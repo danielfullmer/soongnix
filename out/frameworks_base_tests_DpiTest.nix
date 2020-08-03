@@ -1,0 +1,14 @@
+{ android_test }:
+let
+
+DensityTest = android_test {
+    name = "DensityTest";
+    srcs = ["**/*.java"];
+    platform_apis = true;
+    aaptflags = [
+        "-c"
+        "120dpi,240dpi,160dpi,nodpi"
+    ];
+};
+
+in { inherit DensityTest; }

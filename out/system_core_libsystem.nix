@@ -1,0 +1,21 @@
+{ cc_library_headers }:
+let
+
+libsystem_headers = cc_library_headers {
+    name = "libsystem_headers";
+    vendor_available = true;
+    recovery_available = true;
+    host_supported = true;
+    export_include_dirs = ["include"];
+
+    target = {
+        linux_bionic = {
+            enabled = true;
+        };
+        windows = {
+            enabled = true;
+        };
+    };
+};
+
+in { inherit libsystem_headers; }

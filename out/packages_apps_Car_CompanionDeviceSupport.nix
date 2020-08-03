@@ -1,0 +1,119 @@
+{ android_app, android_library }:
+let
+
+#
+#  Copyright (C) 2019 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
+CompanionDeviceSupport-aidl = android_library {
+    name = "CompanionDeviceSupport-aidl";
+
+    srcs = [
+        "src/com/android/car/companiondevicesupport/api/**/*.java"
+        "src/com/android/car/companiondevicesupport/api/**/I*.aidl"
+    ];
+
+    manifest = "AndroidManifest_aidl.xml";
+
+    resource_dirs = [];
+
+    static_libs = [
+        "connected-device-lib"
+    ];
+
+    aidl = {
+        local_include_dirs = [
+            "src/com/android/car/companiondevicesupport/api"
+        ];
+    };
+};
+
+CompanionDeviceSupport-lib = android_library {
+    name = "CompanionDeviceSupport-lib";
+
+    srcs = [
+        "src/**/*.java"
+    ];
+
+    exclude_srcs = [
+        "src/com/android/car/companiondevicesupport/api/**/*.java"
+        "src/com/android/car/companiondevicesupport/api/**/I*.aidl"
+    ];
+
+    resource_dirs = ["res"];
+
+    platform_apis = true;
+
+    optimize = {
+        enabled = false;
+    };
+
+    libs = [
+        "android.car"
+    ];
+
+    static_libs = [
+        "CompanionDeviceSupport-aidl"
+        "CompanionDeviceSupport-proto"
+        "EncryptionRunner-lib"
+        "androidx-constraintlayout_constraintlayout"
+        "androidx-constraintlayout_constraintlayout-solver"
+        "androidx.legacy_legacy-support-v4"
+        "androidx.room_room-runtime"
+        "car-messenger-common"
+        "car-messenger-protos"
+        "car-ui-lib-bp"
+        "com.google.android.material_material"
+        "companion-feature-calendarsync-protos"
+        "connected-device-lib"
+    ];
+
+    plugins = [
+        "car-androidx-room-compiler"
+    ];
+};
+
+CompanionDeviceSupport = android_app {
+    name = "CompanionDeviceSupport";
+
+    platform_apis = true;
+
+    certificate = "platform";
+
+    privileged = true;
+
+    static_libs = [
+        "CompanionDeviceSupport-aidl"
+        "CompanionDeviceSupport-lib"
+    ];
+
+    optimize = {
+        enabled = false;
+    };
+
+    dex_preopt = {
+        enabled = false;
+    };
+
+    product_variables = {
+        pdk = {
+            enabled = false;
+        };
+    };
+
+    required = ["privapp_whitelist_com.android.car.companiondevicesupport"];
+};
+
+in { inherit CompanionDeviceSupport CompanionDeviceSupport-aidl CompanionDeviceSupport-lib; }

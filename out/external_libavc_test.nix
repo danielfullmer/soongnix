@@ -1,0 +1,50 @@
+{ cc_test }:
+let
+
+avcdec = cc_test {
+    name = "avcdec";
+    gtest = false;
+
+    cflags = [
+        "-DPROFILE_ENABLE"
+        "-DARM"
+        "-DMD5_DISABLE"
+        "-fPIC"
+        "-Wall"
+        "-Werror"
+    ];
+    local_include_dirs = [
+        "decoder/"
+    ];
+    srcs = ["decoder/main.c"];
+    static_libs = ["libavcdec"];
+    shared_libs = ["liblog"];
+};
+
+avcenc = cc_test {
+    name = "avcenc";
+    gtest = false;
+
+    cflags = [
+        "-DPROFILE_ENABLE"
+        "-DARM"
+        "-DMD5_DISABLE"
+        "-fPIC"
+        "-Wall"
+        "-Werror"
+        "-Wno-unused-variable"
+    ];
+    local_include_dirs = [
+        "encoder/"
+    ];
+    srcs = [
+        "encoder/main.c"
+        "encoder/psnr.c"
+        "encoder/input.c"
+        "encoder/output.c"
+        "encoder/recon.c"
+    ];
+    static_libs = ["libavcenc"];
+};
+
+in { inherit avcdec avcenc; }

@@ -1,0 +1,67 @@
+{ java_import, java_library, java_library_host, java_test }:
+let
+
+#  Copyright (C) 2016 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+#
+
+# -------------------------------
+#  build a target jar
+
+junit-params = java_library {
+    name = "junit-params";
+    host_supported = true;
+    hostdex = true;
+    srcs = ["src/main/java/**/*.java"];
+    sdk_version = "core_current";
+    static_libs = ["junit"];
+};
+
+#  compatibility host library with old name
+junit-params-host = java_library_host {
+    name = "junit-params-host";
+    static_libs = ["junit-params"];
+};
+
+# -------------------------------
+#  build test jars
+#
+#  Run the target test jar as follows:
+#    vogar --classpath \
+#      ${ANDROID_PRODUCT_OUT}/obj/JAVA_LIBRARIES/junit-params-test_intermediates/javalib.jar \
+#      junitparams
+
+junit-params-test = java_test {
+    name = "junit-params-test";
+    host_supported = true;
+    srcs = ["src/test/java/**/*.java"];
+    java_resource_dirs = ["src/test/resources"];
+    sdk_version = "core_current";
+    static_libs = [
+        "junit-params"
+        "junit-params-assertj-core"
+    ];
+};
+
+# -------------------------------
+#  prebuilt dependencies
+
+junit-params-assertj-core = java_import {
+    name = "junit-params-assertj-core";
+    jars = ["lib/assertj-core-1.7.1.jar"];
+    host_supported = true;
+};
+
+in { inherit junit-params junit-params-assertj-core junit-params-host junit-params-test; }

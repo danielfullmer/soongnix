@@ -1,0 +1,22 @@
+{ cc_library_static }:
+let
+
+libmcldCore = cc_library_static {
+    name = "libmcldCore";
+    defaults = ["mcld-defaults"];
+    host_supported = true;
+    srcs = [
+        "AttributeOption.cpp"
+        "Environment.cpp"
+        "GeneralOptions.cpp"
+        "InputTree.cpp"
+        "IRBuilder.cpp"
+        "LinkerConfig.cpp"
+        "Linker.cpp"
+        "LinkerScript.cpp"
+        "Module.cpp"
+        "TargetOptions.cpp"
+    ];
+};
+
+in { inherit libmcldCore; }

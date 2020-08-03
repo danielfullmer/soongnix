@@ -1,0 +1,24 @@
+{ android_library }:
+let
+
+glide = android_library {
+    name = "glide";
+    srcs = [
+        "library/src/**/*.java"
+        "third_party/disklrucache/src/**/*.java"
+        "third_party/gif_decoder/src/**/*.java"
+        "third_party/gif_encoder/src/**/*.java"
+    ];
+    manifest = "library/src/main/AndroidManifest.xml";
+    libs = [
+        "android-support-core-ui"
+        "android-support-compat"
+        "volley"
+    ];
+    static_libs = [
+        "android-support-fragment"
+    ];
+    sdk_version = "current";
+};
+
+in { inherit glide; }

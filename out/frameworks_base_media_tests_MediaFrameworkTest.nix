@@ -1,0 +1,19 @@
+{ android_test }:
+let
+
+mediaframeworktest = android_test {
+    name = "mediaframeworktest";
+    srcs = ["**/*.java"];
+    libs = [
+        "android.test.runner"
+        "android.test.base"
+    ];
+    static_libs = [
+        "mockito-target-minus-junit4"
+        "androidx.test.rules"
+        "android-ex-camera2"
+    ];
+    platform_apis = true;
+};
+
+in { inherit mediaframeworktest; }

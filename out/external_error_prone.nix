@@ -1,0 +1,45 @@
+{ java_import }:
+let
+
+#  Copyright (C) 2017 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+error_prone_annotations = java_import {
+    name = "error_prone_annotations";
+    host_supported = true;
+    jars = ["error_prone/error_prone_annotations-2.3.2.jar"];
+};
+
+error_prone_core = java_import {
+    name = "error_prone_core";
+    host_supported = true;
+    jars = [
+        "checkerframework/dataflow-2.5.3.jar"
+        "checkerframework/javacutil-2.5.3.jar"
+        "error_prone/error_prone_core-2.3.2-with-dependencies.jar"
+        "error_prone/error_prone_annotations-2.3.2.jar"
+        "javac/javac-9+181-r4173-1.jar"
+        "jFormatString/jFormatString-3.0.0.jar"
+    ];
+};
+
+error_prone_test_helpers = java_import {
+    name = "error_prone_test_helpers";
+    host_supported = true;
+    jars = ["error_prone/error_prone_test_helpers-2.3.2.jar"];
+};
+
+subdirs = ["soong"];
+
+in { inherit error_prone_annotations error_prone_core error_prone_test_helpers; }

@@ -1,0 +1,15 @@
+{ android_test }:
+let
+
+HierarchyViewerTest = android_test {
+    name = "HierarchyViewerTest";
+    srcs = ["**/*.java"];
+    sdk_version = "current";
+    libs = [
+        "android.test.runner.stubs"
+        "android.test.base.stubs"
+    ];
+    static_libs = ["junit"];
+};
+
+in { inherit HierarchyViewerTest; }

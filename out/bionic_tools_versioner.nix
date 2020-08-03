@@ -1,0 +1,8 @@
+{ }:
+let
+
+subdirs = [
+    "src"
+];
+
+in { }

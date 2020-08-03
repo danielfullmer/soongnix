@@ -1,0 +1,49 @@
+diff --git a/base/errors_unix.cpp b/base/errors_unix.cpp
+index 296995efe..48269b675 100644
+--- a/base/errors_unix.cpp
++++ b/base/errors_unix.cpp
+@@ -17,6 +17,7 @@
+ #include "android-base/errors.h"
+ 
+ #include <errno.h>
++#include <string.h>
+ 
+ namespace android {
+ namespace base {
+diff --git a/fs_mgr/liblp/reader.cpp b/fs_mgr/liblp/reader.cpp
+index dcee6d2d8..02f2b6547 100644
+--- a/fs_mgr/liblp/reader.cpp
++++ b/fs_mgr/liblp/reader.cpp
+@@ -19,6 +19,7 @@
+ #include <stddef.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include <string.h>
+ 
+ #include <functional>
+ 
+diff --git a/fs_mgr/liblp/writer.cpp b/fs_mgr/liblp/writer.cpp
+index bffcb7e6e..a360eb5aa 100644
+--- a/fs_mgr/liblp/writer.cpp
++++ b/fs_mgr/liblp/writer.cpp
+@@ -18,6 +18,7 @@
+ 
+ #include <inttypes.h>
+ #include <unistd.h>
++#include <string.h>
+ 
+ #include <string>
+ 
+diff --git a/libcutils/include/cutils/threads.h b/libcutils/include/cutils/threads.h
+index ba4846e33..197066171 100644
+--- a/libcutils/include/cutils/threads.h
++++ b/libcutils/include/cutils/threads.h
+@@ -33,7 +33,7 @@ extern "C" {
+ // Deprecated: use android::base::GetThreadId instead, which doesn't truncate on Mac/Windows.
+ //
+ 
+-extern pid_t gettid();
++//extern pid_t gettid();
+ 
+ //
+ // Deprecated: use `_Thread_local` in C or `thread_local` in C++.

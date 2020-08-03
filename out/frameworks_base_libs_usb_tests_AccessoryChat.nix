@@ -1,0 +1,6 @@
+{ }:
+let
+
+subdirs = ["accessorychat"];
+
+in { }

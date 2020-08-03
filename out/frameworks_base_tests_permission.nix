@@ -1,0 +1,17 @@
+{ android_test }:
+let
+
+FrameworkPermissionTests = android_test {
+    name = "FrameworkPermissionTests";
+    #  Include all test java files.
+    srcs = ["src/**/*.java"];
+    libs = [
+        "android.test.runner"
+        "telephony-common"
+        "android.test.base"
+    ];
+    static_libs = ["junit"];
+    platform_apis = true;
+};
+
+in { inherit FrameworkPermissionTests; }

@@ -1,0 +1,21 @@
+{ cc_test }:
+let
+
+aaudio_loopback = cc_test {
+    name = "aaudio_loopback";
+    gtest = false;
+    srcs = ["src/loopback.cpp"];
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+    static_libs = ["libsndfile"];
+    shared_libs = [
+        "libaaudio"
+        "libaudioutils"
+    ];
+    header_libs = ["libaaudio_example_utils"];
+    pack_relocations = false;
+};
+
+in { inherit aaudio_loopback; }

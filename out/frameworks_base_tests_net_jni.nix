@@ -1,0 +1,28 @@
+{ cc_library_shared }:
+let
+
+libnetworkstatsfactorytestjni = cc_library_shared {
+    name = "libnetworkstatsfactorytestjni";
+
+    cflags = [
+        "-Wall"
+        "-Werror"
+        "-Wno-unused-parameter"
+        "-Wthread-safety"
+    ];
+
+    srcs = [
+        ":lib_networkStatsFactory_native"
+        "test_onload.cpp"
+    ];
+
+    shared_libs = [
+        "libbpf_android"
+        "liblog"
+        "libnativehelper"
+        "libnetdbpf"
+        "libnetdutils"
+    ];
+};
+
+in { inherit libnetworkstatsfactorytestjni; }

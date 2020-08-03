@@ -1,0 +1,14 @@
+{ android_test }:
+let
+
+HugeBackup = android_test {
+    name = "HugeBackup";
+    #  Only compile source java files in this apk.
+    srcs = ["src/**/*.java"];
+    sdk_version = "current";
+    optimize = {
+        proguard_flags_files = ["proguard.flags"];
+    };
+};
+
+in { inherit HugeBackup; }

@@ -1,0 +1,82 @@
+{ python_binary_host, python_library_host, python_test_host }:
+let
+
+#  Copyright (C) 2018 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+external_updater = python_binary_host {
+    name = "external_updater";
+    main = "external_updater.py";
+    srcs = [
+        "external_updater.py"
+    ];
+    libs = [
+        "external_updater_lib"
+    ];
+};
+
+external_updater_notifier = python_binary_host {
+    name = "external_updater_notifier";
+    main = "notifier.py";
+    srcs = [
+        "git_utils.py"
+        "notifier.py"
+    ];
+};
+
+external_updater_lib = python_library_host {
+    name = "external_updater_lib";
+    srcs = [
+        "archive_utils.py"
+        "fileutils.py"
+        "git_updater.py"
+        "git_utils.py"
+        "github_archive_updater.py"
+        "metadata.proto"
+        "updater_utils.py"
+    ];
+    libs = [
+        "python-symbol"
+        "libprotobuf-python"
+    ];
+    proto = {
+        canonical_path_from_root = false;
+    };
+    data = [
+        "update_package.sh"
+    ];
+    version = {
+        py2 = {
+            enabled = false;
+            embedded_launcher = false;
+        };
+        py3 = {
+            enabled = true;
+            embedded_launcher = false;
+        };
+    };
+};
+
+external_updater_test = python_test_host {
+    name = "external_updater_test";
+    main = "external_updater_test.py";
+    srcs = [
+        "external_updater_test.py"
+    ];
+    libs = [
+        "external_updater_lib"
+    ];
+};
+
+in { inherit external_updater external_updater_lib external_updater_notifier external_updater_test; }

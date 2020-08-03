@@ -1,0 +1,128 @@
+{ cc_binary, cc_defaults, cc_library_static, python_binary_host }:
+let
+
+#  Copyright (C) 2018 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+update_verifier_defaults = cc_defaults {
+    name = "update_verifier_defaults";
+
+    defaults = [
+        "recovery_defaults"
+    ];
+
+    local_include_dirs = [
+        "include"
+    ];
+};
+
+libupdate_verifier = cc_library_static {
+    name = "libupdate_verifier";
+
+    defaults = [
+        "update_verifier_defaults"
+    ];
+
+    srcs = [
+        "care_map.proto"
+        "update_verifier.cpp"
+    ];
+
+    export_include_dirs = [
+        "include"
+    ];
+
+    static_libs = [
+        "libotautil"
+        "libvold_binder"
+    ];
+
+    shared_libs = [
+        "android.hardware.boot@1.0"
+        "libbase"
+        "libcutils"
+        "libbinder"
+        "libutils"
+    ];
+
+    proto = {
+        type = "lite";
+        export_proto_headers = true;
+    };
+};
+
+update_verifier = cc_binary {
+    name = "update_verifier";
+
+    defaults = [
+        "update_verifier_defaults"
+    ];
+
+    srcs = [
+        "update_verifier_main.cpp"
+    ];
+
+    static_libs = [
+        "libupdate_verifier"
+        "libotautil"
+        "libvold_binder"
+    ];
+
+    shared_libs = [
+        "android.hardware.boot@1.0"
+        "libbase"
+        "libcutils"
+        "libhardware"
+        "libhidlbase"
+        "liblog"
+        "libprotobuf-cpp-lite"
+        "libbinder"
+        "libutils"
+    ];
+
+    init_rc = [
+        "update_verifier.rc"
+    ];
+};
+
+care_map_generator = python_binary_host {
+    name = "care_map_generator";
+
+    srcs = [
+        "care_map_generator.py"
+        "care_map.proto"
+    ];
+    libs = [
+        "python-symbol"
+        #  Soong won't add "libprotobuf-python" to the dependencies if
+        #  filegroup contains .proto files. So add it here explicitly.
+        "libprotobuf-python"
+    ];
+    proto = {
+        canonical_path_from_root = false;
+    };
+
+    version = {
+        py2 = {
+            enabled = true;
+            embedded_launcher = true;
+        };
+        py3 = {
+            enabled = false;
+            embedded_launcher = false;
+        };
+    };
+};
+
+in { inherit care_map_generator libupdate_verifier update_verifier update_verifier_defaults; }

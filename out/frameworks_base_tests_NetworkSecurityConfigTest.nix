@@ -1,0 +1,17 @@
+{ android_test }:
+let
+
+NetworkSecurityConfigTests = android_test {
+    name = "NetworkSecurityConfigTests";
+    certificate = "platform";
+    libs = [
+        "android.test.runner"
+        "android.test.base"
+    ];
+    static_libs = ["junit"];
+    #  Include all test java files.
+    srcs = ["src/**/*.java"];
+    platform_apis = true;
+};
+
+in { inherit NetworkSecurityConfigTests; }

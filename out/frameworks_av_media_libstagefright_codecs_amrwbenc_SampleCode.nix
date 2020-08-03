@@ -1,0 +1,36 @@
+{ cc_test }:
+let
+
+AMRWBEncTest = cc_test {
+    name = "AMRWBEncTest";
+    gtest = false;
+
+    srcs = ["AMRWB_E_SAMPLE.c"];
+
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+
+    arch = {
+        arm = {
+            instruction_set = "arm";
+        };
+    };
+
+    shared_libs = [
+        "libdl"
+        "liblog"
+    ];
+
+    static_libs = [
+        "libstagefright_amrwbenc"
+        "libstagefright_enc_common"
+    ];
+
+    sanitize = {
+        cfi = true;
+    };
+};
+
+in { inherit AMRWBEncTest; }

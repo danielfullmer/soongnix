@@ -1,0 +1,14 @@
+{ android_library }:
+let
+
+libbackup = android_library {
+    name = "libbackup";
+    sdk_version = "current";
+    srcs = [
+        #  All but src/com/google/android/libraries/backup/shadow/*.java
+        "src/com/google/android/libraries/backup/*.java"
+    ];
+    static_libs = ["android-support-v4"];
+};
+
+in { inherit libbackup; }

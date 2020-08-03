@@ -1,0 +1,24 @@
+{ cc_library_static }:
+let
+
+libLLVMSupport = cc_library_static {
+    name = "libLLVMSupport";
+    vendor_available = true;
+    defaults = ["llvm-defaults-no-generated-headers"];
+    target = {
+        #  llvm-defaults turns off host builds by default, turn it back on for
+        #  modules that are used to build llvm-tblgen
+        host = {
+            enabled = true;
+        };
+        windows = {
+            enabled = true;
+        };
+    };
+    srcs = [
+        "*.c"
+        "*.cpp"
+    ];
+};
+
+in { inherit libLLVMSupport; }

@@ -1,0 +1,19 @@
+{ android_test }:
+let
+
+FrameworkPerf = android_test {
+    name = "FrameworkPerf";
+    srcs = ["**/*.java"];
+    platform_apis = true;
+    libs = [
+        "android.test.runner"
+        "android.test.base"
+    ];
+    static_libs = ["junit"];
+    aaptflags = [
+        "-c"
+        "120dpi,240dpi,160dpi,161dpi,320dpi,nodpi"
+    ];
+};
+
+in { inherit FrameworkPerf; }

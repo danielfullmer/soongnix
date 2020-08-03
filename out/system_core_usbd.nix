@@ -1,0 +1,20 @@
+{ cc_binary }:
+let
+
+usbd = cc_binary {
+    name = "usbd";
+    init_rc = ["usbd.rc"];
+    srcs = ["usbd.cpp"];
+    shared_libs = [
+        "libbase"
+        "libhidlbase"
+        "libhidltransport"
+        "liblog"
+        "libutils"
+        "libhardware"
+        "android.hardware.usb.gadget@1.0"
+        "libcutils"
+    ];
+};
+
+in { inherit usbd; }

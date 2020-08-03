@@ -1,0 +1,6 @@
+{ }:
+let
+
+subdirs = ["jni"];
+
+in { }

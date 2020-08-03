@@ -1,0 +1,19 @@
+{ java_import }:
+let
+
+#  platform-robolectric-android-all-stubs is a stubbed out android-all JAR. This is used in place of
+#  the SDK stubs JAR for apps that can use hidden APIs like Settings.
+#  To use this, add this to libs / LOCAL_STATIC_JAVA_LIBRARIES of your test library.
+
+#  This jar is generated from the command
+#    java -jar \
+#      $ANDROID_HOST_OUT/framework/mkstubs.jar \
+#      $OUT/../../common/obj/JAVA_LIBRARIES/robolectric_android-all_intermediates/classes.jar \
+#      android-all-stubs.jar '+*'
+
+platform-robolectric-android-all-stubs = java_import {
+    name = "platform-robolectric-android-all-stubs";
+    jars = ["android-all/android-all-stubs.jar"];
+};
+
+in { inherit platform-robolectric-android-all-stubs; }
