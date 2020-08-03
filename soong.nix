@@ -184,7 +184,7 @@ let
   }: src: let
     cc = { out, ccCmd, cflags ? [] }: ''
         mkdir -p $(dirname ${out})
-        ${clang}/bin/${ccCmd} -c ${builtins.toString cflags} -o ${out} ${src}
+        ${clang}/bin/${ccCmd} -c ${escapeShellArgs cflags} -o ${out} ${src}
       '';
     langOptions = let
       stdBase = if gnu_extensions then "gnu" else "c";
