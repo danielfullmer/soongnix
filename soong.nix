@@ -124,7 +124,7 @@ let
   mkObjectFile =
   { cflags, conlyflags, cppflags, asflags, include_build_directory, include_dirs, local_include_dirs, export_include_dirs,
     header_libs, shared_libs, static_libs, whole_static_libs, generated_headers,
-    use_version_lib, gnu_extensions, ...
+    use_version_lib, gnu_extensions, c_std, cpp_std, ...
   }: src: let
     cc = { out, ccCmd, cflags ? [] }: ''
         mkdir -p $(dirname ${out})
@@ -132,13 +132,21 @@ let
       '';
     langOptions = let
       stdBase = if gnu_extensions then "gnu" else "c";
+      cStd =
+        if c_std != ""
+        then (if c_std == "experimental" then "${stdBase}11" else c_std)
+        else "${stdBase}99";
+      cppStd =
+        if cpp_std != ""
+        then (if cpp_std == "experimental" then "${stdBase}++2a" else cpp_std)
+        else "${stdBase}++17";
     in if hasSuffix ".c" src then {
         ccCmd = "clang";
-        cflags = [ "-std=${stdBase}99" ] ++ conlyflags;
+        cflags = [ "-std=${cStd}" ] ++ conlyflags;
       }
       else if (hasSuffix ".cpp" src) || (hasSuffix ".cc" src) then {
         ccCmd = "clang++";
-        cflags = [ "-std=${stdBase}++17" ] ++ cppflags;
+        cflags = [ "-std=${cppStd}" ] ++ cppflags;
       }
       else if (hasSuffix ".s" src) || (hasSuffix ".S" src) then {
         ccCmd = "clang";
@@ -216,6 +224,8 @@ let
 
       use_version_lib = false;
       gnu_extensions = true;
+      c_std = "";
+      cpp_std = "";
     };
   in {
     inherit cc_binary;
