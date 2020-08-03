@@ -293,26 +293,33 @@ let
   # TODO: Extract commonality with cc_library
   cc_binary = wrapModule argDefaults.cc_binary
   ({ name , srcs , shared_libs, static_libs, whole_static_libs, use_version_lib, ...  }@args:
-    pkgs.runCommandNoCC "${name}" {
+    pkgs.stdenv.mkDerivation {
+      inherit name;
       passthru = { inherit args; } // args;
-    } (''
-      set -x
-      mkdir -p $out/bin
-      TOP=$TMP
-      cd ${packageSrc}
-      # TODO: Do this in parallel
-      ${concatMapStringsSep "\n" (src: mkObjectFile args src) srcs}
-      touch $TOP/out.rsp
-      ${ld {
-        rsp="$TOP/out.rsp";
-        out="$out/bin/${name}";
-        ldFlags =
-          " -Wl,--whole-archive " # TODO: Only include this arg if the list below is nonempty
-          + (concatMapStringsSep " " (p: bpPkgs.${p}) (whole_static_libs ++ optional use_version_lib "libbuildversion"))
-          + " -Wl,--no-whole-archive "
-          + (concatMapStringsSep " " (p: bpPkgs.${p}) (static_libs ++ shared_libs));
-      }}
-    ''));
+
+      dontUnpack = true;
+      dontConfigure = true;
+      dontInstall = true;
+
+      buildPhase = ''
+        set -x
+        mkdir -p $out/bin
+        TOP=$TMP
+        cd ${packageSrc}
+        # TODO: Do this in parallel
+        ${concatMapStringsSep "\n" (src: mkObjectFile args src) srcs}
+        touch $TOP/out.rsp
+        ${ld {
+          rsp="$TOP/out.rsp";
+          out="$out/bin/${name}";
+          ldFlags =
+            " -Wl,--whole-archive " # TODO: Only include this arg if the list below is nonempty
+            + (concatMapStringsSep " " (p: bpPkgs.${p}) (whole_static_libs ++ optional use_version_lib "libbuildversion"))
+            + " -Wl,--no-whole-archive "
+            + (concatMapStringsSep " " (p: bpPkgs.${p}) (static_libs ++ shared_libs));
+        }}
+      '';
+  });
 
   # Most of the interesting stuff is in soong/cc/builder.go
   cc_library = wrapModule argDefaults.cc_library (
