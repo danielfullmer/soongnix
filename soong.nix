@@ -150,7 +150,7 @@ let
       }
       else if (hasSuffix ".s" src) || (hasSuffix ".S" src) then {
         ccCmd = "clang";
-        cflags = asflags;
+        cflags = asflags ++ [ "-D__ASSEMBLY__" ];
       }
       else throw "unhandled extension for file: ${src}";
     baseName = removeSuffix ".cpp" src;
