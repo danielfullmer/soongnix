@@ -94,6 +94,62 @@ let
     "-D__STDC_FORMAT_MACROS"
     "-D__STDC_CONSTANT_MACROS"
   ];
+
+  # See build/soong/cc/config/clang.go
+  clangExtraCFlags = [
+    "-D__compiler_offsetof=__builtin_offsetof"
+
+    # Emit address-significance table which allows linker to perform safe ICF. Clang does
+    # not emit the table by default on Android since NDK still uses GNU binutils.
+    "-faddrsig"
+
+    # -Wimplicit-fallthrough is not enabled by -Wall.
+    "-Wimplicit-fallthrough"
+
+    # Help catch common 32/64-bit errors.
+    "-Werror=int-conversion"
+
+    # Disable overly aggressive warning for macros defined with a leading underscore
+    # This happens in AndroidConfig.h, which is included nearly everywhere.
+    # TODO: can we remove this now?
+    "-Wno-reserved-id-macro"
+
+    # Disable overly aggressive warning for format strings.
+    # Bug: 20148343
+    "-Wno-format-pedantic"
+
+    # Workaround for ccache with clang.
+    # See http://petereisentraut.blogspot.com/2011/05/ccache-and-clang.html.
+    "-Wno-unused-command-line-argument"
+
+    # Force clang to always output color diagnostics. Ninja will strip the ANSI
+    # color codes if it is not running in a terminal.
+    "-fcolor-diagnostics"
+
+    # http://b/68236239 Allow 0/NULL instead of using nullptr everywhere.
+    "-Wno-zero-as-null-pointer-constant"
+
+    # Warnings from clang-7.0
+    "-Wno-sign-compare"
+
+    # Warnings from clang-8.0
+    "-Wno-defaulted-function-deleted"
+
+    # Disable -Winconsistent-missing-override until we can clean up the existing
+    # codebase for it.
+    "-Wno-inconsistent-missing-override"
+  ];
+
+  clangExtraCppFlags = [
+    # Enable clang's thread-safety annotations in libcxx.
+    # Turn off -Wthread-safety-negative, to avoid breaking projects that use -Weverything.
+    "-D_LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS"
+    "-Wno-thread-safety-negative"
+
+    # libc++'s math.h has an #include_next outside of system_headers.
+    "-Wno-gnu-include-next"
+  ];
+
 #  ] ++ [
 #    "--gcc-toolchain=${gccRoot}"
 #    "--sysroot ${gccRoot}/sysroot"
@@ -146,7 +202,7 @@ let
       }
       else if (hasSuffix ".cpp" src) || (hasSuffix ".cc" src) then {
         ccCmd = "clang++";
-        cflags = [ "-std=${cppStd}" ] ++ cppflags;
+        cflags = [ "-std=${cppStd}" ] ++ cppflags ++ clangExtraCppFlags;
       }
       else if (hasSuffix ".s" src) || (hasSuffix ".S" src) then {
         ccCmd = "clang";
@@ -183,6 +239,7 @@ let
         # The order here is important. See compilerFlags() in soong/cc/compiler.go
         commonGlobalCflags
         ++ linuxCflags
+        ++ clangExtraCFlags
         ++ cflags
         ++ map (d: "-I${packageSrc}/${d}") (local_include_dirs ++ include_dirs ++ export_include_dirs ++ (optional include_build_directory "."))
         ++ map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames
