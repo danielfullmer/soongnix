@@ -314,9 +314,9 @@ let
           out="$out/bin/${name}";
           ldFlags =
             " -Wl,--whole-archive " # TODO: Only include this arg if the list below is nonempty
-            + (concatMapStringsSep " " (p: bpPkgs.${p}) (whole_static_libs ++ optional use_version_lib "libbuildversion"))
+            + (concatMapStringsSep " " (p: "${bpPkgs.${p}}/lib/${p}.a") (whole_static_libs ++ optional use_version_lib "libbuildversion"))
             + " -Wl,--no-whole-archive "
-            + (concatMapStringsSep " " (p: bpPkgs.${p}) (static_libs ++ shared_libs));
+            + (concatMapStringsSep " " (p: "${bpPkgs.${p}}/lib/${p}.a") (static_libs ++ shared_libs));
         }}
       '';
   });
@@ -328,7 +328,7 @@ let
     , whole_static_libs
     , ...
     }@args:
-    pkgs.runCommandNoCC "${name}.o" {
+    pkgs.runCommandNoCC name {
       passthru = { inherit args; } // args;
     } (''
       set -x
@@ -341,13 +341,14 @@ let
       ${concatMapStringsSep "\n" (s: ''
         EXTRACT_DIR=$(mktemp -d)
         pushd $EXTRACT_DIR >/dev/null
-        ${llvm}/bin/llvm-ar x ${bpPkgs.${s}}
+        ${llvm}/bin/llvm-ar x ${bpPkgs.${s}}/lib/${s}.a
         popd >/dev/null
         find $EXTRACT_DIR -type f -iname '*.o' >> $TOP/out.rsp
       '') whole_static_libs}
 
       touch $TOP/out.rsp
-      ${llvm}/bin/llvm-ar crsD -format=gnu $out @$TOP/out.rsp
+      mkdir -p $out/lib
+      ${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$TOP/out.rsp
     ''));
 
   cc_library_headers = wrapModule argDefaults.cc_library_headers id;
