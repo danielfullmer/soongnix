@@ -173,8 +173,8 @@ let
   hostLdLibs = "-ldl -lpthread -lm -lrt";
 
   #### Individual build rules. See soong/cc/builder.go. ####
-  ld = { rsp, out, ldCmd ? "clang++", crtBegin ? "", libFlags ? "", crtEnd ? "", ldFlags ? "" }: ''
-      ${clang}/bin/${ldCmd} @${rsp} ${libFlags} -o ${out} ${ldFlags} -target x86_64-linux -pie ${hostLdLibs}  -Wl,--start-group -lgcc -lgcc_eh -lc -Wl,--end-group
+  ld = { rsp, out, ldCmd ? "clang++", crtBegin ? "", libFlags ? [], crtEnd ? "", ldFlags ? [] }: ''
+      ${clang}/bin/${ldCmd} @${rsp} ${escapeShellArgs libFlags} -o ${out} ${escapeShellArgs ldFlags} -target x86_64-linux -pie ${hostLdLibs}  -Wl,--start-group -lgcc -lgcc_eh -lc -Wl,--end-group
     '';
 
   mkObjectFile =
@@ -283,6 +283,10 @@ let
       gnu_extensions = true;
       c_std = "";
       cpp_std = "";
+
+      # soongnix convenience arguments
+      _static_lib = true;
+      _shared_lib = true;
     };
   in {
     inherit cc_binary;
@@ -312,11 +316,12 @@ let
         ${ld {
           rsp="$TOP/out.rsp";
           out="$out/bin/${name}";
-          ldFlags =
-            " -Wl,--whole-archive " # TODO: Only include this arg if the list below is nonempty
-            + (concatMapStringsSep " " (p: "${bpPkgs.${p}}/lib/${p}.a") (whole_static_libs ++ optional use_version_lib "libbuildversion"))
-            + " -Wl,--no-whole-archive "
-            + (concatMapStringsSep " " (p: "${bpPkgs.${p}}/lib/${p}.a") (static_libs ++ shared_libs));
+          libFlags =
+            [ "-Wl,--whole-archive" ] # TODO: Only include this arg if the list below is nonempty
+            ++ [ "-Wl,--no-whole-archive" ]
+            ++ (map (p: "${bpPkgs.${p}}/lib/${p}.so") shared_libs)
+            ++ (map (p: "${bpPkgs.${p}}/lib/${p}.a") static_libs)
+            ++ (map (p: "${bpPkgs.${p}}/lib/${p}.a") (whole_static_libs ++ optional use_version_lib "libbuildversion"));
         }}
       '';
   });
@@ -326,6 +331,9 @@ let
     { name
     , srcs ? []
     , whole_static_libs
+    , shared_libs
+    , _static_lib
+    , _shared_lib
     , ...
     }@args:
     pkgs.runCommandNoCC name {
@@ -348,15 +356,19 @@ let
 
       touch $TOP/out.rsp
       mkdir -p $out/lib
-      ${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$TOP/out.rsp
+      ${optionalString _static_lib "${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$TOP/out.rsp" }
+      ${optionalString _shared_lib (ld {
+        rsp="$TOP/out.rsp";
+        out="$out/lib/${name}.so";
+        ldFlags = [ "-shared" "-Wl,-soname,${name}.so" ];
+        libFlags = (map (p: "${bpPkgs.${p}}/lib/${p}.so") shared_libs);
+      }) }
     ''));
 
   cc_library_headers = wrapModule argDefaults.cc_library_headers id;
-
-  cc_library_static = cc_library;
-  cc_library_host_static = cc_library;
-  cc_library_shared = cc_library;
-  cc_binary_static = cc_binary;
+  cc_library_static = args: cc_library (args // { _shared_lib = false; _static_lib = true; });
+  cc_library_host_static = args: cc_library (args // { _shared_lib = false; _static_lib = true; });
+  cc_library_shared = args: cc_library (args // { _shared_lib = true; _static_lib = true; });
   cc_binary_host = cc_binary;
 
   cc_test = id;
@@ -394,7 +406,6 @@ in {
   cc_library_static
   cc_library_host_static
   cc_library_shared
-  cc_binary_static
   cc_binary_host
 
   cc_test
