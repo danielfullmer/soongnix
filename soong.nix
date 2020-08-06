@@ -39,7 +39,11 @@ let
     recursiveMerge [ args (attrByPath attrPath {} args) ];
   setMissingDefaults = defaults: args: defaults // args;
 
-  wrapModule = defaults: f: args: pipe args [
+  wrapModule = defaults: f: args: let
+    p = subtractLists ((attrNames defaults) ++ [ "name" ]) (attrNames args);
+  in traceIf (length p > 0) "unimplemented parameters in ${args.name}: ${builtins.toString p}" (wrapModuleNoCheck defaults f args);
+
+  wrapModuleNoCheck = defaults: f: args: pipe args [
     mergeDefaultArgs
 
     # See soong/android/arch.go
@@ -250,10 +254,11 @@ let
     stlOptions
   ]) + "\necho ${objectFilename} >> $TOP/out.rsp";
 
-  cc_defaults = wrapModule {} (attrs: filterAttrs (n: v: n != "name") attrs);
+  cc_defaults = wrapModuleNoCheck {} (attrs: filterAttrs (n: v: n != "name") attrs);
 
   argDefaults = let
     cc_binary = {
+      defaults = [];
       srcs = [];
 
       cflags = [];
@@ -283,6 +288,14 @@ let
       gnu_extensions = true;
       c_std = "";
       cpp_std = "";
+
+      target = {};
+      arch = {};
+
+      host_supported = true;
+
+      # To implement:
+      recovery_available = false;
 
       # soongnix convenience arguments
       _static_lib = true;
