@@ -389,8 +389,9 @@ let
 
   cc_library_headers = wrapModule argDefaults.cc_library_headers id;
   cc_library_static = args: cc_library (args // { _build_shared_lib = false; _build_static_lib = true; });
-  cc_library_host_static = args: cc_library (args // { _build_shared_lib = false; _build_static_lib = true; });
   cc_library_shared = args: cc_library (args // { _build_shared_lib = true; _build_static_lib = true; });
+  cc_library_host_static = cc_library_static;
+  cc_library_host_shared = cc_library_shared;
   cc_binary_host = cc_binary;
 
   cc_test = id;
