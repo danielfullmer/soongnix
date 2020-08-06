@@ -298,8 +298,8 @@ let
       recovery_available = false;
 
       # soongnix convenience arguments
-      _static_lib = true;
-      _shared_lib = true;
+      _build_static_lib = true;
+      _build_shared_lib = true;
     };
   in {
     inherit cc_binary;
@@ -345,8 +345,8 @@ let
     , srcs ? []
     , whole_static_libs
     , shared_libs
-    , _static_lib
-    , _shared_lib
+    , _build_static_lib
+    , _build_shared_lib
     , ...
     }@args:
     pkgs.runCommandNoCC name {
@@ -369,8 +369,8 @@ let
 
       touch $TOP/out.rsp
       mkdir -p $out/lib
-      ${optionalString _static_lib "${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$TOP/out.rsp" }
-      ${optionalString _shared_lib (ld {
+      ${optionalString _build_static_lib "${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$TOP/out.rsp" }
+      ${optionalString _build_shared_lib (ld {
         rsp="$TOP/out.rsp";
         out="$out/lib/${name}.so";
         ldFlags = [ "-shared" "-Wl,-soname,${name}.so" ];
@@ -379,9 +379,9 @@ let
     ''));
 
   cc_library_headers = wrapModule argDefaults.cc_library_headers id;
-  cc_library_static = args: cc_library (args // { _shared_lib = false; _static_lib = true; });
-  cc_library_host_static = args: cc_library (args // { _shared_lib = false; _static_lib = true; });
-  cc_library_shared = args: cc_library (args // { _shared_lib = true; _static_lib = true; });
+  cc_library_static = args: cc_library (args // { _build_shared_lib = false; _build_static_lib = true; });
+  cc_library_host_static = args: cc_library (args // { _build_shared_lib = false; _build_static_lib = true; });
+  cc_library_shared = args: cc_library (args // { _build_shared_lib = true; _build_static_lib = true; });
   cc_binary_host = cc_binary;
 
   cc_test = id;
