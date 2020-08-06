@@ -10,11 +10,13 @@ let
     else v
   ) _sourceDirs;
 
+  # Find the source dir with the longest name which matches a prefix of relpath
   selectDir = relpath:
   let
-    # TODO: Error checking
     matchingDirs = lib.filter (n: lib.hasPrefix n relpath) (lib.attrNames sourceDirs);
-    bestDirName = builtins.head (lib.sort (a: b: (lib.length a) > (lib.length b)) matchingDirs);
+    bestDirName =
+      assert lib.assertMsg ((builtins.length matchingDirs) >= 1) "Could not find soong module: ${relpath}";
+      builtins.head (lib.sort (a: b: (lib.stringLength a) > (lib.stringLength b)) matchingDirs);
     remainingPath = builtins.substring (lib.stringLength bestDirName) (lib.stringLength relpath) relpath;
   in sourceDirs.${bestDirName} + remainingPath;
 
