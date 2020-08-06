@@ -54,6 +54,8 @@ let
     (mergeArchArgs [ "target" "linux_glibc" ])
     (mergeArchArgs [ "target" "linux_x86_64" ])
     (mergeArchArgs [ "target" "not_windows" ])
+    (mergeArchArgs [ "shared" ])
+    (mergeArchArgs [ "static" ])
     (a: a // { inherit packageSrc; })
     (setMissingDefaults defaults)
     f
@@ -283,6 +285,10 @@ let
       export_shared_lib_headers = [];
       export_static_lib_headers = [];
       export_generated_headers = [];
+
+      # Additional options that should be applied only when building as a static or shared library
+      static = {};
+      shared = {};
 
       use_version_lib = false;
       gnu_extensions = true;
