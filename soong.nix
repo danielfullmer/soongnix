@@ -2,9 +2,9 @@
 
 with lib;
 let
-  #clang = pkgs.llvmPackages.clang-unwrapped;
-  clang = pkgs.clang_9;
-  llvm = pkgs.llvm_9;
+  llvmPackages = pkgs.llvmPackages_9;
+  clang = llvmPackages.clang;
+  llvm = llvmPackages.llvm;
 
   # Need a better name for this. Replace string references to actual objects in bpPkgs
   # maybe it's too confusing and we should just dereference when we use it
