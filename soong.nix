@@ -396,12 +396,14 @@ let
   cc_object = id;
 
   genrule =
-    ({ name, cmd, srcs, out, ... }:
+    ({ name, cmd, srcs, out, ... }@args:
     let
       outPaths = map (o: "$out/${o}") out;
     in
-    # TODO: Replace all the options in the genrul docs
-    pkgs.runCommandNoCC name {} ''
+    # TODO: Replace all the options in the genrule docs
+    pkgs.runCommandNoCC name {
+      passthru = args;
+    } ''
       mkdir -p $out
       cd ${packageSrc}
       ${replaceStrings [ "$(in)" "$(out)" ] [ (builtins.toString (resolveFiles srcs)) (builtins.toString outPaths) ] cmd}
