@@ -330,7 +330,7 @@ let
         TOP=$TMP
         cd ${packageSrc}
         # TODO: Do this in parallel
-        ${concatMapStringsSep "\n" (src: mkObjectFile args src) srcs}
+        ${concatMapStringsSep "\n" (src: mkObjectFile args src) (resolveFiles srcs)}
         touch $TOP/out.rsp
         ${ld {
           rsp="$TOP/out.rsp";
@@ -362,7 +362,7 @@ let
       TOP=$TMP
       cd ${packageSrc}
       # TODO: Do this in parallel
-      ${concatMapStringsSep "\n" (src: mkObjectFile args src) srcs}
+      ${concatMapStringsSep "\n" (src: mkObjectFile args src) (resolveFiles srcs)}
 
       # Unpack whole_static_libs into separate dirs and then repack their .o files into our new .a file
       ${concatMapStringsSep "\n" (s: ''
@@ -404,20 +404,20 @@ let
     pkgs.runCommandNoCC name {} ''
       mkdir -p $out
       cd ${packageSrc}
-      ${replaceStrings [ "$(in)" "$(out)" ] [ (builtins.toString srcs) (builtins.toString outPaths) ] cmd}
+      ${replaceStrings [ "$(in)" "$(out)" ] [ (builtins.toString (resolveFiles srcs)) (builtins.toString outPaths) ] cmd}
     '');
   cc_genrule = genrule;
 
-  python_defaults = id;
-  python_binary_host = id;
-  python_test_host = id;
-
-  ndk_library = id;
-  llndk_library = id;
-  ndk_headers = id;
-  prebuilt_etc = id;
+  # Upstream source says a "filegroup" is a collection of files that can be
+  # referenced in other module propererties, like "srcs" using the syntax
+  # ":<name>". This allows modules to refer to sources outside their package
+  # boundaries.
+  filegroup = id;
+  resolveFiles = srcs: flatten (map (s: if hasPrefix ":" s then bpPkgs.${builtins.substring 1 (stringLength s) s}.srcs else s) srcs);
 in {
   inherit
+
+  # Implemented
   cc_defaults
   cc_binary
   cc_library
@@ -426,22 +426,30 @@ in {
   cc_library_host_static
   cc_library_shared
   cc_binary_host
-
-  cc_test
-  cc_test_host
-  cc_test_library
-  cc_benchmark
-  cc_object
-
   genrule
   cc_genrule
 
-  python_defaults
-  python_binary_host
-  python_test_host
+  filegroup;
 
-  ndk_library
-  llndk_library
-  ndk_headers
-  prebuilt_etc;
+  # Unimplemented
+  cc_test = id;
+  cc_test_host = id;
+  cc_test_library = id;
+  cc_benchmark = id;
+  cc_benchmark_host = id;
+  cc_object = id;
+
+  python_defaults = id;
+  python_binary_host = id;
+  python_test_host = id;
+
+  ndk_library = id;
+  llndk_library = id;
+  ndk_headers = id;
+  versioned_ndk_headers = id;
+  prebuilt_etc = id;
+
+  bootstrap_go_package = id;
+  kernel_headers = id;
+  toolchain_library = id;
 }
