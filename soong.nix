@@ -416,6 +416,8 @@ let
   # boundaries.
   filegroup = id;
   resolveFiles = srcs: flatten (map (s: if hasPrefix ":" s then bpPkgs.${builtins.substring 1 (stringLength s) s}.srcs else s) srcs);
+
+  unimplementedModule = name: builtins.trace "unimplemented module: ${name}" id;
 in {
   inherit
 
@@ -432,26 +434,28 @@ in {
   cc_genrule
 
   filegroup;
-
+} // genAttrs [
   # Unimplemented
-  cc_test = id;
-  cc_test_host = id;
-  cc_test_library = id;
-  cc_benchmark = id;
-  cc_benchmark_host = id;
-  cc_object = id;
+  "cc_test"
+  "cc_test_host"
+  "cc_test_library"
+  "cc_benchmark"
+  "cc_benchmark_host"
+  "cc_object"
 
-  python_defaults = id;
-  python_binary_host = id;
-  python_test_host = id;
+  "python_defaults"
+  "python_binary_host"
+  "python_test_host"
 
-  ndk_library = id;
-  llndk_library = id;
-  ndk_headers = id;
-  versioned_ndk_headers = id;
-  prebuilt_etc = id;
+  "ndk_library"
+  "llndk_library"
+  "ndk_headers"
+  "versioned_ndk_headers"
+  "prebuilt_etc"
 
-  bootstrap_go_package = id;
-  kernel_headers = id;
-  toolchain_library = id;
-}
+  "bootstrap_go_package"
+  "kernel_headers"
+  "toolchain_library"
+
+  "java_library_host"
+] (name: unimplementedModule name)
