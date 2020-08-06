@@ -302,6 +302,9 @@ let
 
       # To implement:
       recovery_available = false;
+      vendor_available = false;
+      dist = {}; # dist.targets contains a list of make targets this should be included in.
+      #required = [];
 
       # soongnix convenience arguments
       _build_static_lib = true;
@@ -424,38 +427,118 @@ in {
   # Implemented
   cc_defaults
   cc_binary
+  cc_binary_host
   cc_library
   cc_library_headers
   cc_library_static
-  cc_library_host_static
   cc_library_shared
-  cc_binary_host
+  cc_library_host_static
+  cc_library_host_shared
   genrule
   cc_genrule
 
   filegroup;
 } // genAttrs [
-  # Unimplemented
-  "cc_test"
-  "cc_test_host"
-  "cc_test_library"
-  "cc_benchmark"
-  "cc_benchmark_host"
-  "cc_object"
+  # android/soong/aidl
+  "aidl_interface" "aidl_interfaces_metadata" "aidl_mapping"
 
-  "python_defaults"
-  "python_binary_host"
-  "python_test_host"
+  # android/soong/android
+  "csuite_config" "makefile_goal" "package" "soong_config_bool_variable"
+  "soong_config_module_type" "soong_config_module_type_import"
+  "soong_config_string_variable" "soong_namespace" "vts_config"
 
-  "ndk_library"
-  "llndk_library"
-  "ndk_headers"
-  "versioned_ndk_headers"
-  "prebuilt_etc"
+  # android/soong/apex
+  "apex" "apex_defaults" "apex_key" "apex_set" "apex_test" "apex_vndk"
+  "override_apex" "prebuilt_apex"
 
-  "bootstrap_go_package"
-  "kernel_headers"
-  "toolchain_library"
+  # android/soong/bpf
+  "bpf"
 
-  "java_library_host"
+  # android/soong/cc
+  "cc_benchmark" "cc_benchmark_host" "cc_fuzz" "cc_object" "cc_prebuilt_binary"
+  "cc_prebuilt_library" "cc_prebuilt_library_headers"
+  "cc_prebuilt_library_shared" "cc_prebuilt_library_static"
+  "cc_prebuilt_object" "cc_prebuilt_test_library_shared" "cc_test"
+  "cc_test_host" "cc_test_library" "kernel_headers" "llndk_headers"
+  "llndk_library" "ndk_headers" "ndk_library" "ndk_prebuilt_object"
+  "ndk_prebuilt_shared_stl" "ndk_prebuilt_static_stl"
+  "preprocessed_ndk_headers" "toolchain_library" "vendor_public_library"
+  "vendor_snapshot_binary" "vendor_snapshot_header" "vendor_snapshot_object"
+  "vendor_snapshot_shared" "vendor_snapshot_static" "versioned_ndk_headers"
+  "vndk_libraries_txt" "vndk_prebuilt_shared"
+
+  # android/soong/etc
+  "prebuilt_dsp" "prebuilt_etc" "prebuilt_etc_host" "prebuilt_firmware"
+  "prebuilt_font" "prebuilt_usr_share" "prebuilt_usr_share_host"
+
+  # android/soong/external/clang
+  "clang_binary_host" "clang_tblgen"
+
+  # android/soong/external/llvm
+  "force_build_llvm_components_defaults" "llvm_defaults" "llvm_tblgen"
+
+  # android/soong/fs_config
+  "target_fs_config_gen_filegroup"
+
+  # android/soong/genrule
+  "genrule_defaults" "gensrcs"
+
+  # android/soong/hidl
+  "hidl_interface" "hidl_interfaces_metadata" "hidl_package_root"
+  "prebuilt_hidl_interfaces"
+
+  # android/soong/java
+  "android_app" "android_app_certificate" "android_app_import"
+  "android_app_set" "android_library" "android_library_import"
+  "android_robolectric_runtimes" "android_robolectric_test" "android_test"
+  "android_test_helper_app" "android_test_import" "dex_import" "doc_defaults"
+  "droiddoc" "droiddoc_exported_dir" "droiddoc_host" "droidstubs"
+  "droidstubs_host" "global_compat_config" "hiddenapi_flags" "java_binary"
+  "java_binary_host" "java_defaults" "java_device_for_host" "java_genrule"
+  "java_genrule_host" "java_host_for_device" "java_import" "java_import_host"
+  "java_library" "java_library_host" "java_library_static" "java_plugin"
+  "java_sdk_library" "java_sdk_library_import" "java_system_modules"
+  "java_system_modules_import" "java_test" "java_test_helper_library"
+  "java_test_host" "java_test_import" "javadoc" "javadoc_host"
+  "override_android_app" "override_android_test"
+  "override_runtime_resource_overlay" "platform_compat_config" "prebuilt_apis"
+  "prebuilt_stubs_sources" "runtime_resource_overlay" "stubs_defaults"
+  "tradefed_java_library_host"
+
+  # android/soong/phony
+  "phony"
+
+  # android/soong/prebuilts/clang/host/linux-x86/clangprebuilts
+  "clang_builtin_headers" "libclang_rt_llndk_library"
+  "libclang_rt_prebuilt_library_shared" "libclang_rt_prebuilt_library_static"
+  "llvm_darwin_filegroup" "llvm_host_defaults"
+  "llvm_host_prebuilt_library_shared" "llvm_prebuilt_library_static"
+
+  # android/soong/python
+  "python_binary_host" "python_defaults" "python_library" "python_library_host"
+  "python_test" "python_test_host"
+
+  # android/soong/rust
+  "rust_binary" "rust_binary_host" "rust_bindgen" "rust_bindgen_host"
+  "rust_defaults" "rust_ffi" "rust_ffi_host" "rust_ffi_host_shared"
+  "rust_ffi_host_static" "rust_ffi_shared" "rust_ffi_static" "rust_library"
+  "rust_library_dylib" "rust_library_host" "rust_library_host_dylib"
+  "rust_library_host_rlib" "rust_library_rlib" "rust_prebuilt_dylib"
+  "rust_prebuilt_library" "rust_prebuilt_rlib" "rust_proc_macro" "rust_test"
+  "rust_test_host"
+
+  # android/soong/sdk
+  "module_exports" "module_exports_snapshot" "sdk" "sdk_snapshot"
+
+  # android/soong/sh
+  "sh_binary" "sh_binary_host" "sh_test" "sh_test_host"
+
+  # android/soong/sysprop
+  "sysprop_library"
+
+  # android/soong/xml
+  "prebuilt_etc_xml"
+
+  # github.com/google/blueprint/bootstrap
+  "blueprint_go_binary" "bootstrap_go_binary" "bootstrap_go_package"
 ] (name: unimplementedModule name)
