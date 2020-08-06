@@ -51,9 +51,9 @@ asan_rtl_cflags = [
     "-fvisibility=hidden"
     "-fno-exceptions"
     "-DASAN_LOW_MEMORY=1"
-    "-DASAN_NEEDS_SEGV=" + ASAN_NEEDS_SEGV
-    "-DASAN_HAS_EXCEPTIONS=" + ASAN_HAS_EXCEPTIONS
-    "-DASAN_FLEXIBLE_MAPPING_AND_OFFSET=" + ASAN_FLEXIBLE_MAPPING_AND_OFFSET
+    ("-DASAN_NEEDS_SEGV=" + ASAN_NEEDS_SEGV)
+    ("-DASAN_HAS_EXCEPTIONS=" + ASAN_HAS_EXCEPTIONS)
+    ("-DASAN_FLEXIBLE_MAPPING_AND_OFFSET=" + ASAN_FLEXIBLE_MAPPING_AND_OFFSET)
     "-Wall"
     "-Werror"
     "-Wno-covered-switch-default"
@@ -159,8 +159,8 @@ libasan_noinst_test = cc_library_static {
         "-Wno-sign-compare"
         "-DASAN_UAR=0"
         "-DASAN_HAS_BLACKLIST=1"
-        "-DASAN_HAS_EXCEPTIONS=" + ASAN_HAS_EXCEPTIONS
-        "-DASAN_NEEDS_SEGV=" + ASAN_NEEDS_SEGV
+        ("-DASAN_HAS_EXCEPTIONS=" + ASAN_HAS_EXCEPTIONS)
+        ("-DASAN_NEEDS_SEGV=" + ASAN_NEEDS_SEGV)
         "-std=c++11"
     ];
     srcs = [
@@ -190,8 +190,8 @@ asan_test = cc_test {
     cflags = [
         "-DASAN_LOW_MEMORY=1"
         "-DASAN_UAR=0"
-        "-DASAN_NEEDS_SEGV=" + ASAN_NEEDS_SEGV
-        "-DASAN_HAS_EXCEPTIONS=" + ASAN_HAS_EXCEPTIONS
+        ("-DASAN_NEEDS_SEGV=" + ASAN_NEEDS_SEGV)
+        ("-DASAN_HAS_EXCEPTIONS=" + ASAN_HAS_EXCEPTIONS)
         "-DASAN_HAS_BLACKLIST=1"
         "-Wall"
         "-Werror"

@@ -34,13 +34,13 @@ netd_defaults = cc_defaults {
         "-misc-non-private-member-variables-in-classes" #  Also complains about structs
     ];
     tidy_flags = [
-        "-warnings-as-errors=" +
+        ("-warnings-as-errors=" +
             "'android-*'" +
             ",'clang-analyzer-security*'" +
             ",'cert-*'" +
             ",'google-*'" +
             ",'performance-*'" +
-            ",'misc-*'"
+            ",'misc-*'")
     ];
 };
 

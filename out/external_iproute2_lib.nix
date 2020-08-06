@@ -31,7 +31,7 @@ libiprouteutil = cc_library_shared {
     ];
     cflags = [
         "-DCONFDIR=\"/data/misc/net\""
-        "-DNETNS_RUN_DIR=\"" + NETNS_RUN_DIR + "\""
+        ("-DNETNS_RUN_DIR=\"" + NETNS_RUN_DIR + "\"")
         "-D_GNU_SOURCE"
     ];
 
