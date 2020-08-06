@@ -1,4 +1,4 @@
-{ cc_library, cc_library_headers, llndk_library, ndk_headers, ndk_library }:
+{ cc_library, cc_library_headers }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -15,14 +15,6 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libnativewindow_ndk_headers = ndk_headers {
-    name = "libnativewindow_ndk_headers";
-    from = "include/android";
-    to = "android";
-    srcs = ["include/android/*.h"];
-    license = "NOTICE";
-};
-
 #  TODO(b/118715870): cleanup header files
 libnativewindow_headers = cc_library_headers {
     name = "libnativewindow_headers";
@@ -30,13 +22,7 @@ libnativewindow_headers = cc_library_headers {
     vendor_available = true;
 };
 
-libnativewindow = ndk_library {
-    name = "libnativewindow";
-    symbol_file = "libnativewindow.map.txt";
-
-    #  Android O
-    first_version = "26";
-};
+#  Android O
 
 libnativewindow = cc_library {
     name = "libnativewindow";
@@ -90,13 +76,6 @@ libnativewindow = cc_library {
     ];
 };
 
-libnativewindow = llndk_library {
-    name = "libnativewindow";
-    symbol_file = "libnativewindow.map.txt";
-    unversioned = true;
-    export_include_dirs = ["include"];
-};
-
 subdirs = ["tests"];
 
-in { inherit libnativewindow libnativewindow_headers libnativewindow_ndk_headers; }
+in { inherit libnativewindow libnativewindow_headers; }

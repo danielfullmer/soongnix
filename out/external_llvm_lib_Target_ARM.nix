@@ -36,7 +36,7 @@ llvm-arm-headers = cc_library_static {
 
 llvm-gen-arm = llvm_tblgen {
     name = "llvm-gen-arm";
-    in = "ARM.td";
+    in_ = "ARM.td";
     outs = [
         "ARMGenRegisterInfo.inc"
         "ARMGenInstrInfo.inc"

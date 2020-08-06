@@ -1,19 +1,7 @@
-{ cc_defaults, cc_library, cc_test, llndk_library, ndk_headers, ndk_library }:
+{ cc_defaults, cc_library, cc_test }:
 let
 
-libsync_headers = ndk_headers {
-    name = "libsync_headers";
-    from = "include/ndk";
-    to = "android";
-    srcs = ["include/ndk/sync.h"];
-    license = "NOTICE";
-};
 
-libsync = ndk_library {
-    name = "libsync";
-    symbol_file = "libsync.map.txt";
-    first_version = "26";
-};
 
 libsync_defaults = cc_defaults {
     name = "libsync_defaults";
@@ -29,12 +17,6 @@ libsync = cc_library {
     defaults = ["libsync_defaults"];
 };
 
-libsync = llndk_library {
-    name = "libsync";
-    symbol_file = "libsync.map.txt";
-    export_include_dirs = ["include"];
-};
-
 sync-unit-tests = cc_test {
     name = "sync-unit-tests";
     shared_libs = ["libsync"];
@@ -48,4 +30,4 @@ sync-unit-tests = cc_test {
     ];
 };
 
-in { inherit libsync libsync_defaults libsync_headers sync-unit-tests; }
+in { inherit libsync libsync_defaults sync-unit-tests; }

@@ -1,4 +1,4 @@
-{ cc_library, genrule, llndk_library, ndk_library }:
+{ cc_library, genrule }:
 let
 
 bionic_coverage = false;
@@ -515,17 +515,6 @@ libm = cc_library {
         symbol_file = "libm.map.txt";
         versions = ["10000"];
     };
-};
-
-libm = ndk_library {
-    name = "libm";
-    symbol_file = "libm.map.txt";
-    first_version = "9";
-};
-
-libm = llndk_library {
-    name = "libm";
-    symbol_file = "libm.map.txt";
 };
 
 "libm.arm.map" = genrule {

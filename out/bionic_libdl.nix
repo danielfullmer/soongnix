@@ -1,4 +1,4 @@
-{ cc_library, cc_library_static, genrule, llndk_library, ndk_library }:
+{ cc_library, cc_library_static, genrule }:
 let
 
 #
@@ -180,17 +180,6 @@ libdl_android = cc_library {
         symbol_file = "libdl_android.map.txt";
         versions = ["10000"];
     };
-};
-
-libdl = ndk_library {
-    name = "libdl";
-    symbol_file = "libdl.map.txt";
-    first_version = "9";
-};
-
-libdl = llndk_library {
-    name = "libdl";
-    symbol_file = "libdl.map.txt";
 };
 
 "libdl.arm.map" = genrule {

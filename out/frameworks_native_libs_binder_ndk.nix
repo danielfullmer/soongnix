@@ -1,4 +1,4 @@
-{ cc_library, ndk_headers, ndk_library }:
+{ cc_library }:
 let
 
 /*
@@ -62,20 +62,4 @@ libbinder_ndk = cc_library {
     };
 };
 
-libbinder_ndk_headers = ndk_headers {
-    name = "libbinder_ndk_headers";
-    from = "include_ndk/android";
-    to = "android";
-    srcs = [
-        "include_ndk/android/*.h"
-    ];
-    license = "NOTICE";
-};
-
-libbinder_ndk = ndk_library {
-    name = "libbinder_ndk";
-    symbol_file = "libbinder_ndk.map.txt";
-    first_version = "29";
-};
-
-in { inherit libbinder_ndk libbinder_ndk_headers; }
+in { inherit libbinder_ndk; }

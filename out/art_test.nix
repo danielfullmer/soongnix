@@ -774,8 +774,8 @@ expected_cts_outputs = java_genrule {
     out = ["expected_cts_outputs.jar"];
     tools = ["soong_zip"];
     cmd = "rm -rf $(genDir)/res && mkdir -p $(genDir)/res && " +
-        "for f in $(in); do x=$${f#art/test/}; " +
-        "cp $$f $(genDir)/res/results.$${x%%-*}.expected.txt; done && " +
+        "for f in $(in); do x=$\${f#art/test/}; " +
+        "cp $$f $(genDir)/res/results.$\${x%%-*}.expected.txt; done && " +
         "$(location soong_zip) -o $(out) -C $(genDir)/res -D $(genDir)/res";
 };
 

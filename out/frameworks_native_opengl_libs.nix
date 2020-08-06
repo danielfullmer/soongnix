@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_shared, cc_library_static, cc_test, ndk_library }:
+{ cc_defaults, cc_library, cc_library_shared, cc_library_static, cc_test }:
 let
 
 #  Build the ETC1 library
@@ -29,33 +29,6 @@ libETC1 = cc_library {
 };
 
 #  The headers modules are in frameworks/native/opengl/Android.bp.
-libEGL = ndk_library {
-    name = "libEGL";
-    symbol_file = "libEGL.map.txt";
-    first_version = "9";
-    unversioned_until = "current";
-};
-
-libGLESv1_CM = ndk_library {
-    name = "libGLESv1_CM";
-    symbol_file = "libGLESv1_CM.map.txt";
-    first_version = "9";
-    unversioned_until = "current";
-};
-
-libGLESv2 = ndk_library {
-    name = "libGLESv2";
-    symbol_file = "libGLESv2.map.txt";
-    first_version = "9";
-    unversioned_until = "current";
-};
-
-libGLESv3 = ndk_library {
-    name = "libGLESv3";
-    symbol_file = "libGLESv3.map.txt";
-    first_version = "18";
-    unversioned_until = "current";
-};
 
 gl_libs_defaults = cc_defaults {
     name = "gl_libs_defaults";

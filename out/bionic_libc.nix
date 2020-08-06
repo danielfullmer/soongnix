@@ -1,4 +1,4 @@
-{ cc_defaults, cc_genrule, cc_library, cc_library_headers, cc_library_shared, cc_library_static, cc_object, filegroup, genrule, llndk_library, ndk_headers, ndk_library, python_binary_host, versioned_ndk_headers }:
+{ cc_defaults, cc_genrule, cc_library, cc_library_headers, cc_library_shared, cc_library_static, cc_object, filegroup, genrule, python_binary_host }:
 let
 
 #  Define the common source files for all the libc instances
@@ -21,11 +21,6 @@ libc_common_src_files = [
     "stdio/vfscanf.cpp"
     "stdio/vfwscanf.c"
     "stdlib/exit.c"
-];
-
-#  Various kinds of cruft.
-#  ========================================================
-libc_common_src_files += [
     "bionic/ndk_cruft.cpp"
 ];
 
@@ -1961,152 +1956,9 @@ crtend_android = cc_object {
 #  NDK headers.
 #  ========================================================
 
-common_libc = versioned_ndk_headers {
-    name = "common_libc";
-    from = "include";
-    to = "";
-    license = "NOTICE";
-};
-
-libc_uapi = ndk_headers {
-    name = "libc_uapi";
-    from = "kernel/uapi";
-    to = "";
-    srcs = [
-        "kernel/uapi/asm-generic/**/*.h"
-        "kernel/uapi/drm/**/*.h"
-        "kernel/uapi/linux/**/*.h"
-        "kernel/uapi/misc/**/*.h"
-        "kernel/uapi/mtd/**/*.h"
-        "kernel/uapi/rdma/**/*.h"
-        "kernel/uapi/scsi/**/*.h"
-        "kernel/uapi/sound/**/*.h"
-        "kernel/uapi/video/**/*.h"
-        "kernel/uapi/xen/**/*.h"
-    ];
-    license = "NOTICE";
-};
-
-libc_kernel_android_uapi_linux = ndk_headers {
-    name = "libc_kernel_android_uapi_linux";
-    from = "kernel/android/uapi/linux";
-    to = "linux";
-    srcs = ["kernel/android/uapi/linux/**/*.h"];
-    license = "NOTICE";
-};
-
-libc_kernel_android_scsi = ndk_headers {
-    name = "libc_kernel_android_scsi";
-    from = "kernel/android/scsi/scsi";
-    to = "scsi";
-    srcs = ["kernel/android/scsi/**/*.h"];
-    license = "NOTICE";
-};
-
-libc_asm_arm = ndk_headers {
-    name = "libc_asm_arm";
-    from = "kernel/uapi/asm-arm";
-    to = "arm-linux-androideabi";
-    srcs = ["kernel/uapi/asm-arm/**/*.h"];
-    license = "NOTICE";
-};
-
-libc_asm_arm64 = ndk_headers {
-    name = "libc_asm_arm64";
-    from = "kernel/uapi/asm-arm64";
-    to = "aarch64-linux-android";
-    srcs = ["kernel/uapi/asm-arm64/**/*.h"];
-    license = "NOTICE";
-};
-
 #  Not actually used in the NDK, but needed to build AOSP for mips.
-libc_asm_mips = ndk_headers {
-    name = "libc_asm_mips";
-    from = "kernel/uapi/asm-mips";
-    to = "mipsel-linux-android";
-    srcs = ["kernel/uapi/asm-mips/**/*.h"];
-    license = "NOTICE";
-};
 
 #  Not actually used in the NDK, but needed to build AOSP for mips64.
-libc_asm_mips64 = ndk_headers {
-    name = "libc_asm_mips64";
-    from = "kernel/uapi/asm-mips";
-    to = "mips64el-linux-android";
-    srcs = ["kernel/uapi/asm-mips/**/*.h"];
-    license = "NOTICE";
-};
-
-libc_asm_x86 = ndk_headers {
-    name = "libc_asm_x86";
-    from = "kernel/uapi/asm-x86";
-    to = "i686-linux-android";
-    srcs = ["kernel/uapi/asm-x86/**/*.h"];
-    license = "NOTICE";
-};
-
-libc_asm_x86_64 = ndk_headers {
-    name = "libc_asm_x86_64";
-    from = "kernel/uapi/asm-x86";
-    to = "x86_64-linux-android";
-    srcs = ["kernel/uapi/asm-x86/**/*.h"];
-    license = "NOTICE";
-};
-
-libc = ndk_library {
-    name = "libc";
-    symbol_file = "libc.map.txt";
-    first_version = "9";
-};
-
-libc = llndk_library {
-    name = "libc";
-    symbol_file = "libc.map.txt";
-    export_headers_as_system = true;
-    export_preprocessed_headers = ["include"];
-    export_include_dirs = [
-        "kernel/android/uapi"
-        "kernel/uapi"
-    ];
-    arch = {
-        arm = {
-            export_include_dirs = [
-                "kernel/uapi/asm-arm"
-            ];
-        };
-        arm64 = {
-            export_include_dirs = [
-                "kernel/uapi/asm-arm64"
-            ];
-        };
-        mips = {
-            export_include_dirs = [
-                "kernel/uapi/asm-mips"
-            ];
-        };
-        mips64 = {
-            export_include_dirs = [
-                "kernel/uapi/asm-mips"
-            ];
-        };
-        x86 = {
-            export_include_dirs = [
-                "kernel/uapi/asm-x86"
-            ];
-        };
-        x86_64 = {
-            export_include_dirs = [
-                "kernel/uapi/asm-x86"
-            ];
-        };
-    };
-};
-
-"libstdc++" = ndk_library {
-    name = "libstdc++";
-    symbol_file = "libstdc++.map.txt";
-    first_version = "9";
-};
 
 #  Export these headers for toolbox to process
 kernel_input_headers = filegroup {
@@ -2479,4 +2331,4 @@ subdirs = [
     "bionic/scudo"
 ];
 
-in { inherit "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" common_libc crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_asm_arm libc_asm_arm64 libc_asm_mips libc_asm_mips64 libc_asm_x86 libc_asm_x86_64 libc_bionic libc_bionic_ndk libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_kernel_android_scsi libc_kernel_android_uapi_linux libc_malloc libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_sources_shared libc_sources_shared_arm libc_sources_static libc_sources_static_arm libc_stack_protector libc_syscalls libc_tzcode libc_uapi libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_mips libseccomp_gen_syscall_nrs_mips64 libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_global_sources libseccomp_policy_system_sources; }
+in { inherit "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_bionic libc_bionic_ndk libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_malloc libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_sources_shared libc_sources_shared_arm libc_sources_static libc_sources_static_arm libc_stack_protector libc_syscalls libc_tzcode libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_mips libseccomp_gen_syscall_nrs_mips64 libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_global_sources libseccomp_policy_system_sources; }

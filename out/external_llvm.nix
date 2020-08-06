@@ -147,13 +147,13 @@ llvm-headers = cc_library_headers {
 
 llvm-gen-attributes = llvm_tblgen {
     name = "llvm-gen-attributes";
-    in = "include/llvm/IR/Attributes.td";
+    in_ = "include/llvm/IR/Attributes.td";
     outs = ["llvm/IR/Attributes.inc"];
 };
 
 llvm-gen-intrinsics = llvm_tblgen {
     name = "llvm-gen-intrinsics";
-    in = "include/llvm/IR/Intrinsics.td";
+    in_ = "include/llvm/IR/Intrinsics.td";
     outs = ["llvm/IR/Intrinsics.gen"];
 };
 

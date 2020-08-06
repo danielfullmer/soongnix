@@ -111,7 +111,7 @@ apexd = cc_binary {
     bootstrap = true;
     target = {
         android = {
-            ldflags = ["-Wl,--rpath,/system/${LIB}/bootstrap"];
+            ldflags = ["-Wl,--rpath,/system/\${LIB}/bootstrap"];
         };
     };
 };

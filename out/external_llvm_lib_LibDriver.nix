@@ -12,7 +12,7 @@ libLLVMLibDriver = cc_library_static {
 
 llvm-gen-libdriver = llvm_tblgen {
     name = "llvm-gen-libdriver";
-    in = "Options.td";
+    in_ = "Options.td";
     outs = ["Options.inc"];
 };
 

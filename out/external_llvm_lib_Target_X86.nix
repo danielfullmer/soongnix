@@ -37,7 +37,7 @@ llvm-x86-headers = cc_library_static {
 
 llvm-gen-x86 = llvm_tblgen {
     name = "llvm-gen-x86";
-    in = "X86.td";
+    in_ = "X86.td";
     outs = [
         "X86GenAsmMatcher.inc"
         "X86GenAsmWriter.inc"

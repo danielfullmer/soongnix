@@ -12,7 +12,7 @@ libLLVMCore = cc_library_static {
 
 llvm-gen-core = llvm_tblgen {
     name = "llvm-gen-core";
-    in = "AttributesCompatFunc.td";
+    in_ = "AttributesCompatFunc.td";
     outs = ["AttributesCompatFunc.inc"];
 };
 

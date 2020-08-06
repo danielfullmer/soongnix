@@ -1,4 +1,4 @@
-{ cc_library_shared, llndk_library }:
+{ cc_library_shared }:
 let
 
 libft2 = cc_library_shared {
@@ -84,13 +84,6 @@ libft2 = cc_library_shared {
             enabled = true;
         };
     };
-};
-
-libft2 = llndk_library {
-    name = "libft2";
-    vendor_available = false;
-    symbol_file = "libft2.map.txt";
-    export_include_dirs = ["include"];
 };
 
 in { inherit libft2; }

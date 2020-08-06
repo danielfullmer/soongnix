@@ -22,7 +22,7 @@ MCLD_X86_LIBS = [
 #  Build Options.inc from Options.td
 mcld-gen-options = llvm_tblgen {
     name = "mcld-gen-options";
-    in = "Options.td";
+    in_ = "Options.td";
     outs = ["Options.inc"];
 };
 

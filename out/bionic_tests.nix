@@ -501,7 +501,7 @@ bionic_unit_tests_defaults = cc_defaults {
                 "libLLVMSupport"
             ];
             ldflags = [
-                "-Wl,--rpath,${ORIGIN}/../bionic-loader-test-libs"
+                "-Wl,--rpath,\${ORIGIN}/../bionic-loader-test-libs"
                 "-Wl,--enable-new-dtags"
             ];
         };
@@ -765,7 +765,7 @@ bionic-unit-tests-glibc = cc_test_host {
     ];
 
     ldflags = [
-        "-Wl,--rpath,${ORIGIN}/../bionic-loader-test-libs"
+        "-Wl,--rpath,\${ORIGIN}/../bionic-loader-test-libs"
         "-Wl,--export-dynamic"
     ];
 

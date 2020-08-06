@@ -1,4 +1,4 @@
-{ cc_library, cc_library_headers, cc_library_shared, ndk_headers }:
+{ cc_library, cc_library_headers, cc_library_shared }:
 let
 
 #  Copyright (C) 2009 The Android Open Source Project
@@ -111,18 +111,10 @@ libnativehelper = cc_library {
     stl = "c++_static";
 };
 
-"ndk_jni.h" = ndk_headers {
-    name = "ndk_jni.h";
-    from = "include_jni";
-    to = "";
-    srcs = ["include_jni/jni.h"];
-    license = "NOTICE";
-};
-
 #
 #  Tests.
 #
 
 subdirs = ["tests"];
 
-in { inherit "libnativehelper_compat_libc++" "ndk_jni.h" jni_headers jni_platform_headers libnativehelper libnativehelper_header_only; }
+in { inherit "libnativehelper_compat_libc++" jni_headers jni_platform_headers libnativehelper libnativehelper_header_only; }

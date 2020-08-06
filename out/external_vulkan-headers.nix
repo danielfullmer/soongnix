@@ -1,4 +1,4 @@
-{ cc_library_headers, llndk_headers, ndk_headers }:
+{ cc_library_headers }:
 let
 
 #  Copyright 2019 The Android Open Source Project
@@ -17,18 +17,6 @@ let
 
 #  This module defines which headers are included in the NDK sysroot during
 #  the NDK build process.
-ndk_vulkan_headers = ndk_headers {
-    name = "ndk_vulkan_headers";
-    from = "include";
-    to = "";
-    srcs = [
-        "include/vulkan/vk_platform.h"
-        "include/vulkan/vulkan.h"
-        "include/vulkan/vulkan_core.h"
-        "include/vulkan/vulkan_android.h"
-    ];
-    license = "NOTICE";
-};
 
 #  This module makes Vulkan headers available to other modules without
 #  having to link against libvulkan.so, e.g. for the Vulkan loader and
@@ -43,9 +31,5 @@ vulkan_headers = cc_library_headers {
 
 #  This module makes Vulkan headers available to vendor code that is
 #  restricted to LLNDK dependencies.
-vulkan_headers_llndk = llndk_headers {
-    name = "vulkan_headers_llndk";
-    export_include_dirs = ["include"];
-};
 
-in { inherit ndk_vulkan_headers vulkan_headers vulkan_headers_llndk; }
+in { inherit vulkan_headers; }

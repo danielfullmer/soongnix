@@ -1,5 +1,7 @@
 { pkgs, lib, bpPkgs, sourceDirs, packageSrc }:
 
+# TODO: Handle module "variants"
+
 with lib;
 let
   llvmPackages = pkgs.llvmPackages_9;
@@ -393,6 +395,7 @@ let
   cc_library_host_static = cc_library_static;
   cc_library_host_shared = cc_library_shared;
   cc_binary_host = cc_binary;
+  cc_test_library = cc_library;
 
   cc_test = id;
   cc_test_host = id;
@@ -412,7 +415,7 @@ let
       cd ${packageSrc}
       ${replaceStrings [ "$(in)" "$(out)" ] [ (builtins.toString (resolveFiles srcs)) (builtins.toString outPaths) ] cmd}
     '');
-  cc_genrule = genrule;
+  cc_genrule = wrapModule argDefaults.cc_binary genrule;
 
   # Upstream source says a "filegroup" is a collection of files that can be
   # referenced in other module propererties, like "srcs" using the syntax
@@ -420,6 +423,18 @@ let
   # boundaries.
   filegroup = id;
   resolveFiles = srcs: flatten (map (s: if hasPrefix ":" s then bpPkgs.${builtins.substring 1 (stringLength s) s}.srcs else s) srcs);
+
+  art_cc_library = cc_library;
+  art_cc_library_static = cc_library_static;
+  art_cc_binary = cc_binary;
+  art_cc_test = cc_test;
+  art_cc_test_library = cc_test_library;
+  art_cc_defaults = cc_defaults;
+  libart_cc_defaults = cc_defaults;
+  libart_static_cc_defaults = cc_defaults;
+  art_global_defaults = cc_defaults;
+  art_debug_defaults = cc_defaults;
+  art_apex_test = id;
 
   unimplementedModule = name: builtins.trace "unimplemented module: ${name}" id;
 in {
@@ -435,8 +450,21 @@ in {
   cc_library_shared
   cc_library_host_static
   cc_library_host_shared
+  cc_test_library
   genrule
   cc_genrule
+
+  art_cc_library
+  art_cc_library_static
+  art_cc_binary
+  art_cc_test
+  art_cc_test_library
+  art_cc_defaults
+  libart_cc_defaults
+  libart_static_cc_defaults
+  art_global_defaults
+  art_debug_defaults
+  art_apex_test
 
   filegroup;
 } // genAttrs [

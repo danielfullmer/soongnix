@@ -1,4 +1,4 @@
-{ cc_library_headers, ndk_headers, ndk_library }:
+{ cc_library_headers }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -15,22 +15,9 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libAAudio_headers = ndk_headers {
-    name = "libAAudio_headers";
-    from = "include";
-    to = "";
-    #  omit AAudioTesting.h; supplied separately to those who need it
-    srcs = ["include/aaudio/AAudio.h"];
-    license = "include/aaudio/NOTICE";
-};
+#  omit AAudioTesting.h; supplied separately to those who need it
 
-libaaudio = ndk_library {
-    name = "libaaudio";
-    #  deliberately includes symbols from AAudioTesting.h
-    symbol_file = "libaaudio.map.txt";
-    first_version = "26";
-    unversioned_until = "current";
-};
+#  deliberately includes symbols from AAudioTesting.h
 
 libaaudio_headers = cc_library_headers {
     name = "libaaudio_headers";
@@ -38,4 +25,4 @@ libaaudio_headers = cc_library_headers {
     version_script = "libaaudio.map.txt";
 };
 
-in { inherit libAAudio_headers libaaudio libaaudio_headers; }
+in { inherit libaaudio_headers; }

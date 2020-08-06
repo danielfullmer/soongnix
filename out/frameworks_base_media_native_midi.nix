@@ -1,4 +1,4 @@
-{ cc_library_shared, ndk_headers, ndk_library }:
+{ cc_library_shared }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -46,23 +46,4 @@ libamidi = cc_library_shared {
     export_include_dirs = ["include"];
 };
 
-amidi = ndk_headers {
-    name = "amidi";
-
-    from = "include";
-
-    to = "";
-
-    srcs = ["include/amidi/AMidi.h"];
-    license = "include/amidi/NOTICE";
-};
-
-libamidi = ndk_library {
-    name = "libamidi";
-
-    symbol_file = "libamidi.map.txt";
-
-    first_version = "29";
-};
-
-in { inherit amidi libamidi; }
+in { inherit libamidi; }

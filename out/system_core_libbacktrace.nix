@@ -158,7 +158,7 @@ backtrace_test = cc_test {
 
     #  So that the dlopen can find the libbacktrace_test.so.
     ldflags = [
-        "-Wl,--rpath,${ORIGIN}/../backtrace_test_libs"
+        "-Wl,--rpath,\${ORIGIN}/../backtrace_test_libs"
     ];
 
     test_suites = ["device-tests"];

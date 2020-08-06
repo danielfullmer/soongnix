@@ -33,8 +33,7 @@ liblp = cc_library {
     recovery_available = true;
     defaults = ["fs_mgr_defaults"];
     cppflags = [
-      "-D_FILE_OFFSET_BITS=64"
-      "-Wno-error" # Robotnix Modification
+        "-D_FILE_OFFSET_BITS=64"
     ];
     srcs = [
         "builder.cpp"

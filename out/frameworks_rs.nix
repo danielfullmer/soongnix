@@ -1,4 +1,4 @@
-{ cc_binary_host, cc_defaults, cc_library_headers, cc_library_shared, gensrcs, llndk_library }:
+{ cc_binary_host, cc_defaults, cc_library_headers, cc_library_shared, gensrcs }:
 let
 
 rs-headers = cc_library_headers {
@@ -292,11 +292,6 @@ libRS = cc_library_shared {
     static_libs = ["libRSDispatch"];
 
     version_script = "libRS.map";
-};
-
-libRS = llndk_library {
-    name = "libRS";
-    symbol_file = "libRS.map";
 };
 
 libRSCacheDir = cc_library_shared {

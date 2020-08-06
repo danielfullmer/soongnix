@@ -136,7 +136,7 @@ llvm-rs-as = cc_binary_host {
 #  For build RSCCOptions.inc from RSCCOptions.td
 slang-gen-options = llvm_tblgen {
     name = "slang-gen-options";
-    in = "RSCCOptions.td";
+    in_ = "RSCCOptions.td";
     outs = ["RSCCOptions.inc"];
 };
 

@@ -25,7 +25,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    cmd = GEN_SERVICE_SOURCE;
+    #cmd = GEN_SERVICE_SOURCE;
 };
 
 "nos_app_weaver_service_genc++_headers" = genrule {
@@ -36,7 +36,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    cmd = GEN_SERVICE_HEADER;
+    #cmd = GEN_SERVICE_HEADER;
 };
 
 "nos_app_weaver_service_genc++_mock" = genrule {
@@ -47,7 +47,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    cmd = GEN_SERVICE_MOCK;
+    #cmd = GEN_SERVICE_MOCK;
 };
 
 nos_app_weaver = cc_library {

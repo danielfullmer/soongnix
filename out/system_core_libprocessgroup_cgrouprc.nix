@@ -1,4 +1,4 @@
-{ cc_library, llndk_library }:
+{ cc_library }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -53,14 +53,6 @@ libcgrouprc = cc_library {
             version_script = "libcgrouprc.llndk.txt";
         };
     };
-};
-
-libcgrouprc = llndk_library {
-    name = "libcgrouprc";
-    symbol_file = "libcgrouprc.llndk.txt";
-    export_include_dirs = [
-        "include"
-    ];
 };
 
 in { inherit libcgrouprc; }

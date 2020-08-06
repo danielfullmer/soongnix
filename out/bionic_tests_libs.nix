@@ -25,7 +25,7 @@ bionic_testlib_defaults = cc_defaults {
         "-Werror"
     ];
     ldflags = [
-        "-Wl,--rpath,${ORIGIN}"
+        "-Wl,--rpath,\${ORIGIN}"
         "-Wl,--enable-new-dtags"
     ];
     relative_install_path = "bionic-loader-test-libs";
@@ -71,7 +71,7 @@ elftls_dlopen_ie_error_helper = cc_test {
     name = "elftls_dlopen_ie_error_helper";
     defaults = ["bionic_testlib_defaults"];
     srcs = ["elftls_dlopen_ie_error_helper.cpp"];
-    ldflags = ["-Wl,--rpath,${ORIGIN}/.."];
+    ldflags = ["-Wl,--rpath,\${ORIGIN}/.."];
 };
 
 libtest_elftls_dynamic = cc_test_library {
@@ -841,7 +841,7 @@ cfi_test_helper2 = cc_test {
     defaults = ["bionic_testlib_defaults"];
     srcs = ["cfi_test_helper2.cpp"];
     shared_libs = ["libcfi-test"];
-    ldflags = ["-Wl,--rpath,${ORIGIN}/.."];
+    ldflags = ["-Wl,--rpath,\${ORIGIN}/.."];
 };
 
 preinit_getauxval_test_helper = cc_test {
@@ -864,7 +864,7 @@ ld_preload_test_helper = cc_test {
     defaults = ["bionic_testlib_defaults"];
     srcs = ["ld_preload_test_helper.cpp"];
     shared_libs = ["ld_preload_test_helper_lib1"];
-    ldflags = ["-Wl,--rpath,${ORIGIN}/.."];
+    ldflags = ["-Wl,--rpath,\${ORIGIN}/.."];
 };
 
 ld_preload_test_helper_lib1 = cc_test_library {
@@ -887,7 +887,7 @@ ld_config_test_helper = cc_test {
     defaults = ["bionic_testlib_defaults"];
     srcs = ["ld_config_test_helper.cpp"];
     shared_libs = ["ld_config_test_helper_lib1"];
-    ldflags = ["-Wl,--rpath,${ORIGIN}/.."];
+    ldflags = ["-Wl,--rpath,\${ORIGIN}/.."];
 };
 
 ld_config_test_helper_lib1 = cc_test_library {
@@ -920,7 +920,7 @@ exec_linker_helper = cc_test {
     defaults = ["bionic_testlib_defaults"];
     srcs = ["exec_linker_helper.cpp"];
     shared_libs = ["exec_linker_helper_lib"];
-    ldflags = ["-Wl,--rpath,${ORIGIN}/.."];
+    ldflags = ["-Wl,--rpath,\${ORIGIN}/.."];
 };
 
 exec_linker_helper_lib = cc_test_library {

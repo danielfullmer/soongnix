@@ -187,7 +187,7 @@ init_second_stage = cc_binary {
             ];
         };
     };
-    ldflags = ["-Wl,--rpath,/system/${LIB}/bootstrap"];
+    ldflags = ["-Wl,--rpath,/system/\${LIB}/bootstrap"];
 };
 
 #  Tests

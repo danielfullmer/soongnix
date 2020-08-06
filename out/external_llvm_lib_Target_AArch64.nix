@@ -37,7 +37,7 @@ llvm-aarch64-headers = cc_library_static {
 
 llvm-gen-aarch64 = llvm_tblgen {
     name = "llvm-gen-aarch64";
-    in = "AArch64.td";
+    in_ = "AArch64.td";
     outs = [
         "AArch64GenRegisterInfo.inc"
         "AArch64GenInstrInfo.inc"

@@ -33,7 +33,7 @@ statsd-config-protos = java_genrule {
      */
     cmd = "out_dir=$$(dirname $(out)) && assets_dir=\"assets/statsd-configs\" " +
         "&& mkdir -p $$out_dir/$$assets_dir && protos=($(locations res/statsd-configs/**/*.pb)) " +
-        "&& for file in $${protos[@]} ; do cp $$file $$out_dir/$$assets_dir/ ; done " +
+        "&& for file in $\${protos[@]} ; do cp $$file $$out_dir/$$assets_dir/ ; done " +
         "&& jar cf $(out) -C $$(dirname $(out)) $$assets_dir";
 };
 

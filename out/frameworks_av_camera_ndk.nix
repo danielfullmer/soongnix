@@ -1,4 +1,4 @@
-{ cc_library_shared, cc_test, ndk_headers, ndk_library }:
+{ cc_library_shared, cc_test }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -18,21 +18,6 @@ let
 #  Headers module is in frameworks/av/Android.bp because modules are not allowed
 #  to refer to headers in parent directories and the headers live in
 #  frameworks/av/include.
-
-libcamera2ndk = ndk_library {
-    name = "libcamera2ndk";
-    symbol_file = "libcamera2ndk.map.txt";
-    first_version = "24";
-    unversioned_until = "current";
-};
-
-libcamera2ndk_headers = ndk_headers {
-    name = "libcamera2ndk_headers";
-    from = "include/camera";
-    to = "camera";
-    srcs = ["include/camera/**/*.h"];
-    license = "NOTICE";
-};
 
 libcamera2ndk = cc_library_shared {
     name = "libcamera2ndk";
@@ -164,4 +149,4 @@ AImageReaderVendorTest = cc_test {
     ];
 };
 
-in { inherit AImageReaderVendorTest libcamera2ndk libcamera2ndk_headers libcamera2ndk_vendor; }
+in { inherit AImageReaderVendorTest libcamera2ndk libcamera2ndk_vendor; }

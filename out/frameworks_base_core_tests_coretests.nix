@@ -110,7 +110,7 @@ FrameworksCoreTests_apks_as_resources = java_genrule {
 
     cmd = "mkdir -p $(genDir)/res/raw && " +
         "for i in $(in); do " +
-        "  x=$${i##*FrameworksCoreTests_}; echo $${x}; cp $$i $(genDir)/res/raw/$${x%.apk};" +
+        "  x=$\${i##*FrameworksCoreTests_}; echo $\${x}; cp $$i $(genDir)/res/raw/$\${x%.apk};" +
         "done && " +
         "$(location soong_zip) -o $(out) -C $(genDir)/res -D $(genDir)/res";
 };

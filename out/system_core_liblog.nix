@@ -1,4 +1,4 @@
-{ cc_library, cc_library_headers, llndk_library, ndk_headers, ndk_library }:
+{ cc_library, cc_library_headers }:
 let
 
 #
@@ -124,25 +124,4 @@ liblog = cc_library {
     compile_multilib = "both";
 };
 
-liblog_ndk_headers = ndk_headers {
-    name = "liblog_ndk_headers";
-    from = "include/android";
-    to = "android";
-    srcs = ["include/android/log.h"];
-    license = "NOTICE";
-};
-
-#liblog = ndk_library {
-#    name = "liblog";
-#    symbol_file = "liblog.map.txt";
-#    first_version = "9";
-#    unversioned_until = "current";
-#};
-#
-#liblog = llndk_library {
-#    name = "liblog";
-#    symbol_file = "liblog.map.txt";
-#    export_include_dirs = ["include_vndk"];
-#};
-
-in { inherit liblog liblog_headers liblog_ndk_headers; }
+in { inherit liblog liblog_headers; }

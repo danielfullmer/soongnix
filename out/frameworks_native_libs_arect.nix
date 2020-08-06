@@ -1,4 +1,4 @@
-{ cc_library_static, ndk_headers }:
+{ cc_library_static }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -15,14 +15,6 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libarect_headers = ndk_headers {
-    name = "libarect_headers";
-    from = "include/android";
-    to = "android";
-    srcs = ["include/android/*.h"];
-    license = "NOTICE";
-};
-
 libarect = cc_library_static {
     name = "libarect";
     host_supported = true;
@@ -35,4 +27,4 @@ libarect = cc_library_static {
     };
 };
 
-in { inherit libarect libarect_headers; }
+in { inherit libarect; }

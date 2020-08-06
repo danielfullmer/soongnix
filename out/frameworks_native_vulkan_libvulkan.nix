@@ -1,4 +1,4 @@
-{ cc_library_shared, llndk_library, ndk_library }:
+{ cc_library_shared }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -16,20 +16,6 @@ let
 #  limitations under the License.
 
 #  Headers module is in external/vulkan-headers/Android.bp.
-libvulkan = ndk_library {
-    name = "libvulkan";
-    symbol_file = "libvulkan.map.txt";
-    first_version = "24";
-    unversioned_until = "current";
-};
-
-libvulkan = llndk_library {
-    name = "libvulkan";
-    symbol_file = "libvulkan.map.txt";
-    export_llndk_headers = [
-        "vulkan_headers_llndk"
-    ];
-};
 
 libvulkan = cc_library_shared {
     name = "libvulkan";

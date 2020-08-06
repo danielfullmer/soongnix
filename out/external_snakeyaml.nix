@@ -40,7 +40,7 @@ snakeyaml_patched_src_files = genrule {
         "soong_zip"
     ];
     cmd = "for src in $(in); do " +
-        "   $(location patch-android-src) external/snakeyaml/ $${src} $(genDir)/$${src}; " +
+        "   $(location patch-android-src) external/snakeyaml/ $\${src} $(genDir)/$\${src}; " +
         " done && " +
         " $(location soong_zip) -o $(out) -C $(genDir) -D $(genDir)";
     out = ["snakeyaml_patched_src_files.srcjar"];

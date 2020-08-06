@@ -1,13 +1,7 @@
-{ cc_library_headers, ndk_headers }:
+{ cc_library_headers }:
 let
 
-libandroid_headers = ndk_headers {
-    name = "libandroid_headers";
-    from = "include/android";
-    to = "android";
-    srcs = ["include/android/**/*.h"];
-    license = "NOTICE";
-};
+
 
 subdirs = [
     "cmds/*"
@@ -24,4 +18,4 @@ libandroid_sensor_headers = cc_library_headers {
     export_include_dirs = ["include_sensor"];
 };
 
-in { inherit libandroid_headers libandroid_sensor_headers; }
+in { inherit libandroid_sensor_headers; }

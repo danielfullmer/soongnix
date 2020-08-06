@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_shared, llndk_library, ndk_library }:
+{ cc_defaults, cc_library_shared }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -16,12 +16,6 @@ let
 #  limitations under the License.
 
 #  The headers module is in frameworks/native/Android.bp.
-libandroid = ndk_library {
-    name = "libandroid";
-    symbol_file = "libandroid.map.txt";
-    first_version = "9";
-    unversioned_until = "current";
-};
 
 libandroid_defaults = cc_defaults {
     name = "libandroid_defaults";
@@ -105,13 +99,6 @@ libandroid_net = cc_library_shared {
     shared_libs = ["libnetd_client"];
 
     include_dirs = ["bionic/libc/dns/include"];
-};
-
-libandroid_net = llndk_library {
-    name = "libandroid_net";
-    export_include_dirs = ["include"];
-    symbol_file = "libandroid_net.map.txt";
-    unversioned = true;
 };
 
 in { inherit libandroid libandroid_defaults libandroid_net; }

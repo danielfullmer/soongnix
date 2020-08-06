@@ -1,4 +1,4 @@
-{ cc_binary, cc_binary_host, cc_library, ndk_library }:
+{ cc_binary, cc_binary_host, cc_library }:
 let
 
 libz = cc_library {
@@ -116,12 +116,5 @@ zlib_example_host = cc_binary_host {
 #      ],
 #      license: "NOTICE",
 #  }
-
-#libz = ndk_library {
-#    name = "libz";
-#    symbol_file = "libz.map.txt";
-#    first_version = "9";
-#    unversioned_until = "current";
-#};
 
 in { inherit libz minigzip zlib_example zlib_example_host; }

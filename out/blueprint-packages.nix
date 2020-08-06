@@ -154,7 +154,7 @@
     bionic-benchmarks bionic-benchmarks-defaults bionic-benchmarks-extras-defaults bionic-benchmarks-glibc bionic-benchmarks-tests libBionicBenchmarksUtils;
 
   inherit (callBPPackage "bionic/libc" ./bionic_libc.nix {})
-    "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" common_libc crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_asm_arm libc_asm_arm64 libc_asm_mips libc_asm_mips64 libc_asm_x86 libc_asm_x86_64 libc_bionic libc_bionic_ndk libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_kernel_android_scsi libc_kernel_android_uapi_linux libc_malloc libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_sources_shared libc_sources_shared_arm libc_sources_static libc_sources_static_arm libc_stack_protector libc_syscalls libc_tzcode libc_uapi libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_mips libseccomp_gen_syscall_nrs_mips64 libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_global_sources libseccomp_policy_system_sources;
+    "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_bionic libc_bionic_ndk libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_malloc libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_sources_shared libc_sources_shared_arm libc_sources_static libc_sources_static_arm libc_stack_protector libc_syscalls libc_tzcode libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_mips libseccomp_gen_syscall_nrs_mips64 libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_global_sources libseccomp_policy_system_sources;
 
   inherit (callBPPackage "bionic/libc/async_safe" ./bionic_libc_async_safe.nix {})
     libasync_safe libasync_safe_headers;
@@ -1959,9 +1959,6 @@
   inherit (callBPPackage "development/host/windows" ./development_host_windows.nix {})
     AdbWinApi AdbWinApi_defaults AdbWinUsbApi;
 
-  inherit (callBPPackage "development/ndk" ./development_ndk.nix {})
-    libz_headers;
-
   inherit (callBPPackage "development/python-packages" ./development_python-packages.nix {})
     adb_py;
 
@@ -2126,9 +2123,6 @@
 
   inherit (callBPPackage "external/chromium-libpac/test" ./external_chromium-libpac_test.nix {})
     proxy_resolver_v8_unittest;
-
-  inherit (callBPPackage "external/clang" ./external_clang.nix {})
-    clang-defaults clang-gen-arm-neon clang-gen-attributes clang-gen-checkers clang-gen-comment-commands clang-gen-comment-html-named-character-references clang-gen-comment-nodes clang-gen-declnodes clang-gen-diagnostics clang-gen-html-tags clang-gen-options clang-gen-statnodes clang-headers clang-version libclang_android;
 
   inherit (callBPPackage "external/clang/lib/ARCMigrate" ./external_clang_lib_ARCMigrate.nix {})
     libclangARCMigrate;
@@ -2949,9 +2943,6 @@
   inherit (callBPPackage "external/linux-kselftest" ./external_linux-kselftest.nix {})
     "kselftest_exec_execveat.sh" "kselftest_ftrace_test.d_00basic_basic1" "kselftest_ftrace_test.d_00basic_basic2" "kselftest_ftrace_test.d_00basic_basic3" "kselftest_ftrace_test.d_00basic_basic4" "kselftest_ftrace_test.d_functions" "kselftest_ftrace_test.d_instances_instance" "kselftest_ftrace_test.d_instances_instance-event" "kselftest_ftrace_test.d_template" "kselftest_futex_functional_run.sh" "kselftest_intel_pstate_run.sh" "kselftest_splice_default_file_splice_read.sh" "kselftest_zram_zram.sh" "kselftest_zram_zram01.sh" "kselftest_zram_zram02.sh" "kselftest_zram_zram_lib.sh" kselftest_breakpoints_tests kselftest_capabilities_test kselftest_cpu-hotplug_cpu-on-off-test kselftest_defaults kselftest_efivarfs_efivarfs kselftest_efivarfs_tests kselftest_exec_test kselftest_firmware_fw_fallback kselftest_firmware_fw_filesystem kselftest_ftrace_ftracetest kselftest_futex_tests kselftest_intel_pstate_tests kselftest_kcmp_tests kselftest_lib_bitmap kselftest_lib_printf kselftest_media_tests kselftest_membarrier_tests kselftest_memory-hotplug_mem-on-off-test kselftest_mount_tests kselftest_net_test_bpf kselftest_net_tests kselftest_pstore_common_tests kselftest_pstore_pstore_crash_test kselftest_pstore_pstore_post_reboot_tests kselftest_pstore_pstore_tests kselftest_ptrace_tests kselftest_rtc_tests kselftest_seccomp_tests kselftest_size_test kselftest_splice_test kselftest_static_keys_test_static_keys kselftest_timer_tests kselftest_user_test_user_copy kselftest_vdso_test kselftest_vm64_tests kselftest_vm_run_vmtests kselftest_vm_tests kselftest_x86_check_initial_reg_state kselftest_x86_ptrace_syscall kselftest_x86_test_syscall_vdso kselftest_x86_tests;
 
-  inherit (callBPPackage "external/llvm" ./external_llvm.nix {})
-    force_build_llvm_components libLLVM_android llvm-defaults llvm-defaults-no-generated-headers llvm-gen-attributes llvm-gen-intrinsics llvm-headers llvm-headers-no-generated-headers;
-
   inherit (callBPPackage "external/llvm/lib/Analysis" ./external_llvm_lib_Analysis.nix {})
     libLLVMAnalysis;
 
@@ -3679,7 +3670,7 @@
     volley;
 
   inherit (callBPPackage "external/vulkan-headers" ./external_vulkan-headers.nix {})
-    ndk_vulkan_headers vulkan_headers vulkan_headers_llndk;
+    vulkan_headers;
 
   inherit (callBPPackage "external/walt/android/WALT/app/src/main/jni" ./external_walt_android_WALT_app_src_main_jni.nix {})
     sync_clock_jni;
@@ -3805,7 +3796,7 @@
     cameraserver;
 
   inherit (callBPPackage "frameworks/av/camera/ndk" ./frameworks_av_camera_ndk.nix {})
-    AImageReaderVendorTest libcamera2ndk libcamera2ndk_headers libcamera2ndk_vendor;
+    AImageReaderVendorTest libcamera2ndk libcamera2ndk_vendor;
 
   inherit (callBPPackage "frameworks/av/cmds/screenrecord" ./frameworks_av_cmds_screenrecord.nix {})
     screenrecord;
@@ -4006,7 +3997,7 @@
     libimg_utils;
 
   inherit (callBPPackage "frameworks/av/media/libaaudio" ./frameworks_av_media_libaaudio.nix {})
-    libAAudio_headers libaaudio libaaudio_headers;
+    libaaudio_headers;
 
   inherit (callBPPackage "frameworks/av/media/libaaudio/examples" ./frameworks_av_media_libaaudio_examples.nix {})
     libaaudio_example_utils;
@@ -4019,6 +4010,9 @@
 
   inherit (callBPPackage "frameworks/av/media/libaaudio/examples/write_sine" ./frameworks_av_media_libaaudio_examples_write_sine.nix {})
     write_sine write_sine_callback;
+
+  inherit (callBPPackage "frameworks/av/media/libaaudio/src" ./frameworks_av_media_libaaudio_src.nix {})
+    libaaudio;
 
   inherit (callBPPackage "frameworks/av/media/libaaudio/tests" ./frameworks_av_media_libaaudio_tests.nix {})
     libaaudio_tests_defaults test_aaudio_marshalling test_aaudio_monkey test_aaudio_recovery test_atomic_fifo test_attributes test_bad_disconnect test_block_adapter test_clock_model test_flowgraph test_full_queue test_interference test_n_streams test_no_close test_open_params test_return_stop test_session_id test_stop_hang test_timestamps test_various;
@@ -4267,7 +4261,7 @@
     mtp_ffs_handle_test posix_async_io_test;
 
   inherit (callBPPackage "frameworks/av/media/ndk" ./frameworks_av_media_ndk.nix {})
-    AImageReaderWindowHandleTest libmediandk libmediandk_headers libmediandk_utils media_ndk_headers;
+    AImageReaderWindowHandleTest libmediandk libmediandk_utils media_ndk_headers;
 
   inherit (callBPPackage "frameworks/av/media/utils" ./frameworks_av_media_utils.nix {})
     libmediautils;
@@ -4663,7 +4657,7 @@
     CameraEffectsTests;
 
   inherit (callBPPackage "frameworks/base/media/native/midi" ./frameworks_base_media_native_midi.nix {})
-    amidi libamidi;
+    libamidi;
 
   inherit (callBPPackage "frameworks/base/media/packages/BluetoothMidiService" ./frameworks_base_media_packages_BluetoothMidiService.nix {})
     BluetoothMidiService;
@@ -5572,7 +5566,7 @@
     neuralnetworks_test_vendor_fibonacci_extension;
 
   inherit (callBPPackage "frameworks/ml/nn/runtime" ./frameworks_ml_nn_runtime.nix {})
-    libneuralnetworks libneuralnetworks_headers libneuralnetworks_ndk_headers libneuralnetworks_private_headers;
+    libneuralnetworks libneuralnetworks_headers libneuralnetworks_private_headers;
 
   inherit (callBPPackage "frameworks/ml/nn/runtime/test" ./frameworks_ml_nn_runtime_test.nix {})
     NeuralNetworksTest_default_libs NeuralNetworksTest_defaults NeuralNetworksTest_mt_defaults NeuralNetworksTest_mt_static NeuralNetworksTest_mt_static_asan NeuralNetworksTest_shared_partial NeuralNetworksTest_static NeuralNetworksTest_static_asan NeuralNetworksTest_static_defaults NeuralNetworksTest_static_fuzzing NeuralNetworksTest_static_ubsan;
@@ -5587,7 +5581,7 @@
     android-support-multidex android-support-multidex-version;
 
   inherit (callBPPackage "frameworks/native" ./frameworks_native.nix {})
-    libandroid_headers libandroid_sensor_headers;
+    libandroid_sensor_headers;
 
   inherit (callBPPackage "frameworks/native/cmds/atrace" ./frameworks_native_cmds_atrace.nix {})
     atrace;
@@ -5650,13 +5644,13 @@
     libandroid_runtime_lazy;
 
   inherit (callBPPackage "frameworks/native/libs/arect" ./frameworks_native_libs_arect.nix {})
-    libarect libarect_headers;
+    libarect;
 
   inherit (callBPPackage "frameworks/native/libs/binder" ./frameworks_native_libs_binder.nix {})
     libbinder libbinder_aidl libbinder_headers;
 
   inherit (callBPPackage "frameworks/native/libs/binder/ndk" ./frameworks_native_libs_binder_ndk.nix {})
-    libbinder_ndk libbinder_ndk_headers;
+    libbinder_ndk;
 
   inherit (callBPPackage "frameworks/native/libs/binder/ndk/test" ./frameworks_native_libs_binder_ndk_test.nix {})
     libbinder_ndk_test_client libbinder_ndk_test_server test_libbinder_ndk_defaults test_libbinder_ndk_library test_libbinder_ndk_test_defaults;
@@ -5704,7 +5698,7 @@
     libnativebase_headers;
 
   inherit (callBPPackage "frameworks/native/libs/nativewindow" ./frameworks_native_libs_nativewindow.nix {})
-    libnativewindow libnativewindow_headers libnativewindow_ndk_headers;
+    libnativewindow libnativewindow_headers;
 
   inherit (callBPPackage "frameworks/native/libs/nativewindow/tests" ./frameworks_native_libs_nativewindow_tests.nix {})
     AHardwareBufferTest;
@@ -5788,10 +5782,13 @@
     libvrsensor;
 
   inherit (callBPPackage "frameworks/native/opengl" ./frameworks_native_opengl.nix {})
-    gl_headers khr_headers libEGL libEGL_headers libGLESv1_CM libGLESv1_CM_headers libGLESv2 libGLESv2_headers libGLESv3 libGLESv3_headers;
+    gl_headers;
 
   inherit (callBPPackage "frameworks/native/opengl/libagl" ./frameworks_native_opengl_libagl.nix {})
     libGLES_android libGLES_android_arm libGLES_android_defaults;
+
+  inherit (callBPPackage "frameworks/native/opengl/libs" ./frameworks_native_opengl_libs.nix {})
+    egl_libs_defaults gl_libs_defaults gles_libs_defaults libEGL libEGL_blobCache libEGL_getProcAddress libEGL_test libETC1 libGLESv1_CM libGLESv2 libGLESv3;
 
   inherit (callBPPackage "frameworks/native/opengl/tests/EGLTest" ./frameworks_native_opengl_tests_EGLTest.nix {})
     EGL_test;
@@ -6118,7 +6115,10 @@
     libRSSupportIO librsjni;
 
   inherit (callBPPackage "frameworks/wilhelm" ./frameworks_wilhelm.nix {})
-    libOpenMAXAL libOpenMAXAL_headers libOpenSLES libOpenSLES_headers libOpenSLES_ndk_headers;
+    libOpenSLES_headers;
+
+  inherit (callBPPackage "frameworks/wilhelm/src" ./frameworks_wilhelm_src.nix {})
+    libOpenMAXAL libOpenSLES libOpenSLESUT libopensles_helper libwilhelm;
 
   inherit (callBPPackage "frameworks/wilhelm/tests" ./frameworks_wilhelm_tests.nix {})
     libopenslestests;
@@ -6235,7 +6235,7 @@
     libcore-compare-upstreams libcore-copy-upstream-files;
 
   inherit (callBPPackage "libnativehelper" ./libnativehelper.nix {})
-    "libnativehelper_compat_libc++" "ndk_jni.h" jni_headers jni_platform_headers libnativehelper libnativehelper_header_only;
+    "libnativehelper_compat_libc++" jni_headers jni_platform_headers libnativehelper libnativehelper_header_only;
 
   inherit (callBPPackage "libnativehelper/tests" ./libnativehelper_tests.nix {})
     JniInvocation_test JniSafeRegisterNativeMethods_test libnativehelper_api_test;
@@ -7080,17 +7080,11 @@
   inherit (callBPPackage "prebuilts/misc/gdbserver" ./prebuilts_misc_gdbserver.nix {})
     gdbserver;
 
-  inherit (callBPPackage "prebuilts/ndk" ./prebuilts_ndk.nix {})
-    "ndk_crtbegin_dynamic.16" "ndk_crtbegin_dynamic.17" "ndk_crtbegin_dynamic.18" "ndk_crtbegin_dynamic.19" "ndk_crtbegin_dynamic.21" "ndk_crtbegin_dynamic.22" "ndk_crtbegin_dynamic.23" "ndk_crtbegin_dynamic.24" "ndk_crtbegin_dynamic.26" "ndk_crtbegin_dynamic.27" "ndk_crtbegin_dynamic.28" "ndk_crtbegin_so.16" "ndk_crtbegin_so.17" "ndk_crtbegin_so.18" "ndk_crtbegin_so.19" "ndk_crtbegin_so.21" "ndk_crtbegin_so.22" "ndk_crtbegin_so.23" "ndk_crtbegin_so.24" "ndk_crtbegin_so.26" "ndk_crtbegin_so.27" "ndk_crtbegin_so.28" "ndk_crtbegin_static.16" "ndk_crtbegin_static.17" "ndk_crtbegin_static.18" "ndk_crtbegin_static.19" "ndk_crtbegin_static.21" "ndk_crtbegin_static.22" "ndk_crtbegin_static.23" "ndk_crtbegin_static.24" "ndk_crtbegin_static.26" "ndk_crtbegin_static.27" "ndk_crtbegin_static.28" "ndk_crtend_android.16" "ndk_crtend_android.17" "ndk_crtend_android.18" "ndk_crtend_android.19" "ndk_crtend_android.21" "ndk_crtend_android.22" "ndk_crtend_android.23" "ndk_crtend_android.24" "ndk_crtend_android.26" "ndk_crtend_android.27" "ndk_crtend_android.28" "ndk_crtend_so.16" "ndk_crtend_so.17" "ndk_crtend_so.18" "ndk_crtend_so.19" "ndk_crtend_so.21" "ndk_crtend_so.22" "ndk_crtend_so.23" "ndk_crtend_so.24" "ndk_crtend_so.26" "ndk_crtend_so.27" "ndk_crtend_so.28";
-
   inherit (callBPPackage "prebuilts/ndk" ./prebuilts_ndk_android_native_app_glue.bp.nix {})
     android_native_app_glue;
 
   inherit (callBPPackage "prebuilts/ndk" ./prebuilts_ndk_cpufeatures.bp.nix {})
     cpufeatures;
-
-  inherit (callBPPackage "prebuilts/ndk" ./prebuilts_ndk_stl.bp.nix {})
-    "ndk_libc++_shared" "ndk_libc++_static" "ndk_libc++abi" ndk_libandroid_support ndk_libunwind;
 
   inherit (callBPPackage "prebuilts/r8" ./prebuilts_r8.nix {})
     d8 d8-compat-dx d8-compat-dx-master r8-compat-proguard r8-compat-proguard-master r8-master;
@@ -7124,6 +7118,9 @@
 
   inherit (callBPPackage "prebuilts/sdk/current/support" ./prebuilts_sdk_current_support.nix {})
     android-slices-builders android-slices-builders-nodeps android-slices-core android-slices-core-nodeps android-slices-view android-slices-view-nodeps android-support-animatedvectordrawable android-support-animatedvectordrawable-nodeps android-support-annotations android-support-annotations-nodeps android-support-asynclayoutinflater android-support-asynclayoutinflater-nodeps android-support-car android-support-car-nodeps android-support-collections android-support-collections-nodeps android-support-compat android-support-compat-nodeps android-support-coordinatorlayout android-support-coordinatorlayout-nodeps android-support-core-ui android-support-core-ui-nodeps android-support-core-utils android-support-core-utils-nodeps android-support-cursoradapter android-support-cursoradapter-nodeps android-support-customtabs android-support-customtabs-nodeps android-support-customview android-support-customview-nodeps android-support-documentfile android-support-documentfile-nodeps android-support-drawerlayout android-support-drawerlayout-nodeps android-support-dynamic-animation android-support-dynamic-animation-nodeps android-support-emoji android-support-emoji-appcompat android-support-emoji-appcompat-nodeps android-support-emoji-bundled android-support-emoji-bundled-nodeps android-support-emoji-nodeps android-support-exifinterface android-support-exifinterface-nodeps android-support-fragment android-support-fragment-nodeps android-support-heifwriter android-support-heifwriter-nodeps android-support-interpolator android-support-interpolator-nodeps android-support-loader android-support-loader-nodeps android-support-localbroadcastmanager android-support-localbroadcastmanager-nodeps android-support-media-compat android-support-media-compat-nodeps android-support-percent android-support-percent-nodeps android-support-print android-support-print-nodeps android-support-recommendation android-support-recommendation-nodeps android-support-recyclerview-selection android-support-recyclerview-selection-nodeps android-support-slidingpanelayout android-support-slidingpanelayout-nodeps android-support-swiperefreshlayout android-support-swiperefreshlayout-nodeps android-support-transition android-support-transition-nodeps android-support-tv-provider android-support-tv-provider-nodeps android-support-v13 android-support-v13-nodeps android-support-v14-preference android-support-v14-preference-nodeps android-support-v17-leanback android-support-v17-leanback-nodeps android-support-v17-preference-leanback android-support-v17-preference-leanback-nodeps android-support-v4 android-support-v4-nodeps android-support-v7-appcompat android-support-v7-appcompat-nodeps android-support-v7-cardview android-support-v7-cardview-nodeps android-support-v7-gridlayout android-support-v7-gridlayout-nodeps android-support-v7-mediarouter android-support-v7-mediarouter-nodeps android-support-v7-palette android-support-v7-palette-nodeps android-support-v7-preference android-support-v7-preference-nodeps android-support-v7-recyclerview android-support-v7-recyclerview-nodeps android-support-vectordrawable android-support-vectordrawable-nodeps android-support-viewpager android-support-viewpager-nodeps android-support-wear android-support-wear-nodeps android-support-webkit android-support-webkit-nodeps android-versionedparcelable android-versionedparcelable-nodeps;
+
+  inherit (callBPPackage "prebuilts/sdk/tools" ./prebuilts_sdk_tools.nix {})
+    libLLVM_android libclang_android sdk-core-lambda-stubs;
 
   inherit (callBPPackage "prebuilts/sdk/tools/jetifier/jetifier-standalone" ./prebuilts_sdk_tools_jetifier_jetifier-standalone.nix {})
     jetifier jetifier-prebuilt-jar;
@@ -7501,7 +7498,7 @@
     libkeyutils libkeyutils-tests mini-keyctl;
 
   inherit (callBPPackage "system/core/liblog" ./system_core_liblog.nix {})
-    liblog liblog_headers liblog_ndk_headers;
+    liblog liblog_headers;
 
   inherit (callBPPackage "system/core/liblog/tests" ./system_core_liblog_tests.nix {})
     CtsLiblogTestCases liblog-benchmarks liblog-tests-defaults liblog-unit-tests;
@@ -7627,7 +7624,7 @@
     libsuspend;
 
   inherit (callBPPackage "system/core/libsync" ./system_core_libsync.nix {})
-    libsync libsync_defaults libsync_headers sync-unit-tests;
+    libsync libsync_defaults sync-unit-tests;
 
   inherit (callBPPackage "system/core/libsystem" ./system_core_libsystem.nix {})
     libsystem_headers;

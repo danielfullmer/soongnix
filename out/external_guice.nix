@@ -61,7 +61,7 @@ guice_munge_srcjar = genrule {
     name = "guice_munge_srcjar";
     out = ["guice_munge.srcjar"];
     srcs = ["lib/build/munge.jar"];
-    cmd = "zip --temp-path $${TMPDIR:-/tmp} $(in) -O $(out) -d MungeTask.java";
+    cmd = "zip --temp-path $\${TMPDIR:-/tmp} $(in) -O $(out) -d MungeTask.java";
 };
 
 guice_munge_manifest = genrule {
@@ -87,8 +87,8 @@ guice_munged_srcs = genrule {
         "soong_zip"
     ];
     cmd = "for src in $(in); do " +
-        "  mkdir -p $$(dirname $(genDir)/$${src}) && " +
-        "  $(location guice_munge) -DNO_AOP $${src} > $(genDir)/$${src} || exit 1; " +
+        "  mkdir -p $$(dirname $(genDir)/$\${src}) && " +
+        "  $(location guice_munge) -DNO_AOP $\${src} > $(genDir)/$\${src} || exit 1; " +
         " done && " +
         " $(location soong_zip) -o $(out) -C $(genDir) -D $(genDir)";
 };

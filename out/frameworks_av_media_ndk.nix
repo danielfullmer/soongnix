@@ -1,4 +1,4 @@
-{ cc_library, cc_library_headers, cc_library_shared, cc_test, llndk_library, ndk_headers, ndk_library }:
+{ cc_library, cc_library_headers, cc_library_shared, cc_test }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -18,21 +18,6 @@ let
 #  Headers module is in frameworks/av/Android.bp because modules are not allowed
 #  to refer to headers in parent directories and the headers live in
 #  frameworks/av/include.
-
-libmediandk = ndk_library {
-    name = "libmediandk";
-    symbol_file = "libmediandk.map.txt";
-    first_version = "21";
-    unversioned_until = "current";
-};
-
-libmediandk_headers = ndk_headers {
-    name = "libmediandk_headers";
-    from = "include/media";
-    to = "media";
-    srcs = ["include/media/**/*.h"];
-    license = "NOTICE";
-};
 
 #  for use with header_libs
 media_ndk_headers = cc_library_headers {
@@ -115,14 +100,6 @@ libmediandk = cc_library_shared {
     };
 };
 
-libmediandk = llndk_library {
-    name = "libmediandk";
-    symbol_file = "libmediandk.map.txt";
-    export_include_dirs = [
-        "include"
-    ];
-};
-
 libmediandk_utils = cc_library {
     name = "libmediandk_utils";
 
@@ -179,4 +156,4 @@ AImageReaderWindowHandleTest = cc_test {
     ];
 };
 
-in { inherit AImageReaderWindowHandleTest libmediandk libmediandk_headers libmediandk_utils media_ndk_headers; }
+in { inherit AImageReaderWindowHandleTest libmediandk libmediandk_utils media_ndk_headers; }

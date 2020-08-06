@@ -1,4 +1,4 @@
-{ cc_library, cc_library_headers, llndk_library, ndk_headers, ndk_library }:
+{ cc_library, cc_library_headers }:
 let
 
 /*
@@ -104,25 +104,6 @@ libneuralnetworks = cc_library {
     ];
 };
 
-libneuralnetworks_ndk_headers = ndk_headers {
-    name = "libneuralnetworks_ndk_headers";
-    from = "include";
-    to = "android";
-    srcs = ["include/NeuralNetworks.h"];
-    license = "NOTICE";
-};
+#  Android O-MR1
 
-libneuralnetworks = ndk_library {
-    name = "libneuralnetworks";
-    symbol_file = "libneuralnetworks.map.txt";
-    #  Android O-MR1
-    first_version = "27";
-};
-
-libneuralnetworks = llndk_library {
-    name = "libneuralnetworks";
-    symbol_file = "libneuralnetworks.map.txt";
-    export_include_dirs = ["include"];
-};
-
-in { inherit libneuralnetworks libneuralnetworks_headers libneuralnetworks_ndk_headers libneuralnetworks_private_headers; }
+in { inherit libneuralnetworks libneuralnetworks_headers libneuralnetworks_private_headers; }

@@ -1,4 +1,4 @@
-{ ndk_headers }:
+{ }:
 let
 
 #
@@ -17,15 +17,4 @@ let
 #  limitations under the License.
 #
 
-libz_headers = ndk_headers {
-    name = "libz_headers";
-    from = "zlib";
-    to = "";
-    srcs = [
-        "zlib/zconf.h"
-        "zlib/zlib.h"
-    ];
-    license = "zlib/NOTICE";
-};
-
-in { inherit libz_headers; }
+in { }

@@ -1,4 +1,4 @@
-{ cc_library_headers, ndk_headers, ndk_library }:
+{ cc_library_headers }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -15,35 +15,9 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libOpenMAXAL_headers = ndk_headers {
-    name = "libOpenMAXAL_headers";
-    from = "include";
-    to = "";
-    srcs = ["include/OMXAL/**/*.h"]; #  All headers in all subdirs.
-    license = "include/OMXAL/NOTICE";
-};
+#  All headers in all subdirs.
 
-libOpenMAXAL = ndk_library {
-    name = "libOpenMAXAL";
-    symbol_file = "src/libOpenMAXAL.map.txt";
-    first_version = "14";
-    unversioned_until = "current";
-};
-
-libOpenSLES_ndk_headers = ndk_headers {
-    name = "libOpenSLES_ndk_headers";
-    from = "include";
-    to = "";
-    srcs = ["include/SLES/**/*.h"]; #  All headers in all subdirs.
-    license = "include/SLES/NOTICE";
-};
-
-libOpenSLES = ndk_library {
-    name = "libOpenSLES";
-    symbol_file = "src/libOpenSLES.map.txt";
-    first_version = "9";
-    unversioned_until = "current";
-};
+#  All headers in all subdirs.
 
 libOpenSLES_headers = cc_library_headers {
     name = "libOpenSLES_headers";
@@ -55,4 +29,4 @@ subdirs = [
     "tests"
 ];
 
-in { inherit libOpenMAXAL libOpenMAXAL_headers libOpenSLES libOpenSLES_headers libOpenSLES_ndk_headers; }
+in { inherit libOpenSLES_headers; }

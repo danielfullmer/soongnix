@@ -30,7 +30,7 @@ llvm-mips-headers = cc_library_static {
 
 llvm-gen-mips = llvm_tblgen {
     name = "llvm-gen-mips";
-    in = "Mips.td";
+    in_ = "Mips.td";
     outs = [
         "MipsGenRegisterInfo.inc"
         "MipsGenInstrInfo.inc"

@@ -1,4 +1,4 @@
-{ cc_library_shared, ndk_library }:
+{ cc_library_shared }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -44,11 +44,5 @@ libjnigraphics = cc_library_shared {
 };
 
 #  The headers module is in frameworks/native/Android.bp.
-libjnigraphics = ndk_library {
-    name = "libjnigraphics";
-    symbol_file = "libjnigraphics.map.txt";
-    first_version = "9";
-    unversioned_until = "current";
-};
 
 in { inherit libjnigraphics; }

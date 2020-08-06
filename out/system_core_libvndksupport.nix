@@ -1,4 +1,4 @@
-{ cc_library, llndk_library }:
+{ cc_library }:
 let
 
 subdirs = ["tests"];
@@ -21,12 +21,6 @@ libvndksupport = cc_library {
         symbol_file = "libvndksupport.map.txt";
         versions = ["29"];
     };
-};
-
-libvndksupport = llndk_library {
-    name = "libvndksupport";
-    symbol_file = "libvndksupport.map.txt";
-    export_include_dirs = ["include"];
 };
 
 in { inherit libvndksupport; }

@@ -76,13 +76,13 @@ clang-headers = cc_library_headers {
 
 clang-gen-options = llvm_tblgen {
     name = "clang-gen-options";
-    in = "include/clang/Driver/Options.td";
+    in_ = "include/clang/Driver/Options.td";
     outs = ["clang/Driver/Options.inc"];
 };
 
 clang-gen-attributes = clang_tblgen {
     name = "clang-gen-attributes";
-    in = "include/clang/Basic/Attr.td";
+    in_ = "include/clang/Basic/Attr.td";
     outs = [
         "clang/AST/AttrDump.inc"
         "clang/AST/AttrImpl.inc"
@@ -103,13 +103,13 @@ clang-gen-attributes = clang_tblgen {
 
 clang-gen-checkers = clang_tblgen {
     name = "clang-gen-checkers";
-    in = "include/clang/StaticAnalyzer/Checkers/Checkers.td";
+    in_ = "include/clang/StaticAnalyzer/Checkers/Checkers.td";
     outs = ["clang/StaticAnalyzer/Checkers/Checkers.inc"];
 };
 
 clang-gen-comment-commands = clang_tblgen {
     name = "clang-gen-comment-commands";
-    in = "include/clang/AST/CommentCommands.td";
+    in_ = "include/clang/AST/CommentCommands.td";
     outs = [
         "clang/AST/CommentCommandInfo.inc"
         "clang/AST/CommentCommandList.inc"
@@ -118,13 +118,13 @@ clang-gen-comment-commands = clang_tblgen {
 
 clang-gen-comment-html-named-character-references = clang_tblgen {
     name = "clang-gen-comment-html-named-character-references";
-    in = "include/clang/AST/CommentHTMLNamedCharacterReferences.td";
+    in_ = "include/clang/AST/CommentHTMLNamedCharacterReferences.td";
     outs = ["clang/AST/CommentHTMLNamedCharacterReferences.inc"];
 };
 
 clang-gen-html-tags = clang_tblgen {
     name = "clang-gen-html-tags";
-    in = "include/clang/AST/CommentHTMLTags.td";
+    in_ = "include/clang/AST/CommentHTMLTags.td";
     outs = [
         "clang/AST/CommentHTMLTagsProperties.inc"
         "clang/AST/CommentHTMLTags.inc"
@@ -133,13 +133,13 @@ clang-gen-html-tags = clang_tblgen {
 
 clang-gen-comment-nodes = clang_tblgen {
     name = "clang-gen-comment-nodes";
-    in = "include/clang/Basic/CommentNodes.td";
+    in_ = "include/clang/Basic/CommentNodes.td";
     outs = ["clang/AST/CommentNodes.inc"];
 };
 
 clang-gen-diagnostics = clang_tblgen {
     name = "clang-gen-diagnostics";
-    in = "include/clang/Basic/Diagnostic.td";
+    in_ = "include/clang/Basic/Diagnostic.td";
     outs = [
         "clang/Basic/DiagnosticAnalysisKinds.inc"
         "clang/Basic/DiagnosticASTKinds.inc"
@@ -158,19 +158,19 @@ clang-gen-diagnostics = clang_tblgen {
 
 clang-gen-declnodes = clang_tblgen {
     name = "clang-gen-declnodes";
-    in = "include/clang/Basic/DeclNodes.td";
+    in_ = "include/clang/Basic/DeclNodes.td";
     outs = ["clang/AST/DeclNodes.inc"];
 };
 
 clang-gen-statnodes = clang_tblgen {
     name = "clang-gen-statnodes";
-    in = "include/clang/Basic/StmtNodes.td";
+    in_ = "include/clang/Basic/StmtNodes.td";
     outs = ["clang/AST/StmtNodes.inc"];
 };
 
 clang-gen-arm-neon = clang_tblgen {
     name = "clang-gen-arm-neon";
-    in = "include/clang/Basic/arm_neon.td";
+    in_ = "include/clang/Basic/arm_neon.td";
     outs = [
         "clang/Basic/arm_neon.inc"
         "clang/Basic/arm_neon.h"

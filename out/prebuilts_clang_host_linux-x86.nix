@@ -1,4 +1,4 @@
-{ clang_builtin_headers, libclang_rt_llndk_library, libclang_rt_prebuilt_library_shared, libclang_rt_prebuilt_library_static, llvm_host_defaults, llvm_host_prebuilt_library_shared, llvm_prebuilt_library_static }:
+{ clang_builtin_headers, libclang_rt_prebuilt_library_shared, libclang_rt_prebuilt_library_static, llvm_host_defaults, llvm_host_prebuilt_library_shared, llvm_prebuilt_library_static }:
 let
 
 #
@@ -163,56 +163,6 @@ libomp = llvm_prebuilt_library_static {
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
     has_stubs = true;
-};
-
-"libclang_rt.asan-arm-android" = libclang_rt_llndk_library {
-    name = "libclang_rt.asan-arm-android";
-    enabled = false;
-    arch = {
-        arm = {
-            enabled = true;
-        };
-    };
-};
-
-"libclang_rt.asan-aarch64-android" = libclang_rt_llndk_library {
-    name = "libclang_rt.asan-aarch64-android";
-    enabled = false;
-    arch = {
-        arm64 = {
-            enabled = true;
-        };
-    };
-};
-
-"libclang_rt.asan-i686-android" = libclang_rt_llndk_library {
-    name = "libclang_rt.asan-i686-android";
-    enabled = false;
-    arch = {
-        x86 = {
-            enabled = true;
-        };
-    };
-};
-
-"libclang_rt.asan-x86_64-android" = libclang_rt_llndk_library {
-    name = "libclang_rt.asan-x86_64-android";
-    enabled = false;
-    arch = {
-        x86_64 = {
-            enabled = true;
-        };
-    };
-};
-
-"libclang_rt.hwasan-aarch64-android" = libclang_rt_llndk_library {
-    name = "libclang_rt.hwasan-aarch64-android";
-    enabled = false;
-    arch = {
-        arm64 = {
-            enabled = true;
-        };
-    };
 };
 
 "libclang_rt.ubsan_standalone-arm-android" = libclang_rt_prebuilt_library_shared {
