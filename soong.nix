@@ -44,10 +44,25 @@ let
     in f [] attrList;
 
 
+  # The ordering here with ensures that static_libs are linked in the correct order, with A before B if A depends on B.
+  recursiveMergeWithStaticLibs = attrList:
+    let f = attrPath:
+      zipAttrsWith (n: values:
+        if tail values == []
+          then head values
+        else if all isList values
+          then unique (concatLists (if (hasSuffix "static_libs" n) then reverseList values else values))
+        else if all isAttrs values
+          then f (attrPath ++ [n]) values
+        else last values
+      );
+    in f [] attrList;
+
+  # Normally, the downstream module overrides the "defaults" modules
+  # Also do this recursively so we get "defaults" of "defaults"
   mergeDefaultArgs = args: 
-    # The ordering here with [ args ] before the defaults ensures that static_libs are linked in the correct order, with A before B if A depends on B.
-    # TODO: We should probably make something more explicit for static_libs ensuring this
-    recursiveMerge ([ args ] ++ (map (name: bpPkgs.${name}) (attrByPath ["defaults"] [] args)));
+    recursiveMergeWithStaticLibs
+      ((map (name: mergeDefaultArgs bpPkgs.${name}) (args.defaults or [])) ++ [ args ]);
   mergeArchArgs = attrPath: args:
     recursiveMerge [ args (attrByPath attrPath {} args) ];
   setMissingDefaults = defaults: args: defaults // args;
