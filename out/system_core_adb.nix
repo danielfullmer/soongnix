@@ -27,6 +27,9 @@ adb_defaults = cc_defaults {
         "-Wno-missing-field-initializers"
         "-Wthread-safety"
         "-Wvla"
+        "-Wno-error=thread-safety-attributes"
+        "-Wno-error=thread-safety-analysis"
+        "-Wno-error=thread-safety-reference"
         "-DADB_HOST=1" #  overridden by adbd_defaults
         "-DALLOW_ADBD_ROOT=0" #  overridden by adbd_defaults
     ];
