@@ -305,6 +305,7 @@ let
     cc_binary = {
       defaults = [];
       srcs = [];
+      objs = [];
 
       cflags = [];
       conlyflags = [];
@@ -361,7 +362,7 @@ let
 
   # TODO: Extract commonality with cc_library
   cc_binary = wrapModule argDefaults.cc_binary
-  ({ name , srcs , shared_libs, static_libs, whole_static_libs, use_version_lib, ...  }@args:
+  ({ name, srcs, shared_libs, static_libs, whole_static_libs, use_version_lib, ...  }@args:
     pkgs.stdenv.mkDerivation {
       inherit name;
       passthru = { inherit args; } // args;
@@ -390,6 +391,21 @@ let
         }}
       '';
   });
+
+  cc_object = wrapModule argDefaults.cc_binary
+  ({ name, srcs ? [], objs ? [], ... }@args:
+  # Only support a single .c file, no other objs ATM.
+  pkgs.runCommand "${name}.o" { passthru = args; } (''
+    set -x
+    TOP=$TMP
+    cd ${packageSrc}
+  '' + (if srcs != [] then
+    # TODO: Can there only be one src file?
+    (mkObjectFile args (head (resolveFiles srcs))) + ''
+    cp $(cat $TOP/out.rsp) $out
+  '' else ''
+    ${clang}/bin/clang -o $out ${escapeShellArgs (map (o: bpPkgs.${o}) objs)}
+  '')));
 
   # Most of the interesting stuff is in soong/cc/builder.go
   cc_library = wrapModule argDefaults.cc_library (
@@ -441,7 +457,6 @@ let
   cc_test = id;
   cc_test_host = id;
   cc_benchmark = id;
-  cc_object = id;
 
   genrule =
     ({ name, cmd, srcs, out, ... }@args:
@@ -485,6 +500,7 @@ in {
   cc_defaults
   cc_binary
   cc_binary_host
+  cc_object
   cc_library
   cc_library_headers
   cc_library_static
@@ -525,7 +541,7 @@ in {
   "bpf"
 
   # android/soong/cc
-  "cc_benchmark" "cc_benchmark_host" "cc_fuzz" "cc_object" "cc_prebuilt_binary"
+  "cc_benchmark" "cc_benchmark_host" "cc_fuzz" "cc_prebuilt_binary"
   "cc_prebuilt_library" "cc_prebuilt_library_headers"
   "cc_prebuilt_library_shared" "cc_prebuilt_library_static"
   "cc_prebuilt_object" "cc_prebuilt_test_library_shared" "cc_test"
