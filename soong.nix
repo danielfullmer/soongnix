@@ -277,7 +277,7 @@ let
     in
       map (d: "-I${selectDir d}") include_dirs # include_dirs appears to be a path relative to the AOSP root
       ++ map (d: "-I${packageSrc}/${d}") (local_include_dirs ++ export_include_dirs ++ (optional include_build_directory "."))
-      ++ map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames
+      ++ flatten (map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames)
       ++ map (p: "-I${bpPkgs.${p}}") generated_headers;
 
   in if (hasSuffix ".asm" src) then ''
