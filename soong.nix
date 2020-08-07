@@ -1,9 +1,20 @@
-{ pkgs, lib, bpPkgs, sourceDirs, packageSrc }:
+{ pkgs, lib, bpPkgs, sourceDirs, relpath }:
 
 # TODO: Handle module "variants"
 
 with lib;
 let
+  # Find the source dir with the longest name which matches a prefix of relpath
+  selectDir = relpath:
+  let
+    matchingDirs = lib.filter (n: lib.hasPrefix n relpath) (lib.attrNames sourceDirs);
+    bestDirName =
+      assert lib.assertMsg ((builtins.length matchingDirs) >= 1) "Could not find soong module: ${relpath}";
+      builtins.head (lib.sort (a: b: (lib.stringLength a) > (lib.stringLength b)) matchingDirs);
+    remainingPath = builtins.substring (lib.stringLength bestDirName) (lib.stringLength relpath) relpath;
+  in sourceDirs.${bestDirName} + remainingPath;
+
+  packageSrc = selectDir relpath;
   llvmPackages = pkgs.llvmPackages_9;
   clang = llvmPackages.clang;
   llvm = llvmPackages.llvm;
@@ -249,7 +260,8 @@ let
         ++ linuxCflags
         ++ clangExtraCFlags
         ++ cflags
-        ++ map (d: "-I${packageSrc}/${d}") (local_include_dirs ++ include_dirs ++ export_include_dirs ++ (optional include_build_directory "."))
+        ++ map (d: "-I${selectDir d}") include_dirs # include_dirs appears to be a path relative to the AOSP root
+        ++ map (d: "-I${packageSrc}/${d}") (local_include_dirs ++ export_include_dirs ++ (optional include_build_directory "."))
         ++ map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames
         ++ map (p: "-I${bpPkgs.${p}}") generated_headers
         ++ commonGlobalIncludes;

@@ -10,20 +10,8 @@ let
     else v
   ) _sourceDirs;
 
-  # Find the source dir with the longest name which matches a prefix of relpath
-  selectDir = relpath:
-  let
-    matchingDirs = lib.filter (n: lib.hasPrefix n relpath) (lib.attrNames sourceDirs);
-    bestDirName =
-      assert lib.assertMsg ((builtins.length matchingDirs) >= 1) "Could not find soong module: ${relpath}";
-      builtins.head (lib.sort (a: b: (lib.stringLength a) > (lib.stringLength b)) matchingDirs);
-    remainingPath = builtins.substring (lib.stringLength bestDirName) (lib.stringLength relpath) relpath;
-  in sourceDirs.${bestDirName} + remainingPath;
-
   callBPPackage = relpath: let
-    #packageSrc = /home/danielrf/src/aosp + "/${relpath}"; # This should not reimport something already in /nix/store. Make it align with robotnix sources.dir ?
-    packageSrc = selectDir relpath;
-    soongModules = import ./soong.nix { inherit pkgs lib bpPkgs sourceDirs packageSrc; };
+    soongModules = import ./soong.nix { inherit pkgs lib bpPkgs sourceDirs relpath; };
   in
     lib.callPackageWith soongModules;
   bpPkgs = import ./out/blueprint-packages.nix { inherit callBPPackage; };
