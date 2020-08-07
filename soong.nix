@@ -237,33 +237,40 @@ let
 #      cppflags = [ "-nostdinc++" ];
 #      ldflags = [ "-nostdinc++" ];
     };
-  in cc (recursiveMerge [
+
+    includeFlags = let
+      headerNames = (
+        header_libs ++ shared_libs ++ static_libs ++ whole_static_libs
+        ++ optional use_version_lib "libbuildversion"
+      );
+      allHeaderNames =
+        headerNames
+        ++ (flatten (map (p:
+          bpPkgs.${p}.export_header_lib_headers
+          ++ bpPkgs.${p}.export_shared_lib_headers
+          ++ bpPkgs.${p}.export_static_lib_headers
+          ++ bpPkgs.${p}.export_generated_headers
+          ++ bpPkgs.${p}.whole_static_libs) # This one is not well documented, but appears to be necessary (test: fastboot)
+            headerNames));
+    in
+      map (d: "-I${selectDir d}") include_dirs # include_dirs appears to be a path relative to the AOSP root
+      ++ map (d: "-I${packageSrc}/${d}") (local_include_dirs ++ export_include_dirs ++ (optional include_build_directory "."))
+      ++ map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames
+      ++ map (p: "-I${bpPkgs.${p}}") generated_headers;
+
+  in if (hasSuffix ".asm" src) then ''
+    mkdir -p $(dirname ${objectFilename})
+    ${pkgs.yasm}/bin/yasm ${escapeShellArgs asflags} ${escapeShellArgs includeFlags} -D__ASSEMBLY__ -o ${objectFilename} ${src}
+  '' else cc (recursiveMerge [
     {
       out = objectFilename;
-      cflags = let
-        headerNames = (
-          header_libs ++ shared_libs ++ static_libs ++ whole_static_libs
-          ++ optional use_version_lib "libbuildversion"
-        );
-        allHeaderNames =
-          headerNames
-          ++ (flatten (map (p:
-            bpPkgs.${p}.export_header_lib_headers
-            ++ bpPkgs.${p}.export_shared_lib_headers
-            ++ bpPkgs.${p}.export_static_lib_headers
-            ++ bpPkgs.${p}.export_generated_headers
-            ++ bpPkgs.${p}.whole_static_libs) # This one is not well documented, but appears to be necessary (test: fastboot)
-              headerNames));
-      in
+      cflags =
         # The order here is important. See compilerFlags() in soong/cc/compiler.go
         commonGlobalCflags
         ++ linuxCflags
         ++ clangExtraCFlags
         ++ cflags
-        ++ map (d: "-I${selectDir d}") include_dirs # include_dirs appears to be a path relative to the AOSP root
-        ++ map (d: "-I${packageSrc}/${d}") (local_include_dirs ++ export_include_dirs ++ (optional include_build_directory "."))
-        ++ map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames
-        ++ map (p: "-I${bpPkgs.${p}}") generated_headers
+        ++ includeFlags
         ++ commonGlobalIncludes;
     }
     langOptions
