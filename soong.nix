@@ -16,7 +16,7 @@ let
 
   packageSrc = selectDir relpath;
   llvmPackages = pkgs.llvmPackages_9;
-  clang = llvmPackages.clang;
+  clang = llvmPackages.libcxxClang;
   llvm = llvmPackages.llvm;
 
   # Need a better name for this. Replace string references to actual objects in bpPkgs
@@ -480,7 +480,30 @@ let
   filegroup = id;
   resolveFiles = srcs: flatten (map (s: if hasPrefix ":" s then bpPkgs.${builtins.substring 1 (stringLength s) s}.srcs else s) srcs);
 
-  art_cc_library = cc_library;
+  art_cc_library = args: cc_library (recursiveMerge [
+    args
+    { # See art/build/art.go
+      cflags = [
+        "-O3"
+        "-DART_DEFAULT_GC_TYPE=CMS"
+        "-DIMT_SIZE=43"
+        "-DART_USE_GENERATIONAL_CC=1"
+        "-DART_DEFAULT_COMPACT_DEX_LEVEL=fast"
+        "-DART_STACK_OVERFLOW_GAP_arm=8192"
+        "-DART_STACK_OVERFLOW_GAP_arm64=8192"
+        "-DART_STACK_OVERFLOW_GAP_mips=16384"
+        "-DART_STACK_OVERFLOW_GAP_mips64=16384"
+        "-DART_STACK_OVERFLOW_GAP_x86=8192"
+        "-DART_STACK_OVERFLOW_GAP_x86_64=8192"
+        "-DUSE_D8_DESUGAR=1"
+
+        # host flags
+        "-Wframe-larger-than=1736"
+        "-DART_FRAME_SIZE_LIMIT=6400"
+      ];
+    }
+  ]);
+
   art_cc_library_static = cc_library_static;
   art_cc_binary = cc_binary;
   art_cc_test = cc_test;

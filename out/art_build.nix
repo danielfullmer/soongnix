@@ -77,8 +77,8 @@ art_defaults = art_global_defaults {
         "-fvisibility=protected"
 
         #  Warn about thread safety violations with clang.
-        "-Wthread-safety"
-        "-Wthread-safety-negative"
+        #"-Wthread-safety"
+        #"-Wthread-safety-negative"
 
         #  Warn if switch fallthroughs aren't annotated.
         "-Wimplicit-fallthrough"
@@ -200,7 +200,7 @@ art_defaults = art_global_defaults {
     ];
 };
 
-art_debug_defaults = art_debug_defaults {
+_art_debug_defaults = art_debug_defaults {
     name = "art_debug_defaults";
     cflags = [
         "-DDYNAMIC_ANNOTATIONS_ENABLED=1"
@@ -223,4 +223,4 @@ art_debug_defaults = art_debug_defaults {
     };
 };
 
-in { inherit art_debug_defaults art_defaults soong-art; }
+in { inherit art_defaults soong-art; art_debug_defaults = _art_debug_defaults; }

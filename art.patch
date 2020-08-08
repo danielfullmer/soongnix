@@ -1,0 +1,12 @@
+diff --git a/libartbase/base/globals.h b/libartbase/base/globals.h
+index 97eae635d4..f40c44fae8 100644
+--- a/libartbase/base/globals.h
++++ b/libartbase/base/globals.h
+@@ -19,6 +19,7 @@
+ 
+ #include <stddef.h>
+ #include <stdint.h>
++#include <string.h>
+ 
+ namespace art {
+ 
