@@ -220,10 +220,10 @@ let
     cc = { ccCmd, cflags ? [] }: ''
       ( shopt -s failglob globstar
         for file in ${src}; do
-          out=$TOP/''${file%.*}.o
+          out=$NIX_BUILD_TOP/''${file%.*}.o
           mkdir -p $(dirname $out)
           ${clang}/bin/${ccCmd} -c ${escapeShellArgs cflags} -o $out $file
-          echo $out >> $TOP/out.rsp
+          echo $out >> $NIX_BUILD_TOP/out.rsp
         done
       )
       '';
@@ -251,7 +251,7 @@ let
       }
       else throw "unhandled extension for file: ${src}";
     baseName = removeSuffix ".cpp" src;
-    objectFilename = "$TOP/" + baseName + ".o";
+    objectFilename = "$NIX_BUILD_TOP/" + baseName + ".o";
 
     stlOptions = {
       # We'll just do libc++_static for now
@@ -283,7 +283,7 @@ let
   in if (hasSuffix ".asm" src) then ''
     mkdir -p $(dirname ${objectFilename})
     ${pkgs.yasm}/bin/yasm ${escapeShellArgs asflags} ${escapeShellArgs includeFlags} -D__ASSEMBLY__ -o ${objectFilename} ${src}
-    echo ${objectFilename} >> $TOP/out.rsp
+    echo ${objectFilename} >> $NIX_BUILD_TOP/out.rsp
   '' else cc (recursiveMerge [
     {
       cflags =
@@ -374,13 +374,13 @@ let
       buildPhase = ''
         set -x
         mkdir -p $out/bin
-        TOP=$TMP
+        NIX_BUILD_TOP=$TMP
         cd ${packageSrc}
         # TODO: Do this in parallel
         ${concatMapStringsSep "\n" (src: mkObjectFile args src) (resolveFiles srcs)}
-        touch $TOP/out.rsp
+        touch $NIX_BUILD_TOP/out.rsp
         ${ld {
-          rsp="$TOP/out.rsp";
+          rsp="$NIX_BUILD_TOP/out.rsp";
           out="$out/bin/${name}";
           libFlags =
             [ "-Wl,--whole-archive" ] # TODO: Only include this arg if the list below is nonempty
@@ -397,12 +397,11 @@ let
   # Only support a single .c file, no other objs ATM.
   pkgs.runCommand "${name}.o" { passthru = args; } (''
     set -x
-    TOP=$TMP
     cd ${packageSrc}
   '' + (if srcs != [] then
     # TODO: Can there only be one src file?
     (mkObjectFile args (head (resolveFiles srcs))) + ''
-    cp $(cat $TOP/out.rsp) $out
+    cp $(cat $NIX_BUILD_TOP/out.rsp) $out
   '' else ''
     ${clang}/bin/clang -o $out ${escapeShellArgs (map (o: bpPkgs.${o}) objs)}
   '')));
@@ -421,7 +420,6 @@ let
       passthru = { inherit args; } // args;
     } (''
       set -x
-      TOP=$TMP
       cd ${packageSrc}
       # TODO: Do this in parallel
       ${concatMapStringsSep "\n" (src: mkObjectFile args src) (resolveFiles srcs)}
@@ -432,14 +430,14 @@ let
         pushd $EXTRACT_DIR >/dev/null
         ${llvm}/bin/llvm-ar x ${bpPkgs.${s}}/lib/${s}.a
         popd >/dev/null
-        find $EXTRACT_DIR -type f -iname '*.o' >> $TOP/out.rsp
+        find $EXTRACT_DIR -type f -iname '*.o' >> $NIX_BUILD_TOP/out.rsp
       '') whole_static_libs}
 
-      touch $TOP/out.rsp
+      touch $NIX_BUILD_TOP/out.rsp
       mkdir -p $out/lib
-      ${optionalString _build_static_lib "${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$TOP/out.rsp" }
+      ${optionalString _build_static_lib "${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$NIX_BUILD_TOP/out.rsp" }
       ${optionalString _build_shared_lib (ld {
-        rsp="$TOP/out.rsp";
+        rsp="$NIX_BUILD_TOP/out.rsp";
         out="$out/lib/${name}.so";
         ldFlags = [ "-shared" "-Wl,-soname,${name}.so" ];
         libFlags = (map (p: "${bpPkgs.${p}}/lib/${p}.so") shared_libs);
