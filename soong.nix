@@ -75,12 +75,12 @@ let
     mergeDefaultArgs
 
     # See soong/android/arch.go
-    (mergeArchArgs [ "arch" "x86_64" ])
+    (mergeArchArgs [ "arch" arch ])
     (mergeArchArgs [ "multilib" "lib64" ])
     (mergeArchArgs [ "target" "host" ])
     (mergeArchArgs [ "target" "linux" ])
     (mergeArchArgs [ "target" "linux_glibc" ])
-    (mergeArchArgs [ "target" "linux_x86_64" ])
+    (mergeArchArgs [ "target" "linux_${arch}" ])
     (mergeArchArgs [ "target" "not_windows" ])
     (mergeArchArgs [ "shared" ])
     (mergeArchArgs [ "static" ])
@@ -89,7 +89,13 @@ let
     f
   ];
 
-  #aospBase = /home/danielrf/src/aosp;
+  arch =
+    if pkgs.stdenv.isx86_64 then "x86_64"
+    else if pkgs.stdenv.isx86_32 then "x86"
+    else if pkgs.stdenv.isAarch64 then "arm64"
+    else if pkgs.stdenv.isAarch32 then "arm"
+    else throw "unhandled CPU architecture";
+
   commonGlobalCflags = [
     "-DANDROID"
     "-fmessage-length=0"
@@ -208,7 +214,7 @@ let
 
   #### Individual build rules. See soong/cc/builder.go. ####
   ld = { rsp, out, ldCmd ? "clang++", crtBegin ? "", libFlags ? [], crtEnd ? "", ldFlags ? [] }: ''
-      ${clang}/bin/${ldCmd} @${rsp} ${escapeShellArgs libFlags} -o ${out} ${escapeShellArgs ldFlags} -target x86_64-linux -pie ${hostLdLibs}  -Wl,--start-group -lgcc -lgcc_eh -lc -Wl,--end-group
+      ${clang}/bin/${ldCmd} @${rsp} ${escapeShellArgs libFlags} -o ${out} ${escapeShellArgs ldFlags} ${hostLdLibs} -Wl,--start-group -lgcc -lgcc_eh -lc -Wl,--end-group
     '';
 
   mkObjectFile =
