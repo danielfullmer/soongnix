@@ -4,7 +4,7 @@ let
 FrameworksCoreTests_version_1 = android_test_helper_app {
     name = "FrameworksCoreTests_version_1";
     defaults = ["FrameworksCoreTests_apks_defaults"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/version_test/NullProvider.java"];
     aaptflags = [
         "--version-code 1"
         "--version-name 1.0"
@@ -15,7 +15,7 @@ FrameworksCoreTests_version_1 = android_test_helper_app {
 FrameworksCoreTests_version_2 = android_test_helper_app {
     name = "FrameworksCoreTests_version_2";
     defaults = ["FrameworksCoreTests_apks_defaults"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/version_test/NullProvider.java"];
     aaptflags = [
         "--version-code 2"
         "--version-name 2.0"
@@ -26,7 +26,7 @@ FrameworksCoreTests_version_2 = android_test_helper_app {
 FrameworksCoreTests_version_3 = android_test_helper_app {
     name = "FrameworksCoreTests_version_3";
     defaults = ["FrameworksCoreTests_apks_defaults"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/version_test/NullProvider.java"];
     aaptflags = [
         "--version-code 3"
         "--version-name 3.0"
@@ -37,7 +37,7 @@ FrameworksCoreTests_version_3 = android_test_helper_app {
 FrameworksCoreTests_version_1_diff = android_test_helper_app {
     name = "FrameworksCoreTests_version_1_diff";
     defaults = ["FrameworksCoreTests_apks_defaults"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/version_test/NullProvider.java"];
     aaptflags = [
         "--version-code 1"
         "--version-name 1.0"
@@ -48,7 +48,7 @@ FrameworksCoreTests_version_1_diff = android_test_helper_app {
 FrameworksCoreTests_version_2_diff = android_test_helper_app {
     name = "FrameworksCoreTests_version_2_diff";
     defaults = ["FrameworksCoreTests_apks_defaults"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/version_test/NullProvider.java"];
     aaptflags = [
         "--version-code 2"
         "--version-name 2.0"

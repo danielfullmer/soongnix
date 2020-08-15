@@ -18,7 +18,16 @@ let
 
 platform-properties = filegroup {
     name = "platform-properties";
-    srcs = ["**/*.sysprop"];
+    srcs = [
+        "android/sysprop/AdbProperties.sysprop"
+        "android/sysprop/CarProperties.sysprop"
+        "android/sysprop/ContactsProperties.sysprop"
+        "android/sysprop/CryptoProperties.sysprop"
+        "android/sysprop/DisplayProperties.sysprop"
+        "android/sysprop/SetupWizardProperties.sysprop"
+        "android/sysprop/TraceProperties.sysprop"
+        "android/sysprop/VoldProperties.sysprop"
+    ];
 };
 
 in { inherit platform-properties; }

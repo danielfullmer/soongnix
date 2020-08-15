@@ -7,7 +7,7 @@ let
 bmgr = java_binary {
     name = "bmgr";
     wrapper = "bmgr";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/commands/bmgr/Bmgr.java"];
 };
 
 in { inherit bmgr; }

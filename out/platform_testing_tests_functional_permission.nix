@@ -6,7 +6,7 @@ PermissionFunctionalTests = android_test {
 
     sdk_version = "test_current";
 
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/functional/permissiontests/GenericAppPermissionTests.java"];
     static_libs = [
         "ub-uiautomator"
         "launcher-helper-lib"

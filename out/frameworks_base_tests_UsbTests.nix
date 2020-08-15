@@ -19,7 +19,10 @@ let
 
 UsbTests = android_test {
     name = "UsbTests";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/server/usb/UsbDescriptorParserTests.java"
+        "src/com/android/server/usb/UsbHandlerTest.java"
+    ];
     static_libs = [
         "frameworks-base-testutils"
         "androidx.test.rules"

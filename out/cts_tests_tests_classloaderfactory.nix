@@ -17,13 +17,20 @@ let
 
 ClassLoaderFactoryTestSecondary = android_test_helper_app {
     name = "ClassLoaderFactoryTestSecondary";
-    srcs = ["src-ex/**/*.java"];
+    srcs = [
+        "src-ex/android/app/classloaderfactory/cts/MyActivity.java"
+        "src-ex/android/app/classloaderfactory/cts/MyApplication.java"
+    ];
     manifest = "src-ex/AndroidManifest.xml";
 };
 
 cts-classloaderfactorytest-srcs = filegroup {
     name = "cts-classloaderfactorytest-srcs";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/app/classloaderfactory/cts/AppComponentFactoryTest.java"
+        "src/android/app/classloaderfactory/cts/InMemoryDexClassLoaderFactory.java"
+        "src/android/app/classloaderfactory/cts/PathClassLoaderFactory.java"
+    ];
 };
 
 cts_classloaderfactorytest_defaults = java_defaults {

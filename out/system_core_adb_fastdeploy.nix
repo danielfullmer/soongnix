@@ -21,9 +21,10 @@ deployagent = java_binary {
     name = "deployagent";
     sdk_version = "24";
     srcs = [
-        "deployagent/src/**/*.java"
-        "deploylib/src/**/*.java"
-        "proto/**/*.proto"
+        "deployagent/src/com/android/fastdeploy/DeployAgent.java"
+        "deploylib/src/com/android/fastdeploy/PatchFormatException.java"
+        "deploylib/src/com/android/fastdeploy/PatchUtils.java"
+        "proto/ApkEntry.proto"
     ];
     static_libs = ["apkzlib_zip"];
     wrapper = "deployagent/deployagent.sh";
@@ -38,9 +39,10 @@ deployagent = java_binary {
 deploypatchgenerator = java_binary_host {
     name = "deploypatchgenerator";
     srcs = [
-        "deploypatchgenerator/src/**/*.java"
-        "deploylib/src/**/*.java"
-        "proto/**/*.proto"
+        "deploypatchgenerator/src/com/android/fastdeploy/DeployPatchGenerator.java"
+        "deploylib/src/com/android/fastdeploy/PatchFormatException.java"
+        "deploylib/src/com/android/fastdeploy/PatchUtils.java"
+        "proto/ApkEntry.proto"
     ];
     static_libs = ["apkzlib"];
     manifest = "deploypatchgenerator/manifest.txt";

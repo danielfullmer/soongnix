@@ -20,7 +20,7 @@ Magick_filters = cc_library_static {
 
     sdk_version = "24";
 
-    srcs = ["*.c"];
+    srcs = ["analyze.c"];
 
     cflags = [
         "-DHAVE_CONFIG_H"

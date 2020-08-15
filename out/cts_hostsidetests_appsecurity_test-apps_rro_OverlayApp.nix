@@ -24,7 +24,7 @@ CtsOverlayApp = android_test {
     static_libs = ["androidx.test.rules"];
     libs = ["android.test.base.stubs"];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/cts/overlay/app/OverlayableTest.java"
     ];
     test_suites = [
         "cts"

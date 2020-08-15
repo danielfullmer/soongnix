@@ -4,7 +4,7 @@ let
 scoaudiotest = android_test {
     name = "scoaudiotest";
     platform_apis = true;
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/scoaudiotest/ScoAudioTest.java"];
 };
 
 in { inherit scoaudiotest; }

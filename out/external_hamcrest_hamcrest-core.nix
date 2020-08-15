@@ -21,7 +21,47 @@ hamcrest = java_library_static {
     name = "hamcrest";
     host_supported = true;
     hostdex = true;
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/org/hamcrest/BaseDescription.java"
+        "src/main/java/org/hamcrest/BaseMatcher.java"
+        "src/main/java/org/hamcrest/Condition.java"
+        "src/main/java/org/hamcrest/CoreMatchers.java"
+        "src/main/java/org/hamcrest/CustomMatcher.java"
+        "src/main/java/org/hamcrest/CustomTypeSafeMatcher.java"
+        "src/main/java/org/hamcrest/Description.java"
+        "src/main/java/org/hamcrest/DiagnosingMatcher.java"
+        "src/main/java/org/hamcrest/Factory.java"
+        "src/main/java/org/hamcrest/FeatureMatcher.java"
+        "src/main/java/org/hamcrest/Matcher.java"
+        "src/main/java/org/hamcrest/MatcherAssert.java"
+        "src/main/java/org/hamcrest/SelfDescribing.java"
+        "src/main/java/org/hamcrest/StringDescription.java"
+        "src/main/java/org/hamcrest/TypeSafeDiagnosingMatcher.java"
+        "src/main/java/org/hamcrest/TypeSafeMatcher.java"
+        "src/main/java/org/hamcrest/core/AllOf.java"
+        "src/main/java/org/hamcrest/core/AnyOf.java"
+        "src/main/java/org/hamcrest/core/CombinableMatcher.java"
+        "src/main/java/org/hamcrest/core/DescribedAs.java"
+        "src/main/java/org/hamcrest/core/Every.java"
+        "src/main/java/org/hamcrest/core/Is.java"
+        "src/main/java/org/hamcrest/core/IsAnything.java"
+        "src/main/java/org/hamcrest/core/IsCollectionContaining.java"
+        "src/main/java/org/hamcrest/core/IsEqual.java"
+        "src/main/java/org/hamcrest/core/IsInstanceOf.java"
+        "src/main/java/org/hamcrest/core/IsNot.java"
+        "src/main/java/org/hamcrest/core/IsNull.java"
+        "src/main/java/org/hamcrest/core/IsSame.java"
+        "src/main/java/org/hamcrest/core/ShortcutCombination.java"
+        "src/main/java/org/hamcrest/core/StringContains.java"
+        "src/main/java/org/hamcrest/core/StringEndsWith.java"
+        "src/main/java/org/hamcrest/core/StringStartsWith.java"
+        "src/main/java/org/hamcrest/core/SubstringMatcher.java"
+        "src/main/java/org/hamcrest/internal/ArrayIterator.java"
+        "src/main/java/org/hamcrest/internal/NullSafety.java"
+        "src/main/java/org/hamcrest/internal/ReflectiveTypeFinder.java"
+        "src/main/java/org/hamcrest/internal/SelfDescribingValue.java"
+        "src/main/java/org/hamcrest/internal/SelfDescribingValueIterator.java"
+    ];
     sdk_version = "core_current";
 };
 

@@ -20,7 +20,25 @@ let
 
 android_icu4j_srcgen = java_library_host {
     name = "android_icu4j_srcgen";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/main/java/com/android/icu4j/srcgen/CaptureDeprecatedElements.java"
+        "src/main/java/com/android/icu4j/srcgen/HideDraftProvisionalInternal.java"
+        "src/main/java/com/android/icu4j/srcgen/HideNonWhitelistedDeclarations.java"
+        "src/main/java/com/android/icu4j/srcgen/Icu4jBasicTransform.java"
+        "src/main/java/com/android/icu4j/srcgen/Icu4jTestsTransform.java"
+        "src/main/java/com/android/icu4j/srcgen/Icu4jTransform.java"
+        "src/main/java/com/android/icu4j/srcgen/Icu4jTransformRules.java"
+        "src/main/java/com/android/icu4j/srcgen/Main.java"
+        "src/main/java/com/android/icu4j/srcgen/ReplaceIcuTags.java"
+        "src/main/java/com/android/icu4j/srcgen/ShardingAnnotator.java"
+        "src/main/java/com/android/icu4j/srcgen/TagMatchingDeclarations.java"
+        "src/main/java/com/android/icu4j/srcgen/TranslateJcite.java"
+        "src/main/java/com/android/icu4j/srcgen/checker/CheckAndroidIcu4JSource.java"
+        "src/main/java/com/android/icu4j/srcgen/checker/CheckAndroidIcu4jSourceRules.java"
+        "src/main/java/com/android/icu4j/srcgen/checker/CheckForBrokenJciteTag.java"
+        "src/main/java/com/android/icu4j/srcgen/checker/GeneratePublicApiReport.java"
+        "src/main/java/com/android/icu4j/srcgen/checker/RecordPublicApiRules.java"
+    ];
     static_libs = [
         "currysrc"
         "icu4j"

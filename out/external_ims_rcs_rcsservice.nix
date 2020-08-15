@@ -36,7 +36,27 @@ RcsService = android_app {
     name = "RcsService";
     platform_apis = true;
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/service/ims/DeviceShutdown.java"
+        "src/com/android/service/ims/LauncherUtils.java"
+        "src/com/android/service/ims/RcsService.java"
+        "src/com/android/service/ims/RcsServiceApp.java"
+        "src/com/android/service/ims/RcsSettingUtils.java"
+        "src/com/android/service/ims/RcsStackAdaptor.java"
+        "src/com/android/service/ims/RcsUtils.java"
+        "src/com/android/service/ims/Task.java"
+        "src/com/android/service/ims/TaskManager.java"
+        "src/com/android/service/ims/presence/AlarmBroadcastReceiver.java"
+        "src/com/android/service/ims/presence/PresenceAvailabilityTask.java"
+        "src/com/android/service/ims/presence/PresenceBase.java"
+        "src/com/android/service/ims/presence/PresenceCapabilityTask.java"
+        "src/com/android/service/ims/presence/PresenceInfoParser.java"
+        "src/com/android/service/ims/presence/PresencePublication.java"
+        "src/com/android/service/ims/presence/PresencePublishTask.java"
+        "src/com/android/service/ims/presence/PresenceSubscriber.java"
+        "src/com/android/service/ims/presence/PresenceTask.java"
+        "src/com/android/service/ims/presence/StackListener.java"
+    ];
     libs = [
         "telephony-common"
         "ims-common"

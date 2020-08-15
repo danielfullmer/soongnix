@@ -18,7 +18,10 @@ let
 #  TODO: once b/80095087 is fixed, rewrite this back to android_test
 libiorap-java-test-lib = java_library {
     name = "libiorap-java-test-lib";
-    srcs = ["src/**/*.kt"];
+    srcs = [
+        "src/com/google/android/startop/iorap/IIorapIntegrationTest.kt"
+        "src/com/google/android/startop/iorap/ParcelablesTest.kt"
+    ];
     static_libs = [
         #  Non-test dependencies
         #  library under test

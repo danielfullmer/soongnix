@@ -3,7 +3,7 @@ let
 
 AccessibilityEventsLogger = android_test {
     name = "AccessibilityEventsLogger";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/tests/accessibilityeventlogger/AELogger.java"];
     sdk_version = "current";
     certificate = "platform";
     optimize = {

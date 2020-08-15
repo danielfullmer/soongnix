@@ -25,7 +25,22 @@ CalendarProvider = android_app {
         "calendar-common"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/providers/calendar/CalendarAlarmManager.java"
+        "src/com/android/providers/calendar/CalendarCache.java"
+        "src/com/android/providers/calendar/CalendarDatabaseHelper.java"
+        "src/com/android/providers/calendar/CalendarDebug.java"
+        "src/com/android/providers/calendar/CalendarDebugActivity.java"
+        "src/com/android/providers/calendar/CalendarDebugReceiver.java"
+        "src/com/android/providers/calendar/CalendarInstancesHelper.java"
+        "src/com/android/providers/calendar/CalendarProvider2.java"
+        "src/com/android/providers/calendar/CalendarProviderBroadcastReceiver.java"
+        "src/com/android/providers/calendar/CalendarReceiver.java"
+        "src/com/android/providers/calendar/CalendarSanityChecker.java"
+        "src/com/android/providers/calendar/CalendarUpgradeReceiver.java"
+        "src/com/android/providers/calendar/MetaData.java"
+        "src/com/android/providers/calendar/QueryParameterUtils.java"
+        "src/com/android/providers/calendar/SQLiteContentProvider.java"
+        "src/com/android/providers/calendar/enterprise/CrossProfileCalendarHelper.java"
         "src/com/android/providers/calendar/EventLogTags.logtags"
     ];
     platform_apis = true;

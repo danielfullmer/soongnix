@@ -16,7 +16,8 @@ libwebrtc_apm = cc_library_static {
     defaults = ["webrtc_flags"];
 
     srcs = [
-        "./**/*.proto"
+        "debug.proto"
+        "test/unittest.proto"
         "audio_buffer.cc"
         "audio_processing_impl.cc"
         "echo_cancellation_impl.cc"
@@ -56,7 +57,8 @@ webrtc_apm_process_test = cc_test {
     defaults = ["webrtc_flags"];
 
     srcs = [
-        "**/*.proto"
+        "debug.proto"
+        "test/unittest.proto"
         "test/process_test.cc"
         "test/test_utils.cc"
         "test/protobuf_utils.cc"
@@ -91,7 +93,8 @@ webrtc_apm_unit_test = cc_test {
     defaults = ["webrtc_flags"];
 
     srcs = [
-        "**/*.proto"
+        "debug.proto"
+        "test/unittest.proto"
         "test/audio_processing_unittest.cc"
         "test/protobuf_utils.cc"
         "test/test_utils.cc"

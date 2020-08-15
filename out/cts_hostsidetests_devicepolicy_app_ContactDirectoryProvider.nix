@@ -18,7 +18,7 @@ let
 CtsContactDirectoryProvider = android_test_helper_app {
     name = "CtsContactDirectoryProvider";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/contactdirectoryprovider/DirectoryProvider.java"];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

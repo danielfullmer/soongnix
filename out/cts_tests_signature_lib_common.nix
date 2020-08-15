@@ -19,7 +19,25 @@ signature-common-javalib = java_library_static {
     name = "signature-common-javalib";
     host_supported = true;
     installable = false;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/signature/cts/AbstractApiChecker.java"
+        "src/android/signature/cts/AnnotationChecker.java"
+        "src/android/signature/cts/ApiComplianceChecker.java"
+        "src/android/signature/cts/BufferedReaderLineSpliterator.java"
+        "src/android/signature/cts/ByteBufferLineSpliterator.java"
+        "src/android/signature/cts/ClassProvider.java"
+        "src/android/signature/cts/DexApiDocumentParser.java"
+        "src/android/signature/cts/DexField.java"
+        "src/android/signature/cts/DexMember.java"
+        "src/android/signature/cts/DexMethod.java"
+        "src/android/signature/cts/ExcludingClassProvider.java"
+        "src/android/signature/cts/FailureType.java"
+        "src/android/signature/cts/InterfaceChecker.java"
+        "src/android/signature/cts/JDiffClassDescription.java"
+        "src/android/signature/cts/LogHelper.java"
+        "src/android/signature/cts/ReflectionHelper.java"
+        "src/android/signature/cts/ResultObserver.java"
+    ];
     sdk_version = "current";
 };
 

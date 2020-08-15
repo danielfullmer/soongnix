@@ -7,7 +7,7 @@ libLLVMLibDriver = cc_library_static {
         "llvm-lib-defaults"
     ];
     generated_headers = ["llvm-gen-libdriver"];
-    srcs = ["*.cpp"];
+    srcs = ["LibDriver.cpp"];
 };
 
 llvm-gen-libdriver = llvm_tblgen {

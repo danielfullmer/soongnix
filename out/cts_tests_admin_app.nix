@@ -20,7 +20,22 @@ CtsAdminApp = android_test_helper_app {
     defaults = ["cts_support_defaults"];
     libs = ["guava"];
     static_libs = ["androidx.test.rules"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/admin/app/CtsDeviceAdminActivationTestActivity.java"
+        "src/android/admin/app/CtsDeviceAdminBrokenReceiver.java"
+        "src/android/admin/app/CtsDeviceAdminBrokenReceiver2.java"
+        "src/android/admin/app/CtsDeviceAdminBrokenReceiver3.java"
+        "src/android/admin/app/CtsDeviceAdminBrokenReceiver4.java"
+        "src/android/admin/app/CtsDeviceAdminBrokenReceiver5.java"
+        "src/android/admin/app/CtsDeviceAdminDeactivatedReceiver.java"
+        "src/android/admin/app/CtsDeviceAdminDeviceOwner.java"
+        "src/android/admin/app/CtsDeviceAdminProfileOwner.java"
+        "src/android/admin/app/CtsDeviceAdminReceiver.java"
+        "src/android/admin/app/CtsDeviceAdminReceiver2.java"
+        "src/android/admin/app/CtsDeviceAdminReceiver3.java"
+        "src/android/admin/app/CtsDeviceAdminReceiverInvisible.java"
+        "src/android/admin/app/CtsDeviceAdminReceiverVisible.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

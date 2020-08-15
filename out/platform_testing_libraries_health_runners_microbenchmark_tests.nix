@@ -23,7 +23,7 @@ MicrobenchmarkRunnerTests = android_test {
         "microbenchmark-device-lib"
         "truth-prebuilt"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/platform/test/microbenchmark/MicrobenchmarkTest.java"];
     test_suites = ["device-tests"];
 };
 

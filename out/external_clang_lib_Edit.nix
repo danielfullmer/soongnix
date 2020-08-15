@@ -4,7 +4,11 @@ let
 libclangEdit = cc_library_static {
     name = "libclangEdit";
     defaults = ["clang-defaults"];
-    srcs = ["*.cpp"];
+    srcs = [
+        "Commit.cpp"
+        "EditedSource.cpp"
+        "RewriteObjCFoundationAPI.cpp"
+    ];
 };
 
 in { inherit libclangEdit; }

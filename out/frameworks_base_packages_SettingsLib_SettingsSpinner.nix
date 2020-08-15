@@ -4,7 +4,10 @@ let
 SettingsLibSettingsSpinner = android_library {
     name = "SettingsLibSettingsSpinner";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/settingslib/widget/settingsspinner/SettingsSpinner.java"
+        "src/com/android/settingslib/widget/settingsspinner/SettingsSpinnerAdapter.java"
+    ];
     resource_dirs = ["res"];
 
     sdk_version = "system_current";

@@ -22,7 +22,7 @@ let
 
 KeyChainTestsSupport = android_test {
     name = "KeyChainTestsSupport";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/keychain/tests/support/KeyChainServiceTestSupport.java"];
     platform_apis = true;
     static_libs = [
         "com.android.keychain.tests.support"

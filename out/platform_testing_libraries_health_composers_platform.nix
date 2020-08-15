@@ -18,7 +18,8 @@ let
 platform-test-composers = java_library_static {
     name = "platform-test-composers";
     srcs = [
-        "src/**/*.java"
+        "src/android/platform/test/composer/Iterate.java"
+        "src/android/platform/test/composer/Shuffle.java"
     ];
     sdk_version = "current";
     libs = [

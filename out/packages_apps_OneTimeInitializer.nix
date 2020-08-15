@@ -19,7 +19,10 @@ let
 
 OneTimeInitializer = android_app {
     name = "OneTimeInitializer";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/onetimeinitializer/OneTimeInitializer.java"
+        "src/com/android/onetimeinitializer/OneTimeInitializerReceiver.java"
+    ];
     static_libs = ["android-common"];
     sdk_version = "current";
     product_specific = true;

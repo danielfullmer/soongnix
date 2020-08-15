@@ -31,7 +31,12 @@ CtsDocumentClient = android_test {
         "android.test.runner.stubs"
         "android.test.base.stubs"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/documentclient/DocumentsClientTest.java"
+        "src/com/android/cts/documentclient/DocumentsClientTestCase.java"
+        "src/com/android/cts/documentclient/MyActivity.java"
+        "src/com/android/cts/documentclient/ScopedDirectoryAccessClientTest.java"
+    ];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"

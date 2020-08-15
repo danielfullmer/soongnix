@@ -25,7 +25,7 @@ launcherprotosnano = java_library {
 
     sdk_version = "current";
     srcs = [
-        "*.proto"
+        "launcher.proto"
     ];
 };
 

@@ -19,7 +19,7 @@ let
 
 FeatureSplitBase = android_test_helper_app {
     name = "FeatureSplitBase";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/test/split/feature/ActivityMain.java"];
     sdk_version = "current";
     export_package_resources = true;
 };

@@ -36,7 +36,19 @@ CtsEphemeralTestsEphemeralApp1 = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/ephemeralapp1/ClientTest.java"
+        "src/com/android/cts/ephemeralapp1/EphemeralActivity.java"
+        "src/com/android/cts/ephemeralapp1/EphemeralActivity2.java"
+        "src/com/android/cts/ephemeralapp1/EphemeralActivity3.java"
+        "src/com/android/cts/ephemeralapp1/EphemeralProvider.java"
+        "src/com/android/cts/ephemeralapp1/EphemeralResult.java"
+        "src/com/android/cts/ephemeralapp1/EphemeralService.java"
+        "src/com/android/cts/ephemeralapp1/SearchSuggestionProvider.java"
+        "src/com/android/cts/ephemeralapp1/SomeService.java"
+        "src/com/android/cts/ephemeralapp1/WebViewTest.java"
+        "src/com/android/cts/ephemeralapp1/WebViewTestActivity.java"
+    ];
     resource_dirs = ["res"];
     platform_apis = true;
     optimize = {

@@ -18,7 +18,7 @@ let
 CtsAppRestrictionsTargetApp = android_test_helper_app {
     name = "CtsAppRestrictionsTargetApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/apprestrictions/targetapp/ApplicationRestrictionsActivity.java"];
     sdk_version = "current";
     min_sdk_version = "24";
     #  tag this module as a cts test artifact

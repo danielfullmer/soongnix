@@ -19,7 +19,23 @@ let
 
 VectorDrawableTest = android_test {
     name = "VectorDrawableTest";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/test/dynamic/AnimatedStateVectorDrawableTest.java"
+        "src/com/android/test/dynamic/AnimatedVectorDrawableAttr.java"
+        "src/com/android/test/dynamic/AnimatedVectorDrawableDupPerf.java"
+        "src/com/android/test/dynamic/AnimatedVectorDrawableTest.java"
+        "src/com/android/test/dynamic/BitmapDrawableDupe.java"
+        "src/com/android/test/dynamic/BoundsCheckTest.java"
+        "src/com/android/test/dynamic/ScaleDrawableTests.java"
+        "src/com/android/test/dynamic/VectorCheckbox.java"
+        "src/com/android/test/dynamic/VectorDrawable01.java"
+        "src/com/android/test/dynamic/VectorDrawableAnimation.java"
+        "src/com/android/test/dynamic/VectorDrawableDupPerf.java"
+        "src/com/android/test/dynamic/VectorDrawablePerformance.java"
+        "src/com/android/test/dynamic/VectorDrawableStaticPerf.java"
+        "src/com/android/test/dynamic/VectorDrawableTest.java"
+        "src/com/android/test/dynamic/VectorPathChecking.java"
+    ];
     platform_apis = true;
 };
 

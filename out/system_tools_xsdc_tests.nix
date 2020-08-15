@@ -3,7 +3,11 @@ let
 
 xsdc-java-tests = java_test_host {
     name = "xsdc-java-tests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/xsdc/tests/TestCompilationResult.java"
+        "src/com/android/xsdc/tests/TestHelper.java"
+        "src/com/android/xsdc/tests/XmlParserTest.java"
+    ];
     static_libs = [
         "junit"
         "xsdc"
@@ -36,7 +40,14 @@ xsdc-cpp-tests = cc_test_host {
         "libbase"
         "libxml2"
     ];
-    data = ["resources/*.xml"];
+    data = [
+        "resources/nested_type.xml"
+        "resources/predefined_types.xml"
+        "resources/purchase_simple.xml"
+        "resources/reference.xml"
+        "resources/simple_complex_content.xml"
+        "resources/simple_type.xml"
+    ];
 };
 
 in { inherit xsdc-cpp-tests xsdc-java-tests; }

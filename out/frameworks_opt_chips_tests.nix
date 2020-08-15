@@ -18,7 +18,10 @@ let
 libChipsTests = android_test {
     name = "libChipsTests";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/ex/chips/ChipsTest.java"
+        "src/com/android/ex/chips/RecipientAlternatesAdapterTest.java"
+    ];
 
     sdk_version = "current";
     certificate = "platform";

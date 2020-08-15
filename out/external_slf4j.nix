@@ -21,11 +21,43 @@ slf4j-jdk14 = java_library {
     name = "slf4j-jdk14";
     hostdex = true;
     srcs = [
-        "slf4j-api/src/main/**/*.java"
-        "slf4j-jdk14/src/main/java/**/*.java"
+        "slf4j-api/src/main/java/org/slf4j/ILoggerFactory.java"
+        "slf4j-api/src/main/java/org/slf4j/IMarkerFactory.java"
+        "slf4j-api/src/main/java/org/slf4j/Logger.java"
+        "slf4j-api/src/main/java/org/slf4j/LoggerFactory.java"
+        "slf4j-api/src/main/java/org/slf4j/MDC.java"
+        "slf4j-api/src/main/java/org/slf4j/Marker.java"
+        "slf4j-api/src/main/java/org/slf4j/MarkerFactory.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/BasicMDCAdapter.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/BasicMarker.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/BasicMarkerFactory.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/FormattingTuple.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/MarkerIgnoringBase.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/MessageFormatter.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/NOPLogger.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/NOPLoggerFactory.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/NOPMDCAdapter.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/NamedLoggerBase.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/SubstituteLogger.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/SubstituteLoggerFactory.java"
+        "slf4j-api/src/main/java/org/slf4j/helpers/Util.java"
+        "slf4j-api/src/main/java/org/slf4j/impl/StaticLoggerBinder.java"
+        "slf4j-api/src/main/java/org/slf4j/impl/StaticMDCBinder.java"
+        "slf4j-api/src/main/java/org/slf4j/impl/StaticMarkerBinder.java"
+        "slf4j-api/src/main/java/org/slf4j/spi/LocationAwareLogger.java"
+        "slf4j-api/src/main/java/org/slf4j/spi/LoggerFactoryBinder.java"
+        "slf4j-api/src/main/java/org/slf4j/spi/MDCAdapter.java"
+        "slf4j-api/src/main/java/org/slf4j/spi/MarkerFactoryBinder.java"
+        "slf4j-jdk14/src/main/java/org/slf4j/impl/JDK14LoggerAdapter.java"
+        "slf4j-jdk14/src/main/java/org/slf4j/impl/JDK14LoggerFactory.java"
+        "slf4j-jdk14/src/main/java/org/slf4j/impl/StaticLoggerBinder.java"
+        "slf4j-jdk14/src/main/java/org/slf4j/impl/StaticMDCBinder.java"
+        "slf4j-jdk14/src/main/java/org/slf4j/impl/StaticMarkerBinder.java"
     ];
     exclude_srcs = [
-        "slf4j-api/src/main/java/org/slf4j/impl/**/*.java"
+        "slf4j-api/src/main/java/org/slf4j/impl/StaticLoggerBinder.java"
+        "slf4j-api/src/main/java/org/slf4j/impl/StaticMDCBinder.java"
+        "slf4j-api/src/main/java/org/slf4j/impl/StaticMarkerBinder.java"
     ];
 
     sdk_version = "core_current";

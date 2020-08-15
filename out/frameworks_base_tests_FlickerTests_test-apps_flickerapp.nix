@@ -17,7 +17,13 @@ let
 
 FlickerTestApp = android_test {
     name = "FlickerTestApp";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/server/wm/flicker/testapp/ActivityOptions.java"
+        "src/com/android/server/wm/flicker/testapp/ImeActivity.java"
+        "src/com/android/server/wm/flicker/testapp/PipActivity.java"
+        "src/com/android/server/wm/flicker/testapp/SeamlessRotationActivity.java"
+        "src/com/android/server/wm/flicker/testapp/SimpleActivity.java"
+    ];
     sdk_version = "current";
     test_suites = ["device-tests"];
 };

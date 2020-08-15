@@ -22,7 +22,23 @@ ims-common = java_library {
     aidl = {
         local_include_dirs = ["src/java"];
     };
-    srcs = ["src/java/**/*.java"];
+    srcs = [
+        "src/java/com/android/ims/ImsCall.java"
+        "src/java/com/android/ims/ImsConnectionStateListener.java"
+        "src/java/com/android/ims/ImsEcbm.java"
+        "src/java/com/android/ims/ImsEcbmStateListener.java"
+        "src/java/com/android/ims/ImsExternalCallStateListener.java"
+        "src/java/com/android/ims/ImsManager.java"
+        "src/java/com/android/ims/ImsMultiEndpoint.java"
+        "src/java/com/android/ims/ImsServiceBase.java"
+        "src/java/com/android/ims/ImsServiceClass.java"
+        "src/java/com/android/ims/ImsUt.java"
+        "src/java/com/android/ims/MmTelFeatureConnection.java"
+        "src/java/com/android/ims/internal/ICall.java"
+        "src/java/com/android/ims/internal/ImsStreamMediaSession.java"
+        "src/java/com/android/ims/internal/ImsVideoCallProviderWrapper.java"
+        "src/java/com/android/ims/internal/VideoPauseTracker.java"
+    ];
 
 };
 

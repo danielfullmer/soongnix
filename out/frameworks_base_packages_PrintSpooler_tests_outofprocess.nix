@@ -18,7 +18,7 @@ let
 PrintSpoolerOutOfProcessTests = android_test {
     name = "PrintSpoolerOutOfProcessTests";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/printspooler/outofprocess/tests/WorkflowTest.java"];
 
     libs = ["android.test.runner.stubs"];
     static_libs = [

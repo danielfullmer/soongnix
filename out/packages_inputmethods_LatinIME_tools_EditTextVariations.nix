@@ -18,7 +18,16 @@ let
 EditTextVariations = android_test {
     name = "EditTextVariations";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/inputmethod/tools/edittextvariations/EchoingTextWatcher.java"
+        "src/com/android/inputmethod/tools/edittextvariations/EditTextVariations.java"
+        "src/com/android/inputmethod/tools/edittextvariations/FinalClassField.java"
+        "src/com/android/inputmethod/tools/edittextvariations/InstanceMethod.java"
+        "src/com/android/inputmethod/tools/edittextvariations/MultiLineShortMessageEditText.java"
+        "src/com/android/inputmethod/tools/edittextvariations/NotificationBroadcastReceiver.java"
+        "src/com/android/inputmethod/tools/edittextvariations/NotificationUtils.java"
+        "src/com/android/inputmethod/tools/edittextvariations/ThemeItem.java"
+    ];
 
     sdk_version = "current";
     min_sdk_version = "11";

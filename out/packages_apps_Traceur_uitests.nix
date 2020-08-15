@@ -16,7 +16,7 @@ let
 #  limitations under the License.
 TraceurUiTests = android_test {
     name = "TraceurUiTests";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/settings/ui/TraceurAppTests.java"];
     static_libs = [
         "androidx.test.rules"
         "platform-test-annotations"

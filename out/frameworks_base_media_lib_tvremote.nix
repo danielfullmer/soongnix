@@ -19,7 +19,7 @@ let
 
 "com.android.media.tv.remoteprovider" = java_sdk_library {
     name = "com.android.media.tv.remoteprovider";
-    srcs = ["java/**/*.java"];
+    srcs = ["java/com/android/media/tv/remoteprovider/TvRemoteProvider.java"];
     api_packages = ["com.android.media.tv.remoteprovider"];
     dex_preopt = {
         enabled = false;

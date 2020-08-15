@@ -19,7 +19,22 @@ let
 
 FlickerTests = android_test {
     name = "FlickerTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/server/wm/flicker/ChangeAppRotationTest.java"
+        "src/com/android/server/wm/flicker/CloseImeWindowToAppTest.java"
+        "src/com/android/server/wm/flicker/CloseImeWindowToHomeTest.java"
+        "src/com/android/server/wm/flicker/CommonTransitions.java"
+        "src/com/android/server/wm/flicker/DebugTest.java"
+        "src/com/android/server/wm/flicker/FlickerTestBase.java"
+        "src/com/android/server/wm/flicker/OpenAppColdTest.java"
+        "src/com/android/server/wm/flicker/OpenAppToSplitScreenTest.java"
+        "src/com/android/server/wm/flicker/OpenAppWarmTest.java"
+        "src/com/android/server/wm/flicker/OpenImeWindowTest.java"
+        "src/com/android/server/wm/flicker/ResizeSplitScreenTest.java"
+        "src/com/android/server/wm/flicker/SeamlessAppRotationTest.java"
+        "src/com/android/server/wm/flicker/SplitScreenToLauncherTest.java"
+        "src/com/android/server/wm/flicker/StandardAppHelper.java"
+    ];
     platform_apis = true;
     certificate = "platform";
     test_suites = ["device-tests"];

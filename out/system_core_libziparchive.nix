@@ -114,7 +114,13 @@ ziparchive-tests = cc_test {
     defaults = ["libziparchive_flags"];
 
     data = [
-        "testdata/**/*"
+        "testdata/bad_crc.zip"
+        "testdata/bad_filename.zip"
+        "testdata/crash.apk"
+        "testdata/declaredlength.zip"
+        "testdata/dummy-update.zip"
+        "testdata/large.zip"
+        "testdata/valid.zip"
     ];
 
     srcs = [

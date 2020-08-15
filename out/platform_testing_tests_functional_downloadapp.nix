@@ -6,7 +6,10 @@ DownloadAppFunctionalTests = android_test {
 
     sdk_version = "test_current";
 
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/functional/downloadapp/DownloadAppTestHelper.java"
+        "src/com/android/functional/downloadapp/DownloadAppTests.java"
+    ];
     static_libs = [
         "launcher-helper-lib"
         "ub-uiautomator"

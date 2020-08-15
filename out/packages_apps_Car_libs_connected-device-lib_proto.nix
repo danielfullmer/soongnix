@@ -23,7 +23,12 @@ connected-device-protos = java_library_static {
     proto = {
         type = "lite";
     };
-    srcs = ["*.proto"];
+    srcs = [
+        "ble_device_message.proto"
+        "ble_packet.proto"
+        "ble_version_exchange.proto"
+        "operation_type.proto"
+    ];
     jarjar_rules = "jarjar-rules.txt";
     sdk_version = "28";
 };

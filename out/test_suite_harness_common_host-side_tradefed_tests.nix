@@ -19,7 +19,47 @@ compatibility-tradefed-tests = java_test_host {
     name = "compatibility-tradefed-tests";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/tradefed/UnitTests.java"
+        "src/com/android/compatibility/common/tradefed/build/CompatibilityBuildHelperTest.java"
+        "src/com/android/compatibility/common/tradefed/build/CompatibilityBuildProviderTest.java"
+        "src/com/android/compatibility/common/tradefed/command/CompatibilityConsoleTest.java"
+        "src/com/android/compatibility/common/tradefed/config/ConfigurationFactoryTest.java"
+        "src/com/android/compatibility/common/tradefed/presubmit/ApkPackageNameCheck.java"
+        "src/com/android/compatibility/common/tradefed/presubmit/CtsConfigLoadingTest.java"
+        "src/com/android/compatibility/common/tradefed/presubmit/DupFileTest.java"
+        "src/com/android/compatibility/common/tradefed/presubmit/IntegrationTest.java"
+        "src/com/android/compatibility/common/tradefed/presubmit/PresubmitSetupValidation.java"
+        "src/com/android/compatibility/common/tradefed/presubmit/ValidateTestsAbi.java"
+        "src/com/android/compatibility/common/tradefed/result/ChecksumReporterTest.java"
+        "src/com/android/compatibility/common/tradefed/result/ConsoleReporterTest.java"
+        "src/com/android/compatibility/common/tradefed/result/MetadataReporterTest.java"
+        "src/com/android/compatibility/common/tradefed/result/ResultReporterBuildInfoTest.java"
+        "src/com/android/compatibility/common/tradefed/result/ResultReporterTest.java"
+        "src/com/android/compatibility/common/tradefed/result/SubPlanHelperTest.java"
+        "src/com/android/compatibility/common/tradefed/result/suite/CertificationChecksumHelperTest.java"
+        "src/com/android/compatibility/common/tradefed/result/suite/PreviousResultLoaderTest.java"
+        "src/com/android/compatibility/common/tradefed/result/suite/PreviousSessionFileCopierTest.java"
+        "src/com/android/compatibility/common/tradefed/targetprep/BusinessLogicPreparerTest.java"
+        "src/com/android/compatibility/common/tradefed/targetprep/DynamicConfigPusherTest.java"
+        "src/com/android/compatibility/common/tradefed/targetprep/MediaPreparerTest.java"
+        "src/com/android/compatibility/common/tradefed/targetprep/PropertyCheckTest.java"
+        "src/com/android/compatibility/common/tradefed/targetprep/SettingsPreparerTest.java"
+        "src/com/android/compatibility/common/tradefed/testtype/CompatibilityTestTest.java"
+        "src/com/android/compatibility/common/tradefed/testtype/JarHostTestTest.java"
+        "src/com/android/compatibility/common/tradefed/testtype/ModuleDefTest.java"
+        "src/com/android/compatibility/common/tradefed/testtype/ModuleRepoTest.java"
+        "src/com/android/compatibility/common/tradefed/testtype/ShardableTestStub.java"
+        "src/com/android/compatibility/common/tradefed/testtype/SimpleTestStub.java"
+        "src/com/android/compatibility/common/tradefed/testtype/SubPlanTest.java"
+        "src/com/android/compatibility/common/tradefed/testtype/TestStub.java"
+        "src/com/android/compatibility/common/tradefed/testtype/retry/RetryFactoryTestTest.java"
+        "src/com/android/compatibility/common/tradefed/util/CollectorUtilTest.java"
+        "src/com/android/compatibility/common/tradefed/util/DynamicConfigFileReaderTest.java"
+        "src/com/android/compatibility/common/tradefed/util/OptionHelperTest.java"
+        "src/com/android/compatibility/common/tradefed/util/RetryFilterHelperTest.java"
+        "src/com/android/compatibility/common/tradefed/util/UniqueModuleCountUtilTest.java"
+    ];
     java_resource_dirs = ["res"];
 
     libs = [

@@ -19,7 +19,16 @@ let
 
 live-channels-partner-support = android_library {
     name = "live-channels-partner-support";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/google/android/tv/partner/support/BaseCustomization.java"
+        "src/com/google/android/tv/partner/support/EpgContract.java"
+        "src/com/google/android/tv/partner/support/EpgInput.java"
+        "src/com/google/android/tv/partner/support/EpgInputs.java"
+        "src/com/google/android/tv/partner/support/Lineup.java"
+        "src/com/google/android/tv/partner/support/Lineups.java"
+        "src/com/google/android/tv/partner/support/PartnerCustomizations.java"
+        "src/com/google/android/tv/partner/support/TunerSetupUtils.java"
+    ];
 
     sdk_version = "system_current";
     min_sdk_version = "23";

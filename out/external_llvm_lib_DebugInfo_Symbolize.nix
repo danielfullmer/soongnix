@@ -6,7 +6,11 @@ libLLVMSymbolize = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "DIPrinter.cpp"
+        "SymbolizableObjectFile.cpp"
+        "Symbolize.cpp"
+    ];
 };
 
 in { inherit libLLVMSymbolize; }

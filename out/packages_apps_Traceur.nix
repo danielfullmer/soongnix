@@ -19,7 +19,22 @@ Traceur = android_app {
         "androidx.legacy_legacy-support-v4"
     ];
     resource_dirs = ["res"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/google/android/traceur/AtraceUtils.java"
+        "src/com/google/android/traceur/FileSender.java"
+        "src/com/google/android/traceur/MainActivity.java"
+        "src/com/google/android/traceur/MainFragment.java"
+        "src/com/google/android/traceur/MainTvActivity.java"
+        "src/com/google/android/traceur/PerfettoUtils.java"
+        "src/com/google/android/traceur/QsService.java"
+        "src/com/google/android/traceur/Receiver.java"
+        "src/com/google/android/traceur/SearchProvider.java"
+        "src/com/google/android/traceur/StopTraceService.java"
+        "src/com/google/android/traceur/StorageProvider.java"
+        "src/com/google/android/traceur/TraceService.java"
+        "src/com/google/android/traceur/TraceUtils.java"
+        "src/com/google/android/traceur/UserConsentActivityDialog.java"
+    ];
     init_rc = ["traceur.rc"];
     defaults = [
         "SettingsLibDefaults"

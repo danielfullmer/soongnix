@@ -19,7 +19,8 @@ py-mock = python_library {
     name = "py-mock";
     host_supported = true;
     srcs = [
-        "*.py"
+        "__init__.py"
+        "mock.py"
     ];
     version = {
         py2 = {

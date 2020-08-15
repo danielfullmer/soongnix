@@ -21,7 +21,8 @@ collector-helper-utilities = java_library_static {
     defaults = ["tradefed_errorprone_defaults"];
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/helpers/ICollectorHelper.java"
+        "src/com/android/helpers/MetricUtility.java"
     ];
 
     sdk_version = "current";

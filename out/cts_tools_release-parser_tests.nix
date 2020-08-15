@@ -20,7 +20,10 @@ let
 release-parser-tests = java_test_host {
     name = "release-parser-tests";
     srcs = [
-        "src/**/*.java"
+        "src/com/android/cts/releaseparser/ApkParserTest.java"
+        "src/com/android/cts/releaseparser/FileParserTest.java"
+        "src/com/android/cts/releaseparser/SoParserTest.java"
+        "src/com/android/cts/releaseparser/UnitTests.java"
     ];
 
     libs = [

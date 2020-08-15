@@ -4,7 +4,17 @@ let
 clang-tblgen = cc_binary_host {
     name = "clang-tblgen";
     defaults = ["llvm-defaults"];
-    srcs = ["*.cpp"];
+    srcs = [
+        "ClangASTNodesEmitter.cpp"
+        "ClangAttrEmitter.cpp"
+        "ClangCommentCommandInfoEmitter.cpp"
+        "ClangCommentHTMLNamedCharacterReferenceEmitter.cpp"
+        "ClangCommentHTMLTagsEmitter.cpp"
+        "ClangDiagnosticsEmitter.cpp"
+        "ClangSACheckersEmitter.cpp"
+        "NeonEmitter.cpp"
+        "TableGen.cpp"
+    ];
 
     static_libs = [
         "libLLVMTableGen"

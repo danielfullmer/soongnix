@@ -20,7 +20,7 @@ MetricsHelperTests = android_test {
 
     platform_apis = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/support/test/metricshelper/MetricsAssertsTest.java"];
 
     libs = [
         "android.test.runner"

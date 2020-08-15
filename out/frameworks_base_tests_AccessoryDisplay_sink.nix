@@ -19,7 +19,13 @@ let
 AccessoryDisplaySink = android_test {
     name = "AccessoryDisplaySink";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/accessorydisplay/sink/DisplaySinkService.java"
+        "src/com/android/accessorydisplay/sink/SinkActivity.java"
+        "src/com/android/accessorydisplay/sink/UsbAccessoryBulkTransport.java"
+        "src/com/android/accessorydisplay/sink/UsbAccessoryConstants.java"
+        "src/com/android/accessorydisplay/sink/UsbHid.java"
+    ];
     resource_dirs = ["res"];
     static_libs = ["AccessoryDisplayCommon"];
 };

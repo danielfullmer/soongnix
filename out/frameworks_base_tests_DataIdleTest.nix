@@ -25,7 +25,7 @@ DataIdleTest = android_test {
         "android.test.base"
     ];
     static_libs = ["junit"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/tests/dataidle/DataIdleTest.java"];
     #  We need to sign it to get access to the network usage history.
     certificate = "platform";
 };

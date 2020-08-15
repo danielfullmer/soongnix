@@ -23,7 +23,11 @@ BrowserPowerTests = android_test {
     ];
     static_libs = ["junit"];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/browserpowertest/PowerMeasurement.java"
+        "src/com/android/browserpowertest/PowerTestActivity.java"
+        "src/com/android/browserpowertest/PowerTestRunner.java"
+    ];
     platform_apis = true;
     # LOCAL_INSTRUMENTATION_FOR := browserpowertest
 };

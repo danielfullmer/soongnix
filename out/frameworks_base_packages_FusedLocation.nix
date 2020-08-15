@@ -17,7 +17,11 @@ let
 
 FusedLocation = android_app {
     name = "FusedLocation";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/location/fused/FusedLocationProvider.java"
+        "src/com/android/location/fused/FusedLocationService.java"
+        "src/com/android/location/fused/FusionEngine.java"
+    ];
     libs = ["com.android.location.provider"];
     platform_apis = true;
     certificate = "platform";

@@ -18,7 +18,7 @@ let
 ShortcutManagerTestUtils = java_library {
     name = "ShortcutManagerTestUtils";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/server/pm/shortcutmanagertest/ShortcutManagerTestUtils.java"];
 
     libs = [
         "mockito-target"

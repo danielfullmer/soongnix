@@ -26,7 +26,18 @@ libclassdescriptors = cc_library_shared {
 
 cts-api-signature-test = java_library {
     name = "cts-api-signature-test";
-    srcs = ["src/java/**/*.java"];
+    srcs = [
+        "src/java/android/signature/cts/api/AbstractApiTest.java"
+        "src/java/android/signature/cts/api/BaseKillswitchTest.java"
+        "src/java/android/signature/cts/api/BootClassPathClassesProvider.java"
+        "src/java/android/signature/cts/api/DebugClassHiddenApiTest.java"
+        "src/java/android/signature/cts/api/DebugClassKillswitchTest.java"
+        "src/java/android/signature/cts/api/HiddenApiTest.java"
+        "src/java/android/signature/cts/api/SignatureTest.java"
+        "src/java/android/signature/cts/api/TestResultObserver.java"
+        "src/java/android/signature/cts/api/WhitelistKillswitchTest.java"
+        "src/java/android/signature/cts/api/WildcardKillswitchTest.java"
+    ];
     sdk_version = "test_current";
     static_libs = [
         "cts-signature-common"

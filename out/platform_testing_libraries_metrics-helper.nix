@@ -20,7 +20,7 @@ let
 metrics-helper-lib = java_library {
 
     name = "metrics-helper-lib";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/support/test/metricshelper/MetricsAsserts.java"];
     static_libs = [
         "junit"
         "framework-protos"

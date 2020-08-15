@@ -4,7 +4,7 @@ let
 AppLaunchWear = android_test {
     name = "AppLaunchWear";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/tests/applaunch/AppLaunch.java"];
     platform_apis = true;
     certificate = "platform";
     libs = [

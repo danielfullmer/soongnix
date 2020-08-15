@@ -24,7 +24,20 @@ app-helpers-core = java_library {
         "androidx.test.runner"
         "launcher-helper-lib"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/helpers/AbstractStandardAppHelper.java"
+        "src/android/platform/helpers/HelperAccessor.java"
+        "src/android/platform/helpers/HelperManager.java"
+        "src/android/platform/helpers/HelperTest.java"
+        "src/android/platform/helpers/IAppHelper.java"
+        "src/android/platform/helpers/ILauncherHelper.java"
+        "src/android/platform/helpers/exceptions/AccountException.java"
+        "src/android/platform/helpers/exceptions/MappedMultiException.java"
+        "src/android/platform/helpers/exceptions/UiTimeoutException.java"
+        "src/android/platform/helpers/exceptions/UnknownUiException.java"
+        "src/android/platform/helpers/listeners/FailureScreenshotTestWatcher.java"
+        "src/android/platform/helpers/watchers/AppIsNotRespondingWatcher.java"
+    ];
     sdk_version = "test_current";
 };
 

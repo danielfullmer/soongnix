@@ -24,7 +24,7 @@ user-helper = java_library {
         "android-support-test"
         "commands-helper"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/UserHelper.java"];
     sdk_version = "current";
 };
 

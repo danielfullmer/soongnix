@@ -41,7 +41,7 @@ CtsViewTestCasesSdk28 = android_test {
     ];
 
     srcs = [
-        "src/**/*.java"
+        "src/android/view/cts/sdk28/ViewGroupTest.java"
     ];
 
     sdk_version = "28";

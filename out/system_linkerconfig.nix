@@ -40,7 +40,11 @@ linkerconfig_modules = cc_library_static {
     name = "linkerconfig_modules";
     defaults = ["linkerconfig_defaults"];
     srcs = [
-        "modules/*.cc"
+        "modules/configwriter.cc"
+        "modules/link.cc"
+        "modules/namespace.cc"
+        "modules/section.cc"
+        "modules/variables.cc"
     ];
 };
 
@@ -48,7 +52,11 @@ linkerconfig_modules_unittest = cc_test {
     name = "linkerconfig_modules_unittest";
     defaults = ["linkerconfig_defaults"];
     srcs = [
-        "modules/tests/*_test.cc"
+        "modules/tests/configwriter_test.cc"
+        "modules/tests/link_test.cc"
+        "modules/tests/namespace_test.cc"
+        "modules/tests/section_test.cc"
+        "modules/tests/variables_test.cc"
     ];
     static_libs = [
         "linkerconfig_modules"

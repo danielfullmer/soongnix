@@ -7,7 +7,7 @@ libLLVMMipsDisassembler = cc_library_static {
         "llvm-lib-defaults"
         "llvm-mips-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["MipsDisassembler.cpp"];
 };
 
 in { inherit libLLVMMipsDisassembler; }

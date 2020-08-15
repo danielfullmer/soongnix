@@ -19,7 +19,7 @@ let
 
 WallpaperBackup = android_app {
     name = "WallpaperBackup";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/wallpaperbackup/WallpaperBackupAgent.java"];
     optimize = {
         proguard_flags_files = ["proguard.flags"];
     };

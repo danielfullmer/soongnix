@@ -21,8 +21,21 @@ CompanionDeviceSupport-aidl = android_library {
     name = "CompanionDeviceSupport-aidl";
 
     srcs = [
-        "src/com/android/car/companiondevicesupport/api/**/*.java"
-        "src/com/android/car/companiondevicesupport/api/**/I*.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/AssociatedDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/CompanionDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/ConnectedDeviceManagerBinder.java"
+        "src/com/android/car/companiondevicesupport/api/internal/association/AssociationBinder.java"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/TrustedDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/IConnectedDeviceManager.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/IConnectionCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/IDeviceAssociationCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/IDeviceCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/association/IAssociatedDeviceManager.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/association/IAssociationCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceAgentDelegate.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceEnrollmentCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceManager.aidl"
     ];
 
     manifest = "AndroidManifest_aidl.xml";
@@ -44,12 +57,61 @@ CompanionDeviceSupport-lib = android_library {
     name = "CompanionDeviceSupport-lib";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/car/companiondevicesupport/activity/AddAssociatedDeviceFragment.java"
+        "src/com/android/car/companiondevicesupport/activity/AssociatedDeviceDetailFragment.java"
+        "src/com/android/car/companiondevicesupport/activity/AssociatedDeviceDetails.java"
+        "src/com/android/car/companiondevicesupport/activity/AssociatedDeviceViewModel.java"
+        "src/com/android/car/companiondevicesupport/activity/AssociationActivity.java"
+        "src/com/android/car/companiondevicesupport/activity/AssociationErrorFragment.java"
+        "src/com/android/car/companiondevicesupport/activity/ConfirmPairingCodeFragment.java"
+        "src/com/android/car/companiondevicesupport/activity/TurnOnBluetoothFragment.java"
+        "src/com/android/car/companiondevicesupport/api/external/AssociatedDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/CompanionDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/ConnectedDeviceManagerBinder.java"
+        "src/com/android/car/companiondevicesupport/api/internal/association/AssociationBinder.java"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/TrustedDevice.java"
+        "src/com/android/car/companiondevicesupport/feature/LocalFeature.java"
+        "src/com/android/car/companiondevicesupport/feature/RemoteFeature.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarCleaner.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarImporter.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarSyncFeature.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarSyncManager.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarSyncService.java"
+        "src/com/android/car/companiondevicesupport/feature/howitzer/ConnectionHowitzer.java"
+        "src/com/android/car/companiondevicesupport/feature/notificationmsg/NotificationMsgDelegate.java"
+        "src/com/android/car/companiondevicesupport/feature/notificationmsg/NotificationMsgFeature.java"
+        "src/com/android/car/companiondevicesupport/feature/notificationmsg/NotificationMsgService.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/TrustedDeviceAgentService.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/TrustedDeviceConstants.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/TrustedDeviceEventLog.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/TrustedDeviceFeature.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/TrustedDeviceManager.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/TrustedDeviceManagerService.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/storage/TrustedDeviceDao.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/storage/TrustedDeviceDatabase.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/storage/TrustedDeviceEntity.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/ui/TrustedDeviceActivity.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/ui/TrustedDeviceDetailFragment.java"
+        "src/com/android/car/companiondevicesupport/feature/trust/ui/TrustedDeviceViewModel.java"
+        "src/com/android/car/companiondevicesupport/service/CompanionDeviceSupportService.java"
     ];
 
     exclude_srcs = [
-        "src/com/android/car/companiondevicesupport/api/**/*.java"
-        "src/com/android/car/companiondevicesupport/api/**/I*.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/AssociatedDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/CompanionDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/ConnectedDeviceManagerBinder.java"
+        "src/com/android/car/companiondevicesupport/api/internal/association/AssociationBinder.java"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/TrustedDevice.java"
+        "src/com/android/car/companiondevicesupport/api/external/IConnectedDeviceManager.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/IConnectionCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/IDeviceAssociationCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/external/IDeviceCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/association/IAssociatedDeviceManager.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/association/IAssociationCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceAgentDelegate.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceEnrollmentCallback.aidl"
+        "src/com/android/car/companiondevicesupport/api/internal/trust/ITrustedDeviceManager.aidl"
     ];
 
     resource_dirs = ["res"];

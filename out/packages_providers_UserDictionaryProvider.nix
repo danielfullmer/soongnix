@@ -3,7 +3,10 @@ let
 
 UserDictionaryProvider = android_app {
     name = "UserDictionaryProvider";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/providers/userdictionary/DictionaryBackupAgent.java"
+        "src/com/android/providers/userdictionary/UserDictionaryProvider.java"
+    ];
     libs = ["ext"];
     platform_apis = true;
     certificate = "shared";

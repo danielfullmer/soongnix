@@ -9,7 +9,7 @@ CameraEffectsTests = android_test {
     ];
     static_libs = ["junit"];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/camera/mediaeffects/tests/functional/EffectsVideoCapture.java"];
     platform_apis = true;
     instrumentation_for = "CameraEffectsRecordingSample";
 };

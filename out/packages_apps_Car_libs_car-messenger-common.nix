@@ -20,7 +20,17 @@ let
 car-messenger-common = android_library {
     name = "car-messenger-common";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/messenger/common/BaseNotificationDelegate.java"
+        "src/com/android/car/messenger/common/CompositeKey.java"
+        "src/com/android/car/messenger/common/ConversationKey.java"
+        "src/com/android/car/messenger/common/ConversationNotificationInfo.java"
+        "src/com/android/car/messenger/common/Message.java"
+        "src/com/android/car/messenger/common/MessageKey.java"
+        "src/com/android/car/messenger/common/ProjectionStateListener.java"
+        "src/com/android/car/messenger/common/SenderKey.java"
+        "src/com/android/car/messenger/common/Utils.java"
+    ];
 
     optimize = {
         enabled = false;

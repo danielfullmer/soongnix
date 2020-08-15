@@ -35,7 +35,36 @@ FrameworkTestRunnerTests = android_test {
     static_libs = ["junit"];
 
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/test/AndroidTestRunnerTest.java"
+        "src/android/test/InstrumentationTestRunnerTest.java"
+        "src/android/test/TestCaseUtilTest.java"
+        "src/android/test/suitebuilder/AssignableFromTest.java"
+        "src/android/test/suitebuilder/ListTestCaseNames.java"
+        "src/android/test/suitebuilder/SmokeTestSuiteBuilderTest.java"
+        "src/android/test/suitebuilder/TestGroupingTest.java"
+        "src/android/test/suitebuilder/TestPredicatesTest.java"
+        "src/android/test/suitebuilder/TestSuiteBuilderTest.java"
+        "src/android/test/suitebuilder/UnitTestSuiteBuilderTest.java"
+        "src/android/test/suitebuilder/examples/OuterTest.java"
+        "src/android/test/suitebuilder/examples/constructor/NoPublicConstructorTest.java"
+        "src/android/test/suitebuilder/examples/constructor/ProtectedConstructorTest.java"
+        "src/android/test/suitebuilder/examples/constructor/PublicConstructorTest.java"
+        "src/android/test/suitebuilder/examples/error/ErrorTest.java"
+        "src/android/test/suitebuilder/examples/error/FailingTest.java"
+        "src/android/test/suitebuilder/examples/error/RunAsPartOfSeparateTest.java"
+        "src/android/test/suitebuilder/examples/instrumentation/InstrumentationTest.java"
+        "src/android/test/suitebuilder/examples/nested/Level1Test.java"
+        "src/android/test/suitebuilder/examples/nested/nested/Level2Test.java"
+        "src/android/test/suitebuilder/examples/simple/AnotherSimpleTest.java"
+        "src/android/test/suitebuilder/examples/simple/SimpleTest.java"
+        "src/android/test/suitebuilder/examples/smoke/NonSmokeTest.java"
+        "src/android/test/suitebuilder/examples/smoke/SmokeTest.java"
+        "src/android/test/suitebuilder/examples/subclass/SubclassTest.java"
+        "src/android/test/suitebuilder/examples/subclass/SuperclassTest.java"
+        "src/android/test/suitebuilder/examples/suppress/PartiallySuppressedTest.java"
+        "src/android/test/suitebuilder/examples/suppress/SuppressedTest.java"
+    ];
 
     #  Because of android.test.mock.
     platform_apis = true;

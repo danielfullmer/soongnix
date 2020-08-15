@@ -26,7 +26,20 @@ AuptLib = java_library {
         "android.test.runner.stubs"
         "android.test.base.stubs"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/support/test/aupt/AuptTerminator.java"
+        "src/android/support/test/aupt/AuptTestCase.java"
+        "src/android/support/test/aupt/AuptTestRunner.java"
+        "src/android/support/test/aupt/DataCollector.java"
+        "src/android/support/test/aupt/DexTestRunner.java"
+        "src/android/support/test/aupt/FilesystemUtil.java"
+        "src/android/support/test/aupt/IProcessStatusTracker.java"
+        "src/android/support/test/aupt/LogGenerator.java"
+        "src/android/support/test/aupt/MemHealthRecord.java"
+        "src/android/support/test/aupt/ProcessStatusTracker.java"
+        "src/android/support/test/aupt/Scheduler.java"
+        "src/android/support/test/aupt/UiWatchers.java"
+    ];
 };
 
 # #####################################
@@ -44,7 +57,20 @@ AuptRunner = android_test {
         "android.test.base.stubs"
         "android.test.runner.stubs"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/support/test/aupt/AuptTerminator.java"
+        "src/android/support/test/aupt/AuptTestCase.java"
+        "src/android/support/test/aupt/AuptTestRunner.java"
+        "src/android/support/test/aupt/DataCollector.java"
+        "src/android/support/test/aupt/DexTestRunner.java"
+        "src/android/support/test/aupt/FilesystemUtil.java"
+        "src/android/support/test/aupt/IProcessStatusTracker.java"
+        "src/android/support/test/aupt/LogGenerator.java"
+        "src/android/support/test/aupt/MemHealthRecord.java"
+        "src/android/support/test/aupt/ProcessStatusTracker.java"
+        "src/android/support/test/aupt/Scheduler.java"
+        "src/android/support/test/aupt/UiWatchers.java"
+    ];
 };
 
 in { inherit AuptLib AuptRunner; }

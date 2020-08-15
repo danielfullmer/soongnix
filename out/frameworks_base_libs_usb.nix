@@ -19,7 +19,10 @@ let
 
 "com.android.future.usb.accessory" = java_sdk_library {
     name = "com.android.future.usb.accessory";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/future/usb/UsbAccessory.java"
+        "src/com/android/future/usb/UsbManager.java"
+    ];
     api_packages = ["com.android.future.usb"];
 };
 

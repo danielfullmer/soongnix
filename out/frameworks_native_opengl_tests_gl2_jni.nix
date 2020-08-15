@@ -8,7 +8,11 @@ let
 
 GL2JNI = android_app {
     name = "GL2JNI";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/gl2jni/GL2JNIActivity.java"
+        "src/com/android/gl2jni/GL2JNILib.java"
+        "src/com/android/gl2jni/GL2JNIView.java"
+    ];
     sdk_version = "current";
     jni_libs = ["libgl2jni"];
 };

@@ -25,7 +25,10 @@ GameQualificationDevice = android_test {
         "repackaged.android.test.base"
     ];
     test_suites = ["device-tests"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/game/qualification/device/GameQualificationTest.java"
+        "src/com/android/game/qualification/device/MetricsReporter.java"
+    ];
 };
 
 in { inherit GameQualificationDevice; }

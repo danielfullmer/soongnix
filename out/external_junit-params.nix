@@ -24,7 +24,53 @@ junit-params = java_library {
     name = "junit-params";
     host_supported = true;
     hostdex = true;
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/junitparams/FileParameters.java"
+        "src/main/java/junitparams/JUnitParamsRunner.java"
+        "src/main/java/junitparams/Parameters.java"
+        "src/main/java/junitparams/converters/ConversionFailedException.java"
+        "src/main/java/junitparams/converters/ConvertParam.java"
+        "src/main/java/junitparams/converters/Converter.java"
+        "src/main/java/junitparams/converters/Nullable.java"
+        "src/main/java/junitparams/converters/NullableConverter.java"
+        "src/main/java/junitparams/converters/Param.java"
+        "src/main/java/junitparams/converters/ParamAnnotation.java"
+        "src/main/java/junitparams/converters/ParamConverter.java"
+        "src/main/java/junitparams/custom/CustomParameters.java"
+        "src/main/java/junitparams/custom/FileParametersProvider.java"
+        "src/main/java/junitparams/custom/ParametersProvider.java"
+        "src/main/java/junitparams/custom/combined/Cartesian.java"
+        "src/main/java/junitparams/custom/combined/CombinedParameters.java"
+        "src/main/java/junitparams/custom/combined/CombinedParametersProvider.java"
+        "src/main/java/junitparams/internal/DeferredErrorFrameworkMethod.java"
+        "src/main/java/junitparams/internal/DescribableFrameworkMethod.java"
+        "src/main/java/junitparams/internal/InstanceFrameworkMethod.java"
+        "src/main/java/junitparams/internal/InvokableFrameworkMethod.java"
+        "src/main/java/junitparams/internal/InvokeNonParameterisedMethod.java"
+        "src/main/java/junitparams/internal/InvokeParameterisedMethod.java"
+        "src/main/java/junitparams/internal/MethodBlockSupplier.java"
+        "src/main/java/junitparams/internal/NonParameterisedFrameworkMethod.java"
+        "src/main/java/junitparams/internal/ParameterisedFrameworkMethod.java"
+        "src/main/java/junitparams/internal/TestMethod.java"
+        "src/main/java/junitparams/internal/Utils.java"
+        "src/main/java/junitparams/internal/annotation/CustomParametersDescriptor.java"
+        "src/main/java/junitparams/internal/annotation/FrameworkMethodAnnotations.java"
+        "src/main/java/junitparams/internal/parameters/ParametersFromCustomProvider.java"
+        "src/main/java/junitparams/internal/parameters/ParametersFromExternalClassMethod.java"
+        "src/main/java/junitparams/internal/parameters/ParametersFromExternalClassProvideMethod.java"
+        "src/main/java/junitparams/internal/parameters/ParametersFromTestClassMethod.java"
+        "src/main/java/junitparams/internal/parameters/ParametersFromValue.java"
+        "src/main/java/junitparams/internal/parameters/ParametersReader.java"
+        "src/main/java/junitparams/internal/parameters/ParametrizationStrategy.java"
+        "src/main/java/junitparams/internal/parameters/ParamsFromMethodCommon.java"
+        "src/main/java/junitparams/mappers/BufferedReaderDataMapper.java"
+        "src/main/java/junitparams/mappers/CsvWithHeaderMapper.java"
+        "src/main/java/junitparams/mappers/DataMapper.java"
+        "src/main/java/junitparams/mappers/IdentityMapper.java"
+        "src/main/java/junitparams/naming/MacroSubstitutionNamingStrategy.java"
+        "src/main/java/junitparams/naming/TestCaseName.java"
+        "src/main/java/junitparams/naming/TestCaseNamingStrategy.java"
+    ];
     sdk_version = "core_current";
     static_libs = ["junit"];
 };
@@ -46,7 +92,47 @@ junit-params-host = java_library_host {
 junit-params-test = java_test {
     name = "junit-params-test";
     host_supported = true;
-    srcs = ["src/test/java/**/*.java"];
+    srcs = [
+        "src/test/java/junitparams/AssumptionsTest.java"
+        "src/test/java/junitparams/BeforeAfterClassTest.java"
+        "src/test/java/junitparams/CastingParamsTest.java"
+        "src/test/java/junitparams/ClassesAsParamsTest.java"
+        "src/test/java/junitparams/EnumsAsParamsTest.java"
+        "src/test/java/junitparams/FileParamsTest.java"
+        "src/test/java/junitparams/FilterableTest.java"
+        "src/test/java/junitparams/IgnoringTest.java"
+        "src/test/java/junitparams/InstantiatingTestClassOnceTest.java"
+        "src/test/java/junitparams/IterableMethodTest.java"
+        "src/test/java/junitparams/IteratorMethodTest.java"
+        "src/test/java/junitparams/MethodAnnotationArgumentTest.java"
+        "src/test/java/junitparams/MultipleParameterProvidersTest.java"
+        "src/test/java/junitparams/NullValuesTest.java"
+        "src/test/java/junitparams/ObjectStringificationTest.java"
+        "src/test/java/junitparams/OverloadedTestMethodNameTest.java"
+        "src/test/java/junitparams/ParametersForEnumTest.java"
+        "src/test/java/junitparams/ParametersReaderForMethodTest.java"
+        "src/test/java/junitparams/ParametersReaderProvidersTest.java"
+        "src/test/java/junitparams/ParamsConverterTest.java"
+        "src/test/java/junitparams/ParamsInAnnotationTest.java"
+        "src/test/java/junitparams/RulesTest.java"
+        "src/test/java/junitparams/SampleTestCase.java"
+        "src/test/java/junitparams/SamplesOfUsageVerificationTest.java"
+        "src/test/java/junitparams/SubclassTest.java"
+        "src/test/java/junitparams/SuperclassTest.java"
+        "src/test/java/junitparams/WrongArgumentsNumberTest.java"
+        "src/test/java/junitparams/converters/NullableConverterTest.java"
+        "src/test/java/junitparams/custom/CustomParametersProviderTest.java"
+        "src/test/java/junitparams/custom/combined/CartesianTest.java"
+        "src/test/java/junitparams/custom/combined/CombinedParametersProviderTest.java"
+        "src/test/java/junitparams/internal/TestMethodTest.java"
+        "src/test/java/junitparams/internal/UtilsTest.java"
+        "src/test/java/junitparams/naming/MacroSubstitutionNamingStrategyTest.java"
+        "src/test/java/junitparams/naming/NamingStrategyIsUsedByRunnerTest.java"
+        "src/test/java/junitparams/usage/SamplesOfUsageTest.java"
+        "src/test/java/junitparams/usage/person_example/PersonMapper.java"
+        "src/test/java/junitparams/usage/person_example/PersonTest.java"
+        "src/test/java/junitparams/usage/person_example/PersonType.java"
+    ];
     java_resource_dirs = ["src/test/resources"];
     sdk_version = "core_current";
     static_libs = [

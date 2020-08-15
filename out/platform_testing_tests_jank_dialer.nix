@@ -18,7 +18,7 @@ let
 DialerJankTests = android_test {
     name = "DialerJankTests";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/dialer/janktests/DialerJankTests.java"];
 
     static_libs = [
         "ub-uiautomator"

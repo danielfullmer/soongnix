@@ -19,7 +19,7 @@ CtsJdwpTunnelHostTestCases = java_test_host {
     name = "CtsJdwpTunnelHostTestCases";
     defaults = ["cts_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/jdwptunnel/cts/JdwpTunnelTest.java"];
 
     libs = [
         "cts-tradefed"

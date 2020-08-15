@@ -19,8 +19,31 @@ android-opt-bitmap = android_library {
     name = "android-opt-bitmap";
     sdk_version = "18";
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/bitmap/BitmapCache.java"
+        "src/com/android/bitmap/ContiguousFIFOAggregator.java"
+        "src/com/android/bitmap/DecodeAggregator.java"
+        "src/com/android/bitmap/DecodeTask.java"
+        "src/com/android/bitmap/NamedThreadFactory.java"
+        "src/com/android/bitmap/Poolable.java"
+        "src/com/android/bitmap/PooledCache.java"
+        "src/com/android/bitmap/RequestKey.java"
+        "src/com/android/bitmap/ResourceRequestKey.java"
+        "src/com/android/bitmap/ReusableBitmap.java"
+        "src/com/android/bitmap/UnrefedBitmapCache.java"
+        "src/com/android/bitmap/UnrefedPooledCache.java"
+        "src/com/android/bitmap/drawable/BasicBitmapDrawable.java"
+        "src/com/android/bitmap/drawable/CircularBitmapDrawable.java"
+        "src/com/android/bitmap/drawable/ExtendedBitmapDrawable.java"
+        "src/com/android/bitmap/drawable/Parallaxable.java"
+        "src/com/android/bitmap/drawable/StyledCornersBitmapDrawable.java"
+        "src/com/android/bitmap/drawable/TileDrawable.java"
+        "src/com/android/bitmap/util/BitmapUtils.java"
+        "src/com/android/bitmap/util/Exif.java"
+        "src/com/android/bitmap/util/InputStreamBuffer.java"
+        "src/com/android/bitmap/util/RectUtils.java"
+        "src/com/android/bitmap/util/Trace.java"
+        "src/com/android/bitmap/view/BitmapDrawableImageView.java"
+
     ];
     resource_dirs = ["res"];
 };

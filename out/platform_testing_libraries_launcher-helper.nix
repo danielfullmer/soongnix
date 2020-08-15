@@ -32,7 +32,25 @@ launcher-helper-lib = java_library {
         "launcher-aosp-tapl"
     ];
     sdk_version = "test_current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/support/test/launcherhelper/AllAppsScreenHelper.java"
+        "src/android/support/test/launcherhelper/AospLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/AutoLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/BaseLauncher3Strategy.java"
+        "src/android/support/test/launcherhelper/CommonLauncherHelper.java"
+        "src/android/support/test/launcherhelper/GoogleExperienceLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/IAutoLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/ILauncherStrategy.java"
+        "src/android/support/test/launcherhelper/ILeanbackLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/Launcher3Strategy.java"
+        "src/android/support/test/launcherhelper/LauncherStrategyFactory.java"
+        "src/android/support/test/launcherhelper/LeanbackLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/NexusLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/PixelCLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/TvLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/VolvoLauncherStrategy.java"
+        "src/android/support/test/launcherhelper/WearLauncherStrategy.java"
+    ];
 };
 
 in { inherit launcher-helper-lib; }

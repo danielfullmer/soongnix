@@ -24,7 +24,7 @@ permission-helper = java_library {
         "launcher-helper-lib"
         "android-support-test"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/PermissionHelper.java"];
     sdk_version = "test_current";
 };
 

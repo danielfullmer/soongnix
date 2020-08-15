@@ -26,7 +26,12 @@ let
     name = "android.test.base-hiddenapi";
     compile_dex = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/test/AndroidTestCase.java"
+        "src/android/test/InstrumentationTestCase.java"
+        "src/junit/framework/TestCase.java"
+        "src/junit/framework/TestSuite.java"
+    ];
 
     libs = ["android.test.base"];
 };

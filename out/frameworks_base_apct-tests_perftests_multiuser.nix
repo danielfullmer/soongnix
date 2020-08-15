@@ -17,7 +17,12 @@ let
 
 MultiUserPerfTests = android_test {
     name = "MultiUserPerfTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/multiuser/BenchmarkResults.java"
+        "src/android/multiuser/BenchmarkResultsReporter.java"
+        "src/android/multiuser/BenchmarkRunner.java"
+        "src/android/multiuser/UserLifecycleTests.java"
+    ];
     static_libs = [
         "androidx.test.rules"
         "apct-perftests-utils"

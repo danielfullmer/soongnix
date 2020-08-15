@@ -29,7 +29,20 @@ libLLVMFuzzerNoMain = cc_library_static {
         "-Wno-unused-parameter"
     ];
     cpp_std = "gnu++11";
-    srcs = ["*.cpp"];
+    srcs = [
+        "FuzzerCrossOver.cpp"
+        "FuzzerDriver.cpp"
+        "FuzzerExtFunctionsDlsym.cpp"
+        "FuzzerExtFunctionsWeak.cpp"
+        "FuzzerIO.cpp"
+        "FuzzerLoop.cpp"
+        "FuzzerMain.cpp"
+        "FuzzerMutate.cpp"
+        "FuzzerSHA1.cpp"
+        "FuzzerTracePC.cpp"
+        "FuzzerTraceState.cpp"
+        "FuzzerUtil.cpp"
+    ];
     exclude_srcs = ["FuzzerMain.cpp"];
     sanitize = {
         address = false;

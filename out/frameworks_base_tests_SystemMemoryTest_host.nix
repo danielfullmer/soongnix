@@ -17,7 +17,13 @@ let
 
 system-memory-test = java_test_host {
     name = "system-memory-test";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/tests/sysmem/host/Cujs.java"
+        "src/com/android/tests/sysmem/host/Device.java"
+        "src/com/android/tests/sysmem/host/MemoryTest.java"
+        "src/com/android/tests/sysmem/host/Metrics.java"
+        "src/com/android/tests/sysmem/host/TestException.java"
+    ];
     libs = ["tradefed"];
     test_suites = ["general-tests"];
 };

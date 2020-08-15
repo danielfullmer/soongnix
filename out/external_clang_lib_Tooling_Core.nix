@@ -4,7 +4,11 @@ let
 libclangToolingCore = cc_library_static {
     name = "libclangToolingCore";
     defaults = ["clang-defaults"];
-    srcs = ["*.cpp"];
+    srcs = [
+        "Lookup.cpp"
+        "QualTypeNames.cpp"
+        "Replacement.cpp"
+    ];
 };
 
 in { inherit libclangToolingCore; }

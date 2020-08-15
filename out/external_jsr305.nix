@@ -20,7 +20,39 @@ jsr305 = java_library_static {
     host_supported = true;
     hostdex = true;
     sdk_version = "core_current";
-    srcs = ["ri/src/main/java/**/*.java"];
+    srcs = [
+        "ri/src/main/java/javax/annotation/CheckForNull.java"
+        "ri/src/main/java/javax/annotation/CheckForSigned.java"
+        "ri/src/main/java/javax/annotation/CheckReturnValue.java"
+        "ri/src/main/java/javax/annotation/Detainted.java"
+        "ri/src/main/java/javax/annotation/MatchesPattern.java"
+        "ri/src/main/java/javax/annotation/Nonnegative.java"
+        "ri/src/main/java/javax/annotation/Nonnull.java"
+        "ri/src/main/java/javax/annotation/Nullable.java"
+        "ri/src/main/java/javax/annotation/OverridingMethodsMustInvokeSuper.java"
+        "ri/src/main/java/javax/annotation/ParametersAreNonnullByDefault.java"
+        "ri/src/main/java/javax/annotation/ParametersAreNullableByDefault.java"
+        "ri/src/main/java/javax/annotation/PropertyKey.java"
+        "ri/src/main/java/javax/annotation/RegEx.java"
+        "ri/src/main/java/javax/annotation/Signed.java"
+        "ri/src/main/java/javax/annotation/Syntax.java"
+        "ri/src/main/java/javax/annotation/Tainted.java"
+        "ri/src/main/java/javax/annotation/Untainted.java"
+        "ri/src/main/java/javax/annotation/WillClose.java"
+        "ri/src/main/java/javax/annotation/WillCloseWhenClosed.java"
+        "ri/src/main/java/javax/annotation/WillNotClose.java"
+        "ri/src/main/java/javax/annotation/concurrent/GuardedBy.java"
+        "ri/src/main/java/javax/annotation/concurrent/Immutable.java"
+        "ri/src/main/java/javax/annotation/concurrent/NotThreadSafe.java"
+        "ri/src/main/java/javax/annotation/concurrent/ThreadSafe.java"
+        "ri/src/main/java/javax/annotation/meta/Exclusive.java"
+        "ri/src/main/java/javax/annotation/meta/Exhaustive.java"
+        "ri/src/main/java/javax/annotation/meta/TypeQualifier.java"
+        "ri/src/main/java/javax/annotation/meta/TypeQualifierDefault.java"
+        "ri/src/main/java/javax/annotation/meta/TypeQualifierNickname.java"
+        "ri/src/main/java/javax/annotation/meta/TypeQualifierValidator.java"
+        "ri/src/main/java/javax/annotation/meta/When.java"
+    ];
 };
 
 #  Compatibility name

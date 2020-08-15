@@ -3,7 +3,7 @@ let
 
 SafetyRegulatoryInfo = android_app {
     name = "SafetyRegulatoryInfo";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/safetyregulatoryinfo/SafetyAndRegulatoryInfoActivity.java"];
     optimize = {
         enabled = false;
     };

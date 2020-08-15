@@ -19,7 +19,10 @@ let
 
 PresencePollingTests = android_test {
     name = "PresencePollingTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/service/ims/presence/PollingServiceTests.java"
+        "src/com/android/service/ims/presence/PresencePollingTestBase.java"
+    ];
     libs = [
         "mockito-target"
         "android.test.base"

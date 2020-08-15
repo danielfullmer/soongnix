@@ -18,7 +18,16 @@ let
 CtsPermissionDeclareApp = android_test {
     name = "CtsPermissionDeclareApp";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/permissiondeclareapp/AmbiguousContentProvider.java"
+        "src/com/android/cts/permissiondeclareapp/PermissionContentProvider.java"
+        "src/com/android/cts/permissiondeclareapp/PermissionContentProviderGranting.java"
+        "src/com/android/cts/permissiondeclareapp/PermissionContentProviderPath.java"
+        "src/com/android/cts/permissiondeclareapp/PermissionContentProviderPathRestricting.java"
+        "src/com/android/cts/permissiondeclareapp/PrivateContentProvider.java"
+        "src/com/android/cts/permissiondeclareapp/PrivateContentProviderGranting.java"
+        "src/com/android/cts/permissiondeclareapp/UtilsProvider.java"
+    ];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     #  tag this module as a cts test artifact

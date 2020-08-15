@@ -11,7 +11,9 @@ ExternalStorageProvider = android_app {
     ];
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/externalstorage/ExternalStorageProvider.java"
+        "src/com/android/externalstorage/MountReceiver.java"
+        "src/com/android/externalstorage/TestDocumentsProvider.java"
     ];
 
     platform_apis = true;

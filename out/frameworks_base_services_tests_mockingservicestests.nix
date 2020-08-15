@@ -18,7 +18,30 @@ let
 FrameworksMockingServicesTests = android_test {
     name = "FrameworksMockingServicesTests";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/server/AlarmManagerServiceTest.java"
+        "src/com/android/server/AppStateTrackerTest.java"
+        "src/com/android/server/DeviceIdleControllerTest.java"
+        "src/com/android/server/RescuePartyTest.java"
+        "src/com/android/server/am/AppCompactorTest.java"
+        "src/com/android/server/am/PendingIntentControllerTest.java"
+        "src/com/android/server/am/PersistentConnectionTest.java"
+        "src/com/android/server/am/SettingsToPropertiesMapperTest.java"
+        "src/com/android/server/appop/AppOpsServiceTest.java"
+        "src/com/android/server/deviceidle/BluetoothConstraintTest.java"
+        "src/com/android/server/display/LocalDisplayAdapterTest.java"
+        "src/com/android/server/display/color/DisplayTransformManagerTest.java"
+        "src/com/android/server/display/color/DisplayWhiteBalanceTintControllerTest.java"
+        "src/com/android/server/job/JobSchedulerServiceTest.java"
+        "src/com/android/server/job/controllers/ConnectivityControllerTest.java"
+        "src/com/android/server/job/controllers/JobStatusTest.java"
+        "src/com/android/server/job/controllers/QuotaControllerTest.java"
+        "src/com/android/server/job/controllers/StateControllerTest.java"
+        "src/com/android/server/job/controllers/TimeControllerTest.java"
+        "src/com/android/server/power/batterysaver/BatterySaverStateMachineTest.java"
+        "src/com/android/server/testables/TestableDeviceConfig.java"
+        "src/com/android/server/testables/TestableDeviceConfigTest.java"
+    ];
 
     static_libs = [
         "services.core"

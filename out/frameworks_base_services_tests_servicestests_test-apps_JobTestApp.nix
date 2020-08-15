@@ -22,7 +22,10 @@ JobTestApp = android_test_helper_app {
 
     test_suites = ["device-tests"];
 
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/servicestests/apps/jobtestapp/TestJobActivity.java"
+        "src/com/android/servicestests/apps/jobtestapp/TestJobService.java"
+    ];
 
     dex_preopt = {
         enabled = false;

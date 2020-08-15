@@ -7,7 +7,14 @@ framework-protos = java_library_static {
     proto = {
         type = "nano";
     };
-    srcs = ["src/**/*.proto"];
+    srcs = [
+        "src/gnss.proto"
+        "src/ipconnectivity.proto"
+        "src/system_messages.proto"
+        "src/task_snapshot.proto"
+        "src/wifi.proto"
+        "src/metrics_constants/metrics_constants.proto"
+    ];
     no_framework_libs = true;
     sdk_version = "9";
     #  Pin java_version until jarjar is certified to support later versions. http://b/72703434

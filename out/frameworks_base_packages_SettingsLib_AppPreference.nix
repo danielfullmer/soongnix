@@ -4,7 +4,7 @@ let
 SettingsLibAppPreference = android_library {
     name = "SettingsLibAppPreference";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/settingslib/widget/apppreference/AppPreference.java"];
     resource_dirs = ["res"];
 
     libs = [

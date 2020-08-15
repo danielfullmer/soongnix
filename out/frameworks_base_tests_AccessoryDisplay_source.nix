@@ -19,7 +19,14 @@ let
 AccessoryDisplaySource = android_test {
     name = "AccessoryDisplaySource";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/accessorydisplay/source/DisplaySourceService.java"
+        "src/com/android/accessorydisplay/source/SourceActivity.java"
+        "src/com/android/accessorydisplay/source/UsbAccessoryStreamTransport.java"
+        "src/com/android/accessorydisplay/source/presentation/Cube.java"
+        "src/com/android/accessorydisplay/source/presentation/CubeRenderer.java"
+        "src/com/android/accessorydisplay/source/presentation/DemoPresentation.java"
+    ];
     resource_dirs = ["res"];
     static_libs = ["AccessoryDisplayCommon"];
 };

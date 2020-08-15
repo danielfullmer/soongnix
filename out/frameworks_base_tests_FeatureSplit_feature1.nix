@@ -19,7 +19,7 @@ let
 
 FeatureSplit1 = android_test {
     name = "FeatureSplit1";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/test/split/feature/one/One.java"];
     sdk_version = "current";
     libs = ["FeatureSplitBase"];
     aaptflags = [

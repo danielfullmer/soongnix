@@ -18,7 +18,7 @@ let
 CtsInstrumentationAppDiffCert = android_test {
     name = "CtsInstrumentationAppDiffCert";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/instrumentationdiffcertapp/InstrumentationFailToRunTest.java"];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     libs = ["android.test.base.stubs"];

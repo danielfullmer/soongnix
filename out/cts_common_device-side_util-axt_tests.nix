@@ -18,7 +18,17 @@ let
 compatibility-device-util-tests-axt = java_test {
     name = "compatibility-device-util-tests-axt";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/util/ApiLevelUtilTest.java"
+        "src/com/android/compatibility/common/util/BusinessLogicDeviceExecutorTest.java"
+        "src/com/android/compatibility/common/util/BusinessLogicTestCaseTest.java"
+        "src/com/android/compatibility/common/util/DeviceReportTest.java"
+        "src/com/android/compatibility/common/util/RetryRuleTest.java"
+        "src/com/android/compatibility/common/util/SafeCleanerRuleTest.java"
+        "src/com/android/compatibility/common/util/StateChangerRuleTest.java"
+        "src/com/android/compatibility/common/util/StateKeeperRuleTest.java"
+        "src/com/android/compatibility/common/util/TimeoutTest.java"
+    ];
 
     static_libs = [
         "compatibility-device-util-axt"

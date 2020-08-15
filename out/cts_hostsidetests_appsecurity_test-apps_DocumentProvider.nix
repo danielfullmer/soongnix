@@ -27,7 +27,11 @@ CtsDocumentProvider = android_test {
         "ctstestrunner-axt"
         "ub-uiautomator"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/documentprovider/GetContentActivity.java"
+        "src/com/android/cts/documentprovider/MyDocumentsProvider.java"
+        "src/com/android/cts/documentprovider/WebLinkActivity.java"
+    ];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"

@@ -18,7 +18,10 @@ let
 CtsAtomicInstallTestCases = android_test {
     name = "CtsAtomicInstallTestCases";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/tests/atomicinstall/AtomicInstallTest.java"
+        "src/com/android/tests/atomicinstall/LocalIntentSender.java"
+    ];
 
     java_resources = [
         ":AtomicInstallTestAppAv1"
@@ -48,7 +51,7 @@ AtomicInstallCorrupt = filegroup {
 AtomicInstallTestAppAv1 = android_test_helper_app {
     name = "AtomicInstallTestAppAv1";
 
-    srcs = ["testdata/apk/src/**/*java"];
+    srcs = ["testdata/apk/src/com/android/tests/atomicinstall/testapp/MainActivity.java"];
 
     manifest = "testdata/apk/Av1.xml";
 };
@@ -56,7 +59,7 @@ AtomicInstallTestAppAv1 = android_test_helper_app {
 AtomicInstallTestAppAv2 = android_test_helper_app {
     name = "AtomicInstallTestAppAv2";
 
-    srcs = ["testdata/apk/src/**/*java"];
+    srcs = ["testdata/apk/src/com/android/tests/atomicinstall/testapp/MainActivity.java"];
 
     manifest = "testdata/apk/Av2.xml";
 };
@@ -64,7 +67,7 @@ AtomicInstallTestAppAv2 = android_test_helper_app {
 AtomicInstallTestAppBv1 = android_test_helper_app {
     name = "AtomicInstallTestAppBv1";
 
-    srcs = ["testdata/apk/src/**/*java"];
+    srcs = ["testdata/apk/src/com/android/tests/atomicinstall/testapp/MainActivity.java"];
 
     manifest = "testdata/apk/Bv1.xml";
 };

@@ -60,7 +60,8 @@ test-vendor = aidl_interface {
     srcs = [
         "tests_1/some_package/IFoo.aidl"
         "tests_1/some_package/Thing.aidl"
-        "tests_1/some_package/sub_package/*.aidl"
+        "tests_1/some_package/sub_package/IFoo.aidl"
+        "tests_1/some_package/sub_package/SubThing.aidl"
     ];
 };
 
@@ -70,7 +71,8 @@ test-piece-1 = aidl_interface {
     srcs = [
         "tests_1/some_package/IFoo.aidl"
         "tests_1/some_package/Thing.aidl"
-        "tests_1/some_package/sub_package/*.aidl"
+        "tests_1/some_package/sub_package/IFoo.aidl"
+        "tests_1/some_package/sub_package/SubThing.aidl"
     ];
     api_dir = "api/test-piece-1";
     versions = ["1"];

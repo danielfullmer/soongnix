@@ -18,7 +18,14 @@ let
 CtsCrossProfileAppsTests = android_test_helper_app {
     name = "CtsCrossProfileAppsTests";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/crossprofileappstest/CrossProfileAppsNonTargetUserTest.java"
+        "src/com/android/cts/crossprofileappstest/CrossProfileAppsStartActivityTest.java"
+        "src/com/android/cts/crossprofileappstest/CrossProfileAppsTargetUserTest.java"
+        "src/com/android/cts/crossprofileappstest/MainActivity.java"
+        "src/com/android/cts/crossprofileappstest/NonExportedActivity.java"
+        "src/com/android/cts/crossprofileappstest/NonMainActivity.java"
+    ];
     libs = ["junit"];
     static_libs = [
         "androidx.legacy_legacy-support-v4"

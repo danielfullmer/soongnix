@@ -7,7 +7,7 @@ libLLVMX86Info = cc_library_static {
         "llvm-lib-defaults"
         "llvm-x86-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["X86TargetInfo.cpp"];
 };
 
 in { inherit libLLVMX86Info; }

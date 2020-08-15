@@ -7,7 +7,7 @@ ExternalStorageProviderTests = android_test {
     manifest = "AndroidManifest.xml";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/externalstorage/ExternalStorageProviderTest.java"
     ];
 
     libs = [

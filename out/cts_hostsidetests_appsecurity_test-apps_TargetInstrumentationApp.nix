@@ -18,7 +18,7 @@ let
 CtsTargetInstrumentationApp = android_test {
     name = "CtsTargetInstrumentationApp";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/targetinstrumentationapp/TargetInstrumentationActivity.java"];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     #  tag this module as a cts test artifact

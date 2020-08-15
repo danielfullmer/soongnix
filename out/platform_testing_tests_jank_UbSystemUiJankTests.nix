@@ -18,7 +18,12 @@ let
 UbSystemUiJankTests = android_test {
     name = "UbSystemUiJankTests";
     platform_apis = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/systemui/tests/jank/DummyActivity.java"
+        "src/android/platform/systemui/tests/jank/LauncherJankTests.java"
+        "src/android/platform/systemui/tests/jank/SettingsJankTests.java"
+        "src/android/platform/systemui/tests/jank/SystemUiJankTests.java"
+    ];
 
     static_libs = [
         "ub-janktesthelper"

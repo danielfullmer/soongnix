@@ -21,7 +21,7 @@ RecoveryLocalizer = android_app {
     sdk_version = "current";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/recovery_l10n/Main.java"
     ];
 };
 

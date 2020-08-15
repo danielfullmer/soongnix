@@ -6,7 +6,11 @@ libLLVMProfileDataCoverage = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "CoverageMapping.cpp"
+        "CoverageMappingReader.cpp"
+        "CoverageMappingWriter.cpp"
+    ];
 };
 
 in { inherit libLLVMProfileDataCoverage; }

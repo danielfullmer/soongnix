@@ -3,7 +3,7 @@ let
 
 "services.restrictions" = java_library_static {
     name = "services.restrictions";
-    srcs = ["java/**/*.java"];
+    srcs = ["java/com/android/server/restrictions/RestrictionsManagerService.java"];
     libs = ["services.core"];
 };
 

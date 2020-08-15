@@ -18,7 +18,18 @@ let
 CtsDeviceAdminApp23 = android_test_helper_app {
     name = "CtsDeviceAdminApp23";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com.android.cts.deviceadmin/BaseDeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/ClearDeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/ClearDeviceAdminWithNoProtectionTest.java"
+        "src/com.android.cts.deviceadmin/ClearPasswordTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminPasswordTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminReceiverWithNoProtection.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminWithEnterprisePoliciesBlockedTest.java"
+        "src/com.android.cts.deviceadmin/DeviceOwnerPasswordTest.java"
+        "src/com.android.cts.deviceadmin/WipeDataTest.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"
@@ -42,7 +53,18 @@ CtsDeviceAdminApp23 = android_test_helper_app {
 CtsDeviceAdminApp24 = android_test_helper_app {
     name = "CtsDeviceAdminApp24";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com.android.cts.deviceadmin/BaseDeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/ClearDeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/ClearDeviceAdminWithNoProtectionTest.java"
+        "src/com.android.cts.deviceadmin/ClearPasswordTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminPasswordTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminReceiverWithNoProtection.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminWithEnterprisePoliciesBlockedTest.java"
+        "src/com.android.cts.deviceadmin/DeviceOwnerPasswordTest.java"
+        "src/com.android.cts.deviceadmin/WipeDataTest.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"
@@ -68,7 +90,18 @@ CtsDeviceAdminApp24 = android_test_helper_app {
 CtsDeviceAdminApp29 = android_test_helper_app {
     name = "CtsDeviceAdminApp29";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com.android.cts.deviceadmin/BaseDeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/ClearDeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/ClearDeviceAdminWithNoProtectionTest.java"
+        "src/com.android.cts.deviceadmin/ClearPasswordTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminPasswordTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminReceiverWithNoProtection.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminTest.java"
+        "src/com.android.cts.deviceadmin/DeviceAdminWithEnterprisePoliciesBlockedTest.java"
+        "src/com.android.cts.deviceadmin/DeviceOwnerPasswordTest.java"
+        "src/com.android.cts.deviceadmin/WipeDataTest.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"

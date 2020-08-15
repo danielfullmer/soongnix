@@ -20,7 +20,7 @@ let
 PartnerBookmarksProviderTest = android_test {
     name = "PartnerBookmarksProviderTest";
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/providers/partnerbookmarks/PartnerBookmarksProviderTest.java"];
     sdk_version = "current";
     libs = ["android.test.base.stubs"];
     static_libs = ["junit"];

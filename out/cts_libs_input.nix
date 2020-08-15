@@ -18,7 +18,11 @@ let
 cts-input-lib = java_library_static {
     name = "cts-input-lib";
     sdk_version = "test_current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/input/HidDevice.java"
+        "src/com/android/cts/input/HidJsonParser.java"
+        "src/com/android/cts/input/HidTestData.java"
+    ];
 };
 
 in { inherit cts-input-lib; }

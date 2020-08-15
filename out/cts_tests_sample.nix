@@ -32,7 +32,13 @@ CtsSampleDeviceTestCases = android_test {
         "android.test.runner.stubs"
         "android.test.base.stubs"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/sample/SampleDeviceActivity.java"
+        "src/android/sample/cts/SampleDeviceReportLogTest.java"
+        "src/android/sample/cts/SampleDeviceResultTest.java"
+        "src/android/sample/cts/SampleDeviceTest.java"
+        "src/android/sample/cts/SampleJUnit4DeviceTest.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

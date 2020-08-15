@@ -28,7 +28,9 @@ CtsReadExternalStorageApp = android_test {
         "android.test.base.stubs"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/cts/readexternalstorageapp/ReadExternalStorageTest.java"
+        "src/com/android/cts/readexternalstorageapp/ReadGiftTest.java"
+        "src/com/android/cts/readexternalstorageapp/ReadMultiViewTest.java"
     ];
     #  tag this module as a cts test artifact
     test_suites = [

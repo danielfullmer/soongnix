@@ -3,7 +3,7 @@ let
 
 BatteryWaster = android_test {
     name = "BatteryWaster";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/batterywaster/BatteryWaster.java"];
     sdk_version = "current";
     certificate = "platform";
 };

@@ -36,7 +36,32 @@ CtsFragmentTestCases = android_test {
     ];
     libs = ["android.test.base.stubs"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/fragment/cts/ConfigOnStopActivity.java"
+        "src/android/fragment/cts/CountCallsFragment.java"
+        "src/android/fragment/cts/FragmentAnimatorTest.java"
+        "src/android/fragment/cts/FragmentExecuteTests.java"
+        "src/android/fragment/cts/FragmentLifecycleTest.java"
+        "src/android/fragment/cts/FragmentManagerConfigTest.java"
+        "src/android/fragment/cts/FragmentReorderingTest.java"
+        "src/android/fragment/cts/FragmentTestActivity.java"
+        "src/android/fragment/cts/FragmentTestUtil.java"
+        "src/android/fragment/cts/FragmentTransactionTest.java"
+        "src/android/fragment/cts/FragmentTransitionTest.java"
+        "src/android/fragment/cts/FragmentViewTests.java"
+        "src/android/fragment/cts/HostCallbacks.java"
+        "src/android/fragment/cts/LoaderActivity.java"
+        "src/android/fragment/cts/LoaderTest.java"
+        "src/android/fragment/cts/NestedInflatedFragmentTest.java"
+        "src/android/fragment/cts/NewIntentActivity.java"
+        "src/android/fragment/cts/PostponedTransitionTest.java"
+        "src/android/fragment/cts/PrimaryNavFragmentTest.java"
+        "src/android/fragment/cts/RecreatedActivity.java"
+        "src/android/fragment/cts/ReentrantFragment.java"
+        "src/android/fragment/cts/StrictFragment.java"
+        "src/android/fragment/cts/StrictViewFragment.java"
+        "src/android/fragment/cts/TransitionFragment.java"
+    ];
 
     #  Tag this module as a cts test artifact
     test_suites = [

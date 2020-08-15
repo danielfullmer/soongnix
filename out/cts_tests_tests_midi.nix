@@ -38,7 +38,7 @@ CtsMidiTestCases = android_test {
 
     libs = ["android.test.base.stubs"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/midi/cts/MidiEchoTest.java"];
 
     #  Must match the package name in CtsTestCaseList.mk
 

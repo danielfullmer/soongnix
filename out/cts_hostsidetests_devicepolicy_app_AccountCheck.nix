@@ -24,7 +24,7 @@ CtsAccountCheckTestOnlyOwnerApp = android_test_helper_app {
         "vts"
         "general-tests"
     ];
-    srcs = ["src-owner/**/*.java"];
+    srcs = ["src-owner/com/android/cts/devicepolicy/accountcheck/owner/AdminReceiver.java"];
     resource_dirs = ["TestOnlyOwner/res"];
     static_libs = [
         "androidx.legacy_legacy-support-v4"
@@ -45,7 +45,7 @@ CtsAccountCheckNonTestOnlyOwnerApp = android_test_helper_app {
         "vts"
         "general-tests"
     ];
-    srcs = ["src-owner/**/*.java"];
+    srcs = ["src-owner/com/android/cts/devicepolicy/accountcheck/owner/AdminReceiver.java"];
     resource_dirs = ["NonTestOnlyOwner/res"];
     static_libs = [
         "androidx.legacy_legacy-support-v4"
@@ -66,7 +66,7 @@ CtsAccountCheckTestOnlyOwnerUpdateApp = android_test_helper_app {
         "vts"
         "general-tests"
     ];
-    srcs = ["src-owner/**/*.java"];
+    srcs = ["src-owner/com/android/cts/devicepolicy/accountcheck/owner/AdminReceiver.java"];
     resource_dirs = ["TestOnlyOwnerUpdate/res"];
     static_libs = [
         "androidx.legacy_legacy-support-v4"

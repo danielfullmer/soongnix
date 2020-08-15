@@ -18,7 +18,10 @@ let
 CtsDevicePolicyAutofillApp = android_test_helper_app {
     name = "CtsDevicePolicyAutofillApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/devicepolicy/autofillapp/SimpleActivity.java"
+        "src/com/android/cts/devicepolicy/autofillapp/SimpleAutofillService.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "arcts"

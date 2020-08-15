@@ -24,7 +24,18 @@ libfruit = cc_library {
         "include"
         "configuration/android"
     ];
-    srcs = ["src/**/*.cpp"];
+    srcs = [
+        "src/binding_normalization.cpp"
+        "src/component.cpp"
+        "src/demangle_type_name.cpp"
+        "src/fixed_size_allocator.cpp"
+        "src/injector_storage.cpp"
+        "src/memory_pool.cpp"
+        "src/normalized_component_storage.cpp"
+        "src/normalized_component_storage_holder.cpp"
+        "src/semistatic_graph.cpp"
+        "src/semistatic_map.cpp"
+    ];
 };
 
 #  TODO: tests written in python+pytest that calls back into compiler. unclear how to best proceed.
@@ -40,7 +51,7 @@ libfruit-example-defaults = cc_defaults {
 libfruit-example-hello-world = cc_test {
     defaults = ["libfruit-example-defaults"];
     name = "libfruit-example-hello-world";
-    srcs = ["examples/hello_world/**/*.cpp"];
+    srcs = ["examples/hello_world/main.cpp"];
 };
 
 in { inherit libfruit libfruit-example-defaults libfruit-example-hello-world; }

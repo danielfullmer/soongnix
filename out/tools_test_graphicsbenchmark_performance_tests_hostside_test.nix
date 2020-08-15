@@ -17,7 +17,15 @@ let
 
 GameQualificationPerformanceTestTest = java_test_host {
     name = "GameQualificationPerformanceTestTest";
-    srcs = ["**/*.java"];
+    srcs = [
+        "com/android/game/qualification/metric/BaseGameQualificationMetricCollectorTest.java"
+        "com/android/game/qualification/metric/GameQualificationFpsCollectorTest.java"
+        "com/android/game/qualification/metric/GameQualificationScheduledMetricCollectorTest.java"
+        "com/android/game/qualification/metric/HistogramTest.java"
+        "com/android/game/qualification/metric/LoopSummaryTest.java"
+        "com/android/game/qualification/metric/MetricSummaryTest.java"
+        "com/android/game/qualification/test/PerformanceTestTest.java"
+    ];
     libs = [
         "GameQualificationPerformanceTest"
         "GameQualificationHelperHost"

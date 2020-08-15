@@ -22,7 +22,7 @@ CtsPkgAccessApp = android_test {
         "androidx.test.rules"
         "ub-uiautomator"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/packageaccessapp/PackageAccessTest.java"];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"

@@ -3,7 +3,12 @@ let
 
 Music = android_app {
     name = "Music";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/music/AudioPreview.java"
+        "src/com/android/music/MediaPlaybackService.java"
+        "src/com/android/music/MusicBrowserActivity.java"
+        "src/com/android/music/MusicPicker.java"
+    ];
     sdk_version = "current";
     product_specific = true;
     optimize = {

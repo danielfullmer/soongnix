@@ -5,7 +5,7 @@ let
     name = "com.android.test.libs.product";
     installable = true;
     product_specific = true;
-    srcs = ["product/java/**/*.java"];
+    srcs = ["product/java/com/android/test/libs/product/LibsProductTest.java"];
     required = ["com.android.test.libs.product.xml"];
 };
 
@@ -20,7 +20,7 @@ let
     name = "com.android.test.libs.product_services";
     installable = true;
     product_services_specific = true;
-    srcs = ["product_services/java/**/*.java"];
+    srcs = ["product_services/java/com/android/test/libs/product_services/LibsProductServicesTest.java"];
     required = ["com.android.test.libs.product_services.xml"];
 };
 

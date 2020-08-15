@@ -20,7 +20,7 @@ let
 CtsSimplePreMApp = android_test_helper_app {
     name = "CtsSimplePreMApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/launcherapps/simplepremapp/SimpleActivity.java"];
     sdk_version = "21";
     #  tag this module as a cts test artifact
     test_suites = [

@@ -22,7 +22,26 @@ DownloadProvider = android_app {
     manifest = "AndroidManifest.xml";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/providers/downloads/Constants.java"
+        "src/com/android/providers/downloads/DownloadDrmHelper.java"
+        "src/com/android/providers/downloads/DownloadIdleService.java"
+        "src/com/android/providers/downloads/DownloadInfo.java"
+        "src/com/android/providers/downloads/DownloadJobService.java"
+        "src/com/android/providers/downloads/DownloadNotifier.java"
+        "src/com/android/providers/downloads/DownloadProvider.java"
+        "src/com/android/providers/downloads/DownloadReceiver.java"
+        "src/com/android/providers/downloads/DownloadScanner.java"
+        "src/com/android/providers/downloads/DownloadStorageProvider.java"
+        "src/com/android/providers/downloads/DownloadThread.java"
+        "src/com/android/providers/downloads/Helpers.java"
+        "src/com/android/providers/downloads/MediaScanTriggerJob.java"
+        "src/com/android/providers/downloads/MediaStoreDownloadsHelper.java"
+        "src/com/android/providers/downloads/OpenHelper.java"
+        "src/com/android/providers/downloads/RawDocumentsHelper.java"
+        "src/com/android/providers/downloads/RealSystemFacade.java"
+        "src/com/android/providers/downloads/StopRequestException.java"
+        "src/com/android/providers/downloads/StorageUtils.java"
+        "src/com/android/providers/downloads/SystemFacade.java"
     ];
 
     resource_dirs = [

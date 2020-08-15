@@ -25,7 +25,11 @@ CtsPerfettoProducerApp = android_test_helper_app {
     ];
 
     compile_multilib = "both";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/perfetto/producer/ProducerActivity.java"
+        "src/android/perfetto/producer/ProducerIsolatedService.java"
+        "src/android/perfetto/producer/ProducerService.java"
+    ];
     sdk_version = "current";
     jni_libs = [
         "libperfettocts_jni"

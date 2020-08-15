@@ -19,7 +19,12 @@ CtsAppOpsTestCases = android_test {
     name = "CtsAppOpsTestCases";
     sdk_version = "test_current";
 
-    srcs = ["src/**/*.kt"];
+    srcs = [
+        "src/android/app/appops/cts/AppOpsTest.kt"
+        "src/android/app/appops/cts/AppOpsUtils.kt"
+        "src/android/app/appops/cts/HistoricalAppopsTest.kt"
+        "src/android/app/appops/cts/UidStateForceActivity.kt"
+    ];
 
     static_libs = [
         "androidx.test.rules"

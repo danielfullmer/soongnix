@@ -24,7 +24,7 @@ CtsAccountCheckAuthAppTester = android_test_helper_app {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/devicepolicy/accountcheck/tester/TestAuthenticator.java"];
     static_libs = [
         "androidx.legacy_legacy-support-v4"
         "ctstestrunner-axt"

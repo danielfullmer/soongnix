@@ -18,7 +18,7 @@ let
 multi-user-helper = java_library_static {
     name = "multi-user-helper";
     srcs = [
-        "src/**/*.java"
+        "src/android/platform/helpers/MultiUserHelper.java"
     ];
     static_libs = [
         "androidx.test.runner"

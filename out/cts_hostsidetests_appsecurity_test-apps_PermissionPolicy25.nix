@@ -25,7 +25,7 @@ CtsPermissionPolicyTest25 = android_test {
         "compatibility-device-util-axt"
         "ctstestrunner-axt"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/permission/policy/PermissionPolicyTest25.java"];
     sdk_version = "test_current";
     min_sdk_version = "25";
     test_suites = [

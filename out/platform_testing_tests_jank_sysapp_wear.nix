@@ -17,7 +17,16 @@ let
 
 SysAppJankTestsWear = android_test {
     name = "SysAppJankTestsWear";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/wearable/sysapp/janktests/AppLauncherFlingJankTest.java"
+        "src/com/android/wearable/sysapp/janktests/CardsJankTest.java"
+        "src/com/android/wearable/sysapp/janktests/QuickSettingsJankTest.java"
+        "src/com/android/wearable/sysapp/janktests/SettingsFlingJankTest.java"
+        "src/com/android/wearable/sysapp/janktests/SysAppTestHelper.java"
+        "src/com/android/wearable/sysapp/janktests/WatchFaceHelper.java"
+        "src/com/android/wearable/sysapp/janktests/WatchFaceJankTest.java"
+        "src/com/android/wearable/sysapp/janktests/WatchFacePickerJankTest.java"
+    ];
 
     static_libs = [
         "ub-uiautomator"

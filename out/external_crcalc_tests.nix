@@ -23,7 +23,9 @@ CRTests = android_test {
     name = "CRTests";
     sdk_version = "19";
     srcs = [
-        "src/**/*.java"
+        "src/com/hp/creals/CRTest.java"
+        "src/com/hp/creals/ConversionTest.java"
+        "src/com/hp/creals/SlowCRTest.java"
     ];
     static_libs = ["cr"];
 };

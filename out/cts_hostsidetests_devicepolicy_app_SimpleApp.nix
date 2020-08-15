@@ -18,7 +18,19 @@ let
 CtsSimpleApp = android_test_helper_app {
     name = "CtsSimpleApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/launcherapps/simpleapp/NonExportedActivity.java"
+        "src/com/android/cts/launcherapps/simpleapp/NonLauncherActivity.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleActivity.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleActivityChainExit.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleActivityImmediateExit.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleActivityStartService.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleReceiver.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleReceiverStartService.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleRemoteReceiver.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleService.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleService2.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "arcts"

@@ -22,7 +22,19 @@ let
 "android.test.mock" = java_sdk_library {
     name = "android.test.mock";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/test/mock/MockAccountManager.java"
+        "src/android/test/mock/MockApplication.java"
+        "src/android/test/mock/MockContentProvider.java"
+        "src/android/test/mock/MockContentResolver.java"
+        "src/android/test/mock/MockContext.java"
+        "src/android/test/mock/MockCursor.java"
+        "src/android/test/mock/MockDialogInterface.java"
+        "src/android/test/mock/MockIContentProvider.java"
+        "src/android/test/mock/MockPackageManager.java"
+        "src/android/test/mock/MockResources.java"
+        "src/android/test/mock/MockService.java"
+    ];
 
     api_packages = [
         "android.test.mock"

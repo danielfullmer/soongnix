@@ -20,7 +20,11 @@ let
 cts-view-lib = java_library {
     name = "cts-view-lib";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/view/Position.java"
+        "src/com/android/view/RenderedSurfaceView.java"
+        "src/com/android/view/SurfaceRenderer.java"
+    ];
 
     sdk_version = "current";
 

@@ -24,7 +24,16 @@ cts-security-test-support-library = java_library {
         "truth-prebuilt"
         "testng"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/keystore/cts/Asn1Utils.java"
+        "src/android/keystore/cts/Attestation.java"
+        "src/android/keystore/cts/AttestationApplicationId.java"
+        "src/android/keystore/cts/AttestationPackageInfo.java"
+        "src/android/keystore/cts/AuthorizationList.java"
+        "src/android/keystore/cts/CertificateUtils.java"
+        "src/android/keystore/cts/KeyGenerationUtils.java"
+        "src/android/keystore/cts/RootOfTrust.java"
+    ];
 };
 
 in { inherit cts-security-test-support-library; }

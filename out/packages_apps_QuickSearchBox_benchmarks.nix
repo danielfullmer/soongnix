@@ -21,7 +21,13 @@ QuickSearchBoxBenchmarks = android_test {
     name = "QuickSearchBoxBenchmarks";
     sdk_version = "current";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/quicksearchbox/benchmarks/ApplicationsLatency.java"
+        "src/com/android/quicksearchbox/benchmarks/ContactsLatency.java"
+        "src/com/android/quicksearchbox/benchmarks/SourceLatency.java"
+        "src/com/android/quicksearchbox/benchmarks/WebConcurrency.java"
+        "src/com/android/quicksearchbox/benchmarks/WebLatency.java"
+    ];
     certificate = "shared";
 };
 

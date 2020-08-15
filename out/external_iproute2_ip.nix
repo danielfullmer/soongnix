@@ -78,7 +78,7 @@ ip = cc_binary {
         "-Wno-int-conversion"
         "-Wno-missing-field-initializers"
         "-D_GNU_SOURCE"
-        #("-DNETNS_RUN_DIR=\"" + NETNS_RUN_DIR + "\"")
+        ("-DNETNS_RUN_DIR=\"" + NETNS_RUN_DIR + "\"")
     ];
 
     ldflags = [

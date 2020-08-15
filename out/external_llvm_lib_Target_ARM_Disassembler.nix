@@ -7,7 +7,7 @@ libLLVMARMDisassembler = cc_library_static {
         "llvm-lib-defaults"
         "llvm-arm-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["ARMDisassembler.cpp"];
 };
 
 in { inherit libLLVMARMDisassembler; }

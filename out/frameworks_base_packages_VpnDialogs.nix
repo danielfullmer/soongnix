@@ -21,7 +21,11 @@ VpnDialogs = android_app {
     name = "VpnDialogs";
     certificate = "platform";
     privileged = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/vpndialogs/AlwaysOnDisconnectedDialog.java"
+        "src/com/android/vpndialogs/ConfirmDialog.java"
+        "src/com/android/vpndialogs/ManageDialog.java"
+    ];
     platform_apis = true;
 };
 

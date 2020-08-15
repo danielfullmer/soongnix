@@ -19,7 +19,7 @@ let
 RemoteDisplayProviderTest = android_test {
     name = "RemoteDisplayProviderTest";
     sdk_version = "system_current";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/media/remotedisplay/test/RemoteDisplayProviderService.java"];
     resource_dirs = ["res"];
     libs = ["com.android.media.remotedisplay"];
     certificate = "platform";

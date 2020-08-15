@@ -6,7 +6,7 @@ libLLVMPasses = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["PassBuilder.cpp"];
 };
 
 in { inherit libLLVMPasses; }

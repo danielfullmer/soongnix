@@ -19,7 +19,28 @@ let
 
 cts_audio_quality_test = cc_test_host {
     name = "cts_audio_quality_test";
-    srcs = ["*.cpp"];
+    srcs = [
+        "AudioHardwareTest.cpp"
+        "AudioLocalTest.cpp"
+        "AudioPlaybackLocalTest.cpp"
+        "AudioRecordPlayLocalTest.cpp"
+        "AudioRecordingLocalTest.cpp"
+        "AudioSignalFactoryTest.cpp"
+        "BufferTest.cpp"
+        "ClientInterfaceTest.cpp"
+        "FileUtilTest.cpp"
+        "LogTest.cpp"
+        "MixerTest.cpp"
+        "ModelBuilderTest.cpp"
+        "RemoteAudioFakeTcpTest.cpp"
+        "SignalProcessingInterfaceTest.cpp"
+        "SimpleScriptExecTest.cpp"
+        "StringUtilTest.cpp"
+        "TaskCaseTest.cpp"
+        "TaskProcessTest.cpp"
+        "TaskSequentialTest.cpp"
+        "TaskTest.cpp"
+    ];
 
     static_libs = [
         "libbase"

@@ -6,7 +6,13 @@ libLLVMObjectYAML = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "COFFYAML.cpp"
+        "ELFYAML.cpp"
+        "MachOYAML.cpp"
+        "ObjectYAML.cpp"
+        "YAML.cpp"
+    ];
 };
 
 in { inherit libLLVMObjectYAML; }

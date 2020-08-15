@@ -23,7 +23,7 @@ ESimUtility = android_test {
     certificate = "platform";
     platform_apis = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/test/util/esimutility/ESimUtilityInstrumentation.java"];
 };
 
 in { inherit ESimUtility; }

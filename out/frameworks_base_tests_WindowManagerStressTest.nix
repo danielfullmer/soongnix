@@ -19,7 +19,7 @@ let
 
 WindowManagerStressTest = android_test {
     name = "WindowManagerStressTest";
-    srcs = ["**/*.java"];
+    srcs = ["src/test/windowmanagerstresstest/MainActivity.java"];
     platform_apis = true;
 };
 

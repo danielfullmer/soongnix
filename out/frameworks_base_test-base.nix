@@ -25,7 +25,32 @@ let
 "android.test.base" = java_sdk_library {
     name = "android.test.base";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/test/AndroidTestCase.java"
+        "src/android/test/FlakyTest.java"
+        "src/android/test/InstrumentationTestCase.java"
+        "src/android/test/InstrumentationTestSuite.java"
+        "src/android/test/PerformanceTestCase.java"
+        "src/android/test/RepetitiveTest.java"
+        "src/android/test/UiThreadTest.java"
+        "src/android/test/suitebuilder/annotation/LargeTest.java"
+        "src/android/test/suitebuilder/annotation/MediumTest.java"
+        "src/android/test/suitebuilder/annotation/SmallTest.java"
+        "src/android/test/suitebuilder/annotation/Smoke.java"
+        "src/android/test/suitebuilder/annotation/Suppress.java"
+        "src/com/android/internal/util/Predicate.java"
+        "src/junit/framework/Assert.java"
+        "src/junit/framework/AssertionFailedError.java"
+        "src/junit/framework/ComparisonCompactor.java"
+        "src/junit/framework/ComparisonFailure.java"
+        "src/junit/framework/Protectable.java"
+        "src/junit/framework/Test.java"
+        "src/junit/framework/TestCase.java"
+        "src/junit/framework/TestFailure.java"
+        "src/junit/framework/TestListener.java"
+        "src/junit/framework/TestResult.java"
+        "src/junit/framework/TestSuite.java"
+    ];
 
     errorprone = {
         javacflags = ["-Xep:DepAnn:ERROR"];
@@ -52,7 +77,32 @@ let
     name = "android.test.base_static";
     installable = false;
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/test/AndroidTestCase.java"
+        "src/android/test/FlakyTest.java"
+        "src/android/test/InstrumentationTestCase.java"
+        "src/android/test/InstrumentationTestSuite.java"
+        "src/android/test/PerformanceTestCase.java"
+        "src/android/test/RepetitiveTest.java"
+        "src/android/test/UiThreadTest.java"
+        "src/android/test/suitebuilder/annotation/LargeTest.java"
+        "src/android/test/suitebuilder/annotation/MediumTest.java"
+        "src/android/test/suitebuilder/annotation/SmallTest.java"
+        "src/android/test/suitebuilder/annotation/Smoke.java"
+        "src/android/test/suitebuilder/annotation/Suppress.java"
+        "src/com/android/internal/util/Predicate.java"
+        "src/junit/framework/Assert.java"
+        "src/junit/framework/AssertionFailedError.java"
+        "src/junit/framework/ComparisonCompactor.java"
+        "src/junit/framework/ComparisonFailure.java"
+        "src/junit/framework/Protectable.java"
+        "src/junit/framework/Test.java"
+        "src/junit/framework/TestCase.java"
+        "src/junit/framework/TestFailure.java"
+        "src/junit/framework/TestListener.java"
+        "src/junit/framework/TestResult.java"
+        "src/junit/framework/TestSuite.java"
+    ];
 
     errorprone = {
         javacflags = ["-Xep:DepAnn:ERROR"];
@@ -89,8 +139,19 @@ let
     name = "android.test.base-minus-junit";
 
     srcs = [
-        "src/android/**/*.java"
-        "src/com/**/*.java"
+        "src/android/test/AndroidTestCase.java"
+        "src/android/test/FlakyTest.java"
+        "src/android/test/InstrumentationTestCase.java"
+        "src/android/test/InstrumentationTestSuite.java"
+        "src/android/test/PerformanceTestCase.java"
+        "src/android/test/RepetitiveTest.java"
+        "src/android/test/UiThreadTest.java"
+        "src/android/test/suitebuilder/annotation/LargeTest.java"
+        "src/android/test/suitebuilder/annotation/MediumTest.java"
+        "src/android/test/suitebuilder/annotation/SmallTest.java"
+        "src/android/test/suitebuilder/annotation/Smoke.java"
+        "src/android/test/suitebuilder/annotation/Suppress.java"
+        "src/com/android/internal/util/Predicate.java"
     ];
 
     sdk_version = "current";

@@ -22,7 +22,10 @@ CtsNetTestAppForApi23 = android_test {
     #  Include both the 32 and 64 bit versions
     compile_multilib = "both";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/net/cts/appForApi23/ConnectivityListeningActivity.java"
+        "src/android/net/cts/appForApi23/ConnectivityReceiver.java"
+    ];
 
     sdk_version = "23";
 

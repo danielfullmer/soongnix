@@ -84,7 +84,16 @@ libdeqp = cc_library_shared {
         "vts"
     ];
 
-    srcs = ["android/package/src/**/*.java"];
+    srcs = [
+        "android/package/src/com/drawelements/deqp/execserver/ExecServerActivity.java"
+        "android/package/src/com/drawelements/deqp/execserver/ExecService.java"
+        "android/package/src/com/drawelements/deqp/execserver/ServiceStarter.java"
+        "android/package/src/com/drawelements/deqp/platformutil/DeqpPlatformCapabilityQueryInstrumentation.java"
+        "android/package/src/com/drawelements/deqp/testercore/DeqpInstrumentation.java"
+        "android/package/src/com/drawelements/deqp/testercore/Log.java"
+        "android/package/src/com/drawelements/deqp/testercore/RemoteAPI.java"
+        "android/package/src/com/drawelements/deqp/testercore/TestLogParser.java"
+    ];
     resource_dirs = ["android/package/res"];
     manifest = "android/package/AndroidManifest-integration.xml";
 

@@ -2501,7 +2501,22 @@ skia_nanobench = cc_test {
     ];
 
     data = [
-        "resources/*"
+        "resources/Cowboy.svg"
+        "resources/README"
+        "resources/android_fonts/"
+        "resources/crbug769134.fil"
+        "resources/empty_images/"
+        "resources/fonts/"
+        "resources/icc_profiles/"
+        "resources/images/"
+        "resources/invalid_images/"
+        "resources/lua/"
+        "resources/nima/"
+        "resources/nov-talk-sequence.txt"
+        "resources/particles/"
+        "resources/pdf_command_stream.txt"
+        "resources/skottie/"
+        "resources/text/"
     ];
 };
 

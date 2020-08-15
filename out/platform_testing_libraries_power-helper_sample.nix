@@ -3,7 +3,7 @@ let
 
 DummyPowerTest = android_test {
     name = "DummyPowerTest";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/dummy/DummyPowerTest.java"];
 
     static_libs = [
         "PowerTestHelper-src"

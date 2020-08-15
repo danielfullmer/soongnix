@@ -6,7 +6,15 @@ libLLVMProfileData = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "InstrProf.cpp"
+        "InstrProfReader.cpp"
+        "InstrProfWriter.cpp"
+        "ProfileSummaryBuilder.cpp"
+        "SampleProf.cpp"
+        "SampleProfReader.cpp"
+        "SampleProfWriter.cpp"
+    ];
 };
 
 subdirs = ["*"];

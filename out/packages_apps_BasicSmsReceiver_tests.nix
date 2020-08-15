@@ -25,7 +25,7 @@ BasicSmsReceiverTests = android_test {
     ];
     static_libs = ["junit"];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/basicsmsreceiver/DialogSmsDisplayTests.java"];
 
     #  Notice that we don't have to include the src files of Email because, by
     #  running the tests using an instrumentation targeting Eamil, we

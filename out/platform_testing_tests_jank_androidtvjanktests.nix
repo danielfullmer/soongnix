@@ -17,7 +17,10 @@ let
 
 AndroidTVJankTests = android_test {
     name = "AndroidTVJankTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/androidtv/janktests/SystemAppJankTests.java"
+        "src/com/android/androidtv/janktests/SystemUiJankTests.java"
+    ];
 
     static_libs = [
         "ub-janktesthelper"

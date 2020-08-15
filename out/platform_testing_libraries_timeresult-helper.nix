@@ -20,7 +20,7 @@ let
 timeresult-helper-lib = java_library {
     name = "timeresult-helper-lib";
     sdk_version = "21";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/support/test/timeresulthelper/TimeResultLogger.java"];
 };
 
 in { inherit timeresult-helper-lib; }

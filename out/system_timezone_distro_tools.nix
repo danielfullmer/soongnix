@@ -19,7 +19,10 @@ let
 create_time_zone_distro = java_library_host {
     name = "create_time_zone_distro";
 
-    srcs = ["src/main/**/*.java"];
+    srcs = [
+        "src/main/com/android/timezone/distro/builder/TimeZoneDistroBuilder.java"
+        "src/main/com/android/timezone/distro/tools/CreateTimeZoneDistro.java"
+    ];
     libs = [
         "time_zone_distro"
     ];
@@ -30,7 +33,7 @@ time_zone_distro_builder = java_library {
     name = "time_zone_distro_builder";
     host_supported = true;
 
-    srcs = ["src/main/**/builder/*.java"];
+    srcs = ["src/main/com/android/timezone/distro/builder/TimeZoneDistroBuilder.java"];
     libs = [
         "time_zone_distro"
     ];

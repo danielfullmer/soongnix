@@ -19,7 +19,24 @@ let
 
 testables = java_library {
     name = "testables";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/testing/AndroidTestingRunner.java"
+        "src/android/testing/BaseFragmentTest.java"
+        "src/android/testing/DexmakerShareClassLoaderRule.java"
+        "src/android/testing/LayoutInflaterBuilder.java"
+        "src/android/testing/LeakCheck.java"
+        "src/android/testing/PollingCheck.java"
+        "src/android/testing/TestableContentResolver.java"
+        "src/android/testing/TestableContext.java"
+        "src/android/testing/TestableImageView.java"
+        "src/android/testing/TestableInstrumentation.java"
+        "src/android/testing/TestableLooper.java"
+        "src/android/testing/TestablePermissions.java"
+        "src/android/testing/TestableResources.java"
+        "src/android/testing/TestableSettingsProvider.java"
+        "src/android/testing/UiThreadTest.java"
+        "src/android/testing/ViewUtils.java"
+    ];
     libs = [
         "android.test.runner"
         "android.test.mock"

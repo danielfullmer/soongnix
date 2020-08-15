@@ -26,7 +26,10 @@ FrameSequenceSample = android_app {
         proguard_flags_files = ["proguard.flags"];
     };
     sdk_version = "19";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/framesequence/samples/FrameSequenceTest.java"
+        "src/com/android/framesequence/samples/SamplesList.java"
+    ];
     resource_dirs = ["res"];
     aaptflags = [
         "--auto-add-overlay"

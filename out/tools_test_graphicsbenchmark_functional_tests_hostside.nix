@@ -17,7 +17,12 @@ let
 
 GameQualificationHostTestCases = java_test_host {
     name = "GameQualificationHostTestCases";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/game/qualification/test/DeviceConfigurationTest.java"
+        "src/com/android/game/qualification/test/FunctionalTestSuite.java"
+        "src/com/android/game/qualification/test/MemoryTests.java"
+        "src/com/android/game/qualification/test/VkJsonTests.java"
+    ];
 
     libs = [
         "tradefed"

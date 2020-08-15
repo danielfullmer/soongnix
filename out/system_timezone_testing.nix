@@ -21,7 +21,7 @@ tzdata-testing = java_library_static {
     host_supported = true;
     hostdex = true;
 
-    srcs = ["src/main/**/*.java"];
+    srcs = ["src/main/java/libcore/timezone/testing/ZoneInfoTestHelper.java"];
     sdk_version = "core_current";
 };
 

@@ -28,7 +28,12 @@ CtsPdfTestCases = android_test {
         "androidx.annotation_annotation"
         "junit"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/graphics/pdf/cts/PdfDocumentTest.java"
+        "src/android/graphics/pdf/cts/PdfRendererTest.java"
+        "src/android/graphics/pdf/cts/PdfRendererTransformTest.java"
+        "src/android/graphics/pdf/cts/Utils.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

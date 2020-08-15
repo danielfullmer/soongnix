@@ -19,7 +19,11 @@ CtsClassloaderSplitApp = android_test {
     name = "CtsClassloaderSplitApp";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/classloadersplitapp/BaseActivity.java"
+        "src/com/android/cts/classloadersplitapp/BaseReceiver.java"
+        "src/com/android/cts/classloadersplitapp/SplitAppTest.java"
+    ];
     static_libs = [
         "androidx.test.rules"
         "ctstestrunner-axt"

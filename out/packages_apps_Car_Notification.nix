@@ -19,7 +19,45 @@ let
 CarNotification = android_app {
     name = "CarNotification";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/notification/Beeper.java"
+        "src/com/android/car/notification/CarHeadsUpNotificationManager.java"
+        "src/com/android/car/notification/CarNotificationCenterActivity.java"
+        "src/com/android/car/notification/CarNotificationDiff.java"
+        "src/com/android/car/notification/CarNotificationItemTouchListener.java"
+        "src/com/android/car/notification/CarNotificationListener.java"
+        "src/com/android/car/notification/CarNotificationView.java"
+        "src/com/android/car/notification/CarNotificationViewAdapter.java"
+        "src/com/android/car/notification/CarUxRestrictionManagerWrapper.java"
+        "src/com/android/car/notification/DismissAnimationHelper.java"
+        "src/com/android/car/notification/HeadsUpEntry.java"
+        "src/com/android/car/notification/HeadsUpNotificationOnTouchListener.java"
+        "src/com/android/car/notification/NotificationApplication.java"
+        "src/com/android/car/notification/NotificationClickHandlerFactory.java"
+        "src/com/android/car/notification/NotificationDataManager.java"
+        "src/com/android/car/notification/NotificationGroup.java"
+        "src/com/android/car/notification/NotificationUtils.java"
+        "src/com/android/car/notification/NotificationViewController.java"
+        "src/com/android/car/notification/NotificationViewType.java"
+        "src/com/android/car/notification/PreprocessingManager.java"
+        "src/com/android/car/notification/ThemesUtil.java"
+        "src/com/android/car/notification/template/BasicNotificationViewHolder.java"
+        "src/com/android/car/notification/template/CallNotificationViewHolder.java"
+        "src/com/android/car/notification/template/CarNotificationActionsView.java"
+        "src/com/android/car/notification/template/CarNotificationBaseViewHolder.java"
+        "src/com/android/car/notification/template/CarNotificationBodyView.java"
+        "src/com/android/car/notification/template/CarNotificationFooterViewHolder.java"
+        "src/com/android/car/notification/template/CarNotificationHeaderView.java"
+        "src/com/android/car/notification/template/CarNotificationHeaderViewHolder.java"
+        "src/com/android/car/notification/template/EmergencyNotificationViewHolder.java"
+        "src/com/android/car/notification/template/GroupNotificationViewHolder.java"
+        "src/com/android/car/notification/template/GroupSummaryNotificationViewHolder.java"
+        "src/com/android/car/notification/template/InboxNotificationViewHolder.java"
+        "src/com/android/car/notification/template/MessageNotificationViewHolder.java"
+        "src/com/android/car/notification/template/NavigationNotificationViewHolder.java"
+        "src/com/android/car/notification/template/NotificationColorUtil.java"
+        "src/com/android/car/notification/template/ProgressNotificationViewHolder.java"
+    ];
 
     resource_dirs = ["res"];
 
@@ -58,7 +96,45 @@ CarNotification = android_app {
 #  As Lib
 CarNotificationLib = android_library {
     name = "CarNotificationLib";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/notification/Beeper.java"
+        "src/com/android/car/notification/CarHeadsUpNotificationManager.java"
+        "src/com/android/car/notification/CarNotificationCenterActivity.java"
+        "src/com/android/car/notification/CarNotificationDiff.java"
+        "src/com/android/car/notification/CarNotificationItemTouchListener.java"
+        "src/com/android/car/notification/CarNotificationListener.java"
+        "src/com/android/car/notification/CarNotificationView.java"
+        "src/com/android/car/notification/CarNotificationViewAdapter.java"
+        "src/com/android/car/notification/CarUxRestrictionManagerWrapper.java"
+        "src/com/android/car/notification/DismissAnimationHelper.java"
+        "src/com/android/car/notification/HeadsUpEntry.java"
+        "src/com/android/car/notification/HeadsUpNotificationOnTouchListener.java"
+        "src/com/android/car/notification/NotificationApplication.java"
+        "src/com/android/car/notification/NotificationClickHandlerFactory.java"
+        "src/com/android/car/notification/NotificationDataManager.java"
+        "src/com/android/car/notification/NotificationGroup.java"
+        "src/com/android/car/notification/NotificationUtils.java"
+        "src/com/android/car/notification/NotificationViewController.java"
+        "src/com/android/car/notification/NotificationViewType.java"
+        "src/com/android/car/notification/PreprocessingManager.java"
+        "src/com/android/car/notification/ThemesUtil.java"
+        "src/com/android/car/notification/template/BasicNotificationViewHolder.java"
+        "src/com/android/car/notification/template/CallNotificationViewHolder.java"
+        "src/com/android/car/notification/template/CarNotificationActionsView.java"
+        "src/com/android/car/notification/template/CarNotificationBaseViewHolder.java"
+        "src/com/android/car/notification/template/CarNotificationBodyView.java"
+        "src/com/android/car/notification/template/CarNotificationFooterViewHolder.java"
+        "src/com/android/car/notification/template/CarNotificationHeaderView.java"
+        "src/com/android/car/notification/template/CarNotificationHeaderViewHolder.java"
+        "src/com/android/car/notification/template/EmergencyNotificationViewHolder.java"
+        "src/com/android/car/notification/template/GroupNotificationViewHolder.java"
+        "src/com/android/car/notification/template/GroupSummaryNotificationViewHolder.java"
+        "src/com/android/car/notification/template/InboxNotificationViewHolder.java"
+        "src/com/android/car/notification/template/MessageNotificationViewHolder.java"
+        "src/com/android/car/notification/template/NavigationNotificationViewHolder.java"
+        "src/com/android/car/notification/template/NotificationColorUtil.java"
+        "src/com/android/car/notification/template/ProgressNotificationViewHolder.java"
+    ];
 
     resource_dirs = ["res"];
 

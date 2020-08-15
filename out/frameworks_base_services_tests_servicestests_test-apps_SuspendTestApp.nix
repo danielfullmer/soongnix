@@ -26,7 +26,8 @@ SuspendTestApp = android_test_helper_app {
     ];
 
     srcs = [
-        "**/*.java"
+        "src/com/android/servicestests/apps/suspendtestapp/SuspendTestActivity.java"
+        "src/com/android/servicestests/apps/suspendtestapp/SuspendTestReceiver.java"
         ":servicestests-SuspendTestApp-files"
     ];
 

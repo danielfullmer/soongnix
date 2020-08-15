@@ -18,7 +18,22 @@ let
 latinime-common = java_library {
     name = "latinime-common";
     host_supported = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/inputmethod/annotations/ExternallyReferenced.java"
+        "src/com/android/inputmethod/annotations/UsedForTesting.java"
+        "src/com/android/inputmethod/latin/common/CodePointUtils.java"
+        "src/com/android/inputmethod/latin/common/CollectionUtils.java"
+        "src/com/android/inputmethod/latin/common/ComposedData.java"
+        "src/com/android/inputmethod/latin/common/Constants.java"
+        "src/com/android/inputmethod/latin/common/CoordinateUtils.java"
+        "src/com/android/inputmethod/latin/common/FileUtils.java"
+        "src/com/android/inputmethod/latin/common/InputPointers.java"
+        "src/com/android/inputmethod/latin/common/LocaleUtils.java"
+        "src/com/android/inputmethod/latin/common/NativeSuggestOptions.java"
+        "src/com/android/inputmethod/latin/common/ResizableIntArray.java"
+        "src/com/android/inputmethod/latin/common/StringUtils.java"
+        "src/com/android/inputmethod/latin/common/UnicodeSurrogate.java"
+    ];
     static_libs = ["jsr305"];
     sdk_version = "21";
 };

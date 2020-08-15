@@ -6,7 +6,10 @@ libLLVMLinker = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "IRMover.cpp"
+        "LinkModules.cpp"
+    ];
 };
 
 in { inherit libLLVMLinker; }

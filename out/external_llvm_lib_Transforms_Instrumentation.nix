@@ -6,7 +6,20 @@ libLLVMInstrumentation = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "AddressSanitizer.cpp"
+        "BoundsChecking.cpp"
+        "DataFlowSanitizer.cpp"
+        "EfficiencySanitizer.cpp"
+        "GCOVProfiling.cpp"
+        "IndirectCallPromotion.cpp"
+        "InstrProfiling.cpp"
+        "Instrumentation.cpp"
+        "MemorySanitizer.cpp"
+        "PGOInstrumentation.cpp"
+        "SanitizerCoverage.cpp"
+        "ThreadSanitizer.cpp"
+    ];
 };
 
 in { inherit libLLVMInstrumentation; }

@@ -23,7 +23,15 @@ let
 cts-core-test-runner = java_library {
     name = "cts-core-test-runner";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/core/runner/ExpectationBasedFilter.java"
+        "src/com/android/cts/core/runner/support/SingleTestNGTestRunListener.java"
+        "src/com/android/cts/core/runner/support/SingleTestNgTestExecutor.java"
+        "src/com/android/cts/core/runner/support/TestNgRunner.java"
+        "src/com/android/cts/core/runner/support/TestNgRunnerBuilder.java"
+        "src/com/android/cts/runner/CrashParserRunListener.java"
+        "src/com/android/cts/runner/CtsTestRunListener.java"
+    ];
     static_libs = [
         "compatibility-device-util"
         "android-support-test"
@@ -44,7 +52,10 @@ cts-core-test-runner = java_library {
 cts-test-runner = java_library {
     name = "cts-test-runner";
 
-    srcs = ["src/com/android/cts/runner/**/*.java"];
+    srcs = [
+        "src/com/android/cts/runner/CrashParserRunListener.java"
+        "src/com/android/cts/runner/CtsTestRunListener.java"
+    ];
     static_libs = ["android-support-test"];
     sdk_version = "current";
 

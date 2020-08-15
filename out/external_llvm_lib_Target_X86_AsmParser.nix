@@ -7,7 +7,10 @@ libLLVMX86AsmParser = cc_library_static {
         "llvm-lib-defaults"
         "llvm-x86-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "X86AsmInstrumentation.cpp"
+        "X86AsmParser.cpp"
+    ];
 };
 
 in { inherit libLLVMX86AsmParser; }

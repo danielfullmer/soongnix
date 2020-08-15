@@ -3,7 +3,10 @@ let
 
 "services.appwidget" = java_library_static {
     name = "services.appwidget";
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/com/android/server/appwidget/AppWidgetService.java"
+        "java/com/android/server/appwidget/AppWidgetServiceImpl.java"
+    ];
     libs = ["services.core"];
 };
 

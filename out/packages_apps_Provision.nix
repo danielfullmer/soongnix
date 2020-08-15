@@ -3,7 +3,7 @@ let
 
 Provision = android_app {
     name = "Provision";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/provision/DefaultActivity.java"];
     platform_apis = true;
     product_specific = true;
     certificate = "platform";

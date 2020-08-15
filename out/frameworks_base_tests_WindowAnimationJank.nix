@@ -17,7 +17,13 @@ let
 
 WindowAnimationJank = android_test {
     name = "WindowAnimationJank";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/windowanimationjank/ElementLayoutActivity.java"
+        "src/android/windowanimationjank/FlowLayout.java"
+        "src/android/windowanimationjank/FullscreenRotationTest.java"
+        "src/android/windowanimationjank/Utils.java"
+        "src/android/windowanimationjank/WindowAnimationJankTestBase.java"
+    ];
     static_libs = [
         "ub-uiautomator"
         "androidx.test.janktesthelper"

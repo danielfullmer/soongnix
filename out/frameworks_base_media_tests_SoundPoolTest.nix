@@ -3,7 +3,7 @@ let
 
 SoundPoolTest = android_test {
     name = "SoundPoolTest";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/SoundPoolTest.java"];
     platform_apis = true;
 };
 

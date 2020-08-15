@@ -36,7 +36,11 @@ CtsEphemeralTestsEphemeralApp2 = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/ephemeralapp2/EphemeralActivity.java"
+        "src/com/android/cts/ephemeralapp2/EphemeralProvider.java"
+        "src/com/android/cts/ephemeralapp2/SearchSuggestionProvider.java"
+    ];
     resource_dirs = ["res"];
     sdk_version = "test_current";
     min_sdk_version = "24";

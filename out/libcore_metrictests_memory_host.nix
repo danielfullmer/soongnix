@@ -17,7 +17,12 @@ let
 
 libcore-memory-metrics-tests = java_test_host {
     name = "libcore-memory-metrics-tests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/libcore/heapmetrics/HeapCategorization.java"
+        "src/libcore/heapmetrics/LibcoreHeapMetricsTest.java"
+        "src/libcore/heapmetrics/MetricsRunner.java"
+        "src/libcore/heapmetrics/Reachability.java"
+    ];
     libs = [
         "tradefed"
         "ahat"

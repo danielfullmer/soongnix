@@ -19,7 +19,7 @@ let
 EthernetServiceTests = android_test {
     name = "EthernetServiceTests";
 
-    srcs = ["java/**/*.java"];
+    srcs = ["java/com/android/server/ethernet/EthernetTrackerTest.java"];
 
     certificate = "platform";
     platform_apis = true;

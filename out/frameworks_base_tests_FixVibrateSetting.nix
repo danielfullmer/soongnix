@@ -3,7 +3,7 @@ let
 
 FixVibrateSetting = android_app {
     name = "FixVibrateSetting";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/fixvibratesetting/FixVibrateSetting.java"];
     sdk_version = "current";
     certificate = "platform";
 };

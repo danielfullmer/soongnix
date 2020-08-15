@@ -27,7 +27,13 @@ EncryptionRunner = android_library {
         "ukey2"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/android/car/encryptionrunner/DummyEncryptionRunner.java"
+        "src/android/car/encryptionrunner/EncryptionRunner.java"
+        "src/android/car/encryptionrunner/EncryptionRunnerFactory.java"
+        "src/android/car/encryptionrunner/HandshakeException.java"
+        "src/android/car/encryptionrunner/HandshakeMessage.java"
+        "src/android/car/encryptionrunner/Key.java"
+        "src/android/car/encryptionrunner/Ukey2EncryptionRunner.java"
     ];
     installable = true;
 };
@@ -36,7 +42,8 @@ EncryptionRunnerTest = android_test {
     name = "EncryptionRunnerTest";
     min_sdk_version = "23";
     srcs = [
-        "test/**/*.java"
+        "test/android/car/encryptionrunner/EncryptionRunnerTest.java"
+        "test/android/car/encryptionrunner/Ukey2EncryptionRunnerTest.java"
     ];
     product_variables = {
         pdk = {

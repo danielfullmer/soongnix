@@ -4,7 +4,7 @@ let
 SettingsLibHelpUtils = android_library {
     name = "SettingsLibHelpUtils";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/settingslib/HelpUtils.java"];
     resource_dirs = ["res"];
 
     sdk_version = "system_current";

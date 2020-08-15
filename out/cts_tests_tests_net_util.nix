@@ -20,10 +20,7 @@ let
 #  Common utilities for cts net tests.
 cts-net-utils = java_library {
     name = "cts-net-utils";
-    srcs = [
-        "java/**/*.java"
-        "java/**/*.kt"
-    ];
+    srcs = ["java/android/net/cts/util/CtsNetUtils.java"];
     static_libs = [
         "compatibility-device-util-axt"
         "junit"

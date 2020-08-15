@@ -20,7 +20,10 @@ let
 car-assist-lib = android_library {
     name = "car-assist-lib";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/assist/CarVoiceInteractionSession.java"
+        "src/com/android/car/assist/payloadhandlers/NotificationPayloadHandler.java"
+    ];
 
     optimize = {
         enabled = false;

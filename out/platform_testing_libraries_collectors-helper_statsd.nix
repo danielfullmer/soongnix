@@ -21,7 +21,11 @@ statsd-helper = java_library {
     defaults = ["tradefed_errorprone_defaults"];
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/helpers/AppStartupHelper.java"
+        "src/com/android/helpers/CpuUsageHelper.java"
+        "src/com/android/helpers/CrashHelper.java"
+        "src/com/android/helpers/StatsdHelper.java"
+        "src/com/android/helpers/ThermalHelper.java"
     ];
 
     static_libs = [

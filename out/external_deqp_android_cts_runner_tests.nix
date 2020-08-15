@@ -19,7 +19,7 @@ CtsDeqpRunnerTests = java_test_host {
     name = "CtsDeqpRunnerTests";
 
     #  Only compile source java files in this lib.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/drawelements/deqp/runner/DeqpTestRunnerTest.java"];
 
     libs = [
         "cts-tradefed"

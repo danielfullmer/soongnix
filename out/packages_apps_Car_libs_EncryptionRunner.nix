@@ -27,7 +27,13 @@ EncryptionRunner-lib = android_library {
         "ukey2"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/android/car/encryptionrunner/DummyEncryptionRunner.java"
+        "src/android/car/encryptionrunner/EncryptionRunner.java"
+        "src/android/car/encryptionrunner/EncryptionRunnerFactory.java"
+        "src/android/car/encryptionrunner/HandshakeException.java"
+        "src/android/car/encryptionrunner/HandshakeMessage.java"
+        "src/android/car/encryptionrunner/Key.java"
+        "src/android/car/encryptionrunner/Ukey2EncryptionRunner.java"
     ];
     installable = true;
 };

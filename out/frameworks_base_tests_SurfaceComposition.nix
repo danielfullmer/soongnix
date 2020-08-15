@@ -25,7 +25,13 @@ SurfaceComposition = android_test {
     optimize = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/surfacecomposition/CustomLayout.java"
+        "src/android/surfacecomposition/CustomSurfaceView.java"
+        "src/android/surfacecomposition/MemoryAccessTask.java"
+        "src/android/surfacecomposition/SurfaceCompositionMeasuringActivity.java"
+        "src/android/surfacecomposition/SurfaceCompositionTest.java"
+    ];
     static_libs = ["junit"];
     libs = [
         "android.test.runner.stubs"

@@ -19,7 +19,7 @@ let
 
 CaptivePortalLoginDefaults = java_defaults {
     name = "CaptivePortalLoginDefaults";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/captiveportallogin/CaptivePortalLoginActivity.java"];
     sdk_version = "system_current";
     min_sdk_version = "28";
     static_libs = [

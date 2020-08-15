@@ -182,7 +182,10 @@ libaidl-integration-test = cc_library_shared {
         include_dirs = ["frameworks/native/aidl/binder"];
     };
     srcs = [
-        "tests/android/aidl/tests/*.aidl"
+        "tests/android/aidl/tests/INamedCallback.aidl"
+        "tests/android/aidl/tests/ITestService.aidl"
+        "tests/android/aidl/tests/SimpleParcelable.aidl"
+        "tests/android/aidl/tests/StructuredParcelable.aidl"
         "tests/simple_parcelable.cpp"
     ];
 };

@@ -25,7 +25,13 @@ EmergencyInfoUnitTests = android_test {
         "truth-prebuilt"
         "ub-uiautomator"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/emergency/edit/EditInfoActivityTest.java"
+        "src/com/android/emergency/edit/EditMedicalInfoActivityTest.java"
+        "src/com/android/emergency/preferences/EmergencyContactsPreferenceTest.java"
+        "src/com/android/emergency/preferences/EmergencyListPreferenceTest.java"
+        "src/com/android/emergency/view/ViewInfoActivityTest.java"
+    ];
     platform_apis = true;
     test_suites = ["device-tests"];
     certificate = "platform";

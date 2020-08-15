@@ -18,7 +18,27 @@ let
 "Magick++_defaults" = cc_defaults {
     name = "Magick++_defaults";
 
-    srcs = ["lib/*.cpp"];
+    srcs = [
+        "lib/Blob.cpp"
+        "lib/BlobRef.cpp"
+        "lib/CoderInfo.cpp"
+        "lib/Color.cpp"
+        "lib/Drawable.cpp"
+        "lib/Exception.cpp"
+        "lib/Functions.cpp"
+        "lib/Geometry.cpp"
+        "lib/Image.cpp"
+        "lib/ImageRef.cpp"
+        "lib/Montage.cpp"
+        "lib/Options.cpp"
+        "lib/Pixels.cpp"
+        "lib/ResourceLimits.cpp"
+        "lib/STL.cpp"
+        "lib/SecurityPolicy.cpp"
+        "lib/Statistic.cpp"
+        "lib/Thread.cpp"
+        "lib/TypeMetric.cpp"
+    ];
 
     cflags = [
         "-DHAVE_CONFIG_H"

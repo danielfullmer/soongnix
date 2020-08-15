@@ -25,7 +25,12 @@ ProcessTests = android_test {
         "-c"
         "cs"
     ];
-    srcs = ["**/*.java"];
+    srcs = [
+        "NoShareUidApp/src/com/android/cts/process/activity/NoSharePidActivity.java"
+        "ShareUidApp/src/com/android/cts/process/activity/SharePidActivity.java"
+        "ShareUidApp/src/com/android/cts/process/activity/SharePidSubActivity.java"
+        "src/com/android/cts/process/ProcessTest.java"
+    ];
     static_libs = ["junit"];
     libs = ["android.test.base.stubs"];
     dex_preopt = {

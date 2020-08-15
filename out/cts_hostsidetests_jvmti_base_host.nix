@@ -17,7 +17,7 @@ let
 
 CtsJvmtiHostTestBase = java_library_host {
     name = "CtsJvmtiHostTestBase";
-    srcs = ["**/*.java"];
+    srcs = ["src/android/jvmti/cts/JvmtiHostTest.java"];
     libs = [
         "cts-tradefed"
         "tradefed"

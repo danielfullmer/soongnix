@@ -18,7 +18,7 @@ let
 CtsSharedUidInstall = android_test {
     name = "CtsSharedUidInstall";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/shareduidinstall/SharedUidPackageTest.java"];
     sdk_version = "current";
     static_libs = [
         "androidx.test.rules"

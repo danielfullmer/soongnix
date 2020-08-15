@@ -35,7 +35,32 @@ EmergencyInfo-lib = android_library {
     name = "EmergencyInfo-lib";
     platform_apis = true;
     resource_dirs = ["res"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/emergency/CircleFramedDrawable.java"
+        "src/com/android/emergency/EmergencyContactManager.java"
+        "src/com/android/emergency/EmergencySearchIndexablesProvider.java"
+        "src/com/android/emergency/PreferenceKeys.java"
+        "src/com/android/emergency/ReloadablePreferenceInterface.java"
+        "src/com/android/emergency/edit/EditInfoActivity.java"
+        "src/com/android/emergency/edit/EditInfoFragment.java"
+        "src/com/android/emergency/edit/EditMedicalInfoActivity.java"
+        "src/com/android/emergency/edit/EditMedicalInfoFragment.java"
+        "src/com/android/emergency/edit/EmergencyContactsFeatureProvider.java"
+        "src/com/android/emergency/edit/EmergencyContactsFeatureProviderImpl.java"
+        "src/com/android/emergency/overlay/FeatureFactory.java"
+        "src/com/android/emergency/overlay/FeatureFactoryImpl.java"
+        "src/com/android/emergency/preferences/ContactPreference.java"
+        "src/com/android/emergency/preferences/EditUserPhotoController.java"
+        "src/com/android/emergency/preferences/EmergencyContactsPreference.java"
+        "src/com/android/emergency/preferences/EmergencyEditTextPreference.java"
+        "src/com/android/emergency/preferences/EmergencyListPreference.java"
+        "src/com/android/emergency/preferences/EmergencyNamePreference.java"
+        "src/com/android/emergency/preferences/ViewEmergencyContactsPreference.java"
+        "src/com/android/emergency/util/PreferenceUtils.java"
+        "src/com/android/emergency/view/ViewEmergencyContactsFragment.java"
+        "src/com/android/emergency/view/ViewEmergencyInfoFragment.java"
+        "src/com/android/emergency/view/ViewInfoActivity.java"
+    ];
     static_libs = [
         "androidx.legacy_legacy-preference-v14"
         "androidx.legacy_legacy-support-v13"

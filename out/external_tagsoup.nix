@@ -19,7 +19,27 @@ tagsoup = java_library_static {
     name = "tagsoup";
     host_supported = true;
     sdk_version = "core_current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/org/ccil/cowan/tagsoup/AttributesImpl.java"
+        "src/org/ccil/cowan/tagsoup/AutoDetector.java"
+        "src/org/ccil/cowan/tagsoup/CommandLine.java"
+        "src/org/ccil/cowan/tagsoup/Element.java"
+        "src/org/ccil/cowan/tagsoup/ElementType.java"
+        "src/org/ccil/cowan/tagsoup/HTMLModels.java"
+        "src/org/ccil/cowan/tagsoup/HTMLScanner.java"
+        "src/org/ccil/cowan/tagsoup/HTMLSchema.java"
+        "src/org/ccil/cowan/tagsoup/PYXScanner.java"
+        "src/org/ccil/cowan/tagsoup/PYXWriter.java"
+        "src/org/ccil/cowan/tagsoup/Parser.java"
+        "src/org/ccil/cowan/tagsoup/ScanHandler.java"
+        "src/org/ccil/cowan/tagsoup/Scanner.java"
+        "src/org/ccil/cowan/tagsoup/Schema.java"
+        "src/org/ccil/cowan/tagsoup/XMLWriter.java"
+        "src/org/ccil/cowan/tagsoup/jaxp/JAXPTest.java"
+        "src/org/ccil/cowan/tagsoup/jaxp/SAX1ParserAdapter.java"
+        "src/org/ccil/cowan/tagsoup/jaxp/SAXFactoryImpl.java"
+        "src/org/ccil/cowan/tagsoup/jaxp/SAXParserImpl.java"
+    ];
 };
 
 in { inherit tagsoup; }

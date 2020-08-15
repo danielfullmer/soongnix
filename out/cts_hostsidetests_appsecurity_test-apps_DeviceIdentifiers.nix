@@ -25,7 +25,7 @@ CtsAccessDeviceIdentifiers = android_test {
         "compatibility-device-util-axt"
     ];
     libs = ["android.test.base.stubs"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/appsecurity/cts/deviceids/DeviceIdentifierAppOpTest.java"];
     test_suites = [
         "cts"
         "vts"

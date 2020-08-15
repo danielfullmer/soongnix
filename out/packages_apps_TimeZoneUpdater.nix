@@ -19,8 +19,8 @@ let
 time_zone_updater = java_library {
     name = "time_zone_updater";
     srcs = [
-        "src/main/**/*.java"
-        "src/main/**/*.logtags" #  Also include generated EventLogTags from the .logtags file.
+        "src/main/com/android/timezone/updater/RulesCheckReceiver.java"
+        "src/main/com/android/timezone/updater/EventLogTags.logtags" #  Also include generated EventLogTags from the .logtags file.
     ];
     static_libs = ["time_zone_distro"];
 };

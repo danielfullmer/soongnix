@@ -5,7 +5,7 @@ ScreenshotHelperTests = android_test {
     name = "ScreenshotHelperTests";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/internal/util/ScreenshotHelperTest.java"
     ];
 
     static_libs = [

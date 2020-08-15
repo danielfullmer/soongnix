@@ -45,7 +45,10 @@ layersprotosnano = java_library_static {
     proto = {
         type = "nano";
     };
-    srcs = ["*.proto"];
+    srcs = [
+        "layers.proto"
+        "layerstrace.proto"
+    ];
     no_framework_libs = true;
     target = {
         android = {

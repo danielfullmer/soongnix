@@ -4,7 +4,7 @@ let
 FrameworksCoreTests_version_1_nosys = android_test_helper_app {
     name = "FrameworksCoreTests_version_1_nosys";
     defaults = ["FrameworksCoreTests_apks_defaults"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/version_test/NullProvider.java"];
     aaptflags = [
         "--version-code 1"
         "--version-name 1.0"

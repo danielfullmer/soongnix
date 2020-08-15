@@ -17,7 +17,10 @@ let
 
 TextClassifierPerfTests = android_test {
     name = "TextClassifierPerfTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/view/textclassifier/TextClassificationManagerPerfTest.java"
+        "src/android/view/textclassifier/TextClassifierPerfTest.java"
+    ];
     static_libs = [
         "androidx.test.rules"
         "androidx.annotation_annotation"

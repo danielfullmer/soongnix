@@ -19,7 +19,20 @@ let
 
 TvProviderTests = android_test {
     name = "TvProviderTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/providers/tv/BootCompletedReceiverTest.java"
+        "src/com/android/providers/tv/ColumnFilterTest.java"
+        "src/com/android/providers/tv/DatabaseHelperTest.java"
+        "src/com/android/providers/tv/EpgDataCleanupServiceTests.java"
+        "src/com/android/providers/tv/MockTvProviderContext.java"
+        "src/com/android/providers/tv/PackageRemovedReceiverTest.java"
+        "src/com/android/providers/tv/ParametersTest.java"
+        "src/com/android/providers/tv/TransientRowHelperTests.java"
+        "src/com/android/providers/tv/TvProviderForTesting.java"
+        "src/com/android/providers/tv/UnrecognizedColumnsTest.java"
+        "src/com/android/providers/tv/Utils.java"
+        "src/com/android/providers/tv/util/SqliteTokenFinderTest.java"
+    ];
     platform_apis = true;
     libs = [
         "android.test.runner"

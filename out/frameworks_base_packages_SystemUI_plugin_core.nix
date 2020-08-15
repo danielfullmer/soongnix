@@ -18,7 +18,16 @@ let
 PluginCoreLib = java_library {
     sdk_version = "current";
     name = "PluginCoreLib";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/systemui/plugins/Plugin.java"
+        "src/com/android/systemui/plugins/PluginFragment.java"
+        "src/com/android/systemui/plugins/PluginListener.java"
+        "src/com/android/systemui/plugins/annotations/Dependencies.java"
+        "src/com/android/systemui/plugins/annotations/DependsOn.java"
+        "src/com/android/systemui/plugins/annotations/ProvidesInterface.java"
+        "src/com/android/systemui/plugins/annotations/Requirements.java"
+        "src/com/android/systemui/plugins/annotations/Requires.java"
+    ];
 };
 
 in { inherit PluginCoreLib; }

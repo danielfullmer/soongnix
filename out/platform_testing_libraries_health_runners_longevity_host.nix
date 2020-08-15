@@ -17,7 +17,12 @@ let
 
 longevity-base-lib = java_library_static {
     name = "longevity-base-lib";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/host/test/longevity/LongevitySuite.java"
+        "src/android/host/test/longevity/listener/ErrorTerminator.java"
+        "src/android/host/test/longevity/listener/RunTerminator.java"
+        "src/android/host/test/longevity/listener/TimeoutTerminator.java"
+    ];
     host_supported = true;
     hostdex = true;
     defaults = ["tradefed_errorprone_defaults"];

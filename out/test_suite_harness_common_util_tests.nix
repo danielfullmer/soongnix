@@ -19,7 +19,23 @@ compatibility-common-util-tests = java_test_host {
     name = "compatibility-common-util-tests";
     defaults = ["cts_error_prone_rules"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/util/BackupUtilsTest.java"
+        "src/com/android/compatibility/common/util/BusinessLogicTest.java"
+        "src/com/android/compatibility/common/util/CaseResultTest.java"
+        "src/com/android/compatibility/common/util/CrashUtilsTest.java"
+        "src/com/android/compatibility/common/util/DynamicConfigTest.java"
+        "src/com/android/compatibility/common/util/LightInvocationResultTest.java"
+        "src/com/android/compatibility/common/util/MetricsXmlSerializerTest.java"
+        "src/com/android/compatibility/common/util/MultipartFormTest.java"
+        "src/com/android/compatibility/common/util/ReadElfTest.java"
+        "src/com/android/compatibility/common/util/ReportLogTest.java"
+        "src/com/android/compatibility/common/util/ResultHandlerTest.java"
+        "src/com/android/compatibility/common/util/StatTest.java"
+        "src/com/android/compatibility/common/util/TestResultHistoryTest.java"
+        "src/com/android/compatibility/common/util/TestResultTest.java"
+        "src/com/android/compatibility/common/util/UnitTests.java"
+    ];
 
     libs = [
         "junit"

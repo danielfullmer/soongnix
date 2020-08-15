@@ -24,7 +24,10 @@ py2-funcsigs-tests = python_test {
     srcs = [
         #  important: the tests must be run as if they were in the 'tests' module
         #  (i.e. from external/python/funcsigs) otherwise one of the tests will fail.
-        "tests/*.py"
+        "tests/__init__.py"
+        "tests/test_formatannotation.py"
+        "tests/test_funcsigs.py"
+        "tests/test_inspect.py"
         "Android_tests.py"
     ];
     host_supported = true;
@@ -45,7 +48,10 @@ py3-funcsigs-tests = python_test {
     name = "py3-funcsigs-tests";
     main = "Android_tests.py";
     srcs = [
-        "tests/*.py"
+        "tests/__init__.py"
+        "tests/test_formatannotation.py"
+        "tests/test_funcsigs.py"
+        "tests/test_inspect.py"
         "Android_tests.py"
     ];
     host_supported = true;

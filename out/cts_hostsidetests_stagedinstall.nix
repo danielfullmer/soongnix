@@ -19,7 +19,10 @@ CtsStagedInstallHostTestCases = java_test_host {
     name = "CtsStagedInstallHostTestCases";
     defaults = ["cts_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/tests/stagedinstall/host/ApexShimValidationTest.java"
+        "src/com/android/tests/stagedinstall/host/StagedInstallTest.java"
+    ];
 
     libs = [
         "cts-tradefed"
@@ -43,7 +46,13 @@ CtsStagedInstallHostTestCases = java_test_host {
 StagedInstallTest = android_test_helper_app {
     name = "StagedInstallTest";
 
-    srcs = ["app/src/**/*.java"];
+    srcs = [
+        "app/src/com/android/tests/stagedinstall/ApexShimValidationTest.java"
+        "app/src/com/android/tests/stagedinstall/LocalIntentSender.java"
+        "app/src/com/android/tests/stagedinstall/PackageInstallerSessionInfoSubject.java"
+        "app/src/com/android/tests/stagedinstall/SessionUpdateBroadcastReceiver.java"
+        "app/src/com/android/tests/stagedinstall/StagedInstallTest.java"
+    ];
 
     manifest = "app/AndroidManifest.xml";
 
@@ -74,7 +83,7 @@ StagedInstallTest = android_test_helper_app {
 StagedInstallTestAppAv1 = android_test_helper_app {
     name = "StagedInstallTestAppAv1";
 
-    srcs = ["testdata/apk/src/**/*java"];
+    srcs = ["testdata/apk/src/com/android/tests/stagedinstall/testapp/MainActivity.java"];
 
     manifest = "testdata/apk/Av1.xml";
 };
@@ -82,7 +91,7 @@ StagedInstallTestAppAv1 = android_test_helper_app {
 StagedInstallTestAppAv2 = android_test_helper_app {
     name = "StagedInstallTestAppAv2";
 
-    srcs = ["testdata/apk/src/**/*java"];
+    srcs = ["testdata/apk/src/com/android/tests/stagedinstall/testapp/MainActivity.java"];
 
     manifest = "testdata/apk/Av2.xml";
 };
@@ -90,7 +99,7 @@ StagedInstallTestAppAv2 = android_test_helper_app {
 StagedInstallTestAppBv1 = android_test_helper_app {
     name = "StagedInstallTestAppBv1";
 
-    srcs = ["testdata/apk/src/**/*java"];
+    srcs = ["testdata/apk/src/com/android/tests/stagedinstall/testapp/MainActivity.java"];
 
     manifest = "testdata/apk/Bv1.xml";
 };
@@ -98,7 +107,7 @@ StagedInstallTestAppBv1 = android_test_helper_app {
 StagedInstallTestAppSamePackageNameAsApex = android_test_helper_app {
     name = "StagedInstallTestAppSamePackageNameAsApex";
 
-    srcs = ["testdata/apk/src/**/*java"];
+    srcs = ["testdata/apk/src/com/android/tests/stagedinstall/testapp/MainActivity.java"];
 
     manifest = "testdata/apk/StagedInstallTestAppSamePackageNameAsApex.xml";
 };

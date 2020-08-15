@@ -19,8 +19,8 @@ TestSmsRetrieverApp = android_test {
     name = "TestSmsRetrieverApp";
 
     srcs = [
-        "src/**/*.kt"
-        "src/**/*.java"
+        "src/android/telephony/cts/smsretriever/MainActivity.java"
+        "src/android/telephony/cts/smsretriever/SmsRetrieverBroadcastReceiver.java"
     ];
 
     static_libs = [

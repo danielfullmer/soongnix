@@ -19,7 +19,7 @@ AppLinkTestApp = android_test {
     name = "AppLinkTestApp";
 
     #  omit gradle 'build' dir
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/applinktestapp/MainActivity.java"];
 
     resource_dirs = ["res"];
     sdk_version = "current";

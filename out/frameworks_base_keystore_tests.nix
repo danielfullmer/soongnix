@@ -18,7 +18,10 @@ let
 KeystoreTests = android_test {
     name = "KeystoreTests";
     #  LOCAL_MODULE := keystore
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/security/ParcelableKeyGenParameterSpecTest.java"
+        "src/android/security/keystore/KeyGenParameterSpecTest.java"
+    ];
     static_libs = [
         "androidx.test.rules"
         "hamcrest-library"

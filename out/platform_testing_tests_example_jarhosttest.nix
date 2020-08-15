@@ -20,7 +20,7 @@ HelloWorldHostTest = java_test_host {
 
     test_suites = ["general-tests"];
 
-    srcs = ["test/**/*.java"];
+    srcs = ["test/android/test/example/helloworld/HelloWorldTest.java"];
 
     static_libs = [
         "junit"

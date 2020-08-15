@@ -23,7 +23,20 @@ FlickerLibTest = android_test {
     certificate = "platform";
     platform_apis = true;
     test_suites = ["tests"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/server/wm/flicker/AssertionsCheckerTest.java"
+        "src/com/android/server/wm/flicker/AssertionsTest.java"
+        "src/com/android/server/wm/flicker/LayersTraceSubjectTest.java"
+        "src/com/android/server/wm/flicker/LayersTraceTest.java"
+        "src/com/android/server/wm/flicker/TestFileUtils.java"
+        "src/com/android/server/wm/flicker/TransitionRunnerTest.java"
+        "src/com/android/server/wm/flicker/WindowManagerTraceTest.java"
+        "src/com/android/server/wm/flicker/WmTraceSubjectTest.java"
+        "src/com/android/server/wm/flicker/monitor/LayersTraceMonitorTest.java"
+        "src/com/android/server/wm/flicker/monitor/ScreenRecorderTest.java"
+        "src/com/android/server/wm/flicker/monitor/WindowAnimationFrameStatsMonitorTest.java"
+        "src/com/android/server/wm/flicker/monitor/WindowManagerTraceMonitorTest.java"
+    ];
     libs = ["android.test.runner"];
     static_libs = [
         "androidx.test.rules"

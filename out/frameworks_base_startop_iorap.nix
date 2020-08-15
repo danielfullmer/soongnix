@@ -28,7 +28,17 @@ let
 
     srcs = [
         ":iorap-aidl"
-        "**/*.java"
+        "src/com/google/android/startop/iorap/ActivityHintEvent.java"
+        "src/com/google/android/startop/iorap/ActivityInfo.java"
+        "src/com/google/android/startop/iorap/AppIntentEvent.java"
+        "src/com/google/android/startop/iorap/AppLaunchEvent.java"
+        "src/com/google/android/startop/iorap/CheckHelpers.java"
+        "src/com/google/android/startop/iorap/IorapForwardingService.java"
+        "src/com/google/android/startop/iorap/PackageEvent.java"
+        "src/com/google/android/startop/iorap/RequestId.java"
+        "src/com/google/android/startop/iorap/SystemServiceEvent.java"
+        "src/com/google/android/startop/iorap/SystemServiceUserEvent.java"
+        "src/com/google/android/startop/iorap/TaskResult.java"
     ];
 };
 

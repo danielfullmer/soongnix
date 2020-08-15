@@ -17,7 +17,15 @@ let
 
 UiBenchJankTests = android_test {
     name = "UiBenchJankTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/uibench/janktests/UiBenchJankTests.java"
+        "src/com/android/uibench/janktests/UiBenchJankTestsHelper.java"
+        "src/com/android/uibench/janktests/UiBenchLeanbackJankTests.java"
+        "src/com/android/uibench/janktests/UiBenchRenderingJankTests.java"
+        "src/com/android/uibench/janktests/UiBenchTextJankTests.java"
+        "src/com/android/uibench/janktests/UiBenchTransitionsJankTests.java"
+        "src/com/android/uibench/janktests/UiBenchWebView.java"
+    ];
 
     static_libs = [
         "collector-device-lib"

@@ -36,7 +36,7 @@ CtsInstantUpgradeApp = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/instantupgradeapp/ClientTest.java"];
     platform_apis = true;
     optimize = {
         enabled = false;

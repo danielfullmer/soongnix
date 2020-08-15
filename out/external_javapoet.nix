@@ -18,7 +18,25 @@ let
 
 javapoet = java_library_host {
     name = "javapoet";
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/com/squareup/javapoet/AnnotationSpec.java"
+        "src/main/java/com/squareup/javapoet/ArrayTypeName.java"
+        "src/main/java/com/squareup/javapoet/ClassName.java"
+        "src/main/java/com/squareup/javapoet/CodeBlock.java"
+        "src/main/java/com/squareup/javapoet/CodeWriter.java"
+        "src/main/java/com/squareup/javapoet/FieldSpec.java"
+        "src/main/java/com/squareup/javapoet/JavaFile.java"
+        "src/main/java/com/squareup/javapoet/LineWrapper.java"
+        "src/main/java/com/squareup/javapoet/MethodSpec.java"
+        "src/main/java/com/squareup/javapoet/NameAllocator.java"
+        "src/main/java/com/squareup/javapoet/ParameterSpec.java"
+        "src/main/java/com/squareup/javapoet/ParameterizedTypeName.java"
+        "src/main/java/com/squareup/javapoet/TypeName.java"
+        "src/main/java/com/squareup/javapoet/TypeSpec.java"
+        "src/main/java/com/squareup/javapoet/TypeVariableName.java"
+        "src/main/java/com/squareup/javapoet/Util.java"
+        "src/main/java/com/squareup/javapoet/WildcardTypeName.java"
+    ];
 };
 
 #  TODO(b/19776637): Add java_test_host

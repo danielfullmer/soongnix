@@ -21,7 +21,17 @@ CtsHostLaunchAnyWhereApp = android_test_helper_app {
     name = "CtsHostLaunchAnyWhereApp";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/security/cts/launchanywhere/Authenticator.java"
+        "src/com/android/security/cts/launchanywhere/AuthenticatorService.java"
+        "src/com/android/security/cts/launchanywhere/CVE_2017_13286.java"
+        "src/com/android/security/cts/launchanywhere/CVE_2017_13288.java"
+        "src/com/android/security/cts/launchanywhere/CVE_2017_13289.java"
+        "src/com/android/security/cts/launchanywhere/CVE_2017_13312.java"
+        "src/com/android/security/cts/launchanywhere/CVE_2017_13315.java"
+        "src/com/android/security/cts/launchanywhere/IGenerateMalformedParcel.java"
+        "src/com/android/security/cts/launchanywhere/StartExploit.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

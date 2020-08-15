@@ -19,7 +19,7 @@ RollbackManagerTestAppA1 = android_test_helper_app {
     name = "RollbackManagerTestAppA1";
     manifest = "testapp/A1.xml";
     sdk_version = "current";
-    srcs = ["testapp/src/**/*.java"];
+    srcs = ["testapp/src/com/android/cts/rollback/lib/testapp/MainActivity.java"];
     resource_dirs = ["testapp/res_v1"];
 };
 
@@ -27,13 +27,20 @@ RollbackManagerTestAppA2 = android_test_helper_app {
     name = "RollbackManagerTestAppA2";
     manifest = "testapp/A2.xml";
     sdk_version = "current";
-    srcs = ["testapp/src/**/*.java"];
+    srcs = ["testapp/src/com/android/cts/rollback/lib/testapp/MainActivity.java"];
     resource_dirs = ["testapp/res_v2"];
 };
 
 cts-rollback-lib = java_library {
     name = "cts-rollback-lib";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/rollback/lib/Install.java"
+        "src/com/android/cts/rollback/lib/LocalIntentSender.java"
+        "src/com/android/cts/rollback/lib/Rollback.java"
+        "src/com/android/cts/rollback/lib/RollbackInfoSubject.java"
+        "src/com/android/cts/rollback/lib/TestApp.java"
+        "src/com/android/cts/rollback/lib/Utils.java"
+    ];
     static_libs = [
         "androidx.test.rules"
         "truth-prebuilt"

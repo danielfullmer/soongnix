@@ -29,7 +29,29 @@ let
 
 presence_polling_defaults = java_defaults {
     name = "presence_polling_defaults";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/service/ims/presence/AlarmBroadcastReceiver.java"
+        "src/com/android/service/ims/presence/CapabilityPolling.java"
+        "src/com/android/service/ims/presence/ContactDbUtil.java"
+        "src/com/android/service/ims/presence/Contacts.java"
+        "src/com/android/service/ims/presence/DatabaseContentProvider.java"
+        "src/com/android/service/ims/presence/DeviceBoot.java"
+        "src/com/android/service/ims/presence/DeviceShutdown.java"
+        "src/com/android/service/ims/presence/EABContactManager.java"
+        "src/com/android/service/ims/presence/EABDbUtil.java"
+        "src/com/android/service/ims/presence/EABProvider.java"
+        "src/com/android/service/ims/presence/EABService.java"
+        "src/com/android/service/ims/presence/LauncherUtils.java"
+        "src/com/android/service/ims/presence/PersistService.java"
+        "src/com/android/service/ims/presence/PollingAction.java"
+        "src/com/android/service/ims/presence/PollingService.java"
+        "src/com/android/service/ims/presence/PollingTask.java"
+        "src/com/android/service/ims/presence/PollingsQueue.java"
+        "src/com/android/service/ims/presence/PresenceContact.java"
+        "src/com/android/service/ims/presence/PresencePreferences.java"
+        "src/com/android/service/ims/presence/PresenceSetting.java"
+        "src/com/android/service/ims/presence/SharedPrefUtil.java"
+    ];
     libs = [
         "ims-common"
         "telephony-common"

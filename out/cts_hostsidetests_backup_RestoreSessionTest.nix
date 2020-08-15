@@ -24,7 +24,8 @@ CtsRestoreSessionApp = android_test_helper_app {
         "truth-prebuilt"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/android/cts/backup/restoresessionapp/BaseRestoreSessionAppTest.java"
+        "src/android/cts/backup/restoresessionapp/RestoreSessionTest.java"
     ];
     #  tag this module as a cts test artifact
     test_suites = [

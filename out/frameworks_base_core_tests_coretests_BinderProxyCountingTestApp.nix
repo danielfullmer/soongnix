@@ -19,7 +19,7 @@ BinderProxyCountingTestApp = android_test_helper_app {
     name = "BinderProxyCountingTestApp";
 
     static_libs = ["coretests-aidl"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/binderproxycountingtestapp/BpcTestAppCmdService.java"];
 
     sdk_version = "current";
     certificate = "platform";

@@ -18,10 +18,23 @@ py-dateutil = python_library {
     name = "py-dateutil";
     host_supported = true;
     srcs = [
-        "*.py"
-        "parser/*.py"
-        "tz/*.py"
-        "zoneinfo/*.py"
+        "__init__.py"
+        "_common.py"
+        "easter.py"
+        "relativedelta.py"
+        "rrule.py"
+        "tzwin.py"
+        "utils.py"
+        "parser/__init__.py"
+        "parser/_parser.py"
+        "parser/isoparser.py"
+        "tz/__init__.py"
+        "tz/_common.py"
+        "tz/_factories.py"
+        "tz/tz.py"
+        "tz/win.py"
+        "zoneinfo/__init__.py"
+        "zoneinfo/rebuild.py"
     ];
     version = {
         py2 = {

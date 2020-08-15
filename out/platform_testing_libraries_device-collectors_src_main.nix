@@ -19,7 +19,34 @@ collector-device-lib = java_library {
     name = "collector-device-lib";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/android/device/collectors/BaseCollectionListener.java"
+        "java/android/device/collectors/BaseMetricListener.java"
+        "java/android/device/collectors/BatteryStatsListener.java"
+        "java/android/device/collectors/DataRecord.java"
+        "java/android/device/collectors/DumpsysMeminfoListener.java"
+        "java/android/device/collectors/FreeMemListener.java"
+        "java/android/device/collectors/IncidentReportListener.java"
+        "java/android/device/collectors/JankListener.java"
+        "java/android/device/collectors/LogcatOnFailureCollector.java"
+        "java/android/device/collectors/PerfettoListener.java"
+        "java/android/device/collectors/ProcLoadListener.java"
+        "java/android/device/collectors/ProcessShowmapListener.java"
+        "java/android/device/collectors/RssSnapshotListener.java"
+        "java/android/device/collectors/ScheduledRunCollectionListener.java"
+        "java/android/device/collectors/ScheduledRunMetricListener.java"
+        "java/android/device/collectors/ScreenRecordCollector.java"
+        "java/android/device/collectors/ScreenshotOnFailureCollector.java"
+        "java/android/device/collectors/SfStatsListener.java"
+        "java/android/device/collectors/TotalPssMetricListener.java"
+        "java/android/device/collectors/annotations/MetricOption.java"
+        "java/android/device/collectors/annotations/OptionClass.java"
+        "java/android/device/collectors/util/SendToInstrumentation.java"
+        "java/android/device/loggers/LogFileLogger.java"
+        "java/android/device/loggers/TestCaseLogger.java"
+        "java/android/device/loggers/TestLogData.java"
+        "java/android/device/preparers/GarbageCollectionPreparer.java"
+    ];
 
     static_libs = [
         "androidx.test.runner"

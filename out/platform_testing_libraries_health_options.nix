@@ -18,7 +18,14 @@ let
 platform-test-options = java_library_static {
     name = "platform-test-options";
     sdk_version = "24";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/options/BooleanOption.java"
+        "src/android/platform/test/options/DoubleOption.java"
+        "src/android/platform/test/options/IntegerOption.java"
+        "src/android/platform/test/options/LongOption.java"
+        "src/android/platform/test/options/StringOption.java"
+        "src/android/platform/test/options/TestOption.java"
+    ];
     libs = [
         "androidx.test.runner"
         "junit"

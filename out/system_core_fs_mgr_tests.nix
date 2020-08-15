@@ -66,7 +66,7 @@ adb-remount-sh = sh_test {
 fs_mgr_vendor_overlay_test = java_test_host {
     name = "fs_mgr_vendor_overlay_test";
 
-    srcs = ["src/**/VendorOverlayHostTest.java"];
+    srcs = ["src/com/android/tests/vendoroverlay/VendorOverlayHostTest.java"];
 
     libs = ["tradefed"];
 

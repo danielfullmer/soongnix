@@ -20,7 +20,15 @@ let
 connected-device-lib-unit-tests = android_test {
     name = "connected-device-lib-unit-tests";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/connecteddevice/ConnectedDeviceManagerTest.java"
+        "src/com/android/car/connecteddevice/ble/BleDeviceMessageStreamTest.java"
+        "src/com/android/car/connecteddevice/ble/BlePacketFactoryTest.java"
+        "src/com/android/car/connecteddevice/ble/CarBlePeripheralManagerTest.java"
+        "src/com/android/car/connecteddevice/ble/SecureBleChannelTest.java"
+        "src/com/android/car/connecteddevice/storage/ConnectedDeviceStorageTest.java"
+        "src/com/android/car/connecteddevice/util/ScanDataAnalyzerTest.java"
+    ];
 
     libs = [
         "android.test.runner"

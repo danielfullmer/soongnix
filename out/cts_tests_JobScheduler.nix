@@ -25,8 +25,21 @@ CtsJobSchedulerTestCases = android_test {
     ];
     libs = ["android.test.base.stubs"];
     srcs = [
-        "src/**/*.java"
-        "JobTestApp/src/**/*.java"
+        "src/android/jobscheduler/DummyJobContentProvider.java"
+        "src/android/jobscheduler/MockJobService.java"
+        "src/android/jobscheduler/TriggerContentJobService.java"
+        "src/android/jobscheduler/cts/BatteryConstraintTest.java"
+        "src/android/jobscheduler/cts/ConnectivityConstraintTest.java"
+        "src/android/jobscheduler/cts/ConstraintTest.java"
+        "src/android/jobscheduler/cts/DeviceStatesTest.java"
+        "src/android/jobscheduler/cts/JobThrottlingTest.java"
+        "src/android/jobscheduler/cts/StorageConstraintTest.java"
+        "src/android/jobscheduler/cts/TestAppInterface.java"
+        "src/android/jobscheduler/cts/TimingConstraintsTest.java"
+        "src/android/jobscheduler/cts/TriggerContentTest.java"
+        "JobTestApp/src/android/jobscheduler/cts/jobtestapp/TestActivity.java"
+        "JobTestApp/src/android/jobscheduler/cts/jobtestapp/TestJobSchedulerReceiver.java"
+        "JobTestApp/src/android/jobscheduler/cts/jobtestapp/TestJobService.java"
     ];
     #  Tag this module as a cts test artifact
     test_suites = [

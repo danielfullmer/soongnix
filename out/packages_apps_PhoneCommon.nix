@@ -17,7 +17,21 @@ let
 
 "com.android.phone.common" = android_app {
     name = "com.android.phone.common";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/phone/common/CallLogAsync.java"
+        "src/com/android/phone/common/PhoneConstants.java"
+        "src/com/android/phone/common/animation/AnimUtils.java"
+        "src/com/android/phone/common/animation/AnimationListenerAdapter.java"
+        "src/com/android/phone/common/compat/PathInterpolatorCompat.java"
+        "src/com/android/phone/common/dialpad/DialpadKeyButton.java"
+        "src/com/android/phone/common/dialpad/DialpadTextView.java"
+        "src/com/android/phone/common/dialpad/DialpadView.java"
+        "src/com/android/phone/common/dialpad/DigitsEditText.java"
+        "src/com/android/phone/common/util/SettingsUtil.java"
+        "src/com/android/phone/common/util/ViewUtil.java"
+        "src/com/android/phone/common/widget/ResizingTextEditText.java"
+        "src/com/android/phone/common/widget/ResizingTextTextView.java"
+    ];
     resource_dirs = ["res"];
     sdk_version = "current";
 };

@@ -22,7 +22,12 @@ let
 #  TODO: should this be android_helper_test_app?
 UsbHostExternalManagementTestApp = android_app {
     name = "UsbHostExternalManagementTestApp";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/hardware/usb/externalmanagementtest/AoapInterface.java"
+        "src/com/android/hardware/usb/externalmanagementtest/UsbDeviceStateController.java"
+        "src/com/android/hardware/usb/externalmanagementtest/UsbHostManagementActivity.java"
+        "src/com/android/hardware/usb/externalmanagementtest/UsbUtil.java"
+    ];
     resource_dirs = ["res"];
     platform_apis = true;
     privileged = true;

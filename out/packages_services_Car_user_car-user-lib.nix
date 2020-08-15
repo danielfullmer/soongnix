@@ -18,7 +18,8 @@ let
 "android.car.userlib" = java_library {
     name = "android.car.userlib";
     srcs = [
-        "src/**/*.java"
+        "src/android/car/userlib/CarUserManagerHelper.java"
+        "src/android/car/userlib/TestableFrameworkWrapper.java"
     ];
     product_variables = {
         pdk = {

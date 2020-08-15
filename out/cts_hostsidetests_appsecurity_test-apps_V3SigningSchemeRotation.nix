@@ -25,7 +25,7 @@ CtsV3SigningSchemeRotationTest = android_test {
         "general-tests"
         "sts"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/appsecurity/cts/v3rotationtests/V3RotationTest.java"];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     libs = ["android.test.base.stubs"];

@@ -28,7 +28,18 @@ PlatformRuleTests = android_test {
         "guava"
         "mockito-target"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/rule/CompilationFilterRuleTest.java"
+        "src/android/platform/test/rule/DropCachesRuleTest.java"
+        "src/android/platform/test/rule/GarbageCollectRuleTest.java"
+        "src/android/platform/test/rule/KillAppsRuleTest.java"
+        "src/android/platform/test/rule/NaturalOrientationRuleTest.java"
+        "src/android/platform/test/rule/NotificationPressureRuleTest.java"
+        "src/android/platform/test/rule/PressHomeRuleTest.java"
+        "src/android/platform/test/rule/QuickstepPressureRuleTest.java"
+        "src/android/platform/test/rule/StopwatchRuleTest.java"
+        "src/android/platform/test/rule/TracePointRuleTest.java"
+    ];
     test_suites = ["device-tests"];
 };
 

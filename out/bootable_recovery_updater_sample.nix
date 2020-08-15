@@ -20,7 +20,21 @@ SystemUpdaterSample = android_app {
     sdk_version = "system_current";
     privileged = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/example/android/systemupdatersample/PayloadSpec.java"
+        "src/com/example/android/systemupdatersample/UpdateConfig.java"
+        "src/com/example/android/systemupdatersample/UpdateManager.java"
+        "src/com/example/android/systemupdatersample/UpdaterState.java"
+        "src/com/example/android/systemupdatersample/services/PrepareUpdateService.java"
+        "src/com/example/android/systemupdatersample/ui/MainActivity.java"
+        "src/com/example/android/systemupdatersample/util/FileDownloader.java"
+        "src/com/example/android/systemupdatersample/util/PackageFiles.java"
+        "src/com/example/android/systemupdatersample/util/PayloadSpecs.java"
+        "src/com/example/android/systemupdatersample/util/UpdateConfigs.java"
+        "src/com/example/android/systemupdatersample/util/UpdateEngineErrorCodes.java"
+        "src/com/example/android/systemupdatersample/util/UpdateEngineProperties.java"
+        "src/com/example/android/systemupdatersample/util/UpdateEngineStatuses.java"
+    ];
 
     static_libs = [
         "guava"

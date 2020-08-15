@@ -19,7 +19,16 @@ let
 
 "com.android.nfc_extras" = java_sdk_library {
     name = "com.android.nfc_extras";
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/com/android/nfc_extras/EeAlreadyOpenException.java"
+        "java/com/android/nfc_extras/EeExternalFieldException.java"
+        "java/com/android/nfc_extras/EeIOException.java"
+        "java/com/android/nfc_extras/EeInitializationException.java"
+        "java/com/android/nfc_extras/EeListenModeException.java"
+        "java/com/android/nfc_extras/EeNfcDisabledException.java"
+        "java/com/android/nfc_extras/NfcAdapterExtras.java"
+        "java/com/android/nfc_extras/NfcExecutionEnvironment.java"
+    ];
     api_packages = ["com.android.nfc_extras"];
 };
 

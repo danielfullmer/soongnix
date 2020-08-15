@@ -7,7 +7,7 @@ libLLVMMipsInfo = cc_library_static {
         "llvm-lib-defaults"
         "llvm-mips-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["MipsTargetInfo.cpp"];
 };
 
 in { inherit libLLVMMipsInfo; }

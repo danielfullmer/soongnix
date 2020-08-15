@@ -5,7 +5,7 @@ FrameworksCoreTests_install_split_feature_a = android_test_helper_app {
     name = "FrameworksCoreTests_install_split_feature_a";
     defaults = ["FrameworksCoreTests_apks_defaults"];
 
-    srcs = ["**/*.java"];
+    srcs = ["src/com/google/android/dexapis/splitapp/feature_a/FeatureAActivity.java"];
 
     aaptflags = [
         "--custom-package com.google.android.dexapis.splitapp.feature_a"

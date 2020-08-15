@@ -18,7 +18,7 @@ let
 AppSmoke = android_test {
     name = "AppSmoke";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/test/appsmoke/AppSmokeTest.java"];
     platform_apis = true;
 
     static_libs = [

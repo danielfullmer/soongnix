@@ -24,7 +24,7 @@ CtsMediaPreparerApp = android_test {
     optimize = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/mediastress/cts/preconditions/app/MediaPreparerAppTest.java"];
     static_libs = [
         "androidx.test.rules"
         "compatibility-device-util-axt"

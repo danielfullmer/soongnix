@@ -18,7 +18,10 @@ let
 CtsNetTestCasesLegacyPermission22 = android_test {
     name = "CtsNetTestCasesLegacyPermission22";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/net/cts/legacy/api22/permission/ConnectivityManagerPermissionTest.java"
+        "src/android/net/cts/legacy/api22/permission/NoNetworkStatePermissionTest.java"
+    ];
     sdk_version = "22";
     static_libs = ["ctstestrunner-axt"];
     #  Tag this module as a cts test artifact

@@ -23,8 +23,27 @@ libchips = android_library {
     ];
     sdk_version = "current";
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/ex/chips/AccountSpecifier.java"
+        "src/com/android/ex/chips/BaseRecipientAdapter.java"
+        "src/com/android/ex/chips/ChipsUtil.java"
+        "src/com/android/ex/chips/CircularImageView.java"
+        "src/com/android/ex/chips/CopyDialog.java"
+        "src/com/android/ex/chips/DefaultPhotoManager.java"
+        "src/com/android/ex/chips/DropdownChipLayouter.java"
+        "src/com/android/ex/chips/PhoneUtil.java"
+        "src/com/android/ex/chips/PhotoManager.java"
+        "src/com/android/ex/chips/Queries.java"
+        "src/com/android/ex/chips/RecipientAlternatesAdapter.java"
+        "src/com/android/ex/chips/RecipientEditTextView.java"
+        "src/com/android/ex/chips/RecipientEntry.java"
+        "src/com/android/ex/chips/SingleRecipientArrayAdapter.java"
+        "src/com/android/ex/chips/recipientchip/BaseRecipientChip.java"
+        "src/com/android/ex/chips/recipientchip/DrawableRecipientChip.java"
+        "src/com/android/ex/chips/recipientchip/InvisibleRecipientChip.java"
+        "src/com/android/ex/chips/recipientchip/ReplacementDrawableSpan.java"
+        "src/com/android/ex/chips/recipientchip/SimpleRecipientChip.java"
+        "src/com/android/ex/chips/recipientchip/VisibleRecipientChip.java"
+
     ];
 
     resource_dirs = ["res"];

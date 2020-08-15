@@ -18,7 +18,7 @@ let
 CtsPasswordComplexity = android_test_helper_app {
     name = "CtsPasswordComplexity";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com.android.cts.passwordcomplexity/GetPasswordComplexityTest.java"];
     static_libs = [
         "ctstestrunner-axt"
         "compatibility-device-util-axt"

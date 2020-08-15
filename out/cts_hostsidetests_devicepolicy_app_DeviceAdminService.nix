@@ -18,7 +18,12 @@ let
 CtsDeviceAdminService1 = android_test_helper_app {
     name = "CtsDeviceAdminService1";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/deviceadminservice/ComponentController.java"
+        "src/com/android/cts/deviceadminservice/MyOwner.java"
+        "src/com/android/cts/deviceadminservice/MyService.java"
+        "src/com/android/cts/deviceadminservice/MyService2.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"
@@ -38,7 +43,12 @@ CtsDeviceAdminService1 = android_test_helper_app {
 CtsDeviceAdminService2 = android_test_helper_app {
     name = "CtsDeviceAdminService2";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/deviceadminservice/ComponentController.java"
+        "src/com/android/cts/deviceadminservice/MyOwner.java"
+        "src/com/android/cts/deviceadminservice/MyService.java"
+        "src/com/android/cts/deviceadminservice/MyService2.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"
@@ -58,7 +68,12 @@ CtsDeviceAdminService2 = android_test_helper_app {
 CtsDeviceAdminService3 = android_test_helper_app {
     name = "CtsDeviceAdminService3";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/deviceadminservice/ComponentController.java"
+        "src/com/android/cts/deviceadminservice/MyOwner.java"
+        "src/com/android/cts/deviceadminservice/MyService.java"
+        "src/com/android/cts/deviceadminservice/MyService2.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"
@@ -78,7 +93,12 @@ CtsDeviceAdminService3 = android_test_helper_app {
 CtsDeviceAdminService4 = android_test_helper_app {
     name = "CtsDeviceAdminService4";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/deviceadminservice/ComponentController.java"
+        "src/com/android/cts/deviceadminservice/MyOwner.java"
+        "src/com/android/cts/deviceadminservice/MyService.java"
+        "src/com/android/cts/deviceadminservice/MyService2.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"
@@ -98,7 +118,12 @@ CtsDeviceAdminService4 = android_test_helper_app {
 CtsDeviceAdminServiceB = android_test_helper_app {
     name = "CtsDeviceAdminServiceB";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/deviceadminservice/ComponentController.java"
+        "src/com/android/cts/deviceadminservice/MyOwner.java"
+        "src/com/android/cts/deviceadminservice/MyService.java"
+        "src/com/android/cts/deviceadminservice/MyService2.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "ctstestrunner-axt"

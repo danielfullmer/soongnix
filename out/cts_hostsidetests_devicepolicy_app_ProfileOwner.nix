@@ -20,7 +20,14 @@ CtsProfileOwnerApp = android_test_helper_app {
     defaults = ["cts_defaults"];
     platform_apis = true;
     min_sdk_version = "24";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/profileowner/AdminActionBookkeepingTest.java"
+        "src/com/android/cts/profileowner/AppUsageObserverTest.java"
+        "src/com/android/cts/profileowner/BackupServicePoliciesTest.java"
+        "src/com/android/cts/profileowner/BaseProfileOwnerTest.java"
+        "src/com/android/cts/profileowner/ManagementTest.java"
+        "src/com/android/cts/profileowner/WifiTest.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "junit"

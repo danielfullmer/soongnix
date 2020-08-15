@@ -6,7 +6,12 @@ libLLVMBitWriter = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "BitWriter.cpp"
+        "BitcodeWriter.cpp"
+        "BitcodeWriterPass.cpp"
+        "ValueEnumerator.cpp"
+    ];
 };
 
 in { inherit libLLVMBitWriter; }

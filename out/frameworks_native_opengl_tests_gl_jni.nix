@@ -9,7 +9,11 @@ let
 
 GLJNI = android_app {
     name = "GLJNI";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/gljni/GLJNIActivity.java"
+        "src/com/android/gljni/GLJNILib.java"
+        "src/com/android/gljni/GLJNIView.java"
+    ];
     sdk_version = "current";
     jni_libs = ["libgljni"];
 };

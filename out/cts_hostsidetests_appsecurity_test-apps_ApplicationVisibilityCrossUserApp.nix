@@ -19,7 +19,7 @@ CtsApplicationVisibilityCrossUserApp = android_test {
     name = "CtsApplicationVisibilityCrossUserApp";
     defaults = ["cts_defaults"];
     static_libs = ["androidx.test.rules"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/applicationvisibility/ApplicationVisibilityCrossUserTest.java"];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"

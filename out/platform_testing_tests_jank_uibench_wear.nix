@@ -17,7 +17,12 @@ let
 
 UiBenchJankTestsWear = android_test {
     name = "UiBenchJankTestsWear";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/wearable/uibench/janktests/UiBenchJankTests.java"
+        "src/com/android/wearable/uibench/janktests/UiBenchJankTestsHelper.java"
+        "src/com/android/wearable/uibench/janktests/UiBenchRenderingJankTests.java"
+        "src/com/android/wearable/uibench/janktests/UiBenchTextJankTests.java"
+    ];
 
     static_libs = [
         "ub-uiautomator"

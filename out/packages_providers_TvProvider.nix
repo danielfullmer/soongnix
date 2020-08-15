@@ -20,7 +20,17 @@ let
 TvProvider = android_app {
     name = "TvProvider";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/providers/tv/BootCompletedReceiver.java"
+        "src/com/android/providers/tv/EpgDataCleanupService.java"
+        "src/com/android/providers/tv/PackageChangedReceiver.java"
+        "src/com/android/providers/tv/PackageRemovedReceiver.java"
+        "src/com/android/providers/tv/TransientRowHelper.java"
+        "src/com/android/providers/tv/TvProvider.java"
+        "src/com/android/providers/tv/TvProviderUpgradeReceiver.java"
+        "src/com/android/providers/tv/util/SqlParams.java"
+        "src/com/android/providers/tv/util/SqliteTokenFinder.java"
+    ];
 
     platform_apis = true;
     privileged = true;

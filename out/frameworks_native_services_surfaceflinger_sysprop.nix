@@ -3,7 +3,7 @@ let
 
 SurfaceFlingerProperties = sysprop_library {
     name = "SurfaceFlingerProperties";
-    srcs = ["*.sysprop"];
+    srcs = ["SurfaceFlingerProperties.sysprop"];
     api_packages = ["android.sysprop"];
     property_owner = "Platform";
 };

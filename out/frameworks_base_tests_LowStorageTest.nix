@@ -18,7 +18,7 @@ let
 lowstoragetest = android_test {
     name = "lowstoragetest";
     certificate = "platform";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/lowstoragetest/LowStorageTest.java"];
     sdk_version = "current";
 };
 

@@ -18,7 +18,12 @@ let
 CtsCertInstallerApp = android_test_helper_app {
     name = "CtsCertInstallerApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/certinstaller/CertInstallerReceiver.java"
+        "src/com/android/cts/certinstaller/CertSelectionDelegateTest.java"
+        "src/com/android/cts/certinstaller/DelegatedDeviceIdAttestationTest.java"
+        "src/com/android/cts/certinstaller/DirectDelegatedCertInstallerTest.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "android.test.base.stubs"

@@ -23,7 +23,7 @@ common-profile-text-protos = java_genrule {
     tools = ["aprotoc"];
     srcs = [
         ":profile-proto-def"
-        "assets/*.textpb"
+        "assets/scenarios_sample_profile.textpb"
     ];
     out = ["sample-profiles-common.jar"];
     /*
@@ -47,7 +47,15 @@ common-profile-text-protos = java_genrule {
 common-platform-scenario-tests = java_library_static {
     name = "common-platform-scenario-tests";
     sdk_version = "test_current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/scenario/businesscard/OpenAppMicrobenchmark.java"
+        "src/android/platform/test/scenario/generic/OpenAppMicrobenchmark.java"
+        "src/android/platform/test/scenario/performancelaunch/OpenAppMicrobenchmark.java"
+        "src/android/platform/test/scenario/profile/CommonUserProfileTest.java"
+        "src/android/platform/test/scenario/sleep/IdleMemoryMicrobenchmarkBase.java"
+        "src/android/platform/test/scenario/sleep/IdleSystemServerMemoryMicrobenchmark.java"
+        "src/android/platform/test/scenario/sleep/IdleSystemUiMemoryMicrobenchmark.java"
+    ];
     libs = [
         "common-platform-scenarios"
         "guava"
@@ -73,7 +81,15 @@ PlatformCommonScenarioTests = android_test {
         "platform-test-options"
         "platform-test-rules"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/scenario/businesscard/OpenAppMicrobenchmark.java"
+        "src/android/platform/test/scenario/generic/OpenAppMicrobenchmark.java"
+        "src/android/platform/test/scenario/performancelaunch/OpenAppMicrobenchmark.java"
+        "src/android/platform/test/scenario/profile/CommonUserProfileTest.java"
+        "src/android/platform/test/scenario/sleep/IdleMemoryMicrobenchmarkBase.java"
+        "src/android/platform/test/scenario/sleep/IdleSystemServerMemoryMicrobenchmark.java"
+        "src/android/platform/test/scenario/sleep/IdleSystemUiMemoryMicrobenchmark.java"
+    ];
     test_suites = ["device-tests"];
 };
 

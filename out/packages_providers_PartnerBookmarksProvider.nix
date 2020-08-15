@@ -20,7 +20,10 @@ let
 PartnerBookmarksProvider = android_app {
     name = "PartnerBookmarksProvider";
     static_libs = ["android-common"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/providers/partnerbookmarks/PartnerBookmarksContract.java"
+        "src/com/android/providers/partnerbookmarks/PartnerBookmarksProvider.java"
+    ];
     sdk_version = "current";
     optimize = {
         proguard_flags_files = ["proguard.flags"];

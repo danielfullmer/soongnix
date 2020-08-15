@@ -13,7 +13,7 @@ services = java_library {
     };
 
     srcs = [
-        "java/**/*.java"
+        "java/com/android/server/SystemServer.java"
     ];
 
     #  The convention is to name each service module 'services.$(module_name)'

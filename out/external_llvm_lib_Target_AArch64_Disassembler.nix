@@ -7,7 +7,10 @@ libLLVMAArch64Disassembler = cc_library_static {
         "llvm-lib-defaults"
         "llvm-aarch64-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "AArch64Disassembler.cpp"
+        "AArch64ExternalSymbolizer.cpp"
+    ];
 };
 
 in { inherit libLLVMAArch64Disassembler; }

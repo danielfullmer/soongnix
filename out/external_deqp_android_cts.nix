@@ -19,7 +19,28 @@ let
 deqp_master_caselists = filegroup {
     name = "deqp_master_caselists";
     srcs = [
-        "master/*.txt"
+        "master/egl-master-risky.txt"
+        "master/egl-master.txt"
+        "master/gles2-master-risky.txt"
+        "master/gles2-master.txt"
+        "master/gles3-565-no-depth-no-stencil.txt"
+        "master/gles3-master-risky.txt"
+        "master/gles3-master.txt"
+        "master/gles3-multisample.txt"
+        "master/gles3-rotate-landscape.txt"
+        "master/gles3-rotate-portrait.txt"
+        "master/gles3-rotate-reverse-landscape.txt"
+        "master/gles3-rotate-reverse-portrait.txt"
+        "master/gles31-565-no-depth-no-stencil.txt"
+        "master/gles31-master-risky.txt"
+        "master/gles31-master.txt"
+        "master/gles31-multisample.txt"
+        "master/gles31-rotate-landscape.txt"
+        "master/gles31-rotate-portrait.txt"
+        "master/gles31-rotate-reverse-landscape.txt"
+        "master/gles31-rotate-reverse-portrait.txt"
+        "master/vk-master-risky.txt"
+        "master/vk-master.txt"
     ];
     path = "master";
 };
@@ -42,7 +63,8 @@ deqp_nyc_caselists = genrule {
 deqp_angle_exclude_caselists = filegroup {
     name = "deqp_angle_exclude_caselists";
     srcs = [
-        "angle/*.txt"
+        "angle/egl-angle-excluded.txt"
+        "angle/gles2-angle-excluded.txt"
     ];
     path = "angle";
 };
@@ -57,7 +79,10 @@ CtsDeqpTestCases = java_test_host {
         "general-tests"
     ];
 
-    srcs = ["runner/src/**/*.java"];
+    srcs = [
+        "runner/src/com/drawelements/deqp/runner/BatchRunConfiguration.java"
+        "runner/src/com/drawelements/deqp/runner/DeqpTestRunner.java"
+    ];
     libs = [
         "cts-tradefed"
         "compatibility-host-util"

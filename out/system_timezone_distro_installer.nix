@@ -19,7 +19,7 @@ let
 time_zone_distro_installer = java_library {
     name = "time_zone_distro_installer";
 
-    srcs = ["src/main/**/*.java"];
+    srcs = ["src/main/com/android/timezone/distro/installer/TimeZoneDistroInstaller.java"];
     libs = ["time_zone_distro"];
 };
 
@@ -27,7 +27,7 @@ time_zone_distro_installer = java_library {
 time_zone_distro_installer-tests = java_library {
     name = "time_zone_distro_installer-tests";
 
-    srcs = ["src/test/**/*.java"];
+    srcs = ["src/test/com/android/timezone/distro/installer/TimeZoneDistroInstallerTest.java"];
     static_libs = [
         "time_zone_distro"
         "time_zone_distro_builder"

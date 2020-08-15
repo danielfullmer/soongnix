@@ -21,7 +21,12 @@ memory-helper = java_library {
     defaults = ["tradefed_errorprone_defaults"];
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/helpers/DumpsysMeminfoHelper.java"
+        "src/com/android/helpers/FreeMemHelper.java"
+        "src/com/android/helpers/GarbageCollectionHelper.java"
+        "src/com/android/helpers/ProcessShowmapHelper.java"
+        "src/com/android/helpers/RssSnapshotHelper.java"
+        "src/com/android/helpers/TotalPssHelper.java"
     ];
 
     static_libs = [

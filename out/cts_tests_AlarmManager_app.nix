@@ -24,7 +24,10 @@ AlarmTestApp = android_test_helper_app {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/alarmmanager/alarmtestapp/cts/TestAlarmReceiver.java"
+        "src/android/alarmmanager/alarmtestapp/cts/TestAlarmScheduler.java"
+    ];
     dex_preopt = {
         enabled = false;
     };

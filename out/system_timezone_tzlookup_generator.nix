@@ -23,7 +23,7 @@ countryzonesprotos = java_library_host {
         include_dirs = ["external/protobuf/src"];
     };
 
-    srcs = ["src/main/proto/**/*.proto"];
+    srcs = ["src/main/proto/country_zones_file.proto"];
 };
 
 #  The tzlookup_generator host tool.
@@ -31,7 +31,20 @@ tzlookup_generator = java_binary_host {
     name = "tzlookup_generator";
 
     manifest = "src/main/manifest/MANIFEST.mf";
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/com/android/libcore/timezone/tzlookup/CountryZonesFileSupport.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/Errors.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/TzLookupFile.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/TzLookupGenerator.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/Utils.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/ZoneTabFile.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/zonetree/CountryZoneTree.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/zonetree/CountryZoneUsage.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/zonetree/TreeNode.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/zonetree/UniqueZonesVisualizer.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/zonetree/ZoneInfo.java"
+        "src/main/java/com/android/libcore/timezone/tzlookup/zonetree/ZoneOffsetPeriod.java"
+    ];
     javacflags = [
         "-encoding UTF-8"
     ];

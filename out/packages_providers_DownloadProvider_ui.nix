@@ -23,7 +23,7 @@ DownloadProviderUi = android_app {
 
     srcs = [
         ":download_provider-files"
-        "src/**/*.java"
+        "src/com/android/providers/downloads/ui/TrampolineActivity.java"
     ];
 
     resource_dirs = [

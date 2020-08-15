@@ -4,7 +4,14 @@ let
 FrameworkPermissionTests = android_test {
     name = "FrameworkPermissionTests";
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/framework/permission/tests/ActivityManagerPermissionTests.java"
+        "src/com/android/framework/permission/tests/PmPermissionsTests.java"
+        "src/com/android/framework/permission/tests/ServiceManagerPermissionTests.java"
+        "src/com/android/framework/permission/tests/SmsManagerPermissionTest.java"
+        "src/com/android/framework/permission/tests/VibratorServicePermissionTest.java"
+        "src/com/android/framework/permission/tests/WindowManagerPermissionTests.java"
+    ];
     libs = [
         "android.test.runner"
         "telephony-common"

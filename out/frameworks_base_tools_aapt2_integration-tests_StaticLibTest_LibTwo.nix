@@ -20,7 +20,7 @@ let
 AaptTestStaticLib_LibTwo = android_library {
     name = "AaptTestStaticLib_LibTwo";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/aapt/staticlib/two/StaticLibTwo.java"];
     resource_dirs = ["res"];
     libs = ["AaptTestStaticLib_LibOne"];
 };

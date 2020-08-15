@@ -28,7 +28,7 @@ libwifilogd_flags = cc_defaults {
         "-Werror"
 
     ];
-    #include_dirs = ["system/connectivity"];
+    include_dirs = ["system/connectivity"];
     shared_libs = [
         "libbase"
         "libcutils"

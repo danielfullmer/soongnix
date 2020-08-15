@@ -18,7 +18,7 @@ let
 UbWebViewJankTests = android_test {
     name = "UbWebViewJankTests";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/webview/chromium/tests/jank/WebViewFlingTest.java"];
 
     static_libs = [
         "ub-uiautomator"

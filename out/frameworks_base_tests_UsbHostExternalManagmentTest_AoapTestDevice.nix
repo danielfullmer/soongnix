@@ -21,7 +21,7 @@ let
 
 AoapTestDeviceApp = android_test {
     name = "AoapTestDeviceApp";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/hardware/usb/aoapdevicetest/UsbAoapDeviceTestActivity.java"];
     resource_dirs = ["res"];
     platform_apis = true;
     optimize = {

@@ -19,7 +19,7 @@ let
 
 FeatureSplit2 = android_test {
     name = "FeatureSplit2";
-    srcs = ["**/*.java"];
+    srcs = [];
     sdk_version = "current";
     libs = ["FeatureSplitBase"];
     aaptflags = [

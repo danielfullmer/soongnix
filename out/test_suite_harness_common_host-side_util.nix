@@ -19,7 +19,27 @@ compatibility-host-util = java_library_host {
     name = "compatibility-host-util";
     defaults = ["cts_error_prone_rules"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/util/ApiLevelUtil.java"
+        "src/com/android/compatibility/common/util/BackupHostSideUtils.java"
+        "src/com/android/compatibility/common/util/BusinessLogicHostExecutor.java"
+        "src/com/android/compatibility/common/util/CpuFeatures.java"
+        "src/com/android/compatibility/common/util/DeviceInfo.java"
+        "src/com/android/compatibility/common/util/DynamicConfigHandler.java"
+        "src/com/android/compatibility/common/util/DynamicConfigHostSide.java"
+        "src/com/android/compatibility/common/util/FeatureUtil.java"
+        "src/com/android/compatibility/common/util/HostInfoStore.java"
+        "src/com/android/compatibility/common/util/HostSideTestUtils.java"
+        "src/com/android/compatibility/common/util/MetricsReportLog.java"
+        "src/com/android/compatibility/common/util/MetricsStore.java"
+        "src/com/android/compatibility/common/util/MonitoringUtils.java"
+        "src/com/android/compatibility/common/util/PackageUtil.java"
+        "src/com/android/compatibility/common/util/PropertyUtil.java"
+        "src/com/android/compatibility/common/util/ReportLogHostInfoStore.java"
+        "src/com/android/compatibility/common/util/RootProcessScanner.java"
+        "src/com/android/compatibility/common/util/ShellCommandUtil.java"
+        "src/com/android/compatibility/common/util/TestFilter.java"
+    ];
 
     static_libs = [
         "compatibility-common-util-hostsidelib"

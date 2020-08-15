@@ -18,7 +18,11 @@ let
 py2-futures = python_library {
     name = "py2-futures";
     srcs = [
-        "concurrent/**/*.py"
+        "concurrent/__init__.py"
+        "concurrent/futures/__init__.py"
+        "concurrent/futures/_base.py"
+        "concurrent/futures/process.py"
+        "concurrent/futures/thread.py"
     ];
     defaults = ["py2_only"];
 };

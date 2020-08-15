@@ -19,8 +19,13 @@ TestablesTests = android_test {
     name = "TestablesTests";
     platform_apis = true;
     srcs = [
-        "src/**/*.java"
-        "src/**/I*.aidl"
+        "src/android/testing/DexmakerShareClassLoaderRuleTest.java"
+        "src/android/testing/TestableContentResolverTest.java"
+        "src/android/testing/TestableLooperTest.java"
+        "src/android/testing/TestablePermissionsTest.java"
+        "src/android/testing/TestableResourcesTest.java"
+        "src/android/testing/TestableSettingsProviderTest.java"
+
     ];
     resource_dirs = ["res"];
     static_libs = [

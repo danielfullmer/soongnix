@@ -41,7 +41,21 @@ CtsPermission2TestCases = android_test {
         "permission-test-util-lib"
     ];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/permission2/cts/CommandBroadcastReceiver.java"
+        "src/android/permission2/cts/ContactsProviderTest.java"
+        "src/android/permission2/cts/NoCaptureAudioOutputPermissionTest.java"
+        "src/android/permission2/cts/NoLocationPermissionTest.java"
+        "src/android/permission2/cts/NoProcessOutgoingCallPermissionTest.java"
+        "src/android/permission2/cts/NoReceiveSmsPermissionTest.java"
+        "src/android/permission2/cts/NoWriteSecureSettingsPermissionTest.java"
+        "src/android/permission2/cts/PermissionMaxSdkVersionTest.java"
+        "src/android/permission2/cts/PermissionPolicyTest.java"
+        "src/android/permission2/cts/PrivappPermissionsTest.java"
+        "src/android/permission2/cts/ProtectedBroadcastsTest.java"
+        "src/android/permission2/cts/RestrictedPermissionsTest.java"
+        "src/android/permission2/cts/RestrictedStoragePermissionSharedUidTest.java"
+    ];
 
     sdk_version = "test_current";
 };

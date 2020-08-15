@@ -20,7 +20,7 @@ let
 CtsInstantCookieApp = android_test {
     name = "CtsInstantCookieApp";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/test/instant/cookie/CookieTest.java"];
     static_libs = ["androidx.test.rules"];
     sdk_version = "current";
     test_suites = [

@@ -19,8 +19,14 @@ android-opt-timezonepicker = android_library {
     name = "android-opt-timezonepicker";
     sdk_version = "17";
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/timezonepicker/TimeZoneData.java"
+        "src/com/android/timezonepicker/TimeZoneFilterTypeAdapter.java"
+        "src/com/android/timezonepicker/TimeZoneInfo.java"
+        "src/com/android/timezonepicker/TimeZonePickerDialog.java"
+        "src/com/android/timezonepicker/TimeZonePickerUtils.java"
+        "src/com/android/timezonepicker/TimeZonePickerView.java"
+        "src/com/android/timezonepicker/TimeZoneResultAdapter.java"
+
     ];
 
     resource_dirs = ["res"];

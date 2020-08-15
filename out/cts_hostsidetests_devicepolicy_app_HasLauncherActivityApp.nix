@@ -25,7 +25,10 @@ CtsHasLauncherActivityApp = android_test_helper_app {
     optimize = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/haslauncheractivityapp/EmptyService.java"
+        "src/com/android/cts/haslauncheractivityapp/MainActivity.java"
+    ];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
@@ -44,7 +47,10 @@ CtsNoLauncherActivityApp = android_test_helper_app {
     optimize = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/haslauncheractivityapp/EmptyService.java"
+        "src/com/android/cts/haslauncheractivityapp/MainActivity.java"
+    ];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
@@ -64,7 +70,10 @@ CtsNoPermissionApp = android_test_helper_app {
     optimize = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/haslauncheractivityapp/EmptyService.java"
+        "src/com/android/cts/haslauncheractivityapp/MainActivity.java"
+    ];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"

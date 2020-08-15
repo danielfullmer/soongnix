@@ -6,7 +6,13 @@ libLLVMVectorize = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "BBVectorize.cpp"
+        "LoadStoreVectorizer.cpp"
+        "LoopVectorize.cpp"
+        "SLPVectorizer.cpp"
+        "Vectorize.cpp"
+    ];
     clang_cflags = [
         "-Wno-user-defined-warnings"
     ];

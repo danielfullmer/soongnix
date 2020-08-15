@@ -21,7 +21,7 @@ CtsDummyIme = android_test {
     name = "CtsDummyIme";
     defaults = ["cts_support_defaults"];
     sdk_version = "test_current";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/dummyime/CtsDummyIme.java"];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"

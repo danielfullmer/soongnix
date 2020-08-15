@@ -23,7 +23,8 @@ sample-profile-text-protos = java_genrule {
     tools = ["aprotoc"];
     srcs = [
         ":profile-proto-def"
-        "assets/*.textpb"
+        "assets/sample_indexed_profile.textpb"
+        "assets/sample_scheduled_profile.textpb"
     ];
     out = ["sample-profiles.jar"];
     /*
@@ -55,7 +56,10 @@ LongevityPlatformLibSamples = android_test {
         "platform-test-composers"
         "sample-profile-text-protos"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/longevity/samples/SimpleProfile.java"
+        "src/android/platform/test/longevity/samples/SimpleSuite.java"
+    ];
 };
 
 in { inherit LongevityPlatformLibSamples sample-profile-text-protos; }

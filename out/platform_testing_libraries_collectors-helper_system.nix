@@ -21,7 +21,7 @@ system-metric-helper = java_library {
     defaults = ["tradefed_errorprone_defaults"];
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/helpers/ProcLoadHelper.java"
     ];
 
     static_libs = [

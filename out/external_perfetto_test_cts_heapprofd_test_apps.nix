@@ -27,7 +27,7 @@ CtsPerfettoDebuggableApp = android_test_helper_app {
     manifest = "AndroidManifest_debuggable.xml";
 
     compile_multilib = "both";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/perfetto/cts/app/MainActivity.java"];
     sdk_version = "current";
     jni_libs = [
         "libperfettocts_heapprofdtarget"
@@ -47,7 +47,7 @@ CtsPerfettoReleaseApp = android_test_helper_app {
     manifest = "AndroidManifest_release.xml";
 
     compile_multilib = "both";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/perfetto/cts/app/MainActivity.java"];
     sdk_version = "current";
     jni_libs = [
         "libperfettocts_heapprofdtarget"

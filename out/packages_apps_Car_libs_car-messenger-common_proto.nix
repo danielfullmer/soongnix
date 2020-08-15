@@ -23,7 +23,7 @@ car-messenger-protos = java_library_static {
     proto = {
         type = "lite";
     };
-    srcs = ["*.proto"];
+    srcs = ["notification_msg.proto"];
     jarjar_rules = "jarjar-rules.txt";
     sdk_version = "28";
 };

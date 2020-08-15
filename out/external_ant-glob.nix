@@ -19,7 +19,13 @@ ant-glob = java_library_host {
     name = "ant-glob";
 
     #  Only compile source java files in this lib.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/org/apache/tools/ant/BuildException.java"
+        "src/org/apache/tools/ant/taskdefs/condition/Condition.java"
+        "src/org/apache/tools/ant/taskdefs/condition/Os.java"
+        "src/org/apache/tools/ant/types/selectors/SelectorUtils.java"
+        "src/org/apache/tools/ant/util/FileUtils.java"
+    ];
     include_srcs = true;
 };
 

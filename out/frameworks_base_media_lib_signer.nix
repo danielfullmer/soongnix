@@ -19,7 +19,7 @@ let
 
 "com.android.mediadrm.signer" = java_sdk_library {
     name = "com.android.mediadrm.signer";
-    srcs = ["java/**/*.java"];
+    srcs = ["java/com/android/mediadrm/signer/MediaDrmSigner.java"];
     api_packages = ["com.android.mediadrm.signer"];
     srcs_lib = "framework";
     srcs_lib_whitelist_dirs = ["media/java"];

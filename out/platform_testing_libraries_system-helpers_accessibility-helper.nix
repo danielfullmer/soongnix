@@ -26,7 +26,10 @@ accessibility-helper = java_library {
         "package-helper"
         "activity-helper"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/system/helpers/AccessibilityHelper.java"
+        "src/android/system/helpers/AccessibilityScannerHelper.java"
+    ];
     sdk_version = "current";
 };
 

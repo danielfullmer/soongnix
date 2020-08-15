@@ -25,7 +25,7 @@ CtsPreconditions = android_test {
 
     libs = ["android.test.base.stubs"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/preconditions/cts/PreconditionsTest.java"];
 
     #  Tag this module as a cts test artifact
     test_suites = [

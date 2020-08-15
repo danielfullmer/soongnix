@@ -6,7 +6,13 @@ libLLVMLTO = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "LTO.cpp"
+        "LTOCodeGenerator.cpp"
+        "LTOModule.cpp"
+        "ThinLTOCodeGenerator.cpp"
+        "UpdateCompilerUsed.cpp"
+    ];
 };
 
 in { inherit libLLVMLTO; }

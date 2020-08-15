@@ -30,7 +30,23 @@ CtsAnimationTestCases = android_test {
 
     libs = ["android.test.runner.stubs"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/animation/cts/AnimationActivity.java"
+        "src/android/animation/cts/AnimatorListenerAdapterTest.java"
+        "src/android/animation/cts/AnimatorSetTest.java"
+        "src/android/animation/cts/AnimatorTest.java"
+        "src/android/animation/cts/ButtonViewActivity.java"
+        "src/android/animation/cts/CreationTest.java"
+        "src/android/animation/cts/EvaluatorTest.java"
+        "src/android/animation/cts/InterpolatorTest.java"
+        "src/android/animation/cts/KeyframeTest.java"
+        "src/android/animation/cts/LayoutAnimationActivity.java"
+        "src/android/animation/cts/LayoutAnimationTest.java"
+        "src/android/animation/cts/ObjectAnimatorTest.java"
+        "src/android/animation/cts/PropertyValuesHolderTest.java"
+        "src/android/animation/cts/ShapeHolder.java"
+        "src/android/animation/cts/ValueAnimatorTest.java"
+    ];
 
     test_suites = [
         "cts"

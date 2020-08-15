@@ -24,8 +24,13 @@ CtsAlarmManagerTestCases = android_test {
         "compatibility-device-util-axt"
     ];
     srcs = [
-        "src/**/*.java"
-        "app/src/**/*.java"
+        "src/android/alarmmanager/cts/AppStandbyTests.java"
+        "src/android/alarmmanager/cts/BackgroundRestrictedAlarmsTest.java"
+        "src/android/alarmmanager/cts/InstantAppsTests.java"
+        "src/android/alarmmanager/cts/TimeChangeTests.java"
+        "src/android/alarmmanager/cts/UidCapTests.java"
+        "app/src/android/alarmmanager/alarmtestapp/cts/TestAlarmReceiver.java"
+        "app/src/android/alarmmanager/alarmtestapp/cts/TestAlarmScheduler.java"
     ];
     test_suites = [
         "cts"

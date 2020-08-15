@@ -3,7 +3,7 @@ let
 
 loadclass = java_test {
     name = "loadclass";
-    srcs = ["**/*.java"];
+    srcs = ["LoadClass.java"];
 };
 
 in { inherit loadclass; }

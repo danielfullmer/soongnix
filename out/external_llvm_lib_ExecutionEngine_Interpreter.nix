@@ -6,7 +6,11 @@ libLLVMInterpreter = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "Execution.cpp"
+        "ExternalFunctions.cpp"
+        "Interpreter.cpp"
+    ];
 };
 
 in { inherit libLLVMInterpreter; }

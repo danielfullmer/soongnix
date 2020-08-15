@@ -7,7 +7,8 @@ DocumentsUIAppPerfTests = android_test {
     manifest = "AndroidManifest.xml";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/documentsui/FilesAppPerfTest.java"
+        "src/com/android/documentsui/LauncherActivity.java"
     ];
 
     libs = [

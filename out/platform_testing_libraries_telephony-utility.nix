@@ -22,7 +22,7 @@ TelephonyUtility = android_test {
     name = "TelephonyUtility";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/telephony/utility/SimCardUtil.java"];
     static_libs = [
         "androidx.test.runner"
         "collector-device-lib"

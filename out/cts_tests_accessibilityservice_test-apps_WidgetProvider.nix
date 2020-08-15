@@ -18,7 +18,7 @@ let
 CtsAccessibilityWidgetProvider = android_test_helper_app {
     name = "CtsAccessibilityWidgetProvider";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/foo/bar/baz/MyAppWidgetProvider.java"];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

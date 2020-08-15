@@ -18,7 +18,11 @@ let
 compatibility-device-info-tests = java_test {
     name = "compatibility-device-info-tests";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/deviceinfo/DeviceInfoTest.java"
+        "src/com/android/compatibility/common/deviceinfo/ExampleObjects.java"
+        "src/com/android/compatibility/common/deviceinfo/TestDeviceInfo.java"
+    ];
 
     static_libs = [
         "compatibility-device-info"

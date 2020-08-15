@@ -20,7 +20,7 @@ CtsResolverServiceTestCases = android_test {
     sdk_version = "system_current";
 
     srcs = [
-        "src/**/*.java"
+        "src/android/service/resolver/cts/ResolverTargetTest.java"
     ];
 
     static_libs = [

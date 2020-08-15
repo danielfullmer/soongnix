@@ -18,14 +18,27 @@ let
 opt-net-voip-srcs = filegroup {
     name = "opt-net-voip-srcs";
     srcs = [
-        "src/java/android/net/**/*.java"
+        "src/java/android/net/rtp/AudioCodec.java"
+        "src/java/android/net/rtp/AudioGroup.java"
+        "src/java/android/net/rtp/AudioStream.java"
+        "src/java/android/net/rtp/RtpStream.java"
+        "src/java/android/net/sip/SimpleSessionDescription.java"
+        "src/java/android/net/sip/SipAudioCall.java"
+        "src/java/android/net/sip/SipErrorCode.java"
+        "src/java/android/net/sip/SipException.java"
+        "src/java/android/net/sip/SipManager.java"
+        "src/java/android/net/sip/SipProfile.java"
+        "src/java/android/net/sip/SipRegistrationListener.java"
+        "src/java/android/net/sip/SipSession.java"
+        "src/java/android/net/sip/SipSessionAdapter.java"
     ];
 };
 
 opt-net-voip-htmls = filegroup {
     name = "opt-net-voip-htmls";
     srcs = [
-        "src/java/android/net/**/*.html"
+        "src/java/android/net/rtp/package.html"
+        "src/java/android/net/sip/package.html"
     ];
 };
 
@@ -33,8 +46,28 @@ voip-common = java_library {
     name = "voip-common";
     installable = true;
     srcs = [
-        "src/java/**/*.java"
-        "src/java/**/I*.aidl"
+        "src/java/android/net/rtp/AudioCodec.java"
+        "src/java/android/net/rtp/AudioGroup.java"
+        "src/java/android/net/rtp/AudioStream.java"
+        "src/java/android/net/rtp/RtpStream.java"
+        "src/java/android/net/sip/SimpleSessionDescription.java"
+        "src/java/android/net/sip/SipAudioCall.java"
+        "src/java/android/net/sip/SipErrorCode.java"
+        "src/java/android/net/sip/SipException.java"
+        "src/java/android/net/sip/SipManager.java"
+        "src/java/android/net/sip/SipProfile.java"
+        "src/java/android/net/sip/SipRegistrationListener.java"
+        "src/java/android/net/sip/SipSession.java"
+        "src/java/android/net/sip/SipSessionAdapter.java"
+        "src/java/com/android/server/sip/SipHelper.java"
+        "src/java/com/android/server/sip/SipService.java"
+        "src/java/com/android/server/sip/SipSessionGroup.java"
+        "src/java/com/android/server/sip/SipSessionListenerProxy.java"
+        "src/java/com/android/server/sip/SipWakeLock.java"
+        "src/java/com/android/server/sip/SipWakeupTimer.java"
+        "src/java/android/net/sip/ISipService.aidl"
+        "src/java/android/net/sip/ISipSession.aidl"
+        "src/java/android/net/sip/ISipSessionListener.aidl"
     ];
     aidl = {
         local_include_dirs = [

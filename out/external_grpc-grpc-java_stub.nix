@@ -20,7 +20,18 @@ let
 grpc-java-stub = java_library_host {
     name = "grpc-java-stub";
     srcs = [
-        "src/main/java/**/*.java"
+        "src/main/java/io/grpc/stub/AbstractStub.java"
+        "src/main/java/io/grpc/stub/CallStreamObserver.java"
+        "src/main/java/io/grpc/stub/ClientCallStreamObserver.java"
+        "src/main/java/io/grpc/stub/ClientCalls.java"
+        "src/main/java/io/grpc/stub/ClientResponseObserver.java"
+        "src/main/java/io/grpc/stub/MetadataUtils.java"
+        "src/main/java/io/grpc/stub/ServerCallStreamObserver.java"
+        "src/main/java/io/grpc/stub/ServerCalls.java"
+        "src/main/java/io/grpc/stub/StreamObserver.java"
+        "src/main/java/io/grpc/stub/StreamObservers.java"
+        "src/main/java/io/grpc/stub/package-info.java"
+        "src/main/java/io/grpc/stub/annotations/RpcMethod.java"
     ];
     libs = [
         "grpc-java-context"

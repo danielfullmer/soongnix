@@ -23,7 +23,7 @@ companion-feature-calendarsync-protos = java_library_static {
     proto = {
         type = "lite";
     };
-    srcs = ["*.proto"];
+    srcs = ["calendar.proto"];
     jarjar_rules = "jarjar-rules.txt";
     sdk_version = "28";
 };

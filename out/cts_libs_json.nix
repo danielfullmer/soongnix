@@ -20,7 +20,13 @@ let
 json = java_library {
     name = "json";
     host_supported = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/json/stream/JsonReader.java"
+        "src/com/android/json/stream/JsonScope.java"
+        "src/com/android/json/stream/JsonToken.java"
+        "src/com/android/json/stream/JsonWriter.java"
+        "src/com/android/json/stream/NewlineDelimitedJsonWriter.java"
+    ];
     sdk_version = "current";
 };
 

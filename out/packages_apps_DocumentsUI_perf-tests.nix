@@ -8,7 +8,9 @@ DocumentsUIPerfTests = android_test {
 
     srcs = [
         ":DocumentsUIPerfTests-files"
-        "src/**/*.java"
+        "src/com/android/documentsui/FilesActivityPerfTest.java"
+        "src/com/android/documentsui/FilesJankPerfTest.java"
+        "src/com/android/documentsui/StressProvider.java"
     ];
 
     resource_dirs = [

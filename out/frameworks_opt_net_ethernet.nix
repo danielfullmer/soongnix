@@ -26,9 +26,12 @@ ethernet-service = java_library {
         local_include_dirs = ["java"];
     };
     srcs = [
-        "java/**/*.java"
-        "java/**/I*.aidl"
-        "java/**/*.logtags"
+        "java/com/android/server/ethernet/EthernetConfigStore.java"
+        "java/com/android/server/ethernet/EthernetNetworkFactory.java"
+        "java/com/android/server/ethernet/EthernetService.java"
+        "java/com/android/server/ethernet/EthernetServiceImpl.java"
+        "java/com/android/server/ethernet/EthernetTracker.java"
+
     ];
 
     libs = ["services"];

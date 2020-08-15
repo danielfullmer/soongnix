@@ -3,7 +3,17 @@ let
 
 FrameworkPerf = android_test {
     name = "FrameworkPerf";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/frameworkperf/FrameworkPerfActivity.java"
+        "src/com/android/frameworkperf/FrameworkPerfTest.java"
+        "src/com/android/frameworkperf/LocalTestService.java"
+        "src/com/android/frameworkperf/Receiver.java"
+        "src/com/android/frameworkperf/RunResult.java"
+        "src/com/android/frameworkperf/SchedulerService.java"
+        "src/com/android/frameworkperf/SimpleInflater.java"
+        "src/com/android/frameworkperf/TestArgs.java"
+        "src/com/android/frameworkperf/TestService.java"
+    ];
     platform_apis = true;
     libs = [
         "android.test.runner"

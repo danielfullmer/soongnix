@@ -58,7 +58,9 @@ libfs_avb_host_test_defaults = cc_defaults {
         "avbtool"
     ];
     data = [
-        "tests/data/*"
+        "tests/data/testkey_rsa2048.pem"
+        "tests/data/testkey_rsa4096.pem"
+        "tests/data/testkey_rsa8192.pem"
     ];
     static_libs = [
         "libavb"

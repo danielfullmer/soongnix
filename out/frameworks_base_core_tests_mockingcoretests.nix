@@ -21,7 +21,7 @@ FrameworksMockingCoreTests = android_test {
     name = "FrameworksMockingCoreTests";
 
     srcs = [
-        "src/**/*.java"
+        "src/android/app/activity/ActivityThreadClientTest.java"
     ];
 
     static_libs = [

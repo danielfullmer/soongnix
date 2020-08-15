@@ -19,7 +19,7 @@ let
 
 BackupRestoreConfirmation = android_app {
     name = "BackupRestoreConfirmation";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/backupconfirm/BackupRestoreConfirmation.java"];
     platform_apis = true;
     certificate = "platform";
     privileged = true;

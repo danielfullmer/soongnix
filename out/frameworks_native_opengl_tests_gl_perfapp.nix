@@ -7,7 +7,11 @@ let
 # ########################################################################
 GLPerf = android_app {
     name = "GLPerf";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/glperf/GLPerfActivity.java"
+        "src/com/android/glperf/GLPerfLib.java"
+        "src/com/android/glperf/GLPerfView.java"
+    ];
     jni_libs = ["libglperf"];
     #  Run on Eclair
     sdk_version = "7";

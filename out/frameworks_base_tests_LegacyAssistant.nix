@@ -3,7 +3,7 @@ let
 
 LegacyAssistant = android_test {
     name = "LegacyAssistant";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/google/android/test/legacyassistant/AssistActivity.java"];
     sdk_version = "current";
     certificate = "platform";
 };

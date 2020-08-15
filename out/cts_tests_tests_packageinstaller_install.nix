@@ -19,7 +19,15 @@ CtsPackageInstallTestCases = android_test {
     name = "CtsPackageInstallTestCases";
     sdk_version = "test_current";
 
-    srcs = ["src/**/*.kt"];
+    srcs = [
+        "src/android/packageinstaller/install/cts/ExternalSourcesInstantAppsTest.kt"
+        "src/android/packageinstaller/install/cts/ExternalSourcesTest.kt"
+        "src/android/packageinstaller/install/cts/InstallConfirmDialogStarter.kt"
+        "src/android/packageinstaller/install/cts/IntentTest.kt"
+        "src/android/packageinstaller/install/cts/PackageInstallerTestBase.kt"
+        "src/android/packageinstaller/install/cts/SessionTest.kt"
+        "src/android/packageinstaller/install/cts/SessionTestInstant.kt"
+    ];
 
     static_libs = [
         "ub-uiautomator"

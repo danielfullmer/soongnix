@@ -20,7 +20,7 @@ wifi_service_proto = java_library {
     proto = {
         type = "lite";
     };
-    srcs = ["src/**/*.proto"];
+    srcs = ["src/scorecard.proto"];
 };
 
 in { inherit wifi_service_proto; }

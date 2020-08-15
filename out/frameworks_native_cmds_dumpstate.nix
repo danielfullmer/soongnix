@@ -176,7 +176,22 @@ dumpstate_test_fixture = cc_test {
         "-Wunused-parameter"
     ];
     srcs = ["tests/dumpstate_test_fixture.cpp"];
-    data = ["tests/testdata/**/*"];
+    data = [
+        "tests/testdata/empty-file.txt"
+        "tests/testdata/multiple-lines-with-newline.txt"
+        "tests/testdata/multiple-lines.txt"
+        "tests/testdata/single-line-with-newline.txt"
+        "tests/testdata/single-line.txt"
+        "tests/testdata/stats-invalid-1st-NAN.txt"
+        "tests/testdata/stats-invalid-1st-negative.txt"
+        "tests/testdata/stats-invalid-1st-too-big.txt"
+        "tests/testdata/stats-invalid-2nd-NAN.txt"
+        "tests/testdata/stats-invalid-2nd-negative.txt"
+        "tests/testdata/stats-invalid-2nd-too-big.txt"
+        "tests/testdata/stats-invalid-both-NAN.txt"
+        "tests/testdata/stats-one-run-no-newline.txt"
+        "tests/testdata/stats-two-runs.txt"
+    ];
 };
 
 in { inherit dumpstate dumpstate_aidl dumpstate_cflag_defaults dumpstate_defaults dumpstate_smoke_test dumpstate_test dumpstate_test_fixture libdumpstateaidl libdumpstateutil; }

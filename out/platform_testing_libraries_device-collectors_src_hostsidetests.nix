@@ -20,7 +20,13 @@ CollectorHostsideLibTest = java_test_host {
     defaults = ["tradefed_errorprone_defaults"];
 
     #  Only compile source java files in this jar.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/collectors/BatterystatsCollectorHostTest.java"
+        "src/com/android/collectors/DeviceCollectorsTest.java"
+        "src/com/android/collectors/LogcatOnFailureCollectorHostTest.java"
+        "src/com/android/collectors/ScreenshotOnFailureCollectorHostTest.java"
+        "src/com/android/loggers/DeviceFileLoggerHostTest.java"
+    ];
 
     libs = ["tradefed"];
 

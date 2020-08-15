@@ -19,7 +19,20 @@ let
 
 "com.android.location.provider" = java_sdk_library {
     name = "com.android.location.provider";
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/com/android/location/provider/ActivityChangedEvent.java"
+        "java/com/android/location/provider/ActivityRecognitionEvent.java"
+        "java/com/android/location/provider/ActivityRecognitionProvider.java"
+        "java/com/android/location/provider/ActivityRecognitionProviderClient.java"
+        "java/com/android/location/provider/ActivityRecognitionProviderWatcher.java"
+        "java/com/android/location/provider/FusedProvider.java"
+        "java/com/android/location/provider/GeocodeProvider.java"
+        "java/com/android/location/provider/GeofenceProvider.java"
+        "java/com/android/location/provider/LocationProviderBase.java"
+        "java/com/android/location/provider/LocationRequestUnbundled.java"
+        "java/com/android/location/provider/ProviderPropertiesUnbundled.java"
+        "java/com/android/location/provider/ProviderRequestUnbundled.java"
+    ];
     api_packages = ["com.android.location.provider"];
     srcs_lib = "framework";
     srcs_lib_whitelist_dirs = ["location/java"];

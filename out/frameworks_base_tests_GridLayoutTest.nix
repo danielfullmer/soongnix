@@ -19,7 +19,19 @@ let
 
 GridLayoutTest = android_test {
     name = "GridLayoutTest";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/test/layout/AbstractLayoutTest.java"
+        "src/com/android/test/layout/Activity0.java"
+        "src/com/android/test/layout/Activity1.java"
+        "src/com/android/test/layout/Activity4.java"
+        "src/com/android/test/layout/Activity5.java"
+        "src/com/android/test/layout/Activity6.java"
+        "src/com/android/test/layout/Activity7.java"
+        "src/com/android/test/layout/AlignmentTest.java"
+        "src/com/android/test/layout/GridLayoutTest.java"
+        "src/com/android/test/layout/LayoutInsetsTest.java"
+        "src/com/android/test/layout/LinearLayoutTest.java"
+    ];
     sdk_version = "current";
 };
 

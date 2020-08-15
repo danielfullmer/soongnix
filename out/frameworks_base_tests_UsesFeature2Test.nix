@@ -19,7 +19,7 @@ let
 
 UsesFeature2Test = android_test {
     name = "UsesFeature2Test";
-    srcs = ["**/*.java"];
+    srcs = [];
     sdk_version = "current";
 };
 

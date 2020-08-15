@@ -20,7 +20,10 @@ let
 android-common-framesequence = java_library {
     name = "android-common-framesequence";
     sdk_version = "8";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/support/rastermill/FrameSequence.java"
+        "src/android/support/rastermill/FrameSequenceDrawable.java"
+    ];
     optimize = {
         proguard_flags_files = ["proguard.flags"];
     };

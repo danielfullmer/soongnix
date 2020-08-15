@@ -19,7 +19,11 @@ cts-signature-common = java_library_static {
     name = "cts-signature-common";
     host_supported = false;
     installable = false;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/signature/cts/ApiDocumentParser.java"
+        "src/android/signature/cts/CurrentApi.java"
+        "src/android/signature/cts/DexMemberChecker.java"
+    ];
     static_libs = ["signature-common-javalib"];
     sdk_version = "current";
 };

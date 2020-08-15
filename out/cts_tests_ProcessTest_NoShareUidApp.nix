@@ -18,7 +18,7 @@ let
 NoShareUidApp = android_test_helper_app {
     name = "NoShareUidApp";
     defaults = ["cts_defaults"];
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/cts/process/activity/NoSharePidActivity.java"];
     sdk_version = "current";
     optimize = {
         enabled = false;

@@ -20,7 +20,10 @@ let
 permission-utils-lib = java_test {
     name = "permission-utils-lib";
     libs = ["android.test.runner"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/permissionutils/GrantPermissionUtil.java"
+        "src/com/android/permissionutils/PermissionInstrumentation.java"
+    ];
 };
 
 # #####################################
@@ -28,7 +31,10 @@ permission-utils-lib = java_test {
 PermissionUtils = android_test {
     name = "PermissionUtils";
     platform_apis = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/permissionutils/GrantPermissionUtil.java"
+        "src/com/android/permissionutils/PermissionInstrumentation.java"
+    ];
     certificate = "platform";
 };
 

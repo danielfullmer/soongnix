@@ -3,7 +3,7 @@ let
 
 "services.coverage" = java_library_static {
     name = "services.coverage";
-    srcs = ["java/**/*.java"];
+    srcs = ["java/com/android/server/coverage/CoverageService.java"];
     libs = ["jacocoagent"];
 };
 

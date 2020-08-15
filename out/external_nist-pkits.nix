@@ -18,7 +18,7 @@ let
 nist-pkix-tests = java_test {
     name = "nist-pkix-tests";
     hostdex = true;
-    srcs = ["src/**/*.java"];
+    srcs = ["src/libcore/java/security/cert/X509CertificateNistPkitsTest.java"];
     java_resource_dirs = ["res"];
     libs = ["junit"];
     sdk_version = "core_current";

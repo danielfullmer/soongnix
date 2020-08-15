@@ -19,7 +19,7 @@ android-ex-camera2-portability-tests = android_test {
     name = "android-ex-camera2-portability-tests";
     sdk_version = "current";
     srcs = [
-        "src/**/*.java"
+        "src/com/android/ex/camera2/portability/Camera2PortabilityTest.java"
     ];
     static_libs = [
         "android-ex-camera2-portability"

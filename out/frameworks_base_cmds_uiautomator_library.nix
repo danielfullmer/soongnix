@@ -18,8 +18,27 @@ let
 uiautomator-stubs-docs = droiddoc {
     name = "uiautomator-stubs-docs";
     srcs = [
-        "core-src/**/*.java"
-        "testrunner-src/**/*.java"
+        "core-src/com/android/uiautomator/core/AccessibilityNodeInfoDumper.java"
+        "core-src/com/android/uiautomator/core/AccessibilityNodeInfoHelper.java"
+        "core-src/com/android/uiautomator/core/Configurator.java"
+        "core-src/com/android/uiautomator/core/InteractionController.java"
+        "core-src/com/android/uiautomator/core/QueryController.java"
+        "core-src/com/android/uiautomator/core/Tracer.java"
+        "core-src/com/android/uiautomator/core/UiAutomatorBridge.java"
+        "core-src/com/android/uiautomator/core/UiCollection.java"
+        "core-src/com/android/uiautomator/core/UiDevice.java"
+        "core-src/com/android/uiautomator/core/UiObject.java"
+        "core-src/com/android/uiautomator/core/UiObjectNotFoundException.java"
+        "core-src/com/android/uiautomator/core/UiScrollable.java"
+        "core-src/com/android/uiautomator/core/UiSelector.java"
+        "core-src/com/android/uiautomator/core/UiWatcher.java"
+        "testrunner-src/com/android/uiautomator/core/ShellUiAutomatorBridge.java"
+        "testrunner-src/com/android/uiautomator/core/UiAutomationShellWrapper.java"
+        "testrunner-src/com/android/uiautomator/testrunner/IAutomationSupport.java"
+        "testrunner-src/com/android/uiautomator/testrunner/TestCaseCollector.java"
+        "testrunner-src/com/android/uiautomator/testrunner/UiAutomatorTestCase.java"
+        "testrunner-src/com/android/uiautomator/testrunner/UiAutomatorTestCaseFilter.java"
+        "testrunner-src/com/android/uiautomator/testrunner/UiAutomatorTestRunner.java"
     ];
     libs = [
         "android.test.runner"
@@ -49,8 +68,27 @@ android_uiautomator = java_library_static {
 "uiautomator.core" = java_library_static {
     name = "uiautomator.core";
     srcs = [
-        "core-src/**/*.java"
-        "testrunner-src/**/*.java"
+        "core-src/com/android/uiautomator/core/AccessibilityNodeInfoDumper.java"
+        "core-src/com/android/uiautomator/core/AccessibilityNodeInfoHelper.java"
+        "core-src/com/android/uiautomator/core/Configurator.java"
+        "core-src/com/android/uiautomator/core/InteractionController.java"
+        "core-src/com/android/uiautomator/core/QueryController.java"
+        "core-src/com/android/uiautomator/core/Tracer.java"
+        "core-src/com/android/uiautomator/core/UiAutomatorBridge.java"
+        "core-src/com/android/uiautomator/core/UiCollection.java"
+        "core-src/com/android/uiautomator/core/UiDevice.java"
+        "core-src/com/android/uiautomator/core/UiObject.java"
+        "core-src/com/android/uiautomator/core/UiObjectNotFoundException.java"
+        "core-src/com/android/uiautomator/core/UiScrollable.java"
+        "core-src/com/android/uiautomator/core/UiSelector.java"
+        "core-src/com/android/uiautomator/core/UiWatcher.java"
+        "testrunner-src/com/android/uiautomator/core/ShellUiAutomatorBridge.java"
+        "testrunner-src/com/android/uiautomator/core/UiAutomationShellWrapper.java"
+        "testrunner-src/com/android/uiautomator/testrunner/IAutomationSupport.java"
+        "testrunner-src/com/android/uiautomator/testrunner/TestCaseCollector.java"
+        "testrunner-src/com/android/uiautomator/testrunner/UiAutomatorTestCase.java"
+        "testrunner-src/com/android/uiautomator/testrunner/UiAutomatorTestCaseFilter.java"
+        "testrunner-src/com/android/uiautomator/testrunner/UiAutomatorTestRunner.java"
     ];
     libs = [
         "android.test.runner"

@@ -21,7 +21,7 @@ WifiStrengthScannerUtil = android_test {
     name = "WifiStrengthScannerUtil";
 
     static_libs = ["ub-uiautomator"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/test/util/wifistrengthscanner/WifiStrengthScannerInstrumentation.java"];
     sdk_version = "23";
 };
 

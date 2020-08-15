@@ -4,7 +4,11 @@ let
 SettingsLibAdaptiveIcon = android_library {
     name = "SettingsLibAdaptiveIcon";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/settingslib/widget/AdaptiveIcon.java"
+        "src/com/android/settingslib/widget/AdaptiveIconShapeDrawable.java"
+        "src/com/android/settingslib/widget/AdaptiveOutlineDrawable.java"
+    ];
     resource_dirs = ["res"];
 
     static_libs = [

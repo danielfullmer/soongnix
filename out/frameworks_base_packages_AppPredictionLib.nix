@@ -22,7 +22,7 @@ app_prediction = android_library {
     min_sdk_version = "system_current";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/app/prediction/Constants.java"
     ];
 };
 

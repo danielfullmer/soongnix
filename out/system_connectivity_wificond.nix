@@ -23,7 +23,7 @@ wificond_defaults = cc_defaults {
         "-Werror"
         "-Wno-unused-parameter"
     ];
-    #include_dirs = ["system/connectivity"];
+    include_dirs = ["system/connectivity"];
 };
 
 #

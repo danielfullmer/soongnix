@@ -25,13 +25,23 @@ cacert_data = filegroup {
 
 py2_httplib2_srcs = filegroup {
     name = "py2_httplib2_srcs";
-    srcs = ["python2/httplib2/*.py"];
+    srcs = [
+        "python2/httplib2/__init__.py"
+        "python2/httplib2/certs.py"
+        "python2/httplib2/iri2uri.py"
+        "python2/httplib2/socks.py"
+    ];
     path = "python2/httplib2";
 };
 
 py3_httplib2_srcs = filegroup {
     name = "py3_httplib2_srcs";
-    srcs = ["python3/httplib2/*.py"];
+    srcs = [
+        "python3/httplib2/__init__.py"
+        "python3/httplib2/certs.py"
+        "python3/httplib2/iri2uri.py"
+        "python3/httplib2/socks.py"
+    ];
     path = "python3/httplib2";
 };
 

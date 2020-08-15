@@ -19,7 +19,23 @@ let
 
 class2greylistlib = java_library_host {
     name = "class2greylistlib";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/class2greylist/AnnotatedClassContext.java"
+        "src/com/android/class2greylist/AnnotatedMemberContext.java"
+        "src/com/android/class2greylist/AnnotationConsumer.java"
+        "src/com/android/class2greylist/AnnotationContext.java"
+        "src/com/android/class2greylist/AnnotationHandler.java"
+        "src/com/android/class2greylist/AnnotationPropertyWriter.java"
+        "src/com/android/class2greylist/AnnotationVisitor.java"
+        "src/com/android/class2greylist/Class2Greylist.java"
+        "src/com/android/class2greylist/CovariantReturnTypeHandler.java"
+        "src/com/android/class2greylist/HiddenapiFlagsWriter.java"
+        "src/com/android/class2greylist/JarReader.java"
+        "src/com/android/class2greylist/MemberDumpingVisitor.java"
+        "src/com/android/class2greylist/RepeatedAnnotationHandler.java"
+        "src/com/android/class2greylist/Status.java"
+        "src/com/android/class2greylist/UnsupportedAppUsageAnnotationHandler.java"
+    ];
     static_libs = [
         "commons-cli-1.2"
         "apache-bcel"

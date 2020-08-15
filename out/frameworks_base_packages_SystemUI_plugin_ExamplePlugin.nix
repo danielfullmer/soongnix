@@ -12,7 +12,11 @@ ExamplePlugin = android_app {
         enabled = false;
     };
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/systemui/plugin/testoverlayplugin/CustomView.java"
+        "src/com/android/systemui/plugin/testoverlayplugin/PluginSettings.java"
+        "src/com/android/systemui/plugin/testoverlayplugin/SampleOverlayPlugin.java"
+    ];
 
 };
 

@@ -4,7 +4,7 @@ let
 SettingsLibLayoutPreference = android_library {
     name = "SettingsLibLayoutPreference";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/settingslib/widget/LayoutPreference.java"];
     resource_dirs = ["res"];
 
     static_libs = [
