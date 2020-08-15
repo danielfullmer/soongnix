@@ -199,6 +199,10 @@ let
     header_libs, shared_libs, static_libs, whole_static_libs, generated_headers,
     use_version_lib, gnu_extensions, c_std, cpp_std, ...
   }: src: let
+    components = splitString "." src;
+    suffix = head (reverseList components);
+    objectFilename = "$NIX_BUILD_TOP/" + (concatStringsSep "." (components ++ [ "o" ]));
+
     cc = { out, ccCmd, cflags ? [] }: ''
       mkdir -p $(dirname ${out})
       ${clang}/bin/${ccCmd} -c ${escapeShellArgs cflags} -o ${out} ${src}
@@ -213,21 +217,19 @@ let
         if cpp_std != ""
         then (if cpp_std == "experimental" then "${stdBase}++2a" else cpp_std)
         else "${stdBase}++17";
-    in if hasSuffix ".c" src then {
+    in if suffix == "c" then {
         ccCmd = "clang";
         cflags = [ "-std=${cStd}" ] ++ conlyflags;
       }
-      else if (hasSuffix ".cpp" src) || (hasSuffix ".cc" src) then {
+      else if elem suffix [ "cpp" "cc" ] then {
         ccCmd = "clang++";
         cflags = [ "-std=${cppStd}" ] ++ cppflags ++ clangExtraCppFlags;
       }
-      else if (hasSuffix ".s" src) || (hasSuffix ".S" src) then {
+      else if elem suffix [ "s" "S" ] then {
         ccCmd = "clang";
         cflags = asflags ++ [ "-D__ASSEMBLY__" ];
       }
       else throw "unhandled extension for file: ${src}";
-    baseName = removeSuffix ".cpp" src;
-    objectFilename = "$NIX_BUILD_TOP/" + baseName + ".o";
 
     stlOptions = {
       # We'll just do libc++_static for now
