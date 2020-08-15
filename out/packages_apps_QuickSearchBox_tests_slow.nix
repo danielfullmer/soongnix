@@ -21,7 +21,10 @@ SlowSuggestions = android_test {
     name = "SlowSuggestions";
     sdk_version = "8";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/quicksearchbox/tests/slow/SlowSuggestionLauncher.java"
+        "src/com/android/quicksearchbox/tests/slow/SlowSuggestionProvider.java"
+    ];
     certificate = "shared";
 };
 

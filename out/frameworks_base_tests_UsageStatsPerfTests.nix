@@ -17,7 +17,7 @@ let
 
 UsageStatsPerfTests = android_test {
     name = "UsageStatsPerfTests";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/frameworks/perftests/usage/tests/UsageStatsDatabasePerfTest.java"];
     static_libs = [
         "androidx.test.rules"
         "apct-perftests-utils"

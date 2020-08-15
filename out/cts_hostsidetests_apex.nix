@@ -17,7 +17,7 @@ let
 
 CtsApexTestCases = java_test_host {
     name = "CtsApexTestCases";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/apex/cts/ApexTest.java"];
     test_suites = [
         "cts"
         "general-tests"

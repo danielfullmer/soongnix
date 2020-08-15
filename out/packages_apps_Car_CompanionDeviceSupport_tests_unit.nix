@@ -20,7 +20,12 @@ let
 CompanionDeviceSupport-unit-tests = android_test {
     name = "CompanionDeviceSupport-unit-tests";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/companiondevicesupport/api/external/ConnectedDeviceManagerBinderTest.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarCleanerTest.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarImporterTest.java"
+        "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarSyncFeatureTest.java"
+    ];
 
     libs = [
         "android.test.runner"

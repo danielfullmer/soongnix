@@ -18,10 +18,7 @@ let
 TestFinancialSmsApp = android_test {
     name = "TestFinancialSmsApp";
 
-    srcs = [
-        "src/**/*.kt"
-        "src/**/*.java"
-    ];
+    srcs = ["src/android/telephony/cts/financialsms/MainActivity.java"];
 
     static_libs = [
         "compatibility-device-util-axt"

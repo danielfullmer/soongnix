@@ -19,7 +19,9 @@ ActivityManagerPerfTestsUtils = java_test {
     name = "ActivityManagerPerfTestsUtils";
     sdk_version = "current";
     srcs = [
-        "src/**/*.java"
+        "src/com/android/frameworks/perftests/am/util/Constants.java"
+        "src/com/android/frameworks/perftests/am/util/CountDownResultReceiver.java"
+        "src/com/android/frameworks/perftests/am/util/Utils.java"
         "src/com/android/frameworks/perftests/am/util/ITimeReceiverCallback.aidl"
     ];
     static_libs = [

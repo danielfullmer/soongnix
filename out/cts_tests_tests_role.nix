@@ -20,7 +20,8 @@ CtsRoleTestCases = android_test {
     sdk_version = "test_current";
 
     srcs = [
-        "src/**/*.java"
+        "src/android/app/role/cts/RoleManagerTest.java"
+        "src/android/app/role/cts/WaitForResultActivity.java"
     ];
 
     static_libs = [

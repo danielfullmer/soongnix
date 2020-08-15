@@ -25,7 +25,10 @@ CtsFragmentTestCasesSdk26 = android_test {
 
     static_libs = ["androidx.test.rules"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/fragment/cts/sdk26/FragmentManagerNonConfigTest.java"
+        "src/android/fragment/cts/sdk26/NonConfigOnStopActivity.java"
+    ];
 
     #  Tag this module as a cts test artifact
     test_suites = [

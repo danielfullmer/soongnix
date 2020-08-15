@@ -23,7 +23,14 @@ NfcTests = android_test {
     ];
     static_libs = ["junit"];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/nfc/MockLlcpSocket.java"
+        "src/com/android/nfc/snep/SnepBasicTests.java"
+        "src/com/android/nfc/snep/SnepCustomClientTests.java"
+        "src/com/android/nfc/snep/SnepDefaultClientTests.java"
+        "src/com/android/nfc/snep/SnepValidationClientTests.java"
+        "src/com/android/nfc/snep/SnepValidationServerTests.java"
+    ];
     platform_apis = true;
     certificate = "platform";
     instrumentation_for = "NfcNci";

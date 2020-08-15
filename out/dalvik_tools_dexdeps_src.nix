@@ -18,7 +18,14 @@ let
 dexdeps-doc-stubs = droidstubs {
     name = "dexdeps-doc-stubs";
     srcs = [
-        "com/**/*.java"
+        "com/android/dexdeps/ClassRef.java"
+        "com/android/dexdeps/DexData.java"
+        "com/android/dexdeps/DexDataException.java"
+        "com/android/dexdeps/FieldRef.java"
+        "com/android/dexdeps/Main.java"
+        "com/android/dexdeps/MethodRef.java"
+        "com/android/dexdeps/Output.java"
+        "com/android/dexdeps/UsageException.java"
     ];
     create_doc_stubs = true;
 };

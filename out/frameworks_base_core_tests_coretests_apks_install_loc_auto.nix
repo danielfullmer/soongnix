@@ -5,7 +5,7 @@ FrameworksCoreTests_install_loc_auto = android_test_helper_app {
     name = "FrameworksCoreTests_install_loc_auto";
     defaults = ["FrameworksCoreTests_apks_defaults"];
 
-    srcs = ["**/*.java"];
+    srcs = [];
 };
 
 in { inherit FrameworksCoreTests_install_loc_auto; }

@@ -6,7 +6,11 @@ libbackup = android_library {
     sdk_version = "current";
     srcs = [
         #  All but src/com/google/android/libraries/backup/shadow/*.java
-        "src/com/google/android/libraries/backup/*.java"
+        "src/com/google/android/libraries/backup/Backup.java"
+        "src/com/google/android/libraries/backup/BackupKeyPredicate.java"
+        "src/com/google/android/libraries/backup/BackupKeyPredicates.java"
+        "src/com/google/android/libraries/backup/PersistentBackupAgentHelper.java"
+        "src/com/google/android/libraries/backup/PreferenceBackupUtil.java"
     ];
     static_libs = ["android-support-v4"];
 };

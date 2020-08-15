@@ -18,7 +18,11 @@ let
 test-composers = java_library_static {
     name = "test-composers";
     srcs = [
-        "src/**/*.java"
+        "src/android/host/test/composer/Compose.java"
+        "src/android/host/test/composer/Iterate.java"
+        "src/android/host/test/composer/IterateBase.java"
+        "src/android/host/test/composer/Shuffle.java"
+        "src/android/host/test/composer/ShuffleBase.java"
     ];
     libs = ["junit"];
     host_supported = true;

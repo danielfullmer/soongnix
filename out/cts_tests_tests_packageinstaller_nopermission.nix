@@ -19,7 +19,7 @@ CtsNoPermissionTestCasesBase = java_library_static {
     name = "CtsNoPermissionTestCasesBase";
     sdk_version = "test_current";
 
-    srcs = ["src/**/*.kt"];
+    srcs = ["src/android.packageinstaller.nopermission.cts/NoPermissionTests.kt"];
 
     static_libs = [
         "ub-uiautomator"

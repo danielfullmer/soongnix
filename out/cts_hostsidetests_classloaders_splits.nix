@@ -18,7 +18,10 @@ let
 CtsClassloaderSplitsHostTestCases = java_test_host {
     name = "CtsClassloaderSplitsHostTestCases";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/classloaders/cts/BaseInstallMultiple.java"
+        "src/android/classloaders/cts/ClassloaderSplitsTest.java"
+    ];
     libs = [
         "compatibility-host-util"
         "cts-tradefed"

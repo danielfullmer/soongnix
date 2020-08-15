@@ -21,13 +21,33 @@ CtsAccessibilityCommon = java_library_static {
     static_libs = [
         "compatibility-device-util-axt"
     ];
-    srcs = ["common/src/**/*.java"];
+    srcs = [
+        "common/src/android/accessibility/cts/common/InstrumentedAccessibilityService.java"
+        "common/src/android/accessibility/cts/common/ShellCommandBuilder.java"
+    ];
 };
 
 CtsAccessibilityTestCases = android_test {
     name = "CtsAccessibilityTestCases";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/view/accessibility/cts/AccessibilityDelegateTest.java"
+        "src/android/view/accessibility/cts/AccessibilityEventTest.java"
+        "src/android/view/accessibility/cts/AccessibilityManagerTest.java"
+        "src/android/view/accessibility/cts/AccessibilityNodeInfoTest.java"
+        "src/android/view/accessibility/cts/AccessibilityNodeInfo_CollectionInfoTest.java"
+        "src/android/view/accessibility/cts/AccessibilityNodeInfo_RangeInfoTest.java"
+        "src/android/view/accessibility/cts/AccessibilityNodeProviderTest.java"
+        "src/android/view/accessibility/cts/AccessibilityRecordTest.java"
+        "src/android/view/accessibility/cts/AccessibilityServiceInfoTest.java"
+        "src/android/view/accessibility/cts/AccessibilityWindowInfoTest.java"
+        "src/android/view/accessibility/cts/CaptioningManagerTest.java"
+        "src/android/view/accessibility/cts/DummyActivity.java"
+        "src/android/view/accessibility/cts/ServiceControlUtils.java"
+        "src/android/view/accessibility/cts/SpeakingAccessibilityService.java"
+        "src/android/view/accessibility/cts/SpeakingAndVibratingAccessibilityService.java"
+        "src/android/view/accessibility/cts/VibratingAccessibilityService.java"
+    ];
     static_libs = [
         "ctstestrunner-axt"
         "hamcrest-library"

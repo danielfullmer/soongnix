@@ -3,7 +3,7 @@ let
 
 LotsOfApps = android_app {
     name = "LotsOfApps";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/lotsofapps/Nothing.java"];
     sdk_version = "current";
     certificate = "platform";
     optimize = {

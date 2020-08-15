@@ -5,7 +5,7 @@ FrameworksCoreTests_install_bad_dex_ = android_test_helper_app {
     name = "FrameworksCoreTests_install_bad_dex_";
     defaults = ["FrameworksCoreTests_apks_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/frameworks/coretests/TestActivity.java"];
 };
 
 #  Inject bad classes.dex file.

@@ -17,7 +17,12 @@ let
 
 CtsAssistCommon = java_library {
     name = "CtsAssistCommon";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/assist/common/AutoResetLatch.java"
+        "src/android/assist/common/BaseRemoteCallbackActivity.java"
+        "src/android/assist/common/MyWebView.java"
+        "src/android/assist/common/Utils.java"
+    ];
     sdk_version = "test_current";
 };
 

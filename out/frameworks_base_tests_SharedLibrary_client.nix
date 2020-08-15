@@ -3,7 +3,10 @@ let
 
 SharedLibraryClient = android_test {
     name = "SharedLibraryClient";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/google/android/test/lib_client/ActivityMain.java"
+        "src/com/google/android/test/lib_client/DependentAppwidgetProvider.java"
+    ];
     libs = ["SharedLibrary"];
     sdk_version = "current";
 };

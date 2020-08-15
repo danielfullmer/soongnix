@@ -15,7 +15,8 @@ libBlocksRuntime = cc_library {
     c_std = "c11";
     clang = true;
     srcs = [
-        "*.c"
+        "data.c"
+        "runtime.c"
     ];
 };
 

@@ -18,7 +18,7 @@ let
 health-testing-utils = java_library_static {
     name = "health-testing-utils";
     srcs = [
-        "src/**/*.java"
+        "src/android/platform/test/util/HealthRunnerBuilder.java"
     ];
     libs = [
         "androidx.test.runner"

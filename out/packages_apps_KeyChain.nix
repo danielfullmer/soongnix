@@ -17,7 +17,13 @@ let
 
 KeyChain = android_app {
     name = "KeyChain";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/keychain/KeyChainActivity.java"
+        "src/com/android/keychain/KeyChainService.java"
+        "src/com/android/keychain/internal/ExistingKeysProvider.java"
+        "src/com/android/keychain/internal/GrantsDatabase.java"
+        "src/com/android/keychain/internal/KeyInfoProvider.java"
+    ];
     platform_apis = true;
     certificate = "platform";
 };

@@ -19,7 +19,12 @@ LibcoreHeapDumper = android_test_helper_app {
     name = "LibcoreHeapDumper";
     sdk_version = "current";
     resource_dirs = ["res"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/libcore/heapdumper/AbstractMetricInstrumentation.java"
+        "src/libcore/heapdumper/Actions.java"
+        "src/libcore/heapdumper/HeapDumpInstrumentation.java"
+        "src/libcore/heapdumper/PssInstrumentation.java"
+    ];
     test_suites = ["general-tests"];
 };
 

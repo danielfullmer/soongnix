@@ -18,7 +18,18 @@ let
 common-platform-scenarios = java_library_static {
     name = "common-platform-scenarios";
     min_sdk_version = "24";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/scenario/annotation/AppSetup.java"
+        "src/android/platform/test/scenario/annotation/Scenario.java"
+        "src/android/platform/test/scenario/businesscard/DismissDialogs.java"
+        "src/android/platform/test/scenario/businesscard/OpenApp.java"
+        "src/android/platform/test/scenario/generic/OpenApp.java"
+        "src/android/platform/test/scenario/performancelaunch/DismissDialogs.java"
+        "src/android/platform/test/scenario/performancelaunch/OpenApp.java"
+        "src/android/platform/test/scenario/sleep/Idle.java"
+        "src/android/platform/test/scenario/system/ScreenOff.java"
+        "src/android/platform/test/scenario/system/ScreenOn.java"
+    ];
     libs = [
         "androidx.test.runner"
         "app-helpers-handheld-interfaces"

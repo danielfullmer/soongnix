@@ -21,8 +21,15 @@ EasterEgg = android_app {
     #  the build system in pi-dev can't quite handle R.java in kt
     #  so we will have a mix of java and kotlin files
     srcs = [
-        "src/**/*.java"
-        "src/**/*.kt"
+        "src/com/android/egg/paint/PaintActivity.java"
+        "src/com/android/egg/paint/BrushPropertyDrawable.kt"
+        "src/com/android/egg/paint/CutoutAvoidingToolbar.kt"
+        "src/com/android/egg/paint/Painting.kt"
+        "src/com/android/egg/paint/Palette.kt"
+        "src/com/android/egg/paint/SpotFilter.kt"
+        "src/com/android/egg/paint/ToolbarView.kt"
+        "src/com/android/egg/quares/Quare.kt"
+        "src/com/android/egg/quares/QuaresActivity.kt"
     ];
 
     resource_dirs = ["res"];

@@ -19,7 +19,7 @@ CtsUsesLibraryApp = android_test {
     name = "CtsUsesLibraryApp";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/useslibrary/UsesLibraryTest.java"];
     libs = [
         "android.test.base.stubs"
     ];

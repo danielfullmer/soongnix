@@ -20,7 +20,7 @@ TradefedContentProviderHostTest = java_test_host {
     defaults = ["tradefed_errorprone_defaults"];
 
     #  Only compile source java files in this jar.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/tradefed/contentprovider/ContentProviderTest.java"];
 
     libs = ["tradefed"];
 

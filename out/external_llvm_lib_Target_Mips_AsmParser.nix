@@ -7,7 +7,7 @@ libLLVMMipsAsmParser = cc_library_static {
         "llvm-lib-defaults"
         "llvm-mips-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["MipsAsmParser.cpp"];
 };
 
 in { inherit libLLVMMipsAsmParser; }

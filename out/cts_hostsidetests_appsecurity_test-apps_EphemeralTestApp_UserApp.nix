@@ -30,7 +30,7 @@ CtsEphemeralTestsUserApp = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/userapp/UserActivity.java"];
     resource_dirs = ["res"];
     sdk_version = "current";
     optimize = {

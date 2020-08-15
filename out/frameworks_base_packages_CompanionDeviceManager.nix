@@ -17,7 +17,10 @@ let
 
 CompanionDeviceManager = android_app {
     name = "CompanionDeviceManager";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/companiondevicemanager/DeviceChooserActivity.java"
+        "src/com/android/companiondevicemanager/DeviceDiscoveryService.java"
+    ];
     platform_apis = true;
 };
 

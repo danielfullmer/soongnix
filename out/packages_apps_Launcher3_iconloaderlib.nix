@@ -26,7 +26,22 @@ iconloader_base = android_library {
         "res"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/launcher3/icons/BaseIconFactory.java"
+        "src/com/android/launcher3/icons/BitmapInfo.java"
+        "src/com/android/launcher3/icons/BitmapRenderer.java"
+        "src/com/android/launcher3/icons/ColorExtractor.java"
+        "src/com/android/launcher3/icons/DotRenderer.java"
+        "src/com/android/launcher3/icons/FixedScaleDrawable.java"
+        "src/com/android/launcher3/icons/GraphicsUtils.java"
+        "src/com/android/launcher3/icons/IconNormalizer.java"
+        "src/com/android/launcher3/icons/ShadowGenerator.java"
+        "src/com/android/launcher3/icons/cache/BaseIconCache.java"
+        "src/com/android/launcher3/icons/cache/CachingLogic.java"
+        "src/com/android/launcher3/icons/cache/HandlerRunnable.java"
+        "src/com/android/launcher3/icons/cache/IconCacheUpdateHandler.java"
+        "src/com/android/launcher3/util/ComponentKey.java"
+        "src/com/android/launcher3/util/NoLocaleSQLiteHelper.java"
+        "src/com/android/launcher3/util/SQLiteCacheHelper.java"
     ];
 };
 
@@ -41,8 +56,24 @@ iconloader = android_library {
         "res"
     ];
     srcs = [
-        "src/**/*.java"
-        "src_full_lib/**/*.java"
+        "src/com/android/launcher3/icons/BaseIconFactory.java"
+        "src/com/android/launcher3/icons/BitmapInfo.java"
+        "src/com/android/launcher3/icons/BitmapRenderer.java"
+        "src/com/android/launcher3/icons/ColorExtractor.java"
+        "src/com/android/launcher3/icons/DotRenderer.java"
+        "src/com/android/launcher3/icons/FixedScaleDrawable.java"
+        "src/com/android/launcher3/icons/GraphicsUtils.java"
+        "src/com/android/launcher3/icons/IconNormalizer.java"
+        "src/com/android/launcher3/icons/ShadowGenerator.java"
+        "src/com/android/launcher3/icons/cache/BaseIconCache.java"
+        "src/com/android/launcher3/icons/cache/CachingLogic.java"
+        "src/com/android/launcher3/icons/cache/HandlerRunnable.java"
+        "src/com/android/launcher3/icons/cache/IconCacheUpdateHandler.java"
+        "src/com/android/launcher3/util/ComponentKey.java"
+        "src/com/android/launcher3/util/NoLocaleSQLiteHelper.java"
+        "src/com/android/launcher3/util/SQLiteCacheHelper.java"
+        "src_full_lib/com/android/launcher3/icons/IconFactory.java"
+        "src_full_lib/com/android/launcher3/icons/SimpleIconCache.java"
     ];
 };
 

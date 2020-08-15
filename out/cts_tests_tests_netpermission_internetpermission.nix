@@ -19,7 +19,7 @@ CtsNetTestCasesInternetPermission = android_test {
     name = "CtsNetTestCasesInternetPermission";
     defaults = ["cts_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/net/cts/network/permission/InternetPermissionTest.java"];
 
     static_libs = ["ctstestrunner-axt"];
 

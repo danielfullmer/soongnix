@@ -18,7 +18,10 @@ let
 ReviewPermissionHelper = android_test {
     name = "ReviewPermissionHelper";
 
-    srcs = ["src/**/*.kt"];
+    srcs = [
+        "src/com/android/cts/reviewpermissionhelper/ActivityStarter.kt"
+        "src/com/android/cts/reviewpermissionhelper/ReviewPermissionsTest.kt"
+    ];
 
     static_libs = [
         "ub-uiautomator"

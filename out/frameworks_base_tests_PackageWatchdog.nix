@@ -18,7 +18,7 @@ let
 #  PackageWatchdogTest
 PackageWatchdogTest = android_test {
     name = "PackageWatchdogTest";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/server/PackageWatchdogTest.java"];
     static_libs = [
         "junit"
         "mockito-target-extended-minus-junit4"

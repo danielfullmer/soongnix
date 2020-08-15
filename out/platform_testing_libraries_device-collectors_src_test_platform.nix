@@ -22,7 +22,7 @@ CollectorDeviceLibPlatformTest = android_test {
     name = "CollectorDeviceLibPlatformTest";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["android/**/*.java"];
+    srcs = ["android/device/collectors/StatsdListenerTest.java"];
     static_libs = [
         "androidx.test.runner"
         "collector-device-lib-platform"

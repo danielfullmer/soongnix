@@ -18,7 +18,11 @@ let
 CtsTransferOwnerIncomingApp = android_test_helper_app {
     name = "CtsTransferOwnerIncomingApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/transferowner/DeviceAndProfileOwnerTransferIncomingTest.java"
+        "src/com/android/cts/transferowner/TransferDeviceOwnerIncomingTest.java"
+        "src/com/android/cts/transferowner/TransferProfileOwnerIncomingTest.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "junit"

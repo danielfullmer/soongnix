@@ -20,7 +20,14 @@ let
 mockwebserver = java_library {
     name = "mockwebserver";
     hostdex = true;
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/com/google/mockwebserver/Dispatcher.java"
+        "src/main/java/com/google/mockwebserver/MockResponse.java"
+        "src/main/java/com/google/mockwebserver/MockWebServer.java"
+        "src/main/java/com/google/mockwebserver/QueueDispatcher.java"
+        "src/main/java/com/google/mockwebserver/RecordedRequest.java"
+        "src/main/java/com/google/mockwebserver/SocketPolicy.java"
+    ];
 
     #  Some tests (CtsVerifier, etc) that are built with SDK are using this library,
     #  thus this lib should be built with public APIs. Since this lib is not specific

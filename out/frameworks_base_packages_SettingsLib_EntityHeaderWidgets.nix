@@ -4,7 +4,10 @@ let
 SettingsLibEntityHeaderWidgets = android_library {
     name = "SettingsLibEntityHeaderWidgets";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/settingslib/widget/AppEntitiesHeaderController.java"
+        "src/com/android/settingslib/widget/AppEntityInfo.java"
+    ];
     resource_dirs = ["res"];
 
     static_libs = [

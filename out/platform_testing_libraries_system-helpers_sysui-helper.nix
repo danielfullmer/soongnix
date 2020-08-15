@@ -28,7 +28,13 @@ sysui-helper = java_library {
         "app-helpers-handheld-interfaces"
     ];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/system/helpers/HotseatHelper.java"
+        "src/android/system/helpers/LockscreenHelper.java"
+        "src/android/system/helpers/NotificationHelper.java"
+        "src/android/system/helpers/OverviewHelper.java"
+        "src/android/system/helpers/QuickSettingsHelper.java"
+    ];
     sdk_version = "test_current";
 };
 

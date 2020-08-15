@@ -16,7 +16,32 @@ let
 #  limitations under the License.
 StatementService = android_app {
     name = "StatementService";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/statementservice/DirectStatementService.java"
+        "src/com/android/statementservice/ExceptionLoggingFutureTask.java"
+        "src/com/android/statementservice/IntentFilterVerificationReceiver.java"
+        "src/com/android/statementservice/retriever/AbstractAsset.java"
+        "src/com/android/statementservice/retriever/AbstractAssetMatcher.java"
+        "src/com/android/statementservice/retriever/AbstractStatementRetriever.java"
+        "src/com/android/statementservice/retriever/AndroidAppAsset.java"
+        "src/com/android/statementservice/retriever/AndroidAppAssetMatcher.java"
+        "src/com/android/statementservice/retriever/AndroidPackageInfoFetcher.java"
+        "src/com/android/statementservice/retriever/AssetFactory.java"
+        "src/com/android/statementservice/retriever/AssetJsonWriter.java"
+        "src/com/android/statementservice/retriever/AssetMatcherFactory.java"
+        "src/com/android/statementservice/retriever/AssociationServiceException.java"
+        "src/com/android/statementservice/retriever/DirectStatementRetriever.java"
+        "src/com/android/statementservice/retriever/JsonParser.java"
+        "src/com/android/statementservice/retriever/ParsedStatement.java"
+        "src/com/android/statementservice/retriever/Relation.java"
+        "src/com/android/statementservice/retriever/Statement.java"
+        "src/com/android/statementservice/retriever/StatementParser.java"
+        "src/com/android/statementservice/retriever/URLFetcher.java"
+        "src/com/android/statementservice/retriever/Utils.java"
+        "src/com/android/statementservice/retriever/WebAsset.java"
+        "src/com/android/statementservice/retriever/WebAssetMatcher.java"
+        "src/com/android/statementservice/retriever/WebContent.java"
+    ];
     optimize = {
         proguard_flags_files = ["proguard.flags"];
     };

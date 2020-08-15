@@ -20,7 +20,7 @@ let
 
 CameraEffectsRecordingSample = android_test {
     name = "CameraEffectsRecordingSample";
-    srcs = ["**/*.java"];
+    srcs = ["java/android/media/filterfw/samples/CameraEffectsRecordingSample.java"];
     platform_apis = true;
     optimize = {
         enabled = false;

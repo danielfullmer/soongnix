@@ -19,7 +19,10 @@ CtsClassloaderSplitAppFeatureB = android_test_helper_app {
     name = "CtsClassloaderSplitAppFeatureB";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/classloadersplitapp/feature_b/FeatureBActivity.java"
+        "src/com/android/cts/classloadersplitapp/feature_b/FeatureBReceiver.java"
+    ];
     libs = [
         "CtsClassloaderSplitApp"
         "CtsClassloaderSplitAppFeatureA"

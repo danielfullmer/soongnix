@@ -77,7 +77,26 @@ mathtest = cc_test {
         "math/single/e_rem_pio2.c"
         "test/mathtest.c"
     ];
-    data = ["test/testcases/directed/*.tst"];
+    data = [
+        "test/testcases/directed/cosf.tst"
+        "test/testcases/directed/exp.tst"
+        "test/testcases/directed/exp2.tst"
+        "test/testcases/directed/exp2f.tst"
+        "test/testcases/directed/expf.tst"
+        "test/testcases/directed/log.tst"
+        "test/testcases/directed/log2.tst"
+        "test/testcases/directed/log2f.tst"
+        "test/testcases/directed/logf.tst"
+        "test/testcases/directed/pow.tst"
+        "test/testcases/directed/powf.tst"
+        "test/testcases/directed/rred.tst"
+        "test/testcases/directed/rred2.tst"
+        "test/testcases/directed/rred3.tst"
+        "test/testcases/directed/rred4.tst"
+        "test/testcases/directed/rred5.tst"
+        "test/testcases/directed/sincosf.tst"
+        "test/testcases/directed/sinf.tst"
+    ];
     local_include_dirs = ["math/include"];
     target = {
         darwin = {

@@ -19,7 +19,9 @@ py-funcsigs = python_library {
     name = "py-funcsigs";
     host_supported = true;
     srcs = [
-        "*.py"
+        "__init__.py"
+        "odict.py"
+        "version.py"
     ];
     version = {
         py2 = {

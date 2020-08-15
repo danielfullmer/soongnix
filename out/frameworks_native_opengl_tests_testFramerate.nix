@@ -7,7 +7,10 @@ let
 
 TestFramerate = android_app {
     name = "TestFramerate";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/testframerate/TestFramerateActivity.java"
+        "src/com/android/testframerate/TestFramerateView.java"
+    ];
     sdk_version = "system_current";
 };
 

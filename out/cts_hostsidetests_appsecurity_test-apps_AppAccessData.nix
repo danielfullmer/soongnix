@@ -18,7 +18,7 @@ let
 CtsAppAccessData = android_test {
     name = "CtsAppAccessData";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/appaccessdata/AccessPrivateDataTest.java"];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     libs = ["android.test.base.stubs"];

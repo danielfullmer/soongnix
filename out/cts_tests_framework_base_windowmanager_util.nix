@@ -19,7 +19,20 @@ cts-wm-util = java_test {
     name = "cts-wm-util";
 
     srcs = [
-        "src/**/*.java"
+        "src/android/server/wm/ActivityAndWindowManagersState.java"
+        "src/android/server/wm/ActivityLauncher.java"
+        "src/android/server/wm/ActivityManagerState.java"
+        "src/android/server/wm/ActivityManagerTestBase.java"
+        "src/android/server/wm/BarTestUtils.java"
+        "src/android/server/wm/CommandSession.java"
+        "src/android/server/wm/ComponentNameUtils.java"
+        "src/android/server/wm/ProtoExtractors.java"
+        "src/android/server/wm/StateLogger.java"
+        "src/android/server/wm/TestJournalProvider.java"
+        "src/android/server/wm/UiDeviceUtils.java"
+        "src/android/server/wm/WaitForValidActivityState.java"
+        "src/android/server/wm/WindowManagerState.java"
+        "src/android/server/wm/settings/SettingsSession.java"
         ":cts-wm-components"
         ":cts-wm-components-base"
     ];

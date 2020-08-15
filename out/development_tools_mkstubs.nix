@@ -19,7 +19,23 @@ let
 
 mkstubs = java_library_host {
     name = "mkstubs";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/mkstubs/AsmAnalyzer.java"
+        "src/com/android/mkstubs/Filter.java"
+        "src/com/android/mkstubs/FilterClassAdapter.java"
+        "src/com/android/mkstubs/Main.java"
+        "src/com/android/mkstubs/SourceGenerator.java"
+        "src/com/android/mkstubs/StubGenerator.java"
+        "src/com/android/mkstubs/sourcer/AccessSourcer.java"
+        "src/com/android/mkstubs/sourcer/AnnotationSourcer.java"
+        "src/com/android/mkstubs/sourcer/ClassSourcer.java"
+        "src/com/android/mkstubs/sourcer/FieldSourcer.java"
+        "src/com/android/mkstubs/sourcer/MethodSourcer.java"
+        "src/com/android/mkstubs/sourcer/Output.java"
+        "src/com/android/mkstubs/sourcer/SignatureSourcer.java"
+        "src/com/android/mkstubs/stubber/ClassStubber.java"
+        "src/com/android/mkstubs/stubber/MethodStubber.java"
+    ];
     manifest = "manifest.txt";
     static_libs = ["asm-5.2"];
 };

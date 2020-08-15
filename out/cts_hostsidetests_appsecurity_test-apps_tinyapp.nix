@@ -24,7 +24,7 @@ CtsPkgInstallTinyApp = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/appsecurity/cts/tinyapp/MainActivity.java"];
     sdk_version = "current";
     dex_preopt = {
         enabled = false;

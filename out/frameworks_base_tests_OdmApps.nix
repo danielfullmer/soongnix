@@ -17,7 +17,7 @@ let
 
 OdmAppsTest = java_test_host {
     name = "OdmAppsTest";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/test/odm/app/OdmAppsTest.java"];
     libs = ["tradefed"];
     test_suites = ["device-tests"];
 };

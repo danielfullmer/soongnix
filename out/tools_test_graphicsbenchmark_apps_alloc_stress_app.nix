@@ -29,7 +29,7 @@ GameQualificationAllocstress = android_test_helper_app {
     sdk_version = "26"; #  Oreo
     jni_libs = ["libstress"];
     test_suites = ["device-tests"];
-    srcs = ["src/java/**/*.java"];
+    srcs = ["src/java/com/android/game/qualification/allocstress/MainActivity.java"];
 };
 
 in { inherit GameQualificationAllocstress libstress; }

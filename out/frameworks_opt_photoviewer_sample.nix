@@ -34,8 +34,9 @@ PhotoViewerSample = android_app {
     sdk_version = "current";
 
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/example/photoviewersample/MainActivity.java"
+        "src/com/example/photoviewersample/SampleProvider.java"
+
     ];
     resource_dirs = ["res"];
 };
@@ -60,8 +61,9 @@ AppcompatPhotoViewerSample = android_app {
     sdk_version = "current";
 
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/example/photoviewersample/MainActivity.java"
+        "src/com/example/photoviewersample/SampleProvider.java"
+
     ];
     resource_dirs = ["res"];
 

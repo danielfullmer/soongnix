@@ -20,7 +20,12 @@ AndroidCommonTests = android_test {
     certificate = "platform";
     libs = ["android.test.runner.stubs"];
     sdk_version = "8";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/common/OperationSchedulerTest.java"
+        "src/com/android/common/Rfc822ValidatorTest.java"
+        "src/com/android/common/widget/CompositeCursorAdapterTest.java"
+        "src/com/android/common/widget/GroupingListAdapterTests.java"
+    ];
     static_libs = ["android-common"];
     optimize = {
         enabled = false;

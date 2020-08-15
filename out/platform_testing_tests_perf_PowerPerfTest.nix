@@ -25,7 +25,7 @@ PowerPerfTest = android_test {
     ];
     libs = ["android.test.base.stubs"];
     certificate = "platform";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/powerperf/tests/PowerPerfTest.java"];
 
     test_suites = ["device-tests"];
 };

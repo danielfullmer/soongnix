@@ -18,7 +18,7 @@ let
 CtsSimpleAppInstall = android_test {
     name = "CtsSimpleAppInstall";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/simpleappinstall/SimpleAppActivity.java"];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     #  tag this module as a cts test artifact

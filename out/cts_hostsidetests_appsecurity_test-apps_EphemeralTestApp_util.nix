@@ -17,7 +17,7 @@ let
 
 cts-aia-util = java_test {
     name = "cts-aia-util";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/util/TestResult.java"];
     sdk_version = "current";
 };
 

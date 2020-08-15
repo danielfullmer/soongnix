@@ -20,7 +20,15 @@ DownloadProviderTests = android_test {
     name = "DownloadProviderTests";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/providers/downloads/AbstractDownloadProviderFunctionalTest.java"
+        "src/com/android/providers/downloads/AbstractPublicApiTest.java"
+        "src/com/android/providers/downloads/DownloadProviderFunctionalTest.java"
+        "src/com/android/providers/downloads/FakeInputStream.java"
+        "src/com/android/providers/downloads/FakeSystemFacade.java"
+        "src/com/android/providers/downloads/HelpersTest.java"
+        "src/com/android/providers/downloads/MockitoHelper.java"
+        "src/com/android/providers/downloads/PublicApiFunctionalTest.java"
+        "src/com/android/providers/downloads/ThreadingTest.java"
     ];
 
     libs = [

@@ -22,7 +22,7 @@ TradefedContentProvider = android_test {
     name = "TradefedContentProvider";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["java/**/*.java"];
+    srcs = ["java/android/tradefed/contentprovider/ManagedFileContentProvider.java"];
     static_libs = [
         "androidx.test.runner"
     ];

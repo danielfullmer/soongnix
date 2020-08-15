@@ -18,7 +18,21 @@ let
 print-test-util-lib = java_library {
     name = "print-test-util-lib";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/print/test/BasePrintTest.java"
+        "src/android/print/test/PrintDocumentActivity.java"
+        "src/android/print/test/Utils.java"
+        "src/android/print/test/services/AddPrintersActivity.java"
+        "src/android/print/test/services/CustomPrintOptionsActivity.java"
+        "src/android/print/test/services/FirstPrintService.java"
+        "src/android/print/test/services/InfoActivity.java"
+        "src/android/print/test/services/PrintServiceCallbacks.java"
+        "src/android/print/test/services/PrinterDiscoverySessionCallbacks.java"
+        "src/android/print/test/services/SecondPrintService.java"
+        "src/android/print/test/services/SettingsActivity.java"
+        "src/android/print/test/services/StubbablePrintService.java"
+        "src/android/print/test/services/StubbablePrinterDiscoverySession.java"
+    ];
 
     static_libs = [
         "mockito-target-minus-junit4"

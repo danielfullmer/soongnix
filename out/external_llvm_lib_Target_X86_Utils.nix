@@ -7,7 +7,7 @@ libLLVMX86Utils = cc_library_static {
         "llvm-lib-defaults"
         "llvm-x86-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["X86ShuffleDecode.cpp"];
 };
 
 in { inherit libLLVMX86Utils; }

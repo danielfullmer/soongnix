@@ -24,7 +24,10 @@ rappor = java_library {
     libs = [
         "jsr305"
     ];
-    srcs = ["client/java/**/*.java"];
+    srcs = [
+        "client/java/com/google/android/rappor/Encoder.java"
+        "client/java/com/google/android/rappor/HmacDrbg.java"
+    ];
 };
 
 rappor-tests = java_library {
@@ -38,7 +41,10 @@ rappor-tests = java_library {
     ];
     libs = ["jsr305"];
     sdk_version = "core_current";
-    srcs = ["client/javatest/**/*.java"];
+    srcs = [
+        "client/javatest/com/google/android/rappor/EncoderTest.java"
+        "client/javatest/com/google/android/rappor/HmacDrbgTest.java"
+    ];
 };
 
 in { inherit rappor rappor-tests; }

@@ -31,7 +31,18 @@ CellBroadcastReceiverUnitTests = android_test {
         "ub-uiautomator"
     ];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cellbroadcastreceiver/CellBroadcastActivityTestCase.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAlertDialogTest.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAlertServiceTest.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastBootupConfigTest.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastChannelManagerTest.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastConfigServiceTest.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastServiceTestCase.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastSettingsTest.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastTest.java"
+        "src/com/android/cellbroadcastreceiver/MockedServiceManager.java"
+    ];
     platform_apis = true;
     instrumentation_for = "CellBroadcastReceiver";
     test_suites = ["device-tests"];

@@ -22,8 +22,26 @@ android-common = java_library_static {
     name = "android-common";
     sdk_version = "8";
     srcs = [
-        "java/**/*.java"
-        "java/**/*.logtags"
+        "java/com/android/common/LegacyHttpDateTime.java"
+        "java/com/android/common/NetworkConnectivityListener.java"
+        "java/com/android/common/OperationScheduler.java"
+        "java/com/android/common/Rfc822InputFilter.java"
+        "java/com/android/common/Rfc822Validator.java"
+        "java/com/android/common/Search.java"
+        "java/com/android/common/SharedPreferencesCompat.java"
+        "java/com/android/common/contacts/BaseEmailAddressAdapter.java"
+        "java/com/android/common/contacts/DataUsageStatUpdater.java"
+        "java/com/android/common/content/ProjectionMap.java"
+        "java/com/android/common/content/SQLiteContentProvider.java"
+        "java/com/android/common/content/SyncStateContentProviderHelper.java"
+        "java/com/android/common/io/MoreCloseables.java"
+        "java/com/android/common/speech/LoggingEvents.java"
+        "java/com/android/common/speech/Recognition.java"
+        "java/com/android/common/userhappiness/UserHappinessSignals.java"
+        "java/com/android/common/widget/CompositeCursorAdapter.java"
+        "java/com/android/common/widget/GroupingListAdapter.java"
+        "java/com/android/ex/editstyledtext/EditStyledText.java"
+        "java/com/android/common/GoogleLogTags.logtags"
     ];
 };
 

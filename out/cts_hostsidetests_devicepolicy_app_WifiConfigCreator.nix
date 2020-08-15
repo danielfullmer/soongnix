@@ -20,7 +20,7 @@ CtsWifiConfigCreator = android_test_helper_app {
     defaults = ["cts_defaults"];
     #  Don't include this package in any target.
     #  When built, explicitly put it in the data partition.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/deviceowner/wificonfigcreator/WifiConfigCreatorActivity.java"];
     static_libs = ["compatibility-device-util-axt"];
     sdk_version = "test_current";
     #  tag this module as a cts test artifact

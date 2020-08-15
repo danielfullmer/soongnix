@@ -36,7 +36,7 @@ libvibrator = cc_library_shared {
 
     srcs = [
         ":libvibrator_aidl"
-        "*.cpp"
+        "ExternalVibration.cpp"
     ];
 
     cflags = [

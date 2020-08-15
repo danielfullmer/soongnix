@@ -25,7 +25,7 @@ account-helper = java_library {
         "activity-helper"
         "device-helper"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/AccountHelper.java"];
     sdk_version = "current";
 };
 

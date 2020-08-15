@@ -19,7 +19,7 @@ perfetto-helper-test = java_library {
     name = "perfetto-helper-test";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/helpers/tests/PerfettoHelperTest.java"];
 
     static_libs = [
         "androidx.test.runner"

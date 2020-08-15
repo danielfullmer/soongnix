@@ -24,7 +24,7 @@ settings-helper = java_library {
         "android-support-test"
         "activity-helper"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/SettingsHelper.java"];
     sdk_version = "current";
 };
 

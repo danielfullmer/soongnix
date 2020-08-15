@@ -21,7 +21,10 @@ StatsdDogfood = android_app {
     name = "StatsdDogfood";
     platform_apis = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/statsd/dogfood/DisplayProtoUtils.java"
+        "src/com/android/statsd/dogfood/MainActivity.java"
+    ];
 
     resource_dirs = ["res"];
     static_libs = [

@@ -4,7 +4,7 @@ let
 SettingsLibActionButtonsPreference = android_library {
     name = "SettingsLibActionButtonsPreference";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/settingslib/widget/ActionButtonsPreference.java"];
     resource_dirs = ["res"];
 
     static_libs = [

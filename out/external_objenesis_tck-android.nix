@@ -33,7 +33,10 @@ ObjenesisTck = android_test {
         "junit"
     ];
     libs = ["android.test.base"];
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/org/objenesis/tck/android/ObjenesisTest.java"
+        "src/main/java/org/objenesis/tck/android/TckInstrumentation.java"
+    ];
 };
 
 in { inherit ObjenesisTck; }

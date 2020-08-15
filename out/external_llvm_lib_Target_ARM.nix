@@ -7,7 +7,38 @@ libLLVMARMCodeGen = cc_library_static {
         "llvm-lib-defaults"
         "llvm-arm-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "A15SDOptimizer.cpp"
+        "ARMAsmPrinter.cpp"
+        "ARMBaseInstrInfo.cpp"
+        "ARMBaseRegisterInfo.cpp"
+        "ARMConstantIslandPass.cpp"
+        "ARMConstantPoolValue.cpp"
+        "ARMExpandPseudoInsts.cpp"
+        "ARMFastISel.cpp"
+        "ARMFrameLowering.cpp"
+        "ARMHazardRecognizer.cpp"
+        "ARMISelDAGToDAG.cpp"
+        "ARMISelLowering.cpp"
+        "ARMInstrInfo.cpp"
+        "ARMLoadStoreOptimizer.cpp"
+        "ARMMCInstLower.cpp"
+        "ARMMachineFunctionInfo.cpp"
+        "ARMOptimizeBarriersPass.cpp"
+        "ARMRegisterInfo.cpp"
+        "ARMSelectionDAGInfo.cpp"
+        "ARMSubtarget.cpp"
+        "ARMTargetMachine.cpp"
+        "ARMTargetObjectFile.cpp"
+        "ARMTargetTransformInfo.cpp"
+        "MLxExpansionPass.cpp"
+        "Thumb1FrameLowering.cpp"
+        "Thumb1InstrInfo.cpp"
+        "Thumb2ITBlockPass.cpp"
+        "Thumb2InstrInfo.cpp"
+        "Thumb2SizeReduction.cpp"
+        "ThumbRegisterInfo.cpp"
+    ];
 
     #  b/31559947, b/31938382 clang-tidy segmentation fault.
     tidy_checks = [

@@ -25,7 +25,7 @@ dpad-util = java_library {
         "ub-uiautomator"
         "android-support-test"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/platform/test/utils/DPadUtil.java"];
     sdk_version = "current";
 };
 

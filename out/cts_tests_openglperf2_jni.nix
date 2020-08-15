@@ -30,7 +30,34 @@ libctsopengl_jni = cc_library_shared {
     ];
 
     #  Get all cpp files but not hidden files
-    srcs = ["**/*.cpp"];
+    srcs = [
+        "graphics/GLUtils.cpp"
+        "graphics/Matrix.cpp"
+        "graphics/Mesh.cpp"
+        "graphics/MeshNode.cpp"
+        "graphics/PerspectiveMeshNode.cpp"
+        "graphics/PerspectiveProgram.cpp"
+        "graphics/Program.cpp"
+        "graphics/ProgramNode.cpp"
+        "graphics/Renderer.cpp"
+        "graphics/SceneGraphNode.cpp"
+        "graphics/TexturedMeshNode.cpp"
+        "graphics/TransformationNode.cpp"
+        "graphics/Vector2D.cpp"
+        "primitive/GLPrimitive.cpp"
+        "primitive/contextswitch/ContextSwitchRenderer.cpp"
+        "primitive/fullpipeline/FullPipelineRenderer.cpp"
+        "primitive/pixeloutput/PixelOutputRenderer.cpp"
+        "primitive/shaderperf/ShaderPerfRenderer.cpp"
+        "reference/GLReference.cpp"
+        "reference/ReferenceRenderer.cpp"
+        "reference/scene/Scene.cpp"
+        "reference/scene/flocking/Boid.cpp"
+        "reference/scene/flocking/FlockingScene.cpp"
+        "reference/scene/flocking/WaterMeshNode.cpp"
+        "reference/scene/glowing/BlurMeshNode.cpp"
+        "reference/scene/glowing/GlowingScene.cpp"
+    ];
 
     shared_libs = [
         "libEGL"

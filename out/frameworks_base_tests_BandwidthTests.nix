@@ -20,7 +20,10 @@ let
 BandwidthEnforcementTest = android_test {
     name = "BandwidthEnforcementTest";
     platform_apis = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/tests/bandwidthenforcement/BandwidthEnforcementTestActivity.java"
+        "src/com/android/tests/bandwidthenforcement/BandwidthEnforcementTestService.java"
+    ];
 };
 
 in { inherit BandwidthEnforcementTest; }

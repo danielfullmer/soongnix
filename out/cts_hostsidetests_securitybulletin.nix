@@ -18,7 +18,47 @@ let
 CtsSecurityBulletinHostTestCases = java_test_host {
     name = "CtsSecurityBulletinHostTestCases";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/security/cts/AdbUtils.java"
+        "src/android/security/cts/HostsideMainlineModuleDetector.java"
+        "src/android/security/cts/HostsideOomCatcher.java"
+        "src/android/security/cts/LaunchSomeWhere.java"
+        "src/android/security/cts/Poc16_02.java"
+        "src/android/security/cts/Poc16_04.java"
+        "src/android/security/cts/Poc16_05.java"
+        "src/android/security/cts/Poc16_06.java"
+        "src/android/security/cts/Poc16_07.java"
+        "src/android/security/cts/Poc16_09.java"
+        "src/android/security/cts/Poc16_10.java"
+        "src/android/security/cts/Poc16_11.java"
+        "src/android/security/cts/Poc16_12.java"
+        "src/android/security/cts/Poc17_01.java"
+        "src/android/security/cts/Poc17_02.java"
+        "src/android/security/cts/Poc17_03.java"
+        "src/android/security/cts/Poc17_04.java"
+        "src/android/security/cts/Poc17_05.java"
+        "src/android/security/cts/Poc17_06.java"
+        "src/android/security/cts/Poc17_07.java"
+        "src/android/security/cts/Poc17_09.java"
+        "src/android/security/cts/Poc17_11.java"
+        "src/android/security/cts/Poc17_12.java"
+        "src/android/security/cts/Poc18_02.java"
+        "src/android/security/cts/Poc18_03.java"
+        "src/android/security/cts/Poc18_04.java"
+        "src/android/security/cts/Poc18_05.java"
+        "src/android/security/cts/Poc18_06.java"
+        "src/android/security/cts/Poc18_07.java"
+        "src/android/security/cts/Poc18_10.java"
+        "src/android/security/cts/Poc18_11.java"
+        "src/android/security/cts/Poc19_03.java"
+        "src/android/security/cts/Poc19_05.java"
+        "src/android/security/cts/Poc19_06.java"
+        "src/android/security/cts/Poc19_08.java"
+        "src/android/security/cts/Poc19_11.java"
+        "src/android/security/cts/RegexUtils.java"
+        "src/android/security/cts/SecurityTestCase.java"
+        "src/android/security/cts/TestMedia.java"
+    ];
     java_resource_dirs = ["res"];
     #  tag this module as a cts test artifact
     test_suites = [

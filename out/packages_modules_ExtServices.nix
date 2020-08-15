@@ -18,7 +18,26 @@ let
 ExtServices-core = android_library {
     name = "ExtServices-core";
     srcs = [
-        "src/**/*.java"
+        "src/android/ext/services/Version.java"
+        "src/android/ext/services/autofill/AutofillFieldClassificationServiceImpl.java"
+        "src/android/ext/services/autofill/EditDistanceScorer.java"
+        "src/android/ext/services/autofill/ExactMatch.java"
+        "src/android/ext/services/notification/AgingHelper.java"
+        "src/android/ext/services/notification/Assistant.java"
+        "src/android/ext/services/notification/AssistantSettings.java"
+        "src/android/ext/services/notification/ChannelImpressions.java"
+        "src/android/ext/services/notification/CopyCodeActivity.java"
+        "src/android/ext/services/notification/EntityTypeCounter.java"
+        "src/android/ext/services/notification/NotificationCategorizer.java"
+        "src/android/ext/services/notification/NotificationEntry.java"
+        "src/android/ext/services/notification/SmartActionsHelper.java"
+        "src/android/ext/services/notification/SmsHelper.java"
+        "src/android/ext/services/resolver/LRResolverRankerService.java"
+        "src/android/ext/services/sms/FinancialSmsServiceImpl.java"
+        "src/android/ext/services/storage/CacheQuotaServiceImpl.java"
+        "src/android/ext/services/watchdog/ExplicitHealthCheckServiceImpl.java"
+        "src/android/ext/services/watchdog/ExplicitHealthChecker.java"
+        "src/android/ext/services/watchdog/NetworkChecker.java"
     ];
     resource_dirs = [
         "res"
@@ -31,7 +50,28 @@ ExtServices-core = android_library {
 
 ExtServices = android_app {
     name = "ExtServices";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/ext/services/Version.java"
+        "src/android/ext/services/autofill/AutofillFieldClassificationServiceImpl.java"
+        "src/android/ext/services/autofill/EditDistanceScorer.java"
+        "src/android/ext/services/autofill/ExactMatch.java"
+        "src/android/ext/services/notification/AgingHelper.java"
+        "src/android/ext/services/notification/Assistant.java"
+        "src/android/ext/services/notification/AssistantSettings.java"
+        "src/android/ext/services/notification/ChannelImpressions.java"
+        "src/android/ext/services/notification/CopyCodeActivity.java"
+        "src/android/ext/services/notification/EntityTypeCounter.java"
+        "src/android/ext/services/notification/NotificationCategorizer.java"
+        "src/android/ext/services/notification/NotificationEntry.java"
+        "src/android/ext/services/notification/SmartActionsHelper.java"
+        "src/android/ext/services/notification/SmsHelper.java"
+        "src/android/ext/services/resolver/LRResolverRankerService.java"
+        "src/android/ext/services/sms/FinancialSmsServiceImpl.java"
+        "src/android/ext/services/storage/CacheQuotaServiceImpl.java"
+        "src/android/ext/services/watchdog/ExplicitHealthCheckServiceImpl.java"
+        "src/android/ext/services/watchdog/ExplicitHealthChecker.java"
+        "src/android/ext/services/watchdog/NetworkChecker.java"
+    ];
     platform_apis = true;
     certificate = "platform";
     optimize = {

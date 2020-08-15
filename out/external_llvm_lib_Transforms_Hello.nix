@@ -6,7 +6,7 @@ LLVMHello = cc_library_host_shared {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["Hello.cpp"];
     allow_undefined_symbols = true;
     target = {
         windows = {

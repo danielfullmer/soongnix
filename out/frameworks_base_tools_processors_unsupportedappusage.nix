@@ -9,7 +9,8 @@ unsupportedappusage-annotation-processor = java_plugin {
         "META-INF/**/*"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/android/processor/unsupportedappusage/SignatureBuilder.java"
+        "src/android/processor/unsupportedappusage/UnsupportedAppUsageProcessor.java"
     ];
     static_libs = [
         "guava"

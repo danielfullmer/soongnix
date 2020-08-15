@@ -18,7 +18,10 @@ let
 nativetesthelper = java_library {
     name = "nativetesthelper";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/gtestrunner/GtestRunner.java"
+        "src/com/android/gtestrunner/TargetLibrary.java"
+    ];
     static_libs = ["compatibility-common-util-devicesidelib"];
     sdk_version = "current";
 };

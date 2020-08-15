@@ -22,7 +22,10 @@ let
 cts-dalvik-host-test-runner = java_test_host {
     name = "cts-dalvik-host-test-runner";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/testtype/DalvikTest.java"
+        "src/com/android/compatibility/testtype/LibcoreTest.java"
+    ];
 
     libs = [
         "cts-tradefed"

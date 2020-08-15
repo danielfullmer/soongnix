@@ -6,7 +6,7 @@ libLLVMMCJIT = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["MCJIT.cpp"];
 };
 
 in { inherit libLLVMMCJIT; }

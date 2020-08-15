@@ -25,7 +25,7 @@ LongevityHostLibSamples = java_library_host {
         "test-composers"
         "longevity-host-lib"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/host/test/samples/SimpleSuite.java"];
 };
 
 in { inherit LongevityHostLibSamples; }

@@ -7,7 +7,16 @@ InternalTests = android_test {
         type = "nano";
     };
     #  Include some source files directly to be able to access package members
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/app/WallpaperColorsTest.java"
+        "src/android/app/WallpaperInfoTest.java"
+        "src/android/service/wallpaper/WallpaperServiceTest.java"
+        "src/com/android/internal/colorextraction/ColorExtractorTest.java"
+        "src/com/android/internal/colorextraction/types/TonalTest.java"
+        "src/com/android/internal/graphics/ColorUtilsTest.java"
+        "src/com/android/internal/ml/clustering/KMeansTest.java"
+        "src/stub/DummyWallpaperService.java"
+    ];
     libs = ["android.test.runner"];
     static_libs = [
         "junit"

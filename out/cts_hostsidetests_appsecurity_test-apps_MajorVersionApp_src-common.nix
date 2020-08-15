@@ -3,7 +3,7 @@ let
 
 CtsMajorVersionCommon = filegroup {
     name = "CtsMajorVersionCommon";
-    srcs = ["**/*.java"];
+    srcs = ["com/android/cts/majorversion/VersionTest.java"];
 };
 
 in { inherit CtsMajorVersionCommon; }

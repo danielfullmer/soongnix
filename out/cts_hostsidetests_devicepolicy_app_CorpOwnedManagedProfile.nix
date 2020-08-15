@@ -25,8 +25,18 @@ CtsCorpOwnedManagedProfile = android_test_helper_app {
     name = "CtsCorpOwnedManagedProfile";
     defaults = ["cts_defaults"];
     srcs = [
-        "src/**/*.java"
-        "src/**/I*.aidl"
+        "src/com/android/cts/comp/AdminReceiver.java"
+        "src/com/android/cts/comp/BindDeviceAdminServiceFailsTest.java"
+        "src/com/android/cts/comp/BindDeviceAdminServiceGoodSetupTest.java"
+        "src/com/android/cts/comp/DeviceWideLoggingFeaturesTest.java"
+        "src/com/android/cts/comp/ManagementTest.java"
+        "src/com/android/cts/comp/ProtectedCrossUserService.java"
+        "src/com/android/cts/comp/UnprotectedCrossUserService.java"
+        "src/com/android/cts/comp/Utils.java"
+        "src/com/android/cts/comp/provisioning/AffiliationTest.java"
+        "src/com/android/cts/comp/provisioning/ManagedProfileProvisioningTest.java"
+        "src/com/android/cts/comp/provisioning/UserRestrictionTest.java"
+        "src/com/android/cts/comp/ICrossUserService.aidl"
     ];
     aidl = {
         local_include_dirs = ["src"];
@@ -54,8 +64,18 @@ CtsCorpOwnedManagedProfile2 = android_test_helper_app {
     name = "CtsCorpOwnedManagedProfile2";
     defaults = ["cts_defaults"];
     srcs = [
-        "src/**/*.java"
-        "src/**/I*.aidl"
+        "src/com/android/cts/comp/AdminReceiver.java"
+        "src/com/android/cts/comp/BindDeviceAdminServiceFailsTest.java"
+        "src/com/android/cts/comp/BindDeviceAdminServiceGoodSetupTest.java"
+        "src/com/android/cts/comp/DeviceWideLoggingFeaturesTest.java"
+        "src/com/android/cts/comp/ManagementTest.java"
+        "src/com/android/cts/comp/ProtectedCrossUserService.java"
+        "src/com/android/cts/comp/UnprotectedCrossUserService.java"
+        "src/com/android/cts/comp/Utils.java"
+        "src/com/android/cts/comp/provisioning/AffiliationTest.java"
+        "src/com/android/cts/comp/provisioning/ManagedProfileProvisioningTest.java"
+        "src/com/android/cts/comp/provisioning/UserRestrictionTest.java"
+        "src/com/android/cts/comp/ICrossUserService.aidl"
     ];
     aidl = {
         local_include_dirs = ["src"];

@@ -30,8 +30,8 @@ libChipsSample = android_app {
     sdk_version = "current";
 
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/ex/chips/sample/MainActivity.java"
+
     ];
     resource_dirs = ["res"];
 };

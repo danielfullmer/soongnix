@@ -69,7 +69,14 @@ bionic-benchmarks-extras-defaults = cc_defaults {
 bionic-benchmarks = cc_benchmark {
     name = "bionic-benchmarks";
     defaults = ["bionic-benchmarks-defaults"];
-    data = ["suites/*"];
+    data = [
+        "suites/example.xml"
+        "suites/memcmp.xml"
+        "suites/strcmp.xml"
+        "suites/string.xml"
+        "suites/strncmp.xml"
+        "suites/vdso.xml"
+    ];
     static_libs = [
         "libsystemproperties"
         "libasync_safe"
@@ -93,7 +100,14 @@ bionic-benchmarks-glibc = cc_benchmark_host {
             enabled = false;
         };
     };
-    data = ["suites/*"];
+    data = [
+        "suites/example.xml"
+        "suites/memcmp.xml"
+        "suites/strcmp.xml"
+        "suites/string.xml"
+        "suites/strncmp.xml"
+        "suites/vdso.xml"
+    ];
 };
 
 libBionicBenchmarksUtils = cc_library_static {
@@ -115,7 +129,16 @@ bionic-benchmarks-tests = cc_test {
         "libbase"
         "libBionicBenchmarksUtils"
     ];
-    data = ["test_suites/*"];
+    data = [
+        "test_suites/test_alignment_onebuf.xml"
+        "test_suites/test_alignment_onebuf_manual.xml"
+        "test_suites/test_alignment_twobuf.xml"
+        "test_suites/test_alignment_twobuf_manual.xml"
+        "test_suites/test_from_each.xml"
+        "test_suites/test_medium.xml"
+        "test_suites/test_size.xml"
+        "test_suites/test_small.xml"
+    ];
 };
 
 in { inherit bionic-benchmarks bionic-benchmarks-defaults bionic-benchmarks-extras-defaults bionic-benchmarks-glibc bionic-benchmarks-tests libBionicBenchmarksUtils; }

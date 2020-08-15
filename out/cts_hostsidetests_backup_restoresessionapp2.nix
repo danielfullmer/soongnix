@@ -24,7 +24,7 @@ CtsRestoreSessionApp2 = android_test_helper_app {
         "CtsRestoreSessionApp"
     ];
     srcs = [
-        "src/**/*.java"
+        "src/android/cts/backup/restoresessionapp2/RestoreSessionAppTest.java"
     ];
     #  tag this module as a cts test artifact
     test_suites = [

@@ -4,7 +4,14 @@ let
 FrameworksLocationTests = android_test {
     name = "FrameworksLocationTests";
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/location/CountryTester.java"
+        "src/android/location/GeocoderTest.java"
+        "src/android/location/GnssStatusTest.java"
+        "src/android/location/LocationManagerTest.java"
+        "src/android/location/LocationTest.java"
+        "src/android/location/SatelliteInfo.java"
+    ];
     libs = [
         "android.test.runner"
         "android.test.base"

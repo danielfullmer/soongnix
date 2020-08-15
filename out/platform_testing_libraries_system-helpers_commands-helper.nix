@@ -23,7 +23,7 @@ commands-helper = java_library {
         "ub-uiautomator"
         "android-support-test"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/CommandsHelper.java"];
     sdk_version = "current";
 };
 

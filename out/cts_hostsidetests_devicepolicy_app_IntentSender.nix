@@ -18,7 +18,14 @@ let
 CtsIntentSenderApp = android_test_helper_app {
     name = "CtsIntentSenderApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/intent/sender/AppLinkTest.java"
+        "src/com/android/cts/intent/sender/BasicContentProvider.java"
+        "src/com/android/cts/intent/sender/ContentTest.java"
+        "src/com/android/cts/intent/sender/CopyPasteTest.java"
+        "src/com/android/cts/intent/sender/IntentSenderActivity.java"
+        "src/com/android/cts/intent/sender/SuspendPackageTest.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "android.test.base.stubs"

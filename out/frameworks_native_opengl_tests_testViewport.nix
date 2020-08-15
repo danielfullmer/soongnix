@@ -7,7 +7,10 @@ let
 # ########################################################################
 TestViewport = android_app {
     name = "TestViewport";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/test/TestActivity.java"
+        "src/com/android/test/TestView.java"
+    ];
     sdk_version = "8";
 };
 

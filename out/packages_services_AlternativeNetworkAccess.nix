@@ -23,7 +23,13 @@ ONS = android_app {
     platform_apis = true;
     privileged = true;
     libs = ["telephony-common"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/ons/ONSAutoBoot.java"
+        "src/com/android/ons/ONSConfigInput.java"
+        "src/com/android/ons/ONSNetworkScanCtlr.java"
+        "src/com/android/ons/ONSProfileSelector.java"
+        "src/com/android/ons/OpportunisticNetworkService.java"
+    ];
     aaptflags = ["--auto-add-overlay"];
     certificate = "platform";
     optimize = {

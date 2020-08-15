@@ -7,7 +7,7 @@ libLLVMMipsAsmPrinter = cc_library_static {
         "llvm-lib-defaults"
         "llvm-mips-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["MipsInstPrinter.cpp"];
 };
 
 in { inherit libLLVMMipsAsmPrinter; }

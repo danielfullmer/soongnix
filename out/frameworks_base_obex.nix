@@ -19,7 +19,27 @@ let
 
 "javax.obex" = java_sdk_library {
     name = "javax.obex";
-    srcs = ["javax/**/*.java"];
+    srcs = [
+        "javax/obex/ApplicationParameter.java"
+        "javax/obex/Authenticator.java"
+        "javax/obex/BaseStream.java"
+        "javax/obex/ClientOperation.java"
+        "javax/obex/ClientSession.java"
+        "javax/obex/HeaderSet.java"
+        "javax/obex/ObexHelper.java"
+        "javax/obex/ObexPacket.java"
+        "javax/obex/ObexSession.java"
+        "javax/obex/ObexTransport.java"
+        "javax/obex/Operation.java"
+        "javax/obex/PasswordAuthentication.java"
+        "javax/obex/PrivateInputStream.java"
+        "javax/obex/PrivateOutputStream.java"
+        "javax/obex/ResponseCodes.java"
+        "javax/obex/ServerOperation.java"
+        "javax/obex/ServerRequestHandler.java"
+        "javax/obex/ServerSession.java"
+        "javax/obex/SessionNotifier.java"
+    ];
     api_packages = ["javax.obex"];
 };
 

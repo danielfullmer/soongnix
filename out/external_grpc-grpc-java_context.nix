@@ -21,7 +21,10 @@ grpc-java-context = java_library_static {
     name = "grpc-java-context";
     host_supported = true;
     srcs = [
-        "src/main/java/**/*.java"
+        "src/main/java/io/grpc/Context.java"
+        "src/main/java/io/grpc/Deadline.java"
+        "src/main/java/io/grpc/PersistentHashArrayMappedTrie.java"
+        "src/main/java/io/grpc/ThreadLocalContextStorage.java"
     ];
     libs = [
         "error_prone_annotations"

@@ -6,7 +6,11 @@ libLLVMBitReader = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "BitReader.cpp"
+        "BitcodeReader.cpp"
+        "BitstreamReader.cpp"
+    ];
 };
 
 in { inherit libLLVMBitReader; }

@@ -17,7 +17,13 @@ let
 
 ActivityManagerPerfTestsTestApp = android_test {
     name = "ActivityManagerPerfTestsTestApp";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/frameworks/perftests/amteststestapp/StartProcessService.java"
+        "src/com/android/frameworks/perftests/amteststestapp/TestApplication.java"
+        "src/com/android/frameworks/perftests/amteststestapp/TestBroadcastReceiver.java"
+        "src/com/android/frameworks/perftests/amteststestapp/TestContentProvider.java"
+        "src/com/android/frameworks/perftests/amteststestapp/TestService.java"
+    ];
     static_libs = ["ActivityManagerPerfTestsUtils"];
     min_sdk_version = "25";
     sdk_version = "current";

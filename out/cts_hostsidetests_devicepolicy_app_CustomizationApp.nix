@@ -24,7 +24,7 @@ CtsCustomizationApp = android_test_helper_app {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/customizationapp/CustomizationTest.java"];
     static_libs = [
         "androidx.test.rules"
         "compatibility-device-util-axt"

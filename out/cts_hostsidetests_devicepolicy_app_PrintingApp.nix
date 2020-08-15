@@ -18,7 +18,7 @@ let
 CtsDevicePolicyPrintingApp = android_test_helper_app {
     name = "CtsDevicePolicyPrintingApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/devicepolicy/printingapp/PrintActivity.java"];
     sdk_version = "current";
     #  tag this module as a cts test artifact
     test_suites = [

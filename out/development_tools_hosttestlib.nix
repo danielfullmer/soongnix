@@ -19,7 +19,13 @@ hosttestlib = java_library_host {
     name = "hosttestlib";
 
     #  Only compile source java files in this lib.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/hosttest/DeviceConnector.java"
+        "src/com/android/hosttest/DeviceTest.java"
+        "src/com/android/hosttest/DeviceTestCase.java"
+        "src/com/android/hosttest/DeviceTestRunner.java"
+        "src/com/android/hosttest/DeviceTestSuite.java"
+    ];
 
     libs = [
         "ddmlib-prebuilt"

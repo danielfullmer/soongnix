@@ -20,7 +20,7 @@ let
 car-theme-lib-bp = android_library {
     name = "car-theme-lib-bp";
 
-    srcs = ["src/**/*.java"];
+    srcs = [];
 
     resource_dirs = ["res"];
 

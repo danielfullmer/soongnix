@@ -31,7 +31,17 @@ CtsEphemeralTestsNormalApp = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/normalapp/ClientTest.java"
+        "src/com/android/cts/normalapp/ExposedActivity.java"
+        "src/com/android/cts/normalapp/ExposedProvider.java"
+        "src/com/android/cts/normalapp/ExposedService.java"
+        "src/com/android/cts/normalapp/NormalActivity.java"
+        "src/com/android/cts/normalapp/NormalProvider.java"
+        "src/com/android/cts/normalapp/NormalService.java"
+        "src/com/android/cts/normalapp/NormalWebActivity.java"
+        "src/com/android/cts/normalapp/SearchSuggestionProvider.java"
+    ];
     resource_dirs = ["res"];
     sdk_version = "system_current";
     min_sdk_version = "24";

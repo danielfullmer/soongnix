@@ -18,7 +18,11 @@ let
 CtsJobTestApp = android_test_helper_app {
     name = "CtsJobTestApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/jobscheduler/cts/jobtestapp/TestActivity.java"
+        "src/android/jobscheduler/cts/jobtestapp/TestJobSchedulerReceiver.java"
+        "src/android/jobscheduler/cts/jobtestapp/TestJobService.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

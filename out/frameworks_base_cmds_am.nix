@@ -6,7 +6,7 @@ let
 
 libinstrumentation = cc_library_host_static {
     name = "libinstrumentation";
-    srcs = ["**/*.proto"];
+    srcs = ["proto/instrumentation_data.proto"];
     cflags = [
         "-Wall"
         "-Werror"

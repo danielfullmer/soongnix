@@ -18,7 +18,13 @@ let
 CtsIntentReceiverApp = android_test_helper_app {
     name = "CtsIntentReceiverApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/intent/receiver/BroadcastIntentReceiver.java"
+        "src/com/android/cts/intent/receiver/ClearApplicationDataTest.java"
+        "src/com/android/cts/intent/receiver/IntentReceiverActivity.java"
+        "src/com/android/cts/intent/receiver/OwnerChangedBroadcastTest.java"
+        "src/com/android/cts/intent/receiver/SimpleIntentReceiverActivity.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "android.test.base.stubs"

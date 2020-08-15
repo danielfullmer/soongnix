@@ -18,7 +18,7 @@ let
 cts-tradefed-tests = java_library_host {
     name = "cts-tradefed-tests";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/compatibility/tradefed/CtsTradefedTest.java"];
 
     libs = [
         "tradefed"

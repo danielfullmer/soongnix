@@ -22,7 +22,30 @@ CollectorDeviceLibTest = android_test {
     name = "CollectorDeviceLibTest";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["android/**/*.java"];
+    srcs = [
+        "android/device/collectors/BaseCollectionListenerTest.java"
+        "android/device/collectors/BaseMetricListenerInstrumentedTest.java"
+        "android/device/collectors/BatteryStatsListenerTest.java"
+        "android/device/collectors/DumpsysMeminfoListenerTest.java"
+        "android/device/collectors/IncidentReportListenerTest.java"
+        "android/device/collectors/JankListenerTest.java"
+        "android/device/collectors/LogcatOnFailureCollectorTest.java"
+        "android/device/collectors/PerfettoListenerTest.java"
+        "android/device/collectors/ProcLoadListenerTest.java"
+        "android/device/collectors/ProcessShowmapListenerTest.java"
+        "android/device/collectors/RssSnapshotListenerTest.java"
+        "android/device/collectors/ScheduledRunCollectionListenerTest.java"
+        "android/device/collectors/ScheduledRunMetricListenerTest.java"
+        "android/device/collectors/ScreenRecordCollectorTest.java"
+        "android/device/collectors/ScreenshotOnFailureCollectorTest.java"
+        "android/device/collectors/SfStatsListenerTest.java"
+        "android/device/collectors/StubScheduledRunMetricListener.java"
+        "android/device/collectors/StubTestMetricListener.java"
+        "android/device/collectors/TotalPssMetricListenerTest.java"
+        "android/device/loggers/test/StubInstrumentationAnnotatedTest.java"
+        "android/device/preparers/GarbageCollectionPreparerTest.java"
+        "android/device/tests/TestEvents.java"
+    ];
     static_libs = [
         "androidx.test.runner"
         "collector-device-lib"

@@ -23,7 +23,9 @@ lib-test-profile-text-protos = java_genrule {
     tools = ["aprotoc"];
     srcs = [
         ":profile-proto-def"
-        "assets/*.textpb"
+        "assets/testIndexedScheduling_respectsSchedule.textpb"
+        "assets/testTimestampScheduling_respectsSchedule.textpb"
+        "assets/testTimestampScheduling_respectsSuiteTimeout.textpb"
     ];
     out = ["lib-test-profiles.jar"];
     /*
@@ -59,7 +61,18 @@ LongevityPlatformLibTests = android_test {
         "truth-prebuilt"
         "ub-uiautomator"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/longevity/LongevityClassRunnerTest.java"
+        "src/android/platform/test/longevity/LongevitySuiteTest.java"
+        "src/android/platform/test/longevity/ProfileSuiteTest.java"
+        "src/android/platform/test/longevity/ProfileTest.java"
+        "src/android/platform/test/longevity/ScenarioRunnerTest.java"
+        "src/android/platform/test/longevity/ScheduledScenarioRunnerTest.java"
+        "src/android/platform/test/longevity/listener/BatteryTerminatorTest.java"
+        "src/android/platform/test/longevity/listener/TimeoutTerminatorTest.java"
+        "src/android/platform/test/longevity/samples/testing/SampleBasicProfileSuite.java"
+        "src/android/platform/test/longevity/samples/testing/SampleTimedProfileSuite.java"
+    ];
     test_suites = ["device-tests"];
 };
 

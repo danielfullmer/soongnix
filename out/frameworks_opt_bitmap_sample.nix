@@ -20,8 +20,10 @@ bitmapcache-sample = android_app {
     static_libs = ["android-opt-bitmap"];
     sdk_version = "18";
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/example/bitmapsample/BitmapRequestKeyImpl.java"
+        "src/com/example/bitmapsample/BitmapView.java"
+        "src/com/example/bitmapsample/MainActivity.java"
+
     ];
     resource_dirs = ["res"];
 

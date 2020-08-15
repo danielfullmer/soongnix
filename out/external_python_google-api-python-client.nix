@@ -18,9 +18,22 @@ py-google-api-python-client = python_library {
     name = "py-google-api-python-client";
     host_supported = true;
     srcs = [
-        "googleapiclient/*.py"
-        "googleapiclient/discovery_cache/*.py"
-        "apiclient/*.py"
+        "googleapiclient/__init__.py"
+        "googleapiclient/_auth.py"
+        "googleapiclient/_helpers.py"
+        "googleapiclient/channel.py"
+        "googleapiclient/discovery.py"
+        "googleapiclient/errors.py"
+        "googleapiclient/http.py"
+        "googleapiclient/mimeparse.py"
+        "googleapiclient/model.py"
+        "googleapiclient/sample_tools.py"
+        "googleapiclient/schema.py"
+        "googleapiclient/discovery_cache/__init__.py"
+        "googleapiclient/discovery_cache/appengine_memcache.py"
+        "googleapiclient/discovery_cache/base.py"
+        "googleapiclient/discovery_cache/file_cache.py"
+        "apiclient/__init__.py"
     ];
     version = {
         py2 = {

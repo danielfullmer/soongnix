@@ -18,7 +18,10 @@ let
 ctstestserver = java_library {
     name = "ctstestserver";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/webkit/cts/CtsTestServer.java"
+        "src/android/webkit/cts/TestWebServer.java"
+    ];
 
     sdk_version = "16";
 

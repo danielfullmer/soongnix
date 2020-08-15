@@ -17,7 +17,7 @@ let
 
 cts-wm-components-base = filegroup {
     name = "cts-wm-components-base";
-    srcs = ["**/ComponentsBase.java"];
+    srcs = ["src/android/server/wm/component/ComponentsBase.java"];
 };
 
 in { inherit cts-wm-components-base; }

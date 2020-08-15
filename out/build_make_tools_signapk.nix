@@ -21,7 +21,10 @@ let
 #  ============================================================
 signapk = java_library_host {
     name = "signapk";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/signapk/CountingOutputStream.java"
+        "src/com/android/signapk/SignApk.java"
+    ];
     manifest = "SignApk.mf";
     static_libs = [
         "apksig"

@@ -20,7 +20,14 @@ let
 car-assist-client-lib = android_library {
     name = "car-assist-client-lib";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/assist/client/BundleBuilder.java"
+        "src/com/android/car/assist/client/CarAssistUtils.java"
+        "src/com/android/car/assist/client/FallbackAssistant.java"
+        "src/com/android/car/assist/client/tts/AndroidTextToSpeechEngine.java"
+        "src/com/android/car/assist/client/tts/TextToSpeechEngine.java"
+        "src/com/android/car/assist/client/tts/TextToSpeechHelper.java"
+    ];
 
     resource_dirs = ["res"];
 

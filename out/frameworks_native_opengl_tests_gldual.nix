@@ -9,7 +9,12 @@ let
 
 GLDual = android_app {
     name = "GLDual";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/gldual/GLDualActivity.java"
+        "src/com/android/gldual/GLDualGL2View.java"
+        "src/com/android/gldual/GLDualLib.java"
+        "src/com/android/gldual/TriangleRenderer.java"
+    ];
     sdk_version = "current";
     jni_libs = ["libgldualjni"];
 };

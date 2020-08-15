@@ -7,7 +7,10 @@ libLLVMX86Disassembler = cc_library_static {
         "llvm-lib-defaults"
         "llvm-x86-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "X86Disassembler.cpp"
+        "X86DisassemblerDecoder.cpp"
+    ];
 };
 
 in { inherit libLLVMX86Disassembler; }

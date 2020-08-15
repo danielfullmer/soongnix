@@ -30,7 +30,7 @@ CtsEphemeralTestsImplicitApp = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/implicitapp/ImplicitActivity.java"];
     resource_dirs = ["res"];
     sdk_version = "current";
     min_sdk_version = "24";

@@ -19,7 +19,10 @@ let
 
 captiveportal-lib = java_library {
     name = "captiveportal-lib";
-    srcs = ["common/**/*.java"];
+    srcs = [
+        "common/CaptivePortalProbeResult.java"
+        "common/CaptivePortalProbeSpec.java"
+    ];
     libs = [
         "androidx.annotation_annotation"
     ];
@@ -37,7 +40,50 @@ NetworkStackBase = android_library {
     name = "NetworkStackBase";
     defaults = ["NetworkStackCommon"];
     srcs = [
-        "src/**/*.java"
+        "src/android/net/NetworkStackIpMemoryStore.java"
+        "src/android/net/apf/ApfFilter.java"
+        "src/android/net/apf/ApfGenerator.java"
+        "src/android/net/dhcp/DhcpAckPacket.java"
+        "src/android/net/dhcp/DhcpClient.java"
+        "src/android/net/dhcp/DhcpDeclinePacket.java"
+        "src/android/net/dhcp/DhcpDiscoverPacket.java"
+        "src/android/net/dhcp/DhcpInformPacket.java"
+        "src/android/net/dhcp/DhcpLease.java"
+        "src/android/net/dhcp/DhcpLeaseRepository.java"
+        "src/android/net/dhcp/DhcpNakPacket.java"
+        "src/android/net/dhcp/DhcpOfferPacket.java"
+        "src/android/net/dhcp/DhcpPacket.java"
+        "src/android/net/dhcp/DhcpPacketListener.java"
+        "src/android/net/dhcp/DhcpReleasePacket.java"
+        "src/android/net/dhcp/DhcpRequestPacket.java"
+        "src/android/net/dhcp/DhcpServer.java"
+        "src/android/net/dhcp/DhcpServingParams.java"
+        "src/android/net/ip/ConnectivityPacketTracker.java"
+        "src/android/net/ip/IpClient.java"
+        "src/android/net/ip/IpClientLinkObserver.java"
+        "src/android/net/ip/IpNeighborMonitor.java"
+        "src/android/net/ip/IpReachabilityMonitor.java"
+        "src/android/net/util/ConnectivityPacketSummary.java"
+        "src/android/net/util/DataStallUtils.java"
+        "src/android/net/util/FdEventsReader.java"
+        "src/android/net/util/NetworkStackUtils.java"
+        "src/android/net/util/PacketReader.java"
+        "src/android/net/util/SharedLog.java"
+        "src/android/net/util/Stopwatch.java"
+        "src/com/android/networkstack/metrics/DataStallDetectionStats.java"
+        "src/com/android/networkstack/metrics/DataStallStatsUtils.java"
+        "src/com/android/networkstack/util/DnsUtils.java"
+        "src/com/android/server/NetworkObserver.java"
+        "src/com/android/server/NetworkObserverRegistry.java"
+        "src/com/android/server/NetworkStackService.java"
+        "src/com/android/server/connectivity/NetworkMonitor.java"
+        "src/com/android/server/connectivity/ipmemorystore/IpMemoryStoreDatabase.java"
+        "src/com/android/server/connectivity/ipmemorystore/IpMemoryStoreService.java"
+        "src/com/android/server/connectivity/ipmemorystore/RegularMaintenanceJobService.java"
+        "src/com/android/server/connectivity/ipmemorystore/RelevanceUtils.java"
+        "src/com/android/server/connectivity/ipmemorystore/Utils.java"
+        "src/com/android/server/util/NetworkStackConstants.java"
+        "src/com/android/server/util/PermissionUtil.java"
         ":framework-networkstack-shared-srcs"
         ":services-networkstack-shared-srcs"
         ":statslog-networkstack-java-gen"

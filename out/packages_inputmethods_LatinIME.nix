@@ -18,7 +18,13 @@ let
 dicttool_deps = filegroup {
     name = "dicttool_deps";
     srcs = [
-        "java/src/com/android/inputmethod/latin/makedict/**/*.java"
+        "java/src/com/android/inputmethod/latin/makedict/DictionaryHeader.java"
+        "java/src/com/android/inputmethod/latin/makedict/FormatSpec.java"
+        "java/src/com/android/inputmethod/latin/makedict/NgramProperty.java"
+        "java/src/com/android/inputmethod/latin/makedict/ProbabilityInfo.java"
+        "java/src/com/android/inputmethod/latin/makedict/UnsupportedFormatException.java"
+        "java/src/com/android/inputmethod/latin/makedict/WeightedString.java"
+        "java/src/com/android/inputmethod/latin/makedict/WordProperty.java"
 
         #  Dependencies for Dicttool. Most of these files are needed by BinaryDictionary.java. Note that
         #  a significant part of the dependencies are mocked in the compat/ directory, with empty or
@@ -37,7 +43,21 @@ dicttool_deps = filegroup {
         "java/src/com/android/inputmethod/latin/define/DecoderSpecificConstants.java"
 
         "tests/src/com/android/inputmethod/latin/utils/ByteArrayDictBuffer.java"
-        "tests/src/com/android/inputmethod/latin/makedict/**/*.java"
+        "tests/src/com/android/inputmethod/latin/makedict/AbstractDictDecoder.java"
+        "tests/src/com/android/inputmethod/latin/makedict/BinaryDictDecoderEncoderTests.java"
+        "tests/src/com/android/inputmethod/latin/makedict/BinaryDictDecoderUtils.java"
+        "tests/src/com/android/inputmethod/latin/makedict/BinaryDictEncoderUtils.java"
+        "tests/src/com/android/inputmethod/latin/makedict/BinaryDictIOUtils.java"
+        "tests/src/com/android/inputmethod/latin/makedict/BinaryDictUtils.java"
+        "tests/src/com/android/inputmethod/latin/makedict/DictDecoder.java"
+        "tests/src/com/android/inputmethod/latin/makedict/DictEncoder.java"
+        "tests/src/com/android/inputmethod/latin/makedict/FusionDictionary.java"
+        "tests/src/com/android/inputmethod/latin/makedict/MakedictLog.java"
+        "tests/src/com/android/inputmethod/latin/makedict/PendingAttribute.java"
+        "tests/src/com/android/inputmethod/latin/makedict/PtNodeInfo.java"
+        "tests/src/com/android/inputmethod/latin/makedict/Ver2DictEncoder.java"
+        "tests/src/com/android/inputmethod/latin/makedict/Ver4DictDecoder.java"
+        "tests/src/com/android/inputmethod/latin/makedict/Ver4DictEncoder.java"
     ];
 };
 

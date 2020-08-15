@@ -18,7 +18,33 @@ py-pyasn1-modules = python_library {
     name = "py-pyasn1-modules";
     host_supported = true;
     srcs = [
-        "*.py"
+        "__init__.py"
+        "pem.py"
+        "rfc1155.py"
+        "rfc1157.py"
+        "rfc1901.py"
+        "rfc1902.py"
+        "rfc1905.py"
+        "rfc2251.py"
+        "rfc2314.py"
+        "rfc2315.py"
+        "rfc2437.py"
+        "rfc2459.py"
+        "rfc2511.py"
+        "rfc2560.py"
+        "rfc3279.py"
+        "rfc3280.py"
+        "rfc3281.py"
+        "rfc3412.py"
+        "rfc3414.py"
+        "rfc3447.py"
+        "rfc3852.py"
+        "rfc4210.py"
+        "rfc4211.py"
+        "rfc5208.py"
+        "rfc5280.py"
+        "rfc5652.py"
+        "rfc6402.py"
     ];
     version = {
         py2 = {

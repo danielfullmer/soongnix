@@ -22,7 +22,11 @@ let
 cr = java_library {
     name = "cr";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/hp/creals/CR.java"
+        "src/com/hp/creals/StringFloatRep.java"
+        "src/com/hp/creals/UnaryCRFunction.java"
+    ];
 
     sdk_version = "19";
 

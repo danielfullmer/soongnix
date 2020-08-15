@@ -58,7 +58,11 @@ sysprop_test = cc_test_host {
     srcs = [
         "CppGen.cpp"
         "JavaGen.cpp"
-        "tests/*.cpp"
+        "tests/CodeWriterUnitTest.cpp"
+        "tests/CppGenTest.cpp"
+        "tests/DirectoryUtilUnitTest.cpp"
+        "tests/InvalidSyspropTest.cpp"
+        "tests/JavaGenTest.cpp"
     ];
 };
 

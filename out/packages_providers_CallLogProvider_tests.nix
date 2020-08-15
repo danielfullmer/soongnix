@@ -9,7 +9,10 @@ CallLogBackupTests = android_test {
         "android.test.base"
     ];
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/calllogbackup/CallLogBackupAgentTest.java"
+        "src/com/android/calllogbackup/MockitoHelper.java"
+    ];
     platform_apis = true;
     instrumentation_for = "CallLogBackup";
     certificate = "shared";

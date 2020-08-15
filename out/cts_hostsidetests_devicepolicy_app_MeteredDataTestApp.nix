@@ -18,7 +18,7 @@ let
 CtsMeteredDataTestApp = android_test_helper_app {
     name = "CtsMeteredDataTestApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/devicepolicy/metereddatatestapp/MainActivity.java"];
     #  Tag this module as a cts test artifact
     test_suites = [
         "arcts"

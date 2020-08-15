@@ -24,7 +24,7 @@ ConnectivityUIDTest = android_app {
     dex_preopt = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/tests/connectivity/uid/ConnectivityTestActivity.java"];
     resource_dirs = ["res"];
     privileged = true;
     optimize = {

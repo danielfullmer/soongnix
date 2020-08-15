@@ -20,7 +20,7 @@ let
 package-helper = java_library {
     name = "package-helper";
     libs = ["commands-helper"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/PackageHelper.java"];
     sdk_version = "current";
 };
 

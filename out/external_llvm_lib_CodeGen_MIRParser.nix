@@ -6,7 +6,11 @@ libLLVMMIRParser = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "MILexer.cpp"
+        "MIParser.cpp"
+        "MIRParser.cpp"
+    ];
 };
 
 in { inherit libLLVMMIRParser; }

@@ -690,7 +690,16 @@ libart_runtime_headers = cc_library_headers {
 "libart_mterp.arm" = genrule {
     name = "libart_mterp.arm";
     out = ["mterp_arm.S"];
-    srcs = ["interpreter/mterp/arm/*.S"];
+    srcs = [
+        "interpreter/mterp/arm/arithmetic.S"
+        "interpreter/mterp/arm/array.S"
+        "interpreter/mterp/arm/control_flow.S"
+        "interpreter/mterp/arm/floating_point.S"
+        "interpreter/mterp/arm/invoke.S"
+        "interpreter/mterp/arm/main.S"
+        "interpreter/mterp/arm/object.S"
+        "interpreter/mterp/arm/other.S"
+    ];
     tool_files = [
         "interpreter/mterp/gen_mterp.py"
         "interpreter/mterp/common/gen_setup.py"
@@ -701,7 +710,16 @@ libart_runtime_headers = cc_library_headers {
 "libart_mterp.arm64" = genrule {
     name = "libart_mterp.arm64";
     out = ["mterp_arm64.S"];
-    srcs = ["interpreter/mterp/arm64/*.S"];
+    srcs = [
+        "interpreter/mterp/arm64/arithmetic.S"
+        "interpreter/mterp/arm64/array.S"
+        "interpreter/mterp/arm64/control_flow.S"
+        "interpreter/mterp/arm64/floating_point.S"
+        "interpreter/mterp/arm64/invoke.S"
+        "interpreter/mterp/arm64/main.S"
+        "interpreter/mterp/arm64/object.S"
+        "interpreter/mterp/arm64/other.S"
+    ];
     tool_files = [
         "interpreter/mterp/gen_mterp.py"
         "interpreter/mterp/common/gen_setup.py"
@@ -712,7 +730,16 @@ libart_runtime_headers = cc_library_headers {
 "libart_mterp.mips" = genrule {
     name = "libart_mterp.mips";
     out = ["mterp_mips.S"];
-    srcs = ["interpreter/mterp/mips/*.S"];
+    srcs = [
+        "interpreter/mterp/mips/arithmetic.S"
+        "interpreter/mterp/mips/array.S"
+        "interpreter/mterp/mips/control_flow.S"
+        "interpreter/mterp/mips/floating_point.S"
+        "interpreter/mterp/mips/invoke.S"
+        "interpreter/mterp/mips/main.S"
+        "interpreter/mterp/mips/object.S"
+        "interpreter/mterp/mips/other.S"
+    ];
     tool_files = [
         "interpreter/mterp/gen_mterp.py"
         "interpreter/mterp/common/gen_setup.py"
@@ -723,7 +750,16 @@ libart_runtime_headers = cc_library_headers {
 "libart_mterp.mips64" = genrule {
     name = "libart_mterp.mips64";
     out = ["mterp_mips64.S"];
-    srcs = ["interpreter/mterp/mips64/*.S"];
+    srcs = [
+        "interpreter/mterp/mips64/arithmetic.S"
+        "interpreter/mterp/mips64/array.S"
+        "interpreter/mterp/mips64/control_flow.S"
+        "interpreter/mterp/mips64/floating_point.S"
+        "interpreter/mterp/mips64/invoke.S"
+        "interpreter/mterp/mips64/main.S"
+        "interpreter/mterp/mips64/object.S"
+        "interpreter/mterp/mips64/other.S"
+    ];
     tool_files = [
         "interpreter/mterp/gen_mterp.py"
         "interpreter/mterp/common/gen_setup.py"
@@ -734,7 +770,16 @@ libart_runtime_headers = cc_library_headers {
 "libart_mterp.x86" = genrule {
     name = "libart_mterp.x86";
     out = ["mterp_x86.S"];
-    srcs = ["interpreter/mterp/x86/*.S"];
+    srcs = [
+        "interpreter/mterp/x86/arithmetic.S"
+        "interpreter/mterp/x86/array.S"
+        "interpreter/mterp/x86/control_flow.S"
+        "interpreter/mterp/x86/floating_point.S"
+        "interpreter/mterp/x86/invoke.S"
+        "interpreter/mterp/x86/main.S"
+        "interpreter/mterp/x86/object.S"
+        "interpreter/mterp/x86/other.S"
+    ];
     tool_files = [
         "interpreter/mterp/gen_mterp.py"
         "interpreter/mterp/common/gen_setup.py"
@@ -745,7 +790,16 @@ libart_runtime_headers = cc_library_headers {
 "libart_mterp.x86_64" = genrule {
     name = "libart_mterp.x86_64";
     out = ["mterp_x86_64.S"];
-    srcs = ["interpreter/mterp/x86_64/*.S"];
+    srcs = [
+        "interpreter/mterp/x86_64/arithmetic.S"
+        "interpreter/mterp/x86_64/array.S"
+        "interpreter/mterp/x86_64/control_flow.S"
+        "interpreter/mterp/x86_64/floating_point.S"
+        "interpreter/mterp/x86_64/invoke.S"
+        "interpreter/mterp/x86_64/main.S"
+        "interpreter/mterp/x86_64/object.S"
+        "interpreter/mterp/x86_64/other.S"
+    ];
     tool_files = [
         "interpreter/mterp/gen_mterp.py"
         "interpreter/mterp/common/gen_setup.py"

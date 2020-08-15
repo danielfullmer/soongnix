@@ -22,7 +22,7 @@ business-card-app-helper = java_library {
     libs = [
         "app-helpers-handheld-interfaces"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/platform/helpers/BusinessCardHelperImpl.java"];
     sdk_version = "test_current";
 };
 

@@ -23,7 +23,10 @@ CtsJvmtiTrackingDeviceApp = android_test_helper_app {
     optimize = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/jvmti/cts/JvmtiTrackingTest.java"
+        "src/art/Main.java"
+    ];
     test_suites = [
         "cts"
         "vts"

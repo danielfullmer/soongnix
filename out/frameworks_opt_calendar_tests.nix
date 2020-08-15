@@ -18,7 +18,13 @@ let
 CalendarCommonTests = android_test {
     name = "CalendarCommonTests";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/calendarcommon2/DurationTest.java"
+        "src/com/android/calendarcommon2/EventRecurrenceTest.java"
+        "src/com/android/calendarcommon2/RRuleTest.java"
+        "src/com/android/calendarcommon2/RecurrenceProcessorTest.java"
+        "src/com/android/calendarcommon2/RecurrenceSetTest.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "android.test.base.stubs"

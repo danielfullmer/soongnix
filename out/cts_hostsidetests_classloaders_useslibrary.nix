@@ -18,7 +18,11 @@ let
 CtsUsesLibraryHostTestCases = java_test_host {
     name = "CtsUsesLibraryHostTestCases";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/classloaders/cts/BaseInstallMultiple.java"
+        "src/android/classloaders/cts/UsesLibraryHostTest.java"
+        "src/android/classloaders/cts/Utils.java"
+    ];
     libs = [
         "compatibility-host-util"
         "cts-tradefed"

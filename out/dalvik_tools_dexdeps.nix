@@ -19,7 +19,14 @@ dexdeps = java_binary_host {
     name = "dexdeps";
     manifest = "etc/manifest.txt";
     srcs = [
-        "src/**/*.java"
+        "src/com/android/dexdeps/ClassRef.java"
+        "src/com/android/dexdeps/DexData.java"
+        "src/com/android/dexdeps/DexDataException.java"
+        "src/com/android/dexdeps/FieldRef.java"
+        "src/com/android/dexdeps/Main.java"
+        "src/com/android/dexdeps/MethodRef.java"
+        "src/com/android/dexdeps/Output.java"
+        "src/com/android/dexdeps/UsageException.java"
     ];
     wrapper = "etc/dexdeps";
 };

@@ -23,7 +23,10 @@ CtsJvmtiAttachingDeviceApp = android_test_helper_app {
     optimize = {
         enabled = false;
     };
-    srcs = ["app/src/**/*.java"];
+    srcs = [
+        "app/src/android/jvmti/JvmtiActivity.java"
+        "app/src/android/jvmti/JvmtiApplication.java"
+    ];
     manifest = "app/AndroidManifest.xml";
     test_suites = [
         "cts"
@@ -81,7 +84,7 @@ libctsjvmtiattachagent = cc_library_shared {
 
 CtsJvmtiAttachingHostTestCases = java_test_host {
     name = "CtsJvmtiAttachingHostTestCases";
-    srcs = ["host/**/*.java"];
+    srcs = ["host/src/android/jvmti/cts/JvmtiAttachingHostTest.java"];
     libs = [
         "cts-tradefed"
         "tradefed"

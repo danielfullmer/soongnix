@@ -5,7 +5,7 @@ let
 
 WAPPushManager = android_app {
     name = "WAPPushManager";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/smspush/WapPushManager.java"];
     platform_apis = true;
     libs = ["telephony-common"];
     static_libs = ["android-common"];

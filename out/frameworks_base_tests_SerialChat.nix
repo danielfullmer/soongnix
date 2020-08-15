@@ -19,7 +19,7 @@ let
 
 SerialChat = android_test {
     name = "SerialChat";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/serialchat/SerialChat.java"];
     platform_apis = true;
 };
 

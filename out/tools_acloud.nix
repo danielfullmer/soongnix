@@ -73,10 +73,24 @@ acloud_test = python_test_host {
     srcs = [
         "acloud_test.py"
         "errors.py"
-        "public/*_test.py"
-        "public/actions/*_test.py"
-        "internal/lib/*_test.py"
-        "metrics/*.py"
+        "public/config_test.py"
+        "public/device_driver_test.py"
+        "public/report_test.py"
+        "public/actions/common_operations_test.py"
+        "public/actions/create_cuttlefish_action_test.py"
+        "public/actions/create_goldfish_action_test.py"
+        "internal/lib/adb_tools_test.py"
+        "internal/lib/android_build_client_test.py"
+        "internal/lib/android_compute_client_test.py"
+        "internal/lib/base_cloud_client_test.py"
+        "internal/lib/cheeps_compute_client_test.py"
+        "internal/lib/cvd_compute_client_test.py"
+        "internal/lib/gcompute_client_test.py"
+        "internal/lib/goldfish_compute_client_test.py"
+        "internal/lib/gstorage_client_test.py"
+        "internal/lib/utils_test.py"
+        "metrics/__init__.py"
+        "metrics/metrics.py"
     ];
     libs = [
         "acloud_create"
@@ -102,12 +116,33 @@ acloud_public = python_library_host {
     name = "acloud_public";
     defaults = ["acloud_default"];
     srcs = [
-        "public/*.py"
-        "public/actions/*.py"
+        "public/__init__.py"
+        "public/__main__.py"
+        "public/acloud_common.py"
+        "public/acloud_main.py"
+        "public/avd.py"
+        "public/config.py"
+        "public/config_test.py"
+        "public/device_driver.py"
+        "public/device_driver_test.py"
+        "public/report.py"
+        "public/report_test.py"
+        "public/actions/__init__.py"
+        "public/actions/base_device_factory.py"
+        "public/actions/common_operations.py"
+        "public/actions/common_operations_test.py"
+        "public/actions/create_cuttlefish_action.py"
+        "public/actions/create_cuttlefish_action_test.py"
+        "public/actions/create_goldfish_action.py"
+        "public/actions/create_goldfish_action_test.py"
     ];
     exclude_srcs = [
-        "public/*_test.py"
-        "public/actions/*_test.py"
+        "public/config_test.py"
+        "public/device_driver_test.py"
+        "public/report_test.py"
+        "public/actions/common_operations_test.py"
+        "public/actions/create_cuttlefish_action_test.py"
+        "public/actions/create_goldfish_action_test.py"
         "public/acloud_main.py"
     ];
 };
@@ -116,11 +151,43 @@ acloud_internal = python_library_host {
     name = "acloud_internal";
     defaults = ["acloud_default"];
     srcs = [
-        "internal/*.py"
-        "internal/lib/*.py"
+        "internal/__init__.py"
+        "internal/constants.py"
+        "internal/lib/__init__.py"
+        "internal/lib/adb_tools.py"
+        "internal/lib/adb_tools_test.py"
+        "internal/lib/android_build_client.py"
+        "internal/lib/android_build_client_test.py"
+        "internal/lib/android_compute_client.py"
+        "internal/lib/android_compute_client_test.py"
+        "internal/lib/auth.py"
+        "internal/lib/base_cloud_client.py"
+        "internal/lib/base_cloud_client_test.py"
+        "internal/lib/cheeps_compute_client.py"
+        "internal/lib/cheeps_compute_client_test.py"
+        "internal/lib/cvd_compute_client.py"
+        "internal/lib/cvd_compute_client_test.py"
+        "internal/lib/driver_test_lib.py"
+        "internal/lib/gcompute_client.py"
+        "internal/lib/gcompute_client_test.py"
+        "internal/lib/goldfish_compute_client.py"
+        "internal/lib/goldfish_compute_client_test.py"
+        "internal/lib/gstorage_client.py"
+        "internal/lib/gstorage_client_test.py"
+        "internal/lib/utils.py"
+        "internal/lib/utils_test.py"
     ];
     exclude_srcs = [
-        "internal/lib/*_test.py"
+        "internal/lib/adb_tools_test.py"
+        "internal/lib/android_build_client_test.py"
+        "internal/lib/android_compute_client_test.py"
+        "internal/lib/base_cloud_client_test.py"
+        "internal/lib/cheeps_compute_client_test.py"
+        "internal/lib/cvd_compute_client_test.py"
+        "internal/lib/gcompute_client_test.py"
+        "internal/lib/goldfish_compute_client_test.py"
+        "internal/lib/gstorage_client_test.py"
+        "internal/lib/utils_test.py"
     ];
 };
 
@@ -128,7 +195,8 @@ acloud_proto = python_library_host {
     name = "acloud_proto";
     defaults = ["acloud_default"];
     srcs = [
-        "internal/proto/*.proto"
+        "internal/proto/internal_config.proto"
+        "internal/proto/user_config.proto"
     ];
     proto = {
         canonical_path_from_root = false;
@@ -139,10 +207,22 @@ acloud_setup = python_library_host {
     name = "acloud_setup";
     defaults = ["acloud_default"];
     srcs = [
-        "setup/*.py"
+        "setup/__init__.py"
+        "setup/base_task_runner.py"
+        "setup/gcp_setup_runner.py"
+        "setup/gcp_setup_runner_test.py"
+        "setup/google_sdk.py"
+        "setup/host_setup_runner.py"
+        "setup/host_setup_runner_test.py"
+        "setup/setup.py"
+        "setup/setup_args.py"
+        "setup/setup_common.py"
+        "setup/setup_common_test.py"
     ];
     exclude_srcs = [
-        "setup/*_test.py"
+        "setup/gcp_setup_runner_test.py"
+        "setup/host_setup_runner_test.py"
+        "setup/setup_common_test.py"
     ];
 };
 
@@ -150,7 +230,26 @@ acloud_create = python_library_host {
     name = "acloud_create";
     defaults = ["acloud_default"];
     srcs = [
-        "create/*.py"
+        "create/__init__.py"
+        "create/avd_spec.py"
+        "create/avd_spec_test.py"
+        "create/base_avd_create.py"
+        "create/cheeps_remote_image_remote_instance.py"
+        "create/cheeps_remote_image_remote_instance_test.py"
+        "create/create.py"
+        "create/create_args.py"
+        "create/create_common.py"
+        "create/create_common_test.py"
+        "create/gce_local_image_remote_instance.py"
+        "create/gce_remote_image_remote_instance.py"
+        "create/goldfish_remote_image_remote_instance.py"
+        "create/local_image_local_instance.py"
+        "create/local_image_local_instance_test.py"
+        "create/local_image_remote_instance.py"
+        "create/local_image_remote_instance_test.py"
+        "create/remote_image_local_instance.py"
+        "create/remote_image_local_instance_test.py"
+        "create/remote_image_remote_instance.py"
     ];
 };
 
@@ -158,7 +257,10 @@ acloud_delete = python_library_host {
     name = "acloud_delete";
     defaults = ["acloud_default"];
     srcs = [
-        "delete/*.py"
+        "delete/__init__.py"
+        "delete/delete.py"
+        "delete/delete_args.py"
+        "delete/delete_test.py"
     ];
 };
 
@@ -166,7 +268,12 @@ acloud_list = python_library_host {
     name = "acloud_list";
     defaults = ["acloud_default"];
     srcs = [
-        "list/*.py"
+        "list/__init__.py"
+        "list/instance.py"
+        "list/instance_test.py"
+        "list/list.py"
+        "list/list_args.py"
+        "list/list_test.py"
     ];
 };
 
@@ -174,7 +281,10 @@ acloud_reconnect = python_library_host {
     name = "acloud_reconnect";
     defaults = ["acloud_default"];
     srcs = [
-        "reconnect/*.py"
+        "reconnect/__init__.py"
+        "reconnect/reconnect.py"
+        "reconnect/reconnect_args.py"
+        "reconnect/reconnect_test.py"
     ];
 };
 
@@ -182,7 +292,8 @@ acloud_metrics = python_library_host {
     name = "acloud_metrics";
     defaults = ["acloud_default"];
     srcs = [
-        "metrics/*.py"
+        "metrics/__init__.py"
+        "metrics/metrics.py"
     ];
     libs = [
         "asuite_cc_client"

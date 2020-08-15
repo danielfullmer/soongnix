@@ -20,7 +20,33 @@ let
 connected-device-lib = android_library {
     name = "connected-device-lib";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/connecteddevice/AssociationCallback.java"
+        "src/com/android/car/connecteddevice/ConnectedDeviceManager.java"
+        "src/com/android/car/connecteddevice/ble/BleCentralManager.java"
+        "src/com/android/car/connecteddevice/ble/BleDeviceMessageStream.java"
+        "src/com/android/car/connecteddevice/ble/BlePacketFactory.java"
+        "src/com/android/car/connecteddevice/ble/BlePacketFactoryException.java"
+        "src/com/android/car/connecteddevice/ble/BlePeripheralManager.java"
+        "src/com/android/car/connecteddevice/ble/CarBleCentralManager.java"
+        "src/com/android/car/connecteddevice/ble/CarBleManager.java"
+        "src/com/android/car/connecteddevice/ble/CarBlePeripheralManager.java"
+        "src/com/android/car/connecteddevice/ble/DeviceMessage.java"
+        "src/com/android/car/connecteddevice/ble/SecureBleChannel.java"
+        "src/com/android/car/connecteddevice/model/AssociatedDevice.java"
+        "src/com/android/car/connecteddevice/model/ConnectedDevice.java"
+        "src/com/android/car/connecteddevice/storage/AssociatedDeviceDao.java"
+        "src/com/android/car/connecteddevice/storage/AssociatedDeviceEntity.java"
+        "src/com/android/car/connecteddevice/storage/AssociatedDeviceKeyEntity.java"
+        "src/com/android/car/connecteddevice/storage/ConnectedDeviceDatabase.java"
+        "src/com/android/car/connecteddevice/storage/ConnectedDeviceStorage.java"
+        "src/com/android/car/connecteddevice/util/ByteUtils.java"
+        "src/com/android/car/connecteddevice/util/EventLog.java"
+        "src/com/android/car/connecteddevice/util/RemoteCallbackBinder.java"
+        "src/com/android/car/connecteddevice/util/SafeLog.java"
+        "src/com/android/car/connecteddevice/util/ScanDataAnalyzer.java"
+        "src/com/android/car/connecteddevice/util/ThreadSafeCallbacks.java"
+    ];
 
     manifest = "AndroidManifest.xml";
 

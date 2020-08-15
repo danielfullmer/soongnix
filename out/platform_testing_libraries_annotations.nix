@@ -20,7 +20,20 @@ let
 platform-test-annotations = java_library_static {
     name = "platform-test-annotations";
     host_supported = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/annotations/ApiTest.java"
+        "src/android/platform/test/annotations/AppModeFull.java"
+        "src/android/platform/test/annotations/AppModeInstant.java"
+        "src/android/platform/test/annotations/GlobalPresubmit.java"
+        "src/android/platform/test/annotations/HermeticTest.java"
+        "src/android/platform/test/annotations/Postsubmit.java"
+        "src/android/platform/test/annotations/Presubmit.java"
+        "src/android/platform/test/annotations/QualityTest.java"
+        "src/android/platform/test/annotations/RequiresDevice.java"
+        "src/android/platform/test/annotations/RestrictedBuildTest.java"
+        "src/android/platform/test/annotations/RootPermissionTest.java"
+        "src/android/platform/test/annotations/SecurityTest.java"
+    ];
     sdk_version = "current"; #  To allow use from CTS
 };
 

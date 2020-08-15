@@ -19,7 +19,11 @@ CtsViewInspectorAnnotationProcessorTestCases = android_test {
     name = "CtsViewInspectorAnnotationProcessorTestCases";
     sdk_version = "test_current";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/processor/view/inspector/cts/PlatformInspectableProcessorTest.java"
+        "src/android/processor/view/inspector/cts/TestPropertyMapper.java"
+        "src/android/processor/view/inspector/cts/TestPropertyReader.java"
+    ];
 
     plugins = ["view-inspector-annotation-processor"];
 

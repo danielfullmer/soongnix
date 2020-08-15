@@ -18,7 +18,7 @@ let
 CtsRollbackManagerHostTestCases = java_test_host {
     name = "CtsRollbackManagerHostTestCases";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/rollback/host/RollbackManagerHostTest.java"];
     libs = [
         "cts-tradefed"
         "tradefed"
@@ -33,7 +33,7 @@ CtsRollbackManagerHostTestCases = java_test_host {
 
 CtsRollbackManagerHostTestHelperApp = android_test_helper_app {
     name = "CtsRollbackManagerHostTestHelperApp";
-    srcs = ["app/src/**/*.java"];
+    srcs = ["app/src/com/android/cts/rollback/host/app/HostTestHelper.java"];
     static_libs = [
         "androidx.test.rules"
         "cts-rollback-lib"

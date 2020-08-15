@@ -17,7 +17,10 @@ let
 
 TouchLatencyJankTestWear = android_test {
     name = "TouchLatencyJankTestWear";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/wearable/touch/janktests/BouncingBallJankTest.java"
+        "src/com/android/wearable/touch/janktests/TouchLatencyHelper.java"
+    ];
 
     static_libs = [
         "ub-uiautomator"

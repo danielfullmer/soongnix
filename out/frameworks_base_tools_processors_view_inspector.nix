@@ -6,7 +6,14 @@ view-inspector-annotation-processor = java_plugin {
 
     processor_class = "android.processor.view.inspector.PlatformInspectableProcessor";
 
-    srcs = ["src/java/**/*.java"];
+    srcs = [
+        "src/java/android/processor/view/inspector/AnnotationUtils.java"
+        "src/java/android/processor/view/inspector/InspectableClassModel.java"
+        "src/java/android/processor/view/inspector/InspectablePropertyProcessor.java"
+        "src/java/android/processor/view/inspector/InspectionCompanionGenerator.java"
+        "src/java/android/processor/view/inspector/PlatformInspectableProcessor.java"
+        "src/java/android/processor/view/inspector/ProcessingException.java"
+    ];
     java_resource_dirs = ["src/resources"];
 
     static_libs = [
@@ -20,7 +27,7 @@ view-inspector-annotation-processor = java_plugin {
 view-inspector-annotation-processor-test = java_test_host {
     name = "view-inspector-annotation-processor-test";
 
-    srcs = ["test/java/**/*.java"];
+    srcs = ["test/java/android/processor/view/inspector/InspectionCompanionGeneratorTest.java"];
     java_resource_dirs = ["test/resources"];
 
     static_libs = [

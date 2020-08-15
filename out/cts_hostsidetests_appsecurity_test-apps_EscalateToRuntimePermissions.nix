@@ -21,7 +21,7 @@ CtsEscalateToRuntimePermissions = android_test {
     name = "CtsEscalateToRuntimePermissions";
     defaults = ["cts_support_defaults"];
     static_libs = ["androidx.test.rules"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/escalatepermission/PermissionEscalationTest.java"];
     sdk_version = "current";
     test_suites = [
         "cts"

@@ -19,7 +19,36 @@ SystemUIPluginLib = java_library {
 
     name = "SystemUIPluginLib";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/systemui/plugins/ActivityStarter.java"
+        "src/com/android/systemui/plugins/ClockPlugin.java"
+        "src/com/android/systemui/plugins/DarkIconDispatcher.java"
+        "src/com/android/systemui/plugins/DozeServicePlugin.java"
+        "src/com/android/systemui/plugins/FalsingManager.java"
+        "src/com/android/systemui/plugins/FalsingPlugin.java"
+        "src/com/android/systemui/plugins/FragmentBase.java"
+        "src/com/android/systemui/plugins/GlobalActions.java"
+        "src/com/android/systemui/plugins/GlobalActionsPanelPlugin.java"
+        "src/com/android/systemui/plugins/IntentButtonProvider.java"
+        "src/com/android/systemui/plugins/NotificationListenerController.java"
+        "src/com/android/systemui/plugins/OverlayPlugin.java"
+        "src/com/android/systemui/plugins/PluginDependency.java"
+        "src/com/android/systemui/plugins/PluginUtils.java"
+        "src/com/android/systemui/plugins/SensorManagerPlugin.java"
+        "src/com/android/systemui/plugins/ViewProvider.java"
+        "src/com/android/systemui/plugins/VolumeDialog.java"
+        "src/com/android/systemui/plugins/VolumeDialogController.java"
+        "src/com/android/systemui/plugins/qs/DetailAdapter.java"
+        "src/com/android/systemui/plugins/qs/QS.java"
+        "src/com/android/systemui/plugins/qs/QSFactory.java"
+        "src/com/android/systemui/plugins/qs/QSIconView.java"
+        "src/com/android/systemui/plugins/qs/QSTile.java"
+        "src/com/android/systemui/plugins/qs/QSTileView.java"
+        "src/com/android/systemui/plugins/statusbar/DozeParameters.java"
+        "src/com/android/systemui/plugins/statusbar/NotificationMenuRowPlugin.java"
+        "src/com/android/systemui/plugins/statusbar/NotificationSwipeActionHelper.java"
+        "src/com/android/systemui/plugins/statusbar/StatusBarStateController.java"
+    ];
 
     static_libs = [
         "PluginCoreLib"
@@ -32,7 +61,36 @@ PluginDummyLib = android_app {
     #  Dummy to generate .toc files.
     name = "PluginDummyLib";
     platform_apis = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/systemui/plugins/ActivityStarter.java"
+        "src/com/android/systemui/plugins/ClockPlugin.java"
+        "src/com/android/systemui/plugins/DarkIconDispatcher.java"
+        "src/com/android/systemui/plugins/DozeServicePlugin.java"
+        "src/com/android/systemui/plugins/FalsingManager.java"
+        "src/com/android/systemui/plugins/FalsingPlugin.java"
+        "src/com/android/systemui/plugins/FragmentBase.java"
+        "src/com/android/systemui/plugins/GlobalActions.java"
+        "src/com/android/systemui/plugins/GlobalActionsPanelPlugin.java"
+        "src/com/android/systemui/plugins/IntentButtonProvider.java"
+        "src/com/android/systemui/plugins/NotificationListenerController.java"
+        "src/com/android/systemui/plugins/OverlayPlugin.java"
+        "src/com/android/systemui/plugins/PluginDependency.java"
+        "src/com/android/systemui/plugins/PluginUtils.java"
+        "src/com/android/systemui/plugins/SensorManagerPlugin.java"
+        "src/com/android/systemui/plugins/ViewProvider.java"
+        "src/com/android/systemui/plugins/VolumeDialog.java"
+        "src/com/android/systemui/plugins/VolumeDialogController.java"
+        "src/com/android/systemui/plugins/qs/DetailAdapter.java"
+        "src/com/android/systemui/plugins/qs/QS.java"
+        "src/com/android/systemui/plugins/qs/QSFactory.java"
+        "src/com/android/systemui/plugins/qs/QSIconView.java"
+        "src/com/android/systemui/plugins/qs/QSTile.java"
+        "src/com/android/systemui/plugins/qs/QSTileView.java"
+        "src/com/android/systemui/plugins/statusbar/DozeParameters.java"
+        "src/com/android/systemui/plugins/statusbar/NotificationMenuRowPlugin.java"
+        "src/com/android/systemui/plugins/statusbar/NotificationSwipeActionHelper.java"
+        "src/com/android/systemui/plugins/statusbar/StatusBarStateController.java"
+    ];
 
     libs = ["SystemUIPluginLib"];
 

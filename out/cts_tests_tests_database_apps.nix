@@ -20,7 +20,7 @@ CtsProviderApp = android_test {
     sdk_version = "test_current";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/cts/providerapp/DummyProvider.java"
     ];
 
     test_suites = [

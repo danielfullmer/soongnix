@@ -17,7 +17,12 @@ let
 
 ONSTests = android_test {
     name = "ONSTests";
-    srcs = ["src/com/android/ons//**/*.java"];
+    srcs = [
+        "src/com/android/ons/ONSBaseTest.java"
+        "src/com/android/ons/ONSNetworkScanCtlrTest.java"
+        "src/com/android/ons/ONSProfileSelectorTest.java"
+        "src/com/android/ons/OpportunisticNetworkServiceTest.java"
+    ];
     libs = [
         "android.test.runner"
         "telephony-common"

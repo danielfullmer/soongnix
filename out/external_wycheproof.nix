@@ -19,7 +19,36 @@ let
 
 wycheproof = java_library_static {
     name = "wycheproof";
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/com/google/security/wycheproof/BouncyCastleAllTests.java"
+        "java/com/google/security/wycheproof/BouncyCastleTest.java"
+        "java/com/google/security/wycheproof/ConscryptTest.java"
+        "java/com/google/security/wycheproof/EcUtil.java"
+        "java/com/google/security/wycheproof/OpenJDKAllTests.java"
+        "java/com/google/security/wycheproof/OpenJDKTest.java"
+        "java/com/google/security/wycheproof/ProviderIndependentTest.java"
+        "java/com/google/security/wycheproof/RandomUtil.java"
+        "java/com/google/security/wycheproof/SpongyCastleAllTests.java"
+        "java/com/google/security/wycheproof/SpongyCastleTest.java"
+        "java/com/google/security/wycheproof/TestUtil.java"
+        "java/com/google/security/wycheproof/WycheproofRunner.java"
+        "java/com/google/security/wycheproof/testcases/AesEaxTest.java"
+        "java/com/google/security/wycheproof/testcases/AesGcmTest.java"
+        "java/com/google/security/wycheproof/testcases/BasicTest.java"
+        "java/com/google/security/wycheproof/testcases/BigIntegerTest.java"
+        "java/com/google/security/wycheproof/testcases/CipherInputStreamTest.java"
+        "java/com/google/security/wycheproof/testcases/CipherOutputStreamTest.java"
+        "java/com/google/security/wycheproof/testcases/DhTest.java"
+        "java/com/google/security/wycheproof/testcases/DhiesTest.java"
+        "java/com/google/security/wycheproof/testcases/DsaTest.java"
+        "java/com/google/security/wycheproof/testcases/EcKeyTest.java"
+        "java/com/google/security/wycheproof/testcases/EcdhTest.java"
+        "java/com/google/security/wycheproof/testcases/EcdsaTest.java"
+        "java/com/google/security/wycheproof/testcases/EciesTest.java"
+        "java/com/google/security/wycheproof/testcases/RsaEncryptionTest.java"
+        "java/com/google/security/wycheproof/testcases/RsaKeyTest.java"
+        "java/com/google/security/wycheproof/testcases/RsaSignatureTest.java"
+    ];
     exclude_srcs = [
         "java/com/google/security/wycheproof/SpongyCastleTest.java"
         "java/com/google/security/wycheproof/SpongyCastleAllTests.java"

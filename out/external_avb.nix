@@ -205,8 +205,27 @@ libavb_host_unittest = cc_test_host {
     ];
     data = [
         "avbtool"
-        "test/avbtool_signing_helper_*.py"
-        "test/data/*"
+        "test/avbtool_signing_helper_test.py"
+        "test/avbtool_signing_helper_with_files_test.py"
+        "test/data/atx_metadata.bin"
+        "test/data/atx_permanent_attributes.bin"
+        "test/data/atx_pik_certificate.bin"
+        "test/data/atx_product_id.bin"
+        "test/data/atx_psk_certificate.bin"
+        "test/data/atx_puk_certificate.bin"
+        "test/data/atx_unlock_challenge.bin"
+        "test/data/atx_unlock_credential.bin"
+        "test/data/large_blob.bin"
+        "test/data/small_blob.bin"
+        "test/data/test_file.bin"
+        "test/data/test_file.bin.sparse"
+        "test/data/testkey_atx_pik.pem"
+        "test/data/testkey_atx_prk.pem"
+        "test/data/testkey_atx_psk.pem"
+        "test/data/testkey_atx_puk.pem"
+        "test/data/testkey_rsa2048.pem"
+        "test/data/testkey_rsa4096.pem"
+        "test/data/testkey_rsa8192.pem"
     ];
     test_config = "test/libavb_host_unittest.xml";
     test_suites = ["general-tests"];

@@ -18,7 +18,22 @@ py-rsa = python_library {
     name = "py-rsa";
     host_supported = true;
     srcs = [
-        "*.py"
+        "__init__.py"
+        "_compat.py"
+        "asn1.py"
+        "cli.py"
+        "common.py"
+        "core.py"
+        "key.py"
+        "machine_size.py"
+        "parallel.py"
+        "pem.py"
+        "pkcs1.py"
+        "pkcs1_v2.py"
+        "prime.py"
+        "randnum.py"
+        "transform.py"
+        "util.py"
     ];
     libs = [
         "py-pyasn1"

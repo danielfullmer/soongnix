@@ -90,7 +90,7 @@ libprocinfo_test = cc_test {
     };
 
     data = [
-        "testdata/*"
+        "testdata/maps"
     ];
 
     test_suites = ["device-tests"];
@@ -119,7 +119,7 @@ libprocinfo_benchmark = cc_benchmark {
     };
 
     data = [
-        "testdata/*"
+        "testdata/maps"
     ];
 };
 

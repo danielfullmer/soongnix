@@ -18,7 +18,10 @@ let
 CtsAppWithData = android_test {
     name = "CtsAppWithData";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/appwithdata/CreatePrivateDataTest.java"
+        "src/com/android/cts/appwithdata/MyProvider.java"
+    ];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     libs = ["android.test.base.stubs"];

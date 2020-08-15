@@ -3,7 +3,10 @@ let
 
 DensityTest = android_test {
     name = "DensityTest";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/google/android/test/dpi/DpiTestActivity.java"
+        "src/com/google/android/test/dpi/DpiTestNoCompatActivity.java"
+    ];
     platform_apis = true;
     aaptflags = [
         "-c"

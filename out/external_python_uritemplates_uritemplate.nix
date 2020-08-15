@@ -18,7 +18,10 @@ py-uritemplate = python_library {
     name = "py-uritemplate";
     host_supported = true;
     srcs = [
-        "*.py"
+        "__init__.py"
+        "api.py"
+        "template.py"
+        "variable.py"
     ];
     version = {
         py2 = {

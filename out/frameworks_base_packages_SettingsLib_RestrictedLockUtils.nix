@@ -4,7 +4,7 @@ let
 SettingsLibRestrictedLockUtils = android_library {
     name = "SettingsLibRestrictedLockUtils";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/settingslib/RestrictedLockUtils.java"];
     resource_dirs = ["res"];
 
     libs = [

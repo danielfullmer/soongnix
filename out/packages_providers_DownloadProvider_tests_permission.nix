@@ -20,7 +20,7 @@ DownloadProviderPermissionTests = android_test {
     name = "DownloadProviderPermissionTests";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/providers/downloads/permission/tests/DownloadProviderPermissionsTest.java"
     ];
 
     libs = [

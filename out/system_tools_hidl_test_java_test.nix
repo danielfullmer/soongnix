@@ -43,7 +43,7 @@ hidl_test_java_native = cc_test {
 
 hidl_test_java_java = java_test {
     name = "hidl_test_java_java";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/commands/hidl_test_java/HidlTestJava.java"];
 
     static_libs = [
         "android.hidl.manager-V1.0-java"

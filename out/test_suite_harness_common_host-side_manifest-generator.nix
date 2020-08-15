@@ -18,7 +18,7 @@ let
 compatibility-manifest-generator = java_library_host {
     name = "compatibility-manifest-generator";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/compatibility/common/generator/ManifestGenerator.java"];
 
     static_libs = ["kxml2-2.3.0"];
 

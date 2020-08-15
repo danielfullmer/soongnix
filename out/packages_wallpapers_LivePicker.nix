@@ -25,7 +25,13 @@ let
 
 LiveWallpapersPicker = android_app {
     name = "LiveWallpapersPicker";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/wallpaper/livepicker/LiveWallpaperActivity.java"
+        "src/com/android/wallpaper/livepicker/LiveWallpaperChange.java"
+        "src/com/android/wallpaper/livepicker/LiveWallpaperListAdapter.java"
+        "src/com/android/wallpaper/livepicker/LiveWallpaperPreview.java"
+        "src/com/android/wallpaper/livepicker/widget/ConstraintViewPager.java"
+    ];
     required = ["android.software.live_wallpaper.xml"];
     platform_apis = true;
     certificate = "platform";

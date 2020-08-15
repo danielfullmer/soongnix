@@ -4,7 +4,7 @@ let
 FrameworksSaxTests = android_test {
     name = "FrameworksSaxTests";
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/sax/SafeSaxTest.java"];
     libs = [
         "android.test.runner"
         "android.test.base"

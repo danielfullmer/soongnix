@@ -25,7 +25,12 @@ WAPPushManagerTests = android_test {
     static_libs = ["junit"];
     #  Include all test java files.
     srcs = [
-        "src/**/*.java"
+        "src/com/android/smspush/unitTests/ClientTest.java"
+        "src/com/android/smspush/unitTests/DataVerify.java"
+        "src/com/android/smspush/unitTests/DrmReceiver.java"
+        "src/com/android/smspush/unitTests/ReceiverActivity.java"
+        "src/com/android/smspush/unitTests/ReceiverService.java"
+        "src/com/android/smspush/unitTests/WapPushTest.java"
         "src/com/android/smspush/unitTests/IDataVerify.aidl"
     ];
     #  Notice that we don't have to include the src files of Email

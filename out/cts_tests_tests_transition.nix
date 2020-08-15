@@ -31,7 +31,36 @@ CtsTransitionTestCases = android_test {
 
     libs = ["android.test.runner.stubs"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/transition/cts/ActivityTransitionTest.java"
+        "src/android/transition/cts/ArcMotionTest.java"
+        "src/android/transition/cts/BaseTransitionTest.java"
+        "src/android/transition/cts/CaptureValuesTest.java"
+        "src/android/transition/cts/ChangeBoundsTest.java"
+        "src/android/transition/cts/ChangeClipBoundsTest.java"
+        "src/android/transition/cts/ChangeImageTransformTest.java"
+        "src/android/transition/cts/ChangeScrollTest.java"
+        "src/android/transition/cts/ChangeTransformTest.java"
+        "src/android/transition/cts/ExplodeTest.java"
+        "src/android/transition/cts/FadeTest.java"
+        "src/android/transition/cts/PathMotionTest.java"
+        "src/android/transition/cts/PatternPathMotionTest.java"
+        "src/android/transition/cts/PropagationTest.java"
+        "src/android/transition/cts/SceneTest.java"
+        "src/android/transition/cts/SharedElementCallbackTest.java"
+        "src/android/transition/cts/SlideBadEdgeTest.java"
+        "src/android/transition/cts/SlideDefaultEdgeTest.java"
+        "src/android/transition/cts/SlideEdgeTest.java"
+        "src/android/transition/cts/TargetActivity.java"
+        "src/android/transition/cts/TrackingVisibilityWithAnimator.java"
+        "src/android/transition/cts/TransitionActivity.java"
+        "src/android/transition/cts/TransitionInflaterTest.java"
+        "src/android/transition/cts/TransitionListenerAdapterTest.java"
+        "src/android/transition/cts/TransitionManagerTest.java"
+        "src/android/transition/cts/TransitionSetTest.java"
+        "src/android/transition/cts/TransitionTest.java"
+        "src/android/transition/cts/VisibilityTest.java"
+    ];
 
     test_suites = [
         "cts"

@@ -3,7 +3,7 @@ let
 
 HTMLViewer = android_app {
     name = "HTMLViewer";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/htmlviewer/HTMLViewerActivity.java"];
     sdk_version = "current";
 };
 

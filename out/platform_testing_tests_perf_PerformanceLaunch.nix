@@ -20,7 +20,21 @@ PerformanceLaunch = android_test {
     name = "PerformanceLaunch";
     platform_apis = true;
     certificate = "platform";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/performanceLaunch/ComplexLayoutActivity.java"
+        "src/com/android/performanceLaunch/DispatchActivity.java"
+        "src/com/android/performanceLaunch/EmptyActivity.java"
+        "src/com/android/performanceLaunch/EmptyWebViewActivity.java"
+        "src/com/android/performanceLaunch/ImageActivity.java"
+        "src/com/android/performanceLaunch/ManyConfigResourceActivity.java"
+        "src/com/android/performanceLaunch/SimpleActivity.java"
+        "src/com/android/performanceLaunch/SimpleSurfaceGLActivity.java"
+        "src/com/android/performanceLaunch/SimpleWebViewActivity.java"
+        "src/com/android/performanceLaunch/helper/SimpleGLRenderer.java"
+        "src/com/android/performanceLaunch/helper/SimpleGLSurfaceView.java"
+        "src/com/android/performanceLaunch/helper/Square.java"
+        "src/com/android/performanceLaunch/helper/Triangle.java"
+    ];
 
     test_suites = ["device-tests"];
 };

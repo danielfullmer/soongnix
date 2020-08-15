@@ -18,7 +18,11 @@ let
 CtsDevicePolicyAssistApp = android_test_helper_app {
     name = "CtsDevicePolicyAssistApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/devicepolicy/assistapp/MyInteractionService.java"
+        "src/com/android/cts/devicepolicy/assistapp/MyInteractionSessionService.java"
+        "src/com/android/cts/devicepolicy/assistapp/SettingsActivity.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

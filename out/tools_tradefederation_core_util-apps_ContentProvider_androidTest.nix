@@ -20,7 +20,7 @@ TradefedContentProviderTest = android_test {
     name = "TradefedContentProviderTest";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/tradefed/contentprovider/ManagedFileContentProviderTest.java"];
     static_libs = [
         "androidx.test.runner"
         "junit"

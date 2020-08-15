@@ -19,7 +19,7 @@ let
 
 BackgroundDexOptServiceIntegrationTests = android_test {
     name = "BackgroundDexOptServiceIntegrationTests";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/server/pm/BackgroundDexOptServiceIntegrationTests.java"];
     static_libs = ["androidx.test.rules"];
     platform_apis = true;
     test_suites = ["device-tests"];

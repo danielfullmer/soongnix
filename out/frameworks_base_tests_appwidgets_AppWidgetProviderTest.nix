@@ -3,7 +3,7 @@ let
 
 AppWidgetProvider = android_app {
     name = "AppWidgetProvider";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/tests/appwidgetprovider/TestAppWidgetProvider.java"];
     sdk_version = "current";
     certificate = "platform";
 };

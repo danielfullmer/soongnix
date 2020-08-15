@@ -17,7 +17,12 @@ let
 
 CtsJvmtiDeviceAppBase = java_library {
     name = "CtsJvmtiDeviceAppBase";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/android/jvmti/JvmtiActivity.java"
+        "src/android/jvmti/cts/JvmtiErrors.java"
+        "src/android/jvmti/cts/JvmtiTestBase.java"
+        "src/art/CtsMain.java"
+    ];
     sdk_version = "test_current";
     dex_preopt = {
         enabled = false;

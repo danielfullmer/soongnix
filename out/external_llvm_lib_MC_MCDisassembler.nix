@@ -6,7 +6,13 @@ libLLVMMCDisassembler = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "Disassembler.cpp"
+        "MCDisassembler.cpp"
+        "MCExternalSymbolizer.cpp"
+        "MCRelocationInfo.cpp"
+        "MCSymbolizer.cpp"
+    ];
 };
 
 in { inherit libLLVMMCDisassembler; }

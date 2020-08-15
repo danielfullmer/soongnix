@@ -21,7 +21,7 @@ AaptTestStaticLib_App = android_test {
 
     name = "AaptTestStaticLib_App";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/aapt/app/one/AppOne.java"];
     asset_dirs = [
         "assets"
         "assets2"

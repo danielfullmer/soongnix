@@ -18,7 +18,14 @@ let
 calendar-common = java_library {
     name = "calendar-common";
     sdk_version = "15";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/calendarcommon2/DateException.java"
+        "src/com/android/calendarcommon2/Duration.java"
+        "src/com/android/calendarcommon2/EventRecurrence.java"
+        "src/com/android/calendarcommon2/ICalendar.java"
+        "src/com/android/calendarcommon2/RecurrenceProcessor.java"
+        "src/com/android/calendarcommon2/RecurrenceSet.java"
+    ];
 };
 
 in { inherit calendar-common; }

@@ -5,7 +5,7 @@ FrameworksCoreFeatureFlagTests = android_test {
     name = "FrameworksCoreFeatureFlagTests";
     #  We only want this apk build for tests.
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/util/FeatureFlagUtilsTest.java"];
     dxflags = ["--core-library"];
     static_libs = [
         "android-common"

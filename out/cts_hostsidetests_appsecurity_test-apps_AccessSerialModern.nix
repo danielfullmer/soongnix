@@ -24,7 +24,7 @@ CtsAccessSerialModern = android_test {
         "compatibility-device-util-axt"
         "androidx.test.rules"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/os/cts/AccessSerialModernTest.java"];
     sdk_version = "test_current";
     min_sdk_version = "27";
     test_suites = [

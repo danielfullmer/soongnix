@@ -19,10 +19,7 @@ TestSmsApp22 = android_test {
     name = "TestSmsApp22";
     sdk_version = "test_current";
 
-    srcs = [
-        "src/**/*.kt"
-        "src/**/*.java"
-    ];
+    srcs = ["src/android/telephony/cts/sms23/MainActivity.java"];
 
     static_libs = [
         "compatibility-device-util-axt"

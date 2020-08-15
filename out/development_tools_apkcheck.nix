@@ -19,7 +19,17 @@ apkcheck = java_binary_host {
     name = "apkcheck";
     wrapper = "etc/apkcheck";
     manifest = "etc/manifest.txt";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/apkcheck/ApiDescrHandler.java"
+        "src/com/android/apkcheck/ApiList.java"
+        "src/com/android/apkcheck/ApkCheck.java"
+        "src/com/android/apkcheck/Builtin.java"
+        "src/com/android/apkcheck/ClassInfo.java"
+        "src/com/android/apkcheck/FieldInfo.java"
+        "src/com/android/apkcheck/MethodInfo.java"
+        "src/com/android/apkcheck/PackageInfo.java"
+        "src/com/android/apkcheck/TypeUtils.java"
+    ];
 };
 
 in { inherit apkcheck; }

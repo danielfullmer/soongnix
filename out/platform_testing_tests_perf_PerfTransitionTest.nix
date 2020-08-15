@@ -19,7 +19,10 @@ AppTransitionTests = android_test {
     name = "AppTransitionTests";
 
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/apptransition/tests/AppTransitionTests.java"
+        "src/com/android/apptransition/tests/LatencyTests.java"
+    ];
 
     platform_apis = true;
     certificate = "platform";

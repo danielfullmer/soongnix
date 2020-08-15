@@ -19,7 +19,13 @@ compatibility-host-util-tests = java_test_host {
     name = "compatibility-host-util-tests";
     defaults = ["cts_error_prone_rules"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/util/BusinessLogicHostExecutorTest.java"
+        "src/com/android/compatibility/common/util/DynamicConfigHandlerTest.java"
+        "src/com/android/compatibility/common/util/HostUnitTests.java"
+        "src/com/android/compatibility/common/util/ModuleResultTest.java"
+        "src/com/android/compatibility/common/util/TestFilterTest.java"
+    ];
 
     static_libs = [
         "objenesis-host"

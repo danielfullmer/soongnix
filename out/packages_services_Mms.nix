@@ -23,7 +23,21 @@ MmsService = android_app {
     platform_apis = true;
     privileged = true;
     libs = ["telephony-common"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/mms/service/ApnSettings.java"
+        "src/com/android/mms/service/DownloadRequest.java"
+        "src/com/android/mms/service/LogUtil.java"
+        "src/com/android/mms/service/MmsConfigManager.java"
+        "src/com/android/mms/service/MmsHttpClient.java"
+        "src/com/android/mms/service/MmsNetworkManager.java"
+        "src/com/android/mms/service/MmsRequest.java"
+        "src/com/android/mms/service/MmsService.java"
+        "src/com/android/mms/service/PhoneUtils.java"
+        "src/com/android/mms/service/SendRequest.java"
+        "src/com/android/mms/service/exception/ApnException.java"
+        "src/com/android/mms/service/exception/MmsHttpException.java"
+        "src/com/android/mms/service/exception/MmsNetworkException.java"
+    ];
     resource_dirs = ["res"];
     aaptflags = ["--auto-add-overlay"];
     optimize = {

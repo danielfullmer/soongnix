@@ -24,7 +24,13 @@ BstatsTestApp = android_test_helper_app {
 
     static_libs = ["coretests-aidl"];
 
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/coretests/apps/bstatstestapp/BaseCmdReceiver.java"
+        "src/com/android/coretests/apps/bstatstestapp/Common.java"
+        "src/com/android/coretests/apps/bstatstestapp/IsolatedTestService.java"
+        "src/com/android/coretests/apps/bstatstestapp/TestActivity.java"
+        "src/com/android/coretests/apps/bstatstestapp/TestService.java"
+    ];
 
     sdk_version = "current";
     certificate = "platform";

@@ -18,7 +18,15 @@ let
 coretests-aidl = java_test {
     name = "coretests-aidl";
     sdk_version = "current";
-    srcs = ["**/*.aidl"];
+    srcs = [
+        "com/android/frameworks/coretests/aidl/IBinderProxyCountingService.aidl"
+        "com/android/frameworks/coretests/aidl/IBpcCallbackObserver.aidl"
+        "com/android/frameworks/coretests/aidl/IBpcTestAppCmdService.aidl"
+        "com/android/frameworks/coretests/aidl/IBpcTestServiceCmdService.aidl"
+        "com/android/frameworks/coretests/aidl/ICmdCallback.aidl"
+        "com/android/frameworks/coretests/aidl/ICmdReceiver.aidl"
+        "com/android/frameworks/coretests/aidl/ITestRemoteCallback.aidl"
+    ];
 };
 
 in { inherit coretests-aidl; }

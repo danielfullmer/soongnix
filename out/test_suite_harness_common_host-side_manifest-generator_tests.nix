@@ -18,7 +18,7 @@ let
 compatibility-manifest-generator-tests = java_test_host {
     name = "compatibility-manifest-generator-tests";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/compatibility/common/generator/ManifestGeneratorTest.java"];
 
     libs = [
         "compatibility-manifest-generator"

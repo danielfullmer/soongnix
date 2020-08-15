@@ -7,7 +7,11 @@ libLLVMX86AsmPrinter = cc_library_static {
         "llvm-lib-defaults"
         "llvm-x86-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "X86ATTInstPrinter.cpp"
+        "X86InstComments.cpp"
+        "X86IntelInstPrinter.cpp"
+    ];
 };
 
 in { inherit libLLVMX86AsmPrinter; }

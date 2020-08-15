@@ -18,7 +18,12 @@ let
 compatibility-device-preconditions = java_library {
     name = "compatibility-device-preconditions";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/preconditions/ExternalStorageHelper.java"
+        "src/com/android/compatibility/common/preconditions/ScreenLockHelper.java"
+        "src/com/android/compatibility/common/preconditions/TelephonyHelper.java"
+        "src/com/android/compatibility/common/preconditions/WifiHelper.java"
+    ];
 
     static_libs = ["compatibility-common-util-devicesidelib"];
 

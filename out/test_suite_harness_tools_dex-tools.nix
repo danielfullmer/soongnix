@@ -20,7 +20,34 @@ let
 dex-tools = java_library_host {
     name = "dex-tools";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/dex/reader/DexAnnotationAttributeImpl.java"
+        "src/dex/reader/DexAnnotationImpl.java"
+        "src/dex/reader/DexBuffer.java"
+        "src/dex/reader/DexClassImpl.java"
+        "src/dex/reader/DexEncodedAnnotationImpl.java"
+        "src/dex/reader/DexEncodedValueImpl.java"
+        "src/dex/reader/DexFieldImpl.java"
+        "src/dex/reader/DexFileImpl.java"
+        "src/dex/reader/DexFileReader.java"
+        "src/dex/reader/DexMethodImpl.java"
+        "src/dex/reader/DexParameterImpl.java"
+        "src/dex/reader/TypeFormatter.java"
+        "src/dex/structure/DexAnnotatedElement.java"
+        "src/dex/structure/DexAnnotation.java"
+        "src/dex/structure/DexAnnotationAttribute.java"
+        "src/dex/structure/DexClass.java"
+        "src/dex/structure/DexEncodedAnnotation.java"
+        "src/dex/structure/DexEncodedValue.java"
+        "src/dex/structure/DexEncodedValueType.java"
+        "src/dex/structure/DexField.java"
+        "src/dex/structure/DexFile.java"
+        "src/dex/structure/DexInterface.java"
+        "src/dex/structure/DexMethod.java"
+        "src/dex/structure/DexParameter.java"
+        "src/dex/structure/NamedElement.java"
+        "src/dex/structure/WithModifiers.java"
+    ];
 
     libs = ["dx"];
 };

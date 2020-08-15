@@ -17,7 +17,7 @@ let
 
 native-processes-memory-test = java_test_host {
     name = "native-processes-memory-test";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/tests/nativeprocesses/NativeProcessesMemoryTest.java"];
 
     libs = ["tradefed"];
     test_suites = ["general-tests"];

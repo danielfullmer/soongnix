@@ -18,7 +18,7 @@ let
 dt_early_mount_test = python_test {
     name = "dt_early_mount_test";
     srcs = [
-        "**/*.py"
+        "dt_early_mount_test.py"
     ];
     version = {
         py2 = {

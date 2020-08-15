@@ -20,7 +20,32 @@ MagickWand = cc_library_static {
 
     sdk_version = "24";
 
-    srcs = ["*.c"];
+    srcs = [
+        "animate.c"
+        "compare.c"
+        "composite.c"
+        "conjure.c"
+        "convert.c"
+        "deprecate.c"
+        "display.c"
+        "drawing-wand.c"
+        "identify.c"
+        "import.c"
+        "magick-cli.c"
+        "magick-image.c"
+        "magick-property.c"
+        "magick-wand.c"
+        "mogrify.c"
+        "montage.c"
+        "operation.c"
+        "pixel-iterator.c"
+        "pixel-wand.c"
+        "script-token.c"
+        "stream.c"
+        "wand-view.c"
+        "wand.c"
+        "wandcli.c"
+    ];
 
     cflags = [
         "-DHAVE_CONFIG_H"

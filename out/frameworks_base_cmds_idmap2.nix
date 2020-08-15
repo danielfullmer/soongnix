@@ -133,7 +133,18 @@ idmap2_tests = cc_test {
             ];
         };
     };
-    data = ["tests/data/**/*.apk"];
+    data = [
+        "tests/data/overlay/overlay-no-name-static.apk"
+        "tests/data/overlay/overlay-no-name.apk"
+        "tests/data/overlay/overlay-static-1.apk"
+        "tests/data/overlay/overlay-static-2.apk"
+        "tests/data/overlay/overlay.apk"
+        "tests/data/signature-overlay/signature-overlay.apk"
+        "tests/data/system-overlay/system-overlay.apk"
+        "tests/data/system-overlay-invalid/system-overlay-invalid.apk"
+        "tests/data/target/target-no-overlayable.apk"
+        "tests/data/target/target.apk"
+    ];
 };
 
 idmap2 = cc_binary {

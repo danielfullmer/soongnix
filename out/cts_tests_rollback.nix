@@ -17,7 +17,7 @@ let
 
 CtsRollbackManagerTestCases = android_test {
     name = "CtsRollbackManagerTestCases";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/server/cts/rollback/RollbackManagerTest.java"];
     static_libs = [
         "androidx.test.rules"
         "cts-rollback-lib"

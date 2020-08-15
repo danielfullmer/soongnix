@@ -33,9 +33,29 @@ libphotoviewer_appcompat = android_library {
 
     sdk_version = "current";
     srcs = [
-        "src/**/*.java"
-        "appcompat/src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/ex/photo/ActionBarInterface.java"
+        "src/com/android/ex/photo/Intents.java"
+        "src/com/android/ex/photo/PhotoViewCallbacks.java"
+        "src/com/android/ex/photo/PhotoViewController.java"
+        "src/com/android/ex/photo/PhotoViewPager.java"
+        "src/com/android/ex/photo/adapters/BaseCursorPagerAdapter.java"
+        "src/com/android/ex/photo/adapters/BaseFragmentPagerAdapter.java"
+        "src/com/android/ex/photo/adapters/PhotoPagerAdapter.java"
+        "src/com/android/ex/photo/fragments/PhotoViewFragment.java"
+        "src/com/android/ex/photo/loaders/PhotoBitmapLoader.java"
+        "src/com/android/ex/photo/loaders/PhotoBitmapLoaderInterface.java"
+        "src/com/android/ex/photo/loaders/PhotoPagerLoader.java"
+        "src/com/android/ex/photo/provider/PhotoContract.java"
+        "src/com/android/ex/photo/util/Exif.java"
+        "src/com/android/ex/photo/util/ImageUtils.java"
+        "src/com/android/ex/photo/util/InputStreamBuffer.java"
+        "src/com/android/ex/photo/util/Trace.java"
+        "src/com/android/ex/photo/util/Util.java"
+        "src/com/android/ex/photo/views/PhotoView.java"
+        "src/com/android/ex/photo/views/ProgressBarWrapper.java"
+        "appcompat/src/com/android/ex/photo/ActionBarWrapper.java"
+        "appcompat/src/com/android/ex/photo/PhotoViewActivity.java"
+
     ];
 
     resource_dirs = [
@@ -61,9 +81,29 @@ libphotoviewer = android_library {
 
     sdk_version = "current";
     srcs = [
-        "src/**/*.java"
-        "activity/src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/ex/photo/ActionBarInterface.java"
+        "src/com/android/ex/photo/Intents.java"
+        "src/com/android/ex/photo/PhotoViewCallbacks.java"
+        "src/com/android/ex/photo/PhotoViewController.java"
+        "src/com/android/ex/photo/PhotoViewPager.java"
+        "src/com/android/ex/photo/adapters/BaseCursorPagerAdapter.java"
+        "src/com/android/ex/photo/adapters/BaseFragmentPagerAdapter.java"
+        "src/com/android/ex/photo/adapters/PhotoPagerAdapter.java"
+        "src/com/android/ex/photo/fragments/PhotoViewFragment.java"
+        "src/com/android/ex/photo/loaders/PhotoBitmapLoader.java"
+        "src/com/android/ex/photo/loaders/PhotoBitmapLoaderInterface.java"
+        "src/com/android/ex/photo/loaders/PhotoPagerLoader.java"
+        "src/com/android/ex/photo/provider/PhotoContract.java"
+        "src/com/android/ex/photo/util/Exif.java"
+        "src/com/android/ex/photo/util/ImageUtils.java"
+        "src/com/android/ex/photo/util/InputStreamBuffer.java"
+        "src/com/android/ex/photo/util/Trace.java"
+        "src/com/android/ex/photo/util/Util.java"
+        "src/com/android/ex/photo/views/PhotoView.java"
+        "src/com/android/ex/photo/views/ProgressBarWrapper.java"
+        "activity/src/com/android/ex/photo/ActionBarWrapper.java"
+        "activity/src/com/android/ex/photo/PhotoViewActivity.java"
+
     ];
 
     resource_dirs = [

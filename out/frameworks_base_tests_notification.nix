@@ -4,7 +4,7 @@ let
 NotificationTests = android_test {
     name = "NotificationTests";
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/frameworks/tests/notification/NotificationTests.java"];
     libs = ["android.test.runner.stubs"];
     sdk_version = "21";
 };

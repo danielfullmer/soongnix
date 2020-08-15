@@ -140,7 +140,7 @@ libiorap-manager = cc_library_static {
     ];
 
     srcs = [
-        "src/manager/**/*.cc"
+        "src/manager/event_manager.cc"
     ];
 };
 
@@ -170,7 +170,9 @@ libiorap-inode2filename = cc_library_static {
     ];
 
     srcs = [
-        "src/inode2filename/**/*.cc"
+        "src/inode2filename/inode.cc"
+        "src/inode2filename/main.cc"
+        "src/inode2filename/search_directories.cc"
     ];
 };
 
@@ -181,7 +183,9 @@ libiorap-inode2filename = cc_library_static {
         "iorap-default-dependencies"
     ];
     srcs = [
-        "src/inode2filename/**/*.cc"
+        "src/inode2filename/inode.cc"
+        "src/inode2filename/main.cc"
+        "src/inode2filename/search_directories.cc"
     ];
     #  Easier debugging. TODO: make a separate debug config.
     #  XX: Using -O0 seems to completely hide some errors.
@@ -213,7 +217,10 @@ iorapd-tests = cc_test {
         "iorap-default-dependencies"
     ];
     srcs = [
-        "tests/src/**/*.cc"
+        "tests/src/binder/app_launch_event_test.cc"
+        "tests/src/binder/auto_parcelable_test.cc"
+        "tests/src/inode2filename/search_directories_test.cc"
+        "tests/src/tmp/introspection_test.cc"
     ];
     cflags = [
         "-O2"
@@ -273,7 +280,8 @@ libiorap-perfetto = cc_library_static {
     ];
 
     srcs = [
-        "src/perfetto/**/*.cc"
+        "src/perfetto/main.cc"
+        "src/perfetto/rx_producer.cc"
     ];
 };
 
@@ -286,7 +294,8 @@ libiorap-perfetto = cc_library_static {
     shared_libs = ["libperfetto"];
     include_dirs = ["external/perfetto/include"];
     srcs = [
-        "src/perfetto/**/*.cc"
+        "src/perfetto/main.cc"
+        "src/perfetto/rx_producer.cc"
     ];
     #  Easier debugging. TODO: make a separate debug config.
     #  XX: Using -O0 seems to completely hide some errors.

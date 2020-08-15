@@ -21,7 +21,13 @@ NaughtySuggestions = android_test {
     name = "NaughtySuggestions";
     sdk_version = "current";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/quicksearchbox/tests/naughty/CrashingSuggestionLauncher.java"
+        "src/com/android/quicksearchbox/tests/naughty/CrashingSuggestionProvider.java"
+        "src/com/android/quicksearchbox/tests/naughty/HangingSuggestionLauncher.java"
+        "src/com/android/quicksearchbox/tests/naughty/HangingSuggestionProvider.java"
+        "src/com/android/quicksearchbox/tests/naughty/NaughtySuggestionProvider.java"
+    ];
     certificate = "shared";
 };
 

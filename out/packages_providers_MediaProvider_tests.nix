@@ -8,7 +8,13 @@ MediaProviderTests = android_test {
     manifest = "AndroidManifest.xml";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/providers/media/DatabaseHelperTest.java"
+        "src/com/android/providers/media/IdleServiceTest.java"
+        "src/com/android/providers/media/IsoInterfaceTest.java"
+        "src/com/android/providers/media/MediaProviderTest.java"
+        "src/com/android/providers/media/XmpInterfaceTest.java"
+        "src/com/android/providers/media/scan/MediaScannerTest.java"
+        "src/com/android/providers/media/scan/ModernMediaScannerTest.java"
     ];
 
     libs = [

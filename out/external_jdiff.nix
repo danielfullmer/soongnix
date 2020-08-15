@@ -17,7 +17,40 @@ let
 
 jdiff = java_library_host {
     name = "jdiff";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/jdiff/API.java"
+        "src/jdiff/APIComparator.java"
+        "src/jdiff/APIDiff.java"
+        "src/jdiff/APIHandler.java"
+        "src/jdiff/ClassAPI.java"
+        "src/jdiff/ClassDiff.java"
+        "src/jdiff/Comments.java"
+        "src/jdiff/CommentsHandler.java"
+        "src/jdiff/CompareClassPdiffs.java"
+        "src/jdiff/ComparePkgPdiffs.java"
+        "src/jdiff/ConstructorAPI.java"
+        "src/jdiff/Diff.java"
+        "src/jdiff/DiffMyers.java"
+        "src/jdiff/DiffOutput.java"
+        "src/jdiff/FieldAPI.java"
+        "src/jdiff/HTMLFiles.java"
+        "src/jdiff/HTMLIndexes.java"
+        "src/jdiff/HTMLReportGenerator.java"
+        "src/jdiff/HTMLStatistics.java"
+        "src/jdiff/JDiff.java"
+        "src/jdiff/MemberDiff.java"
+        "src/jdiff/MergeChanges.java"
+        "src/jdiff/MethodAPI.java"
+        "src/jdiff/Modifiers.java"
+        "src/jdiff/Options.java"
+        "src/jdiff/PackageAPI.java"
+        "src/jdiff/PackageDiff.java"
+        "src/jdiff/ParamAPI.java"
+        "src/jdiff/RootDocToXML.java"
+        "src/jdiff/SingleComment.java"
+        "src/jdiff/StreamReader.java"
+        "src/jdiff/XMLToAPI.java"
+    ];
 
     use_tools_jar = true;
 };

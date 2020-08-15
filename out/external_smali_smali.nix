@@ -29,7 +29,22 @@ smali = java_binary_host {
     name = "smali";
 
     srcs = [
-        "src/main/java/**/*.java"
+        "src/main/java/org/jf/smali/AssembleCommand.java"
+        "src/main/java/org/jf/smali/HelpCommand.java"
+        "src/main/java/org/jf/smali/InvalidToken.java"
+        "src/main/java/org/jf/smali/LexerErrorInterface.java"
+        "src/main/java/org/jf/smali/LiteralTools.java"
+        "src/main/java/org/jf/smali/Main.java"
+        "src/main/java/org/jf/smali/OdexedInstructionException.java"
+        "src/main/java/org/jf/smali/SemanticException.java"
+        "src/main/java/org/jf/smali/Smali.java"
+        "src/main/java/org/jf/smali/SmaliMethodParameter.java"
+        "src/main/java/org/jf/smali/SmaliOptions.java"
+        "src/main/java/org/jf/smali/SmaliTestUtils.java"
+        "src/main/java/org/jf/smali/WithRegister.java"
+        "src/main/java/org/jf/smali/smaliFlexLexer.java"
+        "src/main/java/org/jf/smali/smaliParser.java"
+        "src/main/java/org/jf/smali/smaliTreeWalker.java"
     ];
 
     manifest = "manifest.txt";

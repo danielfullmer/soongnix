@@ -19,7 +19,23 @@ dexmaker = java_library_static {
     name = "dexmaker";
 
     #  Include all the java files.
-    srcs = ["dexmaker/src/main/java/**/*.java"];
+    srcs = [
+        "dexmaker/src/main/java/com/android/dx/AnnotationId.java"
+        "dexmaker/src/main/java/com/android/dx/AppDataDirGuesser.java"
+        "dexmaker/src/main/java/com/android/dx/BinaryOp.java"
+        "dexmaker/src/main/java/com/android/dx/Code.java"
+        "dexmaker/src/main/java/com/android/dx/Comparison.java"
+        "dexmaker/src/main/java/com/android/dx/Constants.java"
+        "dexmaker/src/main/java/com/android/dx/DexMaker.java"
+        "dexmaker/src/main/java/com/android/dx/FieldId.java"
+        "dexmaker/src/main/java/com/android/dx/Label.java"
+        "dexmaker/src/main/java/com/android/dx/Local.java"
+        "dexmaker/src/main/java/com/android/dx/MethodId.java"
+        "dexmaker/src/main/java/com/android/dx/TypeId.java"
+        "dexmaker/src/main/java/com/android/dx/TypeList.java"
+        "dexmaker/src/main/java/com/android/dx/UnaryOp.java"
+        "dexmaker/src/main/java/com/android/dx/stock/ProxyBuilder.java"
+    ];
 
     static_libs = [
         "dexmaker-dx-target"
@@ -32,7 +48,11 @@ dexmaker = java_library_static {
 dexmaker-mockmaker = java_library_static {
     name = "dexmaker-mockmaker";
     sdk_version = "core_current";
-    srcs = ["dexmaker-mockito/src/main/java/**/*.java"];
+    srcs = [
+        "dexmaker-mockito/src/main/java/com/android/dx/mockito/DexmakerMockMaker.java"
+        "dexmaker-mockito/src/main/java/com/android/dx/mockito/InvocationHandlerAdapter.java"
+        "dexmaker-mockito/src/main/java/com/android/dx/mockito/UnsafeAllocator.java"
+    ];
     java_resource_dirs = ["dexmaker-mockito/src/main/resources"];
     libs = [
         "dexmaker"
@@ -44,7 +64,7 @@ dexmaker-mockmaker = java_library_static {
 dexmaker-inline-mockmaker-dispatcher = java_library_static {
     name = "dexmaker-inline-mockmaker-dispatcher";
     sdk_version = "current";
-    srcs = ["dexmaker-mockito-inline-dispatcher/src/main/java/**/*.java"];
+    srcs = ["dexmaker-mockito-inline-dispatcher/src/main/java/com/android/dx/mockito/inline/MockMethodDispatcher.java"];
 };
 
 #  Defaults for agent code.
@@ -91,7 +111,7 @@ libdexmakerjvmtiagent = cc_library_shared {
     defaults = [
         "dexmaker_agent_defaults"
     ];
-    srcs = ["dexmaker-mockito-inline/src/main/jni/**/*.cc"];
+    srcs = ["dexmaker-mockito-inline/src/main/jni/dexmakerjvmtiagent/agent.cc"];
 };
 
 #  Build agent for Dexmaker's extended MockMaker
@@ -100,7 +120,7 @@ libstaticjvmtiagent = cc_library_shared {
     defaults = [
         "dexmaker_agent_defaults"
     ];
-    srcs = ["dexmaker-mockito-inline-extended/src/main/jni/**/*.cc"];
+    srcs = ["dexmaker-mockito-inline-extended/src/main/jni/staticjvmtiagent/agent.cc"];
 };
 
 #  Build agent for Dexmaker's inline tests
@@ -109,14 +129,25 @@ libmultiplejvmtiagentsinterferenceagent = cc_library_shared {
     defaults = [
         "dexmaker_agent_defaults"
     ];
-    srcs = ["dexmaker-mockito-inline-tests/src/main/jni/**/*.cc"];
+    srcs = ["dexmaker-mockito-inline-tests/src/main/jni/multiplejvmtiagentsinterferenceagent/agent.cc"];
 };
 
 #  Build Dexmaker's inline MockMaker, a plugin to Mockito
 dexmaker-inline-mockmaker = java_library_static {
     name = "dexmaker-inline-mockmaker";
     sdk_version = "current";
-    srcs = ["dexmaker-mockito-inline/src/main/java/**/*.java"];
+    srcs = [
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/ClassTransformer.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/DexmakerStackTraceCleaner.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/IllegalClassFormatException.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/InlineDexmakerMockMaker.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/InvocationHandlerAdapter.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/JvmtiAgent.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/MockFeatures.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/MockMakerMultiplexer.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/MockMethodAdvice.java"
+        "dexmaker-mockito-inline/src/main/java/com/android/dx/mockito/inline/UnmodifiableClassException.java"
+    ];
     java_resource_dirs = ["dexmaker-mockito-inline/src/main/resources"];
     libs = [
         "dexmaker"
@@ -129,7 +160,21 @@ dexmaker-inline-mockmaker = java_library_static {
 dexmaker-extended-mockmaker = java_library_static {
     name = "dexmaker-extended-mockmaker";
     sdk_version = "current";
-    srcs = ["dexmaker-mockito-inline-extended/src/main/java/**/*.java"];
+    srcs = [
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/InlineStaticMockMaker.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/StaticClassTransformer.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/StaticJvmtiAgent.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/StaticMockMethodAdvice.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/ExtendedMockito.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/MockedMethod.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/MockedVoidMethod.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/StaticCapableStubber.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/StaticInOrder.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/StaticMocking.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/StaticMockitoSession.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/StaticMockitoSessionBuilder.java"
+        "dexmaker-mockito-inline-extended/src/main/java/com/android/dx/mockito/inline/extended/UnstableApi.java"
+    ];
 
     java_resource_dirs = ["dexmaker-mockito-inline/src/main/resources"];
 
@@ -241,7 +286,16 @@ dexmaker-dx-target = java_import {
 dexmaker-tests-lib = java_library_static {
     name = "dexmaker-tests-lib";
     sdk_version = "current";
-    srcs = ["dexmaker-tests/src/androidTest/java/**/*.java"];
+    srcs = [
+        "dexmaker-tests/src/androidTest/java/com/android/dx/AnnotationIdTest.java"
+        "dexmaker-tests/src/androidTest/java/com/android/dx/AppDataDirGuesserTest.java"
+        "dexmaker-tests/src/androidTest/java/com/android/dx/DexMakerTest.java"
+        "dexmaker-tests/src/androidTest/java/com/android/dx/TypeIdTest.java"
+        "dexmaker-tests/src/androidTest/java/com/android/dx/examples/FibonacciMaker.java"
+        "dexmaker-tests/src/androidTest/java/com/android/dx/examples/HelloWorldMaker.java"
+        "dexmaker-tests/src/androidTest/java/com/android/dx/stock/ProxyBuilderTest.java"
+        "dexmaker-tests/src/androidTest/java/com/android/dx/util/TestUtil.java"
+    ];
 
     libs = [
         "androidx.test.rules"
@@ -254,7 +308,13 @@ dexmaker-tests-lib = java_library_static {
 dexmaker-mockmaker-tests = java_library_static {
     name = "dexmaker-mockmaker-tests";
     sdk_version = "current";
-    srcs = ["dexmaker-mockito-tests/src/main/java/**/*.java"];
+    srcs = [
+        "dexmaker-mockito-tests/src/main/java/com/android/dx/mockito/tests/BlacklistedApis.java"
+        "dexmaker-mockito-tests/src/main/java/com/android/dx/mockito/tests/CleanStackTrace.java"
+        "dexmaker-mockito-tests/src/main/java/com/android/dx/mockito/tests/GeneralMocking.java"
+        "dexmaker-mockito-tests/src/main/java/com/android/dx/mockito/tests/PartialClasses.java"
+        "dexmaker-mockito-tests/src/main/java/com/android/dx/mockito/tests/Stress.java"
+    ];
 
     libs = [
         "androidx.test.rules"
@@ -269,7 +329,11 @@ dexmaker-mockmaker-tests = java_library_static {
 dexmaker-inline-mockmaker-tests = java_library_static {
     name = "dexmaker-inline-mockmaker-tests";
     sdk_version = "current";
-    srcs = ["dexmaker-mockito-inline-tests/src/main/java/**/*.java"];
+    srcs = [
+        "dexmaker-mockito-inline-tests/src/main/java/com/android/dx/mockito/inline/tests/MockFinal.java"
+        "dexmaker-mockito-inline-tests/src/main/java/com/android/dx/mockito/inline/tests/MockNonPublic.java"
+        "dexmaker-mockito-inline-tests/src/main/java/com/android/dx/mockito/inline/tests/MultipleJvmtiAgentsInterference.java"
+    ];
 
     libs = [
         "androidx.test.rules"
@@ -285,7 +349,16 @@ dexmaker-inline-mockmaker-tests = java_library_static {
 dexmaker-extended-mockmaker-tests = java_library_static {
     name = "dexmaker-extended-mockmaker-tests";
     sdk_version = "current";
-    srcs = ["dexmaker-mockito-inline-extended-tests/src/main/java/**/*.java"];
+    srcs = [
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/EmptyActivity.java"
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/MockInstanceUsingExtendedMockito.java"
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/MockStatic.java"
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/SpyOn.java"
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/StaticMockitoSession.java"
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/StaticMockitoSessionVsMockitoJUnitRunner.java"
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/Stress.java"
+        "dexmaker-mockito-inline-extended-tests/src/main/java/com/android/dx/mockito/inline/extended/tests/VerifyStatic.java"
+    ];
 
     libs = [
         "androidx.test.rules"

@@ -26,7 +26,7 @@ java_api_finder = java_plugin {
 java_api_used_by_mainline_module = java_library_host {
     name = "java_api_used_by_mainline_module";
 
-    srcs = ["src/main/**/*.java"];
+    srcs = ["src/main/com/android/apifinder/JavaApiUsedByMainlineModule.java"];
 
     static_libs = [
         "//external/error_prone:error_prone_core"
@@ -42,7 +42,7 @@ java_api_used_by_mainline_module = java_library_host {
 
 JavaApiUsedByMainlineModuleTest = java_test_host {
     name = "JavaApiUsedByMainlineModuleTest";
-    srcs = ["src/test/**/JavaApiUsedByMainlineModuleTest.java"];
+    srcs = ["src/test/com/android/apifinder/JavaApiUsedByMainlineModuleTest.java"];
     java_resource_dirs = ["src/test/res"];
     java_resources = [":java_api_used_by_mainline_module_testdata"];
     static_libs = [
@@ -58,7 +58,7 @@ JavaApiUsedByMainlineModuleTest = java_test_host {
 java_api_used_by_mainline_module_testdata = filegroup {
     name = "java_api_used_by_mainline_module_testdata";
     path = "src/test/res";
-    srcs = ["src/test/res/**/*.java"];
+    srcs = ["src/test/res/com/android/apifinder/JavaApiUsedByMainlineModuleCases.java"];
 };
 
 in { inherit JavaApiUsedByMainlineModuleTest java_api_finder java_api_used_by_mainline_module java_api_used_by_mainline_module_testdata; }

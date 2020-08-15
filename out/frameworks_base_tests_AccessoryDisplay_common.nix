@@ -19,7 +19,13 @@ let
 AccessoryDisplayCommon = java_library_static {
     name = "AccessoryDisplayCommon";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/accessorydisplay/common/BufferPool.java"
+        "src/com/android/accessorydisplay/common/Logger.java"
+        "src/com/android/accessorydisplay/common/Protocol.java"
+        "src/com/android/accessorydisplay/common/Service.java"
+        "src/com/android/accessorydisplay/common/Transport.java"
+    ];
 };
 
 in { inherit AccessoryDisplayCommon; }

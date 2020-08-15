@@ -18,7 +18,7 @@ libandroidicu_static = cc_library_static {
     name = "libandroidicu_static";
     host_supported = true;
     srcs = [
-        "*.cpp"
+        "shim.cpp"
     ];
     shared_libs = [
         "libicuuc"

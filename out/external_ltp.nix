@@ -24,7 +24,21 @@ ltp_syscalls_h = genrule {
     name = "ltp_syscalls_h";
     tool_files = ["include/lapi/syscalls/regen.sh"];
     cmd = "$(location) $(genDir)/lapi/syscalls.h";
-    srcs = ["include/lapi/syscalls/*.in"];
+    srcs = [
+        "include/lapi/syscalls/aarch64.in"
+        "include/lapi/syscalls/arm.in"
+        "include/lapi/syscalls/hppa.in"
+        "include/lapi/syscalls/i386.in"
+        "include/lapi/syscalls/ia64.in"
+        "include/lapi/syscalls/powerpc.in"
+        "include/lapi/syscalls/powerpc64.in"
+        "include/lapi/syscalls/s390.in"
+        "include/lapi/syscalls/s390x.in"
+        "include/lapi/syscalls/sh.in"
+        "include/lapi/syscalls/sparc.in"
+        "include/lapi/syscalls/sparc64.in"
+        "include/lapi/syscalls/x86_64.in"
+    ];
     out = ["lapi/syscalls.h"];
 };
 

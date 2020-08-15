@@ -28,7 +28,7 @@ BroadcastRadioTests = android_test {
         "testng"
     ];
     libs = ["android.test.base"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/hardware/radio/tests/functional/RadioTunerTest.java"];
     dex_preopt = {
         enabled = false;
     };

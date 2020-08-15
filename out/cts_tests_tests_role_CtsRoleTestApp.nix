@@ -20,7 +20,10 @@ CtsRoleTestApp = android_test {
     sdk_version = "test_current";
 
     srcs = [
-        "src/**/*.java"
+        "src/android/app/role/cts/app/ChangeDefaultDialerActivity.java"
+        "src/android/app/role/cts/app/ChangeDefaultSmsActivity.java"
+        "src/android/app/role/cts/app/IsRoleHeldActivity.java"
+        "src/android/app/role/cts/app/RequestRoleActivity.java"
     ];
 
     test_suites = [

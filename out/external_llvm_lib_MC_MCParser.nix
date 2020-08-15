@@ -6,7 +6,17 @@ libLLVMMCParser = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "AsmLexer.cpp"
+        "AsmParser.cpp"
+        "COFFAsmParser.cpp"
+        "DarwinAsmParser.cpp"
+        "ELFAsmParser.cpp"
+        "MCAsmLexer.cpp"
+        "MCAsmParser.cpp"
+        "MCAsmParserExtension.cpp"
+        "MCTargetAsmParser.cpp"
+    ];
 };
 
 in { inherit libLLVMMCParser; }

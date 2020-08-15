@@ -17,7 +17,15 @@ incident_helper_defaults = cc_defaults {
     ];
 
     srcs = [
-        "src/parsers/*.cpp"
+        "src/parsers/BatteryTypeParser.cpp"
+        "src/parsers/CpuFreqParser.cpp"
+        "src/parsers/CpuInfoParser.cpp"
+        "src/parsers/EventLogTagsParser.cpp"
+        "src/parsers/KernelWakesParser.cpp"
+        "src/parsers/PageTypeInfoParser.cpp"
+        "src/parsers/ProcrankParser.cpp"
+        "src/parsers/PsParser.cpp"
+        "src/parsers/SystemPropertiesParser.cpp"
         "src/TextParserBase.cpp"
         "src/ih_util.cpp"
     ];
@@ -45,11 +53,30 @@ incident_helper_test = cc_test {
     local_include_dirs = ["src/"];
 
     srcs = [
-        "tests/*.cpp"
+        "tests/BatteryTypeParser_test.cpp"
+        "tests/CpuFreqParser_test.cpp"
+        "tests/CpuInfoParser_test.cpp"
+        "tests/EventLogTagsParser_test.cpp"
+        "tests/KernelWakesParser_test.cpp"
+        "tests/PageTypeInfoParser_test.cpp"
+        "tests/ProcrankParser_test.cpp"
+        "tests/PsParser_test.cpp"
+        "tests/SystemPropertiesParser_test.cpp"
+        "tests/ih_util_test.cpp"
     ];
 
     data = [
-        "testdata/*"
+        "testdata/batterytype.txt"
+        "testdata/cpufreq.txt"
+        "testdata/cpuinfo.txt"
+        "testdata/event-log-tags.txt"
+        "testdata/kernel_wakeups.txt"
+        "testdata/kernel_wakeups_short.txt"
+        "testdata/pagetypeinfo.txt"
+        "testdata/procrank.txt"
+        "testdata/procrank_short.txt"
+        "testdata/ps.txt"
+        "testdata/system_properties.txt"
     ];
 
     static_libs = [

@@ -19,7 +19,10 @@ let
 
 PacProcessor = android_app {
     name = "PacProcessor";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/pacprocessor/PacNative.java"
+        "src/com/android/pacprocessor/PacService.java"
+    ];
     platform_apis = true;
     certificate = "platform";
     jni_libs = ["libjni_pacprocessor"];

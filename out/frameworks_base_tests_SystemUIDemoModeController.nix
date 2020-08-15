@@ -3,7 +3,7 @@ let
 
 DemoModeController = android_test {
     name = "DemoModeController";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/example/android/demomodecontroller/DemoModeController.java"];
     sdk_version = "current";
 };
 

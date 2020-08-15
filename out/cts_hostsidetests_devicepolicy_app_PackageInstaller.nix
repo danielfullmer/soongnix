@@ -18,7 +18,12 @@ let
 CtsPackageInstallerApp = android_test_helper_app {
     name = "CtsPackageInstallerApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/packageinstaller/BasePackageInstallTest.java"
+        "src/com/android/cts/packageinstaller/ClearDeviceOwnerTest.java"
+        "src/com/android/cts/packageinstaller/ManualPackageInstallTest.java"
+        "src/com/android/cts/packageinstaller/SilentPackageInstallTest.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "android.test.base.stubs"

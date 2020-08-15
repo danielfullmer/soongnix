@@ -188,9 +188,27 @@ aapt2_tests = cc_test_host {
     ];
     defaults = ["aapt2_defaults"];
     data = [
-        "integration-tests/CompileTest/**/*"
-        "integration-tests/CommandTests/**/*"
-        "integration-tests/ConvertTest/**/*"
+        "integration-tests/CompileTest/DirInput/"
+        "integration-tests/CompileTest/ZipInput/"
+        "integration-tests/CompileTest/res/"
+        "integration-tests/CompileTest/DirInput/res/"
+        "integration-tests/CompileTest/DirInput/res/drawable/"
+        "integration-tests/CompileTest/DirInput/res/layout/"
+        "integration-tests/CompileTest/DirInput/res/values/"
+        "integration-tests/CompileTest/DirInput/res/drawable/image.png"
+        "integration-tests/CompileTest/DirInput/res/layout/layout.xml"
+        "integration-tests/CompileTest/DirInput/res/values/values.xml"
+        "integration-tests/CompileTest/ZipInput/res.zip"
+        "integration-tests/CompileTest/res/drawable/"
+        "integration-tests/CompileTest/res/values/"
+        "integration-tests/CompileTest/res/drawable/image.9.png"
+        "integration-tests/CompileTest/res/drawable/image.png"
+        "integration-tests/CompileTest/res/drawable/image.small.9.png"
+        "integration-tests/CompileTest/res/drawable/image.small.png"
+        "integration-tests/CompileTest/res/values/values.all.xml"
+        "integration-tests/CompileTest/res/values/values.xml"
+        "integration-tests/CommandTests/android-28.jar"
+        "integration-tests/ConvertTest/duplicate_entries.apk"
     ];
 };
 

@@ -8,7 +8,20 @@ PMC = android_app {
     dex_preopt = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/pmc/A2dpReceiver.java"
+        "src/com/android/pmc/BleScanReceiver.java"
+        "src/com/android/pmc/GattClientListener.java"
+        "src/com/android/pmc/GattPMCReceiver.java"
+        "src/com/android/pmc/GattServer.java"
+        "src/com/android/pmc/IperfClient.java"
+        "src/com/android/pmc/PMCMainActivity.java"
+        "src/com/android/pmc/PMCStatusLogger.java"
+        "src/com/android/pmc/SettingActivity.java"
+        "src/com/android/pmc/WifiConnScanReceiver.java"
+        "src/com/android/pmc/WifiDownloadReceiver.java"
+        "src/com/android/pmc/WifiGScanReceiver.java"
+    ];
     resource_dirs = ["res"];
     privileged = true;
     optimize = {

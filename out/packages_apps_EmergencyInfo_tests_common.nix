@@ -18,7 +18,7 @@ let
 emergencyinfo-test-common = java_library {
     name = "emergencyinfo-test-common";
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/emergency/ContactTestUtils.java"];
     sdk_version = "system_current";
 };
 

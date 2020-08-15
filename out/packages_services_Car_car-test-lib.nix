@@ -18,7 +18,11 @@ let
 "android.car.testapi" = java_library {
     name = "android.car.testapi";
     srcs = [
-        "src/**/*.java"
+        "src/android/car/testapi/CarProjectionController.java"
+        "src/android/car/testapi/CarPropertyController.java"
+        "src/android/car/testapi/FakeCar.java"
+        "src/android/car/testapi/FakeCarProjectionService.java"
+        "src/android/car/testapi/FakeCarPropertyService.java"
     ];
     product_variables = {
         pdk = {

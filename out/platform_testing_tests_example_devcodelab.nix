@@ -18,7 +18,7 @@ let
 DevCodelabTest = android_test {
     name = "DevCodelabTest";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/test/example/devcodelab/DevCodelabTest.java"];
     sdk_version = "current";
 
     static_libs = ["android-support-test"];

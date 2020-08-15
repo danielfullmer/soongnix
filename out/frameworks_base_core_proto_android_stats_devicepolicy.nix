@@ -21,7 +21,8 @@ devicepolicyprotosnano = java_library_static {
         type = "nano";
     };
     srcs = [
-        "*.proto"
+        "device_policy.proto"
+        "device_policy_enums.proto"
     ];
     java_version = "1.8";
     target = {

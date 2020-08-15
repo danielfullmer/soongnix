@@ -19,7 +19,10 @@ BootHelperApp = android_test {
     name = "BootHelperApp";
 
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/boothelper/AwareActivity.java"
+        "src/com/android/boothelper/BootHelperTest.java"
+    ];
 
     sdk_version = "current";
     libs = ["android.test.runner.stubs"];

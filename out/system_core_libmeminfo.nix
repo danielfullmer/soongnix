@@ -58,8 +58,12 @@ libmeminfo_test = cc_test {
     ];
 
     data = [
-        "testdata1/*"
-        "testdata2/*"
+        "testdata1/mm_stat"
+        "testdata1/showmap_test.sh"
+        "testdata1/smaps"
+        "testdata1/smaps_short"
+        "testdata1/vmallocinfo"
+        "testdata2/mem_used_total"
     ];
 };
 
@@ -76,7 +80,11 @@ libmeminfo_benchmark = cc_benchmark {
     ];
 
     data = [
-        "testdata1/*"
+        "testdata1/mm_stat"
+        "testdata1/showmap_test.sh"
+        "testdata1/smaps"
+        "testdata1/smaps_short"
+        "testdata1/vmallocinfo"
     ];
 };
 

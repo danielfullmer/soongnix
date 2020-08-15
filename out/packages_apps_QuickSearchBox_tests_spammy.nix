@@ -21,7 +21,10 @@ SpammySuggestions = android_test {
     name = "SpammySuggestions";
     sdk_version = "8";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/quicksearchbox/tests/spammy/SpammySuggestionLauncher.java"
+        "src/com/android/quicksearchbox/tests/spammy/SpammySuggestionProvider.java"
+    ];
     certificate = "shared";
 };
 

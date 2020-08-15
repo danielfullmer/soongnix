@@ -33,7 +33,23 @@ CtsStatsdApp = android_test_helper_app {
     platform_apis = true;
     min_sdk_version = "24";
     srcs = [
-        "src/**/*.java"
+        "src/com/android/server/cts/device/statsd/ANRActivity.java"
+        "src/com/android/server/cts/device/statsd/AtomTests.java"
+        "src/com/android/server/cts/device/statsd/Checkers.java"
+        "src/com/android/server/cts/device/statsd/DaveyActivity.java"
+        "src/com/android/server/cts/device/statsd/DaveyView.java"
+        "src/com/android/server/cts/device/statsd/DummyCallscreeningService.java"
+        "src/com/android/server/cts/device/statsd/HiddenApiUsedActivity.java"
+        "src/com/android/server/cts/device/statsd/StatsdAuthenticator.java"
+        "src/com/android/server/cts/device/statsd/StatsdCtsBackgroundService.java"
+        "src/com/android/server/cts/device/statsd/StatsdCtsForegroundActivity.java"
+        "src/com/android/server/cts/device/statsd/StatsdCtsForegroundService.java"
+        "src/com/android/server/cts/device/statsd/StatsdJobService.java"
+        "src/com/android/server/cts/device/statsd/StatsdProvider.java"
+        "src/com/android/server/cts/device/statsd/StatsdSyncAdapter.java"
+        "src/com/android/server/cts/device/statsd/StatsdSyncService.java"
+        "src/com/android/server/cts/device/statsd/VideoPlayerActivity.java"
+        "src/com/android/server/cts/device/statsd/WakelockLoadTestRunnable.java"
         ":statslog-statsd-cts-java-gen"
     ];
     libs = [

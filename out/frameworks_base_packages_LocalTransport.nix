@@ -19,7 +19,11 @@ let
 
 LocalTransport = android_app {
     name = "LocalTransport";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/localtransport/LocalTransport.java"
+        "src/com/android/localtransport/LocalTransportParameters.java"
+        "src/com/android/localtransport/LocalTransportService.java"
+    ];
     optimize = {
         proguard_flags_files = ["proguard.flags"];
     };

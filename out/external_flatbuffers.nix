@@ -68,7 +68,16 @@ flatc = cc_binary_host {
 
 flatbuffers-java = java_library {
     name = "flatbuffers-java";
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/com/google/flatbuffers/ByteBufferUtil.java"
+        "java/com/google/flatbuffers/Constants.java"
+        "java/com/google/flatbuffers/FlatBufferBuilder.java"
+        "java/com/google/flatbuffers/Struct.java"
+        "java/com/google/flatbuffers/Table.java"
+        "java/com/google/flatbuffers/Utf8.java"
+        "java/com/google/flatbuffers/Utf8Old.java"
+        "java/com/google/flatbuffers/Utf8Safe.java"
+    ];
     sdk_version = "current";
 
     java_version = "1.8";

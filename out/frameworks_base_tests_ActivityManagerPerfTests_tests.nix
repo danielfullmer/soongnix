@@ -17,7 +17,15 @@ let
 
 ActivityManagerPerfTests = android_test {
     name = "ActivityManagerPerfTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/frameworks/perftests/am/tests/BasePerfTest.java"
+        "src/com/android/frameworks/perftests/am/tests/BroadcastPerfTest.java"
+        "src/com/android/frameworks/perftests/am/tests/ContentProviderPerfTest.java"
+        "src/com/android/frameworks/perftests/am/tests/ServiceBindPerfTest.java"
+        "src/com/android/frameworks/perftests/am/tests/ServiceStartPerfTest.java"
+        "src/com/android/frameworks/perftests/am/util/TargetPackageUtils.java"
+        "src/com/android/frameworks/perftests/am/util/TimeReceiver.java"
+    ];
     static_libs = [
         "androidx.test.rules"
         "apct-perftests-utils"

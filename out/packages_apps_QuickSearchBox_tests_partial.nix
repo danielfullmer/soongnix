@@ -21,7 +21,10 @@ PartialSuggestions = android_test {
     name = "PartialSuggestions";
     sdk_version = "8";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/quicksearchbox/tests/partial/PartialSuggestionLauncher.java"
+        "src/com/android/quicksearchbox/tests/partial/PartialSuggestionProvider.java"
+    ];
     certificate = "shared";
 };
 

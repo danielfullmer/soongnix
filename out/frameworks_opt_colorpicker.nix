@@ -19,8 +19,12 @@ colorpicker = android_library {
     name = "colorpicker";
     sdk_version = "15";
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/colorpicker/ColorPickerDialog.java"
+        "src/com/android/colorpicker/ColorPickerPalette.java"
+        "src/com/android/colorpicker/ColorPickerSwatch.java"
+        "src/com/android/colorpicker/ColorStateDrawable.java"
+        "src/com/android/colorpicker/HsvColorComparator.java"
+
     ];
     resource_dirs = ["res"];
 };

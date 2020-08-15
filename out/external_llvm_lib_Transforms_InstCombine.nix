@@ -6,7 +6,21 @@ libLLVMInstCombine = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "InstCombineAddSub.cpp"
+        "InstCombineAndOrXor.cpp"
+        "InstCombineCalls.cpp"
+        "InstCombineCasts.cpp"
+        "InstCombineCompares.cpp"
+        "InstCombineLoadStoreAlloca.cpp"
+        "InstCombineMulDivRem.cpp"
+        "InstCombinePHI.cpp"
+        "InstCombineSelect.cpp"
+        "InstCombineShifts.cpp"
+        "InstCombineSimplifyDemanded.cpp"
+        "InstCombineVectorOps.cpp"
+        "InstructionCombining.cpp"
+    ];
 };
 
 in { inherit libLLVMInstCombine; }

@@ -3,7 +3,7 @@ let
 
 CarrierConfig = android_app {
     name = "CarrierConfig";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/carrierconfig/DefaultCarrierConfigService.java"];
     libs = ["telephony-common"];
     platform_apis = true;
     certificate = "platform";

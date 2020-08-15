@@ -20,7 +20,35 @@ let
 QuickSearchBoxTests = android_test {
     name = "QuickSearchBoxTests";
     sdk_version = "9";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/quicksearchbox/CachingIconLoaderTest.java"
+        "src/com/android/quicksearchbox/ConsumerTrap.java"
+        "src/com/android/quicksearchbox/IconLoaderTest.java"
+        "src/com/android/quicksearchbox/LevenshteinFormatterTest.java"
+        "src/com/android/quicksearchbox/MockHandler.java"
+        "src/com/android/quicksearchbox/MockIconLoader.java"
+        "src/com/android/quicksearchbox/MockLogger.java"
+        "src/com/android/quicksearchbox/MockSearchSettings.java"
+        "src/com/android/quicksearchbox/MockSource.java"
+        "src/com/android/quicksearchbox/MockSuggestionExtras.java"
+        "src/com/android/quicksearchbox/MockSuggestionProviderCursor.java"
+        "src/com/android/quicksearchbox/MockTextAppearanceFactory.java"
+        "src/com/android/quicksearchbox/PackageIconLoaderTest.java"
+        "src/com/android/quicksearchbox/SearchActivityTest.java"
+        "src/com/android/quicksearchbox/SuggestionCursorUtil.java"
+        "src/com/android/quicksearchbox/SuggestionUtilsTest.java"
+        "src/com/android/quicksearchbox/tests/CrashingIconProvider.java"
+        "src/com/android/quicksearchbox/util/CachedLaterTest.java"
+        "src/com/android/quicksearchbox/util/LevenshteinDistanceTest.java"
+        "src/com/android/quicksearchbox/util/MockDataSetObserver.java"
+        "src/com/android/quicksearchbox/util/MockExecutor.java"
+        "src/com/android/quicksearchbox/util/MockNamedTaskExecutor.java"
+        "src/com/android/quicksearchbox/util/MockNamedTaskExecutorFactory.java"
+        "src/com/android/quicksearchbox/util/MockTask.java"
+        "src/com/android/quicksearchbox/util/PerNameExecutorTest.java"
+        "src/com/android/quicksearchbox/util/PriorityThreadFactoryTest.java"
+        "src/com/android/quicksearchbox/util/SingleThreadNamedTaskExecutorTest.java"
+    ];
     certificate = "shared";
     instrumentation_for = "QuickSearchBox";
 };

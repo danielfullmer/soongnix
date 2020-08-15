@@ -4,7 +4,7 @@ let
 SettingsLibProgressBar = android_library {
     name = "SettingsLibProgressBar";
 
-    srcs = ["src/**/*.java"];
+    srcs = [];
     resource_dirs = ["res"];
 
     sdk_version = "system_current";

@@ -7,7 +7,20 @@ libLLVMMipsDesc = cc_library_static {
         "llvm-lib-defaults"
         "llvm-mips-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "MipsABIFlagsSection.cpp"
+        "MipsABIInfo.cpp"
+        "MipsAsmBackend.cpp"
+        "MipsELFObjectWriter.cpp"
+        "MipsELFStreamer.cpp"
+        "MipsMCAsmInfo.cpp"
+        "MipsMCCodeEmitter.cpp"
+        "MipsMCExpr.cpp"
+        "MipsMCTargetDesc.cpp"
+        "MipsNaClELFStreamer.cpp"
+        "MipsOptionRecord.cpp"
+        "MipsTargetStreamer.cpp"
+    ];
 };
 
 in { inherit libLLVMMipsDesc; }

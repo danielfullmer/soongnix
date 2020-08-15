@@ -19,7 +19,7 @@ CtsNetTestCasesUpdateStatsPermission = android_test {
     name = "CtsNetTestCasesUpdateStatsPermission";
     defaults = ["cts_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/net/cts/network/permission/UpdateStatsPermissionTest.java"];
 
     static_libs = ["ctstestrunner-axt"];
 

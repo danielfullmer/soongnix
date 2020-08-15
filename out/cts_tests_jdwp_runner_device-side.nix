@@ -19,7 +19,7 @@ cts-dalvik-device-test-runner = java_test_helper_library {
     name = "cts-dalvik-device-test-runner";
     installable = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/compatibility/dalvik/DalvikTestRunner.java"];
 
     dex_preopt = {
         enabled = false;

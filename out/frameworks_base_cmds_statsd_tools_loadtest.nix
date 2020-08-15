@@ -21,7 +21,22 @@ StatsdLoadtest = android_app {
     name = "StatsdLoadtest";
     platform_apis = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/statsd/loadtest/BatteryDataRecorder.java"
+        "src/com/android/statsd/loadtest/BatteryStatsParser.java"
+        "src/com/android/statsd/loadtest/ConfigFactory.java"
+        "src/com/android/statsd/loadtest/DisplayProtoUtils.java"
+        "src/com/android/statsd/loadtest/LoadtestActivity.java"
+        "src/com/android/statsd/loadtest/MemInfoParser.java"
+        "src/com/android/statsd/loadtest/MemoryDataRecorder.java"
+        "src/com/android/statsd/loadtest/NumericalWatcher.java"
+        "src/com/android/statsd/loadtest/PerfData.java"
+        "src/com/android/statsd/loadtest/PerfDataRecorder.java"
+        "src/com/android/statsd/loadtest/PerfParser.java"
+        "src/com/android/statsd/loadtest/SequencePusher.java"
+        "src/com/android/statsd/loadtest/StatsdStatsRecorder.java"
+        "src/com/android/statsd/loadtest/ValidationRecorder.java"
+    ];
 
     resource_dirs = ["res"];
     static_libs = [

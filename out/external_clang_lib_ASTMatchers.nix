@@ -4,7 +4,10 @@ let
 libclangASTMatchers = cc_library_static {
     name = "libclangASTMatchers";
     defaults = ["clang-defaults"];
-    srcs = ["*.cpp"];
+    srcs = [
+        "ASTMatchFinder.cpp"
+        "ASTMatchersInternal.cpp"
+    ];
 };
 
 in { inherit libclangASTMatchers; }

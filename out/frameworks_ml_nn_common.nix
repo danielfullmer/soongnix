@@ -236,7 +236,15 @@ NeuralNetworksTest_operations = cc_test {
         "-Wno-invalid-partial-specialization"
     ];
     srcs = [
-        "operations/*Test.cpp"
+        "operations/EmbeddingLookupTest.cpp"
+        "operations/HashtableLookupTest.cpp"
+        "operations/LSHProjectionTest.cpp"
+        "operations/LSTMTest.cpp"
+        "operations/LayerNormLSTMTest.cpp"
+        "operations/MultinomialTest.cpp"
+        "operations/QuantizedLSTMTest.cpp"
+        "operations/RNNTest.cpp"
+        "operations/SVDFTest.cpp"
     ];
     local_include_dirs = ["include"];
     header_libs = [

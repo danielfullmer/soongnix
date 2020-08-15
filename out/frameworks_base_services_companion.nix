@@ -3,7 +3,7 @@ let
 
 "services.companion" = java_library_static {
     name = "services.companion";
-    srcs = ["java/**/*.java"];
+    srcs = ["java/com/android/server/companion/CompanionDeviceManagerService.java"];
     libs = ["services.core"];
 };
 

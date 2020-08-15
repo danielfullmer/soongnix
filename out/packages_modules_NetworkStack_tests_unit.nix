@@ -20,7 +20,23 @@ let
 NetworkStackTests = android_test {
     name = "NetworkStackTests";
     certificate = "platform";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/net/apf/ApfTest.java"
+        "src/android/net/apf/Bpf2Apf.java"
+        "src/android/net/captiveportal/CaptivePortalProbeSpecTest.java"
+        "src/android/net/dhcp/DhcpLeaseRepositoryTest.java"
+        "src/android/net/dhcp/DhcpPacketTest.java"
+        "src/android/net/dhcp/DhcpServerTest.java"
+        "src/android/net/dhcp/DhcpServingParamsTest.java"
+        "src/android/net/ip/IpClientTest.java"
+        "src/android/net/ip/IpReachabilityMonitorTest.java"
+        "src/android/net/util/ConnectivityPacketSummaryTest.java"
+        "src/android/net/util/PacketReaderTest.java"
+        "src/com/android/server/connectivity/NetworkMonitorTest.java"
+        "src/com/android/server/connectivity/ipmemorystore/IpMemoryStoreServiceTest.java"
+        "src/com/android/server/connectivity/ipmemorystore/RelevanceUtilsTests.java"
+        "src/com/android/server/util/SharedLogTest.java"
+    ];
     test_suites = ["device-tests"];
     resource_dirs = ["res"];
     static_libs = [
@@ -82,7 +98,7 @@ NetworkStackTests = android_test {
 libnetworkstacktestsjni = cc_library_shared {
     name = "libnetworkstacktestsjni";
     srcs = [
-        "jni/**/*.cpp"
+        "jni/apf_jni.cpp"
     ];
     cflags = [
         "-Wall"

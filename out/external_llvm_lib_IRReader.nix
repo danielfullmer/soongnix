@@ -6,7 +6,7 @@ libLLVMIRReader = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["IRReader.cpp"];
 };
 
 in { inherit libLLVMIRReader; }

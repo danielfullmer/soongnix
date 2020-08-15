@@ -20,7 +20,40 @@ let
 hamcrest-library = java_library_static {
     name = "hamcrest-library";
     host_supported = true;
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/org/hamcrest/Matchers.java"
+        "src/main/java/org/hamcrest/collection/IsArray.java"
+        "src/main/java/org/hamcrest/collection/IsArrayContaining.java"
+        "src/main/java/org/hamcrest/collection/IsArrayContainingInAnyOrder.java"
+        "src/main/java/org/hamcrest/collection/IsArrayContainingInOrder.java"
+        "src/main/java/org/hamcrest/collection/IsArrayWithSize.java"
+        "src/main/java/org/hamcrest/collection/IsCollectionWithSize.java"
+        "src/main/java/org/hamcrest/collection/IsEmptyCollection.java"
+        "src/main/java/org/hamcrest/collection/IsEmptyIterable.java"
+        "src/main/java/org/hamcrest/collection/IsIn.java"
+        "src/main/java/org/hamcrest/collection/IsIterableContainingInAnyOrder.java"
+        "src/main/java/org/hamcrest/collection/IsIterableContainingInOrder.java"
+        "src/main/java/org/hamcrest/collection/IsIterableContainingInRelativeOrder.java"
+        "src/main/java/org/hamcrest/collection/IsIterableWithSize.java"
+        "src/main/java/org/hamcrest/collection/IsMapContaining.java"
+        "src/main/java/org/hamcrest/collection/IsMapWithSize.java"
+        "src/main/java/org/hamcrest/comparator/ComparatorMatcherBuilder.java"
+        "src/main/java/org/hamcrest/io/FileMatchers.java"
+        "src/main/java/org/hamcrest/number/BigDecimalCloseTo.java"
+        "src/main/java/org/hamcrest/number/IsCloseTo.java"
+        "src/main/java/org/hamcrest/number/IsNaN.java"
+        "src/main/java/org/hamcrest/number/OrderingComparison.java"
+        "src/main/java/org/hamcrest/object/HasToString.java"
+        "src/main/java/org/hamcrest/object/IsCompatibleType.java"
+        "src/main/java/org/hamcrest/object/IsEventFrom.java"
+        "src/main/java/org/hamcrest/text/IsBlankString.java"
+        "src/main/java/org/hamcrest/text/IsEmptyString.java"
+        "src/main/java/org/hamcrest/text/IsEqualIgnoringCase.java"
+        "src/main/java/org/hamcrest/text/IsEqualIgnoringWhiteSpace.java"
+        "src/main/java/org/hamcrest/text/MatchesPattern.java"
+        "src/main/java/org/hamcrest/text/StringContainsInOrder.java"
+        "src/main/java/org/hamcrest/xml/HasXPath.java"
+    ];
 
     libs = ["hamcrest"];
     sdk_version = "core_current";

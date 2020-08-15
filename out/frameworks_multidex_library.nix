@@ -23,7 +23,10 @@ android-support-multidex-version = genrule {
     #  use srcs as dependencies, otherwise, this module won't be re-run
     #  during incremental build.
     srcs = [
-        "src/**/*.java"
+        "src/androidx/multidex/MultiDex.java"
+        "src/androidx/multidex/MultiDexApplication.java"
+        "src/androidx/multidex/MultiDexExtractor.java"
+        "src/androidx/multidex/ZipUtil.java"
     ];
     cmd = "echo \"git.version=`cd frameworks/multidex/library; git log --format=\"%H\" -n 1 || " +
         "(echo git hash not available; exit 0)`\" > $(genDir)/android-support-multidex.version.txt";
@@ -37,7 +40,10 @@ android-support-multidex = java_library_static {
     sdk_version = "15";
     min_sdk_version = "4";
     srcs = [
-        "src/**/*.java"
+        "src/androidx/multidex/MultiDex.java"
+        "src/androidx/multidex/MultiDexApplication.java"
+        "src/androidx/multidex/MultiDexExtractor.java"
+        "src/androidx/multidex/ZipUtil.java"
     ];
     java_resources = [
         ":android-support-multidex-version"

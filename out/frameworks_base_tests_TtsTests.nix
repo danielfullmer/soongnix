@@ -19,7 +19,12 @@ let
 
 TtsTests = android_test {
     name = "TtsTests";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/speech/tts/MockableCheckVoiceData.java"
+        "src/com/android/speech/tts/MockableTextToSpeechService.java"
+        "src/com/android/speech/tts/TextToSpeechTests.java"
+        "src/com/android/speech/tts/TtsEnginesTests.java"
+    ];
     static_libs = ["mockito-target"];
     libs = [
         "android.test.runner"

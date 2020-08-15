@@ -20,7 +20,7 @@ let
 zone_compactor = java_library_host {
     name = "zone_compactor";
     manifest = "main/manifest/MANIFEST.mf";
-    srcs = ["main/java/**/*.java"];
+    srcs = ["main/java/ZoneCompactor.java"];
 };
 
 in { inherit zone_compactor; }

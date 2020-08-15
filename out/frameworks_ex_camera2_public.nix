@@ -18,7 +18,17 @@ let
 android-ex-camera2 = java_library {
     name = "android-ex-camera2";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/ex/camera2/blocking/BlockingCameraManager.java"
+        "src/com/android/ex/camera2/blocking/BlockingCaptureCallback.java"
+        "src/com/android/ex/camera2/blocking/BlockingSessionCallback.java"
+        "src/com/android/ex/camera2/blocking/BlockingStateCallback.java"
+        "src/com/android/ex/camera2/exceptions/TimeoutRuntimeException.java"
+        "src/com/android/ex/camera2/pos/AutoFocusStateMachine.java"
+        "src/com/android/ex/camera2/utils/StateChangeListener.java"
+        "src/com/android/ex/camera2/utils/StateWaiter.java"
+        "src/com/android/ex/camera2/utils/SysTrace.java"
+    ];
 };
 
 in { inherit android-ex-camera2; }

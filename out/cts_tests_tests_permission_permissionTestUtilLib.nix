@@ -18,7 +18,7 @@ let
 permission-test-util-lib = java_library {
     name = "permission-test-util-lib";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/permission/cts/PermissionUtils.java"];
 
     static_libs = [
         "ub-uiautomator"

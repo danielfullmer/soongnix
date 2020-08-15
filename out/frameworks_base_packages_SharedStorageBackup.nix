@@ -19,7 +19,10 @@ let
 
 SharedStorageBackup = android_app {
     name = "SharedStorageBackup";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/sharedstoragebackup/ObbBackupService.java"
+        "src/com/android/sharedstoragebackup/SharedStorageAgent.java"
+    ];
     optimize = {
         proguard_flags_files = ["proguard.flags"];
     };

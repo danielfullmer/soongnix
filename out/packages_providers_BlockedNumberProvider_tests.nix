@@ -13,7 +13,12 @@ BlockedNumberProviderTest = android_test {
         "android.test.mock"
     ];
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/providers/blockednumber/BlockedNumberContractTest.java"
+        "src/com/android/providers/blockednumber/BlockedNumberProviderTest.java"
+        "src/com/android/providers/blockednumber/BlockedNumberProviderTestable.java"
+        "src/com/android/providers/blockednumber/MyMockContext.java"
+    ];
     platform_apis = true;
     test_suites = ["device-tests"];
     instrumentation_for = "BlockedNumberProvider";

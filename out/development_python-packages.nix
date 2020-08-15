@@ -18,7 +18,10 @@ let
 adb_py = python_library_host {
     name = "adb_py";
     srcs = [
-        "adb/*.py"
+        "adb/__init__.py"
+        "adb/device.py"
+        "adb/setup.py"
+        "adb/test.py"
     ];
     version = {
         py2 = {

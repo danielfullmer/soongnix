@@ -19,7 +19,14 @@ memory-helper-test = java_library {
     name = "memory-helper-test";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/helpers/tests/DumpsysMeminfoHelperTest.java"
+        "src/com/android/helpers/tests/FreeMemHelperTest.java"
+        "src/com/android/helpers/tests/GarbageCollectionHelperTest.java"
+        "src/com/android/helpers/tests/ProcessShowmapHelperTest.java"
+        "src/com/android/helpers/tests/RssSnapshotHelperTest.java"
+        "src/com/android/helpers/tests/TotalPssHelperTest.java"
+    ];
 
     static_libs = [
         "androidx.test.runner"

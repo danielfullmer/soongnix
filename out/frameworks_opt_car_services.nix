@@ -8,7 +8,7 @@ car-frameworks-service = java_library {
     # LOCAL_PACKAGE_NAME := CarFrameworkService
     required = ["libcar-framework-service-jni"];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/internal/car/CarServiceHelperService.java"
         "src/com/android/internal/car/ICarServiceHelper.aidl"
     ];
     static_libs = ["android.car.userlib"];

@@ -21,7 +21,7 @@ let
 
 AoapTestHostApp = android_test {
     name = "AoapTestHostApp";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/hardware/usb/aoaphosttest/UsbAoapHostTestActivity.java"];
     resource_dirs = ["res"];
     platform_apis = true;
     optimize = {

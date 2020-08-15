@@ -17,7 +17,7 @@ let
 
 rmtypedefs = java_binary_host {
     name = "rmtypedefs";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/tools/rmtypedefs/RmTypeDefs.java"];
     manifest = "etc/manifest.txt";
     wrapper = "etc/rmtypedefs";
     static_libs = [

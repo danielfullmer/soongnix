@@ -23,7 +23,10 @@ CtsJvmtiTaggingDeviceApp = android_test_helper_app {
     optimize = {
         enabled = false;
     };
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/jvmti/cts/JvmtiTaggingTest.java"
+        "src/art/Main.java"
+    ];
     manifest = "AndroidManifest.xml";
     test_suites = [
         "cts"

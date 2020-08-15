@@ -25,7 +25,7 @@ CtsMultiUserStorageApp = android_test {
     ];
     libs = ["android.test.base.stubs"];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/cts/multiuserstorageapp/MultiUserStorageTest.java"
     ];
     #  tag this module as a cts test artifact
     test_suites = [

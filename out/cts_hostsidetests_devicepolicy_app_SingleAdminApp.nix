@@ -18,7 +18,7 @@ let
 CtsDevicePolicySingleAdminTestApp = android_test_helper_app {
     name = "CtsDevicePolicySingleAdminTestApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/devicepolicy/singleadmin/ProvisioningSingleAdminTest.java"];
     libs = [
         "android.test.runner.stubs"
         "junit"

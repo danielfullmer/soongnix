@@ -19,7 +19,7 @@ PerformanceAppTest = android_test {
     name = "PerformanceAppTest";
 
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/performanceapp/tests/AppLaunchTests.java"];
 
     sdk_version = "current";
     certificate = "platform";

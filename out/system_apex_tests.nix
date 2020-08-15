@@ -18,7 +18,7 @@ let
 timezone_data_e2e_tests = java_test_host {
     name = "timezone_data_e2e_tests";
 
-    srcs = ["src/**/TimezoneDataHostTest.java"];
+    srcs = ["src/com/android/tests/apex/TimezoneDataHostTest.java"];
 
     libs = ["tradefed"];
 
@@ -39,7 +39,7 @@ timezone_data_e2e_tests = java_test_host {
 media_e2e_tests = java_test_host {
     name = "media_e2e_tests";
 
-    srcs = ["src/**/MediaHostTest.java"];
+    srcs = ["src/com/android/tests/apex/MediaHostTest.java"];
 
     libs = ["tradefed"];
 
@@ -57,7 +57,7 @@ media_e2e_tests = java_test_host {
 media_swcodec_e2e_tests = java_test_host {
     name = "media_swcodec_e2e_tests";
 
-    srcs = ["src/**/MediaSwCodecHostTest.java"];
+    srcs = ["src/com/android/tests/apex/MediaSwCodecHostTest.java"];
 
     libs = ["tradefed"];
 
@@ -75,7 +75,7 @@ media_swcodec_e2e_tests = java_test_host {
 conscrypt_e2e_tests = java_test_host {
     name = "conscrypt_e2e_tests";
 
-    srcs = ["src/**/ConscryptHostTest.java"];
+    srcs = ["src/com/android/tests/apex/ConscryptHostTest.java"];
 
     libs = ["tradefed"];
 
@@ -95,7 +95,7 @@ apex_targetprep_tests = java_test_host {
 
     libs = ["tradefed"];
 
-    srcs = ["src/**/ApexTargetPrepTest.java"];
+    srcs = ["src/com/android/tests/apex/ApexTargetPrepTest.java"];
 
     data = [":StagedInstallTestApexV2"];
 
@@ -107,8 +107,8 @@ apex_targetprep_tests = java_test_host {
 apex_e2e_base_test = java_library_host {
     name = "apex_e2e_base_test";
     srcs = [
-        "src/**/ApexE2EBaseHostTest.java"
-        "src/**/ApexTestUtils.java"
+        "src/com/android/tests/apex/ApexE2EBaseHostTest.java"
+        "src/com/android/tests/apex/ApexTestUtils.java"
     ];
     libs = ["tradefed"];
 };

@@ -475,7 +475,19 @@ libprotobuf-java-nano = java_library_static {
     sdk_version = "9";
 
     srcs = [
-        "javanano/src/main/java/com/google/protobuf/nano/**/*.java"
+        "javanano/src/main/java/com/google/protobuf/nano/CodedInputByteBufferNano.java"
+        "javanano/src/main/java/com/google/protobuf/nano/CodedOutputByteBufferNano.java"
+        "javanano/src/main/java/com/google/protobuf/nano/ExtendableMessageNano.java"
+        "javanano/src/main/java/com/google/protobuf/nano/Extension.java"
+        "javanano/src/main/java/com/google/protobuf/nano/FieldArray.java"
+        "javanano/src/main/java/com/google/protobuf/nano/FieldData.java"
+        "javanano/src/main/java/com/google/protobuf/nano/InternalNano.java"
+        "javanano/src/main/java/com/google/protobuf/nano/InvalidProtocolBufferNanoException.java"
+        "javanano/src/main/java/com/google/protobuf/nano/MapFactories.java"
+        "javanano/src/main/java/com/google/protobuf/nano/MessageNano.java"
+        "javanano/src/main/java/com/google/protobuf/nano/MessageNanoPrinter.java"
+        "javanano/src/main/java/com/google/protobuf/nano/UnknownFieldData.java"
+        "javanano/src/main/java/com/google/protobuf/nano/WireFormatNano.java"
     ];
 
     target = {
@@ -505,7 +517,14 @@ libprotobuf-java-micro = java_library_static {
 
     sdk_version = "8";
 
-    srcs = ["javamicro/src/main/java/com/google/protobuf/micro/**/*.java"];
+    srcs = [
+        "javamicro/src/main/java/com/google/protobuf/micro/ByteStringMicro.java"
+        "javamicro/src/main/java/com/google/protobuf/micro/CodedInputStreamMicro.java"
+        "javamicro/src/main/java/com/google/protobuf/micro/CodedOutputStreamMicro.java"
+        "javamicro/src/main/java/com/google/protobuf/micro/InvalidProtocolBufferMicroException.java"
+        "javamicro/src/main/java/com/google/protobuf/micro/MessageMicro.java"
+        "javamicro/src/main/java/com/google/protobuf/micro/WireFormatMicro.java"
+    ];
 };
 
 #  Java micro library (compatibility for old host-side users)
@@ -587,7 +606,75 @@ libprotobuf-java-full = java_library_host {
     defaults = ["libprotobuf_errorprone_defaults"];
 
     srcs = [
-        "java/core/src/main/java/**/*.java"
+        "java/core/src/main/java/com/google/protobuf/AbstractMessage.java"
+        "java/core/src/main/java/com/google/protobuf/AbstractMessageLite.java"
+        "java/core/src/main/java/com/google/protobuf/AbstractParser.java"
+        "java/core/src/main/java/com/google/protobuf/AbstractProtobufList.java"
+        "java/core/src/main/java/com/google/protobuf/BlockingRpcChannel.java"
+        "java/core/src/main/java/com/google/protobuf/BlockingService.java"
+        "java/core/src/main/java/com/google/protobuf/BooleanArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/ByteBufferWriter.java"
+        "java/core/src/main/java/com/google/protobuf/ByteOutput.java"
+        "java/core/src/main/java/com/google/protobuf/ByteString.java"
+        "java/core/src/main/java/com/google/protobuf/CodedInputStream.java"
+        "java/core/src/main/java/com/google/protobuf/CodedOutputStream.java"
+        "java/core/src/main/java/com/google/protobuf/Descriptors.java"
+        "java/core/src/main/java/com/google/protobuf/DoubleArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/DynamicMessage.java"
+        "java/core/src/main/java/com/google/protobuf/ExperimentalApi.java"
+        "java/core/src/main/java/com/google/protobuf/Extension.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionLite.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionRegistry.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionRegistryLite.java"
+        "java/core/src/main/java/com/google/protobuf/FieldSet.java"
+        "java/core/src/main/java/com/google/protobuf/FloatArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/GeneratedMessage.java"
+        "java/core/src/main/java/com/google/protobuf/GeneratedMessageLite.java"
+        "java/core/src/main/java/com/google/protobuf/IntArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/Internal.java"
+        "java/core/src/main/java/com/google/protobuf/InvalidProtocolBufferException.java"
+        "java/core/src/main/java/com/google/protobuf/LazyField.java"
+        "java/core/src/main/java/com/google/protobuf/LazyFieldLite.java"
+        "java/core/src/main/java/com/google/protobuf/LazyStringArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/LazyStringList.java"
+        "java/core/src/main/java/com/google/protobuf/LongArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/MapEntry.java"
+        "java/core/src/main/java/com/google/protobuf/MapEntryLite.java"
+        "java/core/src/main/java/com/google/protobuf/MapField.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldLite.java"
+        "java/core/src/main/java/com/google/protobuf/Message.java"
+        "java/core/src/main/java/com/google/protobuf/MessageLite.java"
+        "java/core/src/main/java/com/google/protobuf/MessageLiteOrBuilder.java"
+        "java/core/src/main/java/com/google/protobuf/MessageLiteToString.java"
+        "java/core/src/main/java/com/google/protobuf/MessageOrBuilder.java"
+        "java/core/src/main/java/com/google/protobuf/MessageReflection.java"
+        "java/core/src/main/java/com/google/protobuf/MutabilityOracle.java"
+        "java/core/src/main/java/com/google/protobuf/NioByteString.java"
+        "java/core/src/main/java/com/google/protobuf/Parser.java"
+        "java/core/src/main/java/com/google/protobuf/ProtobufArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/ProtocolMessageEnum.java"
+        "java/core/src/main/java/com/google/protobuf/ProtocolStringList.java"
+        "java/core/src/main/java/com/google/protobuf/RepeatedFieldBuilder.java"
+        "java/core/src/main/java/com/google/protobuf/RopeByteString.java"
+        "java/core/src/main/java/com/google/protobuf/RpcCallback.java"
+        "java/core/src/main/java/com/google/protobuf/RpcChannel.java"
+        "java/core/src/main/java/com/google/protobuf/RpcController.java"
+        "java/core/src/main/java/com/google/protobuf/RpcUtil.java"
+        "java/core/src/main/java/com/google/protobuf/Service.java"
+        "java/core/src/main/java/com/google/protobuf/ServiceException.java"
+        "java/core/src/main/java/com/google/protobuf/SingleFieldBuilder.java"
+        "java/core/src/main/java/com/google/protobuf/SmallSortedMap.java"
+        "java/core/src/main/java/com/google/protobuf/TextFormat.java"
+        "java/core/src/main/java/com/google/protobuf/TextFormatEscaper.java"
+        "java/core/src/main/java/com/google/protobuf/TextFormatParseInfoTree.java"
+        "java/core/src/main/java/com/google/protobuf/TextFormatParseLocation.java"
+        "java/core/src/main/java/com/google/protobuf/UninitializedMessageException.java"
+        "java/core/src/main/java/com/google/protobuf/UnknownFieldSet.java"
+        "java/core/src/main/java/com/google/protobuf/UnknownFieldSetLite.java"
+        "java/core/src/main/java/com/google/protobuf/UnmodifiableLazyStringList.java"
+        "java/core/src/main/java/com/google/protobuf/UnsafeByteOperations.java"
+        "java/core/src/main/java/com/google/protobuf/Utf8.java"
+        "java/core/src/main/java/com/google/protobuf/WireFormat.java"
         ":libprotobuf-internal-protos"
     ];
 
@@ -612,7 +699,7 @@ host-libprotobuf-java-full = java_library_host {
 #  =======================================================
 "libcore_private.stubs" = java_library {
     name = "libcore_private.stubs";
-    srcs = ["java/core/src/stubs/**/*.java"];
+    srcs = ["java/core/src/stubs/sun/misc/Unsafe.java"];
     sdk_version = "core_current";
     installable = false;
 };
@@ -647,7 +734,55 @@ libprotobuf-python = python_library {
 
 libprotobuf-internal-python-srcs = filegroup {
     name = "libprotobuf-internal-python-srcs";
-    srcs = ["python/google/**/*.py"];
+    srcs = [
+        "python/google/__init__.py"
+        "python/google/protobuf/__init__.py"
+        "python/google/protobuf/descriptor.py"
+        "python/google/protobuf/descriptor_database.py"
+        "python/google/protobuf/descriptor_pool.py"
+        "python/google/protobuf/json_format.py"
+        "python/google/protobuf/message.py"
+        "python/google/protobuf/message_factory.py"
+        "python/google/protobuf/proto_builder.py"
+        "python/google/protobuf/reflection.py"
+        "python/google/protobuf/service.py"
+        "python/google/protobuf/service_reflection.py"
+        "python/google/protobuf/symbol_database.py"
+        "python/google/protobuf/text_encoding.py"
+        "python/google/protobuf/text_format.py"
+        "python/google/protobuf/internal/__init__.py"
+        "python/google/protobuf/internal/_parameterized.py"
+        "python/google/protobuf/internal/api_implementation.py"
+        "python/google/protobuf/internal/containers.py"
+        "python/google/protobuf/internal/decoder.py"
+        "python/google/protobuf/internal/descriptor_database_test.py"
+        "python/google/protobuf/internal/descriptor_pool_test.py"
+        "python/google/protobuf/internal/descriptor_test.py"
+        "python/google/protobuf/internal/encoder.py"
+        "python/google/protobuf/internal/enum_type_wrapper.py"
+        "python/google/protobuf/internal/generator_test.py"
+        "python/google/protobuf/internal/json_format_test.py"
+        "python/google/protobuf/internal/message_factory_test.py"
+        "python/google/protobuf/internal/message_listener.py"
+        "python/google/protobuf/internal/message_test.py"
+        "python/google/protobuf/internal/proto_builder_test.py"
+        "python/google/protobuf/internal/python_message.py"
+        "python/google/protobuf/internal/reflection_test.py"
+        "python/google/protobuf/internal/service_reflection_test.py"
+        "python/google/protobuf/internal/symbol_database_test.py"
+        "python/google/protobuf/internal/test_util.py"
+        "python/google/protobuf/internal/text_encoding_test.py"
+        "python/google/protobuf/internal/text_format_test.py"
+        "python/google/protobuf/internal/type_checkers.py"
+        "python/google/protobuf/internal/unknown_fields_test.py"
+        "python/google/protobuf/internal/well_known_types.py"
+        "python/google/protobuf/internal/well_known_types_test.py"
+        "python/google/protobuf/internal/wire_format.py"
+        "python/google/protobuf/internal/wire_format_test.py"
+        "python/google/protobuf/internal/import_test_package/__init__.py"
+        "python/google/protobuf/pyext/__init__.py"
+        "python/google/protobuf/pyext/cpp_message.py"
+    ];
     path = "python";
 };
 
@@ -734,7 +869,7 @@ NanoAndroidTest = android_test {
     #  Test APK
     name = "NanoAndroidTest";
     sdk_version = "8";
-    srcs = ["javanano/src/device/test/java/com/google/protobuf/nano/**/*.java"];
+    srcs = ["javanano/src/device/test/java/com/google/protobuf/nano/NanoAndroidTest.java"];
     manifest = "javanano/src/device/test/AndroidManifest.xml";
     static_libs = [
         "libprotobuf-java-nano"

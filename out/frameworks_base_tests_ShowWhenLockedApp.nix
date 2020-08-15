@@ -3,7 +3,7 @@ let
 
 ShowWhenLocked = android_test {
     name = "ShowWhenLocked";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/showwhenlocked/ShowWhenLockedActivity.java"];
     sdk_version = "current";
 };
 

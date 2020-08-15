@@ -25,7 +25,19 @@ platform-test-rules = java_library {
         "memory-helper"
         "ub-uiautomator"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/rule/CompilationFilterRule.java"
+        "src/android/platform/test/rule/DropCachesRule.java"
+        "src/android/platform/test/rule/GarbageCollectRule.java"
+        "src/android/platform/test/rule/KillAppsRule.java"
+        "src/android/platform/test/rule/NaturalOrientationRule.java"
+        "src/android/platform/test/rule/NotificationPressureRule.java"
+        "src/android/platform/test/rule/PressHomeRule.java"
+        "src/android/platform/test/rule/QuickstepPressureRule.java"
+        "src/android/platform/test/rule/StopwatchRule.java"
+        "src/android/platform/test/rule/TestWatcher.java"
+        "src/android/platform/test/rule/TracePointRule.java"
+    ];
 };
 
 in { inherit platform-test-rules; }

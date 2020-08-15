@@ -18,7 +18,11 @@ let
 android-ex-camera2-utils = java_library {
     name = "android-ex-camera2-utils";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/ex/camera2/utils/Camera2CaptureCallbackForwarder.java"
+        "src/com/android/ex/camera2/utils/Camera2CaptureCallbackSplitter.java"
+        "src/com/android/ex/camera2/utils/Camera2RequestSettingsSet.java"
+    ];
 };
 
 in { inherit android-ex-camera2-utils; }

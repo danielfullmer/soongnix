@@ -18,7 +18,7 @@ let
 CtsNotificationSenderApp = android_test_helper_app {
     name = "CtsNotificationSenderApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/managedprofiletests/notificationsender/SendNotification.java"];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

@@ -23,7 +23,12 @@ CtsFileSystemTestCases = android_test {
         "compatibility-device-util-axt"
         "ctstestrunner-axt"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/filesystem/cts/AlmostFullTest.java"
+        "src/android/filesystem/cts/FileUtil.java"
+        "src/android/filesystem/cts/RandomRWTest.java"
+        "src/android/filesystem/cts/SequentialRWTest.java"
+    ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

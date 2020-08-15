@@ -6,7 +6,16 @@ libLLVMOrcJIT = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "ExecutionUtils.cpp"
+        "IndirectionUtils.cpp"
+        "NullResolver.cpp"
+        "OrcABISupport.cpp"
+        "OrcCBindings.cpp"
+        "OrcError.cpp"
+        "OrcMCJITReplacement.cpp"
+        "OrcRemoteTargetRPCAPI.cpp"
+    ];
 };
 
 in { inherit libLLVMOrcJIT; }

@@ -28,7 +28,11 @@ LongevityHostLibTests = java_test_host {
         "test-composers"
         "truth-host-prebuilt"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/host/test/longevity/LongevitySuiteTest.java"
+        "src/android/host/test/longevity/listener/ErrorTerminatorTest.java"
+        "src/android/host/test/longevity/listener/TimeoutTerminatorTest.java"
+    ];
 };
 
 in { inherit LongevityHostLibTests; }

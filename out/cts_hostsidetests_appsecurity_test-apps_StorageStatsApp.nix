@@ -26,7 +26,7 @@ CtsStorageStatsApp = android_test {
     ];
     libs = ["android.test.base.stubs"];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/cts/storagestatsapp/StorageStatsTest.java"
     ];
     test_suites = [
         "cts"

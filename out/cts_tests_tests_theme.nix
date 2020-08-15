@@ -26,7 +26,12 @@ CtsThemeDeviceTestCases = android_test {
         "android.test.base.stubs"
     ];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/theme/cts/DeviceDefaultActivity.java"
+        "src/android/theme/cts/DeviceDefaultTest.java"
+        "src/android/theme/cts/ThemeRebaseTest.java"
+        "src/android/theme/cts/WatchPercentageScreenDimenTest.java"
+    ];
 
     test_suites = [
         "cts"

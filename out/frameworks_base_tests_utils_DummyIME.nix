@@ -19,7 +19,10 @@ let
 
 DummyIME = android_test {
     name = "DummyIME";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/testing/dummyime/DummyIme.java"
+        "src/com/android/testing/dummyime/ImePreferences.java"
+    ];
     sdk_version = "current";
 };
 

@@ -19,7 +19,10 @@ let
 
 live-tv-tuner-proto = java_library {
     name = "live-tv-tuner-proto";
-    srcs = ["*.proto"];
+    srcs = [
+        "channel.proto"
+        "track.proto"
+    ];
     sdk_version = "system_current";
     proto = {
         type = "nano";

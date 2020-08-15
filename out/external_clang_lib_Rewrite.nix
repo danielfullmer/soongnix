@@ -4,7 +4,13 @@ let
 libclangRewrite = cc_library_static {
     name = "libclangRewrite";
     defaults = ["clang-defaults"];
-    srcs = ["*.cpp"];
+    srcs = [
+        "DeltaTree.cpp"
+        "HTMLRewrite.cpp"
+        "RewriteRope.cpp"
+        "Rewriter.cpp"
+        "TokenRewriter.cpp"
+    ];
 };
 
 in { inherit libclangRewrite; }

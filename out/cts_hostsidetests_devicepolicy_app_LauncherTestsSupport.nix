@@ -18,7 +18,11 @@ let
 CtsLauncherAppsTestsSupport = android_test_helper_app {
     name = "CtsLauncherAppsTestsSupport";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/launchertests/support/LauncherActivity.java"
+        "src/com/android/cts/launchertests/support/LauncherCallbackTestsService.java"
+        "src/com/android/cts/launchertests/support/QuietModeCommandReceiver.java"
+    ];
     libs = ["junit"];
     sdk_version = "current";
     min_sdk_version = "21";

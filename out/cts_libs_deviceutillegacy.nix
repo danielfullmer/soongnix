@@ -25,7 +25,12 @@ ctsdeviceutillegacy = java_library_static {
 
     libs = ["android.test.base.stubs"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/webkit/cts/WebViewOnUiThread.java"
+        "src/android/webkit/cts/WebViewSyncLoader.java"
+        "src/android/webkit/cts/WebkitUtils.java"
+        "src/com/android/compatibility/common/util/SynchronousPixelCopy.java"
+    ];
 
     sdk_version = "test_current";
 
@@ -42,7 +47,12 @@ ctsdeviceutillegacy-axt = java_library_static {
 
     libs = ["android.test.base.stubs"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/webkit/cts/WebViewOnUiThread.java"
+        "src/android/webkit/cts/WebViewSyncLoader.java"
+        "src/android/webkit/cts/WebkitUtils.java"
+        "src/com/android/compatibility/common/util/SynchronousPixelCopy.java"
+    ];
 
     sdk_version = "test_current";
 

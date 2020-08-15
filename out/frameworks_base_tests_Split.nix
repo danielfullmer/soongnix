@@ -19,7 +19,7 @@ let
 
 Split = android_test {
     name = "Split";
-    srcs = ["**/*.java"];
+    srcs = ["src/java/com/android/example/split/ActivityMain.java"];
     sdk_version = "current";
     package_splits = [
         "mdpi-v4"

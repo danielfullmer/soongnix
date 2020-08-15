@@ -18,7 +18,10 @@ let
 CtsWidgetProviderApp = android_test_helper_app {
     name = "CtsWidgetProviderApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/widgetprovider/SimpleAppWidgetHostService.java"
+        "src/com/android/cts/widgetprovider/SimpleWidgetProvider.java"
+    ];
     sdk_version = "current";
     #  tag this module as a cts test artifact
     test_suites = [

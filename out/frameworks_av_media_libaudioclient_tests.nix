@@ -22,7 +22,7 @@ test_create_audiotrack = cc_test {
         "libcutils"
         "libutils"
     ];
-    data = ["track_test_input_*.txt"];
+    data = ["track_test_input_v1.0_ref.txt"];
 };
 
 test_create_audiorecord = cc_test {
@@ -38,7 +38,7 @@ test_create_audiorecord = cc_test {
         "libcutils"
         "libutils"
     ];
-    data = ["record_test_input_*.txt"];
+    data = ["record_test_input_v1.0_ref.txt"];
 };
 
 in { inherit libaudioclient_tests_defaults test_create_audiorecord test_create_audiotrack; }

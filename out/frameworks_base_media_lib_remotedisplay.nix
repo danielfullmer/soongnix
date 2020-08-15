@@ -19,7 +19,10 @@ let
 
 "com.android.media.remotedisplay" = java_sdk_library {
     name = "com.android.media.remotedisplay";
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/com/android/media/remotedisplay/RemoteDisplay.java"
+        "java/com/android/media/remotedisplay/RemoteDisplayProvider.java"
+    ];
     api_packages = ["com.android.media.remotedisplay"];
 };
 

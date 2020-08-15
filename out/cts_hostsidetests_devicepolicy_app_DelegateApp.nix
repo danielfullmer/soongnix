@@ -18,7 +18,19 @@ let
 CtsDelegateApp = android_test_helper_app {
     name = "CtsDelegateApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/delegate/AppRestrictionsDelegateTest.java"
+        "src/com/android/cts/delegate/AppRestrictionsIsCallerDelegateHelper.java"
+        "src/com/android/cts/delegate/BlockUninstallDelegateTest.java"
+        "src/com/android/cts/delegate/CertInstallDelegateTest.java"
+        "src/com/android/cts/delegate/DelegateTestUtils.java"
+        "src/com/android/cts/delegate/DelegatedScopesReceiverActivity.java"
+        "src/com/android/cts/delegate/EnableSystemAppDelegateTest.java"
+        "src/com/android/cts/delegate/GeneralDelegateTest.java"
+        "src/com/android/cts/delegate/NetworkLoggingDelegateTest.java"
+        "src/com/android/cts/delegate/PackageAccessDelegateTest.java"
+        "src/com/android/cts/delegate/PermissionGrantDelegateTest.java"
+    ];
     libs = [
         "android.test.runner.stubs"
         "junit"

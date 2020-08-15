@@ -18,7 +18,10 @@ let
 android-ex-camera2-utils-tests = android_test {
     name = "android-ex-camera2-utils-tests";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/ex/camera2/utils/Camera2DeviceTester.java"
+        "src/com/android/ex/camera2/utils/Camera2UtilsTest.java"
+    ];
     static_libs = [
         "android-ex-camera2-utils"
         "androidx.test.rules"

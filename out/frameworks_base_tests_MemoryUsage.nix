@@ -4,7 +4,10 @@ let
 MemoryUsage = android_test {
     name = "MemoryUsage";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/tests/memoryusage/MemoryUsageInstrumentation.java"
+        "src/com/android/tests/memoryusage/MemoryUsageTest.java"
+    ];
     platform_apis = true;
     certificate = "platform";
     libs = [

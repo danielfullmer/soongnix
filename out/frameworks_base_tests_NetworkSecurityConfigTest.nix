@@ -10,7 +10,13 @@ NetworkSecurityConfigTests = android_test {
     ];
     static_libs = ["junit"];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/security/net/config/NetworkSecurityConfigTests.java"
+        "src/android/security/net/config/TestCertificateSource.java"
+        "src/android/security/net/config/TestConfigSource.java"
+        "src/android/security/net/config/TestUtils.java"
+        "src/android/security/net/config/XmlConfigTests.java"
+    ];
     platform_apis = true;
 };
 

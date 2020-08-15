@@ -23,7 +23,7 @@ handheld-app-helpers = java_library {
         "business-card-app-helper"
         "performance-launch-app-helper"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [];
 };
 
 in { inherit handheld-app-helpers; }

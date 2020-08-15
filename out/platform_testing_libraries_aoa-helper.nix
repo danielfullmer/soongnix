@@ -17,7 +17,13 @@ let
 
 aoa-helper = java_library_host {
     name = "aoa-helper";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/helper/aoa/AoaDevice.java"
+        "src/com/android/helper/aoa/IUsbNative.java"
+        "src/com/android/helper/aoa/UsbDevice.java"
+        "src/com/android/helper/aoa/UsbException.java"
+        "src/com/android/helper/aoa/UsbHelper.java"
+    ];
     libs = [
         "guava"
     ];
@@ -28,7 +34,11 @@ aoa-helper = java_library_host {
 
 aoa-helper-test = java_test_host {
     name = "aoa-helper-test";
-    srcs = ["tests/src/**/*.java"];
+    srcs = [
+        "tests/src/com/android/helper/aoa/AoaDeviceTest.java"
+        "tests/src/com/android/helper/aoa/UsbDeviceTest.java"
+        "tests/src/com/android/helper/aoa/UsbHelperTest.java"
+    ];
     static_libs = [
         "aoa-helper"
         "guava"

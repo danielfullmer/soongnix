@@ -19,7 +19,20 @@ let
 
 libnosprotos = cc_library {
     name = "libnosprotos";
-    srcs = ["**/*.proto"];
+    srcs = [
+        "google/protobuf/descriptor.proto"
+        "nugget/app/avb/avb.proto"
+        "nugget/app/keymaster/keymaster.proto"
+        "nugget/app/keymaster/keymaster_defs.proto"
+        "nugget/app/keymaster/keymaster_types.proto"
+        "nugget/app/protoapi/control.proto"
+        "nugget/app/protoapi/diagnostics_api.proto"
+        "nugget/app/protoapi/gchips_types.proto"
+        "nugget/app/protoapi/header.proto"
+        "nugget/app/protoapi/testing_api.proto"
+        "nugget/app/weaver/weaver.proto"
+        "nugget/protobuf/options.proto"
+    ];
     exclude_srcs = ["google/protobuf/descriptor.proto"]; #  Used for bazel build
     defaults = [
         "nos_proto_defaults"

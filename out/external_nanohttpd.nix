@@ -6,7 +6,10 @@ let
 #  ============================================================================
 libnanohttpd = java_library {
     name = "libnanohttpd";
-    srcs = ["core/src/main/**/*.java"];
+    srcs = [
+        "core/src/main/java/fi/iki/elonen/NanoHTTPD.java"
+        "core/src/main/java/fi/iki/elonen/util/ServerRunner.java"
+    ];
     sdk_version = "current";
 };
 
@@ -16,8 +19,12 @@ libnanohttpd = java_library {
 nanohttpd-webserver = java_library {
     name = "nanohttpd-webserver";
     srcs = [
-        "core/src/main/**/*.java"
-        "webserver/src/main/**/*.java"
+        "core/src/main/java/fi/iki/elonen/NanoHTTPD.java"
+        "core/src/main/java/fi/iki/elonen/util/ServerRunner.java"
+        "webserver/src/main/java/fi/iki/elonen/InternalRewrite.java"
+        "webserver/src/main/java/fi/iki/elonen/SimpleWebServer.java"
+        "webserver/src/main/java/fi/iki/elonen/WebServerPlugin.java"
+        "webserver/src/main/java/fi/iki/elonen/WebServerPluginInfo.java"
     ];
     sdk_version = "current";
 };

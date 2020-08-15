@@ -34,7 +34,10 @@ honggfuzz_libcommon = cc_library {
     header_libs = ["honggfuzz_libcommon_headers"];
     export_header_lib_headers = ["honggfuzz_libcommon_headers"];
     srcs = [
-        "libhfcommon/*.c"
+        "libhfcommon/files.c"
+        "libhfcommon/log.c"
+        "libhfcommon/ns.c"
+        "libhfcommon/util.c"
     ];
 
     static_libs = [
@@ -69,7 +72,11 @@ honggfuzz_libhfuzz = cc_library {
     ];
 
     srcs = [
-        "libhfuzz/*.c"
+        "libhfuzz/fetch.c"
+        "libhfuzz/instrument.c"
+        "libhfuzz/linux.c"
+        "libhfuzz/memorycmp.c"
+        "libhfuzz/persistent.c"
     ];
 };
 
@@ -96,8 +103,22 @@ honggfuzz = cc_binary {
     ];
 
     srcs = [
-        "*.c"
-        "linux/*.c"
+        "cmdline.c"
+        "display.c"
+        "fuzz.c"
+        "honggfuzz.c"
+        "input.c"
+        "mangle.c"
+        "report.c"
+        "sanitizers.c"
+        "socketfuzzer.c"
+        "subproc.c"
+        "linux/arch.c"
+        "linux/bfd.c"
+        "linux/perf.c"
+        "linux/pt.c"
+        "linux/trace.c"
+        "linux/unwind.c"
     ];
     exclude_srcs = [
         "linux/bfd.c"

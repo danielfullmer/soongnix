@@ -20,7 +20,24 @@ let
 flickerlib = java_test {
     name = "flickerlib";
     platform_apis = true;
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/server/wm/flicker/Assertions.java"
+        "src/com/android/server/wm/flicker/AssertionsChecker.java"
+        "src/com/android/server/wm/flicker/AutomationUtils.java"
+        "src/com/android/server/wm/flicker/ITraceEntry.java"
+        "src/com/android/server/wm/flicker/LayersTrace.java"
+        "src/com/android/server/wm/flicker/LayersTraceSubject.java"
+        "src/com/android/server/wm/flicker/TransitionRunner.java"
+        "src/com/android/server/wm/flicker/WindowManagerTrace.java"
+        "src/com/android/server/wm/flicker/WindowUtils.java"
+        "src/com/android/server/wm/flicker/WmTraceSubject.java"
+        "src/com/android/server/wm/flicker/monitor/ITransitionMonitor.java"
+        "src/com/android/server/wm/flicker/monitor/LayersTraceMonitor.java"
+        "src/com/android/server/wm/flicker/monitor/ScreenRecorder.java"
+        "src/com/android/server/wm/flicker/monitor/TraceMonitor.java"
+        "src/com/android/server/wm/flicker/monitor/WindowAnimationFrameStatsMonitor.java"
+        "src/com/android/server/wm/flicker/monitor/WindowManagerTraceMonitor.java"
+    ];
     static_libs = [
         "androidx.test.janktesthelper"
         "cts-wm-util"

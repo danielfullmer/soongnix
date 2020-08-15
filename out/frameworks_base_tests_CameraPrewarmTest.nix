@@ -3,7 +3,11 @@ let
 
 CameraPrewarmTest = android_test {
     name = "CameraPrewarmTest";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/google/android/test/cameraprewarm/CameraActivity.java"
+        "src/com/google/android/test/cameraprewarm/PrewarmService.java"
+        "src/com/google/android/test/cameraprewarm/SecureCameraActivity.java"
+    ];
     sdk_version = "current";
     certificate = "platform";
 };

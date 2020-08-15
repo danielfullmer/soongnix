@@ -18,14 +18,22 @@ let
 #  Filegroup for the profile proto definition that enables referencing it elsewhere.
 profile-proto-def = filegroup {
     name = "profile-proto-def";
-    srcs = ["src/**/profile.proto"];
+    srcs = ["src/android/platform/test/longevity/profile.proto"];
 };
 
 longevity-device-lib = java_library_static {
     name = "longevity-device-lib";
     srcs = [
-        "src/**/*.java"
-        "src/**/profile.proto"
+        "src/android/platform/test/longevity/LongevityClassRunner.java"
+        "src/android/platform/test/longevity/LongevitySuite.java"
+        "src/android/platform/test/longevity/Profile.java"
+        "src/android/platform/test/longevity/ProfileSuite.java"
+        "src/android/platform/test/longevity/ScenarioRunner.java"
+        "src/android/platform/test/longevity/ScheduledScenarioRunner.java"
+        "src/android/platform/test/longevity/listener/BatteryTerminator.java"
+        "src/android/platform/test/longevity/listener/ErrorTerminator.java"
+        "src/android/platform/test/longevity/listener/TimeoutTerminator.java"
+        "src/android/platform/test/longevity/profile.proto"
     ];
     proto = {
         type = "lite";

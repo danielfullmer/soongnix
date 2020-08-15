@@ -3,7 +3,7 @@ let
 
 LargeAssetTest = android_app {
     name = "LargeAssetTest";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/android/largeassettest/LargeAssetTest.java"];
     sdk_version = "current";
     certificate = "platform";
 };

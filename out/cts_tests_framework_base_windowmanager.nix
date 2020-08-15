@@ -17,7 +17,26 @@ let
 
 cts-wm-components = filegroup {
     name = "cts-wm-components";
-    srcs = ["**/Components.java"];
+    srcs = [
+        "alertwindowapp/src/android/server/wm/alertwindowapp/Components.java"
+        "alertwindowappsdk25/src/android/server/wm/alertwindowappsdk25/Components.java"
+        "alertwindowservice/src/android/server/wm/alertwindowservice/Components.java"
+        "app/src/android/server/wm/app/Components.java"
+        "app27/src/android/server/wm/app27/Components.java"
+        "appDeprecatedSdk/src/android/server/wm/deprecatedsdk/Components.java"
+        "appDisplaySize/src/android/server/wm/displaysize/Components.java"
+        "appPrereleaseSdk/src/android/server/wm/prerelease/Components.java"
+        "appProfileable/src/android/server/wm/debuggable/Components.java"
+        "appSecondUid/src/android/server/wm/second/Components.java"
+        "appThirdUid/src/android/server/wm/third/Components.java"
+        "backgroundactivity/AppA/src/android/server/wm/backgroundactivity/appa/Components.java"
+        "backgroundactivity/AppB/src/android/server/wm/backgroundactivity/appb/Components.java"
+        "dndsourceapp/src/android/server/wm/dndsourceapp/Components.java"
+        "dndtargetapp/src/android/server/wm/dndtargetapp/Components.java"
+        "dndtargetappsdk23/src/android/server/wm/dndtargetappsdk23/Components.java"
+        "translucentapp/src/android/server/wm/translucentapp/Components.java"
+        "translucentappsdk26/src/android/server/wm/translucentapp26/Components.java"
+    ];
 };
 
 in { inherit cts-wm-components; }

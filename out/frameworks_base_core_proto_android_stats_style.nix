@@ -25,7 +25,7 @@ styleprotosnano = java_library {
 
     sdk_version = "current";
     srcs = [
-        "*.proto"
+        "style_enums.proto"
     ];
 };
 

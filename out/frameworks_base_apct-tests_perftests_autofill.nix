@@ -17,7 +17,12 @@ let
 
 AutofillPerfTests = android_test {
     name = "AutofillPerfTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/view/autofill/AbstractAutofillPerfTestCase.java"
+        "src/android/view/autofill/LoginTest.java"
+        "src/android/view/autofill/MyAutofillCallback.java"
+        "src/android/view/autofill/MyAutofillService.java"
+    ];
     resource_dirs = ["res"];
     static_libs = [
         "androidx.test.rules"

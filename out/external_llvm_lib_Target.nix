@@ -6,7 +6,15 @@ libLLVMTarget = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "Target.cpp"
+        "TargetIntrinsicInfo.cpp"
+        "TargetLoweringObjectFile.cpp"
+        "TargetMachine.cpp"
+        "TargetMachineC.cpp"
+        "TargetRecip.cpp"
+        "TargetSubtargetInfo.cpp"
+    ];
 };
 
 subdirs = ["*"];

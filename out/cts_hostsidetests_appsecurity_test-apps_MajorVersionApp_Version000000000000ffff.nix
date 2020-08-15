@@ -19,7 +19,7 @@ CtsMajorVersion000000000000ffff = android_test {
     name = "CtsMajorVersion000000000000ffff";
     defaults = ["cts_support_defaults"];
     srcs = [
-        "src/**/*.java"
+        "src/com/android/cts/majorversion/VersionConstants.java"
         ":CtsMajorVersionCommon"
     ];
     static_libs = ["androidx.test.rules"];

@@ -20,7 +20,7 @@ let
 PowerTestHelper-src = java_library {
     name = "PowerTestHelper-src";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/helper/PowerTestHelper.java"];
 
     sdk_version = "current";
 

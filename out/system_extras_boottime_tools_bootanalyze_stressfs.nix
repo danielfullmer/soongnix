@@ -19,7 +19,10 @@ let
 
 StressFS = android_test {
     name = "StressFS";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/test/stressfs/WritingActivity.java"
+        "src/com/android/car/test/stressfs/WritingService.java"
+    ];
 
     sdk_version = "current";
 

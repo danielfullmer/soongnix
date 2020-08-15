@@ -19,7 +19,10 @@ AppCompatibilityTest = android_test {
     name = "AppCompatibilityTest";
     static_libs = ["androidx.test.rules"];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibilitytest/AppCompatibility.java"
+        "src/com/android/compatibilitytest/AppCompatibilityRunner.java"
+    ];
     platform_apis = true;
     certificate = "platform";
 };

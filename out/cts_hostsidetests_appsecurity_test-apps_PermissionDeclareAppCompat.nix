@@ -18,7 +18,7 @@ let
 CtsPermissionDeclareAppCompat = android_test {
     name = "CtsPermissionDeclareAppCompat";
     defaults = ["cts_support_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/permissiondeclareappcompat/AmbiguousContentProvider.java"];
     sdk_version = "16";
     static_libs = ["androidx.test.rules"];
     #  tag this module as a cts test artifact

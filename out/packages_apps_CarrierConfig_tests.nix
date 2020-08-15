@@ -8,7 +8,7 @@ CarrierConfigTests = android_test {
         "android.test.base"
     ];
     static_libs = ["junit"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/carrierconfig/CarrierConfigTest.java"];
     platform_apis = true;
     test_suites = ["device-tests"];
     certificate = "platform";

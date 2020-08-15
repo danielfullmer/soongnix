@@ -17,7 +17,7 @@ let
 
 BugreportManagerTestCases = android_test {
     name = "BugreportManagerTestCases";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/server/bugreports/BugreportManagerTest.java"];
     libs = [
         "android.test.runner"
         "android.test.base"

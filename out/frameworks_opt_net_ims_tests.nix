@@ -20,7 +20,10 @@ let
 ImsCommonTests = android_test {
     name = "ImsCommonTests";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/ims/ImsConfigTest.java"
+        "src/com/android/ims/ImsTestBase.java"
+    ];
 
     platform_apis = true;
     certificate = "platform";

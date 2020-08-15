@@ -17,7 +17,12 @@ let
 
 test-composers-tests = java_library_static {
     name = "test-composers-tests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/host/test/composer/IterateTest.java"
+        "src/android/host/test/composer/IterateTestBase.java"
+        "src/android/host/test/composer/ShuffleTest.java"
+        "src/android/host/test/composer/ShuffleTestBase.java"
+    ];
     sdk_version = "current";
     host_supported = true;
     libs = [

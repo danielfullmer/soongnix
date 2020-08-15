@@ -7,7 +7,7 @@ libLLVMAArch64Utils = cc_library_static {
         "llvm-lib-defaults"
         "llvm-aarch64-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["AArch64BaseInfo.cpp"];
 };
 
 in { inherit libLLVMAArch64Utils; }

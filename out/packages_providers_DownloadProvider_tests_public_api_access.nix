@@ -20,7 +20,7 @@ DownloadPublicApiAccessTests = android_test {
     name = "DownloadPublicApiAccessTests";
 
     srcs = [
-        "src/**/*.java"
+        "src/com/android/providers/downloads/public_api_access_tests/PublicApiAccessTest.java"
     ];
 
     libs = [

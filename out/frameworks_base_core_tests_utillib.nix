@@ -18,7 +18,10 @@ let
 frameworks-core-util-lib = java_library {
     name = "frameworks-core-util-lib";
 
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/android/test/BandwidthTest.java"
+        "src/android/test/BandwidthTestCase.java"
+    ];
 
     static_libs = ["junit"];
     libs = ["android.test.base"];

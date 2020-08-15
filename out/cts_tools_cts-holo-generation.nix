@@ -28,7 +28,10 @@ CtsHoloGeneration = android_app {
         "android.test.runner.stubs"
         "android.test.base.stubs"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/holo_capture/CaptureActivity.java"
+        "src/com/android/cts/holo_capture/CaptureHolo.java"
+    ];
     sdk_version = "current";
 };
 

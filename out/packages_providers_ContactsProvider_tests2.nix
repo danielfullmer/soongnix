@@ -28,7 +28,7 @@ ContactsProviderTests2 = android_test {
         "android.test.runner"
         "android.test.base"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/providers/contacts/tests2/AllUriTest.java"];
     platform_apis = true;
     test_suites = ["device-tests"];
     instrumentation_for = "ContactsProvider";

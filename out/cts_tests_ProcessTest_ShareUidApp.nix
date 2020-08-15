@@ -18,7 +18,10 @@ let
 ShareUidApp = android_test_helper_app {
     name = "ShareUidApp";
     defaults = ["cts_defaults"];
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/cts/process/activity/SharePidActivity.java"
+        "src/com/android/cts/process/activity/SharePidSubActivity.java"
+    ];
     sdk_version = "current";
     optimize = {
         enabled = false;

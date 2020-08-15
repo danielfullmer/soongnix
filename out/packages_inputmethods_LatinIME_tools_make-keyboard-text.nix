@@ -19,7 +19,15 @@ let
 make-keyboard-text = java_binary_host {
     name = "make-keyboard-text";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/inputmethod/keyboard/tools/ArrayInitializerFormatter.java"
+        "src/com/android/inputmethod/keyboard/tools/JarUtils.java"
+        "src/com/android/inputmethod/keyboard/tools/LocaleUtils.java"
+        "src/com/android/inputmethod/keyboard/tools/MakeKeyboardText.java"
+        "src/com/android/inputmethod/keyboard/tools/MoreKeysResources.java"
+        "src/com/android/inputmethod/keyboard/tools/StringResource.java"
+        "src/com/android/inputmethod/keyboard/tools/StringResourceMap.java"
+    ];
     main_class = "com.android.inputmethod.keyboard.tools.MakeKeyboardText";
     java_resource_dirs = ["res"];
 };

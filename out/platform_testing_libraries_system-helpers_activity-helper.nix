@@ -24,7 +24,7 @@ activity-helper = java_library {
         "android-support-test"
         "commands-helper"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/ActivityHelper.java"];
     sdk_version = "current";
 };
 

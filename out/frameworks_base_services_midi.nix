@@ -3,7 +3,7 @@ let
 
 "services.midi" = java_library_static {
     name = "services.midi";
-    srcs = ["java/**/*.java"];
+    srcs = ["java/com/android/server/midi/MidiService.java"];
     libs = ["services.core"];
 };
 

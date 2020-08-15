@@ -7,7 +7,10 @@ let
 media = java_binary {
     name = "media";
     wrapper = "media";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/commands/media/Media.java"
+        "src/com/android/commands/media/VolumeCtrl.java"
+    ];
 };
 
 in { inherit media; }

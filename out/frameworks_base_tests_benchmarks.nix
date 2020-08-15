@@ -22,7 +22,7 @@ networkStatsFactory-benchmarks = java_library {
     name = "networkStatsFactory-benchmarks";
     installable = true;
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/server/net/NetworkStatsFactoryBenchmark.java"];
 
     libs = [
         "caliper-api-target"

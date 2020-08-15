@@ -19,7 +19,13 @@ statsd-helper-test = java_library {
     name = "statsd-helper-test";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/helpers/AppStartupHelperTest.java"
+        "src/com/android/helpers/CpuUsageHelperTest.java"
+        "src/com/android/helpers/CrashHelperTest.java"
+        "src/com/android/helpers/HelperTestUtility.java"
+        "src/com/android/helpers/ThermalHelperTest.java"
+    ];
 
     static_libs = [
         "androidx.test.runner"

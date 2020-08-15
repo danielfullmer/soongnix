@@ -39,7 +39,16 @@ tinyxml2-tests = cc_test {
     srcs = ["xmltest.cpp"];
     shared_libs = ["libtinyxml2"];
     data = [
-        "resources/**/*"
+        "resources/dream.xml"
+        "resources/empty.xml"
+        "resources/out/"
+        "resources/utf8test.xml"
+        "resources/utf8testverify.xml"
+        "resources/xmltest-4636783552757760.xml"
+        "resources/xmltest-5330.xml"
+        "resources/xmltest-5662204197076992.xml"
+        "resources/xmltest-5720541257269248.xml"
+        "resources/out/readme.txt"
     ];
 };
 

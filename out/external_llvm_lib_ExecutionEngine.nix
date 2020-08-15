@@ -6,7 +6,13 @@ libLLVMExecutionEngine = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "ExecutionEngine.cpp"
+        "ExecutionEngineBindings.cpp"
+        "GDBRegistrationListener.cpp"
+        "SectionMemoryManager.cpp"
+        "TargetSelect.cpp"
+    ];
 };
 
 subdirs = ["*"];

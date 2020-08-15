@@ -40,7 +40,13 @@ SystemUpdaterSampleTests = android_test {
 
     resource_dirs = ["res"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/example/android/systemupdatersample/UpdateConfigTest.java"
+        "src/com/example/android/systemupdatersample/UpdateManagerTest.java"
+        "src/com/example/android/systemupdatersample/util/FileDownloaderTest.java"
+        "src/com/example/android/systemupdatersample/util/PayloadSpecsTest.java"
+        "src/com/example/android/systemupdatersample/util/UpdateConfigsTest.java"
+    ];
 };
 
 in { inherit SystemUpdaterSampleTests; }

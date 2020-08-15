@@ -172,7 +172,29 @@ libandroidfw_tests = cc_test {
             ];
         };
     };
-    data = ["tests/data/**/*.apk"];
+    data = [
+        "tests/data/app/app.apk"
+        "tests/data/appaslib/appaslib.apk"
+        "tests/data/appaslib/appaslib_lib.apk"
+        "tests/data/basic/basic.apk"
+        "tests/data/basic/basic_de_fr.apk"
+        "tests/data/basic/basic_hdpi-v4.apk"
+        "tests/data/basic/basic_xhdpi-v4.apk"
+        "tests/data/basic/basic_xxhdpi-v4.apk"
+        "tests/data/feature/feature.apk"
+        "tests/data/length_decode/length_decode_invalid.apk"
+        "tests/data/length_decode/length_decode_valid.apk"
+        "tests/data/lib_one/lib_one.apk"
+        "tests/data/lib_two/lib_two.apk"
+        "tests/data/libclient/libclient.apk"
+        "tests/data/out_of_order_types/out_of_order_types.apk"
+        "tests/data/overlay/overlay.apk"
+        "tests/data/overlayable/overlayable.apk"
+        "tests/data/sparse/not_sparse.apk"
+        "tests/data/sparse/sparse.apk"
+        "tests/data/styles/styles.apk"
+        "tests/data/system/system.apk"
+    ];
     test_suites = ["device-tests"];
 };
 
@@ -192,7 +214,29 @@ libandroidfw_benchmarks = cc_benchmark {
         "tests/Theme_bench.cpp"
     ];
     shared_libs = common_test_libs;
-    data = ["tests/data/**/*.apk"];
+    data = [
+        "tests/data/app/app.apk"
+        "tests/data/appaslib/appaslib.apk"
+        "tests/data/appaslib/appaslib_lib.apk"
+        "tests/data/basic/basic.apk"
+        "tests/data/basic/basic_de_fr.apk"
+        "tests/data/basic/basic_hdpi-v4.apk"
+        "tests/data/basic/basic_xhdpi-v4.apk"
+        "tests/data/basic/basic_xxhdpi-v4.apk"
+        "tests/data/feature/feature.apk"
+        "tests/data/length_decode/length_decode_invalid.apk"
+        "tests/data/length_decode/length_decode_valid.apk"
+        "tests/data/lib_one/lib_one.apk"
+        "tests/data/lib_two/lib_two.apk"
+        "tests/data/libclient/libclient.apk"
+        "tests/data/out_of_order_types/out_of_order_types.apk"
+        "tests/data/overlay/overlay.apk"
+        "tests/data/overlayable/overlayable.apk"
+        "tests/data/sparse/not_sparse.apk"
+        "tests/data/sparse/sparse.apk"
+        "tests/data/styles/styles.apk"
+        "tests/data/system/system.apk"
+    ];
 };
 
 in { inherit libandroidfw libandroidfw_benchmarks libandroidfw_defaults libandroidfw_tests; }

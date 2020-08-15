@@ -19,7 +19,10 @@ jank-helper-test = java_library {
     name = "jank-helper-test";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/helpers/JankCollectionHelperTest.java"
+        "src/com/android/helpers/SfStatsCollectionHelperTest.java"
+    ];
 
     static_libs = [
         "androidx.test.runner"

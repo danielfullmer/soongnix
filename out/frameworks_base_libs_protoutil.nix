@@ -57,7 +57,12 @@ libprotoutil_test = cc_test {
 
     local_include_dirs = ["include"];
 
-    srcs = ["tests/*"];
+    srcs = [
+        "tests/EncodedBuffer_test.cpp"
+        "tests/ProtoOutputStream_test.cpp"
+        "tests/protobuf_test.cpp"
+        "tests/test.proto"
+    ];
 
     shared_libs = [
         "libprotobuf-cpp-full"

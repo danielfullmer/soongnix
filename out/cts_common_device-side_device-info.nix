@@ -18,7 +18,27 @@ let
 compatibility-device-info = java_library {
     name = "compatibility-device-info";
 
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/compatibility/common/deviceinfo/AppStandbyDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/ClientIdDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/ConfigurationDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/CpuDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/DeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/FeatureDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/GenericDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/GlesStubActivity.java"
+        "src/com/android/compatibility/common/deviceinfo/GraphicsDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/LocaleDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/MediaDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/MemoryDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/PackageDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/PropertyDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/ScreenDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/StorageDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/UserDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/VintfDeviceInfo.java"
+        "src/com/android/compatibility/common/deviceinfo/VintfFilesCollector.java"
+    ];
 
     static_libs = [
         "compatibility-device-util-axt"

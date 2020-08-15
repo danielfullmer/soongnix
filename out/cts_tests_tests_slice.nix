@@ -51,8 +51,17 @@ CtsSliceTestCases = android_test {
     ];
 
     srcs = [
-        "src/**/*.java"
-        "src/**/*.kt"
+        "src/android/slice/cts/Launcher.java"
+        "src/android/slice/cts/LocalSliceProvider.java"
+        "src/android/slice/cts/SliceBindingTest.java"
+        "src/android/slice/cts/SliceBuilderTest.java"
+        "src/android/slice/cts/SliceManagerTest.java"
+        "src/android/slice/cts/SliceMetricsTest.java"
+        "src/android/slice/cts/SlicePermissionsTest.java"
+        "src/android/slice/cts/SliceProvider.java"
+        "src/android/slice/cts/SliceProviderTest.java"
+        "src/android/slice/cts/SliceSpecTest.java"
+        "src/android/slice/cts/SliceProviderTest.kt"
     ];
 
     platform_apis = true;

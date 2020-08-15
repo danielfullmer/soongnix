@@ -19,7 +19,7 @@ system-helper-test = java_library {
     name = "system-helper-test";
     defaults = ["tradefed_errorprone_defaults"];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/helpers/tests/ProcLoadHelperTest.java"];
 
     static_libs = [
         "androidx.test.runner"

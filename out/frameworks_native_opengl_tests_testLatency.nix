@@ -7,7 +7,10 @@ let
 TestLatency = android_app {
     name = "TestLatency";
     sdk_version = "8";
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/testlatency/TestLatencyActivity.java"
+        "src/com/android/testlatency/TestLatencyView.java"
+    ];
 };
 
 in { inherit TestLatency; }

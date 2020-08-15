@@ -23,8 +23,20 @@ incidentd = cc_binary {
     name = "incidentd";
 
     srcs = [
-        "src/**/*.cpp"
-        "src/**/*.proto"
+        "src/Broadcaster.cpp"
+        "src/FdBuffer.cpp"
+        "src/IncidentService.cpp"
+        "src/Privacy.cpp"
+        "src/PrivacyFilter.cpp"
+        "src/Reporter.cpp"
+        "src/Section.cpp"
+        "src/Throttler.cpp"
+        "src/WorkDirectory.cpp"
+        "src/incidentd_util.cpp"
+        "src/main.cpp"
+        "src/proto_util.cpp"
+        "src/report_directory.cpp"
+        "src/report_file.proto"
         ":incidentd_section_list"
     ];
 
@@ -103,8 +115,14 @@ incidentd_test = cc_test {
     generated_headers = ["gen-platform-proto-constants"];
 
     srcs = [
-        "tests/**/*.cpp"
-        "tests/**/*.proto"
+        "tests/FdBuffer_test.cpp"
+        "tests/PrivacyFilter_test.cpp"
+        "tests/ProtoFileReader_test.cpp"
+        "tests/Reporter_test.cpp"
+        "tests/Section_test.cpp"
+        "tests/Throttler_test.cpp"
+        "tests/section_list.cpp"
+        "tests/test_proto.proto"
         "src/FdBuffer.cpp"
         "src/Privacy.cpp"
         "src/PrivacyFilter.cpp"
@@ -115,10 +133,15 @@ incidentd_test = cc_test {
         "src/incidentd_util.cpp"
         "src/proto_util.cpp"
         "src/report_directory.cpp"
-        "src/**/*.proto"
+        "src/report_file.proto"
     ];
 
-    data = ["testdata/**/*"];
+    data = [
+        "testdata/kmsg.txt"
+        "testdata/kmsg.txt.gz"
+        "testdata/metadata.txt"
+        "testdata/morethan96MB.txt"
+    ];
 
     static_libs = [
         "libgmock"

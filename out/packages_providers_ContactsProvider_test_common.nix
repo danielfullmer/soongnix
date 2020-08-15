@@ -17,7 +17,15 @@ let
 
 ContactsProviderTestUtils = java_library {
     name = "ContactsProviderTestUtils";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/providers/contacts/testutil/CommonDatabaseUtils.java"
+        "src/com/android/providers/contacts/testutil/ContactUtil.java"
+        "src/com/android/providers/contacts/testutil/DataUtil.java"
+        "src/com/android/providers/contacts/testutil/DatabaseAsserts.java"
+        "src/com/android/providers/contacts/testutil/DeletedContactUtil.java"
+        "src/com/android/providers/contacts/testutil/RawContactUtil.java"
+        "src/com/android/providers/contacts/testutil/TestUtil.java"
+    ];
     libs = [
         "android.test.runner"
         "androidx.test.rules"

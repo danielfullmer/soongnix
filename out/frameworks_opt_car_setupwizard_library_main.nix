@@ -18,7 +18,30 @@ let
 
 car-setup-wizard-lib = android_library {
     name = "car-setup-wizard-lib";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/car/setupwizardlib/BaseActivity.java"
+        "src/com/android/car/setupwizardlib/BaseCompatActivity.java"
+        "src/com/android/car/setupwizardlib/BaseDesignActivity.java"
+        "src/com/android/car/setupwizardlib/BaseSetupWizardActivity.java"
+        "src/com/android/car/setupwizardlib/CarSetupWizardBaseLayout.java"
+        "src/com/android/car/setupwizardlib/CarSetupWizardCompatLayout.java"
+        "src/com/android/car/setupwizardlib/CarSetupWizardDesignLayout.java"
+        "src/com/android/car/setupwizardlib/CarSetupWizardLayout.java"
+        "src/com/android/car/setupwizardlib/partner/PartnerConfig.java"
+        "src/com/android/car/setupwizardlib/partner/PartnerConfigHelper.java"
+        "src/com/android/car/setupwizardlib/partner/PartnerConfigKey.java"
+        "src/com/android/car/setupwizardlib/partner/ResourceEntry.java"
+        "src/com/android/car/setupwizardlib/summary/DeferredAction.java"
+        "src/com/android/car/setupwizardlib/summary/PartnerSummaryActionsCollector.java"
+        "src/com/android/car/setupwizardlib/summary/SummaryAction.java"
+        "src/com/android/car/setupwizardlib/util/CarDrivingStateMonitor.java"
+        "src/com/android/car/setupwizardlib/util/CarHelperInjectionContext.java"
+        "src/com/android/car/setupwizardlib/util/CarHelperRegistry.java"
+        "src/com/android/car/setupwizardlib/util/CarOrientationHelper.java"
+        "src/com/android/car/setupwizardlib/util/CarSetupWizardUiUtils.java"
+        "src/com/android/car/setupwizardlib/util/CarWizardManagerHelper.java"
+        "src/com/android/car/setupwizardlib/util/ResultCodes.java"
+    ];
     resource_dirs = ["res"];
     libs = ["android.car"];
     static_libs = ["androidx.car_car"];

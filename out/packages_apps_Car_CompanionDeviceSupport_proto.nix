@@ -23,7 +23,10 @@ CompanionDeviceSupport-proto = java_library_static {
     proto = {
         type = "lite";
     };
-    srcs = ["*.proto"];
+    srcs = [
+        "phone_auth.proto"
+        "trusted_device_message.proto"
+    ];
     jarjar_rules = "jarjar-rules.txt";
     sdk_version = "28";
 };

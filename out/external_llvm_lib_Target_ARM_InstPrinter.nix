@@ -7,7 +7,7 @@ libLLVMARMAsmPrinter = cc_library_static {
         "llvm-lib-defaults"
         "llvm-arm-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = ["ARMInstPrinter.cpp"];
 };
 
 in { inherit libLLVMARMAsmPrinter; }

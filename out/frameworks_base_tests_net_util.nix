@@ -20,7 +20,10 @@ let
 #  Common utilities for network tests.
 frameworks-net-testutils = java_library {
     name = "frameworks-net-testutils";
-    srcs = ["java/**/*.java"];
+    srcs = [
+        "java/com/android/internal/util/ParcelableTestUtil.java"
+        "java/com/android/internal/util/TestUtils.java"
+    ];
     #  test_current to be also appropriate for CTS tests
     sdk_version = "test_current";
     static_libs = [

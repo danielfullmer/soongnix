@@ -4,7 +4,7 @@ let
 SettingsLibActionBarShadow = android_library {
     name = "SettingsLibActionBarShadow";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/settingslib/widget/ActionBarShadowController.java"];
 
     static_libs = [
         "androidx.annotation_annotation"

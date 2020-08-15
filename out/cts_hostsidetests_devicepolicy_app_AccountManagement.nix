@@ -25,7 +25,12 @@ CtsAccountManagementDevicePolicyApp = android_test_helper_app {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cts/devicepolicy/accountmanagement/AccountManagementTest.java"
+        "src/com/android/cts/devicepolicy/accountmanagement/AccountUtilsTest.java"
+        "src/com/android/cts/devicepolicy/accountmanagement/MockAccountAuthenticator.java"
+        "src/com/android/cts/devicepolicy/accountmanagement/MockAccountService.java"
+    ];
     static_libs = [
         "androidx.legacy_legacy-support-v4"
         "ctstestrunner-axt"

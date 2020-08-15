@@ -20,7 +20,22 @@ statsd-config-protos = java_genrule {
     name = "statsd-config-protos";
     host_supported = true;
     srcs = [
-        "res/statsd-configs/**/*.pb"
+        "res/statsd-configs/app-compact/app-compact.pb"
+        "res/statsd-configs/app-start/app-start.pb"
+        "res/statsd-configs/full-battery-capacity/full-battery-capacity-run-level.pb"
+        "res/statsd-configs/full-battery-capacity/full-battery-capacity-test-level.pb"
+        "res/statsd-configs/greenday-power/greenday-power-run-level.pb"
+        "res/statsd-configs/greenday-power/greenday-power-test-level.pb"
+        "res/statsd-configs/greenday-power-smaller/greenday-power-smaller-run-level.pb"
+        "res/statsd-configs/greenday-power-smaller/greenday-power-smaller-test-level.pb"
+        "res/statsd-configs/on-device-power-measurement/on-device-power-measurement-run-level.pb"
+        "res/statsd-configs/on-device-power-measurement/on-device-power-measurement-test-level.pb"
+        "res/statsd-configs/remaining-battery-capacity/remaining-battery-capacity-run-level.pb"
+        "res/statsd-configs/remaining-battery-capacity/remaining-battery-capacity-test-level.pb"
+        "res/statsd-configs/remaining-battery-capacity/remaining-battery-capacity-with-uid-run-level.pb"
+        "res/statsd-configs/remaining-battery-capacity/remaining-battery-capacity-with-uid-test-level.pb"
+        "res/statsd-configs/wifi-bytes-transfer/wifi-bytes-transfer-run-level.pb"
+        "res/statsd-configs/wifi-bytes-transfer/wifi-bytes-transfer-test-level.pb"
     ];
     out = ["statsd-config-protos.jar"];
     /*
@@ -43,7 +58,11 @@ collector-device-lib-platform = java_library {
     defaults = ["tradefed_errorprone_defaults"];
 
     srcs = [
-        "src/**/*.java"
+        "src/android/device/collectors/AppStartupListener.java"
+        "src/android/device/collectors/CpuUsageListener.java"
+        "src/android/device/collectors/CrashListener.java"
+        "src/android/device/collectors/StatsdListener.java"
+        "src/android/device/collectors/ThermalListener.java"
     ];
 
     static_libs = [

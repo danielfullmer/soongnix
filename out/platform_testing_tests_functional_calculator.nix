@@ -17,7 +17,10 @@ let
 
 CalculatorFunctionalTests = android_test {
     name = "CalculatorFunctionalTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/calculator/functional/CalculatorHelper.java"
+        "src/com/android/calculator/functional/CalculatorTests.java"
+    ];
     static_libs = [
         "android-support-test"
         "launcher-helper-lib"

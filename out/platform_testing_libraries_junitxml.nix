@@ -20,7 +20,12 @@ let
 junitxml = java_library {
     name = "junitxml";
     static_libs = ["junit"];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/junitxml/AtestRunListener.java"
+        "src/com/android/junitxml/JUnitXmlRunner.java"
+        "src/com/android/junitxml/XmlConstants.java"
+        "src/com/android/junitxml/XmlRunListener.java"
+    ];
     sdk_version = "core_current";
 };
 

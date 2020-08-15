@@ -18,7 +18,42 @@ let
 owasp-html-sanitizer = java_library {
     name = "owasp-html-sanitizer";
     sdk_version = "19";
-    srcs = ["src/main/**/*.java"];
+    srcs = [
+        "src/main/org/owasp/html/AttributePolicy.java"
+        "src/main/org/owasp/html/CssGrammar.java"
+        "src/main/org/owasp/html/CssSchema.java"
+        "src/main/org/owasp/html/CssTokens.java"
+        "src/main/org/owasp/html/ElementAndAttributePolicies.java"
+        "src/main/org/owasp/html/ElementAndAttributePolicyBasedSanitizerPolicy.java"
+        "src/main/org/owasp/html/ElementPolicy.java"
+        "src/main/org/owasp/html/Encoding.java"
+        "src/main/org/owasp/html/FilterUrlByProtocolAttributePolicy.java"
+        "src/main/org/owasp/html/Handler.java"
+        "src/main/org/owasp/html/HtmlChangeListener.java"
+        "src/main/org/owasp/html/HtmlChangeReporter.java"
+        "src/main/org/owasp/html/HtmlEntities.java"
+        "src/main/org/owasp/html/HtmlLexer.java"
+        "src/main/org/owasp/html/HtmlPolicyBuilder.java"
+        "src/main/org/owasp/html/HtmlSanitizer.java"
+        "src/main/org/owasp/html/HtmlStreamEventReceiver.java"
+        "src/main/org/owasp/html/HtmlStreamRenderer.java"
+        "src/main/org/owasp/html/HtmlTextEscapingMode.java"
+        "src/main/org/owasp/html/HtmlToken.java"
+        "src/main/org/owasp/html/HtmlTokenType.java"
+        "src/main/org/owasp/html/PolicyFactory.java"
+        "src/main/org/owasp/html/Sanitizers.java"
+        "src/main/org/owasp/html/StandardUrlAttributePolicy.java"
+        "src/main/org/owasp/html/Strings.java"
+        "src/main/org/owasp/html/StylingPolicy.java"
+        "src/main/org/owasp/html/TCB.java"
+        "src/main/org/owasp/html/TagBalancingHtmlStreamEventReceiver.java"
+        "src/main/org/owasp/html/TokenStream.java"
+        "src/main/org/owasp/html/Trie.java"
+        "src/main/org/owasp/html/package-info.java"
+        "src/main/org/owasp/html/examples/EbayPolicyExample.java"
+        "src/main/org/owasp/html/examples/SlashdotPolicyExample.java"
+        "src/main/org/owasp/html/examples/UrlTextExample.java"
+    ];
     static_libs = [
         "jsr305"
         "guava"

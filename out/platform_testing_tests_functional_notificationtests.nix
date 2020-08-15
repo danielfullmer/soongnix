@@ -17,7 +17,15 @@ let
 
 NotificationFunctionalTests = android_test {
     name = "NotificationFunctionalTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/notification/functional/HeadsUpNotificationTests.java"
+        "src/com/android/notification/functional/NotificationBundlingTests.java"
+        "src/com/android/notification/functional/NotificationHelper.java"
+        "src/com/android/notification/functional/NotificationInlineReplyTests.java"
+        "src/com/android/notification/functional/NotificationInteractionTests.java"
+        "src/com/android/notification/functional/NotificationSecurityLargeTests.java"
+        "src/com/android/notification/functional/NotificationSecurityTests.java"
+    ];
     static_libs = [
         "android-support-test"
         "launcher-helper-lib"

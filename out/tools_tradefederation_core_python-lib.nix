@@ -19,7 +19,12 @@ let
 tradefed_python_lib = python_library_host {
     name = "tradefed_python_lib";
     srcs = [
-        "tradefed_py/*.py"
+        "tradefed_py/__init__.py"
+        "tradefed_py/adb_handler.py"
+        "tradefed_py/android_device.py"
+        "tradefed_py/base_test.py"
+        "tradefed_py/tf_main.py"
+        "tradefed_py/tf_runner.py"
     ];
     version = {
         py2 = {

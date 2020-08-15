@@ -21,7 +21,10 @@ ConnTestApp = android_test_helper_app {
     test_suites = ["device-tests"];
 
     static_libs = ["servicestests-aidl"];
-    srcs = ["**/*.java"];
+    srcs = [
+        "src/com/android/servicestests/apps/conntestapp/CmdReceiverService.java"
+        "src/com/android/servicestests/apps/conntestapp/ConnTestActivity.java"
+    ];
 
     platform_apis = true;
     certificate = "platform";

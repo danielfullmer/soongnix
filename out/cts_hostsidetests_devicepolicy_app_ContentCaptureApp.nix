@@ -18,7 +18,7 @@ let
 CtsDevicePolicyContentCaptureApp = android_test_helper_app {
     name = "CtsDevicePolicyContentCaptureApp";
     defaults = ["cts_defaults"];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/devicepolicy/contentcaptureapp/SimpleActivity.java"];
     #  Tag this module as a cts test artifact
     test_suites = [
         "arcts"

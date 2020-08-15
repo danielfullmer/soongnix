@@ -31,7 +31,33 @@ libimage_io = cc_library {
     vendor_available = false;
     header_libs = ["libimage_io-headers"];
     export_include_dirs = ["includes"];
-    srcs = ["src/**/*.cc"];
+    srcs = [
+        "src/base/byte_buffer.cc"
+        "src/base/data_context.cc"
+        "src/base/data_line_map.cc"
+        "src/base/data_range_tracking_destination.cc"
+        "src/base/data_scanner.cc"
+        "src/base/data_segment.cc"
+        "src/base/data_segment_data_source.cc"
+        "src/base/istream_ref_data_source.cc"
+        "src/base/message_handler.cc"
+        "src/base/message_writer.cc"
+        "src/base/ostream_ref_data_destination.cc"
+        "src/extras/base64_decoder_data_destination.cc"
+        "src/gcontainer/gcontainer.cc"
+        "src/jpeg/jpeg_apple_depth_builder.cc"
+        "src/jpeg/jpeg_image_extractor.cc"
+        "src/jpeg/jpeg_info_builder.cc"
+        "src/jpeg/jpeg_marker.cc"
+        "src/jpeg/jpeg_scanner.cc"
+        "src/jpeg/jpeg_segment.cc"
+        "src/jpeg/jpeg_segment_builder.cc"
+        "src/jpeg/jpeg_segment_lister.cc"
+        "src/jpeg/jpeg_xmp_data_extractor.cc"
+        "src/jpeg/jpeg_xmp_info.cc"
+        "src/jpeg/jpeg_xmp_info_builder.cc"
+        "src/utils/file_utils.cc"
+    ];
     static_libs = [
         "libmodpb64"
     ];
@@ -49,7 +75,33 @@ libimage_io_ndk = cc_library_static {
     vendor_available = false;
     header_libs = ["libimage_io_ndk-headers"];
     export_include_dirs = ["includes"];
-    srcs = ["src/**/*.cc"];
+    srcs = [
+        "src/base/byte_buffer.cc"
+        "src/base/data_context.cc"
+        "src/base/data_line_map.cc"
+        "src/base/data_range_tracking_destination.cc"
+        "src/base/data_scanner.cc"
+        "src/base/data_segment.cc"
+        "src/base/data_segment_data_source.cc"
+        "src/base/istream_ref_data_source.cc"
+        "src/base/message_handler.cc"
+        "src/base/message_writer.cc"
+        "src/base/ostream_ref_data_destination.cc"
+        "src/extras/base64_decoder_data_destination.cc"
+        "src/gcontainer/gcontainer.cc"
+        "src/jpeg/jpeg_apple_depth_builder.cc"
+        "src/jpeg/jpeg_image_extractor.cc"
+        "src/jpeg/jpeg_info_builder.cc"
+        "src/jpeg/jpeg_marker.cc"
+        "src/jpeg/jpeg_scanner.cc"
+        "src/jpeg/jpeg_segment.cc"
+        "src/jpeg/jpeg_segment_builder.cc"
+        "src/jpeg/jpeg_segment_lister.cc"
+        "src/jpeg/jpeg_xmp_data_extractor.cc"
+        "src/jpeg/jpeg_xmp_info.cc"
+        "src/jpeg/jpeg_xmp_info_builder.cc"
+        "src/utils/file_utils.cc"
+    ];
     static_libs = [
         "libmodpb64_ndk"
     ];

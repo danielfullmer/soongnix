@@ -4,7 +4,10 @@ let
 CallLogBackup = android_app {
     name = "CallLogBackup";
     #  Only compile source java files in this apk.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/calllogbackup/CallLogBackupAgent.java"
+        "src/com/android/calllogbackup/CallLogChangeReceiver.java"
+    ];
 
     #  The Jacoco tool analyzes code coverage when running unit tests on the
     #  application. This configuration line selects which packages will be analyzed,

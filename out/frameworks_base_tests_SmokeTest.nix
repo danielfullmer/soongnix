@@ -4,7 +4,7 @@ let
 SmokeTestApp = android_test {
     name = "SmokeTestApp";
     #  This builds "SmokeTestApp"
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/smoketest/SmokeTestActivity.java"];
     sdk_version = "8";
 };
 

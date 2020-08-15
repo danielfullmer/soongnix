@@ -19,7 +19,11 @@ let
 car-setup-wizard-lib-utils = android_library {
     name = "car-setup-wizard-lib-utils";
     srcs = [
-        "src/**/*.java"
+        "src/com/android/car/setupwizardlib/InitialLockListener.java"
+        "src/com/android/car/setupwizardlib/InitialLockSetupClient.java"
+        "src/com/android/car/setupwizardlib/InitialLockSetupConstants.java"
+        "src/com/android/car/setupwizardlib/InitialLockSetupHelper.java"
+        "src/com/android/car/setupwizardlib/LockConfig.java"
         "src/com/android/car/setupwizardlib/IInitialLockSetupService.aidl"
         "src/com/android/car/setupwizardlib/InitialLockListener.java"
         "src/com/android/car/setupwizardlib/InitialLockSetupClient.java"

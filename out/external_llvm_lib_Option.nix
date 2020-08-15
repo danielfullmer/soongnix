@@ -6,7 +6,12 @@ libLLVMOption = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "Arg.cpp"
+        "ArgList.cpp"
+        "OptTable.cpp"
+        "Option.cpp"
+    ];
 };
 
 in { inherit libLLVMOption; }

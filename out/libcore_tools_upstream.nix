@@ -21,7 +21,14 @@ let
 
 libcore-compare-upstreams = java_library_host {
     name = "libcore-compare-upstreams";
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/libcore/CompareUpstreams.java"
+        "src/main/java/libcore/CopyUpstreamFiles.java"
+        "src/main/java/libcore/Lines.java"
+        "src/main/java/libcore/Repository.java"
+        "src/main/java/libcore/StandardRepositories.java"
+        "src/main/java/libcore/Util.java"
+    ];
     manifest = "src/main/libcore-compare-upstreams.mf";
 };
 
@@ -29,7 +36,14 @@ libcore-compare-upstreams = java_library_host {
 
 libcore-copy-upstream-files = java_library_host {
     name = "libcore-copy-upstream-files";
-    srcs = ["src/main/java/**/*.java"];
+    srcs = [
+        "src/main/java/libcore/CompareUpstreams.java"
+        "src/main/java/libcore/CopyUpstreamFiles.java"
+        "src/main/java/libcore/Lines.java"
+        "src/main/java/libcore/Repository.java"
+        "src/main/java/libcore/StandardRepositories.java"
+        "src/main/java/libcore/Util.java"
+    ];
     manifest = "src/main/libcore-copy-upstream-files.mf";
 };
 

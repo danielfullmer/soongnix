@@ -25,7 +25,7 @@ HealthTestingUtilsTests = android_test {
         "androidx.test.runner"
         "health-testing-utils"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/platform/test/util/HealthRunnerBuilderTest.java"];
     test_suites = ["device-tests"];
 };
 

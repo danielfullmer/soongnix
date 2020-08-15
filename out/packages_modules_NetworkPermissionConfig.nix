@@ -21,7 +21,7 @@ NetworkPermissionConfigDefaults = java_defaults {
     name = "NetworkPermissionConfigDefaults";
     #  TODO: mark app as hasCode=false in manifest once soong stops complaining about apps without
     #  a classes.dex.
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/server/NetworkPermissionConfig.java"];
     platform_apis = true;
     min_sdk_version = "28";
     privileged = true;

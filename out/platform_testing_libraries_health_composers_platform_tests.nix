@@ -29,7 +29,10 @@ PlatformTestComposersTests = android_test {
         "guava"
         "mockito-target-minus-junit4"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/android/platform/test/composer/IterateTest.java"
+        "src/android/platform/test/composer/ShuffleTest.java"
+    ];
     test_suites = ["device-tests"];
 };
 

@@ -24,7 +24,7 @@ CtsKeySetTestApp = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/cts/keysets/KeySetPermissionsTest.java"];
     sdk_version = "current";
     static_libs = ["androidx.test.rules"];
     libs = ["android.test.base.stubs"];

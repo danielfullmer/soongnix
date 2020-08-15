@@ -18,7 +18,29 @@ let
 android-ex-camera2-portability = java_library {
     name = "android-ex-camera2-portability";
     sdk_version = "current";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/ex/camera2/portability/AndroidCamera2AgentImpl.java"
+        "src/com/android/ex/camera2/portability/AndroidCamera2Capabilities.java"
+        "src/com/android/ex/camera2/portability/AndroidCamera2Settings.java"
+        "src/com/android/ex/camera2/portability/AndroidCameraAgentImpl.java"
+        "src/com/android/ex/camera2/portability/AndroidCameraCapabilities.java"
+        "src/com/android/ex/camera2/portability/AndroidCameraSettings.java"
+        "src/com/android/ex/camera2/portability/CameraActions.java"
+        "src/com/android/ex/camera2/portability/CameraAgent.java"
+        "src/com/android/ex/camera2/portability/CameraAgentFactory.java"
+        "src/com/android/ex/camera2/portability/CameraCapabilities.java"
+        "src/com/android/ex/camera2/portability/CameraCapabilitiesFactory.java"
+        "src/com/android/ex/camera2/portability/CameraDeviceInfo.java"
+        "src/com/android/ex/camera2/portability/CameraExceptionHandler.java"
+        "src/com/android/ex/camera2/portability/CameraSettings.java"
+        "src/com/android/ex/camera2/portability/CameraStateHolder.java"
+        "src/com/android/ex/camera2/portability/DispatchThread.java"
+        "src/com/android/ex/camera2/portability/HistoryHandler.java"
+        "src/com/android/ex/camera2/portability/Size.java"
+        "src/com/android/ex/camera2/portability/debug/Log.java"
+        "src/com/android/ex/camera2/portability/debug/LogHelper.java"
+        "src/com/android/ex/camera2/portability/util/SystemProperties.java"
+    ];
     static_libs = ["android-ex-camera2-utils"];
 };
 

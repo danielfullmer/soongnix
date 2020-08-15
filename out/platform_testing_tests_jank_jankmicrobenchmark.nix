@@ -17,7 +17,7 @@ let
 
 JankMicroBenchmarkTests = android_test {
     name = "JankMicroBenchmarkTests";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/jankmicrobenchmark/janktests/ApiDemoJankTests.java"];
 
     static_libs = [
         "ub-uiautomator"

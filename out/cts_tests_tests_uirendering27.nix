@@ -21,8 +21,28 @@ CtsUiRenderingTestCases27 = android_test {
     target_sdk_version = "27";
 
     srcs = [
-        "src/**/*.java"
-        "src/**/*.kt"
+        "src/android/uirendering/cts/bitmapcomparers/BitmapComparer.java"
+        "src/android/uirendering/cts/bitmapverifiers/BitmapVerifier.java"
+        "src/android/uirendering/cts/bitmapverifiers/ColorVerifier.java"
+        "src/android/uirendering/cts/bitmapverifiers/PerPixelBitmapVerifier.java"
+        "src/android/uirendering/cts/bitmapverifiers/RectVerifier.java"
+        "src/android/uirendering/cts/bitmapverifiers/SamplePointVerifier.java"
+        "src/android/uirendering/cts/blendmode/BitmapBlendModeCanvasClient.java"
+        "src/android/uirendering/cts/differencevisualizers/DifferenceVisualizer.java"
+        "src/android/uirendering/cts/differencevisualizers/PassFailVisualizer.java"
+        "src/android/uirendering/cts/runner/UiRenderingRunner.java"
+        "src/android/uirendering/cts/testclasses/BitmapBlendModeTest.java"
+        "src/android/uirendering/cts/testinfrastructure/ActivityTestBase.java"
+        "src/android/uirendering/cts/testinfrastructure/CanvasClient.java"
+        "src/android/uirendering/cts/testinfrastructure/CanvasClientDrawable.java"
+        "src/android/uirendering/cts/testinfrastructure/CanvasClientView.java"
+        "src/android/uirendering/cts/testinfrastructure/Tracer.java"
+        "src/android/uirendering/cts/testinfrastructure/ViewInitializer.java"
+        "src/android/uirendering/cts/util/BitmapAsserter.java"
+        "src/android/uirendering/cts/util/BitmapDumper.java"
+        "src/android/uirendering/cts/util/CompareUtils.java"
+        "src/android/uirendering/cts/util/DrawCountDown.java"
+        "src/android/uirendering/cts/testinfrastructure/DrawActivity.kt"
     ];
 
     static_libs = [

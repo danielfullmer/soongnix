@@ -20,7 +20,7 @@ let
 cts-midi-lib = java_library_static {
     name = "cts-midi-lib";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/midi/MidiEchoTestService.java"];
 
     sdk_version = "current";
 };

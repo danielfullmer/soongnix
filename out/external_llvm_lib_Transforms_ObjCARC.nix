@@ -6,7 +6,17 @@ libLLVMTransformObjCARC = cc_library_static {
     defaults = [
         "llvm-lib-defaults"
     ];
-    srcs = ["*.cpp"];
+    srcs = [
+        "DependencyAnalysis.cpp"
+        "ObjCARC.cpp"
+        "ObjCARCAPElim.cpp"
+        "ObjCARCContract.cpp"
+        "ObjCARCExpand.cpp"
+        "ObjCARCOpts.cpp"
+        "ProvenanceAnalysis.cpp"
+        "ProvenanceAnalysisEvaluator.cpp"
+        "PtrState.cpp"
+    ];
 };
 
 in { inherit libLLVMTransformObjCARC; }

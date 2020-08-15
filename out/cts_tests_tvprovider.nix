@@ -26,7 +26,7 @@ CtsTvProviderTestCases = android_test {
         "android.test.runner.stubs"
         "android.test.base.stubs"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/tvprovider/cts/TvProviderPerfTest.java"];
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"

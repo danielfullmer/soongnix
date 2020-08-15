@@ -20,7 +20,7 @@ android-support-multidex-instrumentation-version = genrule {
     #  use srcs as dependencies, otherwise, this module won't be re-run
     #  during incremental build.
     srcs = [
-        "src/**/*.java"
+        "src/com/android/test/runner/MultiDexTestRunner.java"
     ];
     cmd = "echo \"git.version=`cd frameworks/multidex/instrumentation; git log --format=\"%H\" -n 1 || " +
         "(echo git hash not available; exit 0)`\" > $(genDir)/android-support-multidex-instrumentation.version.txt";
@@ -33,7 +33,7 @@ android-support-multidex-instrumentation = java_library_static {
     name = "android-support-multidex-instrumentation";
     sdk_version = "4";
     srcs = [
-        "src/**/*.java"
+        "src/com/android/test/runner/MultiDexTestRunner.java"
     ];
     java_resources = [
         ":android-support-multidex-instrumentation-version"

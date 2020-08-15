@@ -21,8 +21,28 @@ android-opt-datetimepicker = android_library {
     sdk_version = "current";
 
     srcs = [
-        "src/**/*.java"
-        "src/**/*.logtags"
+        "src/com/android/datetimepicker/AccessibleLinearLayout.java"
+        "src/com/android/datetimepicker/AccessibleTextView.java"
+        "src/com/android/datetimepicker/HapticFeedbackController.java"
+        "src/com/android/datetimepicker/Utils.java"
+        "src/com/android/datetimepicker/date/AccessibleDateAnimator.java"
+        "src/com/android/datetimepicker/date/DatePickerController.java"
+        "src/com/android/datetimepicker/date/DatePickerDialog.java"
+        "src/com/android/datetimepicker/date/DayPickerView.java"
+        "src/com/android/datetimepicker/date/MonthAdapter.java"
+        "src/com/android/datetimepicker/date/MonthView.java"
+        "src/com/android/datetimepicker/date/SimpleDayPickerView.java"
+        "src/com/android/datetimepicker/date/SimpleMonthAdapter.java"
+        "src/com/android/datetimepicker/date/SimpleMonthView.java"
+        "src/com/android/datetimepicker/date/TextViewWithCircularIndicator.java"
+        "src/com/android/datetimepicker/date/YearPickerView.java"
+        "src/com/android/datetimepicker/time/AmPmCirclesView.java"
+        "src/com/android/datetimepicker/time/CircleView.java"
+        "src/com/android/datetimepicker/time/RadialPickerLayout.java"
+        "src/com/android/datetimepicker/time/RadialSelectorView.java"
+        "src/com/android/datetimepicker/time/RadialTextsView.java"
+        "src/com/android/datetimepicker/time/TimePickerDialog.java"
+
     ];
 
     resource_dirs = ["res"];

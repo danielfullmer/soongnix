@@ -163,10 +163,27 @@ backtrace_test = cc_test {
 
     test_suites = ["device-tests"];
     data = [
-        "testdata/arm/*"
-        "testdata/arm64/*"
-        "testdata/x86/*"
-        "testdata/x86_64/*"
+        "testdata/arm/libGLESv2_adreno.so"
+        "testdata/arm/libandroid_runtime.so"
+        "testdata/arm/libart.so"
+        "testdata/arm/libbacktrace_test_arm_exidx.so"
+        "testdata/arm/libbacktrace_test_debug_frame.so"
+        "testdata/arm/libbacktrace_test_gnu_debugdata.so"
+        "testdata/arm/offline_testdata"
+        "testdata/arm/offline_testdata_for_libGLESv2_adreno"
+        "testdata/arm/offline_testdata_for_libandroid_runtime"
+        "testdata/arm/offline_testdata_for_libart"
+        "testdata/arm64/eglSubDriverAndroid.so"
+        "testdata/arm64/libbacktrace_test_eh_frame.so"
+        "testdata/arm64/libskia.so"
+        "testdata/arm64/offline_testdata"
+        "testdata/arm64/offline_testdata_for_eglSubDriverAndroid"
+        "testdata/arm64/offline_testdata_for_libskia"
+        "testdata/x86/libbacktrace_test_debug_frame.so"
+        "testdata/x86/libbacktrace_test_gnu_debugdata.so"
+        "testdata/x86/offline_testdata"
+        "testdata/x86_64/libbacktrace_test_eh_frame.so"
+        "testdata/x86_64/offline_testdata"
     ];
     required = [
         "libbacktrace_test"

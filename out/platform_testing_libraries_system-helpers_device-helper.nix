@@ -23,7 +23,7 @@ device-helper = java_library {
         "ub-uiautomator"
         "android-support-test"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/system/helpers/DeviceHelper.java"];
     sdk_version = "current";
 };
 

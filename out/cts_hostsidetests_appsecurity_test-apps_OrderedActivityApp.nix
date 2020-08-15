@@ -25,7 +25,7 @@ CtsOrderedActivityApp = android_test {
         "vts"
         "general-tests"
     ];
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/appsecurity/cts/orderedactivity/PackageResolutionTest.java"];
     sdk_version = "current";
     optimize = {
         enabled = false;

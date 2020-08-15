@@ -194,7 +194,31 @@ res-testdata = filegroup {
     name = "res-testdata";
 
     srcs = [
-        "res-*/images/*_text.png"
+        "res-hdpi/images/erasing_text.png"
+        "res-hdpi/images/error_text.png"
+        "res-hdpi/images/installing_security_text.png"
+        "res-hdpi/images/installing_text.png"
+        "res-hdpi/images/no_command_text.png"
+        "res-mdpi/images/erasing_text.png"
+        "res-mdpi/images/error_text.png"
+        "res-mdpi/images/installing_security_text.png"
+        "res-mdpi/images/installing_text.png"
+        "res-mdpi/images/no_command_text.png"
+        "res-xhdpi/images/erasing_text.png"
+        "res-xhdpi/images/error_text.png"
+        "res-xhdpi/images/installing_security_text.png"
+        "res-xhdpi/images/installing_text.png"
+        "res-xhdpi/images/no_command_text.png"
+        "res-xxhdpi/images/erasing_text.png"
+        "res-xxhdpi/images/error_text.png"
+        "res-xxhdpi/images/installing_security_text.png"
+        "res-xxhdpi/images/installing_text.png"
+        "res-xxhdpi/images/no_command_text.png"
+        "res-xxxhdpi/images/erasing_text.png"
+        "res-xxxhdpi/images/error_text.png"
+        "res-xxxhdpi/images/installing_security_text.png"
+        "res-xxxhdpi/images/installing_text.png"
+        "res-xxxhdpi/images/no_command_text.png"
     ];
 };
 

@@ -27,8 +27,9 @@ CtsNetApi23TestCases = android_test {
     ];
 
     srcs = [
-        "src/**/*.java"
-        "src/**/*.kt"
+        "src/android/net/cts/api23test/ConnectivityManagerApi23Test.java"
+        "src/android/net/cts/api23test/ConnectivityReceiver.java"
+
     ];
 
     static_libs = [

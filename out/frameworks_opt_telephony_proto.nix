@@ -24,7 +24,10 @@ telephony-protos = java_library_static {
             "enum_style=java"
         ];
     };
-    srcs = ["src/**/*.proto"];
+    srcs = [
+        "src/carrierId.proto"
+        "src/telephony.proto"
+    ];
     no_framework_libs = true;
     jarjar_rules = "jarjar-rules.txt";
     #  Pin java_version until jarjar is certified to support later versions. http://b/72703434

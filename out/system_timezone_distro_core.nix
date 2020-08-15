@@ -26,7 +26,13 @@ time_zone_distro = java_library {
     name = "time_zone_distro";
     host_supported = true;
 
-    srcs = ["src/main/**/*.java"];
+    srcs = [
+        "src/main/com/android/timezone/distro/DistroException.java"
+        "src/main/com/android/timezone/distro/DistroVersion.java"
+        "src/main/com/android/timezone/distro/FileUtils.java"
+        "src/main/com/android/timezone/distro/StagedDistroOperation.java"
+        "src/main/com/android/timezone/distro/TimeZoneDistro.java"
+    ];
     target = {
         host = {
             static_libs = ["timezone-host"];
@@ -39,7 +45,13 @@ time_zone_distro = java_library {
 time_zone_distro_unbundled = java_library {
     name = "time_zone_distro_unbundled";
 
-    srcs = ["src/main/**/*.java"];
+    srcs = [
+        "src/main/com/android/timezone/distro/DistroException.java"
+        "src/main/com/android/timezone/distro/DistroVersion.java"
+        "src/main/com/android/timezone/distro/FileUtils.java"
+        "src/main/com/android/timezone/distro/StagedDistroOperation.java"
+        "src/main/com/android/timezone/distro/TimeZoneDistro.java"
+    ];
     sdk_version = "system_current";
 };
 
@@ -47,7 +59,11 @@ time_zone_distro_unbundled = java_library {
 time_zone_distro-tests = java_library {
     name = "time_zone_distro-tests";
 
-    srcs = ["src/test/**/*.java"];
+    srcs = [
+        "src/test/com/android/timezone/distro/DistroVersionTest.java"
+        "src/test/com/android/timezone/distro/FileUtilsTest.java"
+        "src/test/com/android/timezone/distro/TimeZoneDistroTest.java"
+    ];
     static_libs = [
         "time_zone_distro"
         "core-tests-support"

@@ -18,7 +18,7 @@ let
 HelloWorldTests = android_test {
     name = "HelloWorldTests";
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/test/example/helloworld/HelloWorldTest.java"];
     sdk_version = "current";
 
     static_libs = ["android-support-test"];

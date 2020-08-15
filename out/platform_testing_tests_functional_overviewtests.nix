@@ -17,7 +17,11 @@ let
 
 OverviewFunctionalTests = android_test {
     name = "OverviewFunctionalTests";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/overview/functional/MultiWindowTests.java"
+        "src/com/android/overview/functional/OverviewHelper.java"
+        "src/com/android/overview/functional/RecentsTests.java"
+    ];
 
     static_libs = [
         "ub-uiautomator"

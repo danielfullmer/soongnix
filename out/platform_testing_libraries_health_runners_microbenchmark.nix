@@ -24,7 +24,7 @@ microbenchmark-device-lib = java_library {
         "platform-test-rules"
     ];
 
-    srcs = ["src/**/*.java"];
+    srcs = ["src/android/platform/test/microbenchmark/Microbenchmark.java"];
 };
 
 # #####################################

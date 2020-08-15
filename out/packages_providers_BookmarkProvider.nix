@@ -17,7 +17,7 @@ let
 
 BookmarkProvider = android_app {
     name = "BookmarkProvider";
-    srcs = ["src/**/*.java"];
+    srcs = ["src/com/android/bookmarkstore/BookmarkProvider.java"];
     platform_apis = true;
 };
 

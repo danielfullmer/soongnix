@@ -3,7 +3,7 @@ let
 
 TransformTest = android_test {
     name = "TransformTest";
-    srcs = ["**/*.java"];
+    srcs = ["src/com/google/android/test/transform/TransformTestActivity.java"];
     sdk_version = "current";
 };
 

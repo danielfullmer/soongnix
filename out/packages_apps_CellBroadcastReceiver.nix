@@ -5,7 +5,29 @@ let
 
 CellBroadcastReceiver = android_app {
     name = "CellBroadcastReceiver";
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAlertAudio.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAlertDialog.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAlertReminder.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAlertService.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAlertWakeLock.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastAreaInfoReceiver.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastBackupAgent.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastChannelManager.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastConfigService.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastContentProvider.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastCursorAdapter.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastDatabaseHelper.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastListActivity.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastListItem.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastOptOutActivity.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastReceiver.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastReceiverApp.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastResources.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastSearchIndexableProvider.java"
+        "src/com/android/cellbroadcastreceiver/CellBroadcastSettings.java"
+        "src/com/android/cellbroadcastreceiver/PrivilegedCellBroadcastReceiver.java"
+    ];
     libs = ["telephony-common"];
     platform_apis = true;
     certificate = "platform";

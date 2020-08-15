@@ -28,7 +28,11 @@ CarrierDefaultAppUnitTests = android_test {
         "mockito-target-minus-junit4"
     ];
     #  Include all test java files.
-    srcs = ["src/**/*.java"];
+    srcs = [
+        "src/com/android/carrierdefaultapp/CarrierDefaultActivityTestCase.java"
+        "src/com/android/carrierdefaultapp/CarrierDefaultReceiverTest.java"
+        "src/com/android/carrierdefaultapp/TestContext.java"
+    ];
     platform_apis = true;
     instrumentation_for = "CarrierDefaultApp";
 };
