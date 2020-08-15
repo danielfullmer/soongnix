@@ -199,17 +199,10 @@ let
     header_libs, shared_libs, static_libs, whole_static_libs, generated_headers,
     use_version_lib, gnu_extensions, c_std, cpp_std, ...
   }: src: let
-    # Hackily expand globs.
-    cc = { ccCmd, cflags ? [] }: ''
-      ( shopt -s failglob globstar
-        for file in ${src}; do
-          out=$NIX_BUILD_TOP/''${file%.*}.o
-          mkdir -p $(dirname $out)
-          ${clang}/bin/${ccCmd} -c ${escapeShellArgs cflags} -o $out $file
-          echo $out >> $NIX_BUILD_TOP/out.rsp
-        done
-      )
-      '';
+    cc = { out, ccCmd, cflags ? [] }: ''
+      mkdir -p $(dirname ${out})
+      ${clang}/bin/${ccCmd} -c ${escapeShellArgs cflags} -o ${out} ${src}
+    '';
     langOptions = let
       stdBase = if gnu_extensions then "gnu" else "c";
       cStd =
@@ -266,9 +259,9 @@ let
   in if (hasSuffix ".asm" src) then ''
     mkdir -p $(dirname ${objectFilename})
     ${pkgs.yasm}/bin/yasm ${escapeShellArgs asflags} ${escapeShellArgs includeFlags} -D__ASSEMBLY__ -o ${objectFilename} ${src}
-    echo ${objectFilename} >> $NIX_BUILD_TOP/out.rsp
   '' else cc (recursiveMerge [
     {
+      out = objectFilename;
       cflags =
         # The order here is important. See compilerFlags() in soong/cc/compiler.go
         commonGlobalCflags
@@ -280,7 +273,7 @@ let
     }
     langOptions
     stlOptions
-  ]);
+  ]) + "\necho ${objectFilename} >> $NIX_BUILD_TOP/out.rsp";
 
   cc_defaults = wrapModuleNoCheck {} (attrs: filterAttrs (n: v: n != "name") attrs);
 
