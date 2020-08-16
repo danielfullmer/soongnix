@@ -11,6 +11,7 @@ e2fsdroid = cc_binary {
     host_supported = true;
     recovery_available = true;
     defaults = ["e2fsprogs-defaults"];
+    cflags = ["-Wno-error=tautological-constant-out-of-range-compare"];
 
     srcs = [
         "e2fsdroid.c"

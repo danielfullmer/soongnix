@@ -335,11 +335,12 @@ let
 
       host_supported = true;
 
+      required = [];
+
       # To implement:
       recovery_available = false;
       vendor_available = false;
       dist = {}; # dist.targets contains a list of make targets this should be included in.
-      #required = [];
 
       # soongnix convenience arguments
       _build_static_lib = true;
@@ -353,10 +354,12 @@ let
 
   # TODO: Extract commonality with cc_library
   cc_binary = wrapModule argDefaults.cc_binary
-  ({ name, srcs, shared_libs, static_libs, whole_static_libs, use_version_lib, ...  }@args:
-    pkgs.stdenv.mkDerivation {
+  ({ name, srcs, shared_libs, static_libs, whole_static_libs, use_version_lib, required, ... }@args:
+  let
+    _required = filter (m: m._is_binary or false) (map (m: bpPkgs.${m}) required);
+  in pkgs.stdenv.mkDerivation {
       inherit name;
-      passthru = { inherit args; } // args;
+      passthru = { inherit args; _is_binary = true; } // args;
 
       dontUnpack = true;
       dontConfigure = true;
@@ -380,6 +383,12 @@ let
             ++ (map (p: "${bpPkgs.${p}}/lib/${p}.a") static_libs)
             ++ (map (p: "${bpPkgs.${p}}/lib/${p}.a") (whole_static_libs ++ optional use_version_lib "libbuildversion"));
         }}
+      '';
+
+      # TODO: mke2fs has "mke2fs.conf" as a required module, but it is prebuilt_etc
+      nativeBuildInputs = optional (_required != []) [ pkgs.makeWrapper ];
+      preFixup = optionalString (_required != []) ''
+        wrapProgram $out/bin/${name} --prefix PATH : ${makeBinPath _required}
       '';
   });
 
