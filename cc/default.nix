@@ -190,9 +190,11 @@ let
   hostLdLibs = "-ldl -lpthread -lm -lrt";
 
   #### Individual build rules. See soong/cc/builder.go. ####
-  ld = { rsp, out, ldCmd ? "clang++", crtBegin ? "", libFlags ? [], crtEnd ? "", ldFlags ? [] }: ''
-      ${clang}/bin/${ldCmd} @${rsp} ${escapeShellArgs libFlags} -o ${out} ${escapeShellArgs ldFlags} ${hostLdLibs} -Wl,--start-group -lgcc -lgcc_eh -lc -Wl,--end-group
-    '';
+  ld = { rsp, out, ldCmd ? "clang++", crtBegin ? "", libFlags ? [], crtEnd ? "", ldFlags ? [] }:
+      "${clang}/bin/${ldCmd} @${rsp} ${escapeShellArgs libFlags} -o ${out} ${escapeShellArgs ldFlags} ${hostLdLibs} -Wl,--start-group -lgcc -lgcc_eh -lc -Wl,--end-group";
+
+  cc = { src, out, ccCmd, cflags ? [] }:
+    "${clang}/bin/${ccCmd} -c ${escapeShellArgs cflags} -o ${out} ${src}";
 
   mkObjectFile =
   { cflags, conlyflags, cppflags, asflags, include_build_directory, include_dirs, local_include_dirs, export_include_dirs,
@@ -201,12 +203,11 @@ let
   }: src: let
     components = splitString "." src;
     suffix = head (reverseList components);
-    objectFilename = "$NIX_BUILD_TOP/" + (concatStringsSep "." (components ++ [ "o" ]));
+    out =
+      if length components > 1
+      then concatStringsSep "." ((init components) ++ [ "o" ])
+      else src + ".o";
 
-    cc = { out, ccCmd, cflags ? [] }: ''
-      mkdir -p $(dirname ${out})
-      ${clang}/bin/${ccCmd} -c ${escapeShellArgs cflags} -o ${out} ${src}
-    '';
     langOptions = let
       stdBase = if gnu_extensions then "gnu" else "c";
       cStd =
@@ -258,24 +259,36 @@ let
       ++ flatten (map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames)
       ++ map (p: "-I${bpPkgs.${p}}") generated_headers;
 
-  in if (hasSuffix ".asm" src) then ''
-    mkdir -p $(dirname ${objectFilename})
-    ${pkgs.yasm}/bin/yasm ${escapeShellArgs asflags} ${escapeShellArgs includeFlags} -D__ASSEMBLY__ -o ${objectFilename} ${src}
-  '' else cc (recursiveMerge [
-    {
-      out = objectFilename;
-      cflags =
-        # The order here is important. See compilerFlags() in soong/cc/compiler.go
-        commonGlobalCflags
-        ++ linuxCflags
-        ++ clangExtraCFlags
-        ++ cflags
-        ++ includeFlags
-        ++ commonGlobalIncludes;
-    }
-    langOptions
-    stlOptions
-  ]) + "\necho ${objectFilename} >> $NIX_BUILD_TOP/out.rsp";
+  in {
+    inherit out;
+    cmd = if (hasSuffix ".asm" src) then
+      "${pkgs.yasm}/bin/yasm ${escapeShellArgs asflags} ${escapeShellArgs includeFlags} -D__ASSEMBLY__ -o ${out} ${packageSrc}/${src}"
+    else cc (recursiveMerge [
+      {
+        inherit out;
+        src = "${packageSrc}/${src}";
+        cflags =
+          # The order here is important. See compilerFlags() in soong/cc/compiler.go
+          commonGlobalCflags
+          ++ linuxCflags
+          ++ clangExtraCFlags
+          ++ cflags
+          ++ includeFlags
+          ++ commonGlobalIncludes;
+      }
+      langOptions
+      stlOptions
+    ]);
+  };
+
+  mkMakefile = name: rules:
+    pkgs.writeText "${name}-Makefile" (
+      (concatMapStringsSep "\n\n" (rule: "${rule.out}:\n\tmkdir -p `dirname ${rule.out}` && ${rule.cmd}") rules)
+      + "\n\nall: " + (concatMapStringsSep " " (rule: rule.out) rules)
+      );
+
+  mkRspfile = name: rules:
+    pkgs.writeText "${name}.rsp" ((concatMapStringsSep "\n" (rule: rule.out) rules) + "\n");
 
   cc_defaults = wrapModuleNoCheck {} (attrs: filterAttrs (n: v: n != "name") attrs);
 
@@ -349,16 +362,16 @@ let
       dontConfigure = true;
       dontInstall = true;
 
-      buildPhase = ''
-        set -x
+      buildPhase = let
+        rules = map (src: mkObjectFile args src) (resolveFiles srcs);
+        makefile = mkMakefile name rules;
+        rsp = mkRspfile name rules;
+      in ''
         mkdir -p $out/bin
         NIX_BUILD_TOP=$TMP
-        cd ${packageSrc}
-        # TODO: Do this in parallel
-        ${concatMapStringsSep "\n" (src: mkObjectFile args src) (resolveFiles srcs)}
-        touch $NIX_BUILD_TOP/out.rsp
+        make -j$NIX_BUILD_CORES -f${makefile} all
         ${ld {
-          rsp="$NIX_BUILD_TOP/out.rsp";
+          inherit rsp;
           out="$out/bin/${name}";
           libFlags =
             [ "-Wl,--whole-archive" ] # TODO: Only include this arg if the list below is nonempty
@@ -374,8 +387,6 @@ let
   ({ name, srcs ? [], objs ? [], ... }@args:
   # Only support a single .c file, no other objs ATM.
   pkgs.runCommand "${name}.o" { passthru = args; } (''
-    set -x
-    cd ${packageSrc}
   '' + (if srcs != [] then
     # TODO: Can there only be one src file?
     (mkObjectFile args (head (resolveFiles srcs))) + ''
@@ -396,26 +407,28 @@ let
     }@args:
     pkgs.runCommandNoCC name {
       passthru = { inherit args; } // args;
-    } (''
-      set -x
-      cd ${packageSrc}
-      # TODO: Do this in parallel
-      ${concatMapStringsSep "\n" (src: mkObjectFile args src) (resolveFiles srcs)}
+    } (let
+      rules = map (src: mkObjectFile args src) (resolveFiles srcs);
+      makefile = mkMakefile name rules;
+      rsp = mkRspfile name rules;
+    in ''
+      make -j$NIX_BUILD_CORES -f${makefile} all
 
       # Unpack whole_static_libs into separate dirs and then repack their .o files into our new .a file
+      cp ${rsp} out.rsp
+      chmod u+w out.rsp
       ${concatMapStringsSep "\n" (s: ''
         EXTRACT_DIR=$(mktemp -d)
         pushd $EXTRACT_DIR >/dev/null
         ${llvm}/bin/llvm-ar x ${bpPkgs.${s}}/lib/${s}.a
         popd >/dev/null
-        find $EXTRACT_DIR -type f -iname '*.o' >> $NIX_BUILD_TOP/out.rsp
+        find $EXTRACT_DIR -type f -iname '*.o' >> out.rsp
       '') whole_static_libs}
 
-      touch $NIX_BUILD_TOP/out.rsp
       mkdir -p $out/lib
-      ${optionalString _build_static_lib "${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @$NIX_BUILD_TOP/out.rsp" }
+      ${optionalString _build_static_lib "${llvm}/bin/llvm-ar crsD -format=gnu $out/lib/${name}.a @out.rsp" }
       ${optionalString _build_shared_lib (ld {
-        rsp="$NIX_BUILD_TOP/out.rsp";
+        rsp = "out.rsp";
         out="$out/lib/${name}.so";
         ldFlags = [ "-shared" "-Wl,-soname,${name}.so" ];
         libFlags = (map (p: "${bpPkgs.${p}}/lib/${p}.so") shared_libs);
