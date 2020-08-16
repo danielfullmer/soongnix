@@ -48,38 +48,15 @@ let
   filegroup = id;
   resolveFiles = srcs: flatten (map (s: if hasPrefix ":" s then bpPkgs.${builtins.substring 1 (stringLength s) s}.srcs else s) srcs);
 
-  art_cc_library = args: cc.cc_library (recursiveMerge [
-    args
-    { # See art/build/art.go
-      cflags = [
-        "-O3"
-        "-DART_DEFAULT_GC_TYPE=CMS"
-        "-DIMT_SIZE=43"
-        "-DART_USE_GENERATIONAL_CC=1"
-        "-DART_DEFAULT_COMPACT_DEX_LEVEL=fast"
-        "-DART_STACK_OVERFLOW_GAP_arm=8192"
-        "-DART_STACK_OVERFLOW_GAP_arm64=8192"
-        "-DART_STACK_OVERFLOW_GAP_mips=16384"
-        "-DART_STACK_OVERFLOW_GAP_mips64=16384"
-        "-DART_STACK_OVERFLOW_GAP_x86=8192"
-        "-DART_STACK_OVERFLOW_GAP_x86_64=8192"
-        "-DUSE_D8_DESUGAR=1"
-
-        # host flags
-        "-Wframe-larger-than=1736"
-        "-DART_FRAME_SIZE_LIMIT=6400"
-      ];
-    }
-  ]);
+  cc = import ./cc { inherit pkgs lib bpPkgs sourceDirs packageSrc selectDir resolveFiles genrule; };
+  art = import ./art { inherit lib cc; };
 
   unimplementedModule = name: builtins.trace "unimplemented module: ${name}" id;
 
 in {
-  inherit filegroup genrule;
+  inherit filegroup genrule art_cc_library;
 }
-// (import ./cc { inherit pkgs lib bpPkgs sourceDirs packageSrc selectDir resolveFiles; })
-// (import ./art { inherit lib cc; })
-// genAttrs [
+// cc // art // genAttrs [
   # android/soong/aidl
   "aidl_interface" "aidl_interfaces_metadata" "aidl_mapping"
 

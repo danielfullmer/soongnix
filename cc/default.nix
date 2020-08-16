@@ -1,4 +1,4 @@
-{ pkgs, lib, bpPkgs, sourceDirs, packageSrc, selectDir, resolveFiles }:
+{ pkgs, lib, bpPkgs, sourceDirs, packageSrc, selectDir, resolveFiles, genrule }:
 
 with lib;
 let
