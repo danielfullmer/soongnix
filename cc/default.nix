@@ -15,25 +15,10 @@ let
       );
     in f [] attrList;
 
-
-  # The ordering here with ensures that static_libs are linked in the correct order, with A before B if A depends on B.
-  recursiveMergeWithStaticLibs = attrList:
-    let f = attrPath:
-      zipAttrsWith (n: values:
-        if tail values == []
-          then head values
-        else if all isList values
-          then unique (concatLists (if (hasSuffix "static_libs" n) then reverseList values else values))
-        else if all isAttrs values
-          then f (attrPath ++ [n]) values
-        else last values
-      );
-    in f [] attrList;
-
   # Normally, the downstream module overrides the "defaults" modules
   # Also do this recursively so we get "defaults" of "defaults"
   mergeDefaultArgs = args: 
-    recursiveMergeWithStaticLibs
+    recursiveMerge
       ((map (name: mergeDefaultArgs bpPkgs.${name}) (args.defaults or [])) ++ [ args ]);
   mergeArchArgs = attrPath: args:
     recursiveMerge [ args (attrByPath attrPath {} args) ];
@@ -381,6 +366,9 @@ let
         rules = map (src: mkObjectFile args src) (resolveSrcs srcs);
         makefile = mkMakefile name rules;
         rsp = mkRspfile name rules;
+
+        # The ordering here with ensures that static_libs are linked in the correct order, with A before B if A depends on B.
+        sortedStaticLibs = (toposort (a: b: elem b bpPkgs.${a}.static_libs || elem b bpPkgs.${a}.shared_libs) static_libs).result;
       in ''
         mkdir -p $out/bin
         make -j$NIX_BUILD_CORES -f${makefile} all
@@ -391,7 +379,7 @@ let
             [ "-Wl,--whole-archive" ] # TODO: Only include this arg if the list below is nonempty
             ++ [ "-Wl,--no-whole-archive" ]
             ++ (map (p: "${bpPkgs.${p}}/lib/${p}.so") shared_libs)
-            ++ (map (p: "${bpPkgs.${p}}/lib/${p}.a") static_libs)
+            ++ (map (p: "${bpPkgs.${p}}/lib/${p}.a") sortedStaticLibs)
             ++ (map (p: "${bpPkgs.${p}}/lib/${p}.a") (whole_static_libs ++ optional use_version_lib "libbuildversion"));
         }}
       '';
