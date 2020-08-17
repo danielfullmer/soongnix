@@ -7,6 +7,8 @@ let
   sourceDirs = lib.mapAttrs (n: v:
     if n == "system/core"
     then pkgs.applyPatches { src = v; patches = ./system_core.patch; }
+    else if n == "system/tools/aidl"
+    then pkgs.applyPatches { src = v; patches = ./system_tools_aidl.patch; }
     else if n == "art"
     then pkgs.applyPatches { src = v; patches = ./art.patch; }
     else v

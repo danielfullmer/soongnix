@@ -22,6 +22,7 @@ IGNORED_WARNINGS = [
     "-Wno-unused-parameter"
     "-Wno-sign-promo"
     "-Wno-error=return-type"
+    "-Wno-error=enum-compare-switch"
 ];
 
 protobuf-cflags-defaults = cc_defaults {

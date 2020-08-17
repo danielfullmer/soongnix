@@ -1,0 +1,12 @@
+diff --git a/options.cpp b/options.cpp
+index ff99dad..5db7b1f 100644
+--- a/options.cpp
++++ b/options.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include <getopt.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <unistd.h>
+ #include <algorithm>
+ #include <iostream>

@@ -56,7 +56,28 @@ let
 
   llvmPackages = pkgs.llvmPackages_9;
   clang = llvmPackages.libcxxClang;
+  #clang = llvmPackages.clang;
   llvm = llvmPackages.llvm;
+
+  prebuilts = pkgs.stdenv.mkDerivation {
+    name = "android-prebuilts";
+    nativeBuildInputs = with pkgs; [ autoPatchelfHook makeWrapper ];
+    propagatedBuildInputs = with pkgs; [ m4 ];
+    src = sourceDir "prebuilts/build-tools/linux-x86";
+    dontConfigure = true;
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out
+      cp -r $src/. $out
+    '';
+    preFixup = ''
+      wrapProgram $out/bin/bison --prefix PATH : ${makeBinPath [ pkgs.m4 ]}
+    '';
+  };
+  #bison = prebuilts;
+  #flex = prebuilts;
+  bison = pkgs.callPackage ./bison.nix {}; # Need bison 2 -- not 3
+  flex = pkgs.flex;
 
   commonGlobalCflags = [
     "-DANDROID"
@@ -248,10 +269,10 @@ let
     cmd = if suffix == "asm" then
       "${pkgs.yasm}/bin/yasm ${escapeShellArgs asflags} ${escapeShellArgs includeFlags} -D__ASSEMBLY__ -o ${root}.o ${absSrc}"
     else if (suffix == "y" || suffix == "yy") then
-      "${pkgs.bison}/bin/bison -d ${escapeShellArgs yaccflags} --defines=${root}.h -o ${root}.${outSuffix} ${absSrc}"
+      "BISON_PKGDATADIR=${sourceDir "prebuilts/build-tools/common/bison"} ${bison}/bin/bison -d ${escapeShellArgs yaccflags} --defines=${root}.h -o ${root}.${outSuffix} ${absSrc}"
       + " && " + (mkObjectFile args "./${root}.${outSuffix}").cmd
     else if (suffix == "l" || suffix == "ll") then
-      "${pkgs.flex}/bin/flex -o${root}.${outSuffix} ${absSrc}"
+      "${flex}/bin/flex -o${root}.${outSuffix} ${absSrc}"
       + " && " + (mkObjectFile args "./${root}.${outSuffix}").cmd
     else cc (recursiveMerge [
       {
