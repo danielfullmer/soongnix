@@ -41,17 +41,40 @@ let
   in f newArgs;
 
   genrule =
-    ({ name, cmd, srcs, out, ... }@args:
+    ({ name, cmd, srcs, out, tools ? [], tool_files ? [], ... }@args:
     let
-      outPaths = map (o: "$out/${o}") out;
+      lookupTool = tool:
+        if elem tool tools then bpPkgs.${tool} + "/bin/${tool}"
+        else if elem tool tool_files then wrapTool "${packageSrc}/${tool}"
+        else throw "missing tool: ${tool}";
+      wrapTool = toolPath:
+        if lib.hasSuffix ".py" toolPath
+        then "${pkgs.python}/bin/python ${toolPath}"
+        else toolPath;
+      uniqueTool =
+        if tools != [] then head tools
+        else if tool_files != [] then head tool_files
+        else false;
+      substitutedCmd = let
+        locationMatches = flatten (filter lib.isList (builtins.split "\\$\\(location ([^()]+?)\\)" cmd));
+      in
+      replaceStrings
+        ([ "$$" "$(in)" "$(out)" "$(genDir)" ] ++ (optional (uniqueTool != false) "$(location)") ++ (map (m: "$(location ${m})") locationMatches))
+        ([ "$"
+          (builtins.toString (resolveSrcs srcs))
+          "$out/${head out}" # If $(out) is used, there should only be one output
+          "$PWD"
+        ] ++ optional (uniqueTool != false) (lookupTool uniqueTool)
+          ++ (map lookupTool locationMatches))
+        cmd;
     in
     # TODO: Replace all the options in the genrule docs
     pkgs.runCommandNoCC name {
       passthru = args // { inherit packageSrc; _is_genrule = true; };
     } ''
-      mkdir -p $out
+      mkdir -p $(dirname $out/${head out})
       cd ${packageSrc}
-      ${replaceStrings [ "$(in)" "$(out)" ] [ (builtins.toString (resolveSrcs srcs)) (builtins.toString outPaths) ] cmd}
+      ${substitutedCmd}
     '');
 
   # Upstream source says a "filegroup" is a collection of files that can be
