@@ -47,21 +47,30 @@ let
     in
     # TODO: Replace all the options in the genrule docs
     pkgs.runCommandNoCC name {
-      passthru = args;
+      passthru = args // { inherit packageSrc; _is_genrule = true; };
     } ''
       mkdir -p $out
       cd ${packageSrc}
-      ${replaceStrings [ "$(in)" "$(out)" ] [ (builtins.toString (resolveFiles srcs)) (builtins.toString outPaths) ] cmd}
+      ${replaceStrings [ "$(in)" "$(out)" ] [ (builtins.toString (resolveSrcs srcs)) (builtins.toString outPaths) ] cmd}
     '');
 
   # Upstream source says a "filegroup" is a collection of files that can be
   # referenced in other module propererties, like "srcs" using the syntax
   # ":<name>". This allows modules to refer to sources outside their package
   # boundaries.
-  filegroup = id;
-  resolveFiles = srcs: flatten (map (s: if hasPrefix ":" s then bpPkgs.${builtins.substring 1 (stringLength s) s}.srcs else s) srcs);
+  filegroup = args: args // { inherit packageSrc; _is_filegroup = true; };
 
-  cc = import ./cc { inherit pkgs lib bpPkgs sourceDir packageSrc resolveFiles genrule; };
+  # Produce absolute paths from the list of srcs, resolving ":" references
+  resolveSrcs = srcs: flatten (map (s:
+    let
+      pkg = bpPkgs.${removePrefix ":" s};
+      files = if pkg._is_genrule or false then pkg.out else pkg.srcs;
+    in if hasPrefix ":" s
+    then map (file: "${pkg.packageSrc}/${file}") files
+    else s)
+  srcs);
+
+  cc = import ./cc { inherit pkgs lib bpPkgs sourceDir packageSrc resolveSrcs genrule; };
   art = import ./art { inherit lib cc; };
 
   unimplementedModule = name: builtins.trace "unimplemented module: ${name}" id;
