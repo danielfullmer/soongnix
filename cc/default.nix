@@ -1,4 +1,4 @@
-{ pkgs, lib, bpPkgs, sourceDirs, packageSrc, selectDir, resolveFiles, genrule }:
+{ pkgs, lib, bpPkgs, packageSrc, sourceDir, resolveFiles, genrule }:
 
 with lib;
 let
@@ -167,24 +167,9 @@ let
     "-Wno-gnu-include-next"
   ];
 
-#  ] ++ [
-#    "--gcc-toolchain=${gccRoot}"
-#    "--sysroot ${gccRoot}/sysroot"
-#  ];
-  #++ [
-  #  "-B${gccRoot}/lib/gcc/x86_64-linux/4.8.3"
-  #  "-L${gccRoot}/lib/gcc/x86_64-linux/4.8.3"
-  #  "-L${gccRoot}/x86_64-linux/lib64"
-  #];
-  #gccRoot = sourceDirs."prebuilts/gcc" + "/linux-x86/host/x86_64-linux-glibc2.17-4.8";
-
-  #linuxAvailableLibraries = [ "c" "dl" "gcc" "gcc_s" "m" "ncurses" "pthread" "resolv" "rt"
-
   # Well this is unfortunate.
   commonGlobalIncludes = [
-    "-I${sourceDirs."system/core"}/include"
-#    "-I${/home/danielrf/src/aosp/system/media}/audio/include"
-#    "-I${/home/danielrf/src/aosp/hardware/libhardware}/include"
+    ("-I" + sourceDir "system/core/include")
   ];
 
   hostLdLibs = "-ldl -lpthread -lm -lrt";
@@ -254,7 +239,7 @@ let
           ++ bpPkgs.${p}.whole_static_libs) # This one is not well documented, but appears to be necessary (test: fastboot)
             headerNames));
     in
-      map (d: "-I${selectDir d}") include_dirs # include_dirs appears to be a path relative to the AOSP root
+      map (d: "-I${sourceDir d}") include_dirs # include_dirs appears to be a path relative to the AOSP root
       ++ map (d: "-I${packageSrc}/${d}") (local_include_dirs ++ export_include_dirs ++ (optional include_build_directory "."))
       ++ flatten (map (p: map (d: "-I${bpPkgs.${p}.packageSrc}/${d}") bpPkgs.${p}.export_include_dirs) allHeaderNames)
       ++ map (p: "-I${bpPkgs.${p}}") generated_headers;

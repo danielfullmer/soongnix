@@ -4,17 +4,30 @@
 
 with lib;
 let
-  # Find the source dir with the longest name which matches a prefix of relpath
-  selectDir = relpath:
-  let
-    matchingDirs = lib.filter (n: lib.hasPrefix n relpath) (lib.attrNames sourceDirs);
-    bestDirName =
-      assert lib.assertMsg ((builtins.length matchingDirs) >= 1) "Could not find soong module: ${relpath}";
-      builtins.head (lib.sort (a: b: (lib.stringLength a) > (lib.stringLength b)) matchingDirs);
-    remainingPath = builtins.substring (lib.stringLength bestDirName) (lib.stringLength relpath) relpath;
-  in sourceDirs.${bestDirName} + remainingPath;
+  # Return a path containing the contents under the prefix
+  sourceDir = prefix: if (selectDir prefix != false) then selectDir prefix else linkFarmDir prefix;
 
-  packageSrc = selectDir relpath;
+  # Find the source dir with the longest name which matches a prefix
+  selectDir = prefix:
+  let
+    matchingDirs = lib.filter (n: lib.hasPrefix n prefix) (lib.attrNames sourceDirs);
+    bestDirName = builtins.head (lib.sort (a: b: (lib.stringLength a) > (lib.stringLength b)) matchingDirs);
+    remainingPath = builtins.substring (lib.stringLength bestDirName) (lib.stringLength prefix) prefix;
+  in if (builtins.length matchingDirs) >= 1
+    then sourceDirs.${bestDirName} + remainingPath
+    else false;
+
+  # Make a symlink tree of source directories whose prefix matches the one given
+  linkFarmDir = prefix:
+  let
+    matchingDirs = lib.filterAttrs (n: v: lib.hasPrefix prefix n) sourceDirs;
+    entries = mapAttrsToList (name: dir: {
+      name = lib.removePrefix "/" (lib.removePrefix prefix name);
+      path = dir;
+    }) matchingDirs;
+  in pkgs.linkFarm ((replaceStrings ["/"] ["-"] prefix) + "-linkfarm") entries;
+
+  packageSrc = sourceDir relpath;
 
   # Need a better name for this. Replace string references to actual objects in bpPkgs
   # maybe it's too confusing and we should just dereference when we use it
@@ -48,7 +61,7 @@ let
   filegroup = id;
   resolveFiles = srcs: flatten (map (s: if hasPrefix ":" s then bpPkgs.${builtins.substring 1 (stringLength s) s}.srcs else s) srcs);
 
-  cc = import ./cc { inherit pkgs lib bpPkgs sourceDirs packageSrc selectDir resolveFiles genrule; };
+  cc = import ./cc { inherit pkgs lib bpPkgs sourceDir packageSrc resolveFiles genrule; };
   art = import ./art { inherit lib cc; };
 
   unimplementedModule = name: builtins.trace "unimplemented module: ${name}" id;

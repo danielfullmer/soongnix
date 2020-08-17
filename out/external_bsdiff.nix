@@ -24,7 +24,7 @@ bsdiff_defaults = cc_defaults {
     ];
     #  Allow internal includes to be referenced with the "bsdiff/" prefix in the
     #  path.
-    #include_dirs = ["external"]; # Soongnix
+    include_dirs = ["external"];
     export_include_dirs = ["include"];
     cflags = [
         "-D_FILE_OFFSET_BITS=64"
