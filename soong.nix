@@ -32,7 +32,7 @@ let
   lookupPkg = pkg: bpPkgs.${pkg} or (throw "couldn't find ${pkg}");
 
   genrule =
-    ({ name, cmd, srcs, out, tools ? [], tool_files ? [], ... }@args:
+    ({ name, cmd, srcs ? [], out, tools ? [], tool_files ? [], ... }@args:
     let
       lookupTool = tool:
         if elem tool tools then (lookupPkg tool) + "/bin/${tool}"
