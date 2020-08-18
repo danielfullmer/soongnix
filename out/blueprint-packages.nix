@@ -5526,6 +5526,54 @@
   inherit (callBPPackage "frameworks/ex/framesequence/samples/FrameSequenceSamples" ./frameworks_ex_framesequence_samples_FrameSequenceSamples.nix {})
     FrameSequenceSample;
 
+  inherit (callBPPackage "frameworks/hardware/interfaces" ./frameworks_hardware_interfaces.nix {})
+    "android.frameworks";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/bufferhub/1.0" ./frameworks_hardware_interfaces_bufferhub_1.0.nix {})
+    "android.frameworks.bufferhub@1.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/bufferhub/1.0/vts/functional" ./frameworks_hardware_interfaces_bufferhub_1.0_vts_functional.nix {})
+    VtsHalBufferHubV1_0TargetTest;
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/cameraservice/common/2.0" ./frameworks_hardware_interfaces_cameraservice_common_2.0.nix {})
+    "android.frameworks.cameraservice.common@2.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/cameraservice/service/2.0" ./frameworks_hardware_interfaces_cameraservice_service_2.0.nix {})
+    "android.frameworks.cameraservice.service@2.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/cameraservice/vts/functional" ./frameworks_hardware_interfaces_cameraservice_vts_functional.nix {})
+    VtsHalCameraServiceV2_0TargetTest;
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/displayservice/1.0" ./frameworks_hardware_interfaces_displayservice_1.0.nix {})
+    "android.frameworks.displayservice@1.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/displayservice/1.0/vts/functional" ./frameworks_hardware_interfaces_displayservice_1.0_vts_functional.nix {})
+    VtsFwkDisplayServiceV1_0TargetTest;
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/schedulerservice/1.0" ./frameworks_hardware_interfaces_schedulerservice_1.0.nix {})
+    "android.frameworks.schedulerservice@1.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/sensorservice/1.0" ./frameworks_hardware_interfaces_sensorservice_1.0.nix {})
+    "android.frameworks.sensorservice@1.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/sensorservice/1.0/vts/functional" ./frameworks_hardware_interfaces_sensorservice_1.0_vts_functional.nix {})
+    VtsHalSensorManagerV1_0TargetTest;
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/sensorservice/libsensorndkbridge" ./frameworks_hardware_interfaces_sensorservice_libsensorndkbridge.nix {})
+    libsensorndkbridge;
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/stats/1.0" ./frameworks_hardware_interfaces_stats_1.0.nix {})
+    "android.frameworks.stats@1.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/stats/1.0/test_client" ./frameworks_hardware_interfaces_stats_1.0_test_client.nix {})
+    stats_client;
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/stats/1.0/vts/functional" ./frameworks_hardware_interfaces_stats_1.0_vts_functional.nix {})
+    VtsHalStatsV1_0TargetTest;
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/vr/composer/1.0" ./frameworks_hardware_interfaces_vr_composer_1.0.nix {})
+    "android.frameworks.vr.composer@1.0";
+
   inherit (callBPPackage "frameworks/minikin" ./frameworks_minikin.nix {})
     libminikin_headers;
 
@@ -6155,6 +6203,1476 @@
 
   inherit (callBPPackage "frameworks/wilhelm/tests/sandbox/streamSource" ./frameworks_wilhelm_tests_sandbox_streamSource.nix {})
     slesTest_playStream;
+
+  inherit (callBPPackage "hardware/google/apf" ./hardware_google_apf.nix {})
+    apf_defaults apf_disassembler apf_run libapf;
+
+  inherit (callBPPackage "hardware/google/av/codec2" ./hardware_google_av_codec2.nix {})
+    libstagefright_codec2;
+
+  inherit (callBPPackage "hardware/google/av/codec2/faultinjection" ./hardware_google_av_codec2_faultinjection.nix {})
+    libc2_component_wrapper;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/audio" ./hardware_google_av_codec2_hidl_1.0_mts_audio.nix {})
+    MtsHidlC2V1_0TargetAudioDecTest MtsHidlC2V1_0TargetAudioEncTest;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/common" ./hardware_google_av_codec2_hidl_1.0_mts_common.nix {})
+    MtsMediaC2V1_0CommonUtil MtsMediaC2V1_0Defaults;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/component" ./hardware_google_av_codec2_hidl_1.0_mts_component.nix {})
+    MtsHidlC2V1_0TargetComponentTest;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/master" ./hardware_google_av_codec2_hidl_1.0_mts_master.nix {})
+    MtsHidlC2V1_0TargetMasterTest;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/video" ./hardware_google_av_codec2_hidl_1.0_mts_video.nix {})
+    MtsHidlC2V1_0TargetVideoDecTest MtsHidlC2V1_0TargetVideoEncTest;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/utils" ./hardware_google_av_codec2_hidl_1.0_utils.nix {})
+    "libcodec2_hidl_utils@1.0" libstagefright_codec2-hidl-defaults;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/client" ./hardware_google_av_codec2_hidl_client.nix {})
+    libcodec2_hidl_client;
+
+  inherit (callBPPackage "hardware/google/av/codec2/hidl/services" ./hardware_google_av_codec2_hidl_services.nix {})
+    "hardware.google.media.c2@1.0-service" libcodec2_serviceregistrant;
+
+  inherit (callBPPackage "hardware/google/av/codec2/tests" ./hardware_google_av_codec2_tests.nix {})
+    codec2_interface_test codec2_param_test codec2_test;
+
+  inherit (callBPPackage "hardware/google/av/codec2/vndk" ./hardware_google_av_codec2_vndk.nix {})
+    libstagefright_codec2-impl-defaults libstagefright_codec2-internal-defaults libstagefright_codec2_internal libstagefright_codec2_vndk;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/aac" ./hardware_google_av_media_codecs_aac.nix {})
+    libstagefright_soft_c2aacdec libstagefright_soft_c2aacenc;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/amr_nb_wb" ./hardware_google_av_media_codecs_amr_nb_wb.nix {})
+    libstagefright_soft_c2amrnbdec libstagefright_soft_c2amrnbenc libstagefright_soft_c2amrwbdec libstagefright_soft_c2amrwbenc;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/avc" ./hardware_google_av_media_codecs_avc.nix {})
+    libstagefright_soft_c2avcdec libstagefright_soft_c2avcenc;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/base" ./hardware_google_av_media_codecs_base.nix {})
+    libstagefright_simple_c2component libstagefright_soft_c2-defaults libstagefright_soft_c2_sanitize_all-defaults libstagefright_soft_c2_sanitize_signed-defaults libstagefright_soft_c2common;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/cmds" ./hardware_google_av_media_codecs_cmds.nix {})
+    codec2;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/flac" ./hardware_google_av_media_codecs_flac.nix {})
+    libstagefright_soft_c2flacdec libstagefright_soft_c2flacenc;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/g711" ./hardware_google_av_media_codecs_g711.nix {})
+    libstagefright_soft_c2g711alawdec libstagefright_soft_c2g711mlawdec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/gsm" ./hardware_google_av_media_codecs_gsm.nix {})
+    libstagefright_soft_c2gsmdec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/hevc" ./hardware_google_av_media_codecs_hevc.nix {})
+    libstagefright_soft_c2hevcdec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/mp3" ./hardware_google_av_media_codecs_mp3.nix {})
+    libstagefright_soft_c2mp3dec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/mpeg2" ./hardware_google_av_media_codecs_mpeg2.nix {})
+    libstagefright_soft_c2mpeg2dec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/mpeg4_h263" ./hardware_google_av_media_codecs_mpeg4_h263.nix {})
+    libstagefright_soft_c2h263dec libstagefright_soft_c2h263enc libstagefright_soft_c2mpeg4dec libstagefright_soft_c2mpeg4enc;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/opus" ./hardware_google_av_media_codecs_opus.nix {})
+    libstagefright_soft_c2opusdec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/raw" ./hardware_google_av_media_codecs_raw.nix {})
+    libstagefright_soft_c2rawdec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/vorbis" ./hardware_google_av_media_codecs_vorbis.nix {})
+    libstagefright_soft_c2vorbisdec;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/vpx" ./hardware_google_av_media_codecs_vpx.nix {})
+    libstagefright_soft_c2vp8dec libstagefright_soft_c2vp8enc libstagefright_soft_c2vp9dec libstagefright_soft_c2vp9enc;
+
+  inherit (callBPPackage "hardware/google/av/media/codecs/xaac" ./hardware_google_av_media_codecs_xaac.nix {})
+    libstagefright_soft_c2xaacdec;
+
+  inherit (callBPPackage "hardware/google/av/media/eco" ./hardware_google_av_media_eco.nix {})
+    libmedia_ecoservice;
+
+  inherit (callBPPackage "hardware/google/av/media/eco/tests" ./hardware_google_av_media_eco_tests.nix {})
+    EcoDataTest EcoServiceTest EcoSessionTest libmedia_ecoservice_tests_defaults;
+
+  inherit (callBPPackage "hardware/google/av/media/sfplugin" ./hardware_google_av_media_sfplugin.nix {})
+    libstagefright_ccodec;
+
+  inherit (callBPPackage "hardware/google/av/media/sfplugin/tests" ./hardware_google_av_media_sfplugin_tests.nix {})
+    ccodec_test mc_sanity;
+
+  inherit (callBPPackage "hardware/google/av/media/sfplugin/utils" ./hardware_google_av_media_sfplugin_utils.nix {})
+    libstagefright_ccodec_utils;
+
+  inherit (callBPPackage "hardware/google/easel/amber/camera" ./hardware_google_easel_amber_camera.nix {})
+    libhdrplusclient_headers;
+
+  inherit (callBPPackage "hardware/google/interfaces" ./hardware_google_interfaces.nix {})
+    "hardware.google" _missingName;
+
+  inherit (callBPPackage "hardware/google/interfaces/light/1.0" ./hardware_google_interfaces_light_1.0.nix {})
+    "hardware.google.light@1.0";
+
+  inherit (callBPPackage "hardware/google/interfaces/light/1.0/default" ./hardware_google_interfaces_light_1.0_default.nix {})
+    "hardware.google.light@1.0-impl" "hardware.google.light@1.0-service" "hardware.google.light_defaults";
+
+  inherit (callBPPackage "hardware/google/interfaces/light/1.1" ./hardware_google_interfaces_light_1.1.nix {})
+    "hardware.google.light@1.1";
+
+  inherit (callBPPackage "hardware/google/interfaces/light/1.1/default" ./hardware_google_interfaces_light_1.1_default.nix {})
+    "hardware.google.light@1.1-service" "hardware.google.light_defaults-1.1";
+
+  inherit (callBPPackage "hardware/google/interfaces/media/c2/1.0" ./hardware_google_interfaces_media_c2_1.0.nix {})
+    "hardware.google.media.c2@1.0";
+
+  inherit (callBPPackage "hardware/google/pixel/atrace" ./hardware_google_pixel_atrace.nix {})
+    "android.hardware.atrace@1.0-service.pixel";
+
+  inherit (callBPPackage "hardware/google/pixel/fastboot" ./hardware_google_pixel_fastboot.nix {})
+    "android.hardware.fastboot@1.0-impl.pixel";
+
+  inherit (callBPPackage "hardware/google/pixel/health" ./hardware_google_pixel_health.nix {})
+    libpixelhealth;
+
+  inherit (callBPPackage "hardware/google/pixel/perfstatsd" ./hardware_google_pixel_perfstatsd.nix {})
+    libperfstatsd perfstatsd perfstatsd_aidl_private perfstatsd_defaults;
+
+  inherit (callBPPackage "hardware/google/pixel/pixelstats" ./hardware_google_pixel_pixelstats.nix {})
+    libpixelstats pixelatoms-cpp pixelatoms-java;
+
+  inherit (callBPPackage "hardware/google/pixel/power-libperfmgr" ./hardware_google_pixel_power-libperfmgr.nix {})
+    "android.hardware.power@1.3-service.pixel-libperfmgr" pixel_power_headers;
+
+  inherit (callBPPackage "hardware/google/pixel/powerstats" ./hardware_google_pixel_powerstats.nix {})
+    libpixelpowerstats;
+
+  inherit (callBPPackage "hardware/google/pixel/powerstats/aidl" ./hardware_google_pixel_powerstats_aidl.nix {})
+    pixelpowerstats_provider_aidl_interface;
+
+  inherit (callBPPackage "hardware/google/pixel/thermal" ./hardware_google_pixel_thermal.nix {})
+    "android.hardware.thermal@2.0-service.pixel";
+
+  inherit (callBPPackage "hardware/google/pixel/usb" ./hardware_google_pixel_usb.nix {})
+    libpixelusb;
+
+  inherit (callBPPackage "hardware/interfaces" ./hardware_interfaces.nix {})
+    "android.hardware" VtsHalTargetTestDefaults hidl_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/atrace/1.0" ./hardware_interfaces_atrace_1.0.nix {})
+    "android.hardware.atrace@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/atrace/1.0/default" ./hardware_interfaces_atrace_1.0_default.nix {})
+    "android.hardware.atrace@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/atrace/1.0/vts/functional" ./hardware_interfaces_atrace_1.0_vts_functional.nix {})
+    VtsHalAtraceV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/audio/2.0" ./hardware_interfaces_audio_2.0.nix {})
+    "android.hardware.audio@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/4.0" ./hardware_interfaces_audio_4.0.nix {})
+    "android.hardware.audio@4.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/4.0/config" ./hardware_interfaces_audio_4.0_config.nix {})
+    audio_policy_configuration_V4_0;
+
+  inherit (callBPPackage "hardware/interfaces/audio/5.0" ./hardware_interfaces_audio_5.0.nix {})
+    "android.hardware.audio@5.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/5.0/config" ./hardware_interfaces_audio_5.0_config.nix {})
+    audio_policy_configuration_V5_0;
+
+  inherit (callBPPackage "hardware/interfaces/audio/common/2.0" ./hardware_interfaces_audio_common_2.0.nix {})
+    "android.hardware.audio.common@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/common/4.0" ./hardware_interfaces_audio_common_4.0.nix {})
+    "android.hardware.audio.common@4.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/common/5.0" ./hardware_interfaces_audio_common_5.0.nix {})
+    "android.hardware.audio.common@5.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/common/all-versions/default" ./hardware_interfaces_audio_common_all-versions_default.nix {})
+    "android.hardware.audio.common-util" "android.hardware.audio.common-util_default" "android.hardware.audio.common@2.0-util" "android.hardware.audio.common@4.0-util" "android.hardware.audio.common@5.0-util";
+
+  inherit (callBPPackage "hardware/interfaces/audio/common/all-versions/test/utility" ./hardware_interfaces_audio_common_all-versions_test_utility.nix {})
+    "android.hardware.audio.common.test.utility";
+
+  inherit (callBPPackage "hardware/interfaces/audio/common/all-versions/util" ./hardware_interfaces_audio_common_all-versions_util.nix {})
+    "android.hardware.audio.common.util@all-versions";
+
+  inherit (callBPPackage "hardware/interfaces/audio/core/all-versions/default" ./hardware_interfaces_audio_core_all-versions_default.nix {})
+    "android.hardware.audio-impl_default" "android.hardware.audio@2.0-impl" "android.hardware.audio@4.0-impl" "android.hardware.audio@5.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/audio/core/all-versions/vts/functional" ./hardware_interfaces_audio_core_all-versions_vts_functional.nix {})
+    VtsHalAudioTargetTest_defaults VtsHalAudioV2_0TargetTest VtsHalAudioV4_0TargetTest VtsHalAudioV5_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/2.0" ./hardware_interfaces_audio_effect_2.0.nix {})
+    "android.hardware.audio.effect@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/4.0" ./hardware_interfaces_audio_effect_4.0.nix {})
+    "android.hardware.audio.effect@4.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/5.0" ./hardware_interfaces_audio_effect_5.0.nix {})
+    "android.hardware.audio.effect@5.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/5.0/xml" ./hardware_interfaces_audio_effect_5.0_xml.nix {})
+    audio_effects_conf;
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/all-versions/default" ./hardware_interfaces_audio_effect_all-versions_default.nix {})
+    "android.hardware.audio.effect-impl_default" "android.hardware.audio.effect@2.0-impl" "android.hardware.audio.effect@4.0-impl" "android.hardware.audio.effect@5.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/all-versions/vts/functional" ./hardware_interfaces_audio_effect_all-versions_vts_functional.nix {})
+    VtsHalAudioEffectTargetTest_default VtsHalAudioEffectV2_0TargetTest VtsHalAudioEffectV4_0TargetTest VtsHalAudioEffectV5_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/authsecret/1.0" ./hardware_interfaces_authsecret_1.0.nix {})
+    "android.hardware.authsecret@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/authsecret/1.0/default" ./hardware_interfaces_authsecret_1.0_default.nix {})
+    "android.hardware.authsecret@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/authsecret/1.0/vts/functional" ./hardware_interfaces_authsecret_1.0_vts_functional.nix {})
+    VtsHalAuthSecretV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/audiocontrol/1.0" ./hardware_interfaces_automotive_audiocontrol_1.0.nix {})
+    "android.hardware.automotive.audiocontrol@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/audiocontrol/1.0/default" ./hardware_interfaces_automotive_audiocontrol_1.0_default.nix {})
+    "android.hardware.automotive.audiocontrol@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/audiocontrol/1.0/vts/functional" ./hardware_interfaces_automotive_audiocontrol_1.0_vts_functional.nix {})
+    VtsHalAudioControlV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/1.0" ./hardware_interfaces_automotive_evs_1.0.nix {})
+    "android.hardware.automotive.evs@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/1.0/default" ./hardware_interfaces_automotive_evs_1.0_default.nix {})
+    "android.hardware.automotive.evs@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/1.0/vts/functional" ./hardware_interfaces_automotive_evs_1.0_vts_functional.nix {})
+    VtsHalEvsV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/vehicle/2.0" ./hardware_interfaces_automotive_vehicle_2.0.nix {})
+    "android.hardware.automotive.vehicle@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/vehicle/2.0/default" ./hardware_interfaces_automotive_vehicle_2.0_default.nix {})
+    "android.hardware.automotive.vehicle@2.0-default-impl-lib" "android.hardware.automotive.vehicle@2.0-manager-lib" "android.hardware.automotive.vehicle@2.0-manager-unit-tests" "android.hardware.automotive.vehicle@2.0-service" vhal_v2_0_common_headers vhal_v2_0_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/vehicle/2.0/default/impl/vhal_v2_0/proto" ./hardware_interfaces_automotive_vehicle_2.0_default_impl_vhal_v2_0_proto.nix {})
+    "android.hardware.automotive.vehicle@2.0-libproto-native";
+
+  inherit (callBPPackage "hardware/interfaces/biometrics/face/1.0" ./hardware_interfaces_biometrics_face_1.0.nix {})
+    "android.hardware.biometrics.face@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/biometrics/face/1.0/vts/functional" ./hardware_interfaces_biometrics_face_1.0_vts_functional.nix {})
+    VtsHalBiometricsFaceV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/biometrics/fingerprint/2.1" ./hardware_interfaces_biometrics_fingerprint_2.1.nix {})
+    "android.hardware.biometrics.fingerprint@2.1";
+
+  inherit (callBPPackage "hardware/interfaces/biometrics/fingerprint/2.1/default" ./hardware_interfaces_biometrics_fingerprint_2.1_default.nix {})
+    "android.hardware.biometrics.fingerprint@2.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/biometrics/fingerprint/2.1/vts/functional" ./hardware_interfaces_biometrics_fingerprint_2.1_vts_functional.nix {})
+    VtsHalBiometricsFingerprintV2_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/1.0" ./hardware_interfaces_bluetooth_1.0.nix {})
+    "android.hardware.bluetooth@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/1.0/default" ./hardware_interfaces_bluetooth_1.0_default.nix {})
+    "android.hardware.bluetooth-async" "android.hardware.bluetooth-hci" "android.hardware.bluetooth@1.0-impl" "android.hardware.bluetooth@1.0-service" bluetooth-address-unit-tests bluetooth-vendor-interface-unit-tests;
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/1.0/vts/functional" ./hardware_interfaces_bluetooth_1.0_vts_functional.nix {})
+    VtsHalBluetoothV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/a2dp/1.0" ./hardware_interfaces_bluetooth_a2dp_1.0.nix {})
+    "android.hardware.bluetooth.a2dp@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/a2dp/1.0/default" ./hardware_interfaces_bluetooth_a2dp_1.0_default.nix {})
+    "android.hardware.bluetooth.a2dp@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/a2dp/1.0/vts/functional" ./hardware_interfaces_bluetooth_a2dp_1.0_vts_functional.nix {})
+    VtsHalBluetoothA2dpV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/audio/2.0" ./hardware_interfaces_bluetooth_audio_2.0.nix {})
+    "android.hardware.bluetooth.audio@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/audio/2.0/default" ./hardware_interfaces_bluetooth_audio_2.0_default.nix {})
+    "android.hardware.bluetooth.audio@2.0-impl" libbluetooth_audio_session;
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/audio/2.0/vts/functional" ./hardware_interfaces_bluetooth_audio_2.0_vts_functional.nix {})
+    VtsHalBluetoothAudioV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/boot/1.0" ./hardware_interfaces_boot_1.0.nix {})
+    "android.hardware.boot@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/boot/1.0/default" ./hardware_interfaces_boot_1.0_default.nix {})
+    "android.hardware.boot@1.0-impl" "android.hardware.boot@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/boot/1.0/vts/functional" ./hardware_interfaces_boot_1.0_vts_functional.nix {})
+    VtsHalBootV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/1.0" ./hardware_interfaces_broadcastradio_1.0.nix {})
+    "android.hardware.broadcastradio@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/1.0/default" ./hardware_interfaces_broadcastradio_1.0_default.nix {})
+    "android.hardware.broadcastradio@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/1.0/vts/functional" ./hardware_interfaces_broadcastradio_1.0_vts_functional.nix {})
+    VtsHalBroadcastradioV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/1.1" ./hardware_interfaces_broadcastradio_1.1.nix {})
+    "android.hardware.broadcastradio@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/1.1/default" ./hardware_interfaces_broadcastradio_1.1_default.nix {})
+    "android.hardware.broadcastradio@1.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/1.1/vts/functional" ./hardware_interfaces_broadcastradio_1.1_vts_functional.nix {})
+    VtsHalBroadcastradioV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/2.0" ./hardware_interfaces_broadcastradio_2.0.nix {})
+    "android.hardware.broadcastradio@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/2.0/default" ./hardware_interfaces_broadcastradio_2.0_default.nix {})
+    "android.hardware.broadcastradio@2.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/2.0/vts/functional" ./hardware_interfaces_broadcastradio_2.0_vts_functional.nix {})
+    VtsHalBroadcastradioV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/common/tests" ./hardware_interfaces_broadcastradio_common_tests.nix {})
+    "android.hardware.broadcastradio@common-utils-2x-tests" "android.hardware.broadcastradio@common-utils-tests" "android.hardware.broadcastradio@common-utils-xx-tests";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/common/utils" ./hardware_interfaces_broadcastradio_common_utils.nix {})
+    "android.hardware.broadcastradio@common-utils-lib";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/common/utils1x" ./hardware_interfaces_broadcastradio_common_utils1x.nix {})
+    "android.hardware.broadcastradio@common-utils-1x-lib";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/common/utils2x" ./hardware_interfaces_broadcastradio_common_utils2x.nix {})
+    "android.hardware.broadcastradio@common-utils-2x-lib";
+
+  inherit (callBPPackage "hardware/interfaces/broadcastradio/common/vts/utils" ./hardware_interfaces_broadcastradio_common_vts_utils.nix {})
+    "android.hardware.broadcastradio@vts-utils-lib";
+
+  inherit (callBPPackage "hardware/interfaces/camera/common/1.0" ./hardware_interfaces_camera_common_1.0.nix {})
+    "android.hardware.camera.common@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/camera/common/1.0/default" ./hardware_interfaces_camera_common_1.0_default.nix {})
+    "android.hardware.camera.common@1.0-helper";
+
+  inherit (callBPPackage "hardware/interfaces/camera/metadata/3.2" ./hardware_interfaces_camera_metadata_3.2.nix {})
+    "android.hardware.camera.metadata@3.2";
+
+  inherit (callBPPackage "hardware/interfaces/camera/metadata/3.3" ./hardware_interfaces_camera_metadata_3.3.nix {})
+    "android.hardware.camera.metadata@3.3";
+
+  inherit (callBPPackage "hardware/interfaces/camera/metadata/3.4" ./hardware_interfaces_camera_metadata_3.4.nix {})
+    "android.hardware.camera.metadata@3.4";
+
+  inherit (callBPPackage "hardware/interfaces/camera/provider/2.4" ./hardware_interfaces_camera_provider_2.4.nix {})
+    "android.hardware.camera.provider@2.4";
+
+  inherit (callBPPackage "hardware/interfaces/camera/provider/2.4/default" ./hardware_interfaces_camera_provider_2.4_default.nix {})
+    "android.hardware.camera.provider@2.4-external" "android.hardware.camera.provider@2.4-external-service" "android.hardware.camera.provider@2.4-impl" "android.hardware.camera.provider@2.4-legacy" "android.hardware.camera.provider@2.4-service" "android.hardware.camera.provider@2.4-service-lazy" "android.hardware.camera.provider@2.4-service-lazy_64" "android.hardware.camera.provider@2.4-service_64" camera_service_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/camera/provider/2.4/vts/functional" ./hardware_interfaces_camera_provider_2.4_vts_functional.nix {})
+    VtsHalCameraProviderV2_4TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/camera/provider/2.5" ./hardware_interfaces_camera_provider_2.5.nix {})
+    "android.hardware.camera.provider@2.5";
+
+  inherit (callBPPackage "hardware/interfaces/camera/provider/2.5/default" ./hardware_interfaces_camera_provider_2.5_default.nix {})
+    "android.hardware.camera.provider@2.5-external" "android.hardware.camera.provider@2.5-external-service" "android.hardware.camera.provider@2.5-legacy" "android.hardware.camera.provider@2.5-service" "android.hardware.camera.provider@2.5-service-lazy" "android.hardware.camera.provider@2.5-service-lazy_64" "android.hardware.camera.provider@2.5-service_64" camera_service_2_5_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.0" ./hardware_interfaces_cas_1.0.nix {})
+    "android.hardware.cas@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.0/default" ./hardware_interfaces_cas_1.0_default.nix {})
+    "android.hardware.cas@1.0-service" "android.hardware.cas@1.0-service-lazy" cas_service_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.0/vts/functional" ./hardware_interfaces_cas_1.0_vts_functional.nix {})
+    VtsHalCasV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.1" ./hardware_interfaces_cas_1.1.nix {})
+    "android.hardware.cas@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.1/default" ./hardware_interfaces_cas_1.1_default.nix {})
+    "android.hardware.cas@1.1-service" "android.hardware.cas@1.1-service-lazy" "cas_service_defaults@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.1/vts/functional" ./hardware_interfaces_cas_1.1_vts_functional.nix {})
+    VtsHalCasV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/cas/native/1.0" ./hardware_interfaces_cas_native_1.0.nix {})
+    "android.hardware.cas.native@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/compatibility_matrices" ./hardware_interfaces_compatibility_matrices.nix {})
+    "framework_compatibility_matrix.1.xml" "framework_compatibility_matrix.2.xml" "framework_compatibility_matrix.3.xml" "framework_compatibility_matrix.4.xml" "framework_compatibility_matrix.legacy.xml";
+
+  inherit (callBPPackage "hardware/interfaces/compatibility_matrices/build" ./hardware_interfaces_compatibility_matrices_build.nix {})
+    vintf-compatibility-matrix-soong-rules;
+
+  inherit (callBPPackage "hardware/interfaces/configstore/1.0" ./hardware_interfaces_configstore_1.0.nix {})
+    "android.hardware.configstore@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/configstore/1.0/vts/functional" ./hardware_interfaces_configstore_1.0_vts_functional.nix {})
+    VtsHalConfigstoreV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/configstore/1.1" ./hardware_interfaces_configstore_1.1.nix {})
+    "android.hardware.configstore@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/configstore/utils" ./hardware_interfaces_configstore_utils.nix {})
+    "android.hardware.configstore-utils";
+
+  inherit (callBPPackage "hardware/interfaces/confirmationui/1.0" ./hardware_interfaces_confirmationui_1.0.nix {})
+    "android.hardware.confirmationui@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/confirmationui/1.0/default" ./hardware_interfaces_confirmationui_1.0_default.nix {})
+    "android.hardware.confirmationui@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/confirmationui/1.0/vts/functional" ./hardware_interfaces_confirmationui_1.0_vts_functional.nix {})
+    VtsHalConfirmationUIV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/confirmationui/support" ./hardware_interfaces_confirmationui_support.nix {})
+    "android.hardware.confirmationui-support-lib" "android.hardware.confirmationui-support-lib-tests";
+
+  inherit (callBPPackage "hardware/interfaces/contexthub/1.0" ./hardware_interfaces_contexthub_1.0.nix {})
+    "android.hardware.contexthub@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/contexthub/1.0/default" ./hardware_interfaces_contexthub_1.0_default.nix {})
+    "android.hardware.contexthub@1.0-impl" "android.hardware.contexthub@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/contexthub/1.0/vts/functional" ./hardware_interfaces_contexthub_1.0_vts_functional.nix {})
+    VtsHalContexthubV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.0" ./hardware_interfaces_drm_1.0.nix {})
+    "android.hardware.drm@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.0/default" ./hardware_interfaces_drm_1.0_default.nix {})
+    "android.hardware.drm@1.0-helper";
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.0/vts/functional" ./hardware_interfaces_drm_1.0_vts_functional.nix {})
+    VtsHalDrmV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.1" ./hardware_interfaces_drm_1.1.nix {})
+    "android.hardware.drm@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.1/vts/functional" ./hardware_interfaces_drm_1.1_vts_functional.nix {})
+    VtsHalDrmV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.2" ./hardware_interfaces_drm_1.2.nix {})
+    "android.hardware.drm@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.2/vts/functional" ./hardware_interfaces_drm_1.2_vts_functional.nix {})
+    VtsHalDrmV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/dumpstate/1.0" ./hardware_interfaces_dumpstate_1.0.nix {})
+    "android.hardware.dumpstate@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/dumpstate/1.0/default" ./hardware_interfaces_dumpstate_1.0_default.nix {})
+    "android.hardware.dumpstate@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/dumpstate/1.0/vts/functional" ./hardware_interfaces_dumpstate_1.0_vts_functional.nix {})
+    VtsHalDumpstateV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/fastboot/1.0" ./hardware_interfaces_fastboot_1.0.nix {})
+    "android.hardware.fastboot@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/fastboot/1.0/default" ./hardware_interfaces_fastboot_1.0_default.nix {})
+    "android.hardware.fastboot@1.0-impl-mock";
+
+  inherit (callBPPackage "hardware/interfaces/gatekeeper/1.0" ./hardware_interfaces_gatekeeper_1.0.nix {})
+    "android.hardware.gatekeeper@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/gatekeeper/1.0/default" ./hardware_interfaces_gatekeeper_1.0_default.nix {})
+    "android.hardware.gatekeeper@1.0-impl" "android.hardware.gatekeeper@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/gatekeeper/1.0/vts/functional" ./hardware_interfaces_gatekeeper_1.0_vts_functional.nix {})
+    VtsHalGatekeeperV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/gnss/1.0" ./hardware_interfaces_gnss_1.0.nix {})
+    "android.hardware.gnss@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/1.0/default" ./hardware_interfaces_gnss_1.0_default.nix {})
+    "android.hardware.gnss@1.0-impl" "android.hardware.gnss@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/1.0/vts/functional" ./hardware_interfaces_gnss_1.0_vts_functional.nix {})
+    VtsHalGnssV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/gnss/1.1" ./hardware_interfaces_gnss_1.1.nix {})
+    "android.hardware.gnss@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/1.1/default" ./hardware_interfaces_gnss_1.1_default.nix {})
+    "android.hardware.gnss@1.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/1.1/vts/functional" ./hardware_interfaces_gnss_1.1_vts_functional.nix {})
+    VtsHalGnssV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/gnss/2.0" ./hardware_interfaces_gnss_2.0.nix {})
+    "android.hardware.gnss@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/2.0/default" ./hardware_interfaces_gnss_2.0_default.nix {})
+    "android.hardware.gnss@2.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/2.0/vts/functional" ./hardware_interfaces_gnss_2.0_vts_functional.nix {})
+    VtsHalGnssV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/gnss/common/utils/default" ./hardware_interfaces_gnss_common_utils_default.nix {})
+    "android.hardware.gnss@common-default-lib";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/common/utils/vts" ./hardware_interfaces_gnss_common_utils_vts.nix {})
+    "android.hardware.gnss@common-vts-lib";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/measurement_corrections/1.0" ./hardware_interfaces_gnss_measurement_corrections_1.0.nix {})
+    "android.hardware.gnss.measurement_corrections@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/visibility_control/1.0" ./hardware_interfaces_gnss_visibility_control_1.0.nix {})
+    "android.hardware.gnss.visibility_control@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/allocator/2.0" ./hardware_interfaces_graphics_allocator_2.0.nix {})
+    "android.hardware.graphics.allocator@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/allocator/2.0/default" ./hardware_interfaces_graphics_allocator_2.0_default.nix {})
+    "android.hardware.graphics.allocator@2.0-impl" "android.hardware.graphics.allocator@2.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/allocator/2.0/utils/gralloc1-adapter" ./hardware_interfaces_graphics_allocator_2.0_utils_gralloc1-adapter.nix {})
+    libgralloc1-adapter;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/allocator/2.0/utils/hal" ./hardware_interfaces_graphics_allocator_2.0_utils_hal.nix {})
+    "android.hardware.graphics.allocator@2.0-hal";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/allocator/2.0/utils/passthrough" ./hardware_interfaces_graphics_allocator_2.0_utils_passthrough.nix {})
+    "android.hardware.graphics.allocator@2.0-passthrough";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/allocator/3.0" ./hardware_interfaces_graphics_allocator_3.0.nix {})
+    "android.hardware.graphics.allocator@3.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/bufferqueue/1.0" ./hardware_interfaces_graphics_bufferqueue_1.0.nix {})
+    "android.hardware.graphics.bufferqueue@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/bufferqueue/2.0" ./hardware_interfaces_graphics_bufferqueue_2.0.nix {})
+    "android.hardware.graphics.bufferqueue@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/common/1.0" ./hardware_interfaces_graphics_common_1.0.nix {})
+    "android.hardware.graphics.common@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/common/1.1" ./hardware_interfaces_graphics_common_1.1.nix {})
+    "android.hardware.graphics.common@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/common/1.2" ./hardware_interfaces_graphics_common_1.2.nix {})
+    "android.hardware.graphics.common@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1" ./hardware_interfaces_graphics_composer_2.1.nix {})
+    "android.hardware.graphics.composer@2.1";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/default" ./hardware_interfaces_graphics_composer_2.1_default.nix {})
+    "android.hardware.graphics.composer@2.1-impl" "android.hardware.graphics.composer@2.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/command-buffer" ./hardware_interfaces_graphics_composer_2.1_utils_command-buffer.nix {})
+    "android.hardware.graphics.composer@2.1-command-buffer";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/hal" ./hardware_interfaces_graphics_composer_2.1_utils_hal.nix {})
+    "android.hardware.graphics.composer@2.1-hal";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/hwc2on1adapter" ./hardware_interfaces_graphics_composer_2.1_utils_hwc2on1adapter.nix {})
+    libhwc2on1adapter;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/hwc2onfbadapter" ./hardware_interfaces_graphics_composer_2.1_utils_hwc2onfbadapter.nix {})
+    libhwc2onfbadapter;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/passthrough" ./hardware_interfaces_graphics_composer_2.1_utils_passthrough.nix {})
+    "android.hardware.graphics.composer@2.1-passthrough";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/vts" ./hardware_interfaces_graphics_composer_2.1_utils_vts.nix {})
+    "android.hardware.graphics.composer@2.1-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/vts/functional" ./hardware_interfaces_graphics_composer_2.1_vts_functional.nix {})
+    VtsHalGraphicsComposerV2_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2" ./hardware_interfaces_graphics_composer_2.2.nix {})
+    "android.hardware.graphics.composer@2.2";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/utils/command-buffer" ./hardware_interfaces_graphics_composer_2.2_utils_command-buffer.nix {})
+    "android.hardware.graphics.composer@2.2-command-buffer";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/utils/hal" ./hardware_interfaces_graphics_composer_2.2_utils_hal.nix {})
+    "android.hardware.graphics.composer@2.2-hal";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/utils/passthrough" ./hardware_interfaces_graphics_composer_2.2_utils_passthrough.nix {})
+    "android.hardware.graphics.composer@2.2-passthrough";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/utils/vts" ./hardware_interfaces_graphics_composer_2.2_utils_vts.nix {})
+    "android.hardware.graphics.composer@2.2-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/vts/functional" ./hardware_interfaces_graphics_composer_2.2_vts_functional.nix {})
+    VtsHalGraphicsComposerV2_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3" ./hardware_interfaces_graphics_composer_2.3.nix {})
+    "android.hardware.graphics.composer@2.3";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3/default" ./hardware_interfaces_graphics_composer_2.3_default.nix {})
+    "android.hardware.graphics.composer@2.3-service";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3/utils/command-buffer" ./hardware_interfaces_graphics_composer_2.3_utils_command-buffer.nix {})
+    "android.hardware.graphics.composer@2.3-command-buffer";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3/utils/hal" ./hardware_interfaces_graphics_composer_2.3_utils_hal.nix {})
+    "android.hardware.graphics.composer@2.3-hal";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3/utils/passthrough" ./hardware_interfaces_graphics_composer_2.3_utils_passthrough.nix {})
+    "android.hardware.graphics.composer@2.3-passthrough";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3/utils/vts" ./hardware_interfaces_graphics_composer_2.3_utils_vts.nix {})
+    "android.hardware.graphics.composer@2.3-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3/vts/functional" ./hardware_interfaces_graphics_composer_2.3_vts_functional.nix {})
+    VtsHalGraphicsComposerV2_3TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.0" ./hardware_interfaces_graphics_mapper_2.0.nix {})
+    "android.hardware.graphics.mapper@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.0/default" ./hardware_interfaces_graphics_mapper_2.0_default.nix {})
+    "android.hardware.graphics.mapper@2.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.0/utils/hal" ./hardware_interfaces_graphics_mapper_2.0_utils_hal.nix {})
+    "android.hardware.graphics.mapper@2.0-hal";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.0/utils/passthrough" ./hardware_interfaces_graphics_mapper_2.0_utils_passthrough.nix {})
+    "android.hardware.graphics.mapper@2.0-passthrough" "android.hardware.graphics.mapper@2.0-passthrough_headers";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.0/utils/vts" ./hardware_interfaces_graphics_mapper_2.0_utils_vts.nix {})
+    "android.hardware.graphics.mapper@2.0-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.0/vts/functional" ./hardware_interfaces_graphics_mapper_2.0_vts_functional.nix {})
+    VtsHalGraphicsMapperV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.1" ./hardware_interfaces_graphics_mapper_2.1.nix {})
+    "android.hardware.graphics.mapper@2.1";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.1/default" ./hardware_interfaces_graphics_mapper_2.1_default.nix {})
+    "android.hardware.graphics.mapper@2.0-impl-2.1";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.1/utils/hal" ./hardware_interfaces_graphics_mapper_2.1_utils_hal.nix {})
+    "android.hardware.graphics.mapper@2.1-hal";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.1/utils/passthrough" ./hardware_interfaces_graphics_mapper_2.1_utils_passthrough.nix {})
+    "android.hardware.graphics.mapper@2.1-passthrough";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.1/utils/vts" ./hardware_interfaces_graphics_mapper_2.1_utils_vts.nix {})
+    "android.hardware.graphics.mapper@2.1-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.1/vts/functional" ./hardware_interfaces_graphics_mapper_2.1_vts_functional.nix {})
+    VtsHalGraphicsMapperV2_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/3.0" ./hardware_interfaces_graphics_mapper_3.0.nix {})
+    "android.hardware.graphics.mapper@3.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/3.0/utils/vts" ./hardware_interfaces_graphics_mapper_3.0_utils_vts.nix {})
+    "android.hardware.graphics.mapper@3.0-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/3.0/vts/functional" ./hardware_interfaces_graphics_mapper_3.0_vts_functional.nix {})
+    VtsHalGraphicsMapperV3_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/health/1.0" ./hardware_interfaces_health_1.0.nix {})
+    "android.hardware.health@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/health/1.0/default" ./hardware_interfaces_health_1.0_default.nix {})
+    "android.hardware.health@1.0-convert";
+
+  inherit (callBPPackage "hardware/interfaces/health/1.0/default/libhealthd" ./hardware_interfaces_health_1.0_default_libhealthd.nix {})
+    "libhealthd.default";
+
+  inherit (callBPPackage "hardware/interfaces/health/1.0/vts/functional" ./hardware_interfaces_health_1.0_vts_functional.nix {})
+    VtsHalHealthV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/health/2.0" ./hardware_interfaces_health_2.0.nix {})
+    "android.hardware.health@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/health/2.0/default" ./hardware_interfaces_health_2.0_default.nix {})
+    "android.hardware.health@2.0-impl" "android.hardware.health@2.0-impl-default" "android.hardware.health@2.0-impl_defaults";
+
+  inherit (callBPPackage "hardware/interfaces/health/2.0/utils/libhealthhalutils" ./hardware_interfaces_health_2.0_utils_libhealthhalutils.nix {})
+    libhealthhalutils;
+
+  inherit (callBPPackage "hardware/interfaces/health/2.0/utils/libhealthservice" ./hardware_interfaces_health_2.0_utils_libhealthservice.nix {})
+    libhealthservice;
+
+  inherit (callBPPackage "hardware/interfaces/health/2.0/utils/libhealthstoragedefault" ./hardware_interfaces_health_2.0_utils_libhealthstoragedefault.nix {})
+    libhealthstoragedefault;
+
+  inherit (callBPPackage "hardware/interfaces/health/2.0/vts/functional" ./hardware_interfaces_health_2.0_vts_functional.nix {})
+    VtsHalHealthV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/health/storage/1.0" ./hardware_interfaces_health_storage_1.0.nix {})
+    "android.hardware.health.storage@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/health/storage/1.0/default" ./hardware_interfaces_health_storage_1.0_default.nix {})
+    "android.hardware.health.storage@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/health/storage/1.0/vts/functional" ./hardware_interfaces_health_storage_1.0_vts_functional.nix {})
+    VtsHalHealthStorageV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/input/classifier/1.0" ./hardware_interfaces_input_classifier_1.0.nix {})
+    "android.hardware.input.classifier@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/input/classifier/1.0/default" ./hardware_interfaces_input_classifier_1.0_default.nix {})
+    "android.hardware.input.classifier@1.0-service.default";
+
+  inherit (callBPPackage "hardware/interfaces/input/classifier/1.0/vts/functional" ./hardware_interfaces_input_classifier_1.0_vts_functional.nix {})
+    VtsHalInputClassifierV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/input/common/1.0" ./hardware_interfaces_input_common_1.0.nix {})
+    "android.hardware.input.common@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/ir/1.0" ./hardware_interfaces_ir_1.0.nix {})
+    "android.hardware.ir@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/ir/1.0/default" ./hardware_interfaces_ir_1.0_default.nix {})
+    "android.hardware.ir@1.0-impl" "android.hardware.ir@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/ir/1.0/vts/functional" ./hardware_interfaces_ir_1.0_vts_functional.nix {})
+    VtsHalIrV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/3.0" ./hardware_interfaces_keymaster_3.0.nix {})
+    "android.hardware.keymaster@3.0";
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/3.0/vts/functional" ./hardware_interfaces_keymaster_3.0_vts_functional.nix {})
+    VtsHalKeymasterV3_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.0" ./hardware_interfaces_keymaster_4.0.nix {})
+    "android.hardware.keymaster@4.0";
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.0/default" ./hardware_interfaces_keymaster_4.0_default.nix {})
+    "android.hardware.keymaster@4.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.0/support" ./hardware_interfaces_keymaster_4.0_support.nix {})
+    libkeymaster4support;
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.0/vts/functional" ./hardware_interfaces_keymaster_4.0_vts_functional.nix {})
+    VtsHalKeymasterV4_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/light/2.0" ./hardware_interfaces_light_2.0.nix {})
+    "android.hardware.light@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/light/2.0/default" ./hardware_interfaces_light_2.0_default.nix {})
+    "android.hardware.light@2.0-impl" "android.hardware.light@2.0-service" "android.hardware.light@2.0-service-lazy" light_service_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/light/2.0/vts/functional" ./hardware_interfaces_light_2.0_vts_functional.nix {})
+    VtsHalLightV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/light/utils" ./hardware_interfaces_light_utils.nix {})
+    blank_screen;
+
+  inherit (callBPPackage "hardware/interfaces/media/1.0" ./hardware_interfaces_media_1.0.nix {})
+    "android.hardware.media@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/media/bufferpool/1.0" ./hardware_interfaces_media_bufferpool_1.0.nix {})
+    "android.hardware.media.bufferpool@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/media/bufferpool/2.0" ./hardware_interfaces_media_bufferpool_2.0.nix {})
+    "android.hardware.media.bufferpool@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/media/c2/1.0" ./hardware_interfaces_media_c2_1.0.nix {})
+    "android.hardware.media.c2@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/media/omx/1.0" ./hardware_interfaces_media_omx_1.0.nix {})
+    "android.hardware.media.omx@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/media/omx/1.0/vts/functional/audio" ./hardware_interfaces_media_omx_1.0_vts_functional_audio.nix {})
+    VtsHalMediaOmxV1_0TargetAudioDecTest VtsHalMediaOmxV1_0TargetAudioEncTest;
+
+  inherit (callBPPackage "hardware/interfaces/media/omx/1.0/vts/functional/common" ./hardware_interfaces_media_omx_1.0_vts_functional_common.nix {})
+    VtsHalMediaOmxV1_0CommonUtil VtsHalMediaOmxV1_0Defaults;
+
+  inherit (callBPPackage "hardware/interfaces/media/omx/1.0/vts/functional/component" ./hardware_interfaces_media_omx_1.0_vts_functional_component.nix {})
+    VtsHalMediaOmxV1_0TargetComponentTest;
+
+  inherit (callBPPackage "hardware/interfaces/media/omx/1.0/vts/functional/master" ./hardware_interfaces_media_omx_1.0_vts_functional_master.nix {})
+    VtsHalMediaOmxV1_0TargetMasterTest;
+
+  inherit (callBPPackage "hardware/interfaces/media/omx/1.0/vts/functional/video" ./hardware_interfaces_media_omx_1.0_vts_functional_video.nix {})
+    VtsHalMediaOmxV1_0TargetVideoDecTest VtsHalMediaOmxV1_0TargetVideoEncTest;
+
+  inherit (callBPPackage "hardware/interfaces/memtrack/1.0" ./hardware_interfaces_memtrack_1.0.nix {})
+    "android.hardware.memtrack@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/memtrack/1.0/default" ./hardware_interfaces_memtrack_1.0_default.nix {})
+    "android.hardware.memtrack@1.0-impl" "android.hardware.memtrack@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/memtrack/1.0/vts/functional" ./hardware_interfaces_memtrack_1.0_vts_functional.nix {})
+    VtsHalMemtrackV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.0" ./hardware_interfaces_neuralnetworks_1.0.nix {})
+    "android.hardware.neuralnetworks@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.0/vts/functional" ./hardware_interfaces_neuralnetworks_1.0_vts_functional.nix {})
+    PresubmitHalNeuralnetworksV1_0TargetTest VtsHalNeuralNetworksTargetTestDefaults VtsHalNeuralnetworksTest_utils VtsHalNeuralnetworksV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.1" ./hardware_interfaces_neuralnetworks_1.1.nix {})
+    "android.hardware.neuralnetworks@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.1/vts/functional" ./hardware_interfaces_neuralnetworks_1.1_vts_functional.nix {})
+    PresubmitHalNeuralnetworksV1_1TargetTest VtsHalNeuralnetworksV1_1CompatV1_0TargetTest VtsHalNeuralnetworksV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.2" ./hardware_interfaces_neuralnetworks_1.2.nix {})
+    "android.hardware.neuralnetworks@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.2/vts/functional" ./hardware_interfaces_neuralnetworks_1.2_vts_functional.nix {})
+    PresubmitHalNeuralnetworksV1_2TargetTest VtsHalNeuralnetworksV1_2CompatV1_0TargetTest VtsHalNeuralnetworksV1_2CompatV1_1TargetTest VtsHalNeuralnetworksV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/nfc/1.0" ./hardware_interfaces_nfc_1.0.nix {})
+    "android.hardware.nfc@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/nfc/1.0/default" ./hardware_interfaces_nfc_1.0_default.nix {})
+    "android.hardware.nfc@1.0-impl" "android.hardware.nfc@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/nfc/1.0/vts/functional" ./hardware_interfaces_nfc_1.0_vts_functional.nix {})
+    VtsHalNfcV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/nfc/1.1" ./hardware_interfaces_nfc_1.1.nix {})
+    "android.hardware.nfc@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/nfc/1.1/vts/functional" ./hardware_interfaces_nfc_1.1_vts_functional.nix {})
+    VtsHalNfcV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/nfc/1.2" ./hardware_interfaces_nfc_1.2.nix {})
+    "android.hardware.nfc@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/nfc/1.2/vts/functional" ./hardware_interfaces_nfc_1.2_vts_functional.nix {})
+    VtsHalNfcV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/oemlock/1.0" ./hardware_interfaces_oemlock_1.0.nix {})
+    "android.hardware.oemlock@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/oemlock/1.0/vts/functional" ./hardware_interfaces_oemlock_1.0_vts_functional.nix {})
+    VtsHalOemLockV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/power/1.0" ./hardware_interfaces_power_1.0.nix {})
+    "android.hardware.power@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/power/1.0/default" ./hardware_interfaces_power_1.0_default.nix {})
+    "android.hardware.power@1.0-impl" "android.hardware.power@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/power/1.0/vts/functional" ./hardware_interfaces_power_1.0_vts_functional.nix {})
+    VtsHalPowerV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/power/1.1" ./hardware_interfaces_power_1.1.nix {})
+    "android.hardware.power@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/power/1.1/vts/functional" ./hardware_interfaces_power_1.1_vts_functional.nix {})
+    VtsHalPowerV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/power/1.2" ./hardware_interfaces_power_1.2.nix {})
+    "android.hardware.power@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/power/1.2/vts/functional" ./hardware_interfaces_power_1.2_vts_functional.nix {})
+    VtsHalPowerV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/power/1.3" ./hardware_interfaces_power_1.3.nix {})
+    "android.hardware.power@1.3";
+
+  inherit (callBPPackage "hardware/interfaces/power/1.3/vts/functional" ./hardware_interfaces_power_1.3_vts_functional.nix {})
+    VtsHalPowerV1_3TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/power/stats/1.0" ./hardware_interfaces_power_stats_1.0.nix {})
+    "android.hardware.power.stats@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/power/stats/1.0/default" ./hardware_interfaces_power_stats_1.0_default.nix {})
+    "android.hardware.power.stats@1.0-service.mock";
+
+  inherit (callBPPackage "hardware/interfaces/power/stats/1.0/vts/functional" ./hardware_interfaces_power_stats_1.0_vts_functional.nix {})
+    VtsHalPowerStatsV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/prebuilt_hashes" ./hardware_interfaces_prebuilt_hashes.nix {})
+    dump_hals_for_release;
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.0" ./hardware_interfaces_radio_1.0.nix {})
+    "android.hardware.radio@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.0/vts/functional" ./hardware_interfaces_radio_1.0_vts_functional.nix {})
+    "radio.util.header@1.0" RadioVtsTestUtilBase VtsHalRadioV1_0TargetTest VtsHalSapV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.1" ./hardware_interfaces_radio_1.1.nix {})
+    "android.hardware.radio@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.1/vts/functional" ./hardware_interfaces_radio_1.1_vts_functional.nix {})
+    VtsHalRadioV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.2" ./hardware_interfaces_radio_1.2.nix {})
+    "android.hardware.radio@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.2/default" ./hardware_interfaces_radio_1.2_default.nix {})
+    "android.hardware.radio@1.2-radio-service" "android.hardware.radio@1.2-sap-service";
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.2/vts/functional" ./hardware_interfaces_radio_1.2_vts_functional.nix {})
+    VtsHalRadioV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.3" ./hardware_interfaces_radio_1.3.nix {})
+    "android.hardware.radio@1.3";
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.3/vts/functional" ./hardware_interfaces_radio_1.3_vts_functional.nix {})
+    VtsHalRadioV1_3TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.4" ./hardware_interfaces_radio_1.4.nix {})
+    "android.hardware.radio@1.4";
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.4/vts/functional" ./hardware_interfaces_radio_1.4_vts_functional.nix {})
+    VtsHalRadioV1_4TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/config/1.0" ./hardware_interfaces_radio_config_1.0.nix {})
+    "android.hardware.radio.config@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/radio/config/1.0/default" ./hardware_interfaces_radio_config_1.0_default.nix {})
+    "android.hardware.radio.config@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/radio/config/1.0/vts/functional" ./hardware_interfaces_radio_config_1.0_vts_functional.nix {})
+    VtsHalRadioConfigV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/config/1.1" ./hardware_interfaces_radio_config_1.1.nix {})
+    "android.hardware.radio.config@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/radio/config/1.1/vts/functional" ./hardware_interfaces_radio_config_1.1_vts_functional.nix {})
+    VtsHalRadioConfigV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/config/1.2" ./hardware_interfaces_radio_config_1.2.nix {})
+    "android.hardware.radio.config@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/radio/config/1.2/vts/functional" ./hardware_interfaces_radio_config_1.2_vts_functional.nix {})
+    VtsHalRadioConfigV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/radio/deprecated/1.0" ./hardware_interfaces_radio_deprecated_1.0.nix {})
+    "android.hardware.radio.deprecated@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/renderscript/1.0" ./hardware_interfaces_renderscript_1.0.nix {})
+    "android.hardware.renderscript@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/renderscript/1.0/default" ./hardware_interfaces_renderscript_1.0_default.nix {})
+    "android.hardware.renderscript@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/renderscript/1.0/vts/functional" ./hardware_interfaces_renderscript_1.0_vts_functional.nix {})
+    VtsHalRenderscriptV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/secure_element/1.0" ./hardware_interfaces_secure_element_1.0.nix {})
+    "android.hardware.secure_element@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/secure_element/1.0/vts/functional" ./hardware_interfaces_secure_element_1.0_vts_functional.nix {})
+    VtsHalSecureElementV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/secure_element/1.1" ./hardware_interfaces_secure_element_1.1.nix {})
+    "android.hardware.secure_element@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/secure_element/1.1/vts/functional" ./hardware_interfaces_secure_element_1.1_vts_functional.nix {})
+    VtsHalSecureElementV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/sensors/1.0" ./hardware_interfaces_sensors_1.0.nix {})
+    "android.hardware.sensors@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/1.0/default" ./hardware_interfaces_sensors_1.0_default.nix {})
+    "android.hardware.sensors@1.0-convert" "android.hardware.sensors@1.0-impl" "android.hardware.sensors@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/1.0/vts/functional" ./hardware_interfaces_sensors_1.0_vts_functional.nix {})
+    VtsHalSensorsV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/sensors/2.0" ./hardware_interfaces_sensors_2.0.nix {})
+    "android.hardware.sensors@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/2.0/default" ./hardware_interfaces_sensors_2.0_default.nix {})
+    "android.hardware.sensors@2.0-service.mock";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/2.0/vts/functional" ./hardware_interfaces_sensors_2.0_vts_functional.nix {})
+    VtsHalSensorsV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/sensors/common/vts/utils" ./hardware_interfaces_sensors_common_vts_utils.nix {})
+    VtsHalSensorsTargetTestUtils;
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.0" ./hardware_interfaces_soundtrigger_2.0.nix {})
+    "android.hardware.soundtrigger@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.0/default" ./hardware_interfaces_soundtrigger_2.0_default.nix {})
+    "android.hardware.soundtrigger@2.0-core";
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.0/vts/functional" ./hardware_interfaces_soundtrigger_2.0_vts_functional.nix {})
+    VtsHalSoundtriggerV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.1" ./hardware_interfaces_soundtrigger_2.1.nix {})
+    "android.hardware.soundtrigger@2.1";
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.1/vts/functional" ./hardware_interfaces_soundtrigger_2.1_vts_functional.nix {})
+    VtsHalSoundtriggerV2_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.2" ./hardware_interfaces_soundtrigger_2.2.nix {})
+    "android.hardware.soundtrigger@2.2";
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.2/default" ./hardware_interfaces_soundtrigger_2.2_default.nix {})
+    "android.hardware.soundtrigger@2.2-impl";
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.2/vts/functional" ./hardware_interfaces_soundtrigger_2.2_vts_functional.nix {})
+    VtsHalSoundtriggerV2_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/tests/bar/1.0" ./hardware_interfaces_tests_bar_1.0.nix {})
+    "android.hardware.tests.bar@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/bar/1.0/default" ./hardware_interfaces_tests_bar_1.0_default.nix {})
+    "android.hardware.tests.bar@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/baz/1.0" ./hardware_interfaces_tests_baz_1.0.nix {})
+    "android.hardware.tests.baz@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/baz/1.0/default" ./hardware_interfaces_tests_baz_1.0_default.nix {})
+    "android.hardware.tests.baz@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/expression/1.0" ./hardware_interfaces_tests_expression_1.0.nix {})
+    "android.hardware.tests.expression@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/extension/light/2.0" ./hardware_interfaces_tests_extension_light_2.0.nix {})
+    "android.hardware.tests.extension.light@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/extension/light/2.0/default" ./hardware_interfaces_tests_extension_light_2.0_default.nix {})
+    "android.hardware.tests.extension.light@2.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/tests/foo/1.0" ./hardware_interfaces_tests_foo_1.0.nix {})
+    "android.hardware.tests.foo@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/foo/1.0/default" ./hardware_interfaces_tests_foo_1.0_default.nix {})
+    "android.hardware.tests.foo@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/foo/1.0/default/lib" ./hardware_interfaces_tests_foo_1.0_default_lib.nix {})
+    libfootest;
+
+  inherit (callBPPackage "hardware/interfaces/tests/hash/1.0" ./hardware_interfaces_tests_hash_1.0.nix {})
+    "android.hardware.tests.hash@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/hash/1.0/default" ./hardware_interfaces_tests_hash_1.0_default.nix {})
+    "android.hardware.tests.hash@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/inheritance/1.0" ./hardware_interfaces_tests_inheritance_1.0.nix {})
+    "android.hardware.tests.inheritance@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/inheritance/1.0/default" ./hardware_interfaces_tests_inheritance_1.0_default.nix {})
+    "android.hardware.tests.inheritance@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/libhwbinder/1.0" ./hardware_interfaces_tests_libhwbinder_1.0.nix {})
+    "android.hardware.tests.libhwbinder@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/libhwbinder/1.0/default" ./hardware_interfaces_tests_libhwbinder_1.0_default.nix {})
+    "android.hardware.tests.libhwbinder@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/libhwbinder/aidl" ./hardware_interfaces_tests_libhwbinder_aidl.nix {})
+    "android.hardware.tests.libbinder";
+
+  inherit (callBPPackage "hardware/interfaces/tests/memory/1.0" ./hardware_interfaces_tests_memory_1.0.nix {})
+    "android.hardware.tests.memory@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/memory/1.0/default" ./hardware_interfaces_tests_memory_1.0_default.nix {})
+    "android.hardware.tests.memory@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/msgq/1.0" ./hardware_interfaces_tests_msgq_1.0.nix {})
+    "android.hardware.tests.msgq@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/msgq/1.0/default" ./hardware_interfaces_tests_msgq_1.0_default.nix {})
+    "android.hardware.tests.msgq@1.0-impl" "android.hardware.tests.msgq@1.0-service-benchmark" "android.hardware.tests.msgq@1.0-service-test";
+
+  inherit (callBPPackage "hardware/interfaces/tests/multithread/1.0" ./hardware_interfaces_tests_multithread_1.0.nix {})
+    "android.hardware.tests.multithread@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/multithread/1.0/default" ./hardware_interfaces_tests_multithread_1.0_default.nix {})
+    "android.hardware.tests.multithread@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/pointer/1.0" ./hardware_interfaces_tests_pointer_1.0.nix {})
+    "android.hardware.tests.pointer@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/pointer/1.0/default" ./hardware_interfaces_tests_pointer_1.0_default.nix {})
+    "android.hardware.tests.pointer@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/pointer/1.0/default/lib" ./hardware_interfaces_tests_pointer_1.0_default_lib.nix {})
+    libpointertest;
+
+  inherit (callBPPackage "hardware/interfaces/tests/safeunion/1.0" ./hardware_interfaces_tests_safeunion_1.0.nix {})
+    "android.hardware.tests.safeunion@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/safeunion/1.0/default" ./hardware_interfaces_tests_safeunion_1.0_default.nix {})
+    "android.hardware.tests.safeunion@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/safeunion/cpp/1.0" ./hardware_interfaces_tests_safeunion_cpp_1.0.nix {})
+    "android.hardware.tests.safeunion.cpp@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/safeunion/cpp/1.0/default" ./hardware_interfaces_tests_safeunion_cpp_1.0_default.nix {})
+    "android.hardware.tests.safeunion.cpp@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/trie/1.0" ./hardware_interfaces_tests_trie_1.0.nix {})
+    "android.hardware.tests.trie@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tests/trie/1.0/default" ./hardware_interfaces_tests_trie_1.0_default.nix {})
+    "android.hardware.tests.trie@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tetheroffload/config/1.0" ./hardware_interfaces_tetheroffload_config_1.0.nix {})
+    "android.hardware.tetheroffload.config@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tetheroffload/config/1.0/vts/functional" ./hardware_interfaces_tetheroffload_config_1.0_vts_functional.nix {})
+    VtsHalTetheroffloadConfigV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/tetheroffload/control/1.0" ./hardware_interfaces_tetheroffload_control_1.0.nix {})
+    "android.hardware.tetheroffload.control@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tetheroffload/control/1.0/vts/functional" ./hardware_interfaces_tetheroffload_control_1.0_vts_functional.nix {})
+    VtsHalTetheroffloadControlV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/thermal/1.0" ./hardware_interfaces_thermal_1.0.nix {})
+    "android.hardware.thermal@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/thermal/1.0/default" ./hardware_interfaces_thermal_1.0_default.nix {})
+    "android.hardware.thermal@1.0-impl" "android.hardware.thermal@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/thermal/1.0/vts/functional" ./hardware_interfaces_thermal_1.0_vts_functional.nix {})
+    VtsHalThermalV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/thermal/1.1" ./hardware_interfaces_thermal_1.1.nix {})
+    "android.hardware.thermal@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/thermal/1.1/vts/functional" ./hardware_interfaces_thermal_1.1_vts_functional.nix {})
+    VtsHalThermalV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/thermal/2.0" ./hardware_interfaces_thermal_2.0.nix {})
+    "android.hardware.thermal@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/thermal/2.0/default" ./hardware_interfaces_thermal_2.0_default.nix {})
+    "android.hardware.thermal@2.0-service.mock";
+
+  inherit (callBPPackage "hardware/interfaces/thermal/2.0/vts/functional" ./hardware_interfaces_thermal_2.0_vts_functional.nix {})
+    VtsHalThermalV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/tv/cec/1.0" ./hardware_interfaces_tv_cec_1.0.nix {})
+    "android.hardware.tv.cec@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tv/cec/1.0/default" ./hardware_interfaces_tv_cec_1.0_default.nix {})
+    "android.hardware.tv.cec@1.0-impl" "android.hardware.tv.cec@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/tv/cec/2.0" ./hardware_interfaces_tv_cec_2.0.nix {})
+    "android.hardware.tv.cec@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/tv/cec/2.0/default" ./hardware_interfaces_tv_cec_2.0_default.nix {})
+    "android.hardware.tv.cec@2.0-impl" "android.hardware.tv.cec@2.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/tv/input/1.0" ./hardware_interfaces_tv_input_1.0.nix {})
+    "android.hardware.tv.input@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tv/input/1.0/default" ./hardware_interfaces_tv_input_1.0_default.nix {})
+    "android.hardware.tv.input@1.0-impl" "android.hardware.tv.input@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/tv/input/1.0/vts/functional" ./hardware_interfaces_tv_input_1.0_vts_functional.nix {})
+    VtsHalTvInputV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/usb/1.0" ./hardware_interfaces_usb_1.0.nix {})
+    "android.hardware.usb@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/usb/1.0/default" ./hardware_interfaces_usb_1.0_default.nix {})
+    "android.hardware.usb@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/usb/1.0/vts/functional" ./hardware_interfaces_usb_1.0_vts_functional.nix {})
+    VtsHalUsbV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/usb/1.1" ./hardware_interfaces_usb_1.1.nix {})
+    "android.hardware.usb@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/usb/1.1/vts/functional" ./hardware_interfaces_usb_1.1_vts_functional.nix {})
+    VtsHalUsbV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/usb/1.2" ./hardware_interfaces_usb_1.2.nix {})
+    "android.hardware.usb@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/usb/1.2/vts/functional" ./hardware_interfaces_usb_1.2_vts_functional.nix {})
+    VtsHalUsbV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/usb/gadget/1.0" ./hardware_interfaces_usb_gadget_1.0.nix {})
+    "android.hardware.usb.gadget@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.0" ./hardware_interfaces_vibrator_1.0.nix {})
+    "android.hardware.vibrator@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.0/default" ./hardware_interfaces_vibrator_1.0_default.nix {})
+    "android.hardware.vibrator@1.0-impl" "android.hardware.vibrator@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.0/vts/functional" ./hardware_interfaces_vibrator_1.0_vts_functional.nix {})
+    VtsHalVibratorV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.1" ./hardware_interfaces_vibrator_1.1.nix {})
+    "android.hardware.vibrator@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.1/vts/functional" ./hardware_interfaces_vibrator_1.1_vts_functional.nix {})
+    VtsHalVibratorV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.2" ./hardware_interfaces_vibrator_1.2.nix {})
+    "android.hardware.vibrator@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.2/vts/functional" ./hardware_interfaces_vibrator_1.2_vts_functional.nix {})
+    VtsHalVibratorV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.3" ./hardware_interfaces_vibrator_1.3.nix {})
+    "android.hardware.vibrator@1.3";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.3/example" ./hardware_interfaces_vibrator_1.3_example.nix {})
+    "android.hardware.vibrator@1.3-service.example";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/1.3/vts/functional" ./hardware_interfaces_vibrator_1.3_vts_functional.nix {})
+    VtsHalVibratorV1_3TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/vr/1.0" ./hardware_interfaces_vr_1.0.nix {})
+    "android.hardware.vr@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/vr/1.0/default" ./hardware_interfaces_vr_1.0_default.nix {})
+    "android.hardware.vr@1.0-impl" "android.hardware.vr@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/vr/1.0/vts/functional" ./hardware_interfaces_vr_1.0_vts_functional.nix {})
+    VtsHalVrV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/weaver/1.0" ./hardware_interfaces_weaver_1.0.nix {})
+    "android.hardware.weaver@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/weaver/1.0/vts/functional" ./hardware_interfaces_weaver_1.0_vts_functional.nix {})
+    VtsHalWeaverV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.0" ./hardware_interfaces_wifi_1.0.nix {})
+    "android.hardware.wifi@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.0/vts/functional" ./hardware_interfaces_wifi_1.0_vts_functional.nix {})
+    VtsHalWifiNanV1_0TargetTest VtsHalWifiV1_0TargetTest VtsHalWifiV1_0TargetTestUtil;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.1" ./hardware_interfaces_wifi_1.1.nix {})
+    "android.hardware.wifi@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.1/vts/functional" ./hardware_interfaces_wifi_1.1_vts_functional.nix {})
+    VtsHalWifiV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.2" ./hardware_interfaces_wifi_1.2.nix {})
+    "android.hardware.wifi@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.2/vts/functional" ./hardware_interfaces_wifi_1.2_vts_functional.nix {})
+    VtsHalWifiNanV1_2TargetTest VtsHalWifiV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.3" ./hardware_interfaces_wifi_1.3.nix {})
+    "android.hardware.wifi@1.3";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.3/vts/functional" ./hardware_interfaces_wifi_1.3_vts_functional.nix {})
+    VtsHalWifiV1_3TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.0" ./hardware_interfaces_wifi_hostapd_1.0.nix {})
+    "android.hardware.wifi.hostapd@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.0/vts/functional" ./hardware_interfaces_wifi_hostapd_1.0_vts_functional.nix {})
+    VtsHalWifiHostapdV1_0TargetTest VtsHalWifiHostapdV1_0TargetTestUtil;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.1" ./hardware_interfaces_wifi_hostapd_1.1.nix {})
+    "android.hardware.wifi.hostapd@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.1/vts/functional" ./hardware_interfaces_wifi_hostapd_1.1_vts_functional.nix {})
+    VtsHalWifiHostapdV1_1TargetTest VtsHalWifiHostapdV1_1TargetTestUtil;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/offload/1.0" ./hardware_interfaces_wifi_offload_1.0.nix {})
+    "android.hardware.wifi.offload@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/offload/1.0/vts/functional" ./hardware_interfaces_wifi_offload_1.0_vts_functional.nix {})
+    VtsHalWifiOffloadV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.0" ./hardware_interfaces_wifi_supplicant_1.0.nix {})
+    "android.hardware.wifi.supplicant@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.0/vts/functional" ./hardware_interfaces_wifi_supplicant_1.0_vts_functional.nix {})
+    VtsHalWifiSupplicantP2pV1_0TargetTest VtsHalWifiSupplicantV1_0TargetTest VtsHalWifiSupplicantV1_0TargetTestUtil;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.1" ./hardware_interfaces_wifi_supplicant_1.1.nix {})
+    "android.hardware.wifi.supplicant@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.1/vts/functional" ./hardware_interfaces_wifi_supplicant_1.1_vts_functional.nix {})
+    VtsHalWifiSupplicantV1_1TargetTest VtsHalWifiSupplicantV1_1TargetTestUtil;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.2" ./hardware_interfaces_wifi_supplicant_1.2.nix {})
+    "android.hardware.wifi.supplicant@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.2/vts/functional" ./hardware_interfaces_wifi_supplicant_1.2_vts_functional.nix {})
+    VtsHalWifiSupplicantP2pV1_2TargetTest VtsHalWifiSupplicantV1_2TargetTest VtsHalWifiSupplicantV1_2TargetTestUtil;
+
+  inherit (callBPPackage "hardware/libhardware" ./hardware_libhardware.nix {})
+    libhardware libhardware_headers;
+
+  inherit (callBPPackage "hardware/libhardware/modules/audio" ./hardware_libhardware_modules_audio.nix {})
+    "audio.primary.default" "audio.stub.default" "audio_policy.stub";
+
+  inherit (callBPPackage "hardware/libhardware/modules/audio_remote_submix" ./hardware_libhardware_modules_audio_remote_submix.nix {})
+    "audio.r_submix.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/audio_remote_submix/tests" ./hardware_libhardware_modules_audio_remote_submix_tests.nix {})
+    r_submix_tests;
+
+  inherit (callBPPackage "hardware/libhardware/modules/camera/3_0" ./hardware_libhardware_modules_camera_3_0.nix {})
+    "camera.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/consumerir" ./hardware_libhardware_modules_consumerir.nix {})
+    "consumerir.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/fingerprint" ./hardware_libhardware_modules_fingerprint.nix {})
+    "fingerprint.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/hwcomposer" ./hardware_libhardware_modules_hwcomposer.nix {})
+    "hwcomposer.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/input/evdev" ./hardware_libhardware_modules_input_evdev.nix {})
+    "input.evdev.default" libinput_evdev;
+
+  inherit (callBPPackage "hardware/libhardware/modules/local_time" ./hardware_libhardware_modules_local_time.nix {})
+    "local_time.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/nfc-nci" ./hardware_libhardware_modules_nfc-nci.nix {})
+    "nfc_nci.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/nfc" ./hardware_libhardware_modules_nfc.nix {})
+    "nfc.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/power" ./hardware_libhardware_modules_power.nix {})
+    "power.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/radio" ./hardware_libhardware_modules_radio.nix {})
+    "radio.fm.default" radio_hal_tool;
+
+  inherit (callBPPackage "hardware/libhardware/modules/sensors" ./hardware_libhardware_modules_sensors.nix {})
+    multihal sensorstests;
+
+  inherit (callBPPackage "hardware/libhardware/modules/sensors/dynamic_sensor" ./hardware_libhardware_modules_sensors_dynamic_sensor.nix {})
+    "sensors.dynamic_sensor_hal" dynamic_sensor_defaults hidrawdevice_host_test hidrawsensor_host_test libdynamic_sensor_ext;
+
+  inherit (callBPPackage "hardware/libhardware/modules/sensors/dynamic_sensor/HidUtils" ./hardware_libhardware_modules_sensors_dynamic_sensor_HidUtils.nix {})
+    hid_defaults hidparser_example hidparser_example2 libhidparser tristate_test;
+
+  inherit (callBPPackage "hardware/libhardware/modules/soundtrigger" ./hardware_libhardware_modules_soundtrigger.nix {})
+    "sound_trigger.stub.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/thermal" ./hardware_libhardware_modules_thermal.nix {})
+    "thermal.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/tv_input" ./hardware_libhardware_modules_tv_input.nix {})
+    "tv_input.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/usbaudio" ./hardware_libhardware_modules_usbaudio.nix {})
+    "audio.usb.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/usbcamera" ./hardware_libhardware_modules_usbcamera.nix {})
+    "camera.usb.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/vibrator" ./hardware_libhardware_modules_vibrator.nix {})
+    "vibrator.default";
+
+  inherit (callBPPackage "hardware/libhardware/modules/vr" ./hardware_libhardware_modules_vr.nix {})
+    "vr.default";
+
+  inherit (callBPPackage "hardware/libhardware/tests/camera3" ./hardware_libhardware_tests_camera3.nix {})
+    camera3_tests;
+
+  inherit (callBPPackage "hardware/libhardware/tests/fingerprint" ./hardware_libhardware_tests_fingerprint.nix {})
+    fingerprint_tests;
+
+  inherit (callBPPackage "hardware/libhardware/tests/hardware" ./hardware_libhardware_tests_hardware.nix {})
+    static-hal-check;
+
+  inherit (callBPPackage "hardware/libhardware/tests/hwc" ./hardware_libhardware_tests_hwc.nix {})
+    hwc-test-arrows libcnativewindow;
+
+  inherit (callBPPackage "hardware/libhardware/tests/input/evdev" ./hardware_libhardware_tests_input_evdev.nix {})
+    libinput_evdevtests;
+
+  inherit (callBPPackage "hardware/libhardware/tests/keymaster" ./hardware_libhardware_tests_keymaster.nix {})
+    keymaster_test;
+
+  inherit (callBPPackage "hardware/libhardware/tests/nusensors" ./hardware_libhardware_tests_nusensors.nix {})
+    test-nusensors;
+
+  inherit (callBPPackage "hardware/libhardware_legacy" ./hardware_libhardware_legacy.nix {})
+    libhardware_legacy libhardware_legacy_headers libpower libpower_defaults libpower_test;
+
+  inherit (callBPPackage "hardware/libhardware_legacy/audio" ./hardware_libhardware_legacy_audio.nix {})
+    libaudiohw_legacy;
+
+  inherit (callBPPackage "hardware/nxp/nfc" ./hardware_nxp_nfc.nix {})
+    "android.hardware.nfc@1.1-service" "android.hardware.nfc@1.2-service" nfc_nci_nxp nxp_nfc_defaults;
+
+  inherit (callBPPackage "hardware/nxp/nfc/extns/intf/nxpnfc/1.0" ./hardware_nxp_nfc_extns_intf_nxpnfc_1.0.nix {})
+    "vendor.nxp.nxpnfc@1.0";
+
+  inherit (callBPPackage "hardware/nxp/nfc/extns/intf/nxpnfc" ./hardware_nxp_nfc_extns_intf_nxpnfc.nix {})
+    "vendor.nxp.nxpnfc";
+
+  inherit (callBPPackage "hardware/nxp/secure_element" ./hardware_nxp_secure_element.nix {})
+    "android.hardware.secure_element@1.0-service" "android.hardware.secure_element@1.0-service-disabled" "android.hardware.secure_element@1.0_defaults" "android.hardware.secure_element@1.1-service" "android.hardware.secure_element@1.1-service-disabled" "android.hardware.secure_element@1.1_defaults" ese_spi_nxp ls_client;
+
+  inherit (callBPPackage "hardware/nxp/secure_element/extns/intf/nxpese/1.0" ./hardware_nxp_secure_element_extns_intf_nxpese_1.0.nix {})
+    "vendor.nxp.nxpese@1.0";
+
+  inherit (callBPPackage "hardware/nxp/secure_element/extns/intf/nxpese" ./hardware_nxp_secure_element_extns_intf_nxpese.nix {})
+    "vendor.nxp.nxpese";
+
+  inherit (callBPPackage "hardware/qcom/bootctrl" ./hardware_qcom_bootctrl.nix {})
+    bootctrl_hal_defaults bootctrl_hal_src;
+
+  inherit (callBPPackage "hardware/qcom/display/msm8909" ./hardware_qcom_display_msm8909.nix {})
+    display_intf_headers;
+
+  inherit (callBPPackage "hardware/qcom/neuralnetworks/hvxservice/1.0" ./hardware_qcom_neuralnetworks_hvxservice_1.0.nix {})
+    "android.hardware.neuralnetworks@1.0-service-hvx";
+
+  inherit (callBPPackage "hardware/qcom/sdm845/display" ./hardware_qcom_sdm845_display.nix {})
+    display_defaults display_headers;
+
+  inherit (callBPPackage "hardware/qcom/sdm845/display/libqdutils" ./hardware_qcom_sdm845_display_libqdutils.nix {})
+    "libqdMetaData.system" libqdMetaData;
+
+  inherit (callBPPackage "hardware/qcom/sdm845/display/libqservice" ./hardware_qcom_sdm845_display_libqservice.nix {})
+    libqservice;
+
+  inherit (callBPPackage "hardware/qcom/sm8150" ./hardware_qcom_sm8150.nix {})
+    soong-display_defaults;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/display" ./hardware_qcom_sm8150_display.nix {})
+    display_go_defaults;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/display/composer" ./hardware_qcom_sm8150_display_composer.nix {})
+    "android.hardware.graphics.composer@2.3-service-sm8150";
+
+  inherit (callBPPackage "hardware/qcom/sm8150/display/libqdutils" ./hardware_qcom_sm8150_display_libqdutils.nix {})
+    libqdutils;
+
+  inherit (callBPPackage "hardware/ril" ./hardware_ril.nix {})
+    ril_headers;
+
+  inherit (callBPPackage "hardware/ril/librilutils" ./hardware_ril_librilutils.nix {})
+    librilutils sap-api-java-static;
+
+  inherit (callBPPackage "hardware/st/nfc/1.0" ./hardware_st_nfc_1.0.nix {})
+    "nfc_nci.st21nfc";
+
+  inherit (callBPPackage "hardware/st/nfc/1.1" ./hardware_st_nfc_1.1.nix {})
+    "android.hardware.nfc@1.1-service.st";
+
+  inherit (callBPPackage "hardware/st/nfc/1.2" ./hardware_st_nfc_1.2.nix {})
+    "android.hardware.nfc@1.2-service.st";
+
+  inherit (callBPPackage "hardware/st/nfc/st21nfc" ./hardware_st_nfc_st21nfc.nix {})
+    "nfc_nci.st21nfc.default";
+
+  inherit (callBPPackage "hardware/st/secure_element/1.0" ./hardware_st_secure_element_1.0.nix {})
+    "android.hardware.secure_element@1.0-service.st";
+
+  inherit (callBPPackage "hardware/st/secure_element/1.1" ./hardware_st_secure_element_1.1.nix {})
+    "android.hardware.secure_element@1.1-service.st";
+
+  inherit (callBPPackage "hardware/st/secure_element/ese-spi-driver" ./hardware_st_secure_element_ese-spi-driver.nix {})
+    ese_spi_st;
+
+  inherit (callBPPackage "hardware/ti/am57x/bootctrl" ./hardware_ti_am57x_bootctrl.nix {})
+    "bootctrl.am57x";
+
+  inherit (callBPPackage "hardware/ti/am57x/libhwcomposer" ./hardware_ti_am57x_libhwcomposer.nix {})
+    "hwcomposer.am57x";
 
   inherit (callBPPackage "kernel/configs/build" ./kernel_configs_build.nix {})
     kernel-config-soong-rules;
@@ -7973,6 +9491,42 @@
 
   inherit (callBPPackage "system/gsid" ./system_gsid.nix {})
     gsi_aidl_interface gsi_boot_test gsi_tool gsid gsiservice_aidl libgsi libgsi_headers;
+
+  inherit (callBPPackage "system/hardware/interfaces" ./system_hardware_interfaces.nix {})
+    "android.system";
+
+  inherit (callBPPackage "system/hardware/interfaces/net/netd/1.0" ./system_hardware_interfaces_net_netd_1.0.nix {})
+    "android.system.net.netd@1.0";
+
+  inherit (callBPPackage "system/hardware/interfaces/net/netd/1.0/vts/functional" ./system_hardware_interfaces_net_netd_1.0_vts_functional.nix {})
+    VtsHalNetNetdV1_0TargetTest;
+
+  inherit (callBPPackage "system/hardware/interfaces/net/netd/1.1" ./system_hardware_interfaces_net_netd_1.1.nix {})
+    "android.system.net.netd@1.1";
+
+  inherit (callBPPackage "system/hardware/interfaces/net/netd/1.1/vts/functional" ./system_hardware_interfaces_net_netd_1.1_vts_functional.nix {})
+    VtsHalNetNetdV1_1TargetTest;
+
+  inherit (callBPPackage "system/hardware/interfaces/net/netd/testutils" ./system_hardware_interfaces_net_netd_testutils.nix {})
+    VtsHalNetNetdTestDefaults VtsHalNetNetdTestUtils;
+
+  inherit (callBPPackage "system/hardware/interfaces/suspend/1.0" ./system_hardware_interfaces_suspend_1.0.nix {})
+    "android.system.suspend@1.0";
+
+  inherit (callBPPackage "system/hardware/interfaces/suspend/1.0/default" ./system_hardware_interfaces_suspend_1.0_default.nix {})
+    "android.system.suspend@1.0-service" SystemSuspendStatsProto SystemSuspendV1_0UnitTest system_suspend_defaults system_suspend_stats_defaults;
+
+  inherit (callBPPackage "system/hardware/interfaces/suspend/aidl" ./system_hardware_interfaces_suspend_aidl.nix {})
+    suspend_control_aidl_interface;
+
+  inherit (callBPPackage "system/hardware/interfaces/wifi/keystore/1.0" ./system_hardware_interfaces_wifi_keystore_1.0.nix {})
+    "android.system.wifi.keystore@1.0";
+
+  inherit (callBPPackage "system/hardware/interfaces/wifi/keystore/1.0/default" ./system_hardware_interfaces_wifi_keystore_1.0_default.nix {})
+    libwifikeystorehal;
+
+  inherit (callBPPackage "system/hardware/interfaces/wifi/keystore/1.0/vts/functional" ./system_hardware_interfaces_wifi_keystore_1.0_vts_functional.nix {})
+    VtsHalWifiKeystoreV1_0TargetTest;
 
   inherit (callBPPackage "system/hwservicemanager" ./system_hwservicemanager.nix {})
     hwservicemanager hwservicemanager_defaults hwservicemanager_test libhwservicemanager libhwservicemanager_shared_libs libtokenmanager libtokenmanager_shared_libs;

@@ -1,0 +1,33 @@
+{ cc_library_shared }:
+let
+
+"android.hardware.renderscript@1.0-impl" = cc_library_shared {
+    name = "android.hardware.renderscript@1.0-impl";
+    defaults = ["hidl_defaults"];
+    relative_install_path = "hw";
+    proprietary = true;
+    srcs = [
+        "Context.cpp"
+        "Device.cpp"
+    ];
+    include_dirs = [
+        "frameworks/rs"
+    ];
+    shared_libs = [
+        "libdl"
+        "libbase"
+        "libhidlbase"
+        "libhidltransport"
+        "libutils"
+        "android.hardware.renderscript@1.0"
+    ];
+
+    product_variables = {
+        override_rs_driver = {
+            cflags = ["-DOVERRIDE_RS_DRIVER=%s"];
+        };
+    };
+
+};
+
+in { inherit "android.hardware.renderscript@1.0-impl"; }

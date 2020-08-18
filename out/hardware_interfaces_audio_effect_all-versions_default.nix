@@ -1,0 +1,99 @@
+{ cc_defaults, cc_library_shared }:
+let
+
+"android.hardware.audio.effect-impl_default" = cc_defaults {
+    name = "android.hardware.audio.effect-impl_default";
+    defaults = ["hidl_defaults"];
+    vendor = true;
+    relative_install_path = "hw";
+    srcs = [
+        "AcousticEchoCancelerEffect.cpp"
+        "AudioBufferManager.cpp"
+        "AutomaticGainControlEffect.cpp"
+        "BassBoostEffect.cpp"
+        "Conversions.cpp"
+        "DownmixEffect.cpp"
+        "Effect.cpp"
+        "EffectsFactory.cpp"
+        "EnvironmentalReverbEffect.cpp"
+        "EqualizerEffect.cpp"
+        "LoudnessEnhancerEffect.cpp"
+        "NoiseSuppressionEffect.cpp"
+        "PresetReverbEffect.cpp"
+        "VirtualizerEffect.cpp"
+        "VisualizerEffect.cpp"
+    ];
+
+    shared_libs = [
+        "libbase"
+        "libcutils"
+        "libeffects"
+        "libfmq"
+        "libhidlbase"
+        "libhidlmemory"
+        "libhidltransport"
+        "liblog"
+        "libutils"
+        "android.hardware.audio.common-util"
+        "android.hidl.memory@1.0"
+    ];
+
+    header_libs = [
+        "android.hardware.audio.common.util@all-versions"
+        "libaudio_system_headers"
+        "libaudioclient_headers"
+        "libeffects_headers"
+        "libhardware_headers"
+        "libmedia_headers"
+    ];
+};
+
+"android.hardware.audio.effect@2.0-impl" = cc_library_shared {
+    name = "android.hardware.audio.effect@2.0-impl";
+    defaults = ["android.hardware.audio.effect-impl_default"];
+    shared_libs = [
+        "android.hardware.audio.common@2.0"
+        "android.hardware.audio.common@2.0-util"
+        "android.hardware.audio.effect@2.0"
+    ];
+
+    cflags = [
+        "-DMAJOR_VERSION=2"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+"android.hardware.audio.effect@4.0-impl" = cc_library_shared {
+    name = "android.hardware.audio.effect@4.0-impl";
+    defaults = ["android.hardware.audio.effect-impl_default"];
+    shared_libs = [
+        "android.hardware.audio.common@4.0"
+        "android.hardware.audio.common@4.0-util"
+        "android.hardware.audio.effect@4.0"
+    ];
+
+    cflags = [
+        "-DMAJOR_VERSION=4"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+"android.hardware.audio.effect@5.0-impl" = cc_library_shared {
+    name = "android.hardware.audio.effect@5.0-impl";
+    defaults = ["android.hardware.audio.effect-impl_default"];
+    shared_libs = [
+        "android.hardware.audio.common@5.0"
+        "android.hardware.audio.common@5.0-util"
+        "android.hardware.audio.effect@5.0"
+    ];
+
+    cflags = [
+        "-DMAJOR_VERSION=5"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+in { inherit "android.hardware.audio.effect-impl_default" "android.hardware.audio.effect@2.0-impl" "android.hardware.audio.effect@4.0-impl" "android.hardware.audio.effect@5.0-impl"; }

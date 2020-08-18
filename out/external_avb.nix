@@ -33,7 +33,7 @@ avb_defaults = cc_defaults {
         "-Wextra"
         "-Wformat=2"
         "-Wmissing-prototypes"
-        "-Wno-psabi"
+        #"-Wno-psabi"
         "-Wno-unused-parameter"
         "-Wno-format"
         "-ffunction-sections"

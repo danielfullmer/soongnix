@@ -25,7 +25,7 @@ let
       name = lib.removePrefix "/" (lib.removePrefix prefix name);
       path = dir;
     }) matchingDirs;
-  in pkgs.linkFarm ((replaceStrings ["/"] ["-"] prefix) + "-linkfarm") entries;
+  in pkgs.linkFarm "${prefix}-linkfarm" entries;
 
   packageSrc = sourceDir relpath;
 
@@ -77,20 +77,21 @@ let
   # Produce absolute paths from the list of srcs, resolving ":" references
   resolveSrcs = srcs: flatten (map (s:
     let
-      pkg = bpPkgs.${removePrefix ":" s};
+      pkg = lookupPkg (removePrefix ":" s);
       files = if pkg._is_genrule or false then pkg.out else pkg.srcs;
     in if hasPrefix ":" s
     then map (file: "${pkg.packageSrc}/${file}") files
     else s)
   srcs);
 
-  cc = import ./cc { inherit pkgs lib bpPkgs sourceDir packageSrc resolveSrcs genrule; };
+  cc = import ./cc { inherit pkgs lib bpPkgs sourceDir packageSrc lookupPkg resolveSrcs genrule; };
   art = import ./art { inherit lib cc; };
 
   unimplementedModule = name: builtins.trace "unimplemented module: ${name}" id;
 
 in {
   inherit filegroup genrule art_cc_library;
+  llvm_tblgen = args: builtins.trace "unimplemented module: llvm_tblgen" (pkgs.runCommand "llvm-tblgen" { passthru = args; } "mkdir -p $out");
 }
 // cc // art // genAttrs [
   # android/soong/aidl
@@ -109,13 +110,12 @@ in {
   "bpf"
 
   # android/soong/cc
-  "cc_benchmark" "cc_benchmark_host" "cc_fuzz" "cc_prebuilt_binary"
+  "cc_fuzz" "cc_prebuilt_binary"
   "cc_prebuilt_library" "cc_prebuilt_library_headers"
   "cc_prebuilt_library_shared" "cc_prebuilt_library_static"
-  "cc_prebuilt_object" "cc_prebuilt_test_library_shared" "cc_test"
-  "cc_test_host" "cc_test_library" "kernel_headers" "llndk_headers"
-  "llndk_library" "ndk_headers" "ndk_library" "ndk_prebuilt_object"
-  "ndk_prebuilt_shared_stl" "ndk_prebuilt_static_stl"
+  "cc_prebuilt_object" "cc_prebuilt_test_library_shared" "kernel_headers"
+  "llndk_headers" "llndk_library" "ndk_headers" "ndk_library"
+  "ndk_prebuilt_object" "ndk_prebuilt_shared_stl" "ndk_prebuilt_static_stl"
   "preprocessed_ndk_headers" "toolchain_library" "vendor_public_library"
   "vendor_snapshot_binary" "vendor_snapshot_header" "vendor_snapshot_object"
   "vendor_snapshot_shared" "vendor_snapshot_static" "versioned_ndk_headers"
@@ -129,7 +129,7 @@ in {
   "clang_binary_host" "clang_tblgen"
 
   # android/soong/external/llvm
-  "force_build_llvm_components_defaults" "llvm_defaults" "llvm_tblgen"
+  "force_build_llvm_components_defaults" "llvm_defaults"
 
   # android/soong/fs_config
   "target_fs_config_gen_filegroup"
@@ -195,4 +195,12 @@ in {
 
   # github.com/google/blueprint/bootstrap
   "blueprint_go_binary" "bootstrap_go_binary" "bootstrap_go_package"
+
+  "se_cil_compat_map" "se_filegroup"
+
+  "generate_mojom_headers" "generate_mojom_pickles" "generate_mojom_srcjar"
+  "generate_mojom_srcs"
+
+  "tradefed_binary_host" "fluoride_defaults" "xsd_config" "ca_certificates" "ca_certificates_host"
+  "display_go_defaults" "vintf_compatibility_matrix" "kernel_config" "sanitizer_status_library_shared"
 ] (name: unimplementedModule name)

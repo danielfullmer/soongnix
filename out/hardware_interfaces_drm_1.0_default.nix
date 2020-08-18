@@ -1,0 +1,28 @@
+{ cc_library_static }:
+let
+
+"android.hardware.drm@1.0-helper" = cc_library_static {
+    name = "android.hardware.drm@1.0-helper";
+    vendor_available = true;
+    defaults = ["hidl_defaults"];
+    srcs = [
+        "SharedLibrary.cpp"
+    ];
+    cflags = [
+        "-Werror"
+        "-Wextra"
+        "-Wall"
+    ];
+    shared_libs = [
+        "liblog"
+    ];
+    header_libs = [
+        "libutils_headers"
+    ];
+    export_header_lib_headers = [
+        "libutils_headers"
+    ];
+    export_include_dirs = ["include"];
+};
+
+in { inherit "android.hardware.drm@1.0-helper"; }

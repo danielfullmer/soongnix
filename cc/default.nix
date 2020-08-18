@@ -55,8 +55,8 @@ let
 
 
   llvmPackages = pkgs.llvmPackages_9;
-  clang = llvmPackages.libcxxClang;
-  #clang = llvmPackages.clang;
+  #clang = llvmPackages.libcxxClang;
+  clang = llvmPackages.clang;
   llvm = llvmPackages.llvm;
 
   prebuilts = pkgs.stdenv.mkDerivation {
@@ -195,9 +195,9 @@ let
     else { root = filename; suffix = ""; };
 
   mkObjectFile =
-  { cflags, conlyflags, cppflags, asflags, yaccflags, include_build_directory, include_dirs, local_include_dirs, export_include_dirs,
+  { cflags, conlyflags, cppflags, asflags, yaccflags, aidlflags, include_build_directory, include_dirs, local_include_dirs, export_include_dirs,
     header_libs, shared_libs, static_libs, whole_static_libs, generated_headers,
-    use_version_lib, gnu_extensions, c_std, cpp_std, srcs, ...
+    use_version_lib, gnu_extensions, c_std, cpp_std, srcs, generated_sources, ...
   }@args: src: let
     # src can be either a relative path to packageSrc, or an absolute path
     inherit (splitExt (removePrefix "/nix/store/" src)) root suffix;
@@ -474,11 +474,12 @@ let
   cc_library_host_static = cc_library_static;
   cc_library_host_shared = cc_library_shared;
   cc_binary_host = cc_binary;
-  cc_test_library = cc_library;
 
-  cc_test = id;
-  cc_test_host = id;
-  cc_benchmark = id;
+  cc_test = cc_binary;
+  cc_test_host = cc_binary;
+  cc_test_library = cc_library;
+  cc_benchmark = args: cc_binary (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; } ]);
+  cc_benchmark_host = args: cc_binary_host (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; } ]);
 
   cc_genrule = wrapModule argDefaults.cc_binary genrule;
 in {
@@ -493,6 +494,10 @@ in {
     cc_library_shared
     cc_library_host_static
     cc_library_host_shared
+    cc_test
+    cc_test_host
     cc_test_library
+    cc_benchmark
+    cc_benchmark_host
     cc_genrule;
 }
