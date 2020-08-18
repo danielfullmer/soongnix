@@ -29,22 +29,13 @@ let
 
   packageSrc = sourceDir relpath;
 
-  # Need a better name for this. Replace string references to actual objects in bpPkgs
-  # maybe it's too confusing and we should just dereference when we use it
-  deref = value:
-    if builtins.isString value then bpPkgs.${value}
-    else if builtins.isList value then (builtins.map (v: deref v) value)
-    else if builtins.isAttrs value then (mapAttrs (n: v: deref v) value)
-    else throw "can't dereference attrs of this type";
-  derefWrapper = attrs: f: args: let
-    newArgs = mapAttrsRecursive (p: v: if builtins.elem (builtins.elemAt p ((length p)-1)) attrs then deref v else v) args;
-  in f newArgs;
+  lookupPkg = pkg: bpPkgs.${pkg} or (throw "couldn't find ${pkg}");
 
   genrule =
     ({ name, cmd, srcs, out, tools ? [], tool_files ? [], ... }@args:
     let
       lookupTool = tool:
-        if elem tool tools then bpPkgs.${tool} + "/bin/${tool}"
+        if elem tool tools then (lookupPkg tool) + "/bin/${tool}"
         else if elem tool tool_files then wrapTool "${packageSrc}/${tool}"
         else throw "missing tool: ${tool}";
       wrapTool = toolPath:
