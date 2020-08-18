@@ -19,5 +19,4 @@ let
   in
     lib.callPackageWith soongModules;
   bpPkgs = import ./out/blueprint-packages.nix { inherit callBPPackage; };
-in #bpPkgs
-  lib.filterAttrs (n: v: v.host_supported or false) bpPkgs
+in bpPkgs
