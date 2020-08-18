@@ -476,7 +476,7 @@ let
   cc_binary_host = args: cc_binary (args // { host_supported = true; });
 
   cc_test = cc_binary;
-  cc_test_host = args: cc_binary (args // { host_supported = true; });
+  cc_test_host = args: cc_binary (recursiveMerge [ args { static_libs = [ "libgtest_main" "libgtest" ]; host_supported = true; } ]); # TODO: see linkerDeps under test.go
   cc_test_library = cc_library;
   cc_benchmark = args: cc_binary (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; } ]);
   cc_benchmark_host = args: cc_binary_host (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; host_supported = true;} ]);
