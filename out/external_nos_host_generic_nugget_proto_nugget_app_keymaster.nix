@@ -25,7 +25,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    #cmd = GEN_SERVICE_SOURCE;
+    cmd = ""; # TODO soongnix
 };
 
 "nos_app_keymaster_service_genc++_headers" = genrule {
@@ -36,7 +36,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    #cmd = GEN_SERVICE_HEADER;
+    cmd = ""; # TODO soongnix
 };
 
 "nos_app_keymaster_service_genc++_mock" = genrule {
@@ -47,7 +47,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    #cmd = GEN_SERVICE_MOCK;
+    cmd = ""; # TODO soongnix
 };
 
 nos_app_keymaster = cc_library {

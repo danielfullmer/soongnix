@@ -25,7 +25,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    #cmd = GEN_SERVICE_SOURCE + "-Iexternal/nos/host/generic/libnos/generator/test";
+    cmd = ""; # TODO: soongnix
 };
 
 "nos_generator_test_service_genc++_headers" = genrule {
@@ -36,7 +36,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    #cmd = GEN_SERVICE_HEADER + "-Iexternal/nos/host/generic/libnos/generator/test";
+    cmd = ""; # TODO: soongnix
 };
 
 "nos_generator_test_service_genc++_mock" = genrule {
@@ -47,7 +47,7 @@ let
         "aprotoc"
         "protoc-gen-nos-client-cpp"
     ];
-    #cmd = GEN_SERVICE_MOCK + "-Iexternal/nos/host/generic/libnos/generator/test";
+    cmd = ""; # TODO: soongnix
 };
 
 protoc-gen-nos-client-cpp_test = cc_test_host {

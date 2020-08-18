@@ -31,7 +31,32 @@ let
 
   lookupPkg = pkg: bpPkgs.${pkg} or (throw "couldn't find ${pkg}");
 
-  genrule =
+  recursiveMerge = attrList:
+    let f = attrPath:
+      zipAttrsWith (n: values:
+        if tail values == []
+          then head values
+        else if all isList values
+          then unique (concatLists values)
+        else if all isAttrs values
+          then f (attrPath ++ [n]) values
+        else last values
+      );
+    in f [] attrList;
+
+  # Normally, the downstream module overrides the "defaults" modules
+  # Also do this recursively so we get "defaults" of "defaults"
+  mergeDefaultArgs = args: 
+    recursiveMerge
+      ((map (name: mergeDefaultArgs (lookupPkg name)) (args.defaults or [])) ++ [ args ]);
+
+  wrapModule = f: args: pipe args [
+    mergeDefaultArgs
+    (a: a // { inherit packageSrc; })
+    f
+  ];
+
+  genrule = wrapModule
     ({ name, cmd, srcs ? [], out, tools ? [], tool_files ? [], ... }@args:
     let
       lookupTool = tool:
@@ -203,4 +228,5 @@ in {
 
   "tradefed_binary_host" "fluoride_defaults" "xsd_config" "ca_certificates" "ca_certificates_host"
   "display_go_defaults" "vintf_compatibility_matrix" "kernel_config" "sanitizer_status_library_shared"
+  "wayland_protocol_codegen"
 ] (name: unimplementedModule name)

@@ -17,7 +17,7 @@ let
 
   # Normally, the downstream module overrides the "defaults" modules
   # Also do this recursively so we get "defaults" of "defaults"
-  mergeDefaultArgs = args: 
+  mergeDefaultArgs = args:
     recursiveMerge
       ((map (name: mergeDefaultArgs (lookupPkg name)) (args.defaults or [])) ++ [ args ]);
   mergeArchArgs = attrPath: args:
@@ -393,7 +393,7 @@ let
         rsp = mkRspfile name rules;
 
         # The ordering here with ensures that static_libs are linked in the correct order, with A before B if A depends on B.
-        sortedStaticLibs = (toposort (a: b: elem b (lookupPkg a).static_libs || elem b (lookupPkg a).shared_libs) static_libs).result;
+        sortedStaticLibs = (toposort (a: b: elem b (bpPkgs.${a}.static_libs or []) || elem b (bpPkgs.${a}.shared_libs or [])) static_libs).result;
       in ''
         mkdir -p $out/bin
         make -j$NIX_BUILD_CORES -f${makefile} all
