@@ -355,7 +355,7 @@ let
       target = {};
       arch = {};
 
-      host_supported = true;
+      host_supported = false;
 
       required = [];
 
@@ -471,15 +471,15 @@ let
   cc_library_headers = wrapModule argDefaults.cc_library_headers id;
   cc_library_static = args: cc_library (args // { _build_shared_lib = false; _build_static_lib = true; });
   cc_library_shared = args: cc_library (args // { _build_shared_lib = true; _build_static_lib = true; });
-  cc_library_host_static = cc_library_static;
-  cc_library_host_shared = cc_library_shared;
-  cc_binary_host = cc_binary;
+  cc_library_host_static = args: cc_library_static (args // { host_supported = true; });
+  cc_library_host_shared = args: cc_library_shared (args // { host_supported = true; });
+  cc_binary_host = args: cc_binary (args // { host_supported = true; });
 
   cc_test = cc_binary;
-  cc_test_host = cc_binary;
+  cc_test_host = args: cc_binary (args // { host_supported = true; });
   cc_test_library = cc_library;
   cc_benchmark = args: cc_binary (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; } ]);
-  cc_benchmark_host = args: cc_binary_host (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; } ]);
+  cc_benchmark_host = args: cc_binary_host (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; host_supported = true;} ]);
 
   cc_genrule = wrapModule argDefaults.cc_binary genrule;
 in {
