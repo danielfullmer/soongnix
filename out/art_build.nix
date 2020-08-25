@@ -200,7 +200,7 @@ art_defaults = art_global_defaults {
     ];
 };
 
-_art_debug_defaults = art_debug_defaults {
+_bp2nix_art_debug_defaults = art_debug_defaults {
     name = "art_debug_defaults";
     cflags = [
         "-DDYNAMIC_ANNOTATIONS_ENABLED=1"
@@ -223,4 +223,4 @@ _art_debug_defaults = art_debug_defaults {
     };
 };
 
-in { inherit art_defaults soong-art; art_debug_defaults = _art_debug_defaults; }
+in { inherit art_defaults soong-art; art_debug_defaults = _bp2nix_art_debug_defaults; }

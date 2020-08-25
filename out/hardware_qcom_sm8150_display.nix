@@ -4,7 +4,7 @@ let
 _missingName = soong_namespace {
 };
 
-_display_go_defaults = display_go_defaults {
+_bp2nix_display_go_defaults = display_go_defaults {
     name = "display_go_defaults";
 };
 
@@ -58,4 +58,4 @@ subdirs = [
     "libqdutils"
 ];
 
-in { inherit _missingName display_defaults display_headers; display_go_defaults=_display_go_defaults; }
+in { inherit _missingName display_defaults display_headers; display_go_defaults = _bp2nix_display_go_defaults; }

@@ -56,7 +56,7 @@ fluoride_types_defaults = fluoride_defaults {
     };
 };
 
-_fluoride_defaults = fluoride_defaults {
+_bp2nix_fluoride_defaults = fluoride_defaults {
     name = "fluoride_defaults";
     target = {
         android = {
@@ -109,4 +109,4 @@ clang_coverage_bin = cc_defaults {
     };
 };
 
-in { inherit clang_coverage_bin clang_file_coverage fluoride_types_defaults libchrome_support_defaults soong-fluoride; fluoride_defaults=_fluoride_defaults; }
+in { inherit clang_coverage_bin clang_file_coverage fluoride_types_defaults libchrome_support_defaults soong-fluoride; fluoride_defaults = _bp2nix_fluoride_defaults; }
