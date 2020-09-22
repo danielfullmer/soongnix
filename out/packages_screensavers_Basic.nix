@@ -8,7 +8,7 @@ BasicDreams = android_app {
         "src/com/android/dreams/basic/Colors.java"
         "src/com/android/dreams/basic/ColorsGLRenderer.java"
     ];
-    platform_apis = true;
+    sdk_version = "current";
 };
 
 in { inherit BasicDreams; }

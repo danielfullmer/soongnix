@@ -30,12 +30,14 @@ libstagefright_webm = cc_library_static {
     include_dirs = ["frameworks/av/include"];
 
     shared_libs = [
+        "libdatasource"
         "libstagefright_foundation"
         "libutils"
         "liblog"
     ];
 
     header_libs = [
+        "libmedia_headers"
         "media_ndk_headers"
     ];
 };

@@ -43,6 +43,7 @@ libcamera_client = cc_library_shared {
         "ICameraRecordingProxy.cpp"
         "ICameraRecordingProxyListener.cpp"
         "camera2/CaptureRequest.cpp"
+        "camera2/ConcurrentCamera.cpp"
         "camera2/OutputConfiguration.cpp"
         "camera2/SessionConfiguration.cpp"
         "camera2/SubmitInfo.cpp"
@@ -69,7 +70,11 @@ libcamera_client = cc_library_shared {
         "include"
         "include/camera"
     ];
-    export_shared_lib_headers = ["libcamera_metadata"];
+    export_shared_lib_headers = [
+        "libcamera_metadata"
+        "libnativewindow"
+        "libgui"
+    ];
 
     cflags = [
         "-Werror"
@@ -88,7 +93,9 @@ libcamera_client_aidl = filegroup {
         "aidl/android/hardware/ICameraServiceProxy.aidl"
         "aidl/android/hardware/camera2/ICameraDeviceCallbacks.aidl"
         "aidl/android/hardware/camera2/ICameraDeviceUser.aidl"
+        "aidl/android/hardware/camera2/ICameraOfflineSession.aidl"
     ];
+    path = "aidl";
 };
 
 #  Extra AIDL files that are used by framework.jar but not libcamera_client
@@ -99,6 +106,7 @@ libcamera_client_framework_aidl = filegroup {
         "aidl/android/hardware/ICamera.aidl"
         "aidl/android/hardware/ICameraClient.aidl"
     ];
+    path = "aidl";
 };
 
 in { inherit libcamera_client libcamera_client_aidl libcamera_client_framework_aidl; }

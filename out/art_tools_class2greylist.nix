@@ -20,6 +20,7 @@ let
 class2greylistlib = java_library_host {
     name = "class2greylistlib";
     srcs = [
+        "src/com/android/class2greylist/AlternativeNotFoundError.java"
         "src/com/android/class2greylist/AnnotatedClassContext.java"
         "src/com/android/class2greylist/AnnotatedMemberContext.java"
         "src/com/android/class2greylist/AnnotationConsumer.java"
@@ -27,19 +28,34 @@ class2greylistlib = java_library_host {
         "src/com/android/class2greylist/AnnotationHandler.java"
         "src/com/android/class2greylist/AnnotationPropertyWriter.java"
         "src/com/android/class2greylist/AnnotationVisitor.java"
+        "src/com/android/class2greylist/ApiComponents.java"
+        "src/com/android/class2greylist/ApiResolver.java"
         "src/com/android/class2greylist/Class2Greylist.java"
+        "src/com/android/class2greylist/ClassAlternativeNotFoundError.java"
         "src/com/android/class2greylist/CovariantReturnTypeHandler.java"
+        "src/com/android/class2greylist/ErrorReporter.java"
         "src/com/android/class2greylist/HiddenapiFlagsWriter.java"
         "src/com/android/class2greylist/JarReader.java"
+        "src/com/android/class2greylist/JavadocLinkSyntaxError.java"
+        "src/com/android/class2greylist/MemberAlternativeNotFoundError.java"
         "src/com/android/class2greylist/MemberDumpingVisitor.java"
+        "src/com/android/class2greylist/MultipleAlternativesFoundError.java"
+        "src/com/android/class2greylist/NoAlternativesSpecifiedError.java"
+        "src/com/android/class2greylist/PackageAndClassName.java"
         "src/com/android/class2greylist/RepeatedAnnotationHandler.java"
+        "src/com/android/class2greylist/RequiredAlternativeNotSpecifiedError.java"
+        "src/com/android/class2greylist/SignatureSyntaxError.java"
         "src/com/android/class2greylist/Status.java"
+        "src/com/android/class2greylist/StringCursor.java"
+        "src/com/android/class2greylist/StringCursorOutOfBoundsException.java"
         "src/com/android/class2greylist/UnsupportedAppUsageAnnotationHandler.java"
     ];
     static_libs = [
         "commons-cli-1.2"
         "apache-bcel"
         "guava"
+        "testng"
+        "hamcrest-library"
     ];
 };
 

@@ -28,6 +28,7 @@ libaudiopolicyengine_common = cc_library_static {
         "src/ProductStrategy.cpp"
         "src/VolumeCurve.cpp"
         "src/VolumeGroup.cpp"
+        "src/LastRemovableMediaDevices.cpp"
     ];
     cflags = [
         "-Wall"
@@ -46,6 +47,9 @@ libaudiopolicyengine_common = cc_library_static {
     static_libs = [
         "libaudiopolicycomponents"
         "libaudiopolicyengine_config"
+    ];
+    shared_libs = [
+        "libaudiofoundation"
     ];
 };
 

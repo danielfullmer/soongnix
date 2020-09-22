@@ -124,6 +124,7 @@ libgav1 = cc_library_static {
             instruction_set = "arm";
         };
     };
+    min_sdk_version = "29";
 };
 
 in { inherit libgav1; }

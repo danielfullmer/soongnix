@@ -28,7 +28,7 @@ adb_py = python_library_host {
             enabled = true;
         };
         py3 = {
-            enabled = false;
+            enabled = true;
         };
     };
 };

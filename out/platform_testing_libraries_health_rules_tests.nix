@@ -32,6 +32,7 @@ PlatformRuleTests = android_test {
         "src/android/platform/test/rule/CompilationFilterRuleTest.java"
         "src/android/platform/test/rule/DropCachesRuleTest.java"
         "src/android/platform/test/rule/GarbageCollectRuleTest.java"
+        "src/android/platform/test/rule/IorapCompilationRuleTest.java"
         "src/android/platform/test/rule/KillAppsRuleTest.java"
         "src/android/platform/test/rule/NaturalOrientationRuleTest.java"
         "src/android/platform/test/rule/NotificationPressureRuleTest.java"
@@ -39,6 +40,7 @@ PlatformRuleTests = android_test {
         "src/android/platform/test/rule/QuickstepPressureRuleTest.java"
         "src/android/platform/test/rule/StopwatchRuleTest.java"
         "src/android/platform/test/rule/TracePointRuleTest.java"
+        "src/android/platform/test/rule/UnlockScreenRuleTest.java"
     ];
     test_suites = ["device-tests"];
 };

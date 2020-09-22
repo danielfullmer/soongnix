@@ -8,8 +8,6 @@ VtsHalLibDefaults = cc_defaults {
         "libcutils"
         "liblog"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
     ];
     cflags = [

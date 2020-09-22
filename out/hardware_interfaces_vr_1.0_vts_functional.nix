@@ -22,7 +22,10 @@ VtsHalVrV1_0TargetTest = cc_test {
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalVrV1_0TargetTest.cpp"];
     static_libs = ["android.hardware.vr@1.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalVrV1_0TargetTest; }

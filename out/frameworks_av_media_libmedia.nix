@@ -1,16 +1,11 @@
-{ cc_defaults, cc_library, cc_library_headers, cc_library_shared, cc_library_static }:
+{ aidl_interface, cc_library, cc_library_headers, cc_library_shared, cc_library_static, filegroup }:
 let
-
-libmedia_defaults = cc_defaults {
-    name = "libmedia_defaults";
-    include_dirs = [
-        "bionic/libc/private"
-    ];
-};
 
 libmedia_headers = cc_library_headers {
     name = "libmedia_headers";
     vendor_available = true;
+    min_sdk_version = "29";
+
     export_include_dirs = ["include"];
     header_libs = [
         "libbase_headers"
@@ -25,35 +20,42 @@ libmedia_headers = cc_library_headers {
     ];
 };
 
-libmedia_helper = cc_library {
-    name = "libmedia_helper";
-    vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
-    double_loadable = true;
+libmedia_omx_aidl = filegroup {
+    name = "libmedia_omx_aidl";
     srcs = [
-        "AudioParameter.cpp"
-        "TypeConverter.cpp"
+        "aidl/android/IOMXBufferSource.aidl"
     ];
-    cflags = [
-        "-Werror"
-        "-Wno-error=deprecated-declarations"
-        "-Wall"
+    path = "aidl";
+};
+
+mediaextractorservice_aidl = filegroup {
+    name = "mediaextractorservice_aidl";
+    srcs = [
+        "aidl/android/IMediaExtractorService.aidl"
     ];
-    shared_libs = [
-        "libutils"
-        "liblog"
+    path = "aidl";
+};
+
+resourcemanager_aidl = filegroup {
+    name = "resourcemanager_aidl";
+    srcs = [
+        "aidl/android/media/IResourceManagerClient.aidl"
+        "aidl/android/media/IResourceManagerService.aidl"
+        "aidl/android/media/MediaResourceType.aidl"
+        "aidl/android/media/MediaResourceSubType.aidl"
+        "aidl/android/media/MediaResourceParcel.aidl"
+        "aidl/android/media/MediaResourcePolicyParcel.aidl"
     ];
-    header_libs = [
-        "libmedia_headers"
-        "libaudioclient_headers"
-        "libaudio_system_headers"
+    path = "aidl";
+};
+
+resourcemanager_aidl_interface = aidl_interface {
+    name = "resourcemanager_aidl_interface";
+    unstable = true;
+    local_include_dir = "aidl";
+    srcs = [
+        ":resourcemanager_aidl"
     ];
-    export_header_lib_headers = [
-        "libmedia_headers"
-    ];
-    clang = true;
 };
 
 libmedia_omx = cc_library_shared {
@@ -65,15 +67,11 @@ libmedia_omx = cc_library_shared {
     double_loadable = true;
 
     srcs = [
-        "aidl/android/IGraphicBufferSource.aidl"
-        "aidl/android/IOMXBufferSource.aidl"
+        ":libmedia_omx_aidl"
 
-        "IMediaCodecList.cpp"
         "IOMX.cpp"
         "MediaCodecBuffer.cpp"
-        "MediaCodecInfo.cpp"
         "OMXBuffer.cpp"
-        "omx/1.0/WGraphicBufferSource.cpp"
         "omx/1.0/WOmxBufferSource.cpp"
         "omx/1.0/WOmxNode.cpp"
         "omx/1.0/WOmxObserver.cpp"
@@ -94,7 +92,6 @@ libmedia_omx = cc_library_shared {
         "libbinder"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libstagefright_foundation"
         "libui"
@@ -154,7 +151,6 @@ libmedia_omx_client = cc_library_shared {
         "libcutils"
         "libgui"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libmedia_omx"
         "libstagefright_foundation"
@@ -201,14 +197,60 @@ libmedia_omx_client = cc_library_shared {
 libmedia_midiiowrapper = cc_library_static {
     name = "libmedia_midiiowrapper";
 
+    min_sdk_version = "29";
+
     srcs = ["MidiIoWrapper.cpp"];
 
     static_libs = [
-        "libsonivox"
+        "libsonivoxwithoutjet"
     ];
 
     header_libs = [
+        "libmedia_headers"
         "media_ndk_headers"
+    ];
+
+    cflags = [
+        "-Werror"
+        "-Wno-error=deprecated-declarations"
+        "-Wall"
+    ];
+
+    sanitize = {
+        misc_undefined = [
+            "unsigned-integer-overflow"
+            "signed-integer-overflow"
+        ];
+        cfi = true;
+    };
+};
+
+libmedia_codeclist = cc_library_shared {
+    name = "libmedia_codeclist";
+
+    srcs = [
+        "IMediaCodecList.cpp"
+        "MediaCodecInfo.cpp"
+    ];
+
+    local_include_dirs = [
+        "include"
+    ];
+
+    shared_libs = [
+        "android.hardware.media.omx@1.0"
+        "libbinder"
+        "liblog"
+        "libstagefright_foundation"
+        "libutils"
+    ];
+
+    include_dirs = [
+        "system/libhidl/transport/token/1.0/utils/include"
+    ];
+
+    export_include_dirs = [
+        "include"
     ];
 
     cflags = [
@@ -229,16 +271,14 @@ libmedia_midiiowrapper = cc_library_static {
 libmedia = cc_library {
     name = "libmedia";
 
-    defaults = ["libmedia_defaults"];
-
     srcs = [
+        ":mediaextractorservice_aidl"
         "IDataSource.cpp"
         "BufferingSettings.cpp"
         "mediaplayer.cpp"
         "IMediaHTTPConnection.cpp"
         "IMediaHTTPService.cpp"
         "IMediaExtractor.cpp"
-        "IMediaExtractorService.cpp"
         "IMediaPlayerService.cpp"
         "IMediaPlayerClient.cpp"
         "IMediaRecorderClient.cpp"
@@ -247,16 +287,11 @@ libmedia = cc_library {
         "IMediaSource.cpp"
         "IRemoteDisplay.cpp"
         "IRemoteDisplayClient.cpp"
-        "IResourceManagerClient.cpp"
-        "IResourceManagerService.cpp"
         "IStreamSource.cpp"
-        "MediaUtils.cpp"
         "Metadata.cpp"
         "mediarecorder.cpp"
         "IMediaMetadataRetriever.cpp"
         "mediametadataretriever.cpp"
-        "MidiDeviceInfo.cpp"
-        "JetPlayer.cpp"
         "MediaScanner.cpp"
         "MediaScannerClient.cpp"
         "CharacterEncodingDetector.cpp"
@@ -264,7 +299,6 @@ libmedia = cc_library {
         "MediaProfiles.cpp"
         "MediaResource.cpp"
         "MediaResourcePolicy.cpp"
-        "Visualizer.cpp"
         "StringArray.cpp"
         "NdkMediaFormatPriv.cpp"
         "NdkMediaErrorPriv.cpp"
@@ -292,15 +326,16 @@ libmedia = cc_library {
         "libprocessgroup"
         "libutils"
         "libbinder"
-        "libsonivox"
+        "libbinder_ndk"
+        # "libsonivox",
         "libandroidicu"
         "libexpat"
         "libcamera_client"
         "libstagefright_foundation"
         "libgui"
         "libdl"
-        "libaudioutils"
         "libaudioclient"
+        "libmedia_codeclist"
         "libmedia_omx"
     ];
 
@@ -308,13 +343,16 @@ libmedia = cc_library {
         "libaudioclient"
         "libbinder"
         "libandroidicu"
-        "libsonivox"
+        # "libsonivox",
         "libmedia_omx"
     ];
 
     static_libs = [
-        "libc_malloc_debug_backtrace" #  for memory heap analysis
-        "libmedia_midiiowrapper"
+        "resourcemanager_aidl_interface-ndk_platform"
+    ];
+
+    export_static_lib_headers = [
+        "resourcemanager_aidl_interface-ndk_platform"
     ];
 
     export_include_dirs = [
@@ -338,67 +376,4 @@ libmedia = cc_library {
     };
 };
 
-libmedia_player2_util = cc_library_static {
-    name = "libmedia_player2_util";
-
-    defaults = ["libmedia_defaults"];
-
-    srcs = [
-        "AudioParameter.cpp"
-        "BufferingSettings.cpp"
-        "DataSourceDesc.cpp"
-        "MediaCodecBuffer.cpp"
-        "Metadata.cpp"
-        "NdkWrapper.cpp"
-    ];
-
-    shared_libs = [
-        "libbinder"
-        "libcutils"
-        "liblog"
-        "libmediandk"
-        "libnativewindow"
-        "libmediandk_utils"
-        "libstagefright_foundation"
-        "libui"
-        "libutils"
-    ];
-
-    export_shared_lib_headers = [
-        "libbinder"
-        "libmediandk"
-    ];
-
-    header_libs = [
-        "media_plugin_headers"
-    ];
-
-    include_dirs = [
-        "frameworks/av/media/ndk"
-    ];
-
-    static_libs = [
-        "libstagefright_rtsp"
-        "libstagefright_timedtext"
-    ];
-
-    export_include_dirs = [
-        "include"
-    ];
-
-    cflags = [
-        "-Werror"
-        "-Wno-error=deprecated-declarations"
-        "-Wall"
-    ];
-
-    sanitize = {
-        misc_undefined = [
-            "unsigned-integer-overflow"
-            "signed-integer-overflow"
-        ];
-        cfi = true;
-    };
-};
-
-in { inherit libmedia libmedia_defaults libmedia_headers libmedia_helper libmedia_midiiowrapper libmedia_omx libmedia_omx_client libmedia_player2_util; }
+in { inherit libmedia libmedia_codeclist libmedia_headers libmedia_midiiowrapper libmedia_omx libmedia_omx_aidl libmedia_omx_client mediaextractorservice_aidl resourcemanager_aidl resourcemanager_aidl_interface; }

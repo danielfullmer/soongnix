@@ -15,6 +15,7 @@ BufferQueue_test = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 

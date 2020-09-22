@@ -1,4 +1,4 @@
-{ bootstrap_go_package }:
+{ bootstrap_go_package, hidl_interfaces_metadata }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -36,4 +36,9 @@ hidl-soong-rules = bootstrap_go_package {
     pluginFor = ["soong_build"];
 };
 
-in { inherit hidl-soong-rules; }
+hidl_metadata_json = hidl_interfaces_metadata {
+    name = "hidl_metadata_json";
+    visibility = ["//system/tools/hidl:__subpackages__"];
+};
+
+in { inherit hidl-soong-rules hidl_metadata_json; }

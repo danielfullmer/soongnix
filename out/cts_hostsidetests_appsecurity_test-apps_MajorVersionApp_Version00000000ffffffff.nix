@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -15,7 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsMajorVersion00000000ffffffff = android_test {
+CtsMajorVersion00000000ffffffff = android_test_helper_app {
     name = "CtsMajorVersion00000000ffffffff";
     defaults = ["cts_support_defaults"];
     srcs = [
@@ -27,7 +27,7 @@ CtsMajorVersion00000000ffffffff = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     #  sign this app with a different cert than CtsSimpleAppInstallDiffCert

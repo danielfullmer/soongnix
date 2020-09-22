@@ -33,7 +33,10 @@ let
         "src/junit/framework/TestSuite.java"
     ];
 
-    libs = ["android.test.base"];
+    libs = [
+        "android.test.base"
+        "unsupportedappusage"
+    ];
 };
 
 in { inherit "android.test.base-hiddenapi"; }

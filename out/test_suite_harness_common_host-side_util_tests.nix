@@ -24,6 +24,7 @@ compatibility-host-util-tests = java_test_host {
         "src/com/android/compatibility/common/util/DynamicConfigHandlerTest.java"
         "src/com/android/compatibility/common/util/HostUnitTests.java"
         "src/com/android/compatibility/common/util/ModuleResultTest.java"
+        "src/com/android/compatibility/common/util/PollingCheckTest.java"
         "src/com/android/compatibility/common/util/TestFilterTest.java"
     ];
 

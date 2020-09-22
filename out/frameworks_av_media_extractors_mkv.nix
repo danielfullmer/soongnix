@@ -1,7 +1,9 @@
-{ cc_library_shared }:
+{ cc_library }:
 let
 
-libmkvextractor = cc_library_shared {
+libmkvextractor = cc_library {
+    name = "libmkvextractor";
+    defaults = ["extractor-defaults"];
 
     srcs = ["MatroskaExtractor.cpp"];
 
@@ -9,41 +11,18 @@ libmkvextractor = cc_library_shared {
         "external/flac/include"
         "external/libvpx/libwebm"
         "frameworks/av/media/libstagefright/flac/dec"
-        "frameworks/av/media/libstagefright/include"
     ];
 
     shared_libs = [
-        "liblog"
-        "libmediandk"
+        "libstagefright_flacdec"
     ];
 
     static_libs = [
-        "libstagefright_flacdec"
         "libstagefright_foundation"
         "libstagefright_metadatautils"
         "libwebm"
         "libutils"
     ];
-
-    name = "libmkvextractor";
-    relative_install_path = "extractors";
-
-    compile_multilib = "first";
-
-    cflags = [
-        "-Werror"
-        "-Wall"
-        "-fvisibility=hidden"
-    ];
-    version_script = "exports.lds";
-
-    sanitize = {
-        cfi = true;
-        misc_undefined = [
-            "unsigned-integer-overflow"
-            "signed-integer-overflow"
-        ];
-    };
 
 };
 

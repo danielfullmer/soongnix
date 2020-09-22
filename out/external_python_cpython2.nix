@@ -236,8 +236,9 @@ py2-launcher-defaults = cc_defaults {
     ];
     static_libs = [
         "libbase"
-        "libcrypto"
+        "libcrypto_static"
         "libexpat"
+        "liblog"
         "libssl"
         "libz"
     ];
@@ -586,7 +587,7 @@ py2-c-module-_ssl = cc_library_static {
     cflags = ["-Wno-incompatible-pointer-types-discards-qualifiers"];
     static_libs = [
         "libssl"
-        "libcrypto"
+        "libcrypto_static"
     ];
 };
 

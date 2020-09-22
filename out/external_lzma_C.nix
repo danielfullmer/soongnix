@@ -8,6 +8,7 @@ liblzma = cc_library {
     host_supported = true;
     vendor_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
         support_system_process = true;
@@ -84,6 +85,12 @@ liblzma = cc_library {
             ];
         };
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug" #  from libartbase
+        "com.android.art.release"
+    ];
 };
 
 in { inherit liblzma; }

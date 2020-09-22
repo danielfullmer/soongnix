@@ -1,4 +1,4 @@
-{ java_library_static, java_sdk_library }:
+{ filegroup, java_library_static, java_sdk_library }:
 let
 
 #
@@ -160,4 +160,16 @@ let
     ];
 };
 
-in { inherit "android.test.base" "android.test.base-minus-junit" "android.test.base_static" "repackaged.android.test.base"; }
+#  Make the current.txt available for use by the cts/tests/signature tests.
+#  ========================================================================
+"android-test-base-current.txt" = filegroup {
+    name = "android-test-base-current.txt";
+    visibility = [
+        "//cts/tests/signature/api"
+    ];
+    srcs = [
+        "api/current.txt"
+    ];
+};
+
+in { inherit "android-test-base-current.txt" "android.test.base" "android.test.base-minus-junit" "android.test.base_static" "repackaged.android.test.base"; }

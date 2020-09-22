@@ -1,4 +1,4 @@
-{ cc_benchmark, cc_defaults, cc_test }:
+{ cc_benchmark, cc_defaults, cc_test, cc_test_host }:
 let
 
 #
@@ -57,20 +57,24 @@ liblog-tests-defaults = cc_defaults {
     ];
     srcs = [
         "libc_test.cpp"
-        "liblog_test_default.cpp"
-        "liblog_test_stderr.cpp"
+        "liblog_default_tag.cpp"
+        "liblog_global_state.cpp"
+        "liblog_test.cpp"
         "log_id_test.cpp"
         "log_radio_test.cpp"
         "log_read_test.cpp"
         "log_system_test.cpp"
         "log_time_test.cpp"
         "log_wrap_test.cpp"
+        "logd_writer_test.cpp"
+        "logprint_test.cpp"
     ];
     shared_libs = [
         "libcutils"
         "libbase"
     ];
     static_libs = ["liblog"];
+    isolated = true;
 };
 
 #  Build tests for the device (with .so). Run with:
@@ -95,8 +99,20 @@ CtsLiblogTestCases = cc_test {
     cflags = ["-DNO_PSTORE"];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
     ];
 };
 
-in { inherit CtsLiblogTestCases liblog-benchmarks liblog-tests-defaults liblog-unit-tests; }
+liblog-host-test = cc_test_host {
+    name = "liblog-host-test";
+    static_libs = ["liblog"];
+    shared_libs = ["libbase"];
+    srcs = [
+        "liblog_host_test.cpp"
+        "liblog_default_tag.cpp"
+        "liblog_global_state.cpp"
+    ];
+    isolated = true;
+};
+
+in { inherit CtsLiblogTestCases liblog-benchmarks liblog-host-test liblog-tests-defaults liblog-unit-tests; }

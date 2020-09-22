@@ -146,7 +146,7 @@ libcatch2-defaults-tests = cc_defaults {
         "projects/SelfTest/IntrospectiveTests/GeneratorsImpl.tests.cpp"
         "projects/SelfTest/IntrospectiveTests/PartTracker.tests.cpp"
         "projects/SelfTest/IntrospectiveTests/String.tests.cpp"
-        "projects/SelfTest/IntrospectiveTests/TagAlias.tests.cpp"
+        "projects/SelfTest/IntrospectiveTests/Tag.tests.cpp"
         "projects/SelfTest/IntrospectiveTests/Xml.tests.cpp"
         "projects/SelfTest/SurrogateCpps/catch_console_colour.cpp"
         "projects/SelfTest/SurrogateCpps/catch_debugger.cpp"

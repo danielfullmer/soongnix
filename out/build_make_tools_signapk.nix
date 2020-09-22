@@ -30,7 +30,7 @@ signapk = java_library_host {
         "apksig"
         "bouncycastle-unbundled"
         "bouncycastle-bcpkix-unbundled"
-        "conscrypt-nojarjar"
+        "conscrypt-unbundled"
     ];
 
     required = ["libconscrypt_openjdk_jni"];

@@ -23,10 +23,12 @@ libinputservice = cc_library_shared {
     ];
 
     shared_libs = [
+        "libandroid_runtime"
+        "libbinder"
         "libcutils"
+        "libhwui"
         "liblog"
         "libutils"
-        "libhwui"
         "libgui"
         "libui"
         "libinput"

@@ -31,7 +31,11 @@ let
     ];
     export_include_dirs = ["include"];
     shared_libs = [
+        "libhidlbase"
+        "libutils"
         "android.hardware.gnss@1.0"
+        "android.hardware.gnss@2.0"
+        "android.hardware.gnss@2.1"
     ];
 };
 

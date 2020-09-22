@@ -1,0 +1,427 @@
+{ android_test, android_test_helper_app }:
+let
+
+#  Copyright (C) 2008 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+CtsAppTestStubs = android_test_helper_app {
+    name = "CtsAppTestStubs";
+    defaults = ["cts_support_defaults"];
+    libs = [
+        "android.test.runner.stubs"
+        "telephony-common"
+        "voip-common"
+        "org.apache.http.legacy"
+        "android.test.base.stubs"
+    ];
+    static_libs = [
+        "compatibility-device-util-axt"
+        "ctstestrunner-axt"
+        "ctstestserver"
+        "mockito-target-minus-junit4"
+        "androidx.legacy_legacy-support-v4"
+    ];
+    srcs = [
+        "src/android/app/stubs/ActionBarActivity.java"
+        "src/android/app/stubs/ActivityCallbacksTestActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassLaunchActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassTestActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentOneActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentTwoActivity.java"
+        "src/android/app/stubs/ActivityManagerStubCrashActivity.java"
+        "src/android/app/stubs/ActivityManagerStubFooActivity.java"
+        "src/android/app/stubs/ActivityMonitorTestActivity.java"
+        "src/android/app/stubs/ActivityTestsBase.java"
+        "src/android/app/stubs/AliasActivityStub.java"
+        "src/android/app/stubs/AppStubActivity.java"
+        "src/android/app/stubs/AutomaticZenRuleActivity.java"
+        "src/android/app/stubs/BubbledActivity.java"
+        "src/android/app/stubs/BubblesTestService.java"
+        "src/android/app/stubs/CTSActivityTestCaseBase.java"
+        "src/android/app/stubs/ChildActivity.java"
+        "src/android/app/stubs/ClearTop.java"
+        "src/android/app/stubs/CommandReceiver.java"
+        "src/android/app/stubs/DialogStubActivity.java"
+        "src/android/app/stubs/DisplayTestActivity.java"
+        "src/android/app/stubs/ExpandableListTestActivity.java"
+        "src/android/app/stubs/FragmentResultActivity.java"
+        "src/android/app/stubs/FragmentTestActivity.java"
+        "src/android/app/stubs/InstrumentationTestActivity.java"
+        "src/android/app/stubs/IntentServiceStub.java"
+        "src/android/app/stubs/IsolatedService.java"
+        "src/android/app/stubs/KeyboardShortcutsActivity.java"
+        "src/android/app/stubs/KeyguardManagerActivity.java"
+        "src/android/app/stubs/LauncherActivityStub.java"
+        "src/android/app/stubs/LaunchpadActivity.java"
+        "src/android/app/stubs/LaunchpadTabActivity.java"
+        "src/android/app/stubs/LiveWallpaper.java"
+        "src/android/app/stubs/LocalActivity.java"
+        "src/android/app/stubs/LocalActivityManagerStubActivity.java"
+        "src/android/app/stubs/LocalActivityManagerTestHelper.java"
+        "src/android/app/stubs/LocalAlertService.java"
+        "src/android/app/stubs/LocalDeniedService.java"
+        "src/android/app/stubs/LocalDialog.java"
+        "src/android/app/stubs/LocalForegroundService.java"
+        "src/android/app/stubs/LocalForegroundServiceLocation.java"
+        "src/android/app/stubs/LocalGrantedService.java"
+        "src/android/app/stubs/LocalScreen.java"
+        "src/android/app/stubs/LocalService.java"
+        "src/android/app/stubs/LocalStoppedService.java"
+        "src/android/app/stubs/MockActivity.java"
+        "src/android/app/stubs/MockAlarmReceiver.java"
+        "src/android/app/stubs/MockApplication.java"
+        "src/android/app/stubs/MockApplicationActivity.java"
+        "src/android/app/stubs/MockListActivity.java"
+        "src/android/app/stubs/MockReceiver.java"
+        "src/android/app/stubs/MockService.java"
+        "src/android/app/stubs/MockTabActivity.java"
+        "src/android/app/stubs/NewDocumentTestActivity.java"
+        "src/android/app/stubs/NullService.java"
+        "src/android/app/stubs/OrientationTestUtils.java"
+        "src/android/app/stubs/PendingIntentStubActivity.java"
+        "src/android/app/stubs/PipNotSupportedActivity.java"
+        "src/android/app/stubs/ScreenOnActivity.java"
+        "src/android/app/stubs/SearchManagerStubActivity.java"
+        "src/android/app/stubs/SendBubbleActivity.java"
+        "src/android/app/stubs/SimpleActivity.java"
+        "src/android/app/stubs/StubRemoteService.java"
+        "src/android/app/stubs/TestDialog.java"
+        "src/android/app/stubs/TestNotificationListener.java"
+        "src/android/app/stubs/TestTileService.java"
+        "src/android/app/stubs/TestedActivity.java"
+        "src/android/app/stubs/TestedScreen.java"
+        "src/android/app/stubs/ToggleableTestTileService.java"
+        "src/android/app/stubs/ToolbarActivity.java"
+        "src/android/app/stubs/ZygotePreload.java"
+        "src/android/app/stubs/ISecondary.aidl"
+    ];
+    #  Tag this module as a cts test artifact
+    test_suites = [
+        "cts"
+        "vts10"
+        "general-tests"
+    ];
+    platform_apis = true;
+};
+
+CtsAppTestStubsApp1 = android_test_helper_app {
+    name = "CtsAppTestStubsApp1";
+    defaults = ["cts_support_defaults"];
+    libs = [
+        "android.test.runner.stubs"
+        "telephony-common"
+        "voip-common"
+        "org.apache.http.legacy"
+        "android.test.base.stubs"
+    ];
+    static_libs = [
+        "compatibility-device-util-axt"
+        "ctstestrunner-axt"
+        "ctstestserver"
+        "mockito-target-minus-junit4"
+        "androidx.legacy_legacy-support-v4"
+    ];
+    srcs = [
+        "src/android/app/stubs/ActionBarActivity.java"
+        "src/android/app/stubs/ActivityCallbacksTestActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassLaunchActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassTestActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentOneActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentTwoActivity.java"
+        "src/android/app/stubs/ActivityManagerStubCrashActivity.java"
+        "src/android/app/stubs/ActivityManagerStubFooActivity.java"
+        "src/android/app/stubs/ActivityMonitorTestActivity.java"
+        "src/android/app/stubs/ActivityTestsBase.java"
+        "src/android/app/stubs/AliasActivityStub.java"
+        "src/android/app/stubs/AppStubActivity.java"
+        "src/android/app/stubs/AutomaticZenRuleActivity.java"
+        "src/android/app/stubs/BubbledActivity.java"
+        "src/android/app/stubs/BubblesTestService.java"
+        "src/android/app/stubs/CTSActivityTestCaseBase.java"
+        "src/android/app/stubs/ChildActivity.java"
+        "src/android/app/stubs/ClearTop.java"
+        "src/android/app/stubs/CommandReceiver.java"
+        "src/android/app/stubs/DialogStubActivity.java"
+        "src/android/app/stubs/DisplayTestActivity.java"
+        "src/android/app/stubs/ExpandableListTestActivity.java"
+        "src/android/app/stubs/FragmentResultActivity.java"
+        "src/android/app/stubs/FragmentTestActivity.java"
+        "src/android/app/stubs/InstrumentationTestActivity.java"
+        "src/android/app/stubs/IntentServiceStub.java"
+        "src/android/app/stubs/IsolatedService.java"
+        "src/android/app/stubs/KeyboardShortcutsActivity.java"
+        "src/android/app/stubs/KeyguardManagerActivity.java"
+        "src/android/app/stubs/LauncherActivityStub.java"
+        "src/android/app/stubs/LaunchpadActivity.java"
+        "src/android/app/stubs/LaunchpadTabActivity.java"
+        "src/android/app/stubs/LiveWallpaper.java"
+        "src/android/app/stubs/LocalActivity.java"
+        "src/android/app/stubs/LocalActivityManagerStubActivity.java"
+        "src/android/app/stubs/LocalActivityManagerTestHelper.java"
+        "src/android/app/stubs/LocalAlertService.java"
+        "src/android/app/stubs/LocalDeniedService.java"
+        "src/android/app/stubs/LocalDialog.java"
+        "src/android/app/stubs/LocalForegroundService.java"
+        "src/android/app/stubs/LocalForegroundServiceLocation.java"
+        "src/android/app/stubs/LocalGrantedService.java"
+        "src/android/app/stubs/LocalScreen.java"
+        "src/android/app/stubs/LocalService.java"
+        "src/android/app/stubs/LocalStoppedService.java"
+        "src/android/app/stubs/MockActivity.java"
+        "src/android/app/stubs/MockAlarmReceiver.java"
+        "src/android/app/stubs/MockApplication.java"
+        "src/android/app/stubs/MockApplicationActivity.java"
+        "src/android/app/stubs/MockListActivity.java"
+        "src/android/app/stubs/MockReceiver.java"
+        "src/android/app/stubs/MockService.java"
+        "src/android/app/stubs/MockTabActivity.java"
+        "src/android/app/stubs/NewDocumentTestActivity.java"
+        "src/android/app/stubs/NullService.java"
+        "src/android/app/stubs/OrientationTestUtils.java"
+        "src/android/app/stubs/PendingIntentStubActivity.java"
+        "src/android/app/stubs/PipNotSupportedActivity.java"
+        "src/android/app/stubs/ScreenOnActivity.java"
+        "src/android/app/stubs/SearchManagerStubActivity.java"
+        "src/android/app/stubs/SendBubbleActivity.java"
+        "src/android/app/stubs/SimpleActivity.java"
+        "src/android/app/stubs/StubRemoteService.java"
+        "src/android/app/stubs/TestDialog.java"
+        "src/android/app/stubs/TestNotificationListener.java"
+        "src/android/app/stubs/TestTileService.java"
+        "src/android/app/stubs/TestedActivity.java"
+        "src/android/app/stubs/TestedScreen.java"
+        "src/android/app/stubs/ToggleableTestTileService.java"
+        "src/android/app/stubs/ToolbarActivity.java"
+        "src/android/app/stubs/ZygotePreload.java"
+        "src/android/app/stubs/ISecondary.aidl"
+    ];
+    #  Tag this module as a cts test artifact
+    test_suites = [
+        "cts"
+        "vts10"
+        "general-tests"
+    ];
+    platform_apis = true;
+    aaptflags = [
+        "--rename-manifest-package com.android.app1"
+    ];
+};
+
+CtsAppTestStubsApp2 = android_test {
+    name = "CtsAppTestStubsApp2";
+    defaults = ["cts_support_defaults"];
+    libs = [
+        "android.test.runner.stubs"
+        "telephony-common"
+        "voip-common"
+        "org.apache.http.legacy"
+        "android.test.base.stubs"
+    ];
+    static_libs = [
+        "compatibility-device-util-axt"
+        "ctstestrunner-axt"
+        "ctstestserver"
+        "mockito-target-minus-junit4"
+        "androidx.legacy_legacy-support-v4"
+    ];
+    srcs = [
+        "src/android/app/stubs/ActionBarActivity.java"
+        "src/android/app/stubs/ActivityCallbacksTestActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassLaunchActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassTestActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentOneActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentTwoActivity.java"
+        "src/android/app/stubs/ActivityManagerStubCrashActivity.java"
+        "src/android/app/stubs/ActivityManagerStubFooActivity.java"
+        "src/android/app/stubs/ActivityMonitorTestActivity.java"
+        "src/android/app/stubs/ActivityTestsBase.java"
+        "src/android/app/stubs/AliasActivityStub.java"
+        "src/android/app/stubs/AppStubActivity.java"
+        "src/android/app/stubs/AutomaticZenRuleActivity.java"
+        "src/android/app/stubs/BubbledActivity.java"
+        "src/android/app/stubs/BubblesTestService.java"
+        "src/android/app/stubs/CTSActivityTestCaseBase.java"
+        "src/android/app/stubs/ChildActivity.java"
+        "src/android/app/stubs/ClearTop.java"
+        "src/android/app/stubs/CommandReceiver.java"
+        "src/android/app/stubs/DialogStubActivity.java"
+        "src/android/app/stubs/DisplayTestActivity.java"
+        "src/android/app/stubs/ExpandableListTestActivity.java"
+        "src/android/app/stubs/FragmentResultActivity.java"
+        "src/android/app/stubs/FragmentTestActivity.java"
+        "src/android/app/stubs/InstrumentationTestActivity.java"
+        "src/android/app/stubs/IntentServiceStub.java"
+        "src/android/app/stubs/IsolatedService.java"
+        "src/android/app/stubs/KeyboardShortcutsActivity.java"
+        "src/android/app/stubs/KeyguardManagerActivity.java"
+        "src/android/app/stubs/LauncherActivityStub.java"
+        "src/android/app/stubs/LaunchpadActivity.java"
+        "src/android/app/stubs/LaunchpadTabActivity.java"
+        "src/android/app/stubs/LiveWallpaper.java"
+        "src/android/app/stubs/LocalActivity.java"
+        "src/android/app/stubs/LocalActivityManagerStubActivity.java"
+        "src/android/app/stubs/LocalActivityManagerTestHelper.java"
+        "src/android/app/stubs/LocalAlertService.java"
+        "src/android/app/stubs/LocalDeniedService.java"
+        "src/android/app/stubs/LocalDialog.java"
+        "src/android/app/stubs/LocalForegroundService.java"
+        "src/android/app/stubs/LocalForegroundServiceLocation.java"
+        "src/android/app/stubs/LocalGrantedService.java"
+        "src/android/app/stubs/LocalScreen.java"
+        "src/android/app/stubs/LocalService.java"
+        "src/android/app/stubs/LocalStoppedService.java"
+        "src/android/app/stubs/MockActivity.java"
+        "src/android/app/stubs/MockAlarmReceiver.java"
+        "src/android/app/stubs/MockApplication.java"
+        "src/android/app/stubs/MockApplicationActivity.java"
+        "src/android/app/stubs/MockListActivity.java"
+        "src/android/app/stubs/MockReceiver.java"
+        "src/android/app/stubs/MockService.java"
+        "src/android/app/stubs/MockTabActivity.java"
+        "src/android/app/stubs/NewDocumentTestActivity.java"
+        "src/android/app/stubs/NullService.java"
+        "src/android/app/stubs/OrientationTestUtils.java"
+        "src/android/app/stubs/PendingIntentStubActivity.java"
+        "src/android/app/stubs/PipNotSupportedActivity.java"
+        "src/android/app/stubs/ScreenOnActivity.java"
+        "src/android/app/stubs/SearchManagerStubActivity.java"
+        "src/android/app/stubs/SendBubbleActivity.java"
+        "src/android/app/stubs/SimpleActivity.java"
+        "src/android/app/stubs/StubRemoteService.java"
+        "src/android/app/stubs/TestDialog.java"
+        "src/android/app/stubs/TestNotificationListener.java"
+        "src/android/app/stubs/TestTileService.java"
+        "src/android/app/stubs/TestedActivity.java"
+        "src/android/app/stubs/TestedScreen.java"
+        "src/android/app/stubs/ToggleableTestTileService.java"
+        "src/android/app/stubs/ToolbarActivity.java"
+        "src/android/app/stubs/ZygotePreload.java"
+        "src/android/app/stubs/ISecondary.aidl"
+    ];
+    #  Tag this module as a cts test artifact
+    test_suites = [
+        "cts"
+        "vts10"
+        "general-tests"
+    ];
+    platform_apis = true;
+    aaptflags = [
+        "--rename-manifest-package com.android.app2"
+    ];
+};
+
+CtsAppTestStubsApp3 = android_test_helper_app {
+    name = "CtsAppTestStubsApp3";
+    defaults = ["cts_support_defaults"];
+    libs = [
+        "android.test.runner.stubs"
+        "telephony-common"
+        "voip-common"
+        "org.apache.http.legacy"
+        "android.test.base.stubs"
+    ];
+    static_libs = [
+        "compatibility-device-util-axt"
+        "ctstestrunner-axt"
+        "ctstestserver"
+        "mockito-target-minus-junit4"
+        "androidx.legacy_legacy-support-v4"
+    ];
+    srcs = [
+        "src/android/app/stubs/ActionBarActivity.java"
+        "src/android/app/stubs/ActivityCallbacksTestActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassLaunchActivity.java"
+        "src/android/app/stubs/ActivityManagerMemoryClassTestActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentOneActivity.java"
+        "src/android/app/stubs/ActivityManagerRecentTwoActivity.java"
+        "src/android/app/stubs/ActivityManagerStubCrashActivity.java"
+        "src/android/app/stubs/ActivityManagerStubFooActivity.java"
+        "src/android/app/stubs/ActivityMonitorTestActivity.java"
+        "src/android/app/stubs/ActivityTestsBase.java"
+        "src/android/app/stubs/AliasActivityStub.java"
+        "src/android/app/stubs/AppStubActivity.java"
+        "src/android/app/stubs/AutomaticZenRuleActivity.java"
+        "src/android/app/stubs/BubbledActivity.java"
+        "src/android/app/stubs/BubblesTestService.java"
+        "src/android/app/stubs/CTSActivityTestCaseBase.java"
+        "src/android/app/stubs/ChildActivity.java"
+        "src/android/app/stubs/ClearTop.java"
+        "src/android/app/stubs/CommandReceiver.java"
+        "src/android/app/stubs/DialogStubActivity.java"
+        "src/android/app/stubs/DisplayTestActivity.java"
+        "src/android/app/stubs/ExpandableListTestActivity.java"
+        "src/android/app/stubs/FragmentResultActivity.java"
+        "src/android/app/stubs/FragmentTestActivity.java"
+        "src/android/app/stubs/InstrumentationTestActivity.java"
+        "src/android/app/stubs/IntentServiceStub.java"
+        "src/android/app/stubs/IsolatedService.java"
+        "src/android/app/stubs/KeyboardShortcutsActivity.java"
+        "src/android/app/stubs/KeyguardManagerActivity.java"
+        "src/android/app/stubs/LauncherActivityStub.java"
+        "src/android/app/stubs/LaunchpadActivity.java"
+        "src/android/app/stubs/LaunchpadTabActivity.java"
+        "src/android/app/stubs/LiveWallpaper.java"
+        "src/android/app/stubs/LocalActivity.java"
+        "src/android/app/stubs/LocalActivityManagerStubActivity.java"
+        "src/android/app/stubs/LocalActivityManagerTestHelper.java"
+        "src/android/app/stubs/LocalAlertService.java"
+        "src/android/app/stubs/LocalDeniedService.java"
+        "src/android/app/stubs/LocalDialog.java"
+        "src/android/app/stubs/LocalForegroundService.java"
+        "src/android/app/stubs/LocalForegroundServiceLocation.java"
+        "src/android/app/stubs/LocalGrantedService.java"
+        "src/android/app/stubs/LocalScreen.java"
+        "src/android/app/stubs/LocalService.java"
+        "src/android/app/stubs/LocalStoppedService.java"
+        "src/android/app/stubs/MockActivity.java"
+        "src/android/app/stubs/MockAlarmReceiver.java"
+        "src/android/app/stubs/MockApplication.java"
+        "src/android/app/stubs/MockApplicationActivity.java"
+        "src/android/app/stubs/MockListActivity.java"
+        "src/android/app/stubs/MockReceiver.java"
+        "src/android/app/stubs/MockService.java"
+        "src/android/app/stubs/MockTabActivity.java"
+        "src/android/app/stubs/NewDocumentTestActivity.java"
+        "src/android/app/stubs/NullService.java"
+        "src/android/app/stubs/OrientationTestUtils.java"
+        "src/android/app/stubs/PendingIntentStubActivity.java"
+        "src/android/app/stubs/PipNotSupportedActivity.java"
+        "src/android/app/stubs/ScreenOnActivity.java"
+        "src/android/app/stubs/SearchManagerStubActivity.java"
+        "src/android/app/stubs/SendBubbleActivity.java"
+        "src/android/app/stubs/SimpleActivity.java"
+        "src/android/app/stubs/StubRemoteService.java"
+        "src/android/app/stubs/TestDialog.java"
+        "src/android/app/stubs/TestNotificationListener.java"
+        "src/android/app/stubs/TestTileService.java"
+        "src/android/app/stubs/TestedActivity.java"
+        "src/android/app/stubs/TestedScreen.java"
+        "src/android/app/stubs/ToggleableTestTileService.java"
+        "src/android/app/stubs/ToolbarActivity.java"
+        "src/android/app/stubs/ZygotePreload.java"
+        "src/android/app/stubs/ISecondary.aidl"
+    ];
+    #  Tag this module as a cts test artifact
+    test_suites = [
+        "cts"
+        "vts10"
+        "general-tests"
+    ];
+    platform_apis = true;
+    aaptflags = [
+        "--rename-manifest-package com.android.app3"
+    ];
+};
+
+in { inherit CtsAppTestStubs CtsAppTestStubsApp1 CtsAppTestStubsApp2 CtsAppTestStubsApp3; }

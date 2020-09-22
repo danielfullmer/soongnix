@@ -21,6 +21,8 @@ libvts_common = cc_library_shared {
 
     name = "libvts_common";
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 
     cflags = [
         "-Wall"

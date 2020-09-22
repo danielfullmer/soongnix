@@ -9,7 +9,9 @@ libRSDispatch = cc_library_static {
 
     include_dirs = [
         "frameworks/rs"
-        "libnativehelper/include_jni"
+    ];
+    header_libs = [
+        "jni_headers"
     ];
 
     cflags = [
@@ -68,13 +70,19 @@ libRScpp-defaults = cc_defaults {
     shared_libs = [
         "libdl"
         "liblog"
-        "libz"
     ];
 };
 
 libRScpp = cc_library {
     name = "libRScpp";
     defaults = ["libRScpp-defaults"];
+
+    header_libs = [
+        "libarect_headers"
+        "libbase_headers"
+        "libnativebase_headers"
+        "libnativewindow_headers"
+    ];
 
     shared_libs = [
         "libgui"

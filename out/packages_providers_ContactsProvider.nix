@@ -111,7 +111,6 @@ ContactsProvider = android_app {
     ];
     libs = [
         "ext"
-        "telephony-common"
     ];
     static_libs = [
         "android-common"

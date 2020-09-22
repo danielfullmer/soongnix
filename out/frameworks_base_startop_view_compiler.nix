@@ -19,7 +19,6 @@ let
 
 viewcompiler_defaults = cc_defaults {
     name = "viewcompiler_defaults";
-    defaults = ["libdexfile_static_defaults"];
     header_libs = [
         "libbase_headers"
     ];
@@ -28,10 +27,12 @@ viewcompiler_defaults = cc_defaults {
         "slicer"
     ];
     static_libs = [
+        "libcutils"
         "libtinyxml2"
         "liblog"
         "libutils"
         "libziparchive"
+        "libz"
     ];
     cppflags = ["-std=c++17"];
     target = {
@@ -80,7 +81,6 @@ view-compiler-tests = cc_test_host {
     name = "view-compiler-tests";
     defaults = ["viewcompiler_defaults"];
     srcs = [
-        "dex_builder_test.cc"
         "layout_validation_test.cc"
         "util_test.cc"
     ];

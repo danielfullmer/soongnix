@@ -57,7 +57,6 @@ libbluetooth-binder = cc_library_shared {
         ];
     };
     include_dirs = [
-        "libnativehelper/include/nativehelper"
         "system/bt/types"
     ];
     shared_libs = [

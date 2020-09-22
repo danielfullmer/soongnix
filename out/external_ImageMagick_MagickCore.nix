@@ -111,6 +111,7 @@ MagickCore = cc_library_static {
         "utility.c"
         "version.c"
         "vision.c"
+        "visual-effects.c"
         "vms.c"
         "widget.c"
         "xml-tree.c"
@@ -130,6 +131,7 @@ MagickCore = cc_library_static {
 
     header_libs = ["Magick_headers"];
     export_header_lib_headers = ["Magick_headers"];
+    visibility = ["//vendor:__subpackages__"];
 };
 
 in { inherit MagickCore; }

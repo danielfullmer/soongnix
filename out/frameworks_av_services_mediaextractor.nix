@@ -11,10 +11,16 @@ libmediaextractorservice = cc_library_shared {
     srcs = ["MediaExtractorService.cpp"];
 
     shared_libs = [
+        "libdatasource"
         "libmedia"
         "libstagefright"
+        "libstagefright_foundation"
         "libbinder"
         "libutils"
+        "liblog"
+    ];
+    header_libs = [
+        "libmediametrics_headers"
     ];
 };
 
@@ -26,10 +32,14 @@ mediaextractor = cc_binary {
     shared_libs = [
         "libmedia"
         "libmediaextractorservice"
+        "libmediautils"
         "libbinder"
         "libutils"
         "liblog"
         "libavservices_minijail"
+    ];
+    header_libs = [
+        "bionic_libc_platform_headers"
     ];
     target = {
         android = {
@@ -44,12 +54,12 @@ mediaextractor = cc_binary {
     };
     init_rc = ["mediaextractor.rc"];
 
-    include_dirs = ["frameworks/av/media/libmedia"];
-
     cflags = [
         "-Wall"
         "-Werror"
     ];
+
+    required = ["mediaextractor.policy"];
 };
 
 "mediaextractor.policy" = prebuilt_etc {

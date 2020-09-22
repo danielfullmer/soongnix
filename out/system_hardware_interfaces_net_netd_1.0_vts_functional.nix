@@ -22,14 +22,14 @@ VtsHalNetNetdV1_0TargetTest = cc_test {
         "VtsHalNetNetdV1_0TargetTest.cpp"
     ];
     defaults = ["VtsHalNetNetdTestDefaults"];
-    shared_libs = [
+    static_libs = [
         "android.system.net.netd@1.0"
-        "libandroid_net"
-        "libbase"
-        "libhidlbase"
-        "liblog"
-        "libutils"
     ];
+    shared_libs = [
+        "libandroid_net"
+    ];
+    require_root = true;
+    test_suites = ["vts"];
 };
 
 in { inherit VtsHalNetNetdV1_0TargetTest; }

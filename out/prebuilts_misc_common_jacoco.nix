@@ -4,7 +4,10 @@ let
 jvm-jacoco-reporter = java_library_host {
     name = "jvm-jacoco-reporter";
 
-    srcs = ["src/main/java/com/google/android/jacoco/reporter/ReportGenerator.java"];
+    srcs = [
+        "src/main/java/com/google/android/jacoco/reporter/JarSourceFileLocator.java"
+        "src/main/java/com/google/android/jacoco/reporter/ReportGenerator.java"
+    ];
 
     static_libs = [
         "asm-analysis-prebuilt-host-jar"

@@ -1,4 +1,4 @@
-{ cc_library_host_shared }:
+{ cc_library }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,9 +15,11 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libhidl-gen-host-utils = cc_library_host_shared {
+libhidl-gen-host-utils = cc_library {
     name = "libhidl-gen-host-utils";
     defaults = ["hidl-gen-defaults"];
+    host_supported = true;
+    device_supported = false;
     srcs = [
         "Formatter.cpp"
         "StringHelper.cpp"
@@ -25,7 +27,6 @@ libhidl-gen-host-utils = cc_library_host_shared {
     shared_libs = [
         "libbase"
     ];
-
     local_include_dirs = ["include/hidl-util"];
     export_include_dirs = ["include"];
 };

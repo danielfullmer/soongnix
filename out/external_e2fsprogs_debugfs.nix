@@ -72,6 +72,7 @@ debugfs = cc_binary {
 debugfs_static = cc_binary {
     name = "debugfs_static";
     static_executable = true;
+    host_supported = true;
     defaults = ["debugfs-defaults"];
 
     static_libs = debugfs_libs;

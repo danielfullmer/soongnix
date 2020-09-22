@@ -42,6 +42,7 @@ tf-remote-client = java_library_host {
         "src/com/android/tradefed/device/DeviceAllocationState.java"
         "src/com/android/tradefed/device/DeviceEvent.java"
         "src/com/android/tradefed/device/FreeDeviceState.java"
+        "src/com/android/tradefed/device/TestDeviceState.java"
     ];
 
     static_libs = [

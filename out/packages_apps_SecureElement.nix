@@ -1,5 +1,13 @@
-{ android_app }:
+{ android_app, genrule }:
 let
+
+statslog-secure-element-java-gen = genrule {
+    name = "statslog-secure-element-java-gen";
+    tools = ["stats-log-api-gen"];
+    cmd = "$(location stats-log-api-gen) --java $(out) --module secure_element" +
+        " --javaPackage com.android.se --javaClass SecureElementStatsLog";
+    out = ["com/android/se/SecureElementStatsLog.java"];
+};
 
 SecureElement = android_app {
     name = "SecureElement";
@@ -40,6 +48,8 @@ SecureElement = android_app {
         "src/com/android/se/security/gpac/DO_Exception.java"
         "src/com/android/se/security/gpac/Hash_REF_DO.java"
         "src/com/android/se/security/gpac/NFC_AR_DO.java"
+        "src/com/android/se/security/gpac/PERM_AR_DO.java"
+        "src/com/android/se/security/gpac/PKG_REF_DO.java"
         "src/com/android/se/security/gpac/ParserException.java"
         "src/com/android/se/security/gpac/REF_AR_DO.java"
         "src/com/android/se/security/gpac/REF_DO.java"
@@ -48,16 +58,18 @@ SecureElement = android_app {
         "src/com/android/se/security/gpac/Response_AR_DO.java"
         "src/com/android/se/security/gpac/Response_DO_Factory.java"
         "src/com/android/se/security/gpac/Response_RefreshTag_DO.java"
+        ":statslog-secure-element-java-gen"
     ];
     platform_apis = true;
     certificate = "platform";
     static_libs = [
         "android.hardware.secure_element-V1.0-java"
         "android.hardware.secure_element-V1.1-java"
+        "android.hardware.secure_element-V1.2-java"
     ];
     optimize = {
         enabled = false;
     };
 };
 
-in { inherit SecureElement; }
+in { inherit SecureElement statslog-secure-element-java-gen; }

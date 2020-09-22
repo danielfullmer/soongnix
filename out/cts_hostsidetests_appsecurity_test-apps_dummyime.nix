@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsDummyIme = android_test {
+CtsDummyIme = android_test_helper_app {
     name = "CtsDummyIme";
     defaults = ["cts_support_defaults"];
     sdk_version = "test_current";
@@ -25,7 +25,7 @@ CtsDummyIme = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
         "mts"
     ];
@@ -36,6 +36,8 @@ CtsDummyIme = android_test {
     dex_preopt = {
         enabled = false;
     };
+    min_sdk_version = "29";
+    target_sdk_version = "29";
 };
 
 in { inherit CtsDummyIme; }

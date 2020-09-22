@@ -4,10 +4,9 @@ let
 CarrierConfig = android_app {
     name = "CarrierConfig";
     srcs = ["src/com/android/carrierconfig/DefaultCarrierConfigService.java"];
-    libs = ["telephony-common"];
     platform_apis = true;
     certificate = "platform";
-    product_specific = true;
+    system_ext_specific = true;
     privileged = true;
     required = ["privapp_whitelist_com.android.carrierconfig"];
     optimize = {

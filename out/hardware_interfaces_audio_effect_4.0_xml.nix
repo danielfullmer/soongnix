@@ -1,0 +1,13 @@
+{ genrule }:
+let
+
+audio_effects_conf_V4_0 = genrule {
+    name = "audio_effects_conf_V4_0";
+    srcs = ["audio_effects_conf.xsd"];
+    out = [
+        "audio_effects_conf_V4_0.xsd"
+    ];
+    cmd = "cp -f $(in) $(genDir)/audio_effects_conf_V4_0.xsd";
+};
+
+in { inherit audio_effects_conf_V4_0; }

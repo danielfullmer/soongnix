@@ -35,13 +35,23 @@ libc_malloc_hooks = cc_library {
         "-Werror"
         "-fno-stack-protector"
     ];
+
+    apex_available = [
+        "com.android.runtime"
+    ];
+    static = {
+        apex_available = [
+            "//apex_available:platform"
+        ];
+    };
 };
 
 #  ==============================================================
 #  Unit Tests
 #  ==============================================================
-malloc_hooks_unit_tests = cc_test {
-    name = "malloc_hooks_unit_tests";
+malloc_hooks_system_tests = cc_test {
+    name = "malloc_hooks_system_tests";
+    isolated = true;
 
     srcs = [
         "tests/malloc_hooks_tests.cpp"
@@ -56,11 +66,15 @@ malloc_hooks_unit_tests = cc_test {
         "bionic/libc"
         "bionic"
     ];
+    header_libs = [
+        "bionic_libc_platform_headers"
+    ];
 
     cflags = [
         "-Wall"
         "-Werror"
     ];
+    test_suites = ["general-tests"];
 };
 
-in { inherit libc_malloc_hooks malloc_hooks_unit_tests; }
+in { inherit libc_malloc_hooks malloc_hooks_system_tests; }

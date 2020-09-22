@@ -1,9 +1,8 @@
-{ python_test }:
+{ python_defaults, python_test }:
 let
 
-kernel_net_tests = python_test {
-    name = "kernel_net_tests";
-    main = "all_tests.py";
+kernel_net_tests_defaults = python_defaults {
+    name = "kernel_net_tests_defaults";
     srcs = [
         "all_tests.py"
         "anycast_test.py"
@@ -19,6 +18,7 @@ kernel_net_tests = python_test {
         "leak_test.py"
         "multinetwork_base.py"
         "multinetwork_test.py"
+        "namespace.py"
         "neighbour_test.py"
         "net_test.py"
         "netlink.py"
@@ -51,9 +51,26 @@ kernel_net_tests = python_test {
     libs = [
         "scapy"
     ];
-    defaults = [
-        "kernel_tests_defaults"
-    ];
+    defaults = ["kernel_tests_defaults"];
 };
 
-in { inherit kernel_net_tests; }
+#  Currently, we keep it for vts10. This could be useful to produce a binary
+#  that can be run manually on the device.
+#  TODO(b/146651404): Remove all vts10 only test modules after vts11
+#  is released.
+kernel_net_tests = python_test {
+    name = "kernel_net_tests";
+    main = "all_tests.py";
+    defaults = ["kernel_net_tests_defaults"];
+};
+
+vts_kernel_net_tests = python_test {
+    name = "vts_kernel_net_tests";
+    stem = "kernel_net_tests_bin";
+    main = "all_tests.py";
+    defaults = ["kernel_net_tests_defaults"];
+    test_suites = ["vts"];
+    test_config = "vts_kernel_net_tests.xml";
+};
+
+in { inherit kernel_net_tests kernel_net_tests_defaults vts_kernel_net_tests; }

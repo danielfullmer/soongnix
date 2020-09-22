@@ -20,8 +20,6 @@ c2hal = cc_binary_host {
     defaults = ["hidl-gen-defaults"];
     srcs = [
         "AST.cpp"
-        "c2hal_l.ll"
-        "c2hal_y.yy"
         "CompositeDeclaration.cpp"
         "Declaration.cpp"
         "Define.cpp"
@@ -29,21 +27,25 @@ c2hal = cc_binary_host {
         "Expression.cpp"
         "FunctionDeclaration.cpp"
         "Include.cpp"
-        "main.cpp"
         "Note.cpp"
         "Type.cpp"
         "TypeDef.cpp"
         "VarDeclaration.cpp"
+        "c2hal_l.ll"
+        "c2hal_y.yy"
+        "main.cpp"
     ];
 
     shared_libs = [
         "libbase"
         "liblog"
-        "libhidl-gen-host-utils"
-        "libhidl-gen-utils"
     ];
 
-    static_libs = ["libutils"];
+    static_libs = [
+        "libhidl-gen-host-utils"
+        "libhidl-gen-utils"
+        "libutils"
+    ];
 };
 
 in { inherit c2hal; }

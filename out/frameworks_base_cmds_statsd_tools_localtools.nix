@@ -1,4 +1,4 @@
-{ java_binary_host }:
+{ java_binary_host, java_library_host, java_test_host }:
 let
 
 statsd_localdrive = java_binary_host {
@@ -14,9 +14,8 @@ statsd_localdrive = java_binary_host {
     ];
 };
 
-statsd_testdrive = java_binary_host {
-    name = "statsd_testdrive";
-    manifest = "testdrive_manifest.txt";
+statsd_testdrive_lib = java_library_host {
+    name = "statsd_testdrive_lib";
     srcs = [
         "src/com/android/statsd/shelltools/testdrive/TestDrive.java"
         "src/com/android/statsd/shelltools/Utils.java"
@@ -27,4 +26,27 @@ statsd_testdrive = java_binary_host {
     ];
 };
 
-in { inherit statsd_localdrive statsd_testdrive; }
+statsd_testdrive = java_binary_host {
+    name = "statsd_testdrive";
+    manifest = "testdrive_manifest.txt";
+    static_libs = [
+        "statsd_testdrive_lib"
+    ];
+};
+
+statsd_testdrive_test = java_test_host {
+    name = "statsd_testdrive_test";
+    test_suites = ["general-tests"];
+    srcs = [
+        "test/com/android/statsd/shelltools/testdrive/ConfigurationTest.java"
+        "test/com/android/statsd/shelltools/testdrive/TestDriveTest.java"
+    ];
+    static_libs = [
+        "statsd_testdrive_lib"
+        "junit"
+        "platformprotos"
+        "guava"
+    ];
+};
+
+in { inherit statsd_localdrive statsd_testdrive statsd_testdrive_lib statsd_testdrive_test; }

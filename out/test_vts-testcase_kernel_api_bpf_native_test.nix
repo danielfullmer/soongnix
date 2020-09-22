@@ -1,4 +1,4 @@
-{ bpf, cc_test, vts_config }:
+{ bpf, cc_defaults, cc_test, vts_config }:
 let
 
 #
@@ -17,8 +17,8 @@ let
 #  limitations under the License.
 #
 
-vts_test_binary_bpf_module = cc_test {
-    name = "vts_test_binary_bpf_module";
+binary_bpf_defaults = cc_defaults {
+    name = "binary_bpf_defaults";
     srcs = ["BpfTest.cpp"];
     shared_libs = [
         "libcgrouprc"
@@ -48,6 +48,8 @@ vts_test_binary_bpf_module = cc_test {
 
 "kern.o" = bpf {
     name = "kern.o";
+    #  header_libs: ["netd_bpf_progs_headers"],
+    include_dirs = ["system/netd/bpf_progs"];
     srcs = ["kern.c"];
     cflags = [
         "-Wall"
@@ -55,8 +57,23 @@ vts_test_binary_bpf_module = cc_test {
     ];
 };
 
+bpf_module_test = cc_test {
+    name = "bpf_module_test";
+    defaults = ["binary_bpf_defaults"];
+    test_config = "bpf_module_test.xml";
+    test_suites = [
+        "device-tests"
+        "vts"
+    ];
+};
+
+vts_test_binary_bpf_module = cc_test {
+    name = "vts_test_binary_bpf_module";
+    defaults = ["binary_bpf_defaults"];
+};
+
 VtsKernelNetBpfTest = vts_config {
     name = "VtsKernelNetBpfTest";
 };
 
-in { inherit "kern.o" VtsKernelNetBpfTest vts_test_binary_bpf_module; }
+in { inherit "kern.o" VtsKernelNetBpfTest binary_bpf_defaults bpf_module_test vts_test_binary_bpf_module; }

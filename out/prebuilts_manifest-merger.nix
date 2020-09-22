@@ -4,10 +4,10 @@ let
 manifest-merger-jars = java_import_host {
     name = "manifest-merger-jars";
     jars = [
-        "com/android/tools/build/manifest-merger/26.4.0-beta05/manifest-merger-26.4.0-beta05.jar"
-        "com/android/tools/common/26.4.0-beta05/common-26.4.0-beta05.jar"
-        "com/android/tools/sdk-common/26.4.0-beta05/sdk-common-26.4.0-beta05.jar"
-        "com/android/tools/sdklib/26.4.0-beta05/sdklib-26.4.0-beta05.jar"
+        "com/android/tools/build/manifest-merger/26.6.0-dev/manifest-merger-26.6.0-dev.jar"
+        "com/android/tools/common/26.6.0-dev/common-26.6.0-dev.jar"
+        "com/android/tools/sdk-common/26.6.0-dev/sdk-common-26.6.0-dev.jar"
+        "com/android/tools/sdklib/26.6.0-dev/sdklib-26.6.0-dev.jar"
     ];
 };
 
@@ -17,6 +17,7 @@ manifest-merger = java_binary_host {
     static_libs = [
         "manifest-merger-jars"
         "guava-21.0"
+        "gson-prebuilt-jar"
         "kotlin-stdlib"
     ];
 };

@@ -1,4 +1,4 @@
-{ cc_library_static, cc_test }:
+{ cc_test }:
 let
 
 #
@@ -17,46 +17,26 @@ let
 #  limitations under the License.
 #
 
-VtsHalWifiHostapdV1_1TargetTestUtil = cc_library_static {
-    name = "VtsHalWifiHostapdV1_1TargetTestUtil";
-    defaults = ["VtsHalTargetTestDefaults"];
-    srcs = ["hostapd_hidl_test_utils_1_1.cpp"];
-    export_include_dirs = [
-        "."
-    ];
-    static_libs = [
-        "VtsHalWifiV1_0TargetTestUtil"
-        "VtsHalWifiHostapdV1_0TargetTestUtil"
-        "android.hardware.wifi.hostapd@1.0"
-        "android.hardware.wifi.hostapd@1.1"
-        "android.hardware.wifi@1.0"
-        "libcrypto"
-        "libgmock"
-        "libwifi-system"
-        "libwifi-system-iface"
-    ];
-};
-
 VtsHalWifiHostapdV1_1TargetTest = cc_test {
     name = "VtsHalWifiHostapdV1_1TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
-        "VtsHalWifiHostapdV1_1TargetTest.cpp"
         "hostapd_hidl_test.cpp"
     ];
     static_libs = [
         "VtsHalWifiV1_0TargetTestUtil"
         "VtsHalWifiHostapdV1_0TargetTestUtil"
-        "VtsHalWifiHostapdV1_1TargetTestUtil"
         "android.hardware.wifi.hostapd@1.0"
         "android.hardware.wifi.hostapd@1.1"
         "android.hardware.wifi@1.0"
-        "libcrypto"
         "libgmock"
         "libwifi-system"
         "libwifi-system-iface"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
-in { inherit VtsHalWifiHostapdV1_1TargetTest VtsHalWifiHostapdV1_1TargetTestUtil; }
+in { inherit VtsHalWifiHostapdV1_1TargetTest; }

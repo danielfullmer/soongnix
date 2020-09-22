@@ -20,7 +20,6 @@ CarrierDefaultAppUnitTests = android_test {
     certificate = "platform";
     libs = [
         "android.test.runner"
-        "telephony-common"
         "android.test.base"
     ];
     static_libs = [

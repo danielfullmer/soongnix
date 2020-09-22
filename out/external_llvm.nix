@@ -21,6 +21,8 @@ llvm-defaults-no-generated-headers = llvm_defaults {
     name = "llvm-defaults-no-generated-headers";
 
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 
     cflags = [
         "-D_GNU_SOURCE"
@@ -107,6 +109,8 @@ llvm-headers-no-generated-headers = cc_library_headers {
     name = "llvm-headers-no-generated-headers";
     vendor_available = true;
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
     target = {
         android = {
@@ -128,6 +132,8 @@ llvm-headers = cc_library_headers {
     name = "llvm-headers";
     vendor_available = true;
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     header_libs = ["llvm-headers-no-generated-headers"];
     export_header_lib_headers = ["llvm-headers-no-generated-headers"];
     generated_headers = [
@@ -279,7 +285,8 @@ libLLVM_android = cc_library {
             export_include_dirs = ["device/include"];
         };
         android_arm = {
-            whole_static_libs = llvm_arm_static_libraries;
+            whole_static_libs = llvm_arm_static_libraries ++
+                llvm_aarch64_static_libraries;
         };
         android_x86 = {
             whole_static_libs = llvm_x86_static_libraries ++

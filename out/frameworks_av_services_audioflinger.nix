@@ -12,6 +12,7 @@ libaudioflinger = cc_library_shared {
         "AudioStreamOut.cpp"
         "AudioWatchdog.cpp"
         "BufLog.cpp"
+        "DeviceEffectManager.cpp"
         "Effects.cpp"
         "FastCapture.cpp"
         "FastCaptureDumpState.cpp"
@@ -37,6 +38,7 @@ libaudioflinger = cc_library_shared {
     ];
 
     shared_libs = [
+        "libaudiofoundation"
         "libaudiohal"
         "libaudioprocessing"
         "libaudiospdif"
@@ -61,6 +63,11 @@ libaudioflinger = cc_library_shared {
     static_libs = [
         "libcpustats"
         "libsndfile"
+    ];
+
+    header_libs = [
+        "libaudiohal_headers"
+        "libmedia_headers"
     ];
 
     cflags = [

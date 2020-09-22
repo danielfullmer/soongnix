@@ -188,6 +188,12 @@ libRSSupport = cc_library_shared {
         #  Allow implicit fallthrough in rsContext.cpp:414 until it is fixed.
         "-Wno-error=implicit-fallthrough"
     ];
+
+    target = {
+        platform = {
+            shared_libs = ["libnativewindow"];
+        };
+    };
 };
 
 in { inherit libRSSupport rs_generated_headers_support rs_generated_sources_support rs_support_defaults; }

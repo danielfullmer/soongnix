@@ -7,6 +7,7 @@ soong-dexpreopt = bootstrap_go_package {
     srcs = [
         "config.go"
         "dexpreopt.go"
+        "testing.go"
     ];
     testSrcs = [
         "dexpreopt_test.go"

@@ -18,6 +18,7 @@ let
 
 DownloadProviderPermissionTests = android_test {
     name = "DownloadProviderPermissionTests";
+    test_suites = ["device-tests"];
 
     srcs = [
         "src/com/android/providers/downloads/permission/tests/DownloadProviderPermissionsTest.java"
@@ -29,6 +30,7 @@ DownloadProviderPermissionTests = android_test {
     ];
 
     static_libs = [
+        "androidx.test.rules"
         "junit"
     ];
 

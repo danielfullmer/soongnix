@@ -1,7 +1,7 @@
-{ cc_library_static }:
+{ cc_library_shared, cc_library_static }:
 let
 
-libvkjson = cc_library_static {
+libvkjson = cc_library_shared {
     name = "libvkjson";
     srcs = [
         "vkjson.cc"
@@ -18,11 +18,14 @@ libvkjson = cc_library_static {
     export_include_dirs = [
         "."
     ];
+    shared_libs = [
+        "libvulkan"
+    ];
     whole_static_libs = [
         "libjsoncpp"
     ];
-    header_libs = [
-        "vulkan_headers"
+    export_shared_lib_headers = [
+        "libvulkan"
     ];
 };
 

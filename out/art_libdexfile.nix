@@ -49,14 +49,12 @@ libdexfile_defaults = cc_defaults {
             ];
             shared_libs = [
                 #  For MemMap.
-                "libartbase"
                 "libartpalette"
                 "liblog"
                 #  For common macros.
                 "libbase"
             ];
             export_shared_lib_headers = [
-                "libartbase"
                 "libbase"
             ];
         };
@@ -65,14 +63,12 @@ libdexfile_defaults = cc_defaults {
                 "libziparchive"
                 "libz"
                 #  For MemMap.
-                "libartbase"
                 "libartpalette"
                 "liblog"
                 #  For common macros.
                 "libbase"
             ];
             export_shared_lib_headers = [
-                "libartbase"
                 "libbase"
             ];
         };
@@ -81,14 +77,12 @@ libdexfile_defaults = cc_defaults {
                 "libziparchive"
                 "libz"
                 #  For MemMap.
-                "libartbase"
                 "libartpalette"
                 "liblog"
                 #  For common macros.
                 "libbase"
             ];
             export_static_lib_headers = [
-                "libartbase"
                 "libbase"
             ];
             cflags = ["-Wno-thread-safety"];
@@ -116,6 +110,9 @@ libdexfile_static_defaults = cc_defaults {
     defaults = [
         "libartbase_static_defaults"
         "libdexfile_static_base_defaults"
+    ];
+    defaults_visibility = [
+        "//art:__subpackages__"
     ];
     static_libs = ["libdexfile"];
 };
@@ -146,20 +143,44 @@ dexfile_operator_srcs = gensrcs {
 
 libdexfile = art_cc_library {
     name = "libdexfile";
-    defaults = ["libdexfile_defaults"];
-    #  Leave the symbols in the shared library so that stack unwinders can
-    #  produce meaningful name resolution.
-    strip = {
-        keep_symbols = true;
-    };
+    defaults = [
+        "libdexfile_defaults"
+        "libart_nativeunwind_defaults"
+    ];
     target = {
+        android = {
+            shared_libs = [
+                "libartbase"
+            ];
+            export_shared_lib_headers = [
+                "libartbase"
+            ];
+        };
+        not_windows = {
+            shared_libs = [
+                "libartbase"
+            ];
+            export_shared_lib_headers = [
+                "libartbase"
+            ];
+        };
         windows = {
             enabled = true;
             shared = {
                 enabled = false;
             };
+            static_libs = [
+                "libartbase"
+            ];
+            export_static_lib_headers = [
+                "libartbase"
+            ];
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libdexfiled = art_cc_library {
@@ -169,13 +190,38 @@ libdexfiled = art_cc_library {
         "libdexfile_defaults"
     ];
     target = {
+        android = {
+            shared_libs = [
+                "libartbased"
+            ];
+            export_shared_lib_headers = [
+                "libartbased"
+            ];
+        };
+        not_windows = {
+            shared_libs = [
+                "libartbased"
+            ];
+            export_shared_lib_headers = [
+                "libartbased"
+            ];
+        };
         windows = {
             enabled = true;
             shared = {
                 enabled = false;
             };
+            static_libs = [
+                "libartbased"
+            ];
+            export_static_lib_headers = [
+                "libartbased"
+            ];
         };
     };
+    apex_available = [
+        "com.android.art.debug"
+    ];
 };
 
 art_libdexfile_tests = art_cc_test {
@@ -203,16 +249,12 @@ art_libdexfile_tests = art_cc_test {
         "libbacktrace"
         "libziparchive"
     ];
-    include_dirs = [
-        "external/zlib"
-    ];
 };
 
 libdexfile_external_headers = cc_library_headers {
     name = "libdexfile_external_headers";
+    visibility = ["//visibility:public"];
     host_supported = true;
-    vendor_available = true;
-    recovery_available = true;
     header_libs = ["libbase_headers"];
     export_header_lib_headers = ["libbase_headers"];
     export_include_dirs = ["external/include"];
@@ -222,10 +264,29 @@ libdexfile_external_headers = cc_library_headers {
             enabled = true;
         };
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
-libdexfile_external = cc_library {
-    name = "libdexfile_external";
+#  Make dex_instruction_list.h available for tools/jvmti-agents/titrace
+libdexfile_all_headers = cc_library_headers {
+    name = "libdexfile_all_headers";
+    visibility = ["//art:__subpackages__"];
+    host_supported = true;
+    export_include_dirs = ["."];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
+};
+
+libdexfile_external-defaults = cc_defaults {
+    name = "libdexfile_external-defaults";
     host_supported = true;
     srcs = [
         "external/dex_file_ext.cc"
@@ -233,13 +294,52 @@ libdexfile_external = cc_library {
     header_libs = ["libdexfile_external_headers"];
     shared_libs = [
         "libbase"
-        "libdexfile"
     ];
-
     stubs = {
         symbol_file = "external/libdexfile_external.map.txt";
         versions = ["1"];
     };
+    export_header_lib_headers = ["libdexfile_external_headers"];
+};
+
+libdexfile_external = cc_library {
+    name = "libdexfile_external";
+    defaults = [
+        "art_defaults"
+        "libdexfile_external-defaults"
+    ];
+    visibility = ["//visibility:public"];
+    target = {
+        darwin = {
+            enabled = true;
+        };
+    };
+    shared_libs = [
+        "libdexfile"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
+};
+
+libdexfiled_external = cc_library {
+    name = "libdexfiled_external";
+    defaults = [
+        "art_debug_defaults"
+        "libdexfile_external-defaults"
+    ];
+    target = {
+        darwin = {
+            enabled = true;
+        };
+    };
+    shared_libs = [
+        "libdexfiled"
+    ];
+    apex_available = [
+        "com.android.art.debug"
+    ];
 };
 
 art_libdexfile_external_tests = art_cc_test {
@@ -261,24 +361,21 @@ art_libdexfile_external_tests = art_cc_test {
 #  stack frames.
 libdexfile_support = cc_library {
     name = "libdexfile_support";
+    visibility = ["//visibility:public"];
     host_supported = true;
-    vendor_available = true;
-    recovery_available = true;
     srcs = [
         "external/dex_file_supp.cc"
     ];
-    required = ["libdexfile_external"];
+    runtime_libs = ["libdexfile_external"];
     shared_libs = ["liblog"];
     header_libs = ["libdexfile_external_headers"];
     export_header_lib_headers = ["libdexfile_external_headers"];
-    target = {
-        recovery = {
-            cflags = ["-DNO_DEXFILE_SUPPORT"];
-        };
-        vendor = {
-            cflags = ["-DNO_DEXFILE_SUPPORT"];
-        };
-    };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 #  The same source file is used in two tests here, so unlike other ART gtests it
@@ -286,6 +383,9 @@ libdexfile_support = cc_library {
 #  test-art-{host,target}-gtest-art_libdexfile_support_tests.
 art_libdexfile_support_tests = art_cc_test {
     name = "art_libdexfile_support_tests";
+    defaults = [
+        "art_test_defaults"
+    ];
     host_supported = true;
     srcs = [
         "external/dex_file_supp_test.cc"
@@ -298,10 +398,9 @@ art_libdexfile_support_tests = art_cc_test {
     ];
 };
 
-libdexfile_support_static = cc_library_static {
-    name = "libdexfile_support_static";
+libdexfile_support_static_defaults = cc_defaults {
+    name = "libdexfile_support_static_defaults";
     host_supported = true;
-    defaults = ["libdexfile_static_defaults"];
     srcs = [
         "external/dex_file_supp.cc"
     ];
@@ -309,14 +408,42 @@ libdexfile_support_static = cc_library_static {
     #  Using whole_static_libs here only as a "poor man's transitivity" kludge.
     whole_static_libs = [
         "libbase"
-        "libdexfile"
-        "libdexfile_external"
         "liblog"
         "libz"
         "libziparchive"
     ];
     header_libs = ["libdexfile_external_headers"];
     export_header_lib_headers = ["libdexfile_external_headers"];
+};
+
+libdexfile_support_static = cc_library_static {
+    name = "libdexfile_support_static";
+    visibility = [
+        "//art:__subpackages__"
+        #  Required for the simpleperf binary in the NDK. No other modules than
+        #  //system/extras/simpleperf:simpleperf_ndk are allowed to use it.
+        "//system/extras/simpleperf"
+    ];
+    defaults = [
+        "libdexfile_static_defaults"
+        "libdexfile_support_static_defaults"
+    ];
+    whole_static_libs = [
+        "libdexfile"
+        "libdexfile_external"
+    ];
+};
+
+libdexfiled_support_static = cc_library_static {
+    name = "libdexfiled_support_static";
+    defaults = [
+        "libdexfile_support_static_defaults"
+        "libdexfiled_static_defaults"
+    ];
+    whole_static_libs = [
+        "libdexfiled"
+        "libdexfiled_external"
+    ];
 };
 
 #  The same source file is used in two tests here, so unlike other ART gtests it
@@ -334,4 +461,4 @@ art_libdexfile_support_static_tests = art_cc_test {
     ];
 };
 
-in { inherit art_libdexfile_external_tests art_libdexfile_support_static_tests art_libdexfile_support_tests art_libdexfile_tests dexfile_operator_srcs libdexfile libdexfile_defaults libdexfile_external libdexfile_external_headers libdexfile_static_base_defaults libdexfile_static_defaults libdexfile_support libdexfile_support_static libdexfiled libdexfiled_static_defaults; }
+in { inherit art_libdexfile_external_tests art_libdexfile_support_static_tests art_libdexfile_support_tests art_libdexfile_tests dexfile_operator_srcs libdexfile libdexfile_all_headers libdexfile_defaults libdexfile_external libdexfile_external-defaults libdexfile_external_headers libdexfile_static_base_defaults libdexfile_static_defaults libdexfile_support libdexfile_support_static libdexfile_support_static_defaults libdexfiled libdexfiled_external libdexfiled_static_defaults libdexfiled_support_static; }

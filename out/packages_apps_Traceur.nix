@@ -20,20 +20,20 @@ Traceur = android_app {
     ];
     resource_dirs = ["res"];
     srcs = [
-        "src/com/google/android/traceur/AtraceUtils.java"
-        "src/com/google/android/traceur/FileSender.java"
-        "src/com/google/android/traceur/MainActivity.java"
-        "src/com/google/android/traceur/MainFragment.java"
-        "src/com/google/android/traceur/MainTvActivity.java"
-        "src/com/google/android/traceur/PerfettoUtils.java"
-        "src/com/google/android/traceur/QsService.java"
-        "src/com/google/android/traceur/Receiver.java"
-        "src/com/google/android/traceur/SearchProvider.java"
-        "src/com/google/android/traceur/StopTraceService.java"
-        "src/com/google/android/traceur/StorageProvider.java"
-        "src/com/google/android/traceur/TraceService.java"
-        "src/com/google/android/traceur/TraceUtils.java"
-        "src/com/google/android/traceur/UserConsentActivityDialog.java"
+        "src/com/android/traceur/AtraceUtils.java"
+        "src/com/android/traceur/FileSender.java"
+        "src/com/android/traceur/MainActivity.java"
+        "src/com/android/traceur/MainFragment.java"
+        "src/com/android/traceur/MainTvActivity.java"
+        "src/com/android/traceur/PerfettoUtils.java"
+        "src/com/android/traceur/QsService.java"
+        "src/com/android/traceur/Receiver.java"
+        "src/com/android/traceur/SearchProvider.java"
+        "src/com/android/traceur/StopTraceService.java"
+        "src/com/android/traceur/StorageProvider.java"
+        "src/com/android/traceur/TraceService.java"
+        "src/com/android/traceur/TraceUtils.java"
+        "src/com/android/traceur/UserConsentActivityDialog.java"
     ];
     init_rc = ["traceur.rc"];
     defaults = [

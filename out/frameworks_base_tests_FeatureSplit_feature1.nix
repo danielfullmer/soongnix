@@ -21,7 +21,10 @@ FeatureSplit1 = android_test {
     name = "FeatureSplit1";
     srcs = ["src/com/android/test/split/feature/one/One.java"];
     sdk_version = "current";
-    libs = ["FeatureSplitBase"];
+    libs = [
+        "FeatureSplitBase"
+        "FeatureSplit2"
+    ];
     aaptflags = [
         "--package-id"
         "0x80"

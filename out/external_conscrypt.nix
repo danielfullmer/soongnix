@@ -1,4 +1,4 @@
-{ cc_binary_host, cc_defaults, cc_library, cc_library_host_shared, cc_library_shared, cc_library_static, filegroup, genrule, java_library, java_test }:
+{ cc_binary_host, cc_defaults, cc_library, cc_library_host_shared, cc_library_shared, cc_library_static, filegroup, genrule, java_library, java_library_host, java_sdk_library, java_test, module_exports, package, sdk }:
 let
 
 #
@@ -16,6 +16,12 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+
+_missingName = package {
+    default_visibility = [
+        ":__subpackages__"
+    ];
+};
 
 #
 #  Definitions for building the Conscrypt Java library, native code,
@@ -87,7 +93,7 @@ conscrypt_unbundled-jni-defaults = cc_defaults {
 
     static_libs = [
         "libssl"
-        "libcrypto"
+        "libcrypto_static"
     ];
 
     sdk_version = "9";
@@ -115,7 +121,7 @@ libconscrypt_openjdk_jni = cc_library_host_shared {
 
     static_libs = [
         "libssl"
-        "libcrypto"
+        "libcrypto_static"
     ];
 
     #  TODO: b/26097626. ASAN breaks use of this library in JVM.
@@ -152,153 +158,11 @@ conscrypt_generate_constants = cc_binary_host {
     ];
 };
 
-conscrypt-nojarjar_generated_constants = genrule {
-    name = "conscrypt-nojarjar_generated_constants";
+conscrypt-unbundled_generated_constants = genrule {
+    name = "conscrypt-unbundled_generated_constants";
     out = ["org/conscrypt/NativeConstants.java"];
     cmd = "$(location conscrypt_generate_constants) > $(out)";
     tools = ["conscrypt_generate_constants"];
-};
-
-#  Create the conscrypt library without jarjar for tests
-conscrypt-nojarjar = java_library {
-    name = "conscrypt-nojarjar";
-    host_supported = true;
-    hostdex = true;
-
-    srcs = [
-        "common/src/main/java/org/conscrypt/AbstractConscryptEngine.java"
-        "common/src/main/java/org/conscrypt/AbstractConscryptSocket.java"
-        "common/src/main/java/org/conscrypt/AbstractSessionContext.java"
-        "common/src/main/java/org/conscrypt/ActiveSession.java"
-        "common/src/main/java/org/conscrypt/AddressUtils.java"
-        "common/src/main/java/org/conscrypt/AllocatedBuffer.java"
-        "common/src/main/java/org/conscrypt/ApplicationProtocolSelector.java"
-        "common/src/main/java/org/conscrypt/ApplicationProtocolSelectorAdapter.java"
-        "common/src/main/java/org/conscrypt/ArrayUtils.java"
-        "common/src/main/java/org/conscrypt/BufferAllocator.java"
-        "common/src/main/java/org/conscrypt/ByteArray.java"
-        "common/src/main/java/org/conscrypt/CertBlacklist.java"
-        "common/src/main/java/org/conscrypt/CertPinManager.java"
-        "common/src/main/java/org/conscrypt/CertificatePriorityComparator.java"
-        "common/src/main/java/org/conscrypt/ChainStrengthAnalyzer.java"
-        "common/src/main/java/org/conscrypt/ClientSessionContext.java"
-        "common/src/main/java/org/conscrypt/Conscrypt.java"
-        "common/src/main/java/org/conscrypt/ConscryptCertStore.java"
-        "common/src/main/java/org/conscrypt/ConscryptEngine.java"
-        "common/src/main/java/org/conscrypt/ConscryptEngineSocket.java"
-        "common/src/main/java/org/conscrypt/ConscryptFileDescriptorSocket.java"
-        "common/src/main/java/org/conscrypt/ConscryptHostnameVerifier.java"
-        "common/src/main/java/org/conscrypt/ConscryptServerSocket.java"
-        "common/src/main/java/org/conscrypt/ConscryptSession.java"
-        "common/src/main/java/org/conscrypt/CryptoUpcalls.java"
-        "common/src/main/java/org/conscrypt/DESEDESecretKeyFactory.java"
-        "common/src/main/java/org/conscrypt/DefaultSSLContextImpl.java"
-        "common/src/main/java/org/conscrypt/DuckTypedPSKKeyManager.java"
-        "common/src/main/java/org/conscrypt/ECParameters.java"
-        "common/src/main/java/org/conscrypt/EmptyArray.java"
-        "common/src/main/java/org/conscrypt/EvpMdRef.java"
-        "common/src/main/java/org/conscrypt/ExperimentalApi.java"
-        "common/src/main/java/org/conscrypt/ExternalSession.java"
-        "common/src/main/java/org/conscrypt/FileClientSessionCache.java"
-        "common/src/main/java/org/conscrypt/GCMParameters.java"
-        "common/src/main/java/org/conscrypt/HandshakeListener.java"
-        "common/src/main/java/org/conscrypt/Internal.java"
-        "common/src/main/java/org/conscrypt/IvParameters.java"
-        "common/src/main/java/org/conscrypt/Java7ExtendedSSLSession.java"
-        "common/src/main/java/org/conscrypt/Java8EngineSocket.java"
-        "common/src/main/java/org/conscrypt/Java8EngineWrapper.java"
-        "common/src/main/java/org/conscrypt/Java8ExtendedSSLSession.java"
-        "common/src/main/java/org/conscrypt/Java8FileDescriptorSocket.java"
-        "common/src/main/java/org/conscrypt/KeyGeneratorImpl.java"
-        "common/src/main/java/org/conscrypt/KeyManagerFactoryImpl.java"
-        "common/src/main/java/org/conscrypt/KeyManagerImpl.java"
-        "common/src/main/java/org/conscrypt/NativeCrypto.java"
-        "common/src/main/java/org/conscrypt/NativeRef.java"
-        "common/src/main/java/org/conscrypt/NativeSsl.java"
-        "common/src/main/java/org/conscrypt/NativeSslSession.java"
-        "common/src/main/java/org/conscrypt/OAEPParameters.java"
-        "common/src/main/java/org/conscrypt/OpenSSLBIOInputStream.java"
-        "common/src/main/java/org/conscrypt/OpenSSLBIOSink.java"
-        "common/src/main/java/org/conscrypt/OpenSSLBIOSource.java"
-        "common/src/main/java/org/conscrypt/OpenSSLCipher.java"
-        "common/src/main/java/org/conscrypt/OpenSSLCipherChaCha20.java"
-        "common/src/main/java/org/conscrypt/OpenSSLCipherRSA.java"
-        "common/src/main/java/org/conscrypt/OpenSSLContextImpl.java"
-        "common/src/main/java/org/conscrypt/OpenSSLECDHKeyAgreement.java"
-        "common/src/main/java/org/conscrypt/OpenSSLECGroupContext.java"
-        "common/src/main/java/org/conscrypt/OpenSSLECKeyFactory.java"
-        "common/src/main/java/org/conscrypt/OpenSSLECKeyPairGenerator.java"
-        "common/src/main/java/org/conscrypt/OpenSSLECPointContext.java"
-        "common/src/main/java/org/conscrypt/OpenSSLECPrivateKey.java"
-        "common/src/main/java/org/conscrypt/OpenSSLECPublicKey.java"
-        "common/src/main/java/org/conscrypt/OpenSSLKey.java"
-        "common/src/main/java/org/conscrypt/OpenSSLKeyHolder.java"
-        "common/src/main/java/org/conscrypt/OpenSSLMac.java"
-        "common/src/main/java/org/conscrypt/OpenSSLMessageDigestJDK.java"
-        "common/src/main/java/org/conscrypt/OpenSSLProvider.java"
-        "common/src/main/java/org/conscrypt/OpenSSLRSAKeyFactory.java"
-        "common/src/main/java/org/conscrypt/OpenSSLRSAKeyPairGenerator.java"
-        "common/src/main/java/org/conscrypt/OpenSSLRSAPrivateCrtKey.java"
-        "common/src/main/java/org/conscrypt/OpenSSLRSAPrivateKey.java"
-        "common/src/main/java/org/conscrypt/OpenSSLRSAPublicKey.java"
-        "common/src/main/java/org/conscrypt/OpenSSLRandom.java"
-        "common/src/main/java/org/conscrypt/OpenSSLServerSocketFactoryImpl.java"
-        "common/src/main/java/org/conscrypt/OpenSSLSignature.java"
-        "common/src/main/java/org/conscrypt/OpenSSLSignatureRawECDSA.java"
-        "common/src/main/java/org/conscrypt/OpenSSLSignatureRawRSA.java"
-        "common/src/main/java/org/conscrypt/OpenSSLSocketFactoryImpl.java"
-        "common/src/main/java/org/conscrypt/OpenSSLSocketImpl.java"
-        "common/src/main/java/org/conscrypt/OpenSSLX509CRL.java"
-        "common/src/main/java/org/conscrypt/OpenSSLX509CRLEntry.java"
-        "common/src/main/java/org/conscrypt/OpenSSLX509CertPath.java"
-        "common/src/main/java/org/conscrypt/OpenSSLX509Certificate.java"
-        "common/src/main/java/org/conscrypt/OpenSSLX509CertificateFactory.java"
-        "common/src/main/java/org/conscrypt/PSKKeyManager.java"
-        "common/src/main/java/org/conscrypt/PSSParameters.java"
-        "common/src/main/java/org/conscrypt/PeerInfoProvider.java"
-        "common/src/main/java/org/conscrypt/Preconditions.java"
-        "common/src/main/java/org/conscrypt/SSLClientSessionCache.java"
-        "common/src/main/java/org/conscrypt/SSLNullSession.java"
-        "common/src/main/java/org/conscrypt/SSLParametersImpl.java"
-        "common/src/main/java/org/conscrypt/SSLServerSessionCache.java"
-        "common/src/main/java/org/conscrypt/SSLUtils.java"
-        "common/src/main/java/org/conscrypt/ServerSessionContext.java"
-        "common/src/main/java/org/conscrypt/SessionSnapshot.java"
-        "common/src/main/java/org/conscrypt/TrustManagerFactoryImpl.java"
-        "common/src/main/java/org/conscrypt/TrustManagerImpl.java"
-        "common/src/main/java/org/conscrypt/TrustedCertificateIndex.java"
-        "common/src/main/java/org/conscrypt/X509PublicKey.java"
-        "common/src/main/java/org/conscrypt/ct/CTConstants.java"
-        "common/src/main/java/org/conscrypt/ct/CTLogInfo.java"
-        "common/src/main/java/org/conscrypt/ct/CTLogStore.java"
-        "common/src/main/java/org/conscrypt/ct/CTPolicy.java"
-        "common/src/main/java/org/conscrypt/ct/CTVerificationResult.java"
-        "common/src/main/java/org/conscrypt/ct/CTVerifier.java"
-        "common/src/main/java/org/conscrypt/ct/CertificateEntry.java"
-        "common/src/main/java/org/conscrypt/ct/DigitallySigned.java"
-        "common/src/main/java/org/conscrypt/ct/Serialization.java"
-        "common/src/main/java/org/conscrypt/ct/SerializationException.java"
-        "common/src/main/java/org/conscrypt/ct/SignedCertificateTimestamp.java"
-        "common/src/main/java/org/conscrypt/ct/VerifiedSCT.java"
-        "common/src/main/java/org/conscrypt/io/IoUtils.java"
-        ":conscrypt-nojarjar_generated_constants"
-    ];
-
-    no_standard_libs = true;
-    system_modules = "core-all-system-modules";
-    target = {
-        android = {
-            srcs = ["platform/src/main/java/**/*.java"];
-            libs = ["core-all"];
-        };
-        host = {
-            srcs = ["openjdk/src/main/java/**/*.java"];
-            javacflags = ["-XDignore.symbol.file"];
-        };
-    };
-
-    required = ["libjavacrypto"];
-    java_version = "1.7";
 };
 
 conscrypt_generated_constants = genrule {
@@ -362,6 +226,10 @@ conscrypt_java_files = filegroup {
         "repackaged/common/src/main/java/com/android/org/conscrypt/NativeSsl.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/NativeSslSession.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OAEPParameters.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OidData.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLAeadCipher.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLAeadCipherAES.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLAeadCipherChaCha20.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLBIOInputStream.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLBIOSink.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLBIOSource.java"
@@ -376,6 +244,10 @@ conscrypt_java_files = filegroup {
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLECPointContext.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLECPrivateKey.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLECPublicKey.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLEvpCipher.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLEvpCipherAES.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLEvpCipherARC4.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLEvpCipherDESEDE.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLKey.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLKeyHolder.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/OpenSSLMac.java"
@@ -409,6 +281,7 @@ conscrypt_java_files = filegroup {
         "repackaged/common/src/main/java/com/android/org/conscrypt/SSLUtils.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/ServerSessionContext.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/SessionSnapshot.java"
+        "repackaged/common/src/main/java/com/android/org/conscrypt/ShortBufferWithoutStackTraceException.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/TrustManagerFactoryImpl.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/TrustManagerImpl.java"
         "repackaged/common/src/main/java/com/android/org/conscrypt/TrustedCertificateIndex.java"
@@ -447,12 +320,27 @@ conscrypt_public_api_files = filegroup {
         "publicapi/src/main/java/android/net/ssl/SSLEngines.java"
         "publicapi/src/main/java/android/net/ssl/SSLSockets.java"
     ];
+    path = "publicapi/src/main/java";
 };
 
 #  Create the conscrypt library from the source produced by the srcgen/generate_android_src.sh
 #  script.
 conscrypt = java_library {
     name = "conscrypt";
+    visibility = [
+        "//art/build"
+        "//device:__subpackages__"
+        "//external/robolectric-shadows"
+        "//system/apex/tests"
+        ":__subpackages__"
+    ];
+    apex_available = [
+        "com.android.conscrypt"
+        "test_com.android.conscrypt"
+    ];
+    #  Conscrypt should support Q
+    min_sdk_version = "29";
+
     installable = true;
     hostdex = true;
 
@@ -461,18 +349,23 @@ conscrypt = java_library {
         ":conscrypt_public_api_files"
     ];
 
+    libs = ["unsupportedappusage"];
+
     #  Conscrypt can be updated independently from the other core libraries so it must only depend
     #  on public SDK and intra-core APIs.
-    no_standard_libs = true;
-    libs = ["core.intra.stubs"];
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
     patch_module = "java.base";
-    system_modules = "core-intra-stubs-system-modules";
 
     #  Workaround for b/124476339: libjavacrypto is required for both APEX and
     #  hostdex builds, but adding a top-level required property results in
     #  it being installed to /system on Android.
     #  TODO(b/124476339): move required back to a top level property
     target = {
+        #  boringssl_self_test needed in both /system/bin and /apex/com.android.conscrypt/bin
+        android = {
+            required = ["boringssl_self_test"];
+        };
         hostdex = {
             required = ["libjavacrypto"];
         };
@@ -484,6 +377,52 @@ conscrypt = java_library {
     ];
 
     plugins = ["java_api_finder"];
+};
+
+#  Referenced implicitly from conscrypt.module.platform.api.
+"conscrypt.module.platform.api.api.public.latest" = filegroup {
+    name = "conscrypt.module.platform.api.api.public.latest";
+    srcs = [
+        "api/platform/last-api.txt"
+    ];
+};
+
+#  Referenced implicitly from conscrypt.module.platform.api.
+"conscrypt.module.platform.api-removed.api.public.latest" = filegroup {
+    name = "conscrypt.module.platform.api-removed.api.public.latest";
+    srcs = [
+        "api/platform/last-removed.txt"
+    ];
+};
+
+#  A library containing the core platform API stubs of the Conscrypt module.
+#
+#  Core platform APIs are only intended for use of other parts of the platform, not the
+#  core library modules.
+#
+#  The API specification .txt files managed by this only contain the additional
+#  classes/members that are in the platform API but which are not in the public
+#  API.
+"conscrypt.module.platform.api" = java_sdk_library {
+    name = "conscrypt.module.platform.api";
+    visibility = [
+        "//external/wycheproof"
+        "//libcore:__subpackages__"
+    ];
+    srcs = [
+        ":conscrypt_java_files"
+    ];
+    api_dir = "api/platform";
+    api_only = true;
+    droiddoc_options = [
+        "--hide-annotation libcore.api.Hide"
+        "--show-single-annotation libcore.api.CorePlatformApi"
+        "--skip-annotation-instance-methods=false"
+    ];
+    hostdex = true;
+
+    sdk_version = "none";
+    system_modules = "art-module-platform-api-stubs-system-modules";
 };
 
 #  A guaranteed unstripped version of conscrypt.
@@ -498,9 +437,92 @@ conscrypt-testdex = java_library {
         enabled = false;
     };
 
-    no_framework_libs = true;
+    sdk_version = "core_platform";
 
     required = ["libjavacrypto"];
+};
+
+#  Referenced implicitly from conscrypt.module.public.api.
+"conscrypt.module.public.api.api.public.latest" = filegroup {
+    name = "conscrypt.module.public.api.api.public.latest";
+    srcs = [
+        "api/public/last-api.txt"
+    ];
+};
+
+#  Referenced implicitly from conscrypt.module.public.api.
+"conscrypt.module.public.api-removed.api.public.latest" = filegroup {
+    name = "conscrypt.module.public.api-removed.api.public.latest";
+    srcs = [
+        "api/public/last-removed.txt"
+    ];
+};
+
+#  A library containing the public API stubs of the Conscrypt module.
+"conscrypt.module.public.api" = java_sdk_library {
+    name = "conscrypt.module.public.api";
+    visibility = [
+        "//frameworks/base"
+        "//libcore"
+    ];
+    srcs = [
+        ":conscrypt_public_api_files"
+    ];
+    api_dir = "api/public";
+    api_only = true;
+    droiddoc_options = [
+        #  Emit nullability annotations from the source to the stub files.
+        "--include-annotations"
+    ];
+
+    java_version = "1.9";
+
+    sdk_version = "none";
+    system_modules = "art-module-public-api-stubs-system-modules";
+};
+
+#  Referenced implicitly from conscrypt.module.intra.core.api.
+"conscrypt.module.intra.core.api.api.public.latest" = filegroup {
+    name = "conscrypt.module.intra.core.api.api.public.latest";
+    srcs = [
+        "api/intra/last-api.txt"
+    ];
+};
+
+#  Referenced implicitly from conscrypt.module.intra.core.api.
+"conscrypt.module.intra.core.api-removed.api.public.latest" = filegroup {
+    name = "conscrypt.module.intra.core.api-removed.api.public.latest";
+    srcs = [
+        "api/intra/last-removed.txt"
+    ];
+};
+
+#  A library containing the intra-core API stubs of the Conscrypt module.
+#
+#  Intra-core APIs are only intended for the use of other core library modules.
+#
+#  The API specification .txt files managed by this only contain the additional
+#  classes/members that are in the intra-core API but which are not the public API.
+"conscrypt.module.intra.core.api" = java_sdk_library {
+    name = "conscrypt.module.intra.core.api";
+    visibility = [
+        "//external/okhttp"
+        "//libcore:__subpackages__"
+    ];
+    srcs = [
+        ":conscrypt_java_files"
+        ":conscrypt_public_api_files"
+    ];
+    api_dir = "api/intra";
+    api_only = true;
+    droiddoc_options = [
+        "--hide-annotation libcore.api.Hide"
+        "--show-single-annotation libcore.api.IntraCoreApi"
+        "--skip-annotation-instance-methods=false"
+    ];
+
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
 };
 
 #  Platform conscrypt crypto JNI library
@@ -523,9 +545,6 @@ libjavacrypto-defaults = cc_defaults {
         "common/src/jni/main/cpp/conscrypt/netutil.cc"
         "common/src/jni/main/cpp/conscrypt/trace.cc"
     ];
-    include_dirs = [
-        "libcore/luni/src/main/native"
-    ];
     local_include_dirs = ["common/src/jni/main/include"];
 };
 
@@ -547,13 +566,29 @@ libjavacrypto = cc_library_shared {
         darwin = {
             enabled = false;
         };
+        android = {
+            runtime_libs = ["libandroidio"];
+        };
+        not_windows = {
+            runtime_libs = ["libandroidio"];
+        };
     };
+    apex_available = [
+        "com.android.conscrypt"
+        "test_com.android.conscrypt"
+    ];
+    min_sdk_version = "29";
 };
 
-#  Unbundled Conscrypt jar
-conscrypt_unbundled = java_library {
-    name = "conscrypt_unbundled";
-
+#  Unbundled Conscrypt jar for use by signapk and apksigner tool
+#
+#  Builds against standard host libraries.
+conscrypt-unbundled = java_library_host {
+    name = "conscrypt-unbundled";
+    visibility = [
+        "//build/make/tools/signapk"
+        "//tools/apksig"
+    ];
     srcs = [
         "common/src/main/java/org/conscrypt/AbstractConscryptEngine.java"
         "common/src/main/java/org/conscrypt/AbstractConscryptSocket.java"
@@ -606,6 +641,10 @@ conscrypt_unbundled = java_library {
         "common/src/main/java/org/conscrypt/NativeSsl.java"
         "common/src/main/java/org/conscrypt/NativeSslSession.java"
         "common/src/main/java/org/conscrypt/OAEPParameters.java"
+        "common/src/main/java/org/conscrypt/OidData.java"
+        "common/src/main/java/org/conscrypt/OpenSSLAeadCipher.java"
+        "common/src/main/java/org/conscrypt/OpenSSLAeadCipherAES.java"
+        "common/src/main/java/org/conscrypt/OpenSSLAeadCipherChaCha20.java"
         "common/src/main/java/org/conscrypt/OpenSSLBIOInputStream.java"
         "common/src/main/java/org/conscrypt/OpenSSLBIOSink.java"
         "common/src/main/java/org/conscrypt/OpenSSLBIOSource.java"
@@ -620,6 +659,10 @@ conscrypt_unbundled = java_library {
         "common/src/main/java/org/conscrypt/OpenSSLECPointContext.java"
         "common/src/main/java/org/conscrypt/OpenSSLECPrivateKey.java"
         "common/src/main/java/org/conscrypt/OpenSSLECPublicKey.java"
+        "common/src/main/java/org/conscrypt/OpenSSLEvpCipher.java"
+        "common/src/main/java/org/conscrypt/OpenSSLEvpCipherAES.java"
+        "common/src/main/java/org/conscrypt/OpenSSLEvpCipherARC4.java"
+        "common/src/main/java/org/conscrypt/OpenSSLEvpCipherDESEDE.java"
         "common/src/main/java/org/conscrypt/OpenSSLKey.java"
         "common/src/main/java/org/conscrypt/OpenSSLKeyHolder.java"
         "common/src/main/java/org/conscrypt/OpenSSLMac.java"
@@ -653,6 +696,7 @@ conscrypt_unbundled = java_library {
         "common/src/main/java/org/conscrypt/SSLUtils.java"
         "common/src/main/java/org/conscrypt/ServerSessionContext.java"
         "common/src/main/java/org/conscrypt/SessionSnapshot.java"
+        "common/src/main/java/org/conscrypt/ShortBufferWithoutStackTraceException.java"
         "common/src/main/java/org/conscrypt/TrustManagerFactoryImpl.java"
         "common/src/main/java/org/conscrypt/TrustManagerImpl.java"
         "common/src/main/java/org/conscrypt/TrustedCertificateIndex.java"
@@ -670,42 +714,16 @@ conscrypt_unbundled = java_library {
         "common/src/main/java/org/conscrypt/ct/SignedCertificateTimestamp.java"
         "common/src/main/java/org/conscrypt/ct/VerifiedSCT.java"
         "common/src/main/java/org/conscrypt/io/IoUtils.java"
-        "android/src/main/java/org/conscrypt/BaseOpenSSLSocketAdapterFactory.java"
-        "android/src/main/java/org/conscrypt/KitKatPlatformOpenSSLSocketAdapterFactory.java"
-        "android/src/main/java/org/conscrypt/KitKatPlatformOpenSSLSocketImplAdapter.java"
-        "android/src/main/java/org/conscrypt/NativeCryptoJni.java"
-        "android/src/main/java/org/conscrypt/Platform.java"
-        "android/src/main/java/org/conscrypt/PreKitKatPlatformOpenSSLSocketAdapterFactory.java"
-        "android/src/main/java/org/conscrypt/PreKitKatPlatformOpenSSLSocketImplAdapter.java"
-        ":conscrypt-nojarjar_generated_constants"
+        "openjdk/src/main/java/org/conscrypt/HostProperties.java"
+        "openjdk/src/main/java/org/conscrypt/Java8PlatformUtil.java"
+        "openjdk/src/main/java/org/conscrypt/Java9PlatformUtil.java"
+        "openjdk/src/main/java/org/conscrypt/NativeCryptoJni.java"
+        "openjdk/src/main/java/org/conscrypt/NativeLibraryLoader.java"
+        "openjdk/src/main/java/org/conscrypt/NativeLibraryUtil.java"
+        "openjdk/src/main/java/org/conscrypt/Platform.java"
+        ":conscrypt-unbundled_generated_constants"
     ];
-
-    libs = ["conscrypt-stubs"];
-
-    sdk_version = "current";
-    java_version = "1.7";
-};
-
-#  Stub library for unbundled builds
-conscrypt-stubs = java_library {
-    name = "conscrypt-stubs";
-
-    srcs = [
-        "android-stub/src/main/java/com/android/org/conscrypt/NativeCrypto.java"
-        "android-stub/src/main/java/com/android/org/conscrypt/OpenSSLSocketImpl.java"
-        "android-stub/src/main/java/com/android/org/conscrypt/SSLParametersImpl.java"
-        "android-stub/src/main/java/dalvik/system/BlockGuard.java"
-        "android-stub/src/main/java/dalvik/system/CloseGuard.java"
-        "android-stub/src/main/java/javax/net/ssl/ExtendedSSLSession.java"
-        "android-stub/src/main/java/javax/net/ssl/SNIHostName.java"
-        "android-stub/src/main/java/javax/net/ssl/SNIServerName.java"
-        "android-stub/src/main/java/javax/net/ssl/StandardConstants.java"
-        "android-stub/src/main/java/org/apache/harmony/xnet/provider/jsse/NativeCrypto.java"
-        "android-stub/src/main/java/org/apache/harmony/xnet/provider/jsse/OpenSSLSocketImpl.java"
-        "android-stub/src/main/java/org/apache/harmony/xnet/provider/jsse/SSLParametersImpl.java"
-    ];
-
-    sdk_version = "current";
+    javacflags = ["-XDignore.symbol.file"];
     java_version = "1.7";
 };
 
@@ -724,7 +742,7 @@ libconscrypt_static = cc_library_static {
 
     static_libs = [
         "libssl"
-        "libcrypto"
+        "libcrypto_static"
     ];
     sdk_version = "9";
     stl = "c++_shared";
@@ -733,6 +751,10 @@ libconscrypt_static = cc_library_static {
 #  Make the conscrypt-tests library.
 conscrypt-tests = java_test {
     name = "conscrypt-tests";
+    visibility = [
+        "//cts/tests/libcore/luni"
+        "//external/conscrypt/apex/tests"
+    ];
     hostdex = true;
     srcs = [
         "repackaged/platform/src/test/java/com/android/org/conscrypt/CertBlacklistTest.java"
@@ -743,48 +765,58 @@ conscrypt-tests = java_test {
         "repackaged/common/src/test/java/com/android/org/conscrypt/TrustManagerImplTest.java"
         "repackaged/common/src/test/java/com/android/org/conscrypt/ct/CTVerifierTest.java"
         "repackaged/common/src/test/java/com/android/org/conscrypt/ct/SerializationTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParameterGeneratorTestDH.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParameterGeneratorTestDSA.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersPSSTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestAES.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDES.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDESede.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDH.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDSA.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestGCM.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestOAEP.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestDH.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestDSA.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestRSA.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTestDH.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTestDSA.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTestRSA.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/MessageDigestTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/SignatureTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/cert/CertificateFactoryTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/java/security/cert/X509CertificateTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/crypto/CipherBasicsTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/crypto/CipherTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/crypto/ECDHKeyAgreementTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/crypto/KeyGeneratorTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/HttpsURLConnectionTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/KeyManagerFactoryTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/KeyStoreBuilderParametersTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SNIHostNameTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLContextTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLEngineTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLEngineVersionCompatibilityTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLParametersTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLServerSocketFactoryTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLServerSocketTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSessionContextTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSessionTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSocketFactoryTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSocketTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSocketVersionCompatibilityTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/TrustManagerFactoryTest.java"
-        "repackaged/openjdk-integ-tests/src/test/java/com/android/org/conscrypt/javax/net/ssl/X509KeyManagerTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParameterGeneratorTestDH.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParameterGeneratorTestDSA.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersPSSTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestAES.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDES.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDESede.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDH.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestDSA.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestEC.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestGCM.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/AlgorithmParametersTestOAEP.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestDH.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestDSA.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestEC.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestRSA.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestRSACrt.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyFactoryTestRSACustom.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTestDH.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTestDSA.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/KeyPairGeneratorTestRSA.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/MessageDigestTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/SignatureTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/TestECPrivateKey.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/TestECPublicKey.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/TestPrivateKey.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/TestPublicKey.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/cert/CertificateFactoryTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/cert/X509CRLTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/java/security/cert/X509CertificateTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/crypto/AeadCipherTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/crypto/CipherBasicsTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/crypto/CipherTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/crypto/ECDHKeyAgreementTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/crypto/KeyGeneratorTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/HttpsURLConnectionTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/KeyManagerFactoryTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/KeyStoreBuilderParametersTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SNIHostNameTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLContextTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLEngineTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLEngineVersionCompatibilityTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLParametersTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLServerSocketFactoryTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLServerSocketTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSessionContextTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSessionTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSocketFactoryTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSocketTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/SSLSocketVersionCompatibilityTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/TrustManagerFactoryTest.java"
+        "repackaged/common/src/test/java/com/android/org/conscrypt/javax/net/ssl/X509KeyManagerTest.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/ChannelType.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/TestUtils.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/java/security/AbstractAlgorithmParameterGeneratorTest.java"
@@ -816,7 +848,11 @@ conscrypt-tests = java_test {
         "repackaged/testing/src/main/java/com/android/org/conscrypt/javax/net/ssl/TestSSLSessions.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/javax/net/ssl/TestSSLSocketPair.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/javax/net/ssl/TestTrustManager.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/BrokenProvider.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/FailingSniMatcher.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/NullPrintStream.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/OpaqueProvider.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/RestrictedAlgorithmConstraints.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/Streams.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/tlswire/TlsTester.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/tlswire/handshake/AlpnHelloExtension.java"
@@ -836,23 +872,24 @@ conscrypt-tests = java_test {
         "repackaged/testing/src/main/java/tests/net/DelegatingSocketFactory.java"
         "repackaged/testing/src/main/java/tests/util/ForEachRunner.java"
         "repackaged/testing/src/main/java/tests/util/Pair.java"
+        "repackaged/testing/src/main/java/tests/util/ServiceTester.java"
         "publicapi/src/test/java/android/net/ssl/SSLEnginesTest.java"
         "publicapi/src/test/java/android/net/ssl/SSLSocketsTest.java"
     ];
     java_resource_dirs = [
         #  Resource directories do not need repackaging.
         "openjdk/src/test/resources"
-        "openjdk-integ-tests/src/test/resources"
+        "common/src/test/resources"
     ];
 
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
     libs = [
-        "core-all"
         "conscrypt"
+        "core-test-rules"
         "junit"
         "mockito-target-minus-junit4"
     ];
-    system_modules = "core-all-system-modules";
 
     static_libs = [
         "bouncycastle-unbundled"
@@ -904,7 +941,11 @@ conscrypt-benchmarks = java_test {
         "repackaged/testing/src/main/java/com/android/org/conscrypt/javax/net/ssl/TestSSLSessions.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/javax/net/ssl/TestSSLSocketPair.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/javax/net/ssl/TestTrustManager.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/BrokenProvider.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/FailingSniMatcher.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/NullPrintStream.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/OpaqueProvider.java"
+        "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/RestrictedAlgorithmConstraints.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/testing/Streams.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/tlswire/TlsTester.java"
         "repackaged/testing/src/main/java/com/android/org/conscrypt/tlswire/handshake/AlpnHelloExtension.java"
@@ -924,6 +965,7 @@ conscrypt-benchmarks = java_test {
         "repackaged/testing/src/main/java/tests/net/DelegatingSocketFactory.java"
         "repackaged/testing/src/main/java/tests/util/ForEachRunner.java"
         "repackaged/testing/src/main/java/tests/util/Pair.java"
+        "repackaged/testing/src/main/java/tests/util/ServiceTester.java"
         "repackaged/benchmark-base/src/main/java/com/android/org/conscrypt/BenchmarkProtocol.java"
         "repackaged/benchmark-base/src/main/java/com/android/org/conscrypt/BufferType.java"
         "repackaged/benchmark-base/src/main/java/com/android/org/conscrypt/CipherEncryptBenchmark.java"
@@ -944,9 +986,9 @@ conscrypt-benchmarks = java_test {
         "repackaged/benchmark-android/src/main/java/com/android/org/conscrypt/CaliperEngineHandshakeBenchmark.java"
         "repackaged/benchmark-android/src/main/java/com/android/org/conscrypt/CaliperEngineWrapBenchmark.java"
     ];
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
     libs = [
-        "core-all"
         "conscrypt"
         "junit"
         "bouncycastle-unbundled"
@@ -954,7 +996,6 @@ conscrypt-benchmarks = java_test {
         "bouncycastle-ocsp-unbundled"
         "caliper-api-target"
     ];
-    system_modules = "core-all-system-modules";
 
     javacflags = [
         "-Xmaxwarns 9999999"
@@ -966,4 +1007,42 @@ conscrypt-benchmarks = java_test {
     java_version = "1.7";
 };
 
-in { inherit conscrypt conscrypt-benchmarks conscrypt-nojarjar conscrypt-nojarjar_generated_constants conscrypt-stubs conscrypt-testdex conscrypt-tests conscrypt_generate_constants conscrypt_generated_constants conscrypt_global conscrypt_java_files conscrypt_public_api_files conscrypt_unbundled conscrypt_unbundled-jni-defaults libconscrypt_jni libconscrypt_openjdk_jni libconscrypt_static libjavacrypto libjavacrypto-defaults; }
+#  Device SDK exposed by the Conscrypt module.
+conscrypt-module-sdk = sdk {
+    name = "conscrypt-module-sdk";
+    java_sdk_libs = [
+        "conscrypt.module.public.api"
+        "conscrypt.module.intra.core.api"
+        "conscrypt.module.platform.api"
+    ];
+    native_shared_libs = [
+        "libconscrypt_jni"
+    ];
+};
+
+#  Host tools exported by the Conscrypt module.
+conscrypt-module-host-exports = module_exports {
+    name = "conscrypt-module-host-exports";
+    host_supported = true;
+    device_supported = false;
+    java_libs = [
+        "conscrypt-unbundled"
+    ];
+};
+
+#  Test libraries exposed by the Conscrypt module.
+conscrypt-module-test-exports = module_exports {
+    name = "conscrypt-module-test-exports";
+    java_libs = [
+        #  For use by robolectric.
+        "conscrypt"
+        #  For use by art tests
+        "conscrypt-testdex"
+    ];
+    java_tests = [
+        #  For use by CTS
+        "conscrypt-tests"
+    ];
+};
+
+in { inherit "conscrypt.module.intra.core.api" "conscrypt.module.intra.core.api-removed.api.public.latest" "conscrypt.module.intra.core.api.api.public.latest" "conscrypt.module.platform.api" "conscrypt.module.platform.api-removed.api.public.latest" "conscrypt.module.platform.api.api.public.latest" "conscrypt.module.public.api" "conscrypt.module.public.api-removed.api.public.latest" "conscrypt.module.public.api.api.public.latest" _missingName conscrypt conscrypt-benchmarks conscrypt-module-host-exports conscrypt-module-sdk conscrypt-module-test-exports conscrypt-testdex conscrypt-tests conscrypt-unbundled conscrypt-unbundled_generated_constants conscrypt_generate_constants conscrypt_generated_constants conscrypt_global conscrypt_java_files conscrypt_public_api_files conscrypt_unbundled-jni-defaults libconscrypt_jni libconscrypt_openjdk_jni libconscrypt_static libjavacrypto libjavacrypto-defaults; }

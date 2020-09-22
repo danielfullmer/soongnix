@@ -30,6 +30,9 @@ ltp_syscalls_h = genrule {
         "include/lapi/syscalls/hppa.in"
         "include/lapi/syscalls/i386.in"
         "include/lapi/syscalls/ia64.in"
+        "include/lapi/syscalls/mips_n32.in"
+        "include/lapi/syscalls/mips_n64.in"
+        "include/lapi/syscalls/mips_o32.in"
         "include/lapi/syscalls/powerpc.in"
         "include/lapi/syscalls/powerpc64.in"
         "include/lapi/syscalls/s390.in"
@@ -51,11 +54,10 @@ ltp_defaults = cc_defaults {
 
         "-Wall"
         "-Werror"
-        #  Keep some warnings to check later
-        "-Wno-error=absolute-value"
-        "-Wno-error=undefined-internal"
-        "-Wno-error=uninitialized"
-        "-Wno-error=user-defined-warnings"
+        #  These warnings should be checked and fixed upstream
+        "-Wno-absolute-value"
+        "-Wno-uninitialized"
+        "-Wno-user-defined-warnings"
         #  Silence noisy warnings
         "-Wno-constant-conversion"
         "-Wno-deprecated"
@@ -75,6 +77,7 @@ ltp_defaults = cc_defaults {
         "-Wno-sign-compare"
         "-Wno-tautological-compare"
         "-Wno-unneeded-internal-declaration"
+        "-Wno-unreachable-code-loop-increment"
         "-Wno-unused-function"
         "-Wno-unused-parameter"
         "-Wno-unused-variable"

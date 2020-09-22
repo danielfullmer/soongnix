@@ -28,7 +28,10 @@ VtsHalAudioControlV1_0TargetTest = cc_test {
     static_libs = [
         "android.hardware.automotive.audiocontrol@1.0"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalAudioControlV1_0TargetTest; }

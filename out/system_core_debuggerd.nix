@@ -1,4 +1,4 @@
-{ cc_benchmark, cc_binary, cc_defaults, cc_library, cc_library_headers, cc_library_shared, cc_library_static, cc_test }:
+{ cc_benchmark, cc_binary, cc_defaults, cc_library, cc_library_headers, cc_library_shared, cc_library_static, cc_test, prebuilt_etc }:
 let
 
 debuggerd_defaults = cc_defaults {
@@ -77,6 +77,7 @@ libdebuggerd_handler_core = cc_library_static {
     header_libs = [
         "libbase_headers"
         "libdebuggerd_common_headers"
+        "bionic_libc_platform_headers"
     ];
 
     whole_static_libs = [
@@ -95,6 +96,9 @@ libdebuggerd_handler = cc_library_static {
     defaults = ["debuggerd_defaults"];
     srcs = ["handler/debuggerd_fallback_nop.cpp"];
 
+    header_libs = ["bionic_libc_platform_headers"];
+    export_header_lib_headers = ["bionic_libc_platform_headers"];
+
     whole_static_libs = [
         "libdebuggerd_handler_core"
     ];
@@ -102,9 +106,14 @@ libdebuggerd_handler = cc_library_static {
     export_include_dirs = ["include"];
 };
 
-#  Fallback implementation.
+#  Fallback implementation, for use in the Bionic linker only.
 libdebuggerd_handler_fallback = cc_library_static {
     name = "libdebuggerd_handler_fallback";
+    visibility = ["//bionic/linker"];
+    apex_available = [
+        "com.android.runtime"
+        "//apex_available:platform"
+    ];
     defaults = ["debuggerd_defaults"];
     recovery_available = true;
     srcs = [
@@ -117,18 +126,13 @@ libdebuggerd_handler_fallback = cc_library_static {
         "libasync_safe"
         "libbase"
         "libdebuggerd"
-        "libunwindstack"
-        "libdexfile_support_static" #  libunwindstack dependency
+        "libunwindstack_no_dex"
         "liblzma"
         "libcutils"
     ];
-    target = {
-        recovery = {
-            exclude_static_libs = [
-                "libdexfile_support_static"
-            ];
-        };
-    };
+
+    header_libs = ["bionic_libc_platform_headers"];
+    export_header_lib_headers = ["bionic_libc_platform_headers"];
 
     export_include_dirs = ["include"];
 };
@@ -141,15 +145,21 @@ libdebuggerd_client = cc_library {
         "util.cpp"
     ];
 
-    header_libs = ["libdebuggerd_common_headers"];
-
     shared_libs = [
         "libbase"
         "libcutils"
         "libprocinfo"
     ];
 
-    export_header_lib_headers = ["libdebuggerd_common_headers"];
+    header_libs = [
+        "libdebuggerd_common_headers"
+        "bionic_libc_platform_headers"
+    ];
+    export_header_lib_headers = [
+        "libdebuggerd_common_headers"
+        "bionic_libc_platform_headers"
+    ];
+
     export_include_dirs = ["include"];
 };
 
@@ -160,6 +170,7 @@ libdebuggerd = cc_library_static {
 
     srcs = [
         "libdebuggerd/backtrace.cpp"
+        "libdebuggerd/gwp_asan.cpp"
         "libdebuggerd/open_files_list.cpp"
         "libdebuggerd/tombstone.cpp"
         "libdebuggerd/utility.cpp"
@@ -170,19 +181,26 @@ libdebuggerd = cc_library_static {
 
     #  Needed for private/bionic_fdsan.h
     include_dirs = ["bionic/libc"];
+    header_libs = [
+        "bionic_libc_platform_headers"
+        "gwp_asan_headers"
+    ];
 
     static_libs = [
-        "libdexfile_support_static" #  libunwindstack dependency
+        "libdexfile_support" #  libunwindstack dependency
         "libunwindstack"
         "liblzma"
         "libbase"
         "libcutils"
         "liblog"
     ];
+
+    whole_static_libs = ["gwp_asan_crash_handler"];
+
     target = {
         recovery = {
             exclude_static_libs = [
-                "libdexfile_support_static"
+                "libdexfile_support"
             ];
         };
     };
@@ -197,6 +215,7 @@ libdebuggerd = cc_library_static {
 debuggerd_test = cc_test {
     name = "debuggerd_test";
     defaults = ["debuggerd_defaults"];
+    require_root = true;
 
     cflags = ["-Wno-missing-field-initializers"];
     srcs = [
@@ -232,6 +251,12 @@ debuggerd_test = cc_test {
 
     static_libs = [
         "libdebuggerd"
+        "libgmock"
+    ];
+
+    header_libs = [
+        "bionic_libc_platform_headers"
+        "gwp_asan_headers"
     ];
 
     local_include_dirs = [
@@ -279,6 +304,10 @@ crash_dump = cc_binary {
         };
     };
 
+    header_libs = [
+        "bionic_libc_platform_headers"
+    ];
+
     static_libs = [
         "libtombstoned_client_static"
         "libdebuggerd"
@@ -319,7 +348,10 @@ tombstoned = cc_binary {
     ];
     defaults = ["debuggerd_defaults"];
 
-    header_libs = ["libdebuggerd_common_headers"];
+    header_libs = [
+        "bionic_libc_platform_headers"
+        "libdebuggerd_common_headers"
+    ];
 
     static_libs = [
         "libbase"
@@ -331,8 +363,49 @@ tombstoned = cc_binary {
     init_rc = ["tombstoned/tombstoned.rc"];
 };
 
-subdirs = [
-    "crasher"
-];
+"crash_dump.policy" = prebuilt_etc {
+    name = "crash_dump.policy";
+    sub_dir = "seccomp_policy";
+    filename_from_src = true;
+    arch = {
+        arm = {
+            src = "seccomp_policy/crash_dump.arm.policy";
+        };
+        arm64 = {
+            src = "seccomp_policy/crash_dump.arm64.policy";
+        };
+        x86 = {
+            src = "seccomp_policy/crash_dump.x86.policy";
+        };
+        x86_64 = {
+            src = "seccomp_policy/crash_dump.x86_64.policy";
+        };
+    };
+    required = [
+        "crash_dump.policy_other"
+    ];
+};
 
-in { inherit crash_dump debuggerd debuggerd_benchmark debuggerd_defaults debuggerd_test libdebuggerd libdebuggerd_client libdebuggerd_common_headers libdebuggerd_handler libdebuggerd_handler_core libdebuggerd_handler_fallback libtombstoned_client libtombstoned_client_static tombstoned; }
+#  NB -- this installs "the other" architecture. (puts 32 bit config in on 64 bit device)
+#  or at least that is the intention so that we get both of them populated
+"crash_dump.policy_other" = prebuilt_etc {
+    name = "crash_dump.policy_other";
+    sub_dir = "seccomp_policy";
+    filename_from_src = true;
+    arch = {
+        arm = {
+            src = "seccomp_policy/crash_dump.arm64.policy";
+        };
+        arm64 = {
+            src = "seccomp_policy/crash_dump.arm.policy";
+        };
+        x86 = {
+            src = "seccomp_policy/crash_dump.x86_64.policy";
+        };
+        x86_64 = {
+            src = "seccomp_policy/crash_dump.x86.policy";
+        };
+    };
+};
+
+in { inherit "crash_dump.policy" "crash_dump.policy_other" crash_dump debuggerd debuggerd_benchmark debuggerd_defaults debuggerd_test libdebuggerd libdebuggerd_client libdebuggerd_common_headers libdebuggerd_handler libdebuggerd_handler_core libdebuggerd_handler_fallback libtombstoned_client libtombstoned_client_static tombstoned; }

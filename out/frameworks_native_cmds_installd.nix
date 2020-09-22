@@ -16,6 +16,7 @@ installd_defaults = cc_defaults {
     srcs = [
         "CacheItem.cpp"
         "CacheTracker.cpp"
+        "CrateManager.cpp"
         "InstalldNativeService.cpp"
         "QuotaUtils.cpp"
         "dexopt.cpp"
@@ -141,6 +142,7 @@ installd = cc_binary {
 
 otapreopt_chroot = cc_binary {
     name = "otapreopt_chroot";
+    defaults = ["libapexd-deps"];
     cflags = [
         "-Wall"
         "-Werror"
@@ -153,20 +155,11 @@ otapreopt_chroot = cc_binary {
     ];
     shared_libs = [
         "libbase"
-        "libbinder"
         "liblog"
-        "libprotobuf-cpp-full"
-        "libselinux"
         "libutils"
-        "libziparchive"
     ];
     static_libs = [
-        "libapex"
         "libapexd"
-        "lib_apex_manifest_proto"
-        "libavb"
-        "libdm"
-        "libvold_binder"
     ];
 };
 
@@ -174,7 +167,9 @@ installd_aidl = filegroup {
     name = "installd_aidl";
     srcs = [
         "binder/android/os/IInstalld.aidl"
+        "binder/android/os/storage/CrateMetadata.aidl"
     ];
+    path = "binder";
 };
 
 #

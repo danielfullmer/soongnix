@@ -38,8 +38,12 @@ libpower_test = cc_test {
     defaults = ["libpower_defaults"];
     srcs = ["power_test.cpp"];
     static_libs = ["libpower"];
-    shared_libs = ["android.system.suspend@1.0"];
+    shared_libs = [
+        "android.system.suspend@1.0"
+        "suspend_control_aidl_interface-cpp"
+    ];
     test_suites = ["device-tests"];
+    require_root = true;
 };
 
 libhardware_legacy = cc_library_shared {
@@ -74,4 +78,15 @@ libhardware_legacy = cc_library_shared {
     ];
 };
 
-in { inherit libhardware_legacy libhardware_legacy_headers libpower libpower_defaults libpower_test; }
+block_suspend = cc_test {
+    name = "block_suspend";
+    defaults = ["libpower_defaults"];
+    srcs = ["block_suspend.cpp"];
+    static_libs = ["libpower"];
+    shared_libs = [
+        "android.system.suspend@1.0"
+    ];
+    gtest = false;
+};
+
+in { inherit block_suspend libhardware_legacy libhardware_legacy_headers libpower libpower_defaults libpower_test; }

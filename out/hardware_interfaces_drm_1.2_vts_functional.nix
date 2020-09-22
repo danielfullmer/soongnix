@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_library_static, cc_test }:
 let
 
 #
@@ -17,29 +17,80 @@ let
 #  limitations under the License.
 #
 
-VtsHalDrmV1_2TargetTest = cc_test {
-    name = "VtsHalDrmV1_2TargetTest";
+"android.hardware.drm@1.2-vts" = cc_library_static {
+    name = "android.hardware.drm@1.2-vts";
     defaults = ["VtsHalTargetTestDefaults"];
+    local_include_dirs = [
+        "include"
+    ];
     srcs = [
         "drm_hal_clearkey_module.cpp"
         "drm_hal_common.cpp"
         "drm_hal_test.cpp"
-        "vendor_modules.cpp"
     ];
-    include_dirs = ["hardware/interfaces/drm/1.0/vts/functional"];
-    static_libs = [
+    shared_libs = [
         "android.hardware.drm@1.0"
         "android.hardware.drm@1.1"
         "android.hardware.drm@1.2"
-        "android.hardware.drm@1.0-helper"
         "android.hidl.allocator@1.0"
         "android.hidl.memory@1.0"
         "libhidlmemory"
         "libnativehelper"
-        "libssl"
-        "libcrypto"
     ];
-    test_suites = ["general-tests"];
+    static_libs = [
+        "android.hardware.drm@1.0-helper"
+        "libcrypto_static"
+        "libdrmvtshelper"
+    ];
+    export_shared_lib_headers = [
+        "android.hardware.drm@1.2"
+    ];
+    export_static_lib_headers = [
+        "android.hardware.drm@1.0-helper"
+    ];
+    export_include_dirs = [
+        "include"
+    ];
 };
 
-in { inherit VtsHalDrmV1_2TargetTest; }
+VtsHalDrmV1_2TargetTest = cc_test {
+    name = "VtsHalDrmV1_2TargetTest";
+    defaults = ["VtsHalTargetTestDefaults"];
+    srcs = [
+        "drm_hal_test_main.cpp"
+    ];
+    whole_static_libs = [
+        "android.hardware.drm@1.2-vts"
+    ];
+    shared_libs = [
+        "android.hardware.drm@1.0"
+        "android.hardware.drm@1.2"
+        "android.hidl.allocator@1.0"
+        "libhidlmemory"
+    ];
+    static_libs = [
+        "android.hardware.drm@1.0-helper"
+        "libcrypto_static"
+        "libdrmvtshelper"
+    ];
+    arch = {
+        arm = {
+            data = [":libvtswidevine-arm-prebuilts"];
+        };
+        arm64 = {
+            data = [":libvtswidevine-arm64-prebuilts"];
+        };
+        x86 = {
+            data = [":libvtswidevine-x86-prebuilts"];
+        };
+        x86_64 = {
+            data = [":libvtswidevine-x86_64-prebuilts"];
+        };
+    };
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+};
+
+in { inherit "android.hardware.drm@1.2-vts" VtsHalDrmV1_2TargetTest; }

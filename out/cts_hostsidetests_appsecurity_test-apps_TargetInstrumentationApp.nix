@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2009 The Android Open Source Project
@@ -15,7 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsTargetInstrumentationApp = android_test {
+CtsTargetInstrumentationApp = android_test_helper_app {
     name = "CtsTargetInstrumentationApp";
     defaults = ["cts_support_defaults"];
     srcs = ["src/com/android/cts/targetinstrumentationapp/TargetInstrumentationActivity.java"];
@@ -24,7 +24,7 @@ CtsTargetInstrumentationApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     #  sign this app with different cert than CtsInstrumentationAppDiffCert

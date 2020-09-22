@@ -45,7 +45,6 @@ let
         "libhardware"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.neuralnetworks@1.0"

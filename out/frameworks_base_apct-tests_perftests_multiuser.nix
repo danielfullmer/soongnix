@@ -25,6 +25,7 @@ MultiUserPerfTests = android_test {
     ];
     static_libs = [
         "androidx.test.rules"
+        "collector-device-lib-platform"
         "apct-perftests-utils"
     ];
     platform_apis = true;

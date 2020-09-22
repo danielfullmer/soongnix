@@ -4,6 +4,8 @@ let
 libstagefright_amrnbdec = cc_library_static {
     name = "libstagefright_amrnbdec";
     vendor_available = true;
+    host_supported = true;
+    min_sdk_version = "29";
 
     srcs = [
         "src/a_refl.cpp"
@@ -64,6 +66,12 @@ libstagefright_amrnbdec = cc_library_static {
         "libstagefright_amrnb_common"
         "liblog"
     ];
+
+    target = {
+        darwin = {
+            enabled = false;
+        };
+    };
 };
 
 # ###############################################################################
@@ -103,6 +111,7 @@ libstagefright_soft_amrdec = cc_library_shared {
 libstagefright_amrnbdec_test = cc_test {
     name = "libstagefright_amrnbdec_test";
     gtest = false;
+    host_supported = true;
 
     srcs = ["test/amrnbdec_test.cpp"];
 
@@ -123,6 +132,12 @@ libstagefright_amrnbdec_test = cc_test {
         "libaudioutils"
         "liblog"
     ];
+
+    target = {
+        darwin = {
+            enabled = false;
+        };
+    };
 
     # sanitize: {
     #     misc_undefined: [

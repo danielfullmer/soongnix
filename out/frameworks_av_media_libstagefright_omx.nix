@@ -7,6 +7,7 @@ libstagefright_omx = cc_library_shared {
     vndk = {
         enabled = true;
     };
+    double_loadable = true;
 
     srcs = [
         "OMXMaster.cpp"
@@ -48,7 +49,6 @@ libstagefright_omx = cc_library_shared {
         "libdl"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
         "libvndksupport"
         "android.hardware.media.omx@1.0"
         "android.hardware.graphics.bufferqueue@1.0"

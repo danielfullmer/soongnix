@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_headers, cc_library_static, cc_test }:
+{ cc_benchmark, cc_defaults, cc_library, cc_library_headers, cc_library_static, cc_test }:
 let
 
 #
@@ -23,15 +23,23 @@ libbase_cflags_defaults = cc_defaults {
         "-Wall"
         "-Werror"
         "-Wextra"
-        "-D_FILE_OFFSET_BITS=64"
     ];
+    target = {
+        android = {
+            cflags = [
+                "-D_FILE_OFFSET_BITS=64"
+            ];
+        };
+    };
 };
 
 libbase_headers = cc_library_headers {
     name = "libbase_headers";
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
     host_supported = true;
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
 
     target = {
@@ -42,20 +50,28 @@ libbase_headers = cc_library_headers {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+    min_sdk_version = "29";
 };
 
 libbase_defaults = cc_defaults {
     name = "libbase_defaults";
     defaults = ["libbase_cflags_defaults"];
     srcs = [
+        "abi_compatibility.cpp"
         "chrono_utils.cpp"
         "cmsg.cpp"
         "file.cpp"
+        "liblog_symbols.cpp"
         "logging.cpp"
         "mapped_file.cpp"
+        "parsebool.cpp"
         "parsenetaddress.cpp"
+        "process.cpp"
         "properties.cpp"
-        "quick_exit.cpp"
         "stringprintf.cpp"
         "strings.cpp"
         "threads.cpp"
@@ -101,8 +117,10 @@ libbase = cc_library {
     name = "libbase";
     defaults = ["libbase_defaults"];
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
     host_supported = true;
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
         support_system_process = true;
@@ -111,6 +129,14 @@ libbase = cc_library {
         "libbase_headers"
     ];
     export_header_lib_headers = ["libbase_headers"];
+    static_libs = ["fmtlib"];
+    whole_static_libs = ["fmtlib"];
+    export_static_lib_headers = ["fmtlib"];
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+    min_sdk_version = "29";
 };
 
 libbase_ndk = cc_library_static {
@@ -119,6 +145,9 @@ libbase_ndk = cc_library_static {
     sdk_version = "current";
     stl = "c++_static";
     export_include_dirs = ["include"];
+    static_libs = ["fmtlib_ndk"];
+    whole_static_libs = ["fmtlib_ndk"];
+    export_static_lib_headers = ["fmtlib_ndk"];
 };
 
 #  Tests
@@ -131,15 +160,20 @@ libbase_test = cc_test {
         "cmsg_test.cpp"
         "endian_test.cpp"
         "errors_test.cpp"
+        "expected_test.cpp"
         "file_test.cpp"
+        "logging_splitters_test.cpp"
         "logging_test.cpp"
         "macros_test.cpp"
         "mapped_file_test.cpp"
+        "no_destructor_test.cpp"
         "parsedouble_test.cpp"
+        "parsebool_test.cpp"
         "parseint_test.cpp"
         "parsenetaddress_test.cpp"
+        "process_test.cpp"
         "properties_test.cpp"
-        "quick_exit_test.cpp"
+        "result_test.cpp"
         "scopeguard_test.cpp"
         "stringprintf_test.cpp"
         "strings_test.cpp"
@@ -175,4 +209,22 @@ libbase_test = cc_test {
     test_suites = ["device-tests"];
 };
 
-in { inherit libbase libbase_cflags_defaults libbase_defaults libbase_headers libbase_ndk libbase_test; }
+libbase_benchmark = cc_benchmark {
+    name = "libbase_benchmark";
+    defaults = ["libbase_cflags_defaults"];
+
+    srcs = ["format_benchmark.cpp"];
+    shared_libs = ["libbase"];
+
+    compile_multilib = "both";
+    multilib = {
+        lib32 = {
+            suffix = "32";
+        };
+        lib64 = {
+            suffix = "64";
+        };
+    };
+};
+
+in { inherit libbase libbase_benchmark libbase_cflags_defaults libbase_defaults libbase_headers libbase_ndk libbase_test; }

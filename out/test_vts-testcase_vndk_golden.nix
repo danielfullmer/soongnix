@@ -1,4 +1,4 @@
-{ python_binary_host }:
+{ genrule, python_binary_host }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -30,4 +30,14 @@ extract_lsdump = python_binary_host {
     };
 };
 
-in { inherit extract_lsdump; }
+#  TODO(b/150663999): Replace with gensrcs when the build system is able to
+#                     process the large file group.
+vts_vndk_abi_dump_zip = genrule {
+    name = "vts_vndk_abi_dump_zip";
+    tools = ["extract_lsdump"];
+    cmd = "$(location extract_lsdump) $(in) $(out)";
+    srcs = [":vndk_abi_dump_zip"];
+    out = ["vts/testcases/vndk/abi_dump.zip"];
+};
+
+in { inherit extract_lsdump vts_vndk_abi_dump_zip; }

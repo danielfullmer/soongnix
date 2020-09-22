@@ -59,6 +59,7 @@ libminikin = cc_library {
         misc_undefined = [
             "signed-integer-overflow"
             "unsigned-integer-overflow"
+            "bounds"
         ];
     };
     cppflags = [
@@ -75,7 +76,6 @@ libminikin = cc_library {
     };
     shared_libs = [
         "liblog"
-        "libandroidicu"
         "libharfbuzz_ng"
     ];
     header_libs = [
@@ -84,15 +84,33 @@ libminikin = cc_library {
         "libutils_headers"
     ];
     export_header_lib_headers = ["libminikin_headers"];
-    export_shared_lib_headers = ["libandroidicu"];
     whole_static_libs = ["libgtest_prod"];
 
     clang = true;
 
     target = {
+        android = {
+            shared_libs = [
+                "libandroidicu"
+            ];
+            export_shared_lib_headers = [
+                "libandroidicu"
+            ];
+        };
+        host = {
+            shared_libs = [
+                "libicui18n"
+                "libicuuc"
+            ];
+            export_shared_lib_headers = [
+                "libicui18n"
+                "libicuuc"
+            ];
+        };
         windows = {
             enabled = true;
             cppflags = [
+                "-Wno-ignored-attributes"
                 "-Wno-thread-safety"
             ];
         };

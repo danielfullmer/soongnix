@@ -23,7 +23,6 @@ let
     srcs = ["ConsumerIr.cpp"];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "libhardware"
         "liblog"
         "libutils"
@@ -43,7 +42,6 @@ let
         "liblog"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.ir@1.0"
     ];

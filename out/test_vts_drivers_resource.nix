@@ -70,6 +70,9 @@ libvts_resource_driver = cc_library_shared {
 
     defaults = ["libvts_resource-defaults"];
 
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+
     srcs = [
         "hidl_handle_driver/VtsHidlHandleDriver.cpp"
         "hidl_memory_driver/VtsHidlMemoryDriver.cpp"
@@ -80,6 +83,9 @@ libvts_resource_manager = cc_library_shared {
     name = "libvts_resource_manager";
 
     defaults = ["libvts_resource-defaults"];
+
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 
     srcs = [
         "resource_manager/VtsResourceManager.cpp"

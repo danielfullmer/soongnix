@@ -21,9 +21,8 @@ CtsClassLoaderFactoryInMemoryDexClassLoaderTestCases = android_test {
     srcs = [":cts-classloaderfactorytest-srcs"];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
-        "cts_instant"
     ];
 };
 

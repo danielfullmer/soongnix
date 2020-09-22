@@ -87,6 +87,13 @@ let
     filename_from_src = true;
 };
 
+"privapp_whitelist_com.android.car.secondaryhome" = prebuilt_etc {
+    name = "privapp_whitelist_com.android.car.secondaryhome";
+    sub_dir = "permissions";
+    src = "com.android.car.secondaryhome.xml";
+    filename_from_src = true;
+};
+
 "privapp_whitelist_com.android.car.settings" = prebuilt_etc {
     name = "privapp_whitelist_com.android.car.settings";
     sub_dir = "permissions";
@@ -115,6 +122,20 @@ let
     filename_from_src = true;
 };
 
+"privapp_whitelist_com.android.car.bugreport" = prebuilt_etc {
+    name = "privapp_whitelist_com.android.car.bugreport";
+    sub_dir = "permissions";
+    src = "com.android.car.bugreport.xml";
+    filename_from_src = true;
+};
+
+"privapp_whitelist_com.android.car.companiondevicesupport" = prebuilt_etc {
+    name = "privapp_whitelist_com.android.car.companiondevicesupport";
+    sub_dir = "permissions";
+    src = "com.android.car.companiondevicesupport.xml";
+    filename_from_src = true;
+};
+
 "privapp_whitelist_com.google.android.car.kitchensink" = prebuilt_etc {
     name = "privapp_whitelist_com.google.android.car.kitchensink";
     sub_dir = "permissions";
@@ -127,7 +148,21 @@ let
     sub_dir = "permissions";
     src = "com.android.car.developeroptions.xml";
     filename_from_src = true;
-    product_specific = true;
+    system_ext_specific = true;
 };
 
-in { inherit "privapp_whitelist_android.car.cluster" "privapp_whitelist_android.car.cluster.loggingrenderer" "privapp_whitelist_android.car.cluster.sample" "privapp_whitelist_android.car.usb.handler" "privapp_whitelist_com.android.car" "privapp_whitelist_com.android.car.carlauncher" "privapp_whitelist_com.android.car.developeroptions" "privapp_whitelist_com.android.car.dialer" "privapp_whitelist_com.android.car.hvac" "privapp_whitelist_com.android.car.media" "privapp_whitelist_com.android.car.notification" "privapp_whitelist_com.android.car.radio" "privapp_whitelist_com.android.car.settings" "privapp_whitelist_com.android.car.themeplayground" "privapp_whitelist_com.android.car.trust" "privapp_whitelist_com.google.android.car.kitchensink"; }
+"privapp_whitelist_com.android.car.floatingcardslauncher" = prebuilt_etc {
+    name = "privapp_whitelist_com.android.car.floatingcardslauncher";
+    sub_dir = "permissions";
+    src = "com.android.car.floatingcardslauncher.xml";
+    filename_from_src = true;
+};
+
+"privapp_whitelist_com.android.car.ui.paintbooth" = prebuilt_etc {
+    name = "privapp_whitelist_com.android.car.ui.paintbooth";
+    sub_dir = "permissions";
+    src = "com.android.car.ui.paintbooth.xml";
+    filename_from_src = true;
+};
+
+in { inherit "privapp_whitelist_android.car.cluster" "privapp_whitelist_android.car.cluster.loggingrenderer" "privapp_whitelist_android.car.cluster.sample" "privapp_whitelist_android.car.usb.handler" "privapp_whitelist_com.android.car" "privapp_whitelist_com.android.car.bugreport" "privapp_whitelist_com.android.car.carlauncher" "privapp_whitelist_com.android.car.companiondevicesupport" "privapp_whitelist_com.android.car.developeroptions" "privapp_whitelist_com.android.car.dialer" "privapp_whitelist_com.android.car.floatingcardslauncher" "privapp_whitelist_com.android.car.hvac" "privapp_whitelist_com.android.car.media" "privapp_whitelist_com.android.car.notification" "privapp_whitelist_com.android.car.radio" "privapp_whitelist_com.android.car.secondaryhome" "privapp_whitelist_com.android.car.settings" "privapp_whitelist_com.android.car.themeplayground" "privapp_whitelist_com.android.car.trust" "privapp_whitelist_com.android.car.ui.paintbooth" "privapp_whitelist_com.google.android.car.kitchensink"; }

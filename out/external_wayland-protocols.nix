@@ -41,6 +41,7 @@ wayland_extension_protocols = filegroup {
         "freedesktop.org/unstable/input-method/input-method-unstable-v1.xml"
         "freedesktop.org/unstable/keyboard-shortcuts-inhibit/keyboard-shortcuts-inhibit-unstable-v1.xml"
         "freedesktop.org/unstable/linux-dmabuf/linux-dmabuf-unstable-v1.xml"
+        "freedesktop.org/unstable/linux-explicit-synchronization/linux-explicit-synchronization-unstable-v1.xml"
         "freedesktop.org/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml"
         "freedesktop.org/unstable/pointer-gestures/pointer-gestures-unstable-v1.xml"
         "freedesktop.org/unstable/relative-pointer/relative-pointer-unstable-v1.xml"
@@ -56,7 +57,6 @@ wayland_extension_protocols = filegroup {
         "chromium.org/unstable/alpha-compositing/alpha-compositing-unstable-v1.xml"
         "chromium.org/unstable/aura-shell/aura-shell.xml"
         "chromium.org/unstable/cursor-shapes/cursor-shapes-unstable-v1.xml"
-        "chromium.org/unstable/gaming-input/gaming-input-unstable-v1.xml"
         "chromium.org/unstable/gaming-input/gaming-input-unstable-v2.xml"
         "chromium.org/unstable/keyboard/keyboard-configuration-unstable-v1.xml"
         "chromium.org/unstable/keyboard/keyboard-extension-unstable-v1.xml"
@@ -113,6 +113,25 @@ libwayland_extension_client_protocols = cc_library_static {
     export_generated_headers = ["wayland_extension_client_protocol_headers"];
 };
 
+#  Generate a library with the protocol files, configured to export the server
+#  header files
+libwayland_extension_server_protocols = cc_library_static {
+    name = "libwayland_extension_server_protocols";
+    vendor_available = true;
+    host_supported = true;
+    cflags = [
+        "-Wall"
+        "-Wextra"
+        "-Werror"
+        "-g"
+        "-fvisibility=hidden"
+    ];
+    static_libs = ["libwayland_server"];
+    generated_sources = ["wayland_extension_protocol_sources"];
+    generated_headers = ["wayland_extension_server_protocol_headers"];
+    export_generated_headers = ["wayland_extension_server_protocol_headers"];
+};
+
 subdirs = ["flinger_headers"];
 
-in { inherit libwayland_extension_client_protocols soong-wayland-protocol-codegen wayland_extension_client_protocol_headers wayland_extension_protocol_sources wayland_extension_protocols wayland_extension_server_protocol_headers; }
+in { inherit libwayland_extension_client_protocols libwayland_extension_server_protocols soong-wayland-protocol-codegen wayland_extension_client_protocol_headers wayland_extension_protocol_sources wayland_extension_protocols wayland_extension_server_protocol_headers; }

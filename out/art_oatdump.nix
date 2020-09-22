@@ -40,6 +40,10 @@ oatdump = art_cc_binary {
         "libprofile"
         "libbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 oatdumpd = art_cc_binary {
@@ -57,6 +61,9 @@ oatdumpd = art_cc_binary {
         "libartbased"
         "libprofiled"
         "libbase"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

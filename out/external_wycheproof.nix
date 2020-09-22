@@ -1,4 +1,4 @@
-{ java_library_static }:
+{ java_library_static, package }:
 let
 
 #
@@ -17,8 +17,16 @@ let
 #  limitations under the License.
 #
 
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
+
 wycheproof = java_library_static {
     name = "wycheproof";
+    visibility = [
+        "//cts/tests/libcore/wycheproof"
+        "//cts/tests/libcore/wycheproof-bc"
+    ];
     srcs = [
         "java/com/google/security/wycheproof/BouncyCastleAllTests.java"
         "java/com/google/security/wycheproof/BouncyCastleTest.java"
@@ -53,15 +61,12 @@ wycheproof = java_library_static {
         "java/com/google/security/wycheproof/SpongyCastleTest.java"
         "java/com/google/security/wycheproof/SpongyCastleAllTests.java"
     ];
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "art-module-platform-api-stubs-system-modules";
     libs = [
-        "core-oj"
-        "core-libart"
-        "bouncycastle"
-        "conscrypt"
+        "conscrypt.module.platform.api.stubs"
         "junit"
     ];
-    system_modules = "core-system-modules";
 };
 
-in { inherit wycheproof; }
+in { inherit _missingName wycheproof; }

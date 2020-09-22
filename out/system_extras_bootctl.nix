@@ -6,16 +6,17 @@ let
 bootctl = cc_binary {
     name = "bootctl";
     srcs = ["bootctl.cpp"];
+
     cflags = [
         "-Wall"
         "-Werror"
     ];
+
     shared_libs = [
-        "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
-        "libutils"
         "android.hardware.boot@1.0"
+        "android.hardware.boot@1.1"
+        "libhidlbase"
+        "libutils"
     ];
 };
 

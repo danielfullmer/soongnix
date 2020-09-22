@@ -29,6 +29,24 @@ libsysutils = cc_library {
     ];
 
     export_include_dirs = ["include"];
+
+    tidy = true;
+    tidy_checks = [
+        "-*"
+        "cert-*"
+        "clang-analyzer-security*"
+        "android-*"
+    ];
+    tidy_checks_as_errors = [
+        "cert-*"
+        "clang-analyzer-security*"
+        "android-*"
+    ];
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+    min_sdk_version = "apex_inherit";
 };
 
 libsysutils_tests = cc_test {

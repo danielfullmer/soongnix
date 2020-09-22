@@ -38,12 +38,12 @@ logd-unit-test-defaults = cc_defaults {
 
     srcs = ["logd_test.cpp"];
 
-    shared_libs = [
+    static_libs = [
         "libbase"
         "libcutils"
         "libselinux"
+        "liblog"
     ];
-    static_libs = ["liblog"];
 };
 
 #  Build tests for the logger. Run with:
@@ -66,7 +66,7 @@ CtsLogdTestCases = cc_test {
     };
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
     ];
 };
 

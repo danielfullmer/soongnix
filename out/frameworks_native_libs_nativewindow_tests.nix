@@ -17,14 +17,22 @@ let
 #  limitations under the License.
 #
 
-AHardwareBufferTest = cc_test {
-    name = "AHardwareBufferTest";
+libnativewindow_test = cc_test {
+    name = "libnativewindow_test";
+    test_suites = [
+        "device-tests"
+    ];
     shared_libs = [
+        "libgui"
+        "liblog"
         "libnativewindow"
+        "libsync"
+        "libutils"
         "android.hardware.graphics.common@1.0"
     ];
     srcs = [
         "AHardwareBufferTest.cpp"
+        "ANativeWindowTest.cpp"
         "c_compatibility.c"
     ];
     cflags = [
@@ -33,4 +41,4 @@ AHardwareBufferTest = cc_test {
     ];
 };
 
-in { inherit AHardwareBufferTest; }
+in { inherit libnativewindow_test; }

@@ -22,6 +22,9 @@ libnosprotos = cc_library {
     srcs = [
         "google/protobuf/descriptor.proto"
         "nugget/app/avb/avb.proto"
+        "nugget/app/identity/identity.proto"
+        "nugget/app/identity/identity_defs.proto"
+        "nugget/app/identity/identity_types.proto"
         "nugget/app/keymaster/keymaster.proto"
         "nugget/app/keymaster/keymaster_defs.proto"
         "nugget/app/keymaster/keymaster_types.proto"

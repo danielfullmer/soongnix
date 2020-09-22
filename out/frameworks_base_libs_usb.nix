@@ -26,6 +26,4 @@ let
     api_packages = ["com.android.future.usb"];
 };
 
-subdirs = ["tests/*"];
-
 in { inherit "com.android.future.usb.accessory"; }

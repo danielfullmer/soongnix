@@ -10,6 +10,7 @@ surfaceflinger_defaults = cc_defaults {
         "-Wthread-safety"
         "-Wunused"
         "-Wunreachable-code"
+        "-Wconversion"
     ];
 };
 
@@ -22,7 +23,7 @@ libsurfaceflinger_defaults = cc_defaults {
         "-DEGL_EGLEXT_PROTOTYPES"
     ];
     shared_libs = [
-        "android.frameworks.vr.composer@1.0"
+        "android.frameworks.vr.composer@2.0"
         "android.hardware.configstore-utils"
         "android.hardware.configstore@1.0"
         "android.hardware.configstore@1.1"
@@ -32,47 +33,55 @@ libsurfaceflinger_defaults = cc_defaults {
         "android.hardware.graphics.composer@2.1"
         "android.hardware.graphics.composer@2.2"
         "android.hardware.graphics.composer@2.3"
+        "android.hardware.graphics.composer@2.4"
         "android.hardware.power@1.0"
         "android.hardware.power@1.3"
+        "android.hardware.power-cpp"
         "libbase"
         "libbinder"
         "libbufferhubqueue"
         "libcutils"
-        "libdl"
         "libEGL"
         "libfmq"
         "libGLESv1_CM"
         "libGLESv2"
         "libgui"
-        "libhardware"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblayers_proto"
         "liblog"
         "libnativewindow"
         "libpdx_default_transport"
         "libprocessgroup"
         "libprotobuf-cpp-lite"
+        "libstatslog"
         "libsync"
-        "libtimestats_proto"
+        "libtimestats"
         "libui"
         "libinput"
         "libutils"
         "libSurfaceFlingerProp"
     ];
+    #  VrComposer is not used when building surfaceflinger for vendors
+    target = {
+        vendor = {
+            exclude_shared_libs = [
+                "android.frameworks.vr.composer@2.0"
+            ];
+        };
+    };
     static_libs = [
         "libcompositionengine"
+        "libperfetto_client_experimental"
         "librenderengine"
         "libserviceutils"
         "libtrace_proto"
-        "libvr_manager"
         "libvrflinger"
     ];
     header_libs = [
         "android.hardware.graphics.composer@2.1-command-buffer"
         "android.hardware.graphics.composer@2.2-command-buffer"
         "android.hardware.graphics.composer@2.3-command-buffer"
+        "android.hardware.graphics.composer@2.4-command-buffer"
     ];
     export_static_lib_headers = [
         "libcompositionengine"
@@ -86,11 +95,15 @@ libsurfaceflinger_defaults = cc_defaults {
         "android.hardware.graphics.composer@2.1"
         "android.hardware.graphics.composer@2.2"
         "android.hardware.graphics.composer@2.3"
+        "android.hardware.graphics.composer@2.4"
         "android.hardware.power@1.3"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
+        "libtimestats"
     ];
+    #  TODO (marissaw): this library is not used by surfaceflinger. This is here so
+    #  the library compiled in a way that is accessible to system partition when running
+    #  IMapper's VTS.
+    required = ["libgralloctypes"];
 };
 
 libsurfaceflinger_production_defaults = cc_defaults {
@@ -102,6 +115,10 @@ libsurfaceflinger_production_defaults = cc_defaults {
     ];
     lto = {
         thin = true;
+    };
+    #  TODO(b/131771163): Fix broken fuzzer support with LTO.
+    sanitize = {
+        fuzzer = false;
     };
 };
 
@@ -121,7 +138,7 @@ libsurfaceflinger_sources = filegroup {
         "BufferStateLayer.cpp"
         "ClientCache.cpp"
         "Client.cpp"
-        "ColorLayer.cpp"
+        "EffectLayer.cpp"
         "ContainerLayer.cpp"
         "DisplayDevice.cpp"
         "DisplayHardware/ComposerHal.cpp"
@@ -133,11 +150,11 @@ libsurfaceflinger_sources = filegroup {
         "DisplayHardware/VirtualDisplaySurface.cpp"
         "Effects/Daltonizer.cpp"
         "EventLog/EventLog.cpp"
+        "FrameTracer/FrameTracer.cpp"
         "FrameTracker.cpp"
         "Layer.cpp"
         "LayerProtoHelper.cpp"
         "LayerRejecter.cpp"
-        "LayerStats.cpp"
         "LayerVector.cpp"
         "MonitoredProducer.cpp"
         "NativeWindowSurface.cpp"
@@ -148,19 +165,26 @@ libsurfaceflinger_sources = filegroup {
         "Scheduler/DispSyncSource.cpp"
         "Scheduler/EventControlThread.cpp"
         "Scheduler/EventThread.cpp"
-        "Scheduler/IdleTimer.cpp"
+        "Scheduler/OneShotTimer.cpp"
         "Scheduler/LayerHistory.cpp"
+        "Scheduler/LayerHistoryV2.cpp"
         "Scheduler/LayerInfo.cpp"
+        "Scheduler/LayerInfoV2.cpp"
         "Scheduler/MessageQueue.cpp"
         "Scheduler/PhaseOffsets.cpp"
+        "Scheduler/RefreshRateConfigs.cpp"
         "Scheduler/Scheduler.cpp"
         "Scheduler/SchedulerUtils.cpp"
+        "Scheduler/Timer.cpp"
+        "Scheduler/VSyncDispatchTimerQueue.cpp"
+        "Scheduler/VSyncPredictor.cpp"
         "Scheduler/VSyncModulator.cpp"
+        "Scheduler/VSyncReactor.cpp"
         "StartPropertySetThread.cpp"
         "SurfaceFlinger.cpp"
+        "SurfaceFlingerDefaultFactory.cpp"
         "SurfaceInterceptor.cpp"
         "SurfaceTracing.cpp"
-        "TimeStats/TimeStats.cpp"
         "TransactionCompletedThread.cpp"
     ];
 };
@@ -177,6 +201,17 @@ libsurfaceflinger = cc_library_shared {
         #  can be easily replaced.
         "SurfaceFlingerFactory.cpp"
     ];
+    cflags = [
+        "-DUSE_VR_COMPOSER=1"
+    ];
+    #  VrComposer is not used when building surfaceflinger for vendors
+    target = {
+        vendor = {
+            cflags = [
+                "-DUSE_VR_COMPOSER=0"
+            ];
+        };
+    };
     logtags = ["EventLog/EventLogTags.logtags"];
 };
 
@@ -185,9 +220,6 @@ libsurfaceflinger_binary = cc_defaults {
     defaults = ["surfaceflinger_defaults"];
     cflags = [
         "-DLOG_TAG=\"SurfaceFlinger\""
-    ];
-    whole_static_libs = [
-        "libsigchain"
     ];
     shared_libs = [
         "android.frameworks.displayservice@1.0"
@@ -199,13 +231,11 @@ libsurfaceflinger_binary = cc_defaults {
         "libcutils"
         "libdisplayservicehidl"
         "libhidlbase"
-        "libhidltransport"
         "libinput"
         "liblayers_proto"
         "liblog"
         "libprocessgroup"
         "libsync"
-        "libtimestats_proto"
         "libutils"
     ];
     static_libs = [
@@ -233,7 +263,6 @@ surfaceflinger = cc_binary {
 
 subdirs = [
     "layerproto"
-    "TimeStats/timestatsproto"
     "tests"
 ];
 
@@ -248,8 +277,6 @@ libSurfaceFlingerProp = cc_library_shared {
         "android.hardware.configstore@1.1"
         "android.hardware.graphics.common@1.2"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libui"
         "libutils"
         "liblog"
@@ -260,8 +287,7 @@ libSurfaceFlingerProp = cc_library_shared {
     export_shared_lib_headers = [
         "android.hardware.graphics.common@1.2"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
+        "libui"
     ];
     export_static_lib_headers = [
         "SurfaceFlingerProperties"

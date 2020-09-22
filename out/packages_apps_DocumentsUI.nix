@@ -1,4 +1,4 @@
-{ android_app, android_library, filegroup, genrule, java_defaults, java_library }:
+{ android_app, android_library, filegroup, genrule, java_defaults, java_library, platform_compat_config }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -31,6 +31,10 @@ documentsui_defaults = java_defaults {
         "guava"
     ];
 
+    libs = [
+        "app-compat-annotations"
+    ];
+
     privileged = true;
 
     certificate = "platform";
@@ -40,10 +44,16 @@ documentsui_defaults = java_defaults {
     };
 
     sdk_version = "system_current";
-    min_sdk_version = "28";
-    target_sdk_version = "28";
+    min_sdk_version = "29";
 
-    plugins = ["java_api_finder"];
+    plugins = [
+        "java_api_finder"
+    ];
+};
+
+documents-ui-compat-config = platform_compat_config {
+    name = "documents-ui-compat-config";
+    src = ":DocumentsUI";
 };
 
 DocumentsUI-srcs = filegroup {
@@ -56,8 +66,13 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/ActionModeController.java"
         "src/com/android/documentsui/ActivityConfig.java"
         "src/com/android/documentsui/BaseActivity.java"
+        "src/com/android/documentsui/BreadcrumbHolder.java"
         "src/com/android/documentsui/ContentLock.java"
         "src/com/android/documentsui/CreateDirectoryFragment.java"
+        "src/com/android/documentsui/CrossProfileException.java"
+        "src/com/android/documentsui/CrossProfileNoPermissionException.java"
+        "src/com/android/documentsui/CrossProfileQuietModeException.java"
+        "src/com/android/documentsui/DevicePolicyMetricConsts.java"
         "src/com/android/documentsui/DirectoryLoader.java"
         "src/com/android/documentsui/DirectoryResult.java"
         "src/com/android/documentsui/DocsSelectionHelper.java"
@@ -69,7 +84,7 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/DragShadowBuilder.java"
         "src/com/android/documentsui/DrawerController.java"
         "src/com/android/documentsui/DropBadgeView.java"
-        "src/com/android/documentsui/DropdownBreadcrumb.java"
+        "src/com/android/documentsui/DummyProfileTabsAddons.java"
         "src/com/android/documentsui/DummySelectionTracker.java"
         "src/com/android/documentsui/FileTypeMap.java"
         "src/com/android/documentsui/FocusManager.java"
@@ -91,9 +106,13 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/OperationDialogFragment.java"
         "src/com/android/documentsui/PackageReceiver.java"
         "src/com/android/documentsui/PreBootReceiver.java"
+        "src/com/android/documentsui/ProfileTabs.java"
+        "src/com/android/documentsui/ProfileTabsAddons.java"
+        "src/com/android/documentsui/ProfileTabsController.java"
         "src/com/android/documentsui/ProviderExecutor.java"
         "src/com/android/documentsui/RecentsLoader.java"
         "src/com/android/documentsui/RefreshTask.java"
+        "src/com/android/documentsui/RequestQuietModeDisabledTask.java"
         "src/com/android/documentsui/RootsMonitor.java"
         "src/com/android/documentsui/ScopedAccessActivity.java"
         "src/com/android/documentsui/ScopedAccessMetrics.java"
@@ -102,6 +121,8 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/ThumbnailCache.java"
         "src/com/android/documentsui/ThumbnailLoader.java"
         "src/com/android/documentsui/TimeoutTask.java"
+        "src/com/android/documentsui/UserIdManager.java"
+        "src/com/android/documentsui/UserPackage.java"
         "src/com/android/documentsui/ViewAutoScroller.java"
         "src/com/android/documentsui/archives/Archive.java"
         "src/com/android/documentsui/archives/ArchiveEntryInputStream.java"
@@ -134,6 +155,7 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/base/Files.java"
         "src/com/android/documentsui/base/FilteringCursorWrapper.java"
         "src/com/android/documentsui/base/Lookup.java"
+        "src/com/android/documentsui/base/LookupApplicationName.java"
         "src/com/android/documentsui/base/Menus.java"
         "src/com/android/documentsui/base/MimeTypes.java"
         "src/com/android/documentsui/base/PairedTask.java"
@@ -143,6 +165,7 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/base/Shared.java"
         "src/com/android/documentsui/base/SharedMinimal.java"
         "src/com/android/documentsui/base/State.java"
+        "src/com/android/documentsui/base/UserId.java"
         "src/com/android/documentsui/clipping/ClipStorage.java"
         "src/com/android/documentsui/clipping/ClipStorageReader.java"
         "src/com/android/documentsui/clipping/ClipStore.java"
@@ -189,6 +212,7 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/files/ActionHandler.java"
         "src/com/android/documentsui/files/ActivityInputHandler.java"
         "src/com/android/documentsui/files/Config.java"
+        "src/com/android/documentsui/files/DeleteDocumentFragment.java"
         "src/com/android/documentsui/files/FilesActivity.java"
         "src/com/android/documentsui/files/LauncherActivity.java"
         "src/com/android/documentsui/files/MenuManager.java"
@@ -229,11 +253,8 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/picker/UpdatePickResultTask.java"
         "src/com/android/documentsui/prefs/BackupAgent.java"
         "src/com/android/documentsui/prefs/LocalPreferences.java"
-        "src/com/android/documentsui/prefs/Preferences.java"
         "src/com/android/documentsui/prefs/PreferencesMonitor.java"
         "src/com/android/documentsui/prefs/PrefsBackupHelper.java"
-        "src/com/android/documentsui/prefs/ScopedAccessLocalPreferences.java"
-        "src/com/android/documentsui/prefs/ScopedPreferences.java"
         "src/com/android/documentsui/queries/CommandInterceptor.java"
         "src/com/android/documentsui/queries/SearchChipData.java"
         "src/com/android/documentsui/queries/SearchChipViewManager.java"
@@ -261,15 +282,18 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/sidebar/AppItem.java"
         "src/com/android/documentsui/sidebar/DragHost.java"
         "src/com/android/documentsui/sidebar/EjectRootTask.java"
+        "src/com/android/documentsui/sidebar/HeaderItem.java"
         "src/com/android/documentsui/sidebar/Item.java"
         "src/com/android/documentsui/sidebar/ProfileItem.java"
         "src/com/android/documentsui/sidebar/RootAndAppItem.java"
         "src/com/android/documentsui/sidebar/RootItem.java"
+        "src/com/android/documentsui/sidebar/RootItemListBuilder.java"
         "src/com/android/documentsui/sidebar/RootItemView.java"
         "src/com/android/documentsui/sidebar/RootsAdapter.java"
         "src/com/android/documentsui/sidebar/RootsFragment.java"
         "src/com/android/documentsui/sidebar/RootsList.java"
         "src/com/android/documentsui/sidebar/SpacerItem.java"
+        "src/com/android/documentsui/sidebar/UserItemsCombiner.java"
         "src/com/android/documentsui/sorting/HeaderCell.java"
         "src/com/android/documentsui/sorting/SortController.java"
         "src/com/android/documentsui/sorting/SortDimension.java"
@@ -285,7 +309,9 @@ DocumentsUI-srcs = filegroup {
         "src/com/android/documentsui/ui/SearchBarScrollingViewBehavior.java"
         "src/com/android/documentsui/ui/Snackbars.java"
         "src/com/android/documentsui/ui/Views.java"
+        "src/com/android/documentsui/util/CrossProfileUtils.java"
         "src/com/android/documentsui/util/FormatUtils.java"
+        "src/com/android/documentsui/util/VersionUtils.java"
         ":statslog-docsui-java-gen"
     ];
 };
@@ -300,7 +326,7 @@ docsui-statsd = java_library {
 statslog-docsui-java-gen = genrule {
     name = "statslog-docsui-java-gen";
     tools = ["stats-log-api-gen"];
-    cmd = "$(location stats-log-api-gen) --java $(out) --module docsui --javaPackage com.android.documentsui --javaClass DocumentsStatsLog";
+    cmd = "$(location stats-log-api-gen) --java $(out) --module docsui --javaPackage com.android.documentsui --javaClass DocumentsStatsLog --supportQ";
     out = ["com/android/documentsui/DocumentsStatsLog.java"];
 };
 
@@ -322,8 +348,30 @@ DocumentsUI-res-lib = android_library {
         "--auto-add-overlay"
     ];
 
-    min_sdk_version = "28";
-    target_sdk_version = "28";
+    sdk_version = "system_current";
+    min_sdk_version = "29";
+};
+
+DocumentsUIUnitTests-res-lib = android_library {
+    name = "DocumentsUIUnitTests-res-lib";
+
+    manifest = "AndroidManifestForUnitTests.xml";
+
+    static_libs = [
+        "androidx.appcompat_appcompat"
+        "com.google.android.material_material"
+    ];
+
+    resource_dirs = [
+        "res"
+    ];
+
+    aaptflags = [
+        "--auto-add-overlay"
+    ];
+
+    sdk_version = "system_current";
+    min_sdk_version = "29";
 };
 
 DocumentsUI = android_app {
@@ -342,6 +390,8 @@ DocumentsUI = android_app {
     ];
 
     required = ["privapp_whitelist_com.android.documentsui"];
+
+    min_sdk_version = "29";
 };
 
-in { inherit DocumentsUI DocumentsUI-res-lib DocumentsUI-srcs docsui-statsd documentsui_defaults statslog-docsui-java-gen; }
+in { inherit DocumentsUI DocumentsUI-res-lib DocumentsUI-srcs DocumentsUIUnitTests-res-lib docsui-statsd documents-ui-compat-config documentsui_defaults statslog-docsui-java-gen; }

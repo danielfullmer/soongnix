@@ -22,10 +22,6 @@ libinstall_defaults = cc_defaults {
         "recovery_defaults"
     ];
 
-    header_libs = [
-        "libminadbd_headers"
-    ];
-
     shared_libs = [
         "libbase"
         "libbootloader_message"
@@ -35,7 +31,6 @@ libinstall_defaults = cc_defaults {
         "libfusesideload"
         "libhidl-gen-utils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libselinux"
         "libtinyxml2"
@@ -45,12 +40,12 @@ libinstall_defaults = cc_defaults {
     ];
 
     static_libs = [
+        "librecovery_utils"
         "libotautil"
+        "libsnapshot_nobinder"
 
         #  external dependencies
-        "libvintf_recovery"
         "libvintf"
-        "libfstab"
     ];
 };
 
@@ -65,11 +60,17 @@ libinstall = cc_library_static {
     srcs = [
         "adb_install.cpp"
         "asn1_decoder.cpp"
-        "fuse_sdcard_install.cpp"
+        "fuse_install.cpp"
         "install.cpp"
         "package.cpp"
+        "snapshot_utils.cpp"
         "verifier.cpp"
         "wipe_data.cpp"
+        "wipe_device.cpp"
+    ];
+
+    header_libs = [
+        "libminadbd_headers"
     ];
 
     shared_libs = [

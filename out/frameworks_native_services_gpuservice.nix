@@ -1,23 +1,9 @@
-{ cc_binary, cc_defaults, filegroup }:
+{ cc_binary, cc_defaults, cc_library_shared, filegroup }:
 let
-
-gpuservice_sources = filegroup {
-    name = "gpuservice_sources";
-    srcs = [
-        "GpuService.cpp"
-        "gpustats/GpuStats.cpp"
-    ];
-};
-
-gpuservice_binary_sources = filegroup {
-    name = "gpuservice_binary_sources";
-    srcs = ["main_gpuservice.cpp"];
-};
 
 gpuservice_defaults = cc_defaults {
     name = "gpuservice_defaults";
     cflags = [
-        "-DLOG_TAG=\"GpuService\""
         "-Wall"
         "-Werror"
         "-Wformat"
@@ -25,31 +11,38 @@ gpuservice_defaults = cc_defaults {
         "-Wunused"
         "-Wunreachable-code"
     ];
-    srcs = [
-        ":gpuservice_sources"
-    ];
-    include_dirs = [
-        "frameworks/native/vulkan/vkjson"
-        "frameworks/native/vulkan/include"
+};
+
+libgpuservice_defaults = cc_defaults {
+    name = "libgpuservice_defaults";
+    defaults = ["gpuservice_defaults"];
+    cflags = [
+        "-DLOG_TAG=\"GpuService\""
     ];
     shared_libs = [
         "libbase"
         "libbinder"
         "libcutils"
+        "libgfxstats"
         "libgraphicsenv"
         "liblog"
         "libutils"
-        "libvulkan"
+        "libvkjson"
     ];
     static_libs = [
         "libserviceutils"
-        "libvkjson"
+    ];
+    export_static_lib_headers = [
+        "libserviceutils"
+    ];
+    export_shared_lib_headers = [
+        "libgraphicsenv"
     ];
 };
 
-gpuservice_production_defaults = cc_defaults {
-    name = "gpuservice_production_defaults";
-    defaults = ["gpuservice_defaults"];
+libgpuservice_production_defaults = cc_defaults {
+    name = "libgpuservice_production_defaults";
+    defaults = ["libgpuservice_defaults"];
     cflags = [
         "-fvisibility=hidden"
         "-fwhole-program-vtables" #  requires ThinLTO
@@ -59,12 +52,24 @@ gpuservice_production_defaults = cc_defaults {
     };
 };
 
-gpuservice_binary = cc_defaults {
-    name = "gpuservice_binary";
-    defaults = ["gpuservice_defaults"];
-    whole_static_libs = [
-        "libsigchain"
+libgpuservice_sources = filegroup {
+    name = "libgpuservice_sources";
+    srcs = [
+        "GpuService.cpp"
     ];
+};
+
+libgpuservice = cc_library_shared {
+    name = "libgpuservice";
+    defaults = ["libgpuservice_production_defaults"];
+    srcs = [
+        ":libgpuservice_sources"
+    ];
+};
+
+libgpuservice_binary = cc_defaults {
+    name = "libgpuservice_binary";
+    defaults = ["gpuservice_defaults"];
     shared_libs = [
         "libbinder"
         "libcutils"
@@ -74,11 +79,19 @@ gpuservice_binary = cc_defaults {
     ldflags = ["-Wl,--export-dynamic"];
 };
 
-gpuservice = cc_binary {
-    name = "gpuservice";
-    defaults = ["gpuservice_binary"];
-    init_rc = ["gpuservice.rc"];
-    srcs = [":gpuservice_binary_sources"];
+gpuservice_binary_sources = filegroup {
+    name = "gpuservice_binary_sources";
+    srcs = ["main_gpuservice.cpp"];
 };
 
-in { inherit gpuservice gpuservice_binary gpuservice_binary_sources gpuservice_defaults gpuservice_production_defaults gpuservice_sources; }
+gpuservice = cc_binary {
+    name = "gpuservice";
+    defaults = ["libgpuservice_binary"];
+    init_rc = ["gpuservice.rc"];
+    srcs = [":gpuservice_binary_sources"];
+    shared_libs = [
+        "libgpuservice"
+    ];
+};
+
+in { inherit gpuservice gpuservice_binary_sources gpuservice_defaults libgpuservice libgpuservice_binary libgpuservice_defaults libgpuservice_production_defaults libgpuservice_sources; }

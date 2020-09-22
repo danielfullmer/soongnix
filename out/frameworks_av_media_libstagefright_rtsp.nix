@@ -24,6 +24,7 @@ libstagefright_rtsp_defaults = cc_defaults {
 
     shared_libs = [
         "libcrypto"
+        "libdatasource"
         "libmedia"
     ];
 

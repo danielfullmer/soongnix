@@ -31,9 +31,13 @@ bionic-benchmarks-defaults = cc_defaults {
     srcs = [
         "bionic_benchmarks.cpp"
         "atomic_benchmark.cpp"
+        "ctype_benchmark.cpp"
+        "dlfcn_benchmark.cpp"
         "get_heap_size_benchmark.cpp"
         "inttypes_benchmark.cpp"
         "malloc_benchmark.cpp"
+        "malloc_sql_benchmark.cpp"
+        "malloc_map_benchmark.cpp"
         "math_benchmark.cpp"
         "property_benchmark.cpp"
         "pthread_benchmark.cpp"
@@ -43,6 +47,7 @@ bionic-benchmarks-defaults = cc_defaults {
         "string_benchmark.cpp"
         "time_benchmark.cpp"
         "unistd_benchmark.cpp"
+        "wctype_benchmark.cpp"
     ];
     shared_libs = ["liblog"];
     static_libs = [
@@ -51,6 +56,15 @@ bionic-benchmarks-defaults = cc_defaults {
         "libtinyxml2"
     ];
     stl = "libc++_static";
+
+    target = {
+        android = {
+            static_libs = [
+                "libmeminfo"
+                "libprocinfo"
+            ];
+        };
+    };
 };
 
 bionic-benchmarks-extras-defaults = cc_defaults {
@@ -64,8 +78,8 @@ bionic-benchmarks-extras-defaults = cc_defaults {
 };
 
 #  Build benchmarks for the device (with bionic's .so). Run with:
-#    adb shell bionic-benchmarks32
-#    adb shell bionic-benchmarks64
+#    adb shell /data/benchmarktest/bionic-benchmarks/bionic-benchmarks
+#    adb shell /data/benchmarktest64/bionic-benchmarks/bionic-benchmarks
 bionic-benchmarks = cc_benchmark {
     name = "bionic-benchmarks";
     defaults = ["bionic-benchmarks-defaults"];

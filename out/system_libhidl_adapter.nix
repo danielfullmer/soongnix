@@ -19,6 +19,8 @@ libhidladapter = cc_library {
     name = "libhidladapter";
     defaults = ["libhidl-defaults"];
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     srcs = [
         "HidlBinderAdapter.cpp"
     ];
@@ -26,14 +28,11 @@ libhidladapter = cc_library {
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];
     export_shared_lib_headers = [
         "libhidlbase"
-        "libhidltransport"
         "libutils"
     ];
 };

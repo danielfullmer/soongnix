@@ -73,4 +73,14 @@ e2fsck_static = cc_binary {
     static_libs = e2fsck_libs;
 };
 
-in { inherit e2fsck e2fsck-defaults e2fsck_static; }
+e2fsck_ramdisk = cc_binary {
+    name = "e2fsck_ramdisk";
+    stem = "e2fsck";
+    static_executable = true;
+    ramdisk = true;
+    defaults = ["e2fsck-defaults"];
+    system_shared_libs = [];
+    static_libs = e2fsck_libs;
+};
+
+in { inherit e2fsck e2fsck-defaults e2fsck_ramdisk e2fsck_static; }

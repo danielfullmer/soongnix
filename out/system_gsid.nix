@@ -1,4 +1,4 @@
-{ aidl_interface, cc_binary, cc_library, cc_library_headers, cc_test, filegroup }:
+{ aidl_interface, cc_binary, cc_library, cc_library_headers, cc_library_static, filegroup, vts_config }:
 let
 
 #
@@ -21,13 +21,15 @@ gsi_tool = cc_binary {
     name = "gsi_tool";
     shared_libs = [
         "gsi_aidl_interface-cpp"
-        "libbinder"
         "libbase"
+        "libbinder"
         "libcutils"
         "libgsi"
         "liblog"
-        "libservices"
         "libutils"
+    ];
+    static_libs = [
+        "libgsid"
     ];
     srcs = [
         "gsi_tool.cpp"
@@ -47,6 +49,26 @@ libgsi = cc_library {
     export_include_dirs = ["include"];
 };
 
+libgsid = cc_library_static {
+    name = "libgsid";
+    srcs = [
+        "libgsid.cpp"
+    ];
+    shared_libs = [
+        "gsi_aidl_interface-cpp"
+        "libbase"
+        "libbinder"
+        "libcutils"
+        "liblog"
+        "libservices"
+        "libutils"
+    ];
+    static_libs = [
+        "libgsi"
+    ];
+    export_include_dirs = ["include"];
+};
+
 libgsi_headers = cc_library_headers {
     name = "libgsi_headers";
     host_supported = true;
@@ -60,6 +82,7 @@ gsid = cc_binary {
     srcs = [
         "daemon.cpp"
         "gsi_service.cpp"
+        "partition_installer.cpp"
     ];
     required = [
         "mke2fs"
@@ -68,52 +91,31 @@ gsid = cc_binary {
         "gsid.rc"
     ];
     shared_libs = [
-        "gsi_aidl_interface-cpp"
         "libbase"
         "libbinder"
+        "libcrypto"
+        "liblog"
+    ];
+    static_libs = [
+        "gsi_aidl_interface-cpp"
+        "libavb"
+        "libcutils"
+        "libdm"
         "libext4_utils"
         "libfs_mgr"
         "libgsi"
-        "liblog"
+        "libgsid"
         "liblp"
         "libutils"
-    ];
-    static_libs = [
-        "libdm"
-        "libfiemap_writer"
+        "libc++fs"
     ];
     local_include_dirs = ["include"];
 };
 
-gsi_boot_test = cc_test {
-    name = "gsi_boot_test";
-    shared_libs = [
-        "libbase"
-        "libcutils"
-        "libhardware"
-        "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
-        "liblog"
-        "libutils"
-    ];
-    static_libs = [
-        "libext4_utils"
-        "libfstab"
-        "android.hardware.weaver@1.0"
-    ];
-    srcs = [
-        "tests/boot_tests.cpp"
-    ];
-};
-
 gsi_aidl_interface = aidl_interface {
     name = "gsi_aidl_interface";
-    srcs = [
-        "aidl/android/gsi/GsiInstallParams.aidl"
-        "aidl/android/gsi/GsiProgress.aidl"
-        "aidl/android/gsi/IGsiService.aidl"
-    ];
+    unstable = true;
+    srcs = [":gsiservice_aidl"];
     local_include_dir = "aidl";
     backend = {
         ndk = {
@@ -125,10 +127,19 @@ gsi_aidl_interface = aidl_interface {
 gsiservice_aidl = filegroup {
     name = "gsiservice_aidl";
     srcs = [
-        "aidl/android/gsi/GsiInstallParams.aidl"
+        "aidl/android/gsi/AvbPublicKey.aidl"
         "aidl/android/gsi/GsiProgress.aidl"
         "aidl/android/gsi/IGsiService.aidl"
+        "aidl/android/gsi/IGsiServiceCallback.aidl"
+        "aidl/android/gsi/IImageService.aidl"
+        "aidl/android/gsi/IProgressCallback.aidl"
+        "aidl/android/gsi/MappedImage.aidl"
     ];
+    path = "aidl";
 };
 
-in { inherit gsi_aidl_interface gsi_boot_test gsi_tool gsid gsiservice_aidl libgsi libgsi_headers; }
+VtsGsiBootTest = vts_config {
+    name = "VtsGsiBootTest";
+};
+
+in { inherit VtsGsiBootTest gsi_aidl_interface gsi_tool gsid gsiservice_aidl libgsi libgsi_headers libgsid; }

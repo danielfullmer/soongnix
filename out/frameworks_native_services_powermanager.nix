@@ -1,14 +1,28 @@
-{ cc_library_shared }:
+{ cc_library_shared, cc_test }:
 let
 
 libpowermanager = cc_library_shared {
     name = "libpowermanager";
 
-    srcs = ["IPowerManager.cpp"];
+    srcs = [
+        "IPowerManager.cpp"
+        "Temperature.cpp"
+        "CoolingDevice.cpp"
+        ":libpowermanager_aidl"
+    ];
+
+    aidl = {
+        local_include_dirs = ["include"];
+        include_dirs = [
+            "frameworks/base/core/java/android/os"
+        ];
+        export_aidl_headers = true;
+    };
 
     shared_libs = [
         "libutils"
         "libbinder"
+        "liblog"
     ];
 
     cflags = [
@@ -17,6 +31,31 @@ libpowermanager = cc_library_shared {
         "-Wunused"
         "-Wunreachable-code"
     ];
+
+    local_include_dirs = ["include"];
+    export_include_dirs = [
+        "include"
+    ];
 };
 
-in { inherit libpowermanager; }
+thermalmanager-test = cc_test {
+    name = "thermalmanager-test";
+    srcs = [
+        "IThermalManagerTest.cpp"
+    ];
+    cflags = [
+        "-Wall"
+        "-Werror"
+        "-Wextra"
+    ];
+    shared_libs = [
+        "libbase"
+        "libhidlbase"
+        "liblog"
+        "libpowermanager"
+        "libbinder"
+        "libutils"
+    ];
+};
+
+in { inherit libpowermanager thermalmanager-test; }

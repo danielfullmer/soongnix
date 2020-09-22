@@ -1,19 +1,19 @@
-{ cc_library_shared }:
+{ cc_library }:
 let
 
-libflacextractor = cc_library_shared {
+libflacextractor = cc_library {
+    name = "libflacextractor";
+    defaults = ["extractor-defaults"];
 
     srcs = ["FLACExtractor.cpp"];
 
     include_dirs = [
-        "frameworks/av/media/libstagefright/include"
         "external/flac/include"
     ];
 
     shared_libs = [
+        "libbase"
         "libbinder_ndk"
-        "liblog"
-        "libmediandk"
     ];
 
     static_libs = [
@@ -23,26 +23,6 @@ libflacextractor = cc_library_shared {
         "libstagefright_metadatautils"
         "libutils"
     ];
-
-    name = "libflacextractor";
-    relative_install_path = "extractors";
-
-    compile_multilib = "first";
-
-    cflags = [
-        "-Werror"
-        "-Wall"
-        "-fvisibility=hidden"
-    ];
-    version_script = "exports.lds";
-
-    sanitize = {
-        cfi = true;
-        misc_undefined = [
-            "unsigned-integer-overflow"
-            "signed-integer-overflow"
-        ];
-    };
 
 };
 

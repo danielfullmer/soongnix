@@ -21,8 +21,10 @@ ActivityManagerPerfTests = android_test {
         "src/com/android/frameworks/perftests/am/tests/BasePerfTest.java"
         "src/com/android/frameworks/perftests/am/tests/BroadcastPerfTest.java"
         "src/com/android/frameworks/perftests/am/tests/ContentProviderPerfTest.java"
+        "src/com/android/frameworks/perftests/am/tests/OomAdjPerfTest.java"
         "src/com/android/frameworks/perftests/am/tests/ServiceBindPerfTest.java"
         "src/com/android/frameworks/perftests/am/tests/ServiceStartPerfTest.java"
+        "src/com/android/frameworks/perftests/am/util/AtraceUtils.java"
         "src/com/android/frameworks/perftests/am/util/TargetPackageUtils.java"
         "src/com/android/frameworks/perftests/am/util/TimeReceiver.java"
     ];

@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsInstantCookieApp2 = android_test {
+CtsInstantCookieApp2 = android_test_helper_app {
     name = "CtsInstantCookieApp2";
     defaults = ["cts_support_defaults"];
     srcs = ["src/test/instant/cookie/CookieTest.java"];
@@ -25,7 +25,7 @@ CtsInstantCookieApp2 = android_test {
     sdk_version = "current";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     certificate = ":cts-keyset-test-b";

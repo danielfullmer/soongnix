@@ -1,11 +1,12 @@
-{ cc_library_static, cc_test_host }:
+{ cc_library_static, cc_test_host, genrule }:
 let
 
 #  simulation library for testing virtual devices
 #  ========================================================
 libbt-rootcanal = cc_library_static {
     name = "libbt-rootcanal";
-    defaults = ["libchrome_support_defaults"];
+    defaults = ["gd_defaults"];
+    header_libs = ["jni_headers"];
     host_supported = true;
     proprietary = true;
     srcs = [
@@ -31,6 +32,7 @@ libbt-rootcanal = cc_library_static {
         "model/devices/loopback.cc"
         "model/devices/polled_socket.cc"
         "model/devices/remote_loopback_device.cc"
+        "model/devices/scripted_beacon.cc"
         "model/devices/sniffer.cc"
         "model/setup/async_manager.cc"
         "model/setup/device_boutique.cc"
@@ -38,6 +40,8 @@ libbt-rootcanal = cc_library_static {
         "model/setup/test_channel_transport.cc"
         "model/setup/test_command_handler.cc"
         "model/setup/test_model.cc"
+        ":BluetoothPacketSources"
+        ":BluetoothHciClassSources"
     ];
     cflags = [
         "-fvisibility=hidden"
@@ -50,26 +54,34 @@ libbt-rootcanal = cc_library_static {
         "include"
         "."
     ];
-    header_libs = [
-        "libbluetooth_headers"
+    generated_headers = [
+        "RootCanalGeneratedPackets_h"
+        "BluetoothGeneratedPackets_h"
     ];
     include_dirs = [
         "system/bt"
-        "system/bt/utils/include"
-        "system/bt/hci/include"
-        "system/bt/internal_include"
-        "system/bt/stack/include"
+        "system/bt/gd"
     ];
     shared_libs = [
         "libbase"
+        "libchrome"
         "liblog"
-    ];
-    whole_static_libs = [
-        "libbt-rootcanal-packets"
     ];
     static_libs = [
         "libbt-rootcanal-types"
+        "libscriptedbeaconpayload-protos-lite"
     ];
+};
+
+libscriptedbeaconpayload-protos-lite = cc_library_static {
+    name = "libscriptedbeaconpayload-protos-lite";
+    host_supported = true;
+    proprietary = true;
+    proto = {
+        export_proto_headers = true;
+        type = "lite";
+    };
+    srcs = ["model/devices/scripted_beacon_ble_payload.proto"];
 };
 
 #  test-vendor unit tests for host
@@ -93,9 +105,7 @@ test-vendor_test_host = cc_test_host {
     ];
     include_dirs = [
         "system/bt"
-        "system/bt/utils/include"
-        "system/bt/hci/include"
-        "system/bt/stack/include"
+        "system/bt/gd"
     ];
     shared_libs = [
         "liblog"
@@ -129,17 +139,35 @@ root-canal = cc_test_host {
     ];
     include_dirs = [
         "system/bt"
-        "system/bt/utils/include"
-        "system/bt/hci/include"
-        "system/bt/stack/include"
+        "system/bt/gd"
+    ];
+    generated_headers = [
+        "RootCanalGeneratedPackets_h"
+        "BluetoothGeneratedPackets_h"
     ];
     shared_libs = [
         "liblog"
     ];
     static_libs = [
         "libbt-rootcanal-types"
+        "libprotobuf-cpp-lite"
+        "libscriptedbeaconpayload-protos-lite"
         "libbt-rootcanal"
     ];
 };
 
-in { inherit libbt-rootcanal root-canal test-vendor_test_host; }
+RootCanalGeneratedPackets_h = genrule {
+    name = "RootCanalGeneratedPackets_h";
+    tools = [
+        "bluetooth_packetgen"
+    ];
+    cmd = "$(location bluetooth_packetgen) --root_namespace=model --include=system/bt/vendor_libs/test_vendor_lib --out=$(genDir) $(in)";
+    srcs = [
+        "packets/link_layer_packets.pdl"
+    ];
+    out = [
+        "packets/link_layer_packets.h"
+    ];
+};
+
+in { inherit RootCanalGeneratedPackets_h libbt-rootcanal libscriptedbeaconpayload-protos-lite root-canal test-vendor_test_host; }

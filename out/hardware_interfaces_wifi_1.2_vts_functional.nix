@@ -21,7 +21,6 @@ VtsHalWifiV1_2TargetTest = cc_test {
     name = "VtsHalWifiV1_2TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
-        "VtsHalWifiV1_2TargetTest.cpp"
         "wifi_chip_hidl_test.cpp"
         "wifi_sta_iface_hidl_test.cpp"
     ];
@@ -31,15 +30,19 @@ VtsHalWifiV1_2TargetTest = cc_test {
         "android.hardware.wifi@1.1"
         "android.hardware.wifi@1.2"
         "android.hardware.wifi@1.3"
+        "libwifi-system-iface"
     ];
-    test_suites = ["general-tests"];
+    disable_framework = true;
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 VtsHalWifiNanV1_2TargetTest = cc_test {
     name = "VtsHalWifiNanV1_2TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
-        "VtsHalWifiV1_2TargetTest.cpp"
         "wifi_nan_iface_hidl_test.cpp"
     ];
     static_libs = [
@@ -47,8 +50,12 @@ VtsHalWifiNanV1_2TargetTest = cc_test {
         "android.hardware.wifi@1.0"
         "android.hardware.wifi@1.1"
         "android.hardware.wifi@1.2"
+        "libwifi-system-iface"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalWifiNanV1_2TargetTest VtsHalWifiV1_2TargetTest; }

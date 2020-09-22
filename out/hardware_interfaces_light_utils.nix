@@ -26,9 +26,12 @@ blank_screen = cc_binary {
     shared_libs = [
         "android.hardware.light@2.0"
         "libbase"
+        "libbinder"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
+    ];
+    static_libs = [
+        "android.hardware.light-cpp"
     ];
 };
 

@@ -34,21 +34,27 @@ neuralnetworks_operations = cc_defaults {
         "operations/Comparisons.cpp"
         "operations/Concatenation.cpp"
         "operations/Conv2D.cpp"
+        "operations/DepthwiseConv2D.cpp"
         "operations/Dequantize.cpp"
         "operations/Elementwise.cpp"
+        "operations/Elu.cpp"
+        "operations/Fill.cpp"
         "operations/FullyConnected.cpp"
         "operations/Gather.cpp"
         "operations/GenerateProposals.cpp"
         "operations/HeatmapMaxKeypoint.cpp"
         "operations/InstanceNormalization.cpp"
         "operations/L2Normalization.cpp"
+        "operations/LocalResponseNormalization.cpp"
+        "operations/LogSoftmax.cpp"
         "operations/LogicalAndOr.cpp"
         "operations/LogicalNot.cpp"
-        "operations/LogSoftmax.cpp"
         "operations/Neg.cpp"
-        "operations/Pooling.cpp"
         "operations/PRelu.cpp"
+        "operations/Pooling.cpp"
+        "operations/QLSTM.cpp"
         "operations/Quantize.cpp"
+        "operations/Rank.cpp"
         "operations/Reduce.cpp"
         "operations/ResizeImageOps.cpp"
         "operations/RoiAlign.cpp"
@@ -56,6 +62,9 @@ neuralnetworks_operations = cc_defaults {
         "operations/Select.cpp"
         "operations/Slice.cpp"
         "operations/Softmax.cpp"
+        "operations/Squeeze.cpp"
+        "operations/StridedSlice.cpp"
+        "operations/TopK_V2.cpp"
         "operations/Transpose.cpp"
         "operations/TransposeConv2D.cpp"
         "operations/UnidirectionalSequenceLSTM.cpp"
@@ -71,44 +80,51 @@ libneuralnetworks_utils = cc_library_static {
     ];
     host_supported = false;
     vendor_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+    ];
     export_include_dirs = ["include"];
     srcs = [
-        "Utils.cpp"
         "ExecutionBurstController.cpp"
         "ExecutionBurstServer.cpp"
+        "MemoryUtils.cpp"
+        "Utils.cpp"
     ];
     header_libs = [
-        "libneuralnetworks_headers"
-        "libeigen"
         "gemmlowp_headers"
+        "libeigen"
+        "libneuralnetworks_headers"
         "tensorflow_headers"
     ];
     shared_libs = [
-        "libhidltransport"
-        "libhidlmemory"
-        "libnativewindow"
-        "libfmq"
         "android.hardware.neuralnetworks@1.0"
         "android.hardware.neuralnetworks@1.1"
         "android.hardware.neuralnetworks@1.2"
+        "android.hardware.neuralnetworks@1.3"
         "android.hidl.allocator@1.0"
         "android.hidl.memory@1.0"
+        "libfmq"
+        "libhidlbase"
+        "libhidlmemory"
+        "libnativewindow"
     ];
     whole_static_libs = [
         "libarect"
     ];
     cflags = [
         "-DTF_LITE_DISABLE_X86_NEON"
-        "-Werror"
         "-Wall"
+        "-Werror"
         "-Wextra"
         "-Wno-extern-c-compat"
+        "-Wno-invalid-partial-specialization"
         "-Wno-sign-compare"
         "-Wno-unused-local-typedef"
         "-Wno-unused-parameter"
         "-Wno-unused-private-field"
         "-Wno-unused-variable"
-        "-Wno-invalid-partial-specialization"
     ];
 };
 
@@ -118,6 +134,11 @@ libneuralnetworks_common = cc_library_static {
         "neuralnetworks_defaults"
         "neuralnetworks_operations"
     ];
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+    ];
     host_supported = false;
     vendor_available = true;
     #  b/109953668, disable OpenMP
@@ -126,19 +147,22 @@ libneuralnetworks_common = cc_library_static {
         "include"
     ];
     srcs = [
+        "BufferTracker.cpp"
         "CpuExecutor.cpp"
         "ExecutionBurstController.cpp"
         "ExecutionBurstServer.cpp"
         "GraphDump.cpp"
         "IndexedShapeWrapper.cpp"
+        "MemoryUtils.cpp"
+        "MetaModel.cpp"
         "OperationsUtils.cpp"
+        "QuantUtils.cpp"
         "TokenHasher.cpp"
         "Utils.cpp"
         "ValidateHal.cpp"
         "operations/ArgMinMax.cpp"
         "operations/BidirectionalSequenceLSTM.cpp"
         "operations/Cast.cpp"
-        "operations/DepthwiseConv2D.cpp"
         "operations/EmbeddingLookup.cpp"
         "operations/ExpandDims.cpp"
         "operations/GroupedConv2D.cpp"
@@ -147,44 +171,36 @@ libneuralnetworks_common = cc_library_static {
         "operations/LSTM.cpp"
         "operations/MaximumMinimum.cpp"
         "operations/Multinomial.cpp"
-        "operations/Normalization.cpp"
         "operations/Pow.cpp"
-        "operations/TopK_V2.cpp"
         "operations/QuantizedLSTM.cpp"
-        "operations/Reshape.cpp"
         "operations/RNN.cpp"
+        "operations/Reshape.cpp"
+        "operations/SVDF.cpp"
         "operations/SimpleMath.cpp"
         "operations/Split.cpp"
-        "operations/StridedSlice.cpp"
-        "operations/SVDF.cpp"
         "operations/Tile.cpp"
     ];
     shared_libs = [
-        "libbase"
-        "libcutils"
-        "libhidlbase"
-        "libhidltransport"
-        "libhidlmemory"
-        "libnativewindow"
-        "libfmq"
-        "libtextclassifier_hash"
-        "libui"
-        "liblog"
-        "libutils"
         "android.hardware.neuralnetworks@1.0"
         "android.hardware.neuralnetworks@1.1"
         "android.hardware.neuralnetworks@1.2"
+        "android.hardware.neuralnetworks@1.3"
         "android.hidl.allocator@1.0"
         "android.hidl.memory@1.0"
-    ];
-    static_libs = [
-        "libcrypto_static"
+        "libbase"
+        "libcutils"
+        "libfmq"
+        "libhidlbase"
+        "libhidlmemory"
+        "liblog"
+        "libnativewindow"
+        "libutils"
     ];
     header_libs = [
+        "gemmlowp_headers"
+        "libeigen"
         "libneuralnetworks_headers"
         "libtextclassifier_hash_headers"
-        "libeigen"
-        "gemmlowp_headers"
         "philox_random_headers"
         "tensorflow_headers"
     ];
@@ -193,38 +209,45 @@ libneuralnetworks_common = cc_library_static {
         "libtflite_kernel_utils"
         "philox_random"
     ];
-
+    static_libs = [
+        "libcrypto_static"
+        "libtextclassifier_hash_static"
+    ];
     cflags = [
-        "-DNN_INCLUDE_CPU_IMPLEMENTATION"
         "-DNAMESPACE_FOR_HASH_FUNCTIONS=farmhash"
+        "-DNN_INCLUDE_CPU_IMPLEMENTATION"
         "-DTF_LITE_DISABLE_X86_NEON"
-        "-Werror"
         "-Wall"
+        "-Werror"
         "-Wextra"
+        "-Wno-array-bounds"
         "-Wno-extern-c-compat"
+        "-Wno-invalid-partial-specialization"
         "-Wno-sign-compare"
         "-Wno-unused-local-typedef"
         "-Wno-unused-parameter"
         "-Wno-unused-private-field"
         "-Wno-unused-variable"
-        "-Wno-invalid-partial-specialization"
-        "-Wno-array-bounds"
     ];
 };
 
-NeuralNetworksTest_operations = cc_test {
-    name = "NeuralNetworksTest_operations";
+NeuralNetworksTest_common = cc_defaults {
+    name = "NeuralNetworksTest_common";
+    defaults = ["neuralnetworks_float16"];
     shared_libs = [
+        "android.hidl.allocator@1.0"
+        "android.hidl.memory@1.0"
+        "libhidlbase"
         "libhidlmemory"
         "libnativewindow"
         "libneuralnetworks"
+        "libneuralnetworks_packageinfo"
+    ];
+    static_libs = [
         "android.hardware.neuralnetworks@1.0"
         "android.hardware.neuralnetworks@1.1"
         "android.hardware.neuralnetworks@1.2"
-        "android.hidl.allocator@1.0"
-        "android.hidl.memory@1.0"
-    ];
-    static_libs = [
+        "android.hardware.neuralnetworks@1.3"
         "libbase"
         "libgmock"
         "liblog"
@@ -232,9 +255,13 @@ NeuralNetworksTest_operations = cc_test {
     ];
     cflags = [
         "-Wno-extern-c-compat"
-        "-Wno-unused-parameter"
-        "-Wno-invalid-partial-specialization"
     ];
+    local_include_dirs = ["include"];
+};
+
+NeuralNetworksTest_operations = cc_test {
+    name = "NeuralNetworksTest_operations";
+    defaults = ["NeuralNetworksTest_common"];
     srcs = [
         "operations/EmbeddingLookupTest.cpp"
         "operations/HashtableLookupTest.cpp"
@@ -246,43 +273,45 @@ NeuralNetworksTest_operations = cc_test {
         "operations/RNNTest.cpp"
         "operations/SVDFTest.cpp"
     ];
-    local_include_dirs = ["include"];
     header_libs = [
+        "gemmlowp_headers"
         "libeigen"
         "philox_random_headers"
         "tensorflow_headers"
+    ];
+    cflags = [
+        "-Wno-invalid-partial-specialization"
+        "-Wno-unused-parameter"
     ];
 };
 
 NeuralNetworksTest_utils = cc_test {
     name = "NeuralNetworksTest_utils";
-    shared_libs = [
-        "libhidlmemory"
-        "libnativewindow"
-        "libneuralnetworks"
-        "android.hardware.neuralnetworks@1.0"
-        "android.hardware.neuralnetworks@1.1"
-        "android.hardware.neuralnetworks@1.2"
-        "android.hidl.allocator@1.0"
-        "android.hidl.memory@1.0"
-    ];
-    static_libs = [
-        "libbase"
-        "libgmock"
-        "liblog"
-        "libneuralnetworks_common"
-    ];
-    cflags = [
-        "-Wno-extern-c-compat"
-        "-Wno-unused-variable"
-    ];
+    defaults = ["NeuralNetworksTest_common"];
     srcs = [
         "UtilsTest.cpp"
     ];
-    local_include_dirs = ["include"];
     header_libs = [
+        "gemmlowp_headers"
+        "libeigen"
         "tensorflow_headers"
+    ];
+    cflags = [
+        "-Wno-unused-parameter"
+        "-Wno-unused-variable"
+    ];
+    test_suites = [
+        "general-tests"
     ];
 };
 
-in { inherit NeuralNetworksTest_operations NeuralNetworksTest_utils libneuralnetworks_common libneuralnetworks_common_headers libneuralnetworks_utils neuralnetworks_operations; }
+NeuralNetworksTest_logtag = cc_test {
+    name = "NeuralNetworksTest_logtag";
+    defaults = ["NeuralNetworksTest_common"];
+    srcs = [
+        "LogTagTest.cpp"
+        "LogTagTestExtra.cpp"
+    ];
+};
+
+in { inherit NeuralNetworksTest_common NeuralNetworksTest_logtag NeuralNetworksTest_operations NeuralNetworksTest_utils libneuralnetworks_common libneuralnetworks_common_headers libneuralnetworks_utils neuralnetworks_operations; }

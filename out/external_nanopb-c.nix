@@ -33,6 +33,7 @@ libprotobuf-c-nano-defaults = cc_defaults {
     sdk_version = "19";
     export_include_dirs = ["."];
     vendor_available = true;
+    host_supported = true;
 };
 
 libprotobuf-c-nano = cc_library_static {

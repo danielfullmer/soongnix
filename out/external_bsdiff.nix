@@ -39,7 +39,14 @@ bsdiff_defaults = cc_defaults {
 libbspatch = cc_library_static {
     name = "libbspatch";
     defaults = ["bsdiff_defaults"];
+    vendor_available = true;
     recovery_available = true;
+
+    visibility = [
+        "//bootable/recovery:__subpackages__"
+        "//external/puffin:__subpackages__"
+        "//system/update_engine:__subpackages__"
+    ];
 
     srcs = [
         "brotli_decompressor.cc"

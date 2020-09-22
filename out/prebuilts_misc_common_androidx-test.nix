@@ -2,14 +2,16 @@
 let
 
 #  Automatically generated with:
-#  pom2bp -rewrite 'androidx.test:=androidx.test.' -rewrite 'androidx.test.ext:=androidx.test.ext.' -rewrite 'androidx.test.espresso:espresso-=androidx.test.espresso.' -rewrite 'androidx.test.janktesthelper:janktesthelper=androidx.test.janktesthelper' -rewrite 'androidx.test.uiautomator:uiautomator=androidx.test.uiautomator' -rewrite 'com.google.truth:truth=truth-prebuilt' -rewrite 'net.sf.kxml:kxml2=kxml2-android' -rewrite 'androidx.lifecycle:lifecycle-common=androidx.lifecycle_lifecycle-common' -rewrite 'androidx.annotation:annotation=androidx.annotation_annotation' -rewrite 'org.hamcrest:hamcrest-integration=hamcrest' -rewrite 'javax.inject:javax.inject=jsr330' -rewrite 'com.google.android.material:material=com.google.android.material_material' -rewrite 'androidx.drawerlayout:drawerlayout=androidx.drawerlayout_drawerlayout' -rewrite 'androidx.viewpager:viewpager=androidx.viewpager_viewpager' -rewrite 'androidx.recyclerview:recyclerview=androidx.recyclerview_recyclerview' -rewrite 'androidx.core:core=androidx.core_core' -rewrite 'androidx.legacy:legacy-support-core-utils=androidx.legacy_legacy-support-core-utils' -sdk-version current .
+#  pom2bp -rewrite 'androidx.test:=androidx.test.' -rewrite 'androidx.test.ext:=androidx.test.ext.' -rewrite 'androidx.test.espresso:espresso-=androidx.test.espresso.' -rewrite 'androidx.test.janktesthelper:janktesthelper=androidx.test.janktesthelper' -rewrite 'androidx.test.uiautomator:uiautomator=androidx.test.uiautomator' -extra-libs androidx.test.rules=android.test.base -extra-libs androidx.test.uiautomator=android.test.base -rewrite 'com.google.truth:truth=truth-prebuilt' -rewrite 'net.sf.kxml:kxml2=kxml2-android' -rewrite 'androidx.lifecycle:lifecycle-common=androidx.lifecycle_lifecycle-common' -rewrite 'androidx.annotation:annotation=androidx.annotation_annotation' -rewrite 'org.hamcrest:hamcrest-integration=hamcrest' -rewrite 'javax.inject:javax.inject=jsr330' -rewrite 'com.google.android.material:material=com.google.android.material_material' -rewrite 'androidx.drawerlayout:drawerlayout=androidx.drawerlayout_drawerlayout' -rewrite 'androidx.viewpager:viewpager=androidx.viewpager_viewpager' -rewrite 'androidx.recyclerview:recyclerview=androidx.recyclerview_recyclerview' -rewrite 'androidx.core:core=androidx.core_core' -rewrite 'androidx.legacy:legacy-support-core-utils=androidx.legacy_legacy-support-core-utils' -sdk-version current -static-deps .
 
 "androidx.test.core-nodeps" = android_library_import {
     name = "androidx.test.core-nodeps";
-    aars = ["androidx/test/core/1.2.0-alpha03/core-1.2.0-alpha03.aar"];
+    aars = ["androidx/test/core/1.3.0-beta02/core-1.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "androidx.annotation_annotation"
+        "androidx.lifecycle_lifecycle-common"
         "androidx.test.monitor"
     ];
 };
@@ -30,10 +32,17 @@ let
 
 "androidx.test.espresso.contrib-nodeps" = android_library_import {
     name = "androidx.test.espresso.contrib-nodeps";
-    aars = ["androidx/test/espresso/espresso-contrib/3.2.0-alpha03/espresso-contrib-3.2.0-alpha03.aar"];
+    aars = ["androidx/test/espresso/espresso-contrib/3.3.0-beta02/espresso-contrib-3.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "com.google.android.material_material"
+        "androidx.recyclerview_recyclerview"
+        "androidx.core_core"
+        "androidx.drawerlayout_drawerlayout"
+        "androidx.viewpager_viewpager"
+        "androidx.legacy_legacy-support-core-utils"
+        "accessibility-test-framework"
         "androidx.test.espresso.core"
         "androidx.test.espresso.idling-resource"
     ];
@@ -61,10 +70,15 @@ let
 
 "androidx.test.espresso.core-nodeps" = android_library_import {
     name = "androidx.test.espresso.core-nodeps";
-    aars = ["androidx/test/espresso/espresso-core/3.2.0-alpha03/espresso-core-3.2.0-alpha03.aar"];
+    aars = ["androidx/test/espresso/espresso-core/3.3.0-beta02/espresso-core-3.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "javawriter"
+        "jsr330"
+        "hamcrest-library"
+        "hamcrest"
+        "jsr305"
         "androidx.test.runner"
         "androidx.test.espresso.idling-resource"
     ];
@@ -90,7 +104,7 @@ let
 
 "androidx.test.espresso.idling-resource-nodeps" = android_library_import {
     name = "androidx.test.espresso.idling-resource-nodeps";
-    aars = ["androidx/test/espresso/espresso-idling-resource/3.2.0-alpha03/espresso-idling-resource-3.2.0-alpha03.aar"];
+    aars = ["androidx/test/espresso/espresso-idling-resource/3.3.0-beta02/espresso-idling-resource-3.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
@@ -110,7 +124,7 @@ let
 
 "androidx.test.espresso.intents-nodeps" = android_library_import {
     name = "androidx.test.espresso.intents-nodeps";
-    aars = ["androidx/test/espresso/espresso-intents/3.2.0-alpha03/espresso-intents-3.2.0-alpha03.aar"];
+    aars = ["androidx/test/espresso/espresso-intents/3.3.0-beta02/espresso-intents-3.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
@@ -136,10 +150,12 @@ let
 
 "androidx.test.espresso.web-nodeps" = android_library_import {
     name = "androidx.test.espresso.web-nodeps";
-    aars = ["androidx/test/espresso/espresso-web/3.2.0-alpha03/espresso-web-3.2.0-alpha03.aar"];
+    aars = ["androidx/test/espresso/espresso-web/3.3.0-beta02/espresso-web-3.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "androidx.annotation_annotation"
+        "tagsoup"
         "androidx.test.espresso.core"
     ];
 };
@@ -160,10 +176,12 @@ let
 
 "androidx.test.ext.junit-nodeps" = android_library_import {
     name = "androidx.test.ext.junit-nodeps";
-    aars = ["androidx/test/ext/junit/1.1.1-alpha03/junit-1.1.1-alpha03.aar"];
+    aars = ["androidx/test/ext/junit/1.1.2-beta02/junit-1.1.2-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "junit"
+        "androidx.annotation_annotation"
         "androidx.test.core"
         "androidx.test.monitor"
     ];
@@ -186,10 +204,13 @@ let
 
 "androidx.test.ext.truth-nodeps" = android_library_import {
     name = "androidx.test.ext.truth-nodeps";
-    aars = ["androidx/test/ext/truth/1.2.0-alpha03/truth-1.2.0-alpha03.aar"];
+    aars = ["androidx/test/ext/truth/1.3.0-beta02/truth-1.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "guava"
+        "truth-prebuilt"
+        "androidx.annotation_annotation"
         "androidx.test.core"
     ];
 };
@@ -235,10 +256,11 @@ let
 
 "androidx.test.monitor-nodeps" = android_library_import {
     name = "androidx.test.monitor-nodeps";
-    aars = ["androidx/test/monitor/1.2.0-alpha03/monitor-1.2.0-alpha03.aar"];
+    aars = ["androidx/test/monitor/1.3.0-beta02/monitor-1.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "androidx.annotation_annotation"
     ];
 };
 
@@ -256,11 +278,14 @@ let
 
 "androidx.test.rules-nodeps" = android_library_import {
     name = "androidx.test.rules-nodeps";
-    aars = ["androidx/test/rules/1.2.0-alpha03/rules-1.2.0-alpha03.aar"];
+    aars = ["androidx/test/rules/1.3.0-beta02/rules-1.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
         "androidx.test.runner"
+    ];
+    libs = [
+        "android.test.base"
     ];
 };
 
@@ -273,15 +298,20 @@ let
         "androidx.test.rules-nodeps"
         "androidx.test.runner"
     ];
+    libs = [
+        "android.test.base"
+    ];
     java_version = "1.7";
 };
 
 "androidx.test.runner-nodeps" = android_library_import {
     name = "androidx.test.runner-nodeps";
-    aars = ["androidx/test/runner/1.2.0-alpha03/runner-1.2.0-alpha03.aar"];
+    aars = ["androidx/test/runner/1.3.0-beta02/runner-1.3.0-beta02.aar"];
     sdk_version = "current";
     min_sdk_version = "14";
     static_libs = [
+        "androidx.annotation_annotation"
+        "junit"
         "androidx.test.monitor"
     ];
 };
@@ -295,7 +325,6 @@ let
         "androidx.test.runner-nodeps"
         "androidx.annotation_annotation"
         "junit"
-        "kxml2-android"
         "androidx.test.monitor"
     ];
     java_version = "1.7";
@@ -308,6 +337,9 @@ let
     min_sdk_version = "18";
     static_libs = [
     ];
+    libs = [
+        "android.test.base"
+    ];
 };
 
 "androidx.test.uiautomator" = android_library {
@@ -317,6 +349,9 @@ let
     manifest = "manifests/androidx.test.uiautomator/AndroidManifest.xml";
     static_libs = [
         "androidx.test.uiautomator-nodeps"
+    ];
+    libs = [
+        "android.test.base"
     ];
     java_version = "1.7";
 };

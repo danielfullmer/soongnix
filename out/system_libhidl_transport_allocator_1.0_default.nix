@@ -29,8 +29,6 @@ let
     shared_libs = [
         "android.hidl.allocator@1.0"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libbase"
         "liblog"
         "libutils"

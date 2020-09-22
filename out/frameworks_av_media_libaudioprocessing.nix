@@ -6,20 +6,13 @@ libaudioprocessing_defaults = cc_defaults {
 
     export_include_dirs = ["include"];
 
+    header_libs = ["libaudioclient_headers"];
+
     shared_libs = [
-        "libaudiohal"
         "libaudioutils"
         "libcutils"
         "liblog"
-        "libnbaio"
-        "libnblog"
-        "libsonic"
         "libutils"
-        "libvibrator"
-    ];
-
-    header_libs = [
-        "libbase_headers"
     ];
 
     cflags = [
@@ -29,6 +22,25 @@ libaudioprocessing_defaults = cc_defaults {
         #  uncomment to disable NEON on architectures that actually do support NEON, for benchmarking
         #  "-DUSE_NEON=false",
     ];
+
+    arch = {
+        x86 = {
+            avx2 = {
+                cflags = [
+                    "-mavx2"
+                    "-mfma"
+                ];
+            };
+        };
+        x86_64 = {
+            avx2 = {
+                cflags = [
+                    "-mavx2"
+                    "-mfma"
+                ];
+            };
+        };
+    };
 };
 
 libaudioprocessing = cc_library_shared {
@@ -36,18 +48,33 @@ libaudioprocessing = cc_library_shared {
     defaults = ["libaudioprocessing_defaults"];
 
     srcs = [
+        "AudioMixer.cpp"
         "BufferProviders.cpp"
         "RecordBufferConverter.cpp"
     ];
-    whole_static_libs = ["libaudioprocessing_arm"];
+
+    header_libs = [
+        "libaudiohal_headers"
+        "libbase_headers"
+        "libmedia_headers"
+    ];
+
+    shared_libs = [
+        "libaudiohal"
+        "libsonic"
+        "libvibrator"
+    ];
+
+    whole_static_libs = ["libaudioprocessing_base"];
 };
 
-libaudioprocessing_arm = cc_library_static {
-    name = "libaudioprocessing_arm";
+libaudioprocessing_base = cc_library_static {
+    name = "libaudioprocessing_base";
     defaults = ["libaudioprocessing_defaults"];
+    vendor_available = true;
 
     srcs = [
-        "AudioMixer.cpp"
+        "AudioMixerBase.cpp"
         "AudioResampler.cpp"
         "AudioResamplerCubic.cpp"
         "AudioResamplerSinc.cpp"
@@ -61,4 +88,4 @@ libaudioprocessing_arm = cc_library_static {
     };
 };
 
-in { inherit libaudioprocessing libaudioprocessing_arm libaudioprocessing_defaults; }
+in { inherit libaudioprocessing libaudioprocessing_base libaudioprocessing_defaults; }

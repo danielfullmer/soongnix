@@ -11,7 +11,10 @@ AppLaunch = android_test {
         "android.test.base"
         "android.test.runner"
     ];
-    static_libs = ["androidx.test.rules"];
+    static_libs = [
+        "androidx.test.rules"
+        "ub-uiautomator"
+    ];
     test_suites = ["device-tests"];
 };
 

@@ -87,6 +87,7 @@ libbionic_tests_headers_posix = cc_library_static {
         "tar_h.c"
         "termios_h.c"
         "tgmath_h.c"
+        "threads_h.c"
         "time_h.c"
         "unistd_h.c"
         "utime_h.c"

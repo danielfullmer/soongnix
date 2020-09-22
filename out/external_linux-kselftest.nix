@@ -331,7 +331,10 @@ kselftest_media_tests = cc_test {
 kselftest_membarrier_tests = cc_test {
     name = "kselftest_membarrier_tests";
     relative_install_path = "linux-kselftest/membarrier";
-    srcs = ["tools/testing/selftests/membarrier/membarrier_test.c"];
+    srcs = [
+        "tools/testing/selftests/membarrier/membarrier_test_multi_thread.c"
+        "tools/testing/selftests/membarrier/membarrier_test_single_thread.c"
+    ];
     defaults = ["kselftest_defaults"];
 };
 
@@ -439,6 +442,8 @@ kselftest_size_test = cc_test {
     srcs = ["tools/testing/selftests/size/get_size.c"];
     defaults = ["kselftest_defaults"];
     nocrt = true;
+    #  coverage runtime calls atexit, which is unavailable with nocrt.
+    native_coverage = false;
 };
 
 #  splice test
@@ -589,6 +594,9 @@ kselftest_x86_tests = cc_test {
                 "tools/testing/selftests/x86/test_FCOMI.c"
                 "tools/testing/selftests/x86/test_FISTTP.c"
                 "tools/testing/selftests/x86/vdso_restorer.c"
+            ];
+            static_libs = [
+                "libdl"
             ];
         };
     };

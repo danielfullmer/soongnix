@@ -1,4 +1,4 @@
-{ cc_library_shared }:
+{ cc_library }:
 let
 
 # #
@@ -54,7 +54,7 @@ let
 # ############################################################
 #    build the harfbuzz shared library
 #
-libharfbuzz_ng = cc_library_shared {
+libharfbuzz_ng = cc_library {
     name = "libharfbuzz_ng";
     host_supported = true;
     arch = {
@@ -70,8 +70,10 @@ libharfbuzz_ng = cc_library_shared {
         "src/hb-buffer.cc"
         "src/hb-common.cc"
         "src/hb-face.cc"
+        "src/hb-fallback-shape.cc"
         "src/hb-font.cc"
         "src/hb-icu.cc"
+        "src/hb-number.cc"
         "src/hb-ot-cff1-table.cc"
         "src/hb-ot-cff2-table.cc"
         "src/hb-ot-face.cc"
@@ -79,6 +81,7 @@ libharfbuzz_ng = cc_library_shared {
         "src/hb-ot-layout.cc"
         "src/hb-ot-map.cc"
         "src/hb-ot-math.cc"
+        "src/hb-ot-metrics.cc"
         "src/hb-ot-shape-complex-arabic.cc"
         "src/hb-ot-shape-complex-default.cc"
         "src/hb-ot-shape-complex-hangul.cc"
@@ -101,18 +104,23 @@ libharfbuzz_ng = cc_library_shared {
         "src/hb-shape.cc"
         "src/hb-shaper.cc"
         "src/hb-static.cc"
+        "src/hb-ucd.cc"
         "src/hb-unicode.cc"
-        "src/hb-warning.cc"
     ];
 
     target = {
         android = {
             shared_libs = [
+                "libandroidicu"
                 "libcutils"
                 "libutils"
             ];
         };
         host = {
+            shared_libs = [
+                "libicui18n"
+                "libicuuc"
+            ];
             static_libs = [
                 "libcutils"
                 "libutils"
@@ -124,7 +132,6 @@ libharfbuzz_ng = cc_library_shared {
     };
 
     shared_libs = [
-        "libandroidicu"
         "liblog"
     ];
 

@@ -19,14 +19,17 @@ awk-flags = cc_defaults {
         #  in stdio2.h, and this #defines it in awk.h
         "-Wno-macro-redefined"
     ];
-    yaccflags = [
-        "-y"
-    ];
+    stl = "none";
+    yacc = {
+        flags = [
+            "-y"
+        ];
+    };
 };
 
 #  TODO: we should actually rebuild awkgram.y and pass the output through maketab.
 #  For now we just rebuild the checked-in generated files.
-awk-maketab = cc_binary {
+awk-maketab = cc_binary_host {
     name = "awk-maketab";
     defaults = ["awk-flags"];
     srcs = ["maketab.c"];

@@ -56,6 +56,12 @@ libcap = cc_library {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.adbd"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 getcap = cc_binary {

@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -15,7 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsStorageStatsApp = android_test {
+CtsStorageStatsApp = android_test_helper_app {
     name = "CtsStorageStatsApp";
     defaults = ["cts_support_defaults"];
     sdk_version = "test_current";
@@ -30,7 +30,7 @@ CtsStorageStatsApp = android_test {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     dex_preopt = {

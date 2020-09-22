@@ -4,6 +4,7 @@ let
 libstagefright_mp3dec = cc_library_static {
     name = "libstagefright_mp3dec";
     vendor_available = true;
+    min_sdk_version = "29";
 
     srcs = [
         "src/pvmp3_normalize.cpp"

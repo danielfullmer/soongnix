@@ -80,7 +80,6 @@ libselinux_defaults = cc_defaults {
             ];
 
             shared_libs = [
-                "libcrypto"
                 "liblog"
             ];
 
@@ -95,17 +94,15 @@ libselinux_defaults = cc_defaults {
 
     local_include_dirs = ["include"];
     export_include_dirs = ["include"];
+
+    stl = "none";
+    system_shared_libs = ["libc"];
 };
 
 libselinux = cc_library {
     name = "libselinux";
     defaults = ["libselinux_defaults"];
 
-    vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
-    double_loadable = true;
     recovery_available = true;
 
     host_supported = true;
@@ -207,6 +204,11 @@ libselinux = cc_library {
     };
     shared = {
         shared_libs = ["libpcre2"];
+    };
+
+    stubs = {
+        symbol_file = "exported.map";
+        versions = ["30"];
     };
 };
 

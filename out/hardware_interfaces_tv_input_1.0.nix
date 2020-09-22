@@ -18,7 +18,7 @@ let
         "android.hardware.audio.common@2.0"
         "android.hidl.base@1.0"
     ];
-    gen_java = false;
+    gen_java = true;
     gen_java_constants = true;
 };
 

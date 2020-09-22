@@ -24,18 +24,21 @@ EGL_test = cc_test {
         "libbinder"
         "libgui"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libnativewindow"
+        "libSurfaceFlingerProp"
     ];
 
     include_dirs = [
-        "bionic/libc/private"
         "frameworks/native/opengl/libs"
         "frameworks/native/opengl/libs/EGL"
     ];
 
+    header_libs = [
+        "bionic_libc_platform_headers"
+        "libsurfaceflinger_headers"
+    ];
 };
 
 in { inherit EGL_test; }

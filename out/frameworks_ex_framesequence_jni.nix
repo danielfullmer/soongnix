@@ -53,6 +53,8 @@ libframesequence = cc_library_shared {
         "libjnigraphics"
         "liblog"
     ];
+
+    product_specific = true;
 };
 
 in { inherit libframesequence; }

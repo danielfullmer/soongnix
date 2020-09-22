@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_library_static, cc_test }:
 let
 
 #
@@ -17,25 +17,94 @@ let
 #  limitations under the License.
 #
 
-VtsHalDrmV1_0TargetTest = cc_test {
-    name = "VtsHalDrmV1_0TargetTest";
+libdrmvtshelper = cc_library_static {
+    name = "libdrmvtshelper";
     defaults = ["VtsHalTargetTestDefaults"];
+    local_include_dirs = [
+        "include"
+    ];
     srcs = [
-        "drm_hal_clearkey_test.cpp"
-        "drm_hal_vendor_test.cpp"
         "vendor_modules.cpp"
     ];
     static_libs = [
-        "android.hardware.drm@1.0"
         "android.hardware.drm@1.0-helper"
+    ];
+    export_include_dirs = ["include"];
+};
+
+"android.hardware.drm@1.0-vts" = cc_library_static {
+    name = "android.hardware.drm@1.0-vts";
+    defaults = ["VtsHalTargetTestDefaults"];
+    local_include_dirs = [
+        "include"
+    ];
+    srcs = [
+        "drm_hal_clearkey_test.cpp"
+        "drm_hal_vendor_test.cpp"
+    ];
+    shared_libs = [
+        "android.hardware.drm@1.0"
         "android.hidl.allocator@1.0"
         "android.hidl.memory@1.0"
         "libhidlmemory"
         "libnativehelper"
-        "libssl"
-        "libcrypto"
     ];
-    test_suites = ["general-tests"];
+    static_libs = [
+        "android.hardware.drm@1.0-helper"
+        "libcrypto_static"
+        "libdrmvtshelper"
+    ];
+    export_shared_lib_headers = [
+        "android.hardware.drm@1.0"
+        "android.hidl.allocator@1.0"
+        "android.hidl.memory@1.0"
+        "libhidlmemory"
+        "libnativehelper"
+    ];
+    export_include_dirs = [
+        "include"
+    ];
 };
 
-in { inherit VtsHalDrmV1_0TargetTest; }
+VtsHalDrmV1_0TargetTest = cc_test {
+    name = "VtsHalDrmV1_0TargetTest";
+    defaults = ["VtsHalTargetTestDefaults"];
+    srcs = [
+        "drm_hal_test_main.cpp"
+    ];
+    whole_static_libs = [
+        "android.hardware.drm@1.0-vts"
+    ];
+    shared_libs = [
+        "android.hardware.drm@1.0"
+        "android.hidl.allocator@1.0"
+        "android.hidl.memory@1.0"
+        "libhidlmemory"
+        "libnativehelper"
+    ];
+    static_libs = [
+        "android.hardware.drm@1.0-helper"
+        "libcrypto_static"
+        "libdrmvtshelper"
+    ];
+    arch = {
+        arm = {
+            data = [":libvtswidevine-arm-prebuilts"];
+        };
+        arm64 = {
+            data = [":libvtswidevine-arm64-prebuilts"];
+        };
+        x86 = {
+            data = [":libvtswidevine-x86-prebuilts"];
+        };
+        x86_64 = {
+            data = [":libvtswidevine-x86_64-prebuilts"];
+        };
+    };
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+};
+
+in { inherit "android.hardware.drm@1.0-vts" VtsHalDrmV1_0TargetTest libdrmvtshelper; }

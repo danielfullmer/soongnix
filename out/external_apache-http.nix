@@ -1,4 +1,4 @@
-{ java_sdk_library }:
+{ filegroup, java_sdk_library }:
 let
 
 #  Copyright (C) 2014 The Android Open Source Project
@@ -15,8 +15,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"org.apache.http.legacy" = java_sdk_library {
-    name = "org.apache.http.legacy";
+"org.apache.http.legacy.sources" = filegroup {
+    name = "org.apache.http.legacy.sources";
     srcs = [
         "src/org/apache/commons/codec/BinaryDecoder.java"
         "src/org/apache/commons/codec/BinaryEncoder.java"
@@ -399,6 +399,14 @@ let
         "src/org/apache/http/util/ExceptionUtils.java"
         "src/org/apache/http/util/LangUtils.java"
         "src/org/apache/http/util/VersionInfo.java"
+    ];
+    path = "src";
+    visibility = ["//visibility:private"];
+};
+
+"org.apache.http.legacy.android.sources" = filegroup {
+    name = "org.apache.http.legacy.android.sources";
+    srcs = [
         "android/src/android/net/compatibility/WebAddress.java"
         "android/src/android/net/http/AndroidHttpClient.java"
         "android/src/android/net/http/AndroidHttpClientConnection.java"
@@ -428,8 +436,15 @@ let
         "android/src/com/android/internal/http/multipart/PartSource.java"
         "android/src/com/android/internal/http/multipart/StringPart.java"
     ];
-    api_srcs = [
-        ":apache-http-stubs-sources"
+    path = "android/src";
+    visibility = ["//visibility:private"];
+};
+
+"org.apache.http.legacy" = java_sdk_library {
+    name = "org.apache.http.legacy";
+    srcs = [
+        ":org.apache.http.legacy.sources"
+        ":org.apache.http.legacy.android.sources"
     ];
     api_packages = [
         "android.net.compatibility"
@@ -490,4 +505,13 @@ let
     ];
 };
 
-in { inherit "org.apache.http.legacy"; }
+#  Make the current.txt available for use by the cts/tests/signature tests.
+#  ========================================================================
+"apache-http-legacy-current.txt" = filegroup {
+    name = "apache-http-legacy-current.txt";
+    srcs = [
+        "api/current.txt"
+    ];
+};
+
+in { inherit "apache-http-legacy-current.txt" "org.apache.http.legacy" "org.apache.http.legacy.android.sources" "org.apache.http.legacy.sources"; }

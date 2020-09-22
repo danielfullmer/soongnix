@@ -1,4 +1,4 @@
-{ cc_binary, cc_binary_host, cc_defaults, cc_library_static }:
+{ cc_binary, cc_binary_host, cc_defaults, cc_library_host_static, cc_library_static }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -34,6 +34,7 @@ libapplypatch = cc_library_static {
     name = "libapplypatch";
 
     host_supported = true;
+    vendor_available = true;
 
     defaults = [
         "applypatch_defaults"
@@ -54,10 +55,13 @@ libapplypatch = cc_library_static {
         "libbase"
         "libbspatch"
         "libbz"
-        "libcrypto"
         "libedify"
         "libotautil"
         "libz"
+    ];
+
+    shared_libs = [
+        "libcrypto"
     ];
 
     target = {
@@ -69,6 +73,7 @@ libapplypatch = cc_library_static {
 
 libapplypatch_modes = cc_library_static {
     name = "libapplypatch_modes";
+    vendor_available = true;
 
     defaults = [
         "applypatch_defaults"
@@ -81,14 +86,18 @@ libapplypatch_modes = cc_library_static {
     static_libs = [
         "libapplypatch"
         "libbase"
-        "libcrypto"
         "libedify"
         "libotautil"
+    ];
+
+    shared_libs = [
+        "libcrypto"
     ];
 };
 
 applypatch = cc_binary {
     name = "applypatch";
+    vendor = true;
 
     defaults = [
         "applypatch_defaults"
@@ -103,24 +112,28 @@ applypatch = cc_binary {
         "libapplypatch"
         "libedify"
         "libotautil"
+
+        #  External dependencies.
         "libbspatch"
+        "libbrotli"
+        "libbz"
     ];
 
     shared_libs = [
         "libbase"
-        "libbrotli"
-        "libbz"
         "libcrypto"
         "liblog"
         "libz"
         "libziparchive"
     ];
+
+    init_rc = [
+        "vendor_flash_recovery.rc"
+    ];
 };
 
-libimgdiff = cc_library_static {
+libimgdiff = cc_library_host_static {
     name = "libimgdiff";
-
-    host_supported = true;
 
     defaults = [
         "applypatch_defaults"
@@ -174,36 +187,4 @@ imgdiff = cc_binary_host {
     ];
 };
 
-libimgpatch = cc_library_static {
-    name = "libimgpatch";
-
-    #  The host module is for recovery_host_test (Linux only).
-    host_supported = true;
-
-    defaults = [
-        "applypatch_defaults"
-    ];
-
-    srcs = [
-        "bspatch.cpp"
-        "imgpatch.cpp"
-    ];
-
-    static_libs = [
-        "libbase"
-        "libbspatch"
-        "libbz"
-        "libcrypto"
-        "libedify"
-        "libotautil"
-        "libz"
-    ];
-
-    target = {
-        darwin = {
-            enabled = false;
-        };
-    };
-};
-
-in { inherit applypatch applypatch_defaults imgdiff libapplypatch libapplypatch_modes libimgdiff libimgpatch; }
+in { inherit applypatch applypatch_defaults imgdiff libapplypatch libapplypatch_modes libimgdiff; }

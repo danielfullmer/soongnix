@@ -4,7 +4,7 @@ let
 avcdec = cc_test {
     name = "avcdec";
     gtest = false;
-
+    host_supported = true;
     cflags = [
         "-DPROFILE_ENABLE"
         "-DARM"
@@ -19,11 +19,17 @@ avcdec = cc_test {
     srcs = ["decoder/main.c"];
     static_libs = ["libavcdec"];
     shared_libs = ["liblog"];
+    target = {
+        darwin = {
+            enabled = false;
+        };
+    };
 };
 
 avcenc = cc_test {
     name = "avcenc";
     gtest = false;
+    host_supported = true;
 
     cflags = [
         "-DPROFILE_ENABLE"

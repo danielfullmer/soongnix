@@ -66,6 +66,29 @@ chre_test_client = cc_binary {
     static_libs = ["chre_client"];
 };
 
+chre_power_test_client = cc_binary {
+    name = "chre_power_test_client";
+    vendor = true;
+    local_include_dirs = [
+        "chre_api/include/chre_api"
+        "util/include"
+        "apps/power_test/common/include"
+    ];
+    srcs = [
+        "host/common/test/power_test/chre_power_test_client.cc"
+    ];
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+    shared_libs = [
+        "libcutils"
+        "liblog"
+        "libutils"
+    ];
+    static_libs = ["chre_client"];
+};
+
 audio_stress_test = cc_test {
     name = "audio_stress_test";
     vendor = true;
@@ -89,13 +112,10 @@ audio_stress_test = cc_test {
     gtest = false;
 };
 
-"android.hardware.contexthub@1.0-impl.generic" = cc_library_shared {
-    name = "android.hardware.contexthub@1.0-impl.generic";
+"android.hardware.contexthub@1.X-shared-impl" = cc_library_headers {
+    name = "android.hardware.contexthub@1.X-shared-impl";
     vendor = true;
-    relative_install_path = "hw";
-    srcs = [
-        "host/hal_generic/generic_context_hub.cc"
-    ];
+    export_include_dirs = ["host/hal_generic/common/"];
     cflags = [
         "-Wall"
         "-Werror"
@@ -104,11 +124,63 @@ audio_stress_test = cc_test {
         "libcutils"
         "liblog"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.contexthub@1.0"
     ];
     static_libs = ["chre_client"];
+};
+
+"android.hardware.contexthub@1.0-impl.generic" = cc_library_shared {
+    name = "android.hardware.contexthub@1.0-impl.generic";
+    vendor = true;
+    relative_install_path = "hw";
+    srcs = [
+        "host/hal_generic/V1_0/generic_context_hub_v1_0.cc"
+    ];
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+    header_libs = [
+        "android.hardware.contexthub@1.X-shared-impl"
+    ];
+    shared_libs = [
+        "libcutils"
+        "liblog"
+        "libhidlbase"
+        "libutils"
+        "android.hardware.contexthub@1.0"
+    ];
+    static_libs = ["chre_client"];
+};
+
+"android.hardware.contexthub@1.1-service.generic" = cc_binary {
+    name = "android.hardware.contexthub@1.1-service.generic";
+    defaults = ["hidl_defaults"];
+    vendor = true;
+    relative_install_path = "hw";
+    srcs = [
+        "host/hal_generic/V1_1/generic_context_hub_v1_1.cc"
+        "host/hal_generic/V1_1/service.cc"
+    ];
+    init_rc = ["host/hal_generic/V1_1/android.hardware.contexthub@1.1-service-generic.rc"];
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+    header_libs = [
+        "android.hardware.contexthub@1.X-shared-impl"
+    ];
+    shared_libs = [
+        "libcutils"
+        "liblog"
+        "libhidlbase"
+        "libutils"
+        "android.hardware.contexthub@1.0"
+        "android.hardware.contexthub@1.1"
+    ];
+    static_libs = ["chre_client"];
+    vintf_fragments = ["host/hal_generic/V1_1/android.hardware.contexthub@1.1-generic.xml"];
 };
 
 chre_api = cc_library_headers {
@@ -131,4 +203,4 @@ subdirs = [
     "apps/wifi_offload"
 ];
 
-in { inherit "android.hardware.contexthub@1.0-impl.generic" audio_stress_test chre_api chre_client chre_flatbuffers chre_test_client; }
+in { inherit "android.hardware.contexthub@1.0-impl.generic" "android.hardware.contexthub@1.1-service.generic" "android.hardware.contexthub@1.X-shared-impl" audio_stress_test chre_api chre_client chre_flatbuffers chre_power_test_client chre_test_client; }

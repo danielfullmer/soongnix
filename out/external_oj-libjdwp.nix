@@ -99,6 +99,11 @@ javavm_headers = cc_library_headers {
     ];
     host_supported = true;
     device_supported = true;
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 libnpt_headers = cc_library_headers {
@@ -108,6 +113,11 @@ libnpt_headers = cc_library_headers {
         "src/solaris/npt"
     ];
     defaults = ["upstream-jdwp-defaults"];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 libnpt = cc_library {
@@ -122,6 +132,10 @@ libnpt = cc_library {
         "libnpt_headers"
     ];
     defaults = ["upstream-jdwp-defaults"];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libjdwp_headers = cc_library_headers {
@@ -134,6 +148,11 @@ libjdwp_headers = cc_library_headers {
     generated_headers = ["jdwp_generated_headers"];
     export_generated_headers = ["jdwp_generated_headers"];
     defaults = ["upstream-jdwp-defaults"];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 libjdwp = cc_library {
@@ -203,6 +222,10 @@ libjdwp = cc_library {
         "libdt_socket"
     ];
     defaults = ["upstream-jdwp-defaults"];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libdt_socket = cc_library {
@@ -222,6 +245,10 @@ libdt_socket = cc_library {
     ];
     required = ["libnpt"];
     defaults = ["upstream-jdwp-defaults"];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 jdwp_generated_java = genrule {
@@ -468,6 +495,7 @@ jdi-support = java_library_host {
         "src/share/classes/com/sun/tools/jdi/ProcessAttachingConnector.java"
     ];
     services = ["etc/com.sun.jdi.connect.Connector"];
+    java_version = "1.8";
     javacflags = ["-g"];
     notice = "LICENSE";
 };

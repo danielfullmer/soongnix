@@ -16,6 +16,7 @@ slesTest_playStates = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -34,6 +35,7 @@ slesTest_playStreamType = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -52,6 +54,7 @@ slesTest_playUri = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -70,6 +73,7 @@ slesTest_loopUri = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -88,6 +92,7 @@ slesTest_playUri2 = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 
 };
@@ -107,6 +112,7 @@ slesTest_slowDownUri = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -125,6 +131,7 @@ slesTest_manyPlayers = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -143,6 +150,7 @@ slesTest_getPositionUri = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 

@@ -54,7 +54,6 @@ api-coverage = java_library_host {
     };
 
     java_resource_dirs = ["res"];
-    manifest = "MANIFEST.mf";
 
     static_libs = [
         "compatibility-host-util"
@@ -72,12 +71,14 @@ cts-api-coverage = java_binary_host {
     name = "cts-api-coverage";
     wrapper = "etc/cts-api-coverage";
     static_libs = ["api-coverage"];
+    manifest = "MANIFEST.mf";
 };
 
 ndk-api-report = java_binary_host {
     name = "ndk-api-report";
     wrapper = "etc/ndk-api-report";
     static_libs = ["api-coverage"];
+    manifest = "MANIFEST.mf";
 };
 
 in { inherit api-coverage cts-api-coverage ndk-api-report; }

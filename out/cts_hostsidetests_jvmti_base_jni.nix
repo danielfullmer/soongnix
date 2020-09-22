@@ -20,6 +20,7 @@ libctsjvmtiagent = cc_library_shared {
 
     srcs = [
         "cts_agent.cpp"
+        "cts_logging.cpp"
         "tagging.cpp"
         "tracking.cpp"
         "redefine.cpp"

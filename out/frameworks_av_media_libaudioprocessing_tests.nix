@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_test }:
+{ cc_benchmark, cc_binary, cc_defaults, cc_test }:
 let
 
 #  Build the unit tests for libaudioprocessing
@@ -6,8 +6,13 @@ let
 libaudioprocessing_test_defaults = cc_defaults {
     name = "libaudioprocessing_test_defaults";
 
-    header_libs = ["libbase_headers"];
+    header_libs = [
+        "libbase_headers"
+        "libmedia_headers"
+    ];
+
     shared_libs = [
+        "libaudioclient"
         "libaudioprocessing"
         "libaudioutils"
         "libcutils"
@@ -54,4 +59,27 @@ test-resampler = cc_binary {
     static_libs = ["libsndfile"];
 };
 
-in { inherit libaudioprocessing_test_defaults resampler_tests test-mixer test-resampler; }
+#
+#  build mixerops objdump
+#
+#  This is used to verify proper optimization of the code.
+#
+#  For example, use:
+#  ./prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-objdump
+#       -d --source ./out/target/product/crosshatch/symbols/system/bin/mixerops_objdump
+#
+mixerops_objdump = cc_binary {
+    name = "mixerops_objdump";
+    srcs = ["mixerops_objdump.cpp"];
+};
+
+#
+#  build mixerops benchmark
+#
+mixerops_benchmark = cc_benchmark {
+    name = "mixerops_benchmark";
+    srcs = ["mixerops_benchmark.cpp"];
+    static_libs = ["libgoogle-benchmark"];
+};
+
+in { inherit libaudioprocessing_test_defaults mixerops_benchmark mixerops_objdump resampler_tests test-mixer test-resampler; }

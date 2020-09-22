@@ -4,6 +4,8 @@ let
 libstagefright_amrwbdec = cc_library_static {
     name = "libstagefright_amrwbdec";
     vendor_available = true;
+    host_supported = true;
+    min_sdk_version = "29";
 
     srcs = [
         "src/agc2_amr_wb.cpp"
@@ -47,8 +49,6 @@ libstagefright_amrwbdec = cc_library_static {
         "src/weight_amrwb_lpc.cpp"
     ];
 
-    header_libs = ["libstagefright_headers"];
-
     export_include_dirs = [
         "src"
         "include"
@@ -66,12 +66,19 @@ libstagefright_amrwbdec = cc_library_static {
             "signed-integer-overflow"
         ];
     };
+
+    target = {
+        darwin = {
+            enabled = false;
+        };
+    };
 };
 
 # ###############################################################################
 libstagefright_amrwbdec_test = cc_test {
     name = "libstagefright_amrwbdec_test";
     gtest = false;
+    host_supported = true;
 
     srcs = ["test/amrwbdec_test.cpp"];
 
@@ -93,6 +100,12 @@ libstagefright_amrwbdec_test = cc_test {
         misc_undefined = [
             "signed-integer-overflow"
         ];
+    };
+
+    target = {
+        darwin = {
+            enabled = false;
+        };
     };
 };
 

@@ -36,7 +36,6 @@ simpleperf_runtest_defaults = cc_defaults {
             suffix = "32";
         };
     };
-    shared_libs = ["libsimpleperf_inplace_sampler"];
     target = {
         darwin = {
             enabled = false;

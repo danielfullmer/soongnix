@@ -45,7 +45,6 @@ libpdx_default_transport = cc_library_shared {
         "libcutils"
         "liblog"
         "libutils"
-        "libcrypto"
         "libselinux"
     ];
 };

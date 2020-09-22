@@ -18,6 +18,7 @@ let
 
 DownloadPublicApiAccessTests = android_test {
     name = "DownloadPublicApiAccessTests";
+    test_suites = ["device-tests"];
 
     srcs = [
         "src/com/android/providers/downloads/public_api_access_tests/PublicApiAccessTest.java"
@@ -29,6 +30,7 @@ DownloadPublicApiAccessTests = android_test {
     ];
 
     static_libs = [
+        "androidx.test.rules"
         "junit"
     ];
 

@@ -18,31 +18,48 @@ let
 #
 
 #  Build variants {target,host} x {debug,ndebug} x {32,64}
-tifast-defaults = cc_defaults {
-    name = "tifast-defaults";
-    host_supported = true;
+tifast-base-defaults = cc_defaults {
+    name = "tifast-base-defaults";
     srcs = ["tifast.cc"];
     defaults = ["art_defaults"];
 
     #  Note that this tool needs to be built for both 32-bit and 64-bit since it requires
     #  to be same ISA as what it is attached to.
     compile_multilib = "both";
+    header_libs = [
+        "libopenjdkjvmti_headers"
+        "libnativehelper_header_only"
+        "jni_headers"
+    ];
+};
 
+tifast-defaults = cc_defaults {
+    name = "tifast-defaults";
+    host_supported = true;
     shared_libs = [
         "libbase"
     ];
-    header_libs = [
-        "libopenjdkjvmti_headers"
+    defaults = ["tifast-base-defaults"];
+};
+
+tifast-static-defaults = cc_defaults {
+    name = "tifast-static-defaults";
+    host_supported = false;
+    defaults = ["tifast-base-defaults"];
+
+    shared_libs = [
+        "liblog"
     ];
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
-    symlink_preferred_arch = true;
+    static_libs = [
+        "libbase_ndk"
+    ];
+    sdk_version = "current";
+    stl = "c++_static";
+};
+
+libtifasts = art_cc_library {
+    name = "libtifasts";
+    defaults = ["tifast-static-defaults"];
 };
 
 libtifast = art_cc_library {
@@ -58,4 +75,4 @@ libtifastd = art_cc_library {
     ];
 };
 
-in { inherit libtifast libtifastd tifast-defaults; }
+in { inherit libtifast libtifastd libtifasts tifast-base-defaults tifast-defaults tifast-static-defaults; }

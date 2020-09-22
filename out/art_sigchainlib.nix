@@ -19,9 +19,13 @@ let
 
 libsigchain = cc_library {
     name = "libsigchain";
+    defaults = ["art_defaults"];
+    visibility = [
+        #  TODO(b/133140750): Clean this up.
+        "//frameworks/base/cmds/app_process"
+    ];
 
     host_supported = true;
-    defaults = ["art_defaults"];
     target = {
         linux = {
             shared = {
@@ -40,6 +44,15 @@ libsigchain = cc_library {
             whole_static_libs = ["libasync_safe"];
         };
     };
+
+    export_include_dirs = ["."];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        #  TODO(b/142944931) Clean this up. This is due to the dependency from
+        #  app_process
+        "//apex_available:platform"
+    ];
 };
 
 #  Create a dummy version of libsigchain which expose the necessary symbols
@@ -55,6 +68,8 @@ libsigchain_dummy = cc_library_static {
             whole_static_libs = ["libasync_safe"];
         };
     };
+
+    export_include_dirs = ["."];
 };
 
 art_sigchain_tests = art_cc_test {
@@ -68,11 +83,19 @@ art_sigchain_tests = art_cc_test {
 
 "art_sigchain_version_script32.txt" = filegroup {
     name = "art_sigchain_version_script32.txt";
+    visibility = [
+        #  TODO(b/133140750): Clean this up.
+        "//frameworks/base/cmds/app_process"
+    ];
     srcs = ["version-script32.txt"];
 };
 
 "art_sigchain_version_script64.txt" = filegroup {
     name = "art_sigchain_version_script64.txt";
+    visibility = [
+        #  TODO(b/133140750): Clean this up.
+        "//frameworks/base/cmds/app_process"
+    ];
     srcs = ["version-script64.txt"];
 };
 

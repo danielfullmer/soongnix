@@ -27,6 +27,8 @@ soong-selinux = bootstrap_go_package {
     srcs = [
         "cil_compat_map.go"
         "filegroup.go"
+        "selinux.go"
+        "selinux_contexts.go"
     ];
     pluginFor = ["soong_build"];
 };

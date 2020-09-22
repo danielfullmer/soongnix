@@ -10,7 +10,6 @@ let
 
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libbase"
         "libutils"
@@ -38,7 +37,6 @@ let
         "libhardware_legacy"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.tv.cec@2.0"
     ];
 

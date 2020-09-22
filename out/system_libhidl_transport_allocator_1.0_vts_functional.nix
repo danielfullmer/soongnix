@@ -27,6 +27,10 @@ VtsHidlAllocatorV1_0TargetTest = cc_test {
     static_libs = [
         "android.hidl.allocator@1.0"
     ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHidlAllocatorV1_0TargetTest; }

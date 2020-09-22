@@ -26,7 +26,6 @@ BugreportManagerTestCases = android_test {
         "androidx.test.rules"
         "truth-prebuilt"
     ];
-    test_suites = ["general-tests"];
     sdk_version = "test_current";
     platform_apis = true;
 };

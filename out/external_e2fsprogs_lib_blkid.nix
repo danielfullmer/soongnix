@@ -6,6 +6,7 @@ let
 libext2_blkid = cc_library {
     name = "libext2_blkid";
     host_supported = true;
+    ramdisk_available = true;
     recovery_available = true;
     unique_host_soname = true;
     defaults = ["e2fsprogs-defaults"];

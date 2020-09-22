@@ -1,4 +1,4 @@
-{ android_library }:
+{ android_library, genrule, java_library }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -15,8 +15,22 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-SystemUISharedLib = android_library {
+statslog-SystemUI-java-gen = genrule {
+    name = "statslog-SystemUI-java-gen";
+    tools = ["stats-log-api-gen"];
+    cmd = "$(location stats-log-api-gen) --java $(out) --module sysui --javaPackage com.android.systemui.shared.system --javaClass SysUiStatsLog";
+    out = ["com/android/systemui/shared/system/SysUiStatsLog.java"];
+};
 
+SystemUI-statsd = java_library {
+    name = "SystemUI-statsd";
+
+    srcs = [
+        ":statslog-SystemUI-java-gen"
+    ];
+};
+
+SystemUISharedLib = android_library {
     name = "SystemUISharedLib";
     srcs = [
         "src/com/android/systemui/shared/plugins/PluginEnabler.java"
@@ -26,12 +40,10 @@ SystemUISharedLib = android_library {
         "src/com/android/systemui/shared/plugins/PluginManagerImpl.java"
         "src/com/android/systemui/shared/plugins/PluginPrefs.java"
         "src/com/android/systemui/shared/plugins/VersionInfo.java"
-        "src/com/android/systemui/shared/recents/model/IconLoader.java"
         "src/com/android/systemui/shared/recents/model/Task.java"
-        "src/com/android/systemui/shared/recents/model/TaskKeyCache.java"
-        "src/com/android/systemui/shared/recents/model/TaskKeyLruCache.java"
         "src/com/android/systemui/shared/recents/model/ThumbnailData.java"
         "src/com/android/systemui/shared/recents/utilities/AppTrace.java"
+        "src/com/android/systemui/shared/recents/utilities/BitmapUtil.java"
         "src/com/android/systemui/shared/recents/utilities/RectFEvaluator.java"
         "src/com/android/systemui/shared/recents/utilities/Utilities.java"
         "src/com/android/systemui/shared/recents/view/AppTransitionAnimationSpecCompat.java"
@@ -42,7 +54,9 @@ SystemUISharedLib = android_library {
         "src/com/android/systemui/shared/system/ActivityOptionsCompat.java"
         "src/com/android/systemui/shared/system/AssistDataReceiver.java"
         "src/com/android/systemui/shared/system/BackgroundExecutor.java"
+        "src/com/android/systemui/shared/system/BlurUtils.java"
         "src/com/android/systemui/shared/system/ChoreographerCompat.java"
+        "src/com/android/systemui/shared/system/ConfigurationCompat.java"
         "src/com/android/systemui/shared/system/ContextCompat.java"
         "src/com/android/systemui/shared/system/DevicePolicyManagerWrapper.java"
         "src/com/android/systemui/shared/system/DockedStackListenerCompat.java"
@@ -63,8 +77,9 @@ SystemUISharedLib = android_library {
         "src/com/android/systemui/shared/system/RemoteAnimationRunnerCompat.java"
         "src/com/android/systemui/shared/system/RemoteAnimationTargetCompat.java"
         "src/com/android/systemui/shared/system/RotationWatcher.java"
-        "src/com/android/systemui/shared/system/StatsLogCompat.java"
         "src/com/android/systemui/shared/system/SurfaceControlCompat.java"
+        "src/com/android/systemui/shared/system/SurfaceViewRequestReceiver.java"
+        "src/com/android/systemui/shared/system/SurfaceViewRequestUtils.java"
         "src/com/android/systemui/shared/system/SyncRtSurfaceTransactionApplierCompat.java"
         "src/com/android/systemui/shared/system/SystemGestureExclusionListenerCompat.java"
         "src/com/android/systemui/shared/system/TaskDescriptionCompat.java"
@@ -74,9 +89,15 @@ SystemUISharedLib = android_library {
         "src/com/android/systemui/shared/system/ThreadedRendererCompat.java"
         "src/com/android/systemui/shared/system/TonalCompat.java"
         "src/com/android/systemui/shared/system/TransactionCompat.java"
+        "src/com/android/systemui/shared/system/UniversalSmartspaceUtils.java"
+        "src/com/android/systemui/shared/system/ViewRootImplCompat.java"
+        "src/com/android/systemui/shared/system/WallpaperManagerCompat.java"
         "src/com/android/systemui/shared/system/WindowCallbacksCompat.java"
         "src/com/android/systemui/shared/system/WindowManagerWrapper.java"
+        "src/com/android/systemui/shared/tracing/FrameProtoTracer.java"
+        "src/com/android/systemui/shared/tracing/ProtoTraceable.java"
         "src/com/android/systemui/shared/recents/IOverviewProxy.aidl"
+        "src/com/android/systemui/shared/recents/IPinnedStackAnimationListener.aidl"
         "src/com/android/systemui/shared/recents/ISystemUiProxy.aidl"
     ];
 
@@ -84,9 +105,8 @@ SystemUISharedLib = android_library {
         "PluginCoreLib"
     ];
 
-    #  Enforce that the library is built against java 7 so that there are
-    #  no compatibility issues with launcher
-    java_version = "1.7";
+    java_version = "1.8";
+    min_sdk_version = "26";
 };
 
-in { inherit SystemUISharedLib; }
+in { inherit SystemUI-statsd SystemUISharedLib statslog-SystemUI-java-gen; }

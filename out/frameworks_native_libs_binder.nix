@@ -1,4 +1,4 @@
-{ cc_library_headers, cc_library_shared, filegroup }:
+{ aidl_interface, cc_library, cc_library_headers, filegroup }:
 let
 
 #  Copyright (C) 2009 The Android Open Source Project
@@ -19,6 +19,10 @@ libbinder_headers = cc_library_headers {
     name = "libbinder_headers";
     export_include_dirs = ["include"];
     vendor_available = true;
+    host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+
     header_libs = [
         "libbase_headers"
         "libcutils_headers"
@@ -29,9 +33,31 @@ libbinder_headers = cc_library_headers {
         "libcutils_headers"
         "libutils_headers"
     ];
+    min_sdk_version = "29";
 };
 
-libbinder = cc_library_shared {
+#  These interfaces are android-specific implementation unrelated to binder
+#  transport itself and should be moved to AIDL or in domain-specific libs.
+#
+#  Currently, these are only on system android (not vendor, not host)
+libbinder_device_interface_sources = [
+    "ActivityManager.cpp"
+    "AppOpsManager.cpp"
+    "IActivityManager.cpp"
+    "IAppOpsCallback.cpp"
+    "IAppOpsService.cpp"
+    "IBatteryStats.cpp"
+    "IMediaResourceMonitor.cpp"
+    "IPermissionController.cpp"
+    "IProcessInfoService.cpp"
+    "IUidObserver.cpp"
+    "PermissionCache.cpp"
+    "PermissionController.cpp"
+    "ProcessInfoService.cpp"
+    "IpPrefix.cpp"
+];
+
+libbinder = cc_library {
     name = "libbinder";
 
     #  for vndbinder
@@ -40,65 +66,63 @@ libbinder = cc_library_shared {
         enabled = true;
     };
     double_loadable = true;
+    host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+
+    #  TODO(b/31559095): get headers from bionic on host
+    include_dirs = [
+        "bionic/libc/kernel/android/uapi/"
+        "bionic/libc/kernel/uapi/"
+    ];
+
+    #  libbinder does not offer a stable wire protocol.
+    #  if a second copy of it is installed, then it may break after security
+    #  or dessert updates. Instead, apex users should use libbinder_ndk.
+    apex_available = [
+        "//apex_available:platform"
+        #  TODO(b/139016109) remove these three
+        "com.android.media.swcodec"
+        "test_com.android.media.swcodec"
+    ];
 
     srcs = [
-        "ActivityManager.cpp"
-        "AppOpsManager.cpp"
         "Binder.cpp"
         "BpBinder.cpp"
         "BufferedTextOutput.cpp"
         "Debug.cpp"
-        "IActivityManager.cpp"
-        "IAppOpsCallback.cpp"
-        "IAppOpsService.cpp"
-        "IBatteryStats.cpp"
         "IInterface.cpp"
-        "IMediaResourceMonitor.cpp"
         "IMemory.cpp"
         "IPCThreadState.cpp"
-        "IPermissionController.cpp"
-        "IProcessInfoService.cpp"
         "IResultReceiver.cpp"
         "IServiceManager.cpp"
         "IShellCallback.cpp"
-        "IUidObserver.cpp"
+        "LazyServiceRegistrar.cpp"
         "MemoryBase.cpp"
         "MemoryDealer.cpp"
         "MemoryHeapBase.cpp"
         "Parcel.cpp"
         "ParcelFileDescriptor.cpp"
-        "PermissionCache.cpp"
-        "PermissionController.cpp"
         "PersistableBundle.cpp"
-        "ProcessInfoService.cpp"
         "ProcessState.cpp"
         "Static.cpp"
+        "Stability.cpp"
         "Status.cpp"
         "TextOutput.cpp"
-        "IpPrefix.cpp"
-        "Value.cpp"
         ":libbinder_aidl"
     ];
 
     target = {
+        android = {
+            srcs = libbinder_device_interface_sources;
+
+            #  NOT static to keep the wire protocol unfrozen
+            static = {
+                enabled = false;
+            };
+        };
         vendor = {
-            exclude_srcs = [
-                "ActivityManager.cpp"
-                "AppOpsManager.cpp"
-                "IActivityManager.cpp"
-                "IAppOpsCallback.cpp"
-                "IAppOpsService.cpp"
-                "IBatteryStats.cpp"
-                "IMediaResourceMonitor.cpp"
-                "IPermissionController.cpp"
-                "IProcessInfoService.cpp"
-                "IUidObserver.cpp"
-                "PermissionCache.cpp"
-                "PermissionController.cpp"
-                "ProcessInfoService.cpp"
-                "IpPrefix.cpp"
-                ":libbinder_aidl"
-            ];
+            exclude_srcs = libbinder_device_interface_sources;
         };
     };
 
@@ -119,11 +143,9 @@ libbinder = cc_library_shared {
     };
 
     shared_libs = [
-        "libbase"
         "liblog"
         "libcutils"
         "libutils"
-        "libbinderthreadstate"
     ];
 
     header_libs = [
@@ -138,16 +160,34 @@ libbinder = cc_library_shared {
     sanitize = {
         misc_undefined = ["integer"];
     };
+    min_sdk_version = "29";
 };
 
 #  AIDL interface between libbinder and framework.jar
 libbinder_aidl = filegroup {
     name = "libbinder_aidl";
     srcs = [
+        "aidl/android/content/pm/IPackageChangeObserver.aidl"
         "aidl/android/content/pm/IPackageManagerNative.aidl"
+        "aidl/android/content/pm/PackageChangeEvent.aidl"
+        "aidl/android/os/IClientCallback.aidl"
+        "aidl/android/os/IServiceCallback.aidl"
+        "aidl/android/os/IServiceManager.aidl"
     ];
+    path = "aidl";
 };
 
-subdirs = ["tests"];
+libbinder_aidl_test_stub = aidl_interface {
+    name = "libbinder_aidl_test_stub";
+    unstable = true;
+    local_include_dir = "aidl";
+    srcs = [":libbinder_aidl"];
+    vendor_available = true;
+    backend = {
+        java = {
+            enabled = false;
+        };
+    };
+};
 
-in { inherit libbinder libbinder_aidl libbinder_headers; }
+in { inherit libbinder libbinder_aidl libbinder_aidl_test_stub libbinder_headers; }

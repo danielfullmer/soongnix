@@ -31,7 +31,10 @@ VtsHalRenderscriptV1_0TargetTest = cc_test {
         "android.hardware.renderscript@1.0"
         "libnativewindow"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalRenderscriptV1_0TargetTest; }

@@ -1,4 +1,4 @@
-{ cc_binary_host, cc_defaults }:
+{ cc_binary_host, cc_defaults, java_library }:
 let
 
 #
@@ -32,7 +32,7 @@ protoc-gen-stream-defaults = cc_defaults {
         "-Werror"
     ];
 
-    shared_libs = ["libprotoc"];
+    static_libs = ["libprotoc"];
 };
 
 protoc-gen-javastream = cc_binary_host {
@@ -53,4 +53,20 @@ protoc-gen-cppstream = cc_binary_host {
     defaults = ["protoc-gen-stream-defaults"];
 };
 
-in { inherit protoc-gen-cppstream protoc-gen-javastream protoc-gen-stream-defaults; }
+#  ==========================================================
+#  Build the java test
+#  ==========================================================
+StreamingProtoTest = java_library {
+    name = "StreamingProtoTest";
+    srcs = [
+        "test/src/com/android/streaming_proto_test/Main.java"
+        "test/imported.proto"
+        "test/test.proto"
+    ];
+    proto = {
+        plugin = "javastream";
+    };
+    static_libs = ["libprotobuf-java-lite"];
+};
+
+in { inherit StreamingProtoTest protoc-gen-cppstream protoc-gen-javastream protoc-gen-stream-defaults; }

@@ -1,4 +1,4 @@
-{ android_app }:
+{ android_app, filegroup }:
 let
 
 ProxyHandler = android_app {
@@ -13,4 +13,13 @@ ProxyHandler = android_app {
     privileged = true;
 };
 
-in { inherit ProxyHandler; }
+ProxyHandler-aidl-sources = filegroup {
+    name = "ProxyHandler-aidl-sources";
+    srcs = [
+        "src/com/android/net/IProxyCallback.aidl"
+        "src/com/android/net/IProxyPortListener.aidl"
+    ];
+    path = "src";
+};
+
+in { inherit ProxyHandler ProxyHandler-aidl-sources; }

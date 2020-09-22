@@ -16,7 +16,6 @@ libexpat = cc_library {
     sdk_version = "9";
 
     srcs = [
-        "lib/loadlibrary.c"
         "lib/xmlparse.c"
         "lib/xmlrole.c"
         "lib/xmltok.c"
@@ -29,7 +28,6 @@ libexpat = cc_library {
         "-Wno-unused-function"
         "-Wno-unused-parameter"
         "-Wno-missing-field-initializers"
-        "-fexceptions"
         "-DHAVE_EXPAT_CONFIG_H"
         "-UWIN32_LEAN_AND_MEAN"
     ];
@@ -44,8 +42,15 @@ libexpat = cc_library {
         };
     };
 
+    stl = "none";
     local_include_dirs = ["lib"];
     export_include_dirs = ["lib"];
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 in { inherit libexpat; }

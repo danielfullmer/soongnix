@@ -13,7 +13,6 @@ let
         "liblog"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.audio.common@2.0"
         "android.hardware.tv.input@1.0"
@@ -38,7 +37,6 @@ let
         "libhardware_legacy"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.audio.common@2.0"
         "android.hardware.tv.input@1.0"
     ];

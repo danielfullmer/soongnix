@@ -1,12 +1,17 @@
-{ cc_library_shared }:
+{ cc_library_headers, cc_library_shared }:
 let
+
+libmediametrics_headers = cc_library_headers {
+    name = "libmediametrics_headers";
+    export_include_dirs = ["include"];
+};
 
 libmediametrics = cc_library_shared {
     name = "libmediametrics";
 
     srcs = [
-        "IMediaAnalyticsService.cpp"
-        "MediaAnalyticsItem.cpp"
+        "IMediaMetricsService.cpp"
+        "MediaMetricsItem.cpp"
         "MediaMetrics.cpp"
     ];
 
@@ -20,9 +25,11 @@ libmediametrics = cc_library_shared {
     export_include_dirs = ["include"];
 
     cflags = [
-        "-Werror"
-        "-Wno-error=deprecated-declarations"
         "-Wall"
+        "-Werror"
+        "-Wextra"
+        "-Wthread-safety"
+        "-Wunreachable-code"
     ];
 
     sanitize = {
@@ -40,6 +47,18 @@ libmediametrics = cc_library_shared {
             "1"
         ];
     };
+
+    header_abi_checker = {
+        enabled = true;
+        symbol_file = "libmediametrics.map.txt";
+    };
+
+    visibility = [
+        "//cts/tests/tests/nativemedia/mediametrics"
+        "//frameworks/av:__subpackages__"
+        "//frameworks/base/core/jni"
+        "//frameworks/base/media/jni"
+    ];
 };
 
-in { inherit libmediametrics; }
+in { inherit libmediametrics libmediametrics_headers; }

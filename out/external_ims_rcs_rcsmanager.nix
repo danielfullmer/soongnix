@@ -1,4 +1,4 @@
-{ java_library }:
+{ filegroup, java_library }:
 let
 
 #  Copyright (c) 2015, Motorola Mobility LLC
@@ -36,8 +36,19 @@ let
         "src/java/com/android/ims/internal/IRcsService.aidl"
         "src/java/com/android/ims/internal/IRcsPresence.aidl"
         "src/java/com/android/ims/IRcsPresenceListener.aidl"
+        ":rcsmanager-utils"
     ];
-    libs = ["ims-common"];
 };
 
-in { inherit "com.android.ims.rcsmanager"; }
+rcsmanager-utils = filegroup {
+    name = "rcsmanager-utils";
+    srcs = [
+        "src/java/com/android/ims/internal/ContactNumberUtils.java"
+        "src/java/com/android/ims/internal/Logger.java"
+        "src/java/com/android/ims/RcsPresenceInfo.java"
+        "src/java/com/android/ims/ResultCode.java"
+    ];
+    path = "src/java";
+};
+
+in { inherit "com.android.ims.rcsmanager" rcsmanager-utils; }

@@ -34,7 +34,7 @@ CtsAlarmManagerTestCases = android_test {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     platform_apis = true;

@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,7 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsApplicationVisibilityCrossUserApp = android_test {
+CtsApplicationVisibilityCrossUserApp = android_test_helper_app {
     name = "CtsApplicationVisibilityCrossUserApp";
     defaults = ["cts_defaults"];
     static_libs = ["androidx.test.rules"];
@@ -23,7 +23,7 @@ CtsApplicationVisibilityCrossUserApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     sdk_version = "test_current";

@@ -6,7 +6,9 @@ let
 libext2_uuid = cc_library {
     name = "libext2_uuid";
     host_supported = true;
+    ramdisk_available = true;
     recovery_available = true;
+    vendor_available = true;
     unique_host_soname = true;
     defaults = ["e2fsprogs-defaults"];
     srcs = [

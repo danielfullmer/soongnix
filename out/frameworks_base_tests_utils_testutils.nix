@@ -30,6 +30,7 @@ frameworks-base-testutils = java_library {
         "java/com/android/internal/util/test/BidirectionalAsyncChannelServer.java"
         "java/com/android/internal/util/test/BroadcastInterceptingContext.java"
         "java/com/android/internal/util/test/FakeSettingsProvider.java"
+        "java/com/android/server/accessibility/test/MessageCapturingHandler.java"
         "java/com/android/server/wm/test/filters/FrameworksTestsFilter.java"
         "java/com/android/test/filters/SelectTest.java"
         "java/com/android/test/filters/SelectTestTests.java"
@@ -38,6 +39,7 @@ frameworks-base-testutils = java_library {
     static_libs = [
         "junit"
         "hamcrest-library"
+        "androidx.test.runner"
     ];
 
     libs = [

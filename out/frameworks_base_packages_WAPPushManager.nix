@@ -12,6 +12,8 @@ WAPPushManager = android_app {
     optimize = {
         proguard_flags_files = ["proguard.flags"];
     };
+
+    system_ext_specific = true;
 };
 
 in { inherit WAPPushManager; }

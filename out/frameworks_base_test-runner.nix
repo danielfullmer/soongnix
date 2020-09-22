@@ -1,4 +1,4 @@
-{ java_library, java_library_static, java_sdk_library }:
+{ filegroup, java_library, java_library_static, java_sdk_library }:
 let
 
 #
@@ -212,4 +212,16 @@ let
     java_version = "1.8";
 };
 
-in { inherit "android.test.runner" "android.test.runner-minus-junit" "repackaged.android.test.runner"; }
+#  Make the current.txt available for use by the cts/tests/signature tests.
+#  ========================================================================
+"android-test-runner-current.txt" = filegroup {
+    name = "android-test-runner-current.txt";
+    visibility = [
+        "//cts/tests/signature/api"
+    ];
+    srcs = [
+        "api/current.txt"
+    ];
+};
+
+in { inherit "android-test-runner-current.txt" "android.test.runner" "android.test.runner-minus-junit" "repackaged.android.test.runner"; }

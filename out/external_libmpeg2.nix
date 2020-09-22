@@ -4,6 +4,7 @@ let
 libmpeg2dec = cc_library_static {
     name = "libmpeg2dec";
     vendor_available = true;
+    host_supported = true;
     shared_libs = [
         "liblog"
         "libcutils"
@@ -223,6 +224,11 @@ libmpeg2dec = cc_library_static {
         #  cfi: true,
         blacklist = "libmpeg2dec_blacklist.txt";
     };
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 subdirs = ["test"];

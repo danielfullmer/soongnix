@@ -8,12 +8,13 @@ blestream-protos = java_library_static {
         type = "lite";
     };
     srcs = [
+        "ble_device_message.proto"
         "ble_message.proto"
+        "ble_packet.proto"
         "ble_version_exchange.proto"
         "operation_type.proto"
         "phone_auth.proto"
     ];
-    no_framework_libs = true;
     jarjar_rules = "jarjar-rules.txt";
     sdk_version = "28";
 };

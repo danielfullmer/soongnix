@@ -1,16 +1,12 @@
-{ cc_library }:
+{ cc_defaults, cc_library }:
 let
 
-libsonivox = cc_library {
-    name = "libsonivox";
+libsonivox-defaults = cc_defaults {
+    name = "libsonivox-defaults";
     srcs = [
-        "lib_src/eas_chorus.c"
-        "lib_src/eas_chorusdata.c"
         "lib_src/eas_data.c"
         "lib_src/eas_dlssynth.c"
         "lib_src/eas_flog.c"
-        "lib_src/eas_ima_tables.c"
-        "lib_src/eas_imaadpcm.c"
         "lib_src/eas_imelody.c"
         "lib_src/eas_imelodydata.c"
         "lib_src/eas_math.c"
@@ -37,16 +33,9 @@ libsonivox = cc_library {
         "lib_src/eas_xmf.c"
         "lib_src/eas_xmfdata.c"
         "lib_src/wt_22khz.c"
-        "lib_src/jet.c"
         "host_src/eas_config.c"
         "host_src/eas_hostmm.c"
         "host_src/eas_report.c"
-
-        #  not using these modules
-        # "host_src/eas_main.c",
-        # "host_src/eas_wave.c",
-        # "lib_src/eas_wavefile.c",
-        # "lib_src/eas_wavefiledata.c",
     ];
 
     cflags = [
@@ -118,6 +107,36 @@ libsonivox = cc_library {
             clang_asflags = ["-no-integrated-as"];
         };
     };
+    sanitize = {
+        cfi = true;
+        misc_undefined = [
+            "bounds"
+            "unsigned-integer-overflow"
+            "signed-integer-overflow"
+        ];
+    };
 };
 
-in { inherit libsonivox; }
+libsonivoxwithoutjet = cc_library {
+    name = "libsonivoxwithoutjet";
+    defaults = ["libsonivox-defaults"];
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+    ];
+    min_sdk_version = "29";
+};
+
+libsonivox = cc_library {
+    name = "libsonivox";
+    defaults = ["libsonivox-defaults"];
+    srcs = [
+        "lib_src/jet.c"
+    ];
+
+    cflags = [
+        "-DJET_INTERFACE"
+    ];
+};
+
+in { inherit libsonivox libsonivox-defaults libsonivoxwithoutjet; }

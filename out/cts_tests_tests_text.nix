@@ -19,6 +19,7 @@ CtsTextTestCases = android_test {
     name = "CtsTextTestCases";
     defaults = ["cts_defaults"];
     sdk_version = "test_current";
+    stl = "c++_shared";
 
     srcs = [
         "src/android/text/cts/AlteredCharSequenceTest.java"
@@ -66,6 +67,7 @@ CtsTextTestCases = android_test {
         "src/android/text/format/cts/DateUtilsTest.java"
         "src/android/text/format/cts/FormatterTest.java"
         "src/android/text/format/cts/LocaleUtils.java"
+        "src/android/text/format/cts/NativeTimeFunctions.java"
         "src/android/text/format/cts/TimeTest.java"
         "src/android/text/method/cts/ArrowKeyMovementMethodTest.java"
         "src/android/text/method/cts/BackspaceTest.java"
@@ -153,11 +155,18 @@ CtsTextTestCases = android_test {
         "android.test.base.stubs"
     ];
 
+    jni_libs = [
+        "libctstext_jni"
+        "libnativehelper_compat_libc++"
+    ];
+    #  Include both the 32 and 64 bit versions of libctstext_jni, where
+    #  applicable.
+    compile_multilib = "both";
+
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
-        "cts_instant"
         "mts"
     ];
 };

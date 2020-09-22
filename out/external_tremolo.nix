@@ -70,6 +70,8 @@ libvorbisidec = cc_library {
         integer_overflow = true;
         misc_undefined = ["bounds"];
     };
+
+    min_sdk_version = "29";
 };
 
 in { inherit libvorbisidec; }

@@ -15,8 +15,6 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  temporary compatibility-device-util variant that brings in androidx.test transitively, instead
-#  of android.support.test target. Will be removed after androidx.test CTS conversion is complete.
 compatibility-device-util-axt = java_library_static {
     name = "compatibility-device-util-axt";
     sdk_version = "test_current";
@@ -25,6 +23,7 @@ compatibility-device-util-axt = java_library_static {
         "src/com/android/compatibility/common/util/ActivitiesWatcher.java"
         "src/com/android/compatibility/common/util/ActivityLauncher.java"
         "src/com/android/compatibility/common/util/AdoptShellPermissionsRule.java"
+        "src/com/android/compatibility/common/util/AmMonitor.java"
         "src/com/android/compatibility/common/util/AmUtils.java"
         "src/com/android/compatibility/common/util/ApiLevelUtil.java"
         "src/com/android/compatibility/common/util/AppOpsUtils.java"
@@ -36,8 +35,6 @@ compatibility-device-util-axt = java_library_static {
         "src/com/android/compatibility/common/util/BlockedNumberUtil.java"
         "src/com/android/compatibility/common/util/BlockingBroadcastReceiver.java"
         "src/com/android/compatibility/common/util/BroadcastRpcBase.java"
-        "src/com/android/compatibility/common/util/BroadcastTestBase.java"
-        "src/com/android/compatibility/common/util/BroadcastTestStartActivity.java"
         "src/com/android/compatibility/common/util/BroadcastUtils.java"
         "src/com/android/compatibility/common/util/BundleUtils.java"
         "src/com/android/compatibility/common/util/BusinessLogicDeviceExecutor.java"
@@ -60,6 +57,7 @@ compatibility-device-util-axt = java_library_static {
         "src/com/android/compatibility/common/util/DoubleVisitor.java"
         "src/com/android/compatibility/common/util/DummyActivity.java"
         "src/com/android/compatibility/common/util/DynamicConfigDeviceSide.java"
+        "src/com/android/compatibility/common/util/ExceptionUtils.java"
         "src/com/android/compatibility/common/util/FakeKeys.java"
         "src/com/android/compatibility/common/util/FeatureUtil.java"
         "src/com/android/compatibility/common/util/FileCopyHelper.java"
@@ -67,6 +65,7 @@ compatibility-device-util-axt = java_library_static {
         "src/com/android/compatibility/common/util/IBinderParcelable.java"
         "src/com/android/compatibility/common/util/ImeAwareEditText.java"
         "src/com/android/compatibility/common/util/LocationUtils.java"
+        "src/com/android/compatibility/common/util/MatcherUtils.java"
         "src/com/android/compatibility/common/util/MediaPerfUtils.java"
         "src/com/android/compatibility/common/util/MediaUtils.java"
         "src/com/android/compatibility/common/util/MoreMatchers.java"
@@ -78,6 +77,7 @@ compatibility-device-util-axt = java_library_static {
         "src/com/android/compatibility/common/util/ParcelUtils.java"
         "src/com/android/compatibility/common/util/PollingCheck.java"
         "src/com/android/compatibility/common/util/PropertyUtil.java"
+        "src/com/android/compatibility/common/util/ProtoUtils.java"
         "src/com/android/compatibility/common/util/ReadElf.java"
         "src/com/android/compatibility/common/util/ReportLogDeviceInfoStore.java"
         "src/com/android/compatibility/common/util/RequiredFeatureRule.java"
@@ -104,7 +104,10 @@ compatibility-device-util-axt = java_library_static {
         "src/com/android/compatibility/common/util/ThermalUtils.java"
         "src/com/android/compatibility/common/util/ThreadUtils.java"
         "src/com/android/compatibility/common/util/ThrowingRunnable.java"
+        "src/com/android/compatibility/common/util/ThrowingSupplier.java"
         "src/com/android/compatibility/common/util/Timeout.java"
+        "src/com/android/compatibility/common/util/UiAutomatorUtils.java"
+        "src/com/android/compatibility/common/util/UiDumpUtils.java"
         "src/com/android/compatibility/common/util/Visitor.java"
         "src/com/android/compatibility/common/util/WatchDog.java"
         "src/com/android/compatibility/common/util/WidgetTestUtils.java"
@@ -118,6 +121,8 @@ compatibility-device-util-axt = java_library_static {
         "src/com/android/compatibility/common/util/transition/TargetTracking.java"
         "src/com/android/compatibility/common/util/transition/TrackingTransition.java"
         "src/com/android/compatibility/common/util/transition/TrackingVisibility.java"
+        "src/com/android/compatibility/common/util/AccessibilityNodeInfoUtils.kt"
+        "src/com/android/compatibility/common/util/FutureResultActivity.kt"
         "src/com/android/compatibility/common/util/devicepolicy/provisioning/IBooleanCallback.aidl"
     ];
 

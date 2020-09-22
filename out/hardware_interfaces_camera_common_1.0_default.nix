@@ -20,10 +20,12 @@ let
     ];
     shared_libs = [
         "liblog"
+        "libgralloctypes"
         "libhardware"
         "libcamera_metadata"
         "android.hardware.graphics.mapper@2.0"
         "android.hardware.graphics.mapper@3.0"
+        "android.hardware.graphics.mapper@4.0"
         "libexif"
     ];
     include_dirs = ["system/media/private/camera/include"];

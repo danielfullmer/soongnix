@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_headers, cc_library_shared }:
+{ cc_defaults, cc_library, cc_library_headers }:
 let
 
 #  Copyright (C) 2008 The Android Open Source Project
@@ -49,15 +49,21 @@ libicuuc_defaults = cc_defaults {
         "icudataver.cpp"
         "icuplug.cpp"
         "loadednormalizer2impl.cpp"
+        "localebuilder.cpp"
+        "localematcher.cpp"
+        "localeprioritylist.cpp"
         "locavailable.cpp"
         "locbased.cpp"
         "locdispnames.cpp"
+        "locdistance.cpp"
         "locdspnm.cpp"
         "locid.cpp"
         "loclikely.cpp"
+        "loclikelysubtags.cpp"
         "locmap.cpp"
         "locresdata.cpp"
         "locutil.cpp"
+        "lsr.cpp"
         "messagepattern.cpp"
         "normalizer2.cpp"
         "normalizer2impl.cpp"
@@ -81,6 +87,7 @@ libicuuc_defaults = cc_defaults {
         "resbund.cpp"
         "resbund_cnv.cpp"
         "resource.cpp"
+        "restrace.cpp"
         "ruleiter.cpp"
         "schriter.cpp"
         "serv.cpp"
@@ -228,6 +235,7 @@ libicuuc_defaults = cc_defaults {
         "-Wno-missing-field-initializers"
         "-Wno-sign-compare"
         "-Wno-deprecated-declarations"
+        "-Wno-ignored-attributes"
     ];
 
     cppflags = [
@@ -236,7 +244,7 @@ libicuuc_defaults = cc_defaults {
 
     rtti = true;
 
-    required = ["icu-data_host_runtime_apex"];
+    required = ["icu-data_host_i18n_apex"];
 
     target = {
         android = {
@@ -252,6 +260,7 @@ libicuuc_defaults = cc_defaults {
 libicuuc_headers = cc_library_headers {
     name = "libicuuc_headers";
     host_supported = true;
+    native_bridge_supported = true;
     header_libs = ["icu4c_extra_headers"];
     export_header_lib_headers = ["icu4c_extra_headers"];
     export_include_dirs = ["."];
@@ -260,18 +269,31 @@ libicuuc_headers = cc_library_headers {
             enabled = true;
         };
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 #
 #  Build for the host and target.
+#  Allow static builds for host so that they can be statically
+#  linked into libandroid_runtime. That enables libandroid_runtime to
+#  be shipped on desktops as one file which saves space and complexity.
 #
-libicuuc = cc_library_shared {
+libicuuc = cc_library {
     name = "libicuuc";
     host_supported = true;
+    native_bridge_supported = true;
     unique_host_soname = true;
     defaults = ["libicuuc_defaults"];
     target = {
         android = {
+            static = {
+                enabled = false;
+            };
             static_libs = ["libicuuc_stubdata"];
         };
         not_windows = {
@@ -285,6 +307,11 @@ libicuuc = cc_library_shared {
     };
     header_libs = ["libicuuc_headers"];
     export_header_lib_headers = ["libicuuc_headers"];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 in { inherit libicuuc libicuuc_defaults libicuuc_headers; }

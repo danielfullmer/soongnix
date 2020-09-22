@@ -37,6 +37,7 @@ libandroid_runtime_lazy = cc_library {
     name = "libandroid_runtime_lazy";
     vendor_available = true;
     double_loadable = true;
+    host_supported = true;
 
     cflags = [
         "-Wall"
@@ -52,10 +53,6 @@ libandroid_runtime_lazy = cc_library {
     shared_libs = [
         "liblog"
         "libutils"
-    ];
-
-    required = [
-        "libandroid_runtime"
     ];
 
     export_include_dirs = [

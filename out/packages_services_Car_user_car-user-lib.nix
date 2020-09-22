@@ -19,7 +19,15 @@ let
     name = "android.car.userlib";
     srcs = [
         "src/android/car/userlib/CarUserManagerHelper.java"
-        "src/android/car/userlib/TestableFrameworkWrapper.java"
+        "src/android/car/userlib/CommonConstants.java"
+        "src/android/car/userlib/HalCallback.java"
+        "src/android/car/userlib/InitialUserSetter.java"
+        "src/android/car/userlib/UserHalHelper.java"
+        "src/android/car/userlib/UserHelper.java"
+    ];
+    static_libs = [
+        "android.car.settings"
+        "android.hardware.automotive.vehicle-V2.0-java"
     ];
     product_variables = {
         pdk = {

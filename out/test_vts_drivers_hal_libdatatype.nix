@@ -19,6 +19,8 @@ let
 
 libvts_datatype = cc_library_shared {
     name = "libvts_datatype";
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     srcs = [
         "vts_datatype.cpp"
         "hal_light.cpp"

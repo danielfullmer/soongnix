@@ -27,7 +27,7 @@ sg_write_buffer = cc_binary {
         "sg_pt_linux.c"
         "sg_pt_linux_nvme.c"
     ];
-    product_specific = true;
+    system_ext_specific = true;
 };
 
 in { inherit sg3-utils-defaults sg_write_buffer; }

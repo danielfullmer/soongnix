@@ -24,7 +24,10 @@ CtsRollbackManagerHostTestCases = java_test_host {
         "tradefed"
         "truth-prebuilt"
     ];
-    data = [":CtsRollbackManagerHostTestHelperApp"];
+    data = [
+        ":CtsRollbackManagerHostTestHelperApp"
+        ":CtsRollbackManagerHostTestHelperApp2"
+    ];
     test_suites = [
         "cts"
         "general-tests"
@@ -37,14 +40,27 @@ CtsRollbackManagerHostTestHelperApp = android_test_helper_app {
     static_libs = [
         "androidx.test.rules"
         "cts-rollback-lib"
+        "cts-install-lib"
     ];
     manifest = "app/AndroidManifest.xml";
     java_resources = [
-        ":StagedInstallTestApexV2"
-        ":StagedInstallTestApexV3"
+        ":ApexKeyRotationTestV2_SignedBobRotRollback"
     ];
     sdk_version = "test_current";
     test_suites = ["device-tests"];
 };
 
-in { inherit CtsRollbackManagerHostTestCases CtsRollbackManagerHostTestHelperApp; }
+CtsRollbackManagerHostTestHelperApp2 = android_test_helper_app {
+    name = "CtsRollbackManagerHostTestHelperApp2";
+    srcs = ["app2/src/com/android/cts/rollback/host/app2/HostTestHelper.java"];
+    static_libs = [
+        "androidx.test.rules"
+        "cts-rollback-lib"
+        "cts-install-lib"
+    ];
+    manifest = "app2/AndroidManifest.xml";
+    sdk_version = "test_current";
+    test_suites = ["device-tests"];
+};
+
+in { inherit CtsRollbackManagerHostTestCases CtsRollbackManagerHostTestHelperApp CtsRollbackManagerHostTestHelperApp2; }

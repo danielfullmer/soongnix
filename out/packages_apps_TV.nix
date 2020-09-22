@@ -1,4 +1,4 @@
-{ android_app }:
+{ android_app, prebuilt_etc }:
 let
 
 #
@@ -17,8 +17,8 @@ let
 #  limitations under the License.
 #
 
-version_name = "1.20-asop";
-version_code = "417000328";
+version_name = "1.24-asop";
+version_code = "417000452";
 
 LiveTv = android_app {
     name = "LiveTv";
@@ -42,8 +42,6 @@ LiveTv = android_app {
         "src/com/android/tv/analytics/Analytics.java"
         "src/com/android/tv/analytics/ConfigurationInfo.java"
         "src/com/android/tv/analytics/HasTrackerLabel.java"
-        "src/com/android/tv/analytics/SendChannelStatusRunnable.java"
-        "src/com/android/tv/analytics/SendConfigInfoRunnable.java"
         "src/com/android/tv/analytics/StubAnalytics.java"
         "src/com/android/tv/analytics/StubTracker.java"
         "src/com/android/tv/analytics/Tracker.java"
@@ -53,7 +51,7 @@ LiveTv = android_app {
         "src/com/android/tv/audio/AudioManagerHelper.java"
         "src/com/android/tv/audiotvservice/AudioOnlyTvService.java"
         "src/com/android/tv/audiotvservice/AudioOnlyTvServiceUtil.java"
-        "src/com/android/tv/data/BaseProgram.java"
+        "src/com/android/tv/data/BaseProgramImpl.java"
         "src/com/android/tv/data/ChannelDataManager.java"
         "src/com/android/tv/data/ChannelImpl.java"
         "src/com/android/tv/data/ChannelLogoFetcher.java"
@@ -66,12 +64,14 @@ LiveTv = android_app {
         "src/com/android/tv/data/ParcelableList.java"
         "src/com/android/tv/data/PreviewDataManager.java"
         "src/com/android/tv/data/PreviewProgramContent.java"
-        "src/com/android/tv/data/Program.java"
         "src/com/android/tv/data/ProgramDataManager.java"
+        "src/com/android/tv/data/ProgramImpl.java"
         "src/com/android/tv/data/StreamInfo.java"
         "src/com/android/tv/data/TvInputNewComparator.java"
         "src/com/android/tv/data/WatchedHistoryManager.java"
+        "src/com/android/tv/data/api/BaseProgram.java"
         "src/com/android/tv/data/api/Channel.java"
+        "src/com/android/tv/data/api/Program.java"
         "src/com/android/tv/data/epg/EpgFetchHelper.java"
         "src/com/android/tv/data/epg/EpgFetchService.java"
         "src/com/android/tv/data/epg/EpgFetcher.java"
@@ -86,7 +86,7 @@ LiveTv = android_app {
         "src/com/android/tv/dialog/RecentlyWatchedDialogFragment.java"
         "src/com/android/tv/dialog/SafeDismissDialogFragment.java"
         "src/com/android/tv/dialog/WebDialogFragment.java"
-        "src/com/android/tv/dialog/picker/PinPicker.java"
+        "src/com/android/tv/dialog/picker/TvPinPicker.java"
         "src/com/android/tv/dvr/BaseDvrDataManager.java"
         "src/com/android/tv/dvr/DvrDataManager.java"
         "src/com/android/tv/dvr/DvrDataManagerImpl.java"
@@ -127,6 +127,8 @@ LiveTv = android_app {
         "src/com/android/tv/dvr/ui/DvrInsufficientSpaceErrorFragment.java"
         "src/com/android/tv/dvr/ui/DvrMissingStorageErrorFragment.java"
         "src/com/android/tv/dvr/ui/DvrPrioritySettingsFragment.java"
+        "src/com/android/tv/dvr/ui/DvrRecordingSettingsActivity.java"
+        "src/com/android/tv/dvr/ui/DvrRecordingSettingsFragment.java"
         "src/com/android/tv/dvr/ui/DvrScheduleFragment.java"
         "src/com/android/tv/dvr/ui/DvrSeriesDeletionActivity.java"
         "src/com/android/tv/dvr/ui/DvrSeriesDeletionFragment.java"
@@ -249,12 +251,10 @@ LiveTv = android_app {
         "src/com/android/tv/parental/ParentalControlSettings.java"
         "src/com/android/tv/perf/EventNames.java"
         "src/com/android/tv/perf/PerformanceMonitor.java"
-        "src/com/android/tv/perf/PerformanceMonitorManager.java"
-        "src/com/android/tv/perf/PerformanceMonitorManagerFactory.java"
         "src/com/android/tv/perf/StartupMeasure.java"
+        "src/com/android/tv/perf/StartupMeasureFactory.java"
         "src/com/android/tv/perf/TimerEvent.java"
         "src/com/android/tv/perf/stub/StubPerformanceMonitor.java"
-        "src/com/android/tv/perf/stub/StubPerformanceMonitorManager.java"
         "src/com/android/tv/perf/stub/StubStartupMeasure.java"
         "src/com/android/tv/receiver/AbstractGlobalKeyReceiver.java"
         "src/com/android/tv/receiver/AudioCapabilitiesReceiver.java"
@@ -336,7 +336,6 @@ LiveTv = android_app {
         "src/com/android/tv/util/Partner.java"
         "src/com/android/tv/util/RecurringRunner.java"
         "src/com/android/tv/util/SetupUtils.java"
-        "src/com/android/tv/util/SqlParams.java"
         "src/com/android/tv/util/TimeShiftUtils.java"
         "src/com/android/tv/util/ToastUtils.java"
         "src/com/android/tv/util/TvInputManagerHelper.java"
@@ -360,6 +359,7 @@ LiveTv = android_app {
 
     #  It is required for com.android.providers.tv.permission.ALL_EPG_DATA
     privileged = true;
+    product_specific = true;
 
     sdk_version = "system_current";
     min_sdk_version = "23"; #  M
@@ -370,21 +370,20 @@ LiveTv = android_app {
 
     ];
 
+    required = ["com.android.tv.xml"];
+
     libs = ["tv-guava-android-jar"];
 
     static_libs = [
         "android-support-annotations"
         "android-support-compat"
-        "android-support-core-ui"
-        "androidx.tvprovider_tvprovider"
-        "android-support-v4"
-        "android-support-v7-appcompat"
-        "android-support-v7-palette"
-        "android-support-v7-preference"
         "android-support-v7-recyclerview"
-        "android-support-v14-preference"
-        "android-support-v17-leanback"
-        "android-support-v17-preference-leanback"
+        "androidx.legacy_legacy-support-core-ui"
+        "androidx.leanback_leanback"
+        "androidx.leanback_leanback-preference"
+        "androidx.palette_palette"
+        "androidx.preference_preference"
+        "androidx.tvprovider_tvprovider"
         "jsr330"
         "live-channels-partner-support"
         "live-tv-tuner-proto"
@@ -393,6 +392,8 @@ LiveTv = android_app {
         "tv-auto-factory-jar"
         "tv-common"
         "tv-error-prone-annotations-jar"
+        "tv-ratings-resources"
+        "tv-javax-annotations-jar"
         "tv-lib-dagger"
         "tv-lib-exoplayer"
         "tv-lib-exoplayer-v2-core"
@@ -426,4 +427,11 @@ LiveTv = android_app {
     ];
 };
 
-in { inherit LiveTv; }
+"com.android.tv.xml" = prebuilt_etc {
+    name = "com.android.tv.xml";
+    sub_dir = "permissions";
+    src = "com.android.tv.xml";
+    product_specific = true;
+};
+
+in { inherit "com.android.tv.xml" LiveTv; }

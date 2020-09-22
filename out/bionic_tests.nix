@@ -41,6 +41,7 @@ bionic_tests_defaults = cc_defaults {
         #  For glibc.
         "-D__STDC_LIMIT_MACROS"
     ];
+    header_libs = ["bionic_libc_platform_headers"];
     #  Make the bionic tests implicitly test bionic's shadow call stack support.
     arch = {
         arm64 = {
@@ -52,6 +53,12 @@ bionic_tests_defaults = cc_defaults {
         address = false;
     };
     bootstrap = true;
+
+    product_variables = {
+        experimental_mte = {
+            cflags = ["-DANDROID_EXPERIMENTAL_MTE"];
+        };
+    };
 };
 
 #  -----------------------------------------------------------------------------
@@ -75,6 +82,7 @@ libBionicStandardTests = cc_test_library {
     defaults = ["bionic_tests_defaults"];
     srcs = [
         "__aeabi_read_tp_test.cpp"
+        "__cxa_atexit_test.cpp"
         "alloca_test.cpp"
         "android_get_device_api_level.cpp"
         "arpa_inet_test.cpp"
@@ -94,7 +102,9 @@ libBionicStandardTests = cc_test_library {
         "eventfd_test.cpp"
         "fcntl_test.cpp"
         "fdsan_test.cpp"
+        "fdtrack_test.cpp"
         "fenv_test.cpp"
+        "_FILE_OFFSET_BITS_test.cpp"
         "float_test.cpp"
         "ftw_test.cpp"
         "getauxval_test.cpp"
@@ -120,6 +130,7 @@ libBionicStandardTests = cc_test_library {
         "math_force_long_double_test.cpp"
         "membarrier_test.cpp"
         "mntent_test.cpp"
+        "mte_test.cpp"
         "netdb_test.cpp"
         "net_if_test.cpp"
         "netinet_ether_test.cpp"
@@ -193,6 +204,7 @@ libBionicStandardTests = cc_test_library {
         "system_properties_test2.cpp"
         "termios_test.cpp"
         "tgmath_test.c"
+        "threads_test.cpp"
         "time_test.cpp"
         "uchar_test.cpp"
         "unistd_nofortify_test.cpp"
@@ -212,6 +224,9 @@ libBionicStandardTests = cc_test_library {
                 "libasync_safe"
                 "libprocinfo"
                 "libsystemproperties"
+            ];
+            srcs = [
+                "tagged_pointers_test.cpp"
             ];
         };
     };
@@ -243,6 +258,15 @@ libBionicElfTlsTests = cc_test_library {
     cflags = [
         "-fno-emulated-tls"
     ];
+    #  With fuzzer builds, compiler instrumentation generates a reference to the
+    #  __sancov_lowest_stack variable, which (for now) is defined by the fuzzer
+    #  library as an emutls symbol. The -fno-emulated-tls flag above configures
+    #  the compiler to reference an ordinary ELF TLS __sancov_lowest_stack
+    #  symbol instead, which isn't defined. Disable the fuzzer for this test
+    #  until the platform is switched to ELF TLS.
+    sanitize = {
+        fuzzer = false;
+    };
 };
 
 libBionicElfTlsLoaderTests = cc_test_library {
@@ -264,11 +288,47 @@ libBionicElfTlsLoaderTests = cc_test_library {
     cflags = [
         "-fno-emulated-tls"
     ];
+    #  With fuzzer builds, compiler instrumentation generates a reference to the
+    #  __sancov_lowest_stack variable, which (for now) is defined by the fuzzer
+    #  library as an emutls symbol. The -fno-emulated-tls flag above configures
+    #  the compiler to reference an ordinary ELF TLS __sancov_lowest_stack
+    #  symbol instead, which isn't defined. Disable the fuzzer for this test
+    #  until the platform is switched to ELF TLS.
+    sanitize = {
+        fuzzer = false;
+    };
+};
+
+libBionicFramePointerTests = cc_test_library {
+    name = "libBionicFramePointerTests";
+    defaults = ["bionic_tests_defaults"];
+    srcs = [
+        "android_unsafe_frame_pointer_chase_test.cpp"
+    ];
+    include_dirs = [
+        "bionic/libc"
+    ];
+    cflags = [
+        "-fno-omit-frame-pointer"
+    ];
 };
 
 #  -----------------------------------------------------------------------------
 #  Fortify tests.
 #  -----------------------------------------------------------------------------
+
+bionic_clang_fortify_tests_w_flags = cc_defaults {
+    name = "bionic_clang_fortify_tests_w_flags";
+    cflags = [
+        "-Wno-builtin-memcpy-chk-size"
+        "-Wno-format-security"
+        "-Wno-format-zero-length"
+        "-Wno-fortify-source"
+        "-Wno-memset-transposed-args"
+        "-Wno-strlcpy-strlcat-size"
+        "-Wno-strncat-size"
+    ];
+};
 
 bionic_fortify_tests_defaults = cc_defaults {
     name = "bionic_fortify_tests_defaults";
@@ -283,23 +343,20 @@ bionic_fortify_tests_defaults = cc_defaults {
     };
 };
 
-#  If building this fails, then we have both FORTIFY and ASAN enabled, which
-#  isn't desirable. (Ideally, we'd emit FORTIFY diagnostics even with ASAN
-#  enabled, but that's not a reality today.) This is meant to be otherwise
-#  unused.
-fortify_disabled_for_asan = cc_test_library {
-    name = "fortify_disabled_for_asan";
+#  Ensures that FORTIFY checks aren't run when ASAN is on.
+bionic-fortify-runtime-asan-test = cc_test {
+    name = "bionic-fortify-runtime-asan-test";
+    defaults = [
+        "bionic_clang_fortify_tests_w_flags"
+    ];
     cflags = [
         "-Werror"
         "-D_FORTIFY_SOURCE=2"
-        #  "sanitize: address" doesn't work on platforms where libasan isn't
-        #  enabled. Since the intent is just to build this, we can get away with
-        #  passing this flag on its own.
-        "-fsanitize=address"
     ];
-    #  Ignore that we don't have ASAN symbols linked in.
-    allow_undefined_symbols = true;
-    srcs = ["fortify_filecheck_diagnostics_test.cpp"];
+    sanitize = {
+        address = true;
+    };
+    srcs = ["clang_fortify_asan.cpp"];
 };
 
 #  Ensure we don't use FORTIFY'ed functions with the static analyzer/clang-tidy:
@@ -308,12 +365,15 @@ fortify_disabled_for_asan = cc_test_library {
 #  enabled. The library that results from building this is meant to be unused.
 fortify_disabled_for_tidy = cc_test_library {
     name = "fortify_disabled_for_tidy";
+    defaults = [
+        "bionic_clang_fortify_tests_w_flags"
+    ];
     cflags = [
         "-Werror"
         "-D_FORTIFY_SOURCE=2"
         "-D__clang_analyzer__"
     ];
-    srcs = ["fortify_filecheck_diagnostics_test.cpp"];
+    srcs = ["clang_fortify_tests.cpp"];
 };
 
 libfortify1-tests-clang = cc_test_library {
@@ -346,6 +406,52 @@ libfortify2-tests-clang = cc_test_library {
     };
 };
 
+bionic_new_fortify_tests_defaults = cc_defaults {
+    name = "bionic_new_fortify_tests_defaults";
+    defaults = [
+        "bionic_clang_fortify_tests_w_flags"
+    ];
+    cflags = [
+        "-U_FORTIFY_SOURCE"
+    ];
+    srcs = ["clang_fortify_tests.cpp"];
+    target = {
+        host = {
+            clang_cflags = ["-D__clang__"];
+        };
+    };
+};
+
+libfortify1-new-tests-clang = cc_test_library {
+    name = "libfortify1-new-tests-clang";
+    defaults = [
+        "bionic_new_fortify_tests_defaults"
+        "bionic_tests_defaults"
+    ];
+    cflags = [
+        "-D_FORTIFY_SOURCE=1"
+        "-DTEST_NAME=Fortify1_clang_new"
+    ];
+    shared = {
+        enabled = false;
+    };
+};
+
+libfortify2-new-tests-clang = cc_test_library {
+    name = "libfortify2-new-tests-clang";
+    defaults = [
+        "bionic_new_fortify_tests_defaults"
+        "bionic_tests_defaults"
+    ];
+    cflags = [
+        "-D_FORTIFY_SOURCE=2"
+        "-DTEST_NAME=Fortify2_clang_new"
+    ];
+    shared = {
+        enabled = false;
+    };
+};
+
 #  -----------------------------------------------------------------------------
 #  Library of all tests (excluding the dynamic linker tests).
 #  -----------------------------------------------------------------------------
@@ -355,8 +461,11 @@ libBionicTests = cc_test_library {
     whole_static_libs = [
         "libBionicStandardTests"
         "libBionicElfTlsTests"
+        "libBionicFramePointerTests"
         "libfortify1-tests-clang"
+        "libfortify1-new-tests-clang"
         "libfortify2-tests-clang"
+        "libfortify2-new-tests-clang"
     ];
     shared = {
         enabled = false;
@@ -477,7 +586,6 @@ bionic_unit_tests_defaults = cc_defaults {
         android = {
             shared_libs = [
                 "ld-android"
-                "libandroidicu"
                 "libdl"
                 "libdl_android"
                 "libdl_preempt_test_1"
@@ -533,6 +641,10 @@ bionic_unit_tests_defaults = cc_defaults {
         "libdl_preempt_test_2"
         "libdl_test_df_1_global"
         "libgnu-hash-table-library"
+        "librelocations-ANDROID_RELR"
+        "librelocations-ANDROID_REL"
+        "librelocations-RELR"
+        "librelocations-fat"
         "libsysv-hash-table-library"
         "libtestshared"
         "libtest_atexit"
@@ -638,6 +750,11 @@ bionic_unit_tests_defaults = cc_defaults {
         "libnstest_ns_a_public1_internal"
         "libnstest_ns_b_public2"
         "libnstest_ns_b_public3"
+        "ns_hidden_child_helper"
+        "libns_hidden_child_global"
+        "libns_hidden_child_internal"
+        "libns_hidden_child_public"
+        "libns_hidden_child_app"
         "libsegment_gap_inner"
         "libsegment_gap_outer"
         "ld_preload_test_helper"
@@ -666,6 +783,33 @@ bionic-unit-tests-scudo = cc_test {
     shared_libs = [
         "libc_scudo"
     ];
+};
+
+bionic-stress-tests = cc_test {
+    name = "bionic-stress-tests";
+    defaults = [
+        "bionic_tests_defaults"
+    ];
+
+    #  For now, these tests run forever, so do not use the isolation framework.
+    isolated = false;
+
+    srcs = [
+        "malloc_stress_test.cpp"
+    ];
+
+    shared_libs = [
+        "libbase"
+    ];
+
+    target = {
+        android = {
+            static_libs = [
+                "libmeminfo"
+                "libprocinfo"
+            ];
+        };
+    };
 };
 
 #  -----------------------------------------------------------------------------
@@ -782,4 +926,4 @@ bionic-unit-tests-glibc = cc_test_host {
 
 subdirs = ["*"];
 
-in { inherit bionic-unit-tests bionic-unit-tests-glibc bionic-unit-tests-scudo bionic-unit-tests-static bionic_fortify_tests_defaults bionic_tests_defaults bionic_unit_tests_defaults clang_diagnostic_tests fortify_disabled_for_asan fortify_disabled_for_tidy libBionicCtsGtestMain libBionicElfTlsLoaderTests libBionicElfTlsTests libBionicLoaderTests libBionicStandardTests libBionicTests libfortify1-tests-clang libfortify2-tests-clang; }
+in { inherit bionic-fortify-runtime-asan-test bionic-stress-tests bionic-unit-tests bionic-unit-tests-glibc bionic-unit-tests-scudo bionic-unit-tests-static bionic_clang_fortify_tests_w_flags bionic_fortify_tests_defaults bionic_new_fortify_tests_defaults bionic_tests_defaults bionic_unit_tests_defaults clang_diagnostic_tests fortify_disabled_for_tidy libBionicCtsGtestMain libBionicElfTlsLoaderTests libBionicElfTlsTests libBionicFramePointerTests libBionicLoaderTests libBionicStandardTests libBionicTests libfortify1-new-tests-clang libfortify1-tests-clang libfortify2-new-tests-clang libfortify2-tests-clang; }

@@ -40,15 +40,6 @@ tracefast-defaults = cc_defaults {
     header_libs = [
         "libnativehelper_header_only"
     ];
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
-    symlink_preferred_arch = true;
 };
 
 tracefast-interpreter-defaults = cc_defaults {

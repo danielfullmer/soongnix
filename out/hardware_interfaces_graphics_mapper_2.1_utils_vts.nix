@@ -19,14 +19,16 @@ let
 
 "android.hardware.graphics.mapper@2.1-vts" = cc_library_static {
     name = "android.hardware.graphics.mapper@2.1-vts";
-    defaults = ["hidl_defaults"];
+    defaults = [
+        "hidl_defaults"
+        "VtsHalTargetTestDefaults"
+    ];
     srcs = ["MapperVts.cpp"];
     cflags = [
         "-O0"
         "-g"
     ];
     static_libs = [
-        "VtsHalHidlTargetTestBase"
         "android.hardware.graphics.allocator@2.0"
         "android.hardware.graphics.mapper@2.0"
         "android.hardware.graphics.mapper@2.0-vts"

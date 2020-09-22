@@ -32,12 +32,10 @@ let
     ];
     shared_libs = [
         "libcutils"
-        "libhwbinder"
         "libbase"
         "liblog"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hidl.memory@1.0"
     ];
 };

@@ -104,6 +104,11 @@ libv8gen = cc_library_static {
         "libicui18n_headers"
     ];
     generated_headers = ["v8_torque_file"];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 v8_torque = cc_binary_host {
@@ -232,6 +237,11 @@ libv8 = cc_library_static {
         "libv8gen"
     ];
     export_include_dirs = ["include"];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 #  The bare 'd8' name conflicts with d8 from prebuilts/r8

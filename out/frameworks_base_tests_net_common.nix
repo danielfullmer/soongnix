@@ -23,15 +23,25 @@ FrameworksNetCommonTests = java_library {
     name = "FrameworksNetCommonTests";
     srcs = [
         "java/android/net/CaptivePortalTest.java"
+        "java/android/net/DependenciesTest.java"
+        "java/android/net/DhcpInfoTest.java"
         "java/android/net/IpPrefixTest.java"
         "java/android/net/LinkAddressTest.java"
         "java/android/net/LinkPropertiesTest.java"
         "java/android/net/NetworkCapabilitiesTest.java"
+        "java/android/net/NetworkStackTest.java"
         "java/android/net/NetworkTest.java"
         "java/android/net/RouteInfoTest.java"
         "java/android/net/StaticIpConfigurationTest.java"
         "java/android/net/apf/ApfCapabilitiesTest.java"
         "java/android/net/metrics/IpConnectivityLogTest.java"
+        "java/android/net/CaptivePortalDataTest.kt"
+        "java/android/net/KeepalivePacketDataTest.kt"
+        "java/android/net/MatchAllNetworkSpecifierTest.kt"
+        "java/android/net/NattKeepalivePacketDataTest.kt"
+        "java/android/net/NetworkAgentConfigTest.kt"
+        "java/android/net/NetworkProviderTest.kt"
+        "java/android/net/NetworkSpecifierTest.kt"
         "java/android/net/metrics/ApfProgramEventTest.kt"
         "java/android/net/metrics/ApfStatsTest.kt"
         "java/android/net/metrics/DhcpClientEventTest.kt"
@@ -41,13 +51,15 @@ FrameworksNetCommonTests = java_library {
         "java/android/net/metrics/NetworkEventTest.kt"
         "java/android/net/metrics/RaEventTest.kt"
         "java/android/net/metrics/ValidationProbeEventTest.kt"
+        "java/android/net/netstats/NetworkStatsApiTest.kt"
         "java/android/net/util/SocketUtilsTest.kt"
     ];
     static_libs = [
+        "androidx.core_core"
         "androidx.test.rules"
-        "frameworks-net-testutils"
         "junit"
         "mockito-target-minus-junit4"
+        "net-tests-utils"
         "platform-test-annotations"
     ];
     libs = [

@@ -1,4 +1,4 @@
-{ android_app, java_defaults }:
+{ android_app, android_library, java_defaults }:
 let
 
 #
@@ -19,10 +19,13 @@ let
 
 CaptivePortalLoginDefaults = java_defaults {
     name = "CaptivePortalLoginDefaults";
-    srcs = ["src/com/android/captiveportallogin/CaptivePortalLoginActivity.java"];
+    srcs = [
+        "src/com/android/captiveportallogin/CaptivePortalLoginActivity.java"
+        "src/com/android/captiveportallogin/DownloadService.java"
+    ];
     sdk_version = "system_current";
-    min_sdk_version = "28";
     static_libs = [
+        "androidx.annotation_annotation"
         "androidx.legacy_legacy-support-v4"
         "metrics-constants-protos"
         "captiveportal-lib"
@@ -35,6 +38,14 @@ CaptivePortalLogin = android_app {
     name = "CaptivePortalLogin";
     defaults = ["CaptivePortalLoginDefaults"];
     certificate = "networkstack";
+    min_sdk_version = "29";
+    target_sdk_version = "30";
+    updatable = true;
+};
+
+CaptivePortalLoginTestLib = android_library {
+    name = "CaptivePortalLoginTestLib";
+    defaults = ["CaptivePortalLoginDefaults"];
 };
 
 #  Alternative CaptivePortalLogin signed with the platform cert, to use
@@ -46,4 +57,4 @@ PlatformCaptivePortalLogin = android_app {
     overrides = ["CaptivePortalLogin"];
 };
 
-in { inherit CaptivePortalLogin CaptivePortalLoginDefaults PlatformCaptivePortalLogin; }
+in { inherit CaptivePortalLogin CaptivePortalLoginDefaults CaptivePortalLoginTestLib PlatformCaptivePortalLogin; }

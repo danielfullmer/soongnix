@@ -1,4 +1,4 @@
-{ aidl_interface, android_app, cc_binary, cc_binary_host, cc_defaults, cc_library_shared, cc_library_static, cc_test }:
+{ aidl_interface, android_app, cc_binary_host, cc_defaults, cc_fuzz, cc_library_static, cc_test, filegroup }:
 let
 
 #
@@ -33,6 +33,12 @@ aidl_defaults = cc_defaults {
         windows = {
             enabled = true;
         };
+        host = {
+            cflags = [
+                "-O0"
+                "-g"
+            ];
+        };
     };
 };
 
@@ -41,10 +47,14 @@ libaidl-common = cc_library_static {
     name = "libaidl-common";
     defaults = ["aidl_defaults"];
     host_supported = true;
+    cflags = [
+        "-Wno-bool-operation" #  found in aidl_const_expressions.cpp:69
+    ];
 
     srcs = [
         "aidl.cpp"
-        "aidl_apicheck.cpp"
+        "aidl_checkapi.cpp"
+        "aidl_const_expressions.cpp"
         "aidl_language.cpp"
         "aidl_language_l.ll"
         "aidl_language_y.yy"
@@ -65,10 +75,11 @@ libaidl-common = cc_library_static {
         "line_reader.cpp"
         "io_delegate.cpp"
         "options.cpp"
-        "type_cpp.cpp"
-        "type_java.cpp"
-        "type_namespace.cpp"
     ];
+    yacc = {
+        gen_location_hh = true;
+        gen_position_hh = true;
+    };
 };
 
 #  aidl executable
@@ -79,17 +90,20 @@ aidl = cc_binary_host {
     static_libs = [
         "libaidl-common"
         "libbase"
+        "liblog"
     ];
 };
 
-#  aidl-cpp executable
+#  aidl-cpp legacy executable, please use 'aidl' instead
 aidl-cpp = cc_binary_host {
     name = "aidl-cpp";
     defaults = ["aidl_defaults"];
-    srcs = ["main_cpp.cpp"];
+    srcs = ["main.cpp"];
+    cflags = ["-DAIDL_CPP_BUILD"];
     static_libs = [
         "libaidl-common"
         "libbase"
+        "liblog"
     ];
 };
 
@@ -105,7 +119,6 @@ aidl_unittests = cc_test {
         "-Wextra"
         "-Werror"
         "-g"
-        "-DUNIT_TEST"
     ];
 
     srcs = [
@@ -123,33 +136,54 @@ aidl_unittests = cc_test {
         "tests/test_data_ping_responder.cpp"
         "tests/test_data_string_constants.cpp"
         "tests/test_util.cpp"
-        "type_cpp_unittest.cpp"
-        "type_java_unittest.cpp"
     ];
 
     static_libs = [
         "libaidl-common"
         "libbase"
         "libcutils"
+        "libgmock"
+        "liblog"
     ];
-    target = {
-        host = {
-            static_libs = ["libgmock_host"];
-        };
-        android = {
-            static_libs = [
-                "libgmock"
-                "liblog"
-            ];
-        };
+};
+
+aidl_parser_fuzzer = cc_fuzz {
+    name = "aidl_parser_fuzzer";
+    host_supported = true;
+    dictionary = "tests/aidl_parser_fuzzer.dict";
+    corpus = [
+        "tests/corpus/*"
+    ];
+
+    fuzz_config = {
+        cc = [
+            "smoreland@google.com"
+            "jiyong@google.com"
+            "jeongik@google.com"
+        ];
     };
+
+    srcs = [
+        "tests/aidl_parser_fuzzer.cpp"
+        "tests/fake_io_delegate.cpp"
+        "tests/test_util.cpp"
+    ];
+    static_libs = [
+        "libaidl-common"
+        "libbase"
+        "libcutils"
+        "liblog"
+    ];
+    #  Enable this to show additional information about what is being parsed during fuzzing.
+    #  cflags: ["-DFUZZ_LOG"],
 };
 
 #
 #  Everything below here is used for integration testing of generated AIDL code.
 #
-aidl_test_sentinel_searcher = cc_binary {
+aidl_test_sentinel_searcher = cc_test {
     name = "aidl_test_sentinel_searcher";
+    gtest = false;
     srcs = ["tests/aidl_test_sentinel_searcher.cpp"];
     cflags = [
         "-Wall"
@@ -173,7 +207,22 @@ aidl_test_defaults = cc_defaults {
     ];
 };
 
-libaidl-integration-test = cc_library_shared {
+libaidl-integration-test-files = filegroup {
+    name = "libaidl-integration-test-files";
+    srcs = [
+        "tests/android/aidl/tests/ByteEnum.aidl"
+        "tests/android/aidl/tests/ConstantExpressionEnum.aidl"
+        "tests/android/aidl/tests/INamedCallback.aidl"
+        "tests/android/aidl/tests/ITestService.aidl"
+        "tests/android/aidl/tests/IntEnum.aidl"
+        "tests/android/aidl/tests/LongEnum.aidl"
+        "tests/android/aidl/tests/SimpleParcelable.aidl"
+        "tests/android/aidl/tests/StructuredParcelable.aidl"
+    ];
+    path = "tests";
+};
+
+libaidl-integration-test = cc_library_static {
     name = "libaidl-integration-test";
     defaults = ["aidl_test_defaults"];
     aidl = {
@@ -182,25 +231,24 @@ libaidl-integration-test = cc_library_shared {
         include_dirs = ["frameworks/native/aidl/binder"];
     };
     srcs = [
-        "tests/android/aidl/tests/INamedCallback.aidl"
-        "tests/android/aidl/tests/ITestService.aidl"
-        "tests/android/aidl/tests/SimpleParcelable.aidl"
-        "tests/android/aidl/tests/StructuredParcelable.aidl"
+        ":libaidl-integration-test-files"
         "tests/simple_parcelable.cpp"
     ];
 };
 
-aidl_test_service = cc_binary {
+aidl_test_service = cc_test {
     name = "aidl_test_service";
+    gtest = false;
     defaults = ["aidl_test_defaults"];
-    shared_libs = ["libaidl-integration-test"];
+    static_libs = ["libaidl-integration-test"];
     srcs = ["tests/aidl_test_service.cpp"];
 };
 
-aidl_test_client = cc_binary {
+aidl_test_client = cc_test {
     name = "aidl_test_client";
+    gtest = false;
     defaults = ["aidl_test_defaults"];
-    shared_libs = ["libaidl-integration-test"];
+    static_libs = ["libaidl-integration-test"];
     srcs = [
         "tests/aidl_test_client.cpp"
         "tests/aidl_test_client_file_descriptors.cpp"
@@ -227,14 +275,28 @@ aidl_test_services = android_app {
     manifest = "tests/java_app/AndroidManifest.xml";
     resource_dirs = ["tests/java_app/resources"];
     srcs = [
-        "tests/android/aidl/tests/ITestService.aidl"
+        "tests/android/aidl/tests/ByteEnum.aidl"
+        "tests/android/aidl/tests/ConstantExpressionEnum.aidl"
         "tests/android/aidl/tests/INamedCallback.aidl"
+        "tests/android/aidl/tests/ITestService.aidl"
+        "tests/android/aidl/tests/IntEnum.aidl"
+        "tests/android/aidl/tests/LongEnum.aidl"
+        "tests/android/aidl/tests/SimpleParcelable.aidl"
         "tests/android/aidl/tests/StructuredParcelable.aidl"
+        "tests/android/aidl/tests/generic/Baz.aidl"
+        "tests/android/aidl/tests/generic/IFaz.aidl"
+        "tests/android/aidl/tests/generic/Pair.aidl"
+        "tests/android/aidl/tests/map/Bar.aidl"
+        "tests/android/aidl/tests/map/Foo.aidl"
+        "tests/android/aidl/tests/map/IEmpty.aidl"
+        "tests/java_app/src/android/aidl/tests/GenericTests.java"
+        "tests/java_app/src/android/aidl/tests/MapTests.java"
         "tests/java_app/src/android/aidl/tests/NullableTests.java"
         "tests/java_app/src/android/aidl/tests/SimpleParcelable.java"
         "tests/java_app/src/android/aidl/tests/TestFailException.java"
         "tests/java_app/src/android/aidl/tests/TestLogger.java"
         "tests/java_app/src/android/aidl/tests/TestServiceClient.java"
+        "tests/java_app/src/android/aidl/tests/generic/Pair.java"
     ];
     aidl = {
         include_dirs = [
@@ -246,31 +308,20 @@ aidl_test_services = android_app {
 
 aidl_test_loggable_interface = aidl_interface {
     name = "aidl_test_loggable_interface";
+    unstable = true;
     local_include_dir = "tests";
     srcs = [
         "tests/android/aidl/loggable/ILoggableInterface.aidl"
     ];
+    gen_trace = true;
     backend = {
         cpp = {
             gen_log = true;
         };
         ndk = {
-            enabled = false;
-        };
-    };
-};
-
-aidl_test_loggable_interface_ndk = aidl_interface {
-    name = "aidl_test_loggable_interface_ndk";
-    local_include_dir = "tests";
-    srcs = [
-        "tests/android/aidl/loggable/ILoggableInterfaceNdk.aidl"
-    ];
-    backend = {
-        ndk = {
             gen_log = true;
         };
     };
 };
 
-in { inherit aidl aidl-cpp aidl_defaults aidl_test_client aidl_test_defaults aidl_test_loggable_interface aidl_test_loggable_interface_ndk aidl_test_sentinel_searcher aidl_test_service aidl_test_services aidl_unittests libaidl-common libaidl-integration-test; }
+in { inherit aidl aidl-cpp aidl_defaults aidl_parser_fuzzer aidl_test_client aidl_test_defaults aidl_test_loggable_interface aidl_test_sentinel_searcher aidl_test_service aidl_test_services aidl_unittests libaidl-common libaidl-integration-test libaidl-integration-test-files; }

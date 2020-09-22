@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_shared }:
+{ cc_defaults, cc_library_shared, filegroup }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -22,6 +22,7 @@ libandroid_defaults = cc_defaults {
     cflags = [
         "-Wall"
         "-Werror"
+        "-Wextra"
         "-Wunused"
         "-Wunreachable-code"
     ];
@@ -45,10 +46,11 @@ libandroid = cc_library_shared {
         "sensor.cpp"
         "sharedmem.cpp"
         "storage_manager.cpp"
-        "surface_texture.cpp"
         "surface_control.cpp"
+        "surface_texture.cpp"
         "system_fonts.cpp"
         "trace.cpp"
+        "thermal.cpp"
     ];
 
     shared_libs = [
@@ -68,14 +70,20 @@ libandroid = cc_library_shared {
         "libnetd_client"
         "libhwui"
         "libxml2"
+        "libEGL"
+        "libGLESv2"
+        "libpowermanager"
         "android.hardware.configstore@1.0"
         "android.hardware.configstore-utils"
+        "libnativedisplay"
     ];
 
     static_libs = [
         "libstorage"
         "libarect"
     ];
+
+    header_libs = ["libhwui_internal_headers"];
 
     whole_static_libs = ["libnativewindow"];
 
@@ -101,4 +109,36 @@ libandroid_net = cc_library_shared {
     include_dirs = ["bionic/libc/dns/include"];
 };
 
-in { inherit libandroid libandroid_defaults libandroid_net; }
+#  Aidl library for platform compat.
+lib-platform-compat-native-api = cc_library_shared {
+    name = "lib-platform-compat-native-api";
+    cflags = [
+        "-Wall"
+        "-Werror"
+        "-Wno-missing-field-initializers"
+        "-Wno-unused-variable"
+        "-Wunused-parameter"
+    ];
+    shared_libs = [
+        "libbinder"
+        "libutils"
+    ];
+    aidl = {
+        local_include_dirs = ["aidl"];
+        export_aidl_headers = true;
+    };
+    srcs = [
+        ":platform-compat-native-aidl"
+    ];
+    export_include_dirs = ["aidl"];
+};
+
+platform-compat-native-aidl = filegroup {
+    name = "platform-compat-native-aidl";
+    srcs = [
+        "aidl/com/android/internal/compat/IPlatformCompatNative.aidl"
+    ];
+    path = "aidl";
+};
+
+in { inherit lib-platform-compat-native-api libandroid libandroid_defaults libandroid_net platform-compat-native-aidl; }

@@ -31,6 +31,7 @@ libese-app-boot = cc_library {
         "libese"
         "libese-sysdeps"
     ];
+    export_include_dirs = ["include"];
 };
 
 libese-app-boot-fortest = cc_library {
@@ -48,6 +49,7 @@ libese-app-boot-fortest = cc_library {
         "libese"
         "libese-sysdeps"
     ];
+    export_include_dirs = ["include"];
 };
 
 ese-boot-tool = cc_binary {

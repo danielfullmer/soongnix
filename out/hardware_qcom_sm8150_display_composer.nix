@@ -17,20 +17,22 @@ let
 #  limitations under the License.
 #
 
-"android.hardware.graphics.composer@2.3-service-sm8150" = cc_binary {
-    name = "android.hardware.graphics.composer@2.3-service-sm8150";
+"android.hardware.graphics.composer@2.4-service-sm8150" = cc_binary {
+    name = "android.hardware.graphics.composer@2.4-service-sm8150";
     defaults = ["hidl_defaults"];
     vendor = true;
     relative_install_path = "hw";
     srcs = ["service.cpp"];
-    init_rc = ["android.hardware.graphics.composer@2.3-service-sm8150.rc"];
+    init_rc = ["android.hardware.graphics.composer@2.4-service-sm8150.rc"];
     header_libs = [
-        "android.hardware.graphics.composer@2.3-passthrough"
+        "android.hardware.graphics.composer@2.4-passthrough"
     ];
     shared_libs = [
         "android.hardware.graphics.composer@2.1"
+        "android.hardware.graphics.composer@2.1-resources"
         "android.hardware.graphics.composer@2.2"
         "android.hardware.graphics.composer@2.3"
+        "android.hardware.graphics.composer@2.4"
         "android.hardware.graphics.mapper@2.0"
         "android.hardware.graphics.mapper@3.0"
         "libbase"
@@ -39,7 +41,6 @@ let
         "libfmq"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libhwc2on1adapter"
         "libhwc2onfbadapter"
         "liblog"
@@ -48,4 +49,4 @@ let
     ];
 };
 
-in { inherit "android.hardware.graphics.composer@2.3-service-sm8150"; }
+in { inherit "android.hardware.graphics.composer@2.4-service-sm8150"; }

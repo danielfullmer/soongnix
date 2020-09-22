@@ -9,6 +9,14 @@ libcpustats = cc_library_static {
         "ThreadCpuUsage.cpp"
     ];
 
+    local_include_dirs = [
+        "include"
+    ];
+
+    export_include_dirs = [
+        "include"
+    ];
+
     cflags = [
         "-Werror"
         "-Wall"

@@ -26,10 +26,12 @@ CellBroadcastReceiverTests = android_test {
     static_libs = ["junit"];
     #  Include all test java files.
     srcs = [
+        "src/com/android/cellbroadcastreceiver/tests/GsmSmsCbMessage.java"
         "src/com/android/cellbroadcastreceiver/tests/SendCdmaCmasMessages.java"
         "src/com/android/cellbroadcastreceiver/tests/SendGsmCmasMessages.java"
         "src/com/android/cellbroadcastreceiver/tests/SendTestBroadcastActivity.java"
         "src/com/android/cellbroadcastreceiver/tests/SendTestMessages.java"
+        ":cellbroadcast-util-shared-srcs"
     ];
     #  Notice that we don't have to include the src files of Email because, by
     #  running the tests using an instrumentation targeting Eamil, we
@@ -37,7 +39,7 @@ CellBroadcastReceiverTests = android_test {
     platform_apis = true;
     #  Apk must be signed with platform signature in order to send test broadcasts.
     certificate = "platform";
-    instrumentation_for = "CellBroadcastReceiver";
+    instrumentation_for = "CellBroadcastApp";
 };
 
 in { inherit CellBroadcastReceiverTests; }

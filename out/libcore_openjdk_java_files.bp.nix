@@ -953,6 +953,7 @@ openjdk_javadoc_files = filegroup {
         "ojluni/src/main/java/java/util/concurrent/ExecutorCompletionService.java"
         "ojluni/src/main/java/java/util/concurrent/ExecutorService.java"
         "ojluni/src/main/java/java/util/concurrent/Executors.java"
+        "ojluni/src/main/java/java/util/concurrent/Flow.java"
         "ojluni/src/main/java/java/util/concurrent/ForkJoinPool.java"
         "ojluni/src/main/java/java/util/concurrent/ForkJoinTask.java"
         "ojluni/src/main/java/java/util/concurrent/ForkJoinWorkerThread.java"
@@ -1348,6 +1349,7 @@ openjdk_javadoc_files = filegroup {
         "ojluni/src/main/java/javax/sql/StatementEventListener.java"
         "ojluni/src/main/java/sun/reflect/CallerSensitive.java"
     ];
+    path = "ojluni/src/main/java";
 };
 
 #  Stubs needed to satisfy javac's dependencies when compiling lambda code. These are
@@ -1361,6 +1363,9 @@ openjdk_javadoc_files = filegroup {
 #  any of these classes.
 openjdk_lambda_stub_files = filegroup {
     name = "openjdk_lambda_stub_files";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
     srcs = [
         "ojluni/src/lambda/java/java/lang/invoke/LambdaMetafactory.java"
         "ojluni/src/lambda/java/java/lang/invoke/SerializedLambda.java"
@@ -1375,6 +1380,21 @@ openjdk_lambda_duplicate_stub_files = filegroup {
         "ojluni/src/lambda/java/java/lang/invoke/LambdaConversionException.java"
         "ojluni/src/lambda/java/java/lang/invoke/MethodHandle.java"
         "ojluni/src/lambda/java/java/lang/invoke/MethodType.java"
+    ];
+};
+
+#  Stubs needed to satisfy javac when compiling source code that contains
+#  @Generated annotations, which are produced by some code generation tools.
+#  TODO: Remove this source file, this target, and all its dependencies, if
+#  the code generation tools (notably dagger) can be fixed.
+#  See http://b/123891440.
+openjdk_generated_annotation_stub_files = filegroup {
+    name = "openjdk_generated_annotation_stub_files";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
+    srcs = [
+        "ojluni/src/generated-annotation/java/javax/annotation/processing/Generated.java"
     ];
 };
 
@@ -1418,6 +1438,8 @@ openjdk_internal_files = filegroup {
         "ojluni/src/main/java/java/beans/ChangeListenerMap.java"
         "ojluni/src/main/java/java/time/zone/IcuZoneRulesProvider.java"
         "ojluni/src/main/java/java/time/zone/ZoneRulesProvider.java"
+        "ojluni/src/main/java/java/util/ImmutableCollections.java"
+        "ojluni/src/main/java/java/util/KeyValueHolder.java"
         "ojluni/src/main/java/java/util/JapaneseImperialCalendar.java"
         "ojluni/src/main/java/sun/misc/FDBigInteger.java"
         "ojluni/src/main/java/sun/misc/FloatingDecimal.java"
@@ -1425,6 +1447,8 @@ openjdk_internal_files = filegroup {
         "ojluni/src/main/java/jdk/net/NetworkPermission.java"
         "ojluni/src/main/java/jdk/net/SocketFlow.java"
         "ojluni/src/main/java/jdk/net/Sockets.java"
+        "ojluni/src/main/java/jdk/internal/vm/annotation/Stable.java"
+        "ojluni/src/main/java/jdk/internal/util/Preconditions.java"
         "ojluni/src/main/java/sun/invoke/util/BytecodeDescriptor.java"
         "ojluni/src/main/java/sun/invoke/util/Wrapper.java"
         "ojluni/src/main/java/sun/invoke/util/VerifyAccess.java"
@@ -1435,7 +1459,6 @@ openjdk_internal_files = filegroup {
         "ojluni/src/main/java/sun/misc/CEStreamExhausted.java"
         "ojluni/src/main/java/sun/misc/CharacterDecoder.java"
         "ojluni/src/main/java/sun/misc/CharacterEncoder.java"
-        "ojluni/src/main/java/sun/misc/Cleaner.java"
         "ojluni/src/main/java/sun/misc/CompoundEnumeration.java"
         "ojluni/src/main/java/sun/misc/DoubleConsts.java"
         "ojluni/src/main/java/sun/misc/FileURLMapper.java"
@@ -1515,7 +1538,6 @@ openjdk_internal_files = filegroup {
         "ojluni/src/main/java/sun/nio/ch/DatagramSocketAdaptor.java"
         "ojluni/src/main/java/sun/nio/ch/DefaultAsynchronousChannelProvider.java"
         "ojluni/src/main/java/sun/nio/ch/DefaultSelectorProvider.java"
-        "ojluni/src/main/java/sun/nio/ch/DirectBuffer.java"
         "ojluni/src/main/java/sun/nio/ch/EPoll.java"
         "ojluni/src/main/java/sun/nio/ch/EPollPort.java"
         "ojluni/src/main/java/sun/nio/ch/ExtendedSocketOption.java"
@@ -1625,13 +1647,10 @@ openjdk_internal_files = filegroup {
         "ojluni/src/main/java/sun/security/jca/JCAUtil.java"
         "ojluni/src/main/java/sun/security/jca/ProviderConfig.java"
         "ojluni/src/main/java/sun/security/jca/ProviderList.java"
-        "ojluni/src/main/java/sun/security/jca/Providers.java"
         "ojluni/src/main/java/sun/security/jca/ServiceId.java"
-        "ojluni/src/main/java/sun/security/pkcs/PKCS7.java"
         "ojluni/src/main/java/sun/security/pkcs/PKCS8Key.java"
         "ojluni/src/main/java/sun/security/pkcs/PKCS9Attribute.java"
         "ojluni/src/main/java/sun/security/pkcs/PKCS9Attributes.java"
-        "ojluni/src/main/java/sun/security/pkcs/SignerInfo.java"
         "ojluni/src/main/java/sun/security/pkcs/SigningCertificateInfo.java"
         "ojluni/src/main/java/sun/security/provider/CertPathProvider.java"
         "ojluni/src/main/java/sun/security/provider/certpath/AdaptableX509CertSelector.java"
@@ -1797,11 +1816,15 @@ openjdk_internal_files = filegroup {
 #  All classes, whether exposed in any API or not.
 openjdk_java_files = filegroup {
     name = "openjdk_java_files";
+    visibility = [
+        "//frameworks/base"
+    ];
     srcs = [
         ":openjdk_javadoc_files"
         ":openjdk_mmodule_extra_files"
         ":openjdk_internal_files"
         ":openjdk_lambda_stub_files"
+        ":openjdk_generated_annotation_stub_files"
     ];
 };
 
@@ -2053,7 +2076,8 @@ openjdk-sdk-stubs-no-javadoc = droidstubs {
     name = "openjdk-sdk-stubs-no-javadoc";
     srcs = [":openjdk_javadoc_files"];
     installable = false;
-    no_framework_libs = true;
+    sdk_version = "none";
+    system_modules = "none";
     args = "--exclude-documentation-from-stubs";
 };
 
@@ -2068,10 +2092,11 @@ openjdk-mmodule-stubs-no-javadoc = droidstubs {
         ":openjdk_mmodule_extra_files"
     ];
     installable = false;
-    no_framework_libs = true;
+    sdk_version = "none";
+    system_modules = "none";
     args = "--exclude-documentation-from-stubs " +
         "--hide-annotation libcore.api.Hide ";
     merge_inclusion_annotations_dirs = ["ojluni-annotated-mmodule-stubs"];
 };
 
-in { inherit openjdk-mmodule-stubs-no-javadoc openjdk-sdk-stubs-no-javadoc openjdk_hiddenapi_javadoc_files openjdk_internal_files openjdk_java_files openjdk_javadoc_files openjdk_lambda_duplicate_stub_files openjdk_lambda_stub_files openjdk_mmodule_extra_files; }
+in { inherit openjdk-mmodule-stubs-no-javadoc openjdk-sdk-stubs-no-javadoc openjdk_generated_annotation_stub_files openjdk_hiddenapi_javadoc_files openjdk_internal_files openjdk_java_files openjdk_javadoc_files openjdk_lambda_duplicate_stub_files openjdk_lambda_stub_files openjdk_mmodule_extra_files; }

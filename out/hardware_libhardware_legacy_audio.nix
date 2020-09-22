@@ -24,6 +24,7 @@ libaudiohw_legacy = cc_library_static {
     ];
 
     header_libs = [
+        "libaudioclient_headers"
         "libbase_headers"
         "libhardware_legacy_headers"
     ];

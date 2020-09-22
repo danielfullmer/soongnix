@@ -1,0 +1,22 @@
+{ cc_test }:
+let
+
+VtsHalOccupantAwarenessV1_0TargetTest = cc_test {
+    name = "VtsHalOccupantAwarenessV1_0TargetTest";
+    defaults = [
+        "VtsHalTargetTestDefaults"
+        "use_libaidlvintf_gtest_helper_static"
+    ];
+    srcs = ["VtsHalOccupantAwarenessV1_0TargetTest.cpp"];
+    shared_libs = [
+        "libbinder"
+    ];
+    static_libs = [
+        "android.hardware.automotive.occupant_awareness-cpp"
+    ];
+    test_suites = [
+        "vts"
+    ];
+};
+
+in { inherit VtsHalOccupantAwarenessV1_0TargetTest; }

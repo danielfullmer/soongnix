@@ -171,6 +171,30 @@ errorlog_tests = cc_test {
     };
 };
 
+metadata_tests = cc_test {
+    name = "metadata_tests";
+    host_supported = false;
+
+    shared_libs = [
+        "libcutils"
+        "liblog"
+    ];
+    srcs = ["metadata_tests.cpp"];
+    cflags = [
+        "-Wall"
+        "-Werror"
+        "-Wextra"
+    ];
+    target = {
+        android = {
+            shared_libs = ["libaudioutils"];
+        };
+        host = {
+            static_libs = ["libaudioutils"];
+        };
+    };
+};
+
 powerlog_tests = cc_test {
     name = "powerlog_tests";
     host_supported = false;
@@ -280,7 +304,7 @@ statistics_tests = cc_test {
     name = "statistics_tests";
     host_supported = false;
 
-    shared_libs = ["libaudioutils"];
+    header_libs = ["libaudioutils_headers"];
     srcs = ["statistics_tests.cpp"];
     cflags = [
         "-Wall"
@@ -293,7 +317,7 @@ timestampverifier_tests = cc_test {
     name = "timestampverifier_tests";
     host_supported = false;
 
-    shared_libs = ["libaudioutils"];
+    header_libs = ["libaudioutils_headers"];
     srcs = ["timestampverifier_tests.cpp"];
     cflags = [
         "-Wall"
@@ -376,4 +400,20 @@ sample_tests = cc_test {
     };
 };
 
-in { inherit channels_tests errorlog_tests fdtostring_tests fifo_multiprocess fifo_tests fifo_threads format_tests limiter_tests logplot_tests power_tests powerlog_tests primitives_benchmark primitives_tests sample_tests simplelog_tests statistics_benchmark statistics_tests string_tests timestampverifier_tests variadic_tests; }
+spdif_tests = cc_test {
+    name = "spdif_tests";
+
+    shared_libs = [
+        "libaudioutils"
+        "libaudiospdif"
+        "liblog"
+        "libcutils"
+    ];
+    srcs = ["spdif_tests.cpp"];
+    cflags = [
+        "-Werror"
+        "-Wall"
+    ];
+};
+
+in { inherit channels_tests errorlog_tests fdtostring_tests fifo_multiprocess fifo_tests fifo_threads format_tests limiter_tests logplot_tests metadata_tests power_tests powerlog_tests primitives_benchmark primitives_tests sample_tests simplelog_tests spdif_tests statistics_benchmark statistics_tests string_tests timestampverifier_tests variadic_tests; }

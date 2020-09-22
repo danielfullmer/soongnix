@@ -26,11 +26,14 @@ VtsHalConfirmationUIV1_0TargetTest = cc_test {
     static_libs = [
         "android.hardware.confirmationui@1.0"
         "android.hardware.keymaster@4.0"
-        "libcrypto"
+        "libcrypto_static"
         "libcn-cbor"
         "android.hardware.confirmationui-support-lib"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalConfirmationUIV1_0TargetTest; }

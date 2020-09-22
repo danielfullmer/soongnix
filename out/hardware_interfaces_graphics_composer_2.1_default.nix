@@ -12,14 +12,12 @@ let
     ];
     shared_libs = [
         "android.hardware.graphics.composer@2.1"
-        "android.hardware.graphics.mapper@2.0"
-        "android.hardware.graphics.mapper@3.0"
+        "android.hardware.graphics.composer@2.1-resources"
         "libbase"
         "libcutils"
         "libfmq"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libsync"
         "libutils"
@@ -42,7 +40,6 @@ let
         "android.hardware.graphics.composer@2.1"
         "libbinder"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libsync"
         "libutils"

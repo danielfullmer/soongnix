@@ -18,7 +18,7 @@ let
         "android.hardware.soundtrigger@2.1"
         "android.hidl.base@1.0"
     ];
-    gen_java = false;
+    gen_java = true;
 };
 
 in { inherit "android.hardware.soundtrigger@2.2"; }

@@ -50,15 +50,31 @@ libnetd_test_unsol_service = cc_test_library {
     ];
 };
 
+libnetd_test_utils = cc_test_library {
+    name = "libnetd_test_utils";
+    srcs = [
+        "test_utils.cpp"
+    ];
+    export_include_dirs = ["."];
+    shared_libs = [
+        "libbase"
+    ];
+};
+
 netd_integration_test = cc_test {
     name = "netd_integration_test";
-    test_suites = ["device-tests"];
+    test_suites = [
+        "device-tests"
+        "vts"
+    ];
     require_root = true;
     defaults = ["netd_defaults"];
+    tidy = false; #  cuts test build time by almost 1 minute
     srcs = [
         ":netd_integration_test_shared"
         "binder_test.cpp"
         "bpf_base_test.cpp"
+        "netd_client_test.cpp"
         "netd_test.cpp"
         "netlink_listener_test.cpp"
     ];
@@ -79,12 +95,12 @@ netd_integration_test = cc_test {
         "libcap"
         "libnetd_test_tun_interface"
         "libnetd_test_unsol_service"
+        "libnetd_test_utils"
         "libbpf_android"
-        "liblogwrap"
         "libnetdbpf"
         "libnetdutils"
         "libqtaguid"
-        "netd_aidl_interface-cpp"
+        "netd_aidl_interface-unstable-cpp"
         "netd_event_listener_interface-cpp"
         "oemnetd_aidl_interface-cpp"
     ];
@@ -103,4 +119,4 @@ netd_integration_test = cc_test {
     };
 };
 
-in { inherit libnetd_test_tun_interface libnetd_test_unsol_service netd_integration_test; }
+in { inherit libnetd_test_tun_interface libnetd_test_unsol_service libnetd_test_utils netd_integration_test; }

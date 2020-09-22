@@ -47,20 +47,20 @@ ProductPrivAppPermissionTest = android_app {
     product_specific = true;
 };
 
-ProductServicesPrivAppPermissionTest = android_app {
-    name = "ProductServicesPrivAppPermissionTest";
+SystemExtPrivAppPermissionTest = android_app {
+    name = "SystemExtPrivAppPermissionTest";
     sdk_version = "current";
     privileged = true;
-    manifest = "product_services/AndroidManifest.xml";
-    product_services_specific = true;
-    required = ["product_servicesprivapp-permissions-test.xml"];
+    manifest = "system_ext/AndroidManifest.xml";
+    system_ext_specific = true;
+    required = ["system_extprivapp-permissions-test.xml"];
 };
 
-"product_servicesprivapp-permissions-test.xml" = prebuilt_etc {
-    name = "product_servicesprivapp-permissions-test.xml";
-    src = "product_services/privapp-permissions-test.xml";
+"system_extprivapp-permissions-test.xml" = prebuilt_etc {
+    name = "system_extprivapp-permissions-test.xml";
+    src = "system_ext/privapp-permissions-test.xml";
     sub_dir = "permissions";
-    product_services_specific = true;
+    system_ext_specific = true;
 };
 
-in { inherit "privapp-permissions-test.xml" "product_servicesprivapp-permissions-test.xml" "productprivapp-permissions-test.xml" "vendorprivapp-permissions-test.xml" PrivAppPermissionTest ProductPrivAppPermissionTest ProductServicesPrivAppPermissionTest VendorPrivAppPermissionTest; }
+in { inherit "privapp-permissions-test.xml" "productprivapp-permissions-test.xml" "system_extprivapp-permissions-test.xml" "vendorprivapp-permissions-test.xml" PrivAppPermissionTest ProductPrivAppPermissionTest SystemExtPrivAppPermissionTest VendorPrivAppPermissionTest; }

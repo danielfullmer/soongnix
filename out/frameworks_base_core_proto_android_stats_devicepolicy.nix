@@ -33,7 +33,7 @@ devicepolicyprotosnano = java_library_static {
             static_libs = ["libprotobuf-java-nano"];
         };
     };
-    no_framework_libs = true;
+    sdk_version = "core_platform";
 };
 
 in { inherit devicepolicyprotosnano; }

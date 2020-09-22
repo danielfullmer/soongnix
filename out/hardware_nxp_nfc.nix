@@ -25,7 +25,7 @@ nfc_nci_nxp = cc_library_shared {
         "-Werror"
         "-Wextra"
         #  Allow implicit fallthroughs in phDnldNfc_Internal.cc and phNxpConfig.cpp until they are fixed.
-        "-Wno-error=implicit-fallthrough"
+        "-Wno-implicit-fallthrough"
     ];
 
     srcs = [
@@ -50,6 +50,7 @@ nfc_nci_nxp = cc_library_shared {
         "halimpl/utils/phNxpNciHal_utils.cc"
         "halimpl/utils/sparse_crc32.cc"
         "halimpl/utils/NfccPowerTracker.cpp"
+        "halimpl/mifare/NxpMfcReader.cc"
     ];
 
     local_include_dirs = [
@@ -60,6 +61,7 @@ nfc_nci_nxp = cc_library_shared {
         "halimpl/src/include"
         "halimpl/tml"
         "halimpl/utils"
+        "halimpl/mifare"
     ];
 
     export_include_dirs = [
@@ -78,7 +80,6 @@ nfc_nci_nxp = cc_library_shared {
         "libhardware"
         "libhardware_legacy"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "ese_spi_nxp"
@@ -106,8 +107,6 @@ nxp_nfc_defaults = cc_defaults {
         "android.hardware.nfc@1.1"
         "android.hardware.nfc@1.2"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "vendor.nxp.nxpese@1.0"
         "ese_spi_nxp"
         "vendor.nxp.nxpnfc@1.0"

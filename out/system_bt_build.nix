@@ -32,9 +32,10 @@ libchrome_support_defaults = fluoride_defaults {
     };
 };
 
-fluoride_types_defaults = fluoride_defaults {
-    name = "fluoride_types_defaults";
-    defaults = ["libchrome_support_defaults"];
+#  Fuzzable defaults are the subset of defaults that are used in fuzzing, which
+#  requires no shared libraries, and no explicit sanitization.
+fluoride_types_defaults_fuzzable = fluoride_defaults {
+    name = "fluoride_types_defaults_fuzzable";
     cflags = [
         "-DEXPORT_SYMBOL=__attribute__((visibility(\"default\")))"
         "-fvisibility=hidden"
@@ -56,21 +57,40 @@ fluoride_types_defaults = fluoride_defaults {
     };
 };
 
-_bp2nix_fluoride_defaults = fluoride_defaults {
-    name = "fluoride_defaults";
+fluoride_types_defaults = fluoride_defaults {
+    name = "fluoride_types_defaults";
+    defaults = [
+        "fluoride_types_defaults_fuzzable"
+        "libchrome_support_defaults"
+    ];
+};
+
+fluoride_defaults_fuzzable = fluoride_defaults {
+    name = "fluoride_defaults_fuzzable";
     target = {
         android = {
             test_config_template = ":BluetoothTestConfigTemplate";
         };
     };
-    defaults = ["fluoride_types_defaults"];
+    defaults = ["fluoride_types_defaults_fuzzable"];
     header_libs = ["libbluetooth_headers"];
-    shared_libs = ["libstatslog"];
     static_libs = [
         "libbluetooth-types"
         "libbt-platform-protos-lite"
     ];
     cpp_std = "c++17";
+    sanitize = {
+        misc_undefined = ["bounds"];
+    };
+};
+
+_bp2nix_fluoride_defaults = fluoride_defaults {
+    name = "fluoride_defaults";
+    defaults = [
+        "fluoride_defaults_fuzzable"
+        "fluoride_types_defaults"
+    ];
+    shared_libs = ["libstatslog"];
     sanitize = {
         misc_undefined = ["bounds"];
     };
@@ -109,4 +129,4 @@ clang_coverage_bin = cc_defaults {
     };
 };
 
-in { inherit clang_coverage_bin clang_file_coverage fluoride_types_defaults libchrome_support_defaults soong-fluoride; fluoride_defaults = _bp2nix_fluoride_defaults; }
+in { inherit clang_coverage_bin clang_file_coverage fluoride_defaults_fuzzable fluoride_types_defaults fluoride_types_defaults_fuzzable libchrome_support_defaults soong-fluoride; fluoride_defaults = _bp2nix_fluoride_defaults; }

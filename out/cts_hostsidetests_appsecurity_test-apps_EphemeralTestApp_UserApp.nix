@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsEphemeralTestsUserApp = android_test {
+CtsEphemeralTestsUserApp = android_test_helper_app {
     name = "CtsEphemeralTestsUserApp";
     defaults = ["cts_support_defaults"];
     static_libs = [
@@ -27,7 +27,7 @@ CtsEphemeralTestsUserApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     srcs = ["src/com/android/cts/userapp/UserActivity.java"];

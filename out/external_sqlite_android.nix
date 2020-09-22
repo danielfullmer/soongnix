@@ -4,9 +4,8 @@ let
 libsqlite3_android = cc_library_static {
     name = "libsqlite3_android";
     vendor_available = true;
-    host_supported = true;
+    native_bridge_supported = true;
     cflags = [
-        "-DSQLITE_ENABLE_ICU"
         "-Wall"
         "-Werror"
         "-Wno-unused-function"
@@ -20,9 +19,17 @@ libsqlite3_android = cc_library_static {
     include_dirs = ["external/sqlite/dist"];
     shared_libs = [
         "liblog"
-        "libandroidicu"
     ];
     target = {
+        android = {
+            cflags = [
+                "-DSQLITE_ENABLE_ICU"
+                "-DSQLITE_DEFAULT_LEGACY_ALTER_TABLE"
+            ];
+            shared_libs = [
+                "libandroidicu"
+            ];
+        };
         vendor = {
             cflags = ["-USQLITE_ENABLE_ICU"];
             exclude_shared_libs = ["libandroidicu"];

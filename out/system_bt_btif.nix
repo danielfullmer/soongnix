@@ -27,8 +27,6 @@ btifCommonIncludes = [
     "system/bt/utils/include"
     "system/bt/include"
     "system/libhwbinder/include"
-    "system/security/keystore/include"
-    "hardware/interfaces/keymaster/4.0/support/include"
 ];
 
 #  libbtif static library for target
@@ -60,6 +58,7 @@ libbtif = cc_library_static {
         "src/btif_ble_scanner.cc"
         "src/btif_bqr.cc"
         "src/btif_config.cc"
+        "src/btif_config_cache.cc"
         "src/btif_config_transcode.cc"
         "src/btif_core.cc"
         "src/btif_debug.cc"
@@ -76,7 +75,6 @@ libbtif = cc_library_static {
         "src/btif_hf_client.cc"
         "src/btif_hh.cc"
         "src/btif_hd.cc"
-        "src/btif_keystore.cc"
         "src/btif_mce.cc"
         "src/btif_pan.cc"
         "src/btif_profile_queue.cc"
@@ -93,10 +91,14 @@ libbtif = cc_library_static {
         "src/btif_storage.cc"
         "src/btif_uid.cc"
         "src/btif_util.cc"
+        "src/btif_keystore.cc"
         "src/stack_manager.cc"
     ];
+    header_libs = [
+        "libmedia_headers"
+    ];
     shared_libs = [
-        "libaudioclient"
+        "libaaudio"
         "libcutils"
         "libfmq"
         "liblog"
@@ -105,16 +107,8 @@ libbtif = cc_library_static {
         "android.hardware.bluetooth.a2dp@1.0"
         "android.hardware.bluetooth.audio@2.0"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
         "libcrypto"
-        "android.hardware.keymaster@4.0"
-        "android.hardware.keymaster@3.0"
-        "libkeymaster4support"
-        "libkeystore_aidl"
-        "libkeystore_binder"
-        "libkeystore_parcelables"
     ];
     whole_static_libs = [
         "avrcp-target-service"
@@ -124,7 +118,6 @@ libbtif = cc_library_static {
     ];
     cflags = [
         "-DBUILDCFG"
-        "-Wno-implicit-fallthrough"
     ];
 
 };
@@ -138,29 +131,21 @@ net_test_btif = cc_test {
     include_dirs = btifCommonIncludes;
     srcs = [
         "test/btif_storage_test.cc"
-        "test/btif_keystore_test.cc"
     ];
     header_libs = ["libbluetooth_headers"];
     shared_libs = [
-        "libaudioclient"
+        "libaaudio"
+        "android.hardware.bluetooth@1.0"
         "android.hardware.bluetooth.a2dp@1.0"
         "android.hardware.bluetooth.audio@2.0"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libprotobuf-cpp-lite"
         "libcutils"
         "libprocessgroup"
         "libutils"
         "libcrypto"
-        "android.hardware.keymaster@4.0"
-        "android.hardware.keymaster@3.0"
-        "libkeymaster4support"
-        "libkeystore_aidl"
-        "libkeystore_binder"
-        "libkeystore_parcelables"
-        "libbinder"
     ];
     static_libs = [
         "libbt-bta"
@@ -245,4 +230,52 @@ net_test_btif_rc = cc_test {
     };
 };
 
-in { inherit libbtif net_test_btif net_test_btif_profile_queue net_test_btif_rc; }
+#  btif config cache unit tests for target
+#  ========================================================
+net_test_btif_config_cache = cc_test {
+    name = "net_test_btif_config_cache";
+    defaults = ["fluoride_defaults"];
+    test_suites = ["device-tests"];
+    host_supported = true;
+    include_dirs = btifCommonIncludes;
+    srcs = [
+        "src/btif_config_cache.cc"
+        "test/btif_config_cache_test.cc"
+    ];
+    header_libs = ["libbluetooth_headers"];
+    shared_libs = [
+        "liblog"
+        "libcutils"
+    ];
+    static_libs = [
+        "libbluetooth-types"
+        "libosi"
+        "libgmock"
+        "libc++fs"
+    ];
+    cflags = ["-DBUILDCFG"];
+};
+
+#  btif hf client service tests for target
+#  ========================================================
+net_test_btif_hf_client_service = cc_test {
+    name = "net_test_btif_hf_client_service";
+    defaults = ["fluoride_defaults"];
+    test_suites = ["device-tests"];
+    include_dirs = btifCommonIncludes;
+    srcs = [
+        "test/btif_hf_client_service_test.cc"
+    ];
+    header_libs = ["libbluetooth_headers"];
+    shared_libs = [
+        "libcutils"
+        "liblog"
+    ];
+    static_libs = [
+        "libbluetooth-types"
+        "libosi"
+    ];
+    cflags = ["-DBUILDCFG"];
+};
+
+in { inherit libbtif net_test_btif net_test_btif_config_cache net_test_btif_hf_client_service net_test_btif_profile_queue net_test_btif_rc; }

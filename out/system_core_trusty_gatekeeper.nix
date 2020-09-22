@@ -1,7 +1,6 @@
-{ cc_library_shared }:
+{ cc_binary }:
 let
 
-#
 #  Copyright (C) 2015 The Android Open-Source Project
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,14 +22,15 @@ let
 #  to only building on ARM if they include assembly. Individual makefiles
 #  are responsible for having their own logic, for fine-grained control.
 
-"gatekeeper.trusty" = cc_library_shared {
-    name = "gatekeeper.trusty";
+"android.hardware.gatekeeper@1.0-service.trusty" = cc_binary {
+    name = "android.hardware.gatekeeper@1.0-service.trusty";
+    defaults = ["hidl_defaults"];
     vendor = true;
-
     relative_install_path = "hw";
+    init_rc = ["android.hardware.gatekeeper@1.0-service.trusty.rc"];
 
     srcs = [
-        "module.cpp"
+        "service.cpp"
         "trusty_gatekeeper_ipc.c"
         "trusty_gatekeeper.cpp"
     ];
@@ -42,12 +42,17 @@ let
     ];
 
     shared_libs = [
+        "android.hardware.gatekeeper@1.0"
+        "libbase"
+        "libhidlbase"
         "libgatekeeper"
+        "libutils"
         "liblog"
         "libcutils"
         "libtrusty"
     ];
-    header_libs = ["libhardware_headers"];
+
+    vintf_fragments = ["android.hardware.gatekeeper@1.0-service.trusty.xml"];
 };
 
-in { inherit "gatekeeper.trusty"; }
+in { inherit "android.hardware.gatekeeper@1.0-service.trusty"; }

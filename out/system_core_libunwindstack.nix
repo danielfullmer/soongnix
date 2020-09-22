@@ -1,4 +1,4 @@
-{ cc_benchmark, cc_binary, cc_binary_host, cc_defaults, cc_library, cc_test, cc_test_library }:
+{ cc_benchmark, cc_binary, cc_binary_host, cc_defaults, cc_library, cc_library_static, cc_test, cc_test_library }:
 let
 
 #
@@ -38,20 +38,13 @@ libunwindstack_flags = cc_defaults {
     };
 };
 
-libunwindstack = cc_library {
-    name = "libunwindstack";
-    vendor_available = true;
-    recovery_available = true;
-    vndk = {
-        enabled = true;
-        support_system_process = true;
-    };
+libunwindstack_defaults = cc_defaults {
+    name = "libunwindstack_defaults";
     defaults = ["libunwindstack_flags"];
     export_include_dirs = ["include"];
 
     srcs = [
         "ArmExidx.cpp"
-        "DexFile.cpp"
         "DexFiles.cpp"
         "DwarfCfa.cpp"
         "DwarfEhFrameWithHdr.cpp"
@@ -91,26 +84,6 @@ libunwindstack = cc_library {
                 "-g"
             ];
         };
-        vendor = {
-            cflags = ["-DNO_LIBDEXFILE_SUPPORT"];
-            exclude_srcs = [
-                "DexFile.cpp"
-                "DexFiles.cpp"
-            ];
-            exclude_shared_libs = [
-                "libdexfile_support"
-            ];
-        };
-        recovery = {
-            cflags = ["-DNO_LIBDEXFILE_SUPPORT"];
-            exclude_srcs = [
-                "DexFile.cpp"
-                "DexFiles.cpp"
-            ];
-            exclude_shared_libs = [
-                "libdexfile_support"
-            ];
-        };
     };
 
     arch = {
@@ -128,19 +101,72 @@ libunwindstack = cc_library {
         };
     };
 
-    whole_static_libs = [
-        "libdemangle"
-    ];
-
     static_libs = [
         "libprocinfo"
     ];
 
     shared_libs = [
         "libbase"
-        "libdexfile_support"
         "liblog"
         "liblzma"
+    ];
+};
+
+libunwindstack = cc_library {
+    name = "libunwindstack";
+    vendor_available = true;
+    recovery_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+    vndk = {
+        enabled = true;
+        support_system_process = true;
+    };
+    defaults = ["libunwindstack_defaults"];
+
+    srcs = ["DexFile.cpp"];
+    cflags = ["-DDEXFILE_SUPPORT"];
+    shared_libs = ["libdexfile_support"];
+
+    target = {
+        vendor = {
+            cflags = ["-UDEXFILE_SUPPORT"];
+            exclude_srcs = ["DexFile.cpp"];
+            exclude_shared_libs = ["libdexfile_support"];
+        };
+        recovery = {
+            cflags = ["-UDEXFILE_SUPPORT"];
+            exclude_srcs = ["DexFile.cpp"];
+            exclude_shared_libs = ["libdexfile_support"];
+        };
+        native_bridge = {
+            cflags = ["-UDEXFILE_SUPPORT"];
+            exclude_srcs = ["DexFile.cpp"];
+            exclude_shared_libs = ["libdexfile_support"];
+        };
+    };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
+};
+
+#  Static library without DEX support to avoid dependencies on the ART APEX.
+libunwindstack_no_dex = cc_library_static {
+    name = "libunwindstack_no_dex";
+    recovery_available = true;
+    defaults = ["libunwindstack_defaults"];
+
+    visibility = [
+        "//system/core/debuggerd"
+        "//system/core/init"
+        "//system/core/libbacktrace"
+    ];
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.runtime"
     ];
 };
 
@@ -160,10 +186,11 @@ libunwindstack_local = cc_test_library {
     shared_libs = [
         "libunwindstack"
     ];
+    relative_install_path = "libunwindstack_test";
 };
 
-libunwindstack_test = cc_test {
-    name = "libunwindstack_test";
+libunwindstack_testlib_flags = cc_defaults {
+    name = "libunwindstack_testlib_flags";
     defaults = ["libunwindstack_flags"];
 
     srcs = [
@@ -187,8 +214,9 @@ libunwindstack_test = cc_test {
         "tests/ElfInterfaceTest.cpp"
         "tests/ElfTest.cpp"
         "tests/ElfTestUtils.cpp"
+        "tests/IsolatedSettings.cpp"
         "tests/JitDebugTest.cpp"
-        "tests/LocalUnwinderTest.cpp"
+        "tests/LocalUpdatableMapsTest.cpp"
         "tests/LogFake.cpp"
         "tests/MapInfoCreateMemoryTest.cpp"
         "tests/MapInfoGetBuildIDTest.cpp"
@@ -216,6 +244,7 @@ libunwindstack_test = cc_test {
         "tests/UnwindOfflineTest.cpp"
         "tests/UnwindTest.cpp"
         "tests/UnwinderTest.cpp"
+        "tests/VerifyBionicTerminationTest.cpp"
     ];
 
     cflags = [
@@ -265,11 +294,25 @@ libunwindstack_test = cc_test {
         "tests/files/offline/debug_frame_load_bias_arm/mediaserver"
         "tests/files/offline/debug_frame_load_bias_arm/regs.txt"
         "tests/files/offline/debug_frame_load_bias_arm/stack.data"
+        "tests/files/offline/eh_frame_bias_x86/libc.so"
+        "tests/files/offline/eh_frame_bias_x86/maps.txt"
+        "tests/files/offline/eh_frame_bias_x86/regs.txt"
+        "tests/files/offline/eh_frame_bias_x86/stack.data"
+        "tests/files/offline/eh_frame_bias_x86/tombstoned"
+        "tests/files/offline/eh_frame_bias_x86/vdso.so"
         "tests/files/offline/eh_frame_hdr_begin_x86_64/libc.so"
         "tests/files/offline/eh_frame_hdr_begin_x86_64/maps.txt"
         "tests/files/offline/eh_frame_hdr_begin_x86_64/regs.txt"
         "tests/files/offline/eh_frame_hdr_begin_x86_64/stack.data"
         "tests/files/offline/eh_frame_hdr_begin_x86_64/unwind_test64"
+        "tests/files/offline/empty_arm64/libbinder.so"
+        "tests/files/offline/empty_arm64/libc.so"
+        "tests/files/offline/empty_arm64/maps.txt"
+        "tests/files/offline/empty_arm64/netd"
+        "tests/files/offline/empty_arm64/regs.txt"
+        "tests/files/offline/empty_arm64/stack.data"
+        "tests/files/offline/invalid_elf_offset_arm/maps.txt"
+        "tests/files/offline/invalid_elf_offset_arm/regs.txt"
         "tests/files/offline/jit_debug_arm/137-cfi.odex"
         "tests/files/offline/jit_debug_arm/dalvikvm32"
         "tests/files/offline/jit_debug_arm/descriptor.data"
@@ -329,6 +372,19 @@ libunwindstack_test = cc_test {
         "tests/files/offline/gnu_debugdata_arm/maps.txt"
         "tests/files/offline/gnu_debugdata_arm/regs.txt"
         "tests/files/offline/gnu_debugdata_arm/stack.data"
+        "tests/files/offline/load_bias_different_section_bias_arm64/libc.so"
+        "tests/files/offline/load_bias_different_section_bias_arm64/linker64"
+        "tests/files/offline/load_bias_different_section_bias_arm64/maps.txt"
+        "tests/files/offline/load_bias_different_section_bias_arm64/regs.txt"
+        "tests/files/offline/load_bias_different_section_bias_arm64/stack0.data"
+        "tests/files/offline/load_bias_different_section_bias_arm64/stack1.data"
+        "tests/files/offline/load_bias_different_section_bias_arm64/test"
+        "tests/files/offline/load_bias_different_section_bias_arm64/vdso"
+        "tests/files/offline/load_bias_ro_rx_x86_64/libc.so"
+        "tests/files/offline/load_bias_ro_rx_x86_64/maps.txt"
+        "tests/files/offline/load_bias_ro_rx_x86_64/perfetto_unittests"
+        "tests/files/offline/load_bias_ro_rx_x86_64/regs.txt"
+        "tests/files/offline/load_bias_ro_rx_x86_64/stack.data"
         "tests/files/offline/offset_arm/libc.so"
         "tests/files/offline/offset_arm/libunwindstack_test"
         "tests/files/offline/offset_arm/maps.txt"
@@ -356,6 +412,12 @@ libunwindstack_test = cc_test {
         "tests/files/offline/shared_lib_in_apk_single_map_arm64/regs.txt"
         "tests/files/offline/shared_lib_in_apk_single_map_arm64/stack.data"
         "tests/files/offline/shared_lib_in_apk_single_map_arm64/test.apk"
+        "tests/files/offline/signal_load_bias_arm/libc.so"
+        "tests/files/offline/signal_load_bias_arm/libunwindstack_unit_test"
+        "tests/files/offline/signal_load_bias_arm/maps.txt"
+        "tests/files/offline/signal_load_bias_arm/regs.txt"
+        "tests/files/offline/signal_load_bias_arm/stack0.data"
+        "tests/files/offline/signal_load_bias_arm/stack1.data"
         "tests/files/offline/straddle_arm/libbase.so"
         "tests/files/offline/straddle_arm/libc.so"
         "tests/files/offline/straddle_arm/maps.txt"
@@ -366,9 +428,26 @@ libunwindstack_test = cc_test {
         "tests/files/offline/straddle_arm64/regs.txt"
         "tests/files/offline/straddle_arm64/stack.data"
     ];
+};
+
+libunwindstack_test = cc_test {
+    name = "libunwindstack_test";
+    defaults = ["libunwindstack_testlib_flags"];
+    isolated = true;
+
+    srcs = [
+        "tests/LocalUnwinderTest.cpp"
+    ];
     required = [
         "libunwindstack_local"
     ];
+};
+
+#  Skip LocalUnwinderTest until atest understands required properly.
+libunwindstack_unit_test = cc_test {
+    name = "libunwindstack_unit_test";
+    defaults = ["libunwindstack_testlib_flags"];
+    isolated = true;
 };
 
 # -------------------------------------------------------------------------
@@ -473,4 +552,4 @@ gen_gnudebugdata = cc_binary_host {
     ];
 };
 
-in { inherit gen_gnudebugdata libunwindstack libunwindstack_flags libunwindstack_local libunwindstack_test libunwindstack_tools unwind unwind_benchmarks unwind_for_offline unwind_info unwind_reg_info unwind_symbols; }
+in { inherit gen_gnudebugdata libunwindstack libunwindstack_defaults libunwindstack_flags libunwindstack_local libunwindstack_no_dex libunwindstack_test libunwindstack_testlib_flags libunwindstack_tools libunwindstack_unit_test unwind unwind_benchmarks unwind_for_offline unwind_info unwind_reg_info unwind_symbols; }

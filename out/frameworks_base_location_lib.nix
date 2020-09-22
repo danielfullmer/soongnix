@@ -33,10 +33,10 @@ let
         "java/com/android/location/provider/ProviderPropertiesUnbundled.java"
         "java/com/android/location/provider/ProviderRequestUnbundled.java"
     ];
+    libs = [
+        "androidx.annotation_annotation"
+    ];
     api_packages = ["com.android.location.provider"];
-    srcs_lib = "framework";
-    srcs_lib_whitelist_dirs = ["location/java"];
-    srcs_lib_whitelist_pkgs = ["com.android.internal.location"];
 };
 
 in { inherit "com.android.location.provider"; }

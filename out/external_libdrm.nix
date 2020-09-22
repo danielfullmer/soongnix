@@ -40,12 +40,14 @@ libdrm_defaults = cc_defaults {
         "-Wno-deprecated-declarations"
         "-Wno-format"
         "-Wno-gnu-variable-sized-type-not-at-end"
+        "-Wno-implicit-function-declaration"
+        "-Wno-int-conversion"
+        "-Wno-missing-field-initializers"
         "-Wno-pointer-arith"
         "-Wno-unused-parameter"
         "-Wno-unused-variable"
-        "-Wno-missing-field-initializers"
     ];
-    export_include_dirs = ["."];
+    export_system_include_dirs = ["."];
 };
 
 #  Library for the device
@@ -53,6 +55,7 @@ libdrm = cc_library {
     name = "libdrm";
     recovery_available = true;
     vendor_available = true;
+    host_supported = true;
     defaults = [
         "libdrm_defaults"
         "libdrm_sources"

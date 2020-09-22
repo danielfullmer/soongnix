@@ -22,6 +22,20 @@ kotlin-stdlib = java_import {
     sdk_version = "core_current";
 };
 
+kotlin-stdlib-jdk7 = java_import {
+    name = "kotlin-stdlib-jdk7";
+    host_supported = true;
+    jars = ["lib/kotlin-stdlib-jdk7.jar"];
+    sdk_version = "core_current";
+};
+
+kotlin-stdlib-jdk8 = java_import {
+    name = "kotlin-stdlib-jdk8";
+    host_supported = true;
+    jars = ["lib/kotlin-stdlib-jdk8.jar"];
+    sdk_version = "core_current";
+};
+
 kotlin-test = java_import {
     name = "kotlin-test";
     host_supported = true;
@@ -32,4 +46,4 @@ kotlin-test = java_import {
     sdk_version = "core_current";
 };
 
-in { inherit kotlin-annotations kotlin-reflect kotlin-stdlib kotlin-test; }
+in { inherit kotlin-annotations kotlin-reflect kotlin-stdlib kotlin-stdlib-jdk7 kotlin-stdlib-jdk8 kotlin-test; }

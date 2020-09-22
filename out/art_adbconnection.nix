@@ -31,6 +31,7 @@ adbconnection-defaults = cc_defaults {
 
     shared_libs = [
         "libbase"
+        "libadbconnection_client"
     ];
     target = {
         host = {
@@ -43,15 +44,6 @@ adbconnection-defaults = cc_defaults {
         "libnativehelper_header_only"
         "dt_fd_forward_export"
     ];
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
-    symlink_preferred_arch = true;
     required = [
         "libjdwp"
         "libdt_fd_forward"
@@ -65,6 +57,10 @@ libadbconnection = art_cc_library {
         "libart"
         "libartbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libadbconnectiond = art_cc_library {
@@ -76,6 +72,9 @@ libadbconnectiond = art_cc_library {
     shared_libs = [
         "libartd"
         "libartbased"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

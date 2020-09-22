@@ -1,0 +1,34 @@
+{ cc_library }:
+let
+
+"android.hardware.boot@1.1-impl-pixel-legacy" = cc_library {
+    name = "android.hardware.boot@1.1-impl-pixel-legacy";
+    stem = "android.hardware.boot@1.0-impl-1.1-pixel-legacy";
+    vendor = true;
+    recovery_available = true;
+    srcs = [
+        "BootControlShared.cpp"
+        "LegacyBootControl.cpp"
+    ];
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+    relative_install_path = "hw";
+    shared_libs = [
+        "libbase"
+        "liblog"
+        "libhardware"
+        "libhidlbase"
+        "libutils"
+        "android.hardware.boot@1.0"
+        "android.hardware.boot@1.1"
+    ];
+    static_libs = [
+        "libboot_control"
+        "libbootloader_message_vendor"
+        "libfstab"
+    ];
+};
+
+in { inherit "android.hardware.boot@1.1-impl-pixel-legacy"; }

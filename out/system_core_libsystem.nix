@@ -6,6 +6,12 @@ libsystem_headers = cc_library_headers {
     vendor_available = true;
     recovery_available = true;
     host_supported = true;
+    native_bridge_supported = true;
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "apex_inherit";
     export_include_dirs = ["include"];
 
     target = {

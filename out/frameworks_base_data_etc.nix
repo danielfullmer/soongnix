@@ -1,4 +1,4 @@
-{ prebuilt_etc }:
+{ filegroup, prebuilt_etc }:
 let
 
 #  Copyright (C} 2018 The Android Open Source Project
@@ -23,6 +23,19 @@ let
     src = "framework-sysconfig.xml";
 };
 
+"preinstalled-packages-platform.xml" = prebuilt_etc {
+    name = "preinstalled-packages-platform.xml";
+    sub_dir = "sysconfig";
+    src = "preinstalled-packages-platform.xml";
+};
+
+"preinstalled-packages-platform-overlays.xml" = prebuilt_etc {
+    name = "preinstalled-packages-platform-overlays.xml";
+    product_specific = true;
+    sub_dir = "sysconfig";
+    src = "preinstalled-packages-platform-overlays.xml";
+};
+
 "hiddenapi-package-whitelist.xml" = prebuilt_etc {
     name = "hiddenapi-package-whitelist.xml";
     sub_dir = "sysconfig";
@@ -45,9 +58,17 @@ let
 
 "privapp_whitelist_com.android.carrierconfig" = prebuilt_etc {
     name = "privapp_whitelist_com.android.carrierconfig";
-    product_specific = true;
+    system_ext_specific = true;
     sub_dir = "permissions";
     src = "com.android.carrierconfig.xml";
+    filename_from_src = true;
+};
+
+"privapp_whitelist_com.android.cellbroadcastreceiver" = prebuilt_etc {
+    name = "privapp_whitelist_com.android.cellbroadcastreceiver";
+    system_ext_specific = true;
+    sub_dir = "permissions";
+    src = "com.android.cellbroadcastreceiver.xml";
     filename_from_src = true;
 };
 
@@ -69,7 +90,7 @@ let
 
 "privapp_whitelist_com.android.emergency" = prebuilt_etc {
     name = "privapp_whitelist_com.android.emergency";
-    product_specific = true;
+    system_ext_specific = true;
     sub_dir = "permissions";
     src = "com.android.emergency.xml";
     filename_from_src = true;
@@ -84,7 +105,7 @@ let
 
 "privapp_whitelist_com.android.launcher3" = prebuilt_etc {
     name = "privapp_whitelist_com.android.launcher3";
-    product_specific = true;
+    system_ext_specific = true;
     sub_dir = "permissions";
     src = "com.android.launcher3.xml";
     filename_from_src = true;
@@ -92,7 +113,7 @@ let
 
 "privapp_whitelist_com.android.provision" = prebuilt_etc {
     name = "privapp_whitelist_com.android.provision";
-    product_specific = true;
+    system_ext_specific = true;
     sub_dir = "permissions";
     src = "com.android.provision.xml";
     filename_from_src = true;
@@ -100,7 +121,7 @@ let
 
 "privapp_whitelist_com.android.settings" = prebuilt_etc {
     name = "privapp_whitelist_com.android.settings";
-    product_specific = true;
+    system_ext_specific = true;
     sub_dir = "permissions";
     src = "com.android.settings.xml";
     filename_from_src = true;
@@ -116,7 +137,7 @@ let
 
 "privapp_whitelist_com.android.storagemanager" = prebuilt_etc {
     name = "privapp_whitelist_com.android.storagemanager";
-    product_specific = true;
+    system_ext_specific = true;
     sub_dir = "permissions";
     src = "com.android.storagemanager.xml";
     filename_from_src = true;
@@ -124,7 +145,7 @@ let
 
 "privapp_whitelist_com.android.systemui" = prebuilt_etc {
     name = "privapp_whitelist_com.android.systemui";
-    product_specific = true;
+    system_ext_specific = true;
     sub_dir = "permissions";
     src = "com.android.systemui.xml";
     filename_from_src = true;
@@ -136,4 +157,9 @@ let
     src = "com.android.timezone.updater.xml";
 };
 
-in { inherit "com.android.timezone.updater.xml" "framework-sysconfig.xml" "hiddenapi-package-whitelist.xml" "platform.xml" "privapp-permissions-platform.xml" "privapp_whitelist_com.android.carrierconfig" "privapp_whitelist_com.android.contacts" "privapp_whitelist_com.android.dialer" "privapp_whitelist_com.android.documentsui" "privapp_whitelist_com.android.emergency" "privapp_whitelist_com.android.launcher3" "privapp_whitelist_com.android.provision" "privapp_whitelist_com.android.settings" "privapp_whitelist_com.android.settings.intelligence" "privapp_whitelist_com.android.storagemanager" "privapp_whitelist_com.android.systemui"; }
+"services.core.protolog.json" = filegroup {
+    name = "services.core.protolog.json";
+    srcs = ["services.core.protolog.json"];
+};
+
+in { inherit "com.android.timezone.updater.xml" "framework-sysconfig.xml" "hiddenapi-package-whitelist.xml" "platform.xml" "preinstalled-packages-platform-overlays.xml" "preinstalled-packages-platform.xml" "privapp-permissions-platform.xml" "privapp_whitelist_com.android.carrierconfig" "privapp_whitelist_com.android.cellbroadcastreceiver" "privapp_whitelist_com.android.contacts" "privapp_whitelist_com.android.dialer" "privapp_whitelist_com.android.documentsui" "privapp_whitelist_com.android.emergency" "privapp_whitelist_com.android.launcher3" "privapp_whitelist_com.android.provision" "privapp_whitelist_com.android.settings" "privapp_whitelist_com.android.settings.intelligence" "privapp_whitelist_com.android.storagemanager" "privapp_whitelist_com.android.systemui" "services.core.protolog.json"; }

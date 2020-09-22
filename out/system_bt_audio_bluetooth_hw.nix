@@ -22,7 +22,6 @@ let
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

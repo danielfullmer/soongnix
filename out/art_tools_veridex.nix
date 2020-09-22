@@ -1,4 +1,4 @@
-{ cc_binary }:
+{ cc_binary, sh_binary_host }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -50,4 +50,11 @@ veridex = cc_binary {
     };
 };
 
-in { inherit veridex; }
+#  Expose the appcompat.sh script for use by the build.
+veridex-appcompat = sh_binary_host {
+    name = "veridex-appcompat";
+    src = "appcompat.sh";
+    filename_from_src = true;
+};
+
+in { inherit veridex veridex-appcompat; }

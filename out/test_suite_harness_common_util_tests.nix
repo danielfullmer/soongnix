@@ -32,7 +32,6 @@ compatibility-common-util-tests = java_test_host {
         "src/com/android/compatibility/common/util/ReportLogTest.java"
         "src/com/android/compatibility/common/util/ResultHandlerTest.java"
         "src/com/android/compatibility/common/util/StatTest.java"
-        "src/com/android/compatibility/common/util/TestResultHistoryTest.java"
         "src/com/android/compatibility/common/util/TestResultTest.java"
         "src/com/android/compatibility/common/util/UnitTests.java"
     ];

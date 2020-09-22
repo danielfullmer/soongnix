@@ -31,6 +31,15 @@ libnetdutils = cc_library {
         "libbase"
     ];
     export_include_dirs = ["include"];
+    sanitize = {
+        cfi = true;
+    };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.resolv"
+    ];
+    min_sdk_version = "29";
 };
 
 netdutils_test = cc_test {

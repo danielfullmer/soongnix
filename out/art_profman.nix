@@ -50,6 +50,10 @@ profman = art_cc_binary {
         "libdexfile"
         "libartbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 profmand = art_cc_binary {
@@ -62,6 +66,9 @@ profmand = art_cc_binary {
         "libprofiled"
         "libdexfiled"
         "libartbased"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

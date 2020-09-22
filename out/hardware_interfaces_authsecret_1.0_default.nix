@@ -16,7 +16,6 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.authsecret@1.0"

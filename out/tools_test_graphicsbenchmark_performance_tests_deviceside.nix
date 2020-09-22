@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright 2018, The Android Open Source Project
@@ -15,13 +15,13 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-GameQualificationDevice = android_test {
-    name = "GameQualificationDevice";
+GameCoreDevice = android_test_helper_app {
+    name = "GameCoreDevice";
     sdk_version = "26"; #  Oreo
     manifest = "AndroidManifest.xml";
     static_libs = [
         "androidx.test.rules"
-        "GameQualificationHelper"
+        "GameCoreHelper"
         "repackaged.android.test.base"
     ];
     test_suites = ["device-tests"];
@@ -31,4 +31,4 @@ GameQualificationDevice = android_test {
     ];
 };
 
-in { inherit GameQualificationDevice; }
+in { inherit GameCoreDevice; }

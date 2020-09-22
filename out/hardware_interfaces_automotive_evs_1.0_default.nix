@@ -21,7 +21,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libui"
         "libutils"
@@ -30,6 +29,10 @@ let
     cflags = [
         "-O0"
         "-g"
+    ];
+
+    vintf_fragments = [
+        "manifest_android.hardware.automotive.evs@1.0-service.xml"
     ];
 };
 

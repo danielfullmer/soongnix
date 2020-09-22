@@ -17,7 +17,6 @@ let
         "libdl"
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.renderscript@1.0"
     ];

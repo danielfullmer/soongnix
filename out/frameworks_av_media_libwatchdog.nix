@@ -22,10 +22,8 @@ libwatchdog = cc_library {
     ];
     export_include_dirs = ["include"];
     shared_libs = [
-        "liblog"
-    ];
-    static_libs = [
         "libbase"
+        "liblog"
     ];
     target = {
         windows = {
@@ -35,6 +33,8 @@ libwatchdog = cc_library {
             enabled = false;
         };
     };
+    apex_available = ["com.android.media"];
+    min_sdk_version = "29";
 };
 
 in { inherit libwatchdog; }

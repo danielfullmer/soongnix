@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_headers, cc_library_shared }:
+{ cc_defaults, cc_library_headers, cc_library_shared, filegroup }:
 let
 
 #  Copyright (C) 2013 The Android Open Source Project
@@ -15,6 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+#  Default flags to be used throughout all libraries in inputflinger.
 inputflinger_defaults = cc_defaults {
     name = "inputflinger_defaults";
     cflags = [
@@ -26,132 +27,108 @@ inputflinger_defaults = cc_defaults {
     ];
 };
 
-libinputflinger = cc_library_shared {
-    name = "libinputflinger";
-    defaults = ["inputflinger_defaults"];
+# ///////////////////////////////////////////////
+#  libinputflinger
+# ///////////////////////////////////////////////
 
+libinputflinger_sources = filegroup {
+    name = "libinputflinger_sources";
     srcs = [
         "InputClassifier.cpp"
         "InputClassifierConverter.cpp"
-        "InputDispatcher.cpp"
         "InputManager.cpp"
     ];
+};
 
+libinputflinger_defaults = cc_defaults {
+    name = "libinputflinger_defaults";
+    srcs = [":libinputflinger_sources"];
     shared_libs = [
         "android.hardware.input.classifier@1.0"
         "libbase"
-        "libinputflinger_base"
-        "libinputreporter"
-        "libinputreader"
         "libbinder"
+        "libcrypto"
         "libcutils"
         "libhidlbase"
         "libinput"
         "liblog"
+        "libstatslog"
         "libutils"
         "libui"
     ];
+};
 
+libinputflinger = cc_library_shared {
+    name = "libinputflinger";
+    defaults = [
+        "inputflinger_defaults"
+        "libinputflinger_defaults"
+    ];
     cflags = [
         #  TODO(b/23084678): Move inputflinger to its own process and mark it hidden
         # -fvisibility=hidden
     ];
-
+    shared_libs = [
+        #  This should consist only of dependencies from inputflinger. Other dependencies should be
+        #  in cc_defaults so that they are included in the tests.
+        "libinputflinger_base"
+        "libinputreporter"
+        "libinputreader"
+    ];
+    static_libs = [
+        "libinputdispatcher"
+    ];
+    export_static_lib_headers = [
+        "libinputdispatcher"
+    ];
     export_include_dirs = [
         "."
         "include"
     ];
-
 };
+
+# ///////////////////////////////////////////////
+#  libinputflinger_base
+# ///////////////////////////////////////////////
 
 libinputflinger_headers = cc_library_headers {
     name = "libinputflinger_headers";
     export_include_dirs = ["include"];
 };
 
-libinputreader = cc_library_shared {
-    name = "libinputreader";
-    defaults = ["inputflinger_defaults"];
-
+libinputflinger_base_sources = filegroup {
+    name = "libinputflinger_base_sources";
     srcs = [
-        "EventHub.cpp"
-        "InputReader.cpp"
-        "InputReaderFactory.cpp"
-        "TouchVideoDevice.cpp"
+        "InputListener.cpp"
+        "InputReaderBase.cpp"
+        "InputThread.cpp"
     ];
+};
 
+libinputflinger_base_defaults = cc_defaults {
+    name = "libinputflinger_base_defaults";
+    srcs = [":libinputflinger_base_sources"];
     shared_libs = [
         "libbase"
-        "libinputflinger_base"
-        "libcrypto"
         "libcutils"
         "libinput"
         "liblog"
-        "libui"
         "libutils"
-        "libhardware_legacy"
-        "libstatslog"
     ];
-
     header_libs = [
-        "libinputflinger_headers"
-    ];
-
-    export_header_lib_headers = [
         "libinputflinger_headers"
     ];
 };
 
 libinputflinger_base = cc_library_shared {
     name = "libinputflinger_base";
-    defaults = ["inputflinger_defaults"];
-
-    srcs = [
-        "InputListener.cpp"
-        "InputReaderBase.cpp"
+    defaults = [
+        "inputflinger_defaults"
+        "libinputflinger_base_defaults"
     ];
-
-    shared_libs = [
-        "libbase"
-        "libinput"
-        "liblog"
-        "libutils"
-    ];
-
-    header_libs = [
-        "libinputflinger_headers"
-    ];
-
     export_header_lib_headers = [
         "libinputflinger_headers"
     ];
 };
 
-libinputreporter = cc_library_shared {
-    name = "libinputreporter";
-    defaults = ["inputflinger_defaults"];
-
-    srcs = [
-        "InputReporter.cpp"
-    ];
-
-    shared_libs = [
-        "liblog"
-        "libutils"
-    ];
-
-    header_libs = [
-        "libinputflinger_headers"
-    ];
-
-    export_header_lib_headers = [
-        "libinputflinger_headers"
-    ];
-};
-
-subdirs = [
-    "host"
-    "tests"
-];
-
-in { inherit inputflinger_defaults libinputflinger libinputflinger_base libinputflinger_headers libinputreader libinputreporter; }
+in { inherit inputflinger_defaults libinputflinger libinputflinger_base libinputflinger_base_defaults libinputflinger_base_sources libinputflinger_defaults libinputflinger_headers libinputflinger_sources; }

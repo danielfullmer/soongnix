@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_test, vts_config }:
 let
 
 #
@@ -28,4 +28,8 @@ vts_selftest_flaky_test = cc_test {
     ];
 };
 
-in { inherit vts_selftest_flaky_test; }
+VtsSelfTestFlakyTest = vts_config {
+    name = "VtsSelfTestFlakyTest";
+};
+
+in { inherit VtsSelfTestFlakyTest vts_selftest_flaky_test; }

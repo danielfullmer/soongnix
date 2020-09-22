@@ -1,4 +1,4 @@
-{ cc_library_shared }:
+{ cc_defaults, cc_fuzz, cc_library_shared }:
 let
 
 libnfc-nci = cc_library_shared {
@@ -13,7 +13,6 @@ libnfc-nci = cc_library_shared {
         "liblog"
         "libdl"
         "libhardware"
-        "libmetricslogger"
         "libz"
         "libchrome"
         "libbase"
@@ -21,8 +20,6 @@ libnfc-nci = cc_library_shared {
 
         #  Treble configuration
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
         "android.hardware.nfc@1.0"
         "android.hardware.nfc@1.1"
@@ -117,6 +114,158 @@ libnfc-nci = cc_library_shared {
             ];
         };
     };
+    sanitize = {
+        misc_undefined = ["bounds"];
+        integer_overflow = true;
+    };
+
 };
 
-in { inherit libnfc-nci; }
+nfc_fuzzer_defaults = cc_defaults {
+    name = "nfc_fuzzer_defaults";
+    host_supported = true;
+    native_coverage = true;
+    static_libs = [
+        "libnfcutils"
+        "libcutils"
+        "liblog"
+        "libbase"
+        "libchrome"
+    ];
+    cflags = [
+        "-DBUILDCFG=1"
+        "-Wall"
+        "-Werror"
+        "-Wimplicit-fallthrough"
+        "-g"
+        "-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION"
+        "-DGKI_ENABLE_BUF_CORRUPTION_CHECK=FALSE"
+    ];
+    product_variables = {
+        debuggable = {
+            cflags = [
+                "-DDCHECK_ALWAYS_ON"
+            ];
+        };
+    };
+    local_include_dirs = [
+        "include"
+        "gki/ulinux"
+        "gki/common"
+        "nfc/include"
+        "nfa/include"
+        "fuzzers/inc"
+    ];
+};
+
+nfc_nci_fuzzer = cc_fuzz {
+    name = "nfc_nci_fuzzer";
+    defaults = ["nfc_fuzzer_defaults"];
+    srcs = [
+        "nfc/nci/nci_hmsgs.cc"
+        "nfc/nci/nci_hrcv.cc"
+        "nfc/nfc/nfc_ee.cc"
+        "nfc/nfc/nfc_main.cc"
+        "nfc/nfc/nfc_ncif.cc"
+        "nfc/nfc/nfc_task.cc"
+        "nfc/nfc/nfc_test.cc"
+        "nfc/nfc/nfc_utils.cc"
+        "nfc/nfc/nfc_vs.cc"
+        "gki/common/gki_buffer.cc"
+        "gki/common/gki_time.cc"
+        "gki/ulinux/gki_ulinux.cc"
+        "fuzzers/fuzz_cmn.cc"
+        "fuzzers/fuzz_utils.cc"
+        "fuzzers/nci/hal.cc"
+        "fuzzers/nci/nci.cc"
+        "fuzzers/nci/stubs.cc"
+    ];
+};
+
+nfc_rw_fuzzer = cc_fuzz {
+    name = "nfc_rw_fuzzer";
+    defaults = ["nfc_fuzzer_defaults"];
+    srcs = [
+        "nfc/tags/rw_i93.cc"
+        "nfc/tags/rw_main.cc"
+        "nfc/tags/rw_mfc.cc"
+        "nfc/tags/rw_t1t.cc"
+        "nfc/tags/rw_t1t_ndef.cc"
+        "nfc/tags/rw_t2t.cc"
+        "nfc/tags/rw_t2t_ndef.cc"
+        "nfc/tags/rw_t3t.cc"
+        "nfc/tags/rw_t4t.cc"
+        "nfc/tags/tags_int.cc"
+        "gki/common/gki_buffer.cc"
+        "gki/common/gki_time.cc"
+        "gki/ulinux/gki_ulinux.cc"
+        "fuzzers/fuzz_cmn.cc"
+        "fuzzers/fuzz_utils.cc"
+        "fuzzers/rw/main.cc"
+        "fuzzers/rw/mfc.cc"
+        "fuzzers/rw/stubs.cc"
+        "fuzzers/rw/t1t.cc"
+        "fuzzers/rw/t2t.cc"
+        "fuzzers/rw/t3t.cc"
+        "fuzzers/rw/t4t.cc"
+        "fuzzers/rw/t5t.cc"
+    ];
+};
+
+nfc_ce_fuzzer = cc_fuzz {
+    name = "nfc_ce_fuzzer";
+    defaults = ["nfc_fuzzer_defaults"];
+    srcs = [
+        "nfc/tags/ce_main.cc"
+        "nfc/tags/ce_t3t.cc"
+        "nfc/tags/ce_t4t.cc"
+        "nfc/tags/tags_int.cc"
+        "gki/common/gki_buffer.cc"
+        "gki/common/gki_time.cc"
+        "gki/ulinux/gki_ulinux.cc"
+        "fuzzers/fuzz_cmn.cc"
+        "fuzzers/fuzz_utils.cc"
+        "fuzzers/ce/main.cc"
+        "fuzzers/ce/stubs.cc"
+        "fuzzers/ce/t3t.cc"
+        "fuzzers/ce/t4t.cc"
+    ];
+};
+
+nfc_ndef_fuzzer = cc_fuzz {
+    name = "nfc_ndef_fuzzer";
+    defaults = ["nfc_fuzzer_defaults"];
+    srcs = [
+        "nfa/dm/nfa_dm_ndef.cc"
+        "nfc/ndef/ndef_utils.cc"
+        "gki/common/gki_buffer.cc"
+        "gki/common/gki_time.cc"
+        "gki/ulinux/gki_ulinux.cc"
+        "fuzzers/fuzz_cmn.cc"
+        "fuzzers/fuzz_utils.cc"
+        "fuzzers/ndef/main.cc"
+        "fuzzers/ndef/stubs.cc"
+    ];
+};
+
+nfc_llcp_fuzzer = cc_fuzz {
+    name = "nfc_llcp_fuzzer";
+    defaults = ["nfc_fuzzer_defaults"];
+    srcs = [
+        "nfc/llcp/llcp_api.cc"
+        "nfc/llcp/llcp_dlc.cc"
+        "nfc/llcp/llcp_link.cc"
+        "nfc/llcp/llcp_main.cc"
+        "nfc/llcp/llcp_sdp.cc"
+        "nfc/llcp/llcp_util.cc"
+        "gki/common/gki_buffer.cc"
+        "gki/common/gki_time.cc"
+        "gki/ulinux/gki_ulinux.cc"
+        "fuzzers/fuzz_cmn.cc"
+        "fuzzers/fuzz_utils.cc"
+        "fuzzers/llcp/llcp.cc"
+        "fuzzers/llcp/stubs.cc"
+    ];
+};
+
+in { inherit libnfc-nci nfc_ce_fuzzer nfc_fuzzer_defaults nfc_llcp_fuzzer nfc_nci_fuzzer nfc_ndef_fuzzer nfc_rw_fuzzer; }

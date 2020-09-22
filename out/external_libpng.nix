@@ -6,7 +6,12 @@ let
 
 libpng-defaults = cc_defaults {
     name = "libpng-defaults";
+    exclude_srcs = [
+        "example.c"
+        "pngtest.c"
+    ];
     srcs = [
+        "example.c"
         "png.c"
         "pngerror.c"
         "pngget.c"
@@ -17,6 +22,7 @@ libpng-defaults = cc_defaults {
         "pngrtran.c"
         "pngrutil.c"
         "pngset.c"
+        "pngtest.c"
         "pngtrans.c"
         "pngwio.c"
         "pngwrite.c"
@@ -31,32 +37,18 @@ libpng-defaults = cc_defaults {
     ];
     arch = {
         arm = {
-            srcs = [
-                "arm/arm_init.c"
-                "arm/filter_neon.S"
-                "arm/filter_neon_intrinsics.c"
-            ];
+            srcs = ["arm/*"];
         };
         arm64 = {
-            srcs = [
-                "arm/arm_init.c"
-                "arm/filter_neon.S"
-                "arm/filter_neon_intrinsics.c"
-            ];
+            srcs = ["arm/*"];
         };
         x86 = {
-            srcs = [
-                "intel/intel_init.c"
-                "intel/filter_sse2_intrinsics.c"
-            ];
+            srcs = ["intel/*"];
             #  Disable optimizations because they crash on windows
             #  cflags: ["-DPNG_INTEL_SSE_OPT=1"],
         };
         x86_64 = {
-            srcs = [
-                "intel/intel_init.c"
-                "intel/filter_sse2_intrinsics.c"
-            ];
+            srcs = ["intel/*"];
             #  Disable optimizations because they crash on windows
             #  cflags: ["-DPNG_INTEL_SSE_OPT=1"],
         };
@@ -79,6 +71,8 @@ libpng-defaults = cc_defaults {
 libpng = cc_library {
     name = "libpng";
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     recovery_available = true;
     vndk = {
         enabled = true;

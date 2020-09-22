@@ -5,6 +5,9 @@ libsfntly = cc_library_static {
     name = "libsfntly";
     host_supported = true;
     srcs = [
+        "cpp/src/sfntly/font.cc"
+        "cpp/src/sfntly/font_factory.cc"
+        "cpp/src/sfntly/tag.cc"
         "cpp/src/sfntly/data/byte_array.cc"
         "cpp/src/sfntly/data/font_data.cc"
         "cpp/src/sfntly/data/font_input_stream.cc"
@@ -13,12 +16,17 @@ libsfntly = cc_library_static {
         "cpp/src/sfntly/data/memory_byte_array.cc"
         "cpp/src/sfntly/data/readable_font_data.cc"
         "cpp/src/sfntly/data/writable_font_data.cc"
-        "cpp/src/sfntly/font.cc"
-        "cpp/src/sfntly/font_factory.cc"
         "cpp/src/sfntly/port/file_input_stream.cc"
         "cpp/src/sfntly/port/lock.cc"
         "cpp/src/sfntly/port/memory_input_stream.cc"
         "cpp/src/sfntly/port/memory_output_stream.cc"
+        "cpp/src/sfntly/table/byte_array_table_builder.cc"
+        "cpp/src/sfntly/table/font_data_table.cc"
+        "cpp/src/sfntly/table/generic_table_builder.cc"
+        "cpp/src/sfntly/table/header.cc"
+        "cpp/src/sfntly/table/subtable.cc"
+        "cpp/src/sfntly/table/table.cc"
+        "cpp/src/sfntly/table/table_based_table_builder.cc"
         "cpp/src/sfntly/table/bitmap/big_glyph_metrics.cc"
         "cpp/src/sfntly/table/bitmap/bitmap_glyph.cc"
         "cpp/src/sfntly/table/bitmap/bitmap_glyph_info.cc"
@@ -36,7 +44,6 @@ libsfntly = cc_library_static {
         "cpp/src/sfntly/table/bitmap/index_sub_table_format5.cc"
         "cpp/src/sfntly/table/bitmap/simple_bitmap_glyph.cc"
         "cpp/src/sfntly/table/bitmap/small_glyph_metrics.cc"
-        "cpp/src/sfntly/table/byte_array_table_builder.cc"
         "cpp/src/sfntly/table/core/cmap_table.cc"
         "cpp/src/sfntly/table/core/font_header_table.cc"
         "cpp/src/sfntly/table/core/horizontal_device_metrics_table.cc"
@@ -45,21 +52,10 @@ libsfntly = cc_library_static {
         "cpp/src/sfntly/table/core/maximum_profile_table.cc"
         "cpp/src/sfntly/table/core/name_table.cc"
         "cpp/src/sfntly/table/core/os2_table.cc"
-        "cpp/src/sfntly/table/font_data_table.cc"
-        "cpp/src/sfntly/table/generic_table_builder.cc"
-        "cpp/src/sfntly/table/header.cc"
-        "cpp/src/sfntly/table/subtable.cc"
-        "cpp/src/sfntly/table/table.cc"
-        "cpp/src/sfntly/table/table_based_table_builder.cc"
         "cpp/src/sfntly/table/truetype/glyph_table.cc"
         "cpp/src/sfntly/table/truetype/loca_table.cc"
-        "cpp/src/sfntly/tag.cc"
         "cpp/src/sample/chromium/font_subsetter.cc"
         "cpp/src/sample/chromium/subsetter_impl.cc"
-    ];
-
-    shared_libs = [
-        "libandroidicu"
     ];
 
     cflags = [
@@ -142,6 +138,13 @@ libsfntly = cc_library_static {
     target = {
         android = {
             cflags = ["-fPIC"];
+            shared_libs = ["libandroidicu"];
+        };
+        host = {
+            shared_libs = [
+                "libicui18n"
+                "libicuuc"
+            ];
         };
         not_windows = {
             cflags = ["-fPIC"];

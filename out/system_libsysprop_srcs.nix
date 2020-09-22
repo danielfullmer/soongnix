@@ -1,4 +1,4 @@
-{ filegroup }:
+{ sysprop_library }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -16,18 +16,34 @@ let
 #  limitations under the License.
 #
 
-platform-properties = filegroup {
-    name = "platform-properties";
+PlatformProperties = sysprop_library {
+    name = "PlatformProperties";
     srcs = [
         "android/sysprop/AdbProperties.sysprop"
+        "android/sysprop/ApkVerityProperties.sysprop"
         "android/sysprop/CarProperties.sysprop"
         "android/sysprop/ContactsProperties.sysprop"
         "android/sysprop/CryptoProperties.sysprop"
         "android/sysprop/DisplayProperties.sysprop"
+        "android/sysprop/HdmiProperties.sysprop"
+        "android/sysprop/MediaProperties.sysprop"
+        "android/sysprop/OtaProperties.sysprop"
+        "android/sysprop/PowerProperties.sysprop"
         "android/sysprop/SetupWizardProperties.sysprop"
+        "android/sysprop/TelephonyProperties.sysprop"
         "android/sysprop/TraceProperties.sysprop"
+        "android/sysprop/VndkProperties.sysprop"
         "android/sysprop/VoldProperties.sysprop"
+        "android/sysprop/WifiProperties.sysprop"
+    ];
+    property_owner = "Platform";
+    api_packages = ["android.sysprop"];
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.release"
+        "com.android.art.debug"
     ];
 };
 
-in { inherit platform-properties; }
+in { inherit PlatformProperties; }

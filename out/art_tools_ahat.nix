@@ -1,4 +1,4 @@
-{ droiddoc_host, java_library_host }:
+{ droiddoc_host, java_binary_host, java_test_helper_library }:
 let
 
 #  Copyright 2018 Google Inc. All rights reserved.
@@ -79,9 +79,6 @@ ahat-docs = droiddoc_host {
     ];
     custom_template = "droiddoc-templates-sdk";
     args = "-stubpackages com.android.ahat:com.android.ahat.*";
-    api_tag_name = "AHAT";
-    api_filename = "ahat_api.txt";
-    removed_api_filename = "ahat_removed_api.txt";
     check_api = {
         current = {
             api_file = "etc/ahat_api.txt";
@@ -91,8 +88,12 @@ ahat-docs = droiddoc_host {
 };
 
 #  --- ahat.jar ----------------
-ahat = java_library_host {
+ahat = java_binary_host {
     name = "ahat";
+    visibility = [
+        "//libcore/metrictests/memory/host"
+    ];
+    wrapper = "ahat";
     srcs = [
         "src/main/com/android/ahat/AhatHandler.java"
         "src/main/com/android/ahat/AhatHttpHandler.java"
@@ -158,4 +159,34 @@ ahat = java_library_host {
     javacflags = ["-Xdoclint:all/protected"];
 };
 
-in { inherit ahat ahat-docs; }
+#  --- ahat-test-dump.jar --------------
+ahat-test-dump = java_test_helper_library {
+    name = "ahat-test-dump";
+    srcs = [
+        "src/test-dump/DumpedStuff.java"
+        "src/test-dump/Main.java"
+        "src/test-dump/SuperDumpedStuff.java"
+        "src/test-dump/android/os/Binder.java"
+        "src/test-dump/android/os/BinderProxy.java"
+        "src/test-dump/android/os/IBinder.java"
+    ];
+    sdk_version = "core_platform";
+    optimize = {
+        obfuscate = true;
+        enabled = true;
+        proguard_flags_files = ["etc/test-dump.pro"];
+    };
+};
+
+#  --- ahat-ri-test-dump.jar -------
+ahat-ri-test-dump = java_test_helper_library {
+    host_supported = true;
+    device_supported = false;
+    name = "ahat-ri-test-dump";
+    srcs = [
+        "src/ri-test-dump/DumpedStuff.java"
+        "src/ri-test-dump/Main.java"
+    ];
+};
+
+in { inherit ahat ahat-docs ahat-ri-test-dump ahat-test-dump; }

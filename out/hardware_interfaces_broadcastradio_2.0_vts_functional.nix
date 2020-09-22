@@ -20,9 +20,6 @@ let
 VtsHalBroadcastradioV2_0TargetTest = cc_test {
     name = "VtsHalBroadcastradioV2_0TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
-    cppflags = [
-        "-std=c++1z"
-    ];
     srcs = ["VtsHalBroadcastradioV2_0TargetTest.cpp"];
     static_libs = [
         "android.hardware.broadcastradio@2.0"
@@ -31,7 +28,10 @@ VtsHalBroadcastradioV2_0TargetTest = cc_test {
         "android.hardware.broadcastradio@vts-utils-lib"
         "libgmock"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalBroadcastradioV2_0TargetTest; }

@@ -20,6 +20,7 @@ libamidi = cc_library_shared {
 
     srcs = [
         "amidi.cpp"
+        "MidiDeviceInfo.cpp"
         ":IMidiDeviceServer.aidl"
     ];
 
@@ -34,14 +35,18 @@ libamidi = cc_library_shared {
         "-fvisibility=hidden"
     ];
 
+    header_libs = [
+        "media_ndk_headers"
+    ];
+
     shared_libs = [
         "liblog"
         "libbinder"
         "libutils"
-        "libmedia"
-        "libmediandk"
         "libandroid_runtime"
     ];
+
+    version_script = "libamidi.map.txt";
 
     export_include_dirs = ["include"];
 };

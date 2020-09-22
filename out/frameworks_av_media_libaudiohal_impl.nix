@@ -19,17 +19,17 @@ libaudiohal_default = cc_defaults {
         "StreamHalHidl.cpp"
     ];
 
-    export_include_dirs = ["include"];
-
     cflags = [
         "-Wall"
         "-Wextra"
         "-Werror"
+        "-fvisibility=hidden"
     ];
     shared_libs = [
         "android.hardware.audio.common-util"
         "android.hidl.allocator@1.0"
         "android.hidl.memory@1.0"
+        "libaudiofoundation"
         "libaudiohal_deathhandler"
         "libaudioutils"
         "libbase"
@@ -39,8 +39,6 @@ libaudiohal_default = cc_defaults {
         "libhardware"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libmedia_helper"
         "libmediautils"
@@ -48,6 +46,7 @@ libaudiohal_default = cc_defaults {
     ];
     header_libs = [
         "android.hardware.audio.common.util@all-versions"
+        "libaudioclient_headers"
         "libaudiohal_headers"
     ];
 
@@ -104,4 +103,20 @@ libaudiohal_default = cc_defaults {
     ];
 };
 
-in { inherit "libaudiohal@2.0" "libaudiohal@4.0" "libaudiohal@5.0" libaudiohal_default; }
+"libaudiohal@6.0" = cc_library_shared {
+    name = "libaudiohal@6.0";
+    defaults = ["libaudiohal_default"];
+    shared_libs = [
+        "android.hardware.audio.common@6.0"
+        "android.hardware.audio.common@6.0-util"
+        "android.hardware.audio.effect@6.0"
+        "android.hardware.audio@6.0"
+    ];
+    cflags = [
+        "-DMAJOR_VERSION=6"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+in { inherit "libaudiohal@2.0" "libaudiohal@4.0" "libaudiohal@5.0" "libaudiohal@6.0" libaudiohal_default; }

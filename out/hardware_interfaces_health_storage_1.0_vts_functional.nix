@@ -24,9 +24,12 @@ VtsHalHealthStorageV1_0TargetTest = cc_test {
     static_libs = ["android.hardware.health.storage@1.0"];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    test_config = "VtsHalHealthStorageV1_0TargetTest.config";
 };
 
 in { inherit VtsHalHealthStorageV1_0TargetTest; }

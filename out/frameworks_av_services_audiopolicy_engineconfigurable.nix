@@ -36,6 +36,7 @@ libaudiopolicyengineconfigurable = cc_library_shared {
 
     ];
     shared_libs = [
+        "libaudiofoundation"
         "liblog"
         "libcutils"
         "libutils"

@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_static }:
+{ cc_defaults, cc_library, cc_library_headers, cc_library_static }:
 let
 
 libjsoncpp_defaults = cc_defaults {
@@ -43,6 +43,12 @@ libjsoncpp = cc_library {
     };
     host_supported = true;
     recovery_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    native_bridge_supported = true;
+    min_sdk_version = "29";
 };
 
 libjsoncpp_ndk = cc_library_static {
@@ -52,4 +58,10 @@ libjsoncpp_ndk = cc_library_static {
     stl = "libc++_static";
 };
 
-in { inherit libjsoncpp libjsoncpp_defaults libjsoncpp_ndk; }
+libjsoncpp_headers = cc_library_headers {
+    name = "libjsoncpp_headers";
+    export_include_dirs = ["include"];
+    host_supported = true;
+};
+
+in { inherit libjsoncpp libjsoncpp_defaults libjsoncpp_headers libjsoncpp_ndk; }

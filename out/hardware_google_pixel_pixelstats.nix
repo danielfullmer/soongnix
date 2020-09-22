@@ -37,6 +37,7 @@ pixelatoms-java = java_library {
     srcs = [
         "pixelatoms.proto"
     ];
+    sdk_version = "current";
 };
 
 libpixelstats = cc_library {
@@ -46,8 +47,11 @@ libpixelstats = cc_library {
 
     srcs = [
         "DropDetect.cpp"
+        "OrientationCollector.cpp"
         "SysfsCollector.cpp"
         "UeventListener.cpp"
+        "WlcReporter.cpp"
+        "BatteryCapacityReporter.cpp"
     ];
     cflags = [
         "-Wall"
@@ -59,9 +63,9 @@ libpixelstats = cc_library {
         "libbinder"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
+        "libsensorndkbridge"
         "pixelatoms-cpp"
     ];
     export_shared_lib_headers = [

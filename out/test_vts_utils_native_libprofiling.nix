@@ -21,6 +21,8 @@ libvts_profiling_utils = cc_library_shared {
 
     name = "libvts_profiling_utils";
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 
     srcs = ["VtsProfilingUtil.cpp"];
 
@@ -39,6 +41,9 @@ libvts_profiling_utils = cc_library_shared {
 libvts_profiling = cc_library_shared {
 
     name = "libvts_profiling";
+
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 
     srcs = ["VtsProfilingInterface.cpp"];
 
@@ -83,7 +88,6 @@ vts_profiling_configure = cc_binary {
         "libutils"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
     ];
 };
 

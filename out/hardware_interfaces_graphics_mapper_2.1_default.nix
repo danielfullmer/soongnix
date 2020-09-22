@@ -32,7 +32,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libsync"
         "libutils"

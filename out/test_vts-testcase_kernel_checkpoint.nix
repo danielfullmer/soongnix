@@ -1,4 +1,4 @@
-{ vts_config }:
+{ python_test_host, vts_config }:
 let
 
 #
@@ -21,4 +21,31 @@ VtsKernelCheckpointTest = vts_config {
     name = "VtsKernelCheckpointTest";
 };
 
-in { inherit VtsKernelCheckpointTest; }
+vts_kernel_checkpoint_test = python_test_host {
+    name = "vts_kernel_checkpoint_test";
+    main = "vts_kernel_checkpoint_test.py";
+    srcs = [
+        "checkpoint_utils.py"
+        "vts_kernel_checkpoint_test.py"
+    ];
+    libs = [
+        "vndk_utils"
+        "vts_vndk_utils"
+    ];
+    test_suites = [
+        "vts"
+    ];
+    auto_gen_config = true;
+    version = {
+        py2 = {
+            enabled = false;
+            embedded_launcher = false;
+        };
+        py3 = {
+            enabled = true;
+            embedded_launcher = true;
+        };
+    };
+};
+
+in { inherit VtsKernelCheckpointTest vts_kernel_checkpoint_test; }

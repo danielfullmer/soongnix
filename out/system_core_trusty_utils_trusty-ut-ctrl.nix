@@ -23,6 +23,8 @@ trusty-ut-ctrl = cc_test {
     shared_libs = [
         "libc"
         "liblog"
+    ];
+    static_libs = [
         "libtrusty"
     ];
     gtest = false;

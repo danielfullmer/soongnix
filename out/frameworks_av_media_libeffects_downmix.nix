@@ -9,6 +9,7 @@ libdownmix = cc_library_shared {
     srcs = ["EffectDownmix.c"];
 
     shared_libs = [
+        "libaudioutils"
         "libcutils"
         "liblog"
     ];
@@ -26,7 +27,6 @@ libdownmix = cc_library_shared {
         "libaudioeffects"
         "libhardware_headers"
     ];
-    static_libs = ["libaudioutils"];
 };
 
 in { inherit libdownmix; }

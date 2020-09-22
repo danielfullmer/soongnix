@@ -15,19 +15,14 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-vts-tradefed = sh_binary_host {
-    name = "vts-tradefed";
-    src = "vts-tradefed";
-};
-
 vtf = sh_binary_host {
     name = "vtf";
     src = "vtf";
 };
 
-vts-tradefed_win = sh_binary_host {
-    name = "vts-tradefed_win";
-    src = "vts-tradefed_win.bat";
+vts10-tradefed_win = sh_binary_host {
+    name = "vts10-tradefed_win";
+    src = "vts10-tradefed_win.bat";
     filename_from_src = true;
 
     target = {
@@ -40,4 +35,4 @@ vts-tradefed_win = sh_binary_host {
     };
 };
 
-in { inherit vtf vts-tradefed vts-tradefed_win; }
+in { inherit vtf vts10-tradefed_win; }

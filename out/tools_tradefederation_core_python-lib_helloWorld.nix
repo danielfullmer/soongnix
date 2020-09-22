@@ -25,7 +25,7 @@ tradefed_hello_world = python_binary_host {
     libs = [
         "tradefed_python_lib"
     ];
-    test_suites = ["general-tests"];
+    test_suites = ["null-suite"];
     version = {
         py2 = {
             enabled = true;

@@ -30,6 +30,7 @@ TestSmsRetrieverApp = android_test {
 
     test_suites = [
         "cts"
+        "mts"
     ];
 };
 

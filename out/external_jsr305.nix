@@ -20,6 +20,11 @@ jsr305 = java_library_static {
     host_supported = true;
     hostdex = true;
     sdk_version = "core_current";
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+    ];
+    min_sdk_version = "14";
     srcs = [
         "ri/src/main/java/javax/annotation/CheckForNull.java"
         "ri/src/main/java/javax/annotation/CheckForSigned.java"

@@ -1,4 +1,4 @@
-{ android_library, android_test }:
+{ android_library }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -33,33 +33,10 @@ EncryptionRunner = android_library {
         "src/android/car/encryptionrunner/HandshakeException.java"
         "src/android/car/encryptionrunner/HandshakeMessage.java"
         "src/android/car/encryptionrunner/Key.java"
+        "src/android/car/encryptionrunner/OobUkey2EncryptionRunner.java"
         "src/android/car/encryptionrunner/Ukey2EncryptionRunner.java"
     ];
     installable = true;
 };
 
-EncryptionRunnerTest = android_test {
-    name = "EncryptionRunnerTest";
-    min_sdk_version = "23";
-    srcs = [
-        "test/android/car/encryptionrunner/EncryptionRunnerTest.java"
-        "test/android/car/encryptionrunner/Ukey2EncryptionRunnerTest.java"
-    ];
-    product_variables = {
-        pdk = {
-            enabled = false;
-        };
-    };
-    libs = [
-        "android.test.base"
-        "android.test.runner"
-    ];
-    static_libs = [
-        "androidx.test.rules"
-        "EncryptionRunner"
-        "junit"
-        "truth-prebuilt"
-    ];
-};
-
-in { inherit EncryptionRunner EncryptionRunnerTest; }
+in { inherit EncryptionRunner; }

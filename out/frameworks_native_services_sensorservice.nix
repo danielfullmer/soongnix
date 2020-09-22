@@ -36,6 +36,10 @@ libsensorservice = cc_library_shared {
         "-fvisibility=hidden"
     ];
 
+    header_libs = [
+        "android.hardware.sensors@2.X-shared-utils"
+    ];
+
     shared_libs = [
         "libcutils"
         "libhardware"
@@ -45,17 +49,21 @@ libsensorservice = cc_library_shared {
         "libbinder"
         "libsensor"
         "libsensorprivacy"
+        "libprotoutil"
         "libcrypto"
         "libbase"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libfmq"
         "android.hardware.sensors@1.0"
         "android.hardware.sensors@2.0"
+        "android.hardware.sensors@2.1"
     ];
 
-    static_libs = ["android.hardware.sensors@1.0-convert"];
+    static_libs = [
+        "android.hardware.sensors@1.0-convert"
+    ];
+
+    generated_headers = ["framework-cppstream-protos"];
 
     #  our public headers depend on libsensor and libsensorprivacy
     export_shared_lib_headers = [

@@ -9,6 +9,7 @@ native-media = android_test {
     ];
     sdk_version = "current";
     certificate = "platform";
+    jni_uses_platform_apis = true;
     jni_libs = ["libnative-media-jni"];
 };
 

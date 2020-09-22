@@ -16,8 +16,6 @@ libsensorservicehidl = cc_library_shared {
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
         "libsensor"
         "android.frameworks.sensorservice@1.0"

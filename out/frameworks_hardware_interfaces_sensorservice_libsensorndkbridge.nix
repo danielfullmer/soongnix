@@ -30,7 +30,6 @@ libsensorndkbridge = cc_library_shared {
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.frameworks.sensorservice@1.0"
         "android.hardware.sensors@1.0"

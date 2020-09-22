@@ -18,7 +18,8 @@ let
 KeyChainTests = android_test {
     name = "KeyChainTests";
     srcs = [
-        "src/com/android/keychain/tests/KeyChainServiceTest.java"
+        "src/com/android/keychain/tests/BasicKeyChainServiceTest.java"
+        "src/com/android/keychain/tests/KeyChainActivityTest.java"
         "src/com/android/keychain/tests/KeyChainTestActivity.java"
     ];
     platform_apis = true;
@@ -26,8 +27,25 @@ KeyChainTests = android_test {
         "com.android.keychain.tests.support"
         "core-tests-support"
         "mockwebserver"
+        "platform-test-annotations"
         "junit"
+        "mockito-target-minus-junit4"
+        "androidx.test.ext.junit"
+        "androidx.test.runner"
+        "androidx.test.rules"
+        "testng"
+        "truth-prebuilt"
     ];
+    libs = [
+        "android.test.base"
+    ];
+    test_suites = ["general-tests"];
+    required = [
+        "KeyChainTestsSupport"
+    ];
+
+    instrumentation_for = "KeyChain";
+    certificate = "platform";
 };
 
 in { inherit KeyChainTests; }

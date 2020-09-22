@@ -27,7 +27,10 @@ VtsHalVibratorV1_3TargetTest = cc_test {
         "android.hardware.vibrator@1.2"
         "android.hardware.vibrator@1.3"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalVibratorV1_3TargetTest; }

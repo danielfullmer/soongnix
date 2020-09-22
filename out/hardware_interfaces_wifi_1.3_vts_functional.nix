@@ -21,7 +21,6 @@ VtsHalWifiV1_3TargetTest = cc_test {
     name = "VtsHalWifiV1_3TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
-        "VtsHalWifiV1_3TargetTest.cpp"
         "wifi_chip_hidl_test.cpp"
         "wifi_sta_iface_hidl_test.cpp"
     ];
@@ -31,6 +30,12 @@ VtsHalWifiV1_3TargetTest = cc_test {
         "android.hardware.wifi@1.1"
         "android.hardware.wifi@1.2"
         "android.hardware.wifi@1.3"
+        "libwifi-system-iface"
+    ];
+    disable_framework = true;
+    test_suites = [
+        "general-tests"
+        "vts"
     ];
 };
 

@@ -30,7 +30,6 @@ let
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.thermal@2.0"
         "android.hardware.thermal@1.0"

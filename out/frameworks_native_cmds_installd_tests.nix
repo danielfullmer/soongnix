@@ -104,6 +104,8 @@ installd_dexopt_test = cc_test {
         "libinstalld"
         "liblog"
         "liblogwrap"
+        "libziparchive"
+        "libz"
     ];
     test_config = "installd_dexopt_test.xml";
 };

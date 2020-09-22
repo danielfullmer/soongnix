@@ -25,7 +25,7 @@ memory-helper = java_library {
         "src/com/android/helpers/FreeMemHelper.java"
         "src/com/android/helpers/GarbageCollectionHelper.java"
         "src/com/android/helpers/ProcessShowmapHelper.java"
-        "src/com/android/helpers/RssSnapshotHelper.java"
+        "src/com/android/helpers/ShowmapSnapshotHelper.java"
         "src/com/android/helpers/TotalPssHelper.java"
     ];
 
@@ -33,6 +33,7 @@ memory-helper = java_library {
         "androidx.test.runner"
         "ub-uiautomator"
         "collector-helper-utilities"
+        "platformprotosnano"
     ];
 
     sdk_version = "current";

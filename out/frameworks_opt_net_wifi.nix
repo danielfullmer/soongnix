@@ -18,7 +18,10 @@ let
 subdirs = [
     "libwifi_system"
     "libwifi_system_iface"
+    "service"
+    "service/apex"
     "service/proto"
+    "tests"
 ];
 
 in { }

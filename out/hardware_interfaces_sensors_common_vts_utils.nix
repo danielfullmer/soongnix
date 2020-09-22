@@ -19,12 +19,10 @@ let
 
 VtsHalSensorsTargetTestUtils = cc_library_static {
     name = "VtsHalSensorsTargetTestUtils";
+    defaults = ["VtsHalTargetTestDefaults"];
     cflags = ["-DLOG_TAG=\"sensors_hidl_hal_test\""];
     srcs = [
         "GrallocWrapper.cpp"
-        "SensorsHidlEnvironmentBase.cpp"
-        "SensorsHidlTestBase.cpp"
-        "SensorsTestSharedMemory.cpp"
     ];
     export_include_dirs = [
         "include"
@@ -32,14 +30,22 @@ VtsHalSensorsTargetTestUtils = cc_library_static {
     local_include_dirs = [
         "include/sensors-vts-utils"
     ];
+    shared_libs = [
+        "libutils"
+    ];
     static_libs = [
+        "android.hardware.sensors@1.0"
+        "android.hardware.sensors@2.0"
+        "android.hardware.sensors@2.1"
+    ];
+    whole_static_libs = [
         "android.hardware.graphics.allocator@2.0"
         "android.hardware.graphics.allocator@3.0"
+        "android.hardware.graphics.allocator@4.0"
         "android.hardware.graphics.mapper@2.0"
         "android.hardware.graphics.mapper@2.1"
         "android.hardware.graphics.mapper@3.0"
-        "android.hardware.sensors@1.0"
-        "VtsHalHidlTargetTestBase"
+        "android.hardware.graphics.mapper@4.0"
     ];
 };
 

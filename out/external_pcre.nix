@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_shared }:
+{ cc_defaults, cc_library }:
 let
 
 
@@ -22,6 +22,7 @@ libpcre2_src_files = [
     (libpcre2_dist_prefix + "/src/pcre2_newline.c")
     (libpcre2_dist_prefix + "/src/pcre2_ord2utf.c")
     (libpcre2_dist_prefix + "/src/pcre2_pattern_info.c")
+    (libpcre2_dist_prefix + "/src/pcre2_script_run.c")
     (libpcre2_dist_prefix + "/src/pcre2_serialize.c")
     (libpcre2_dist_prefix + "/src/pcre2_string_utils.c")
     (libpcre2_dist_prefix + "/src/pcre2_study.c")
@@ -67,6 +68,8 @@ libpcre2 = cc_library {
     double_loadable = true;
     recovery_available = true;
     srcs = libpcre2_src_files;
+    stl = "none";
+    system_shared_libs = ["libc"];
     target = {
         linux_bionic = {
             enabled = true;
@@ -74,33 +77,4 @@ libpcre2 = cc_library {
     };
 };
 
-#
-#  Google's C++ wrapper.
-#
-
-libpcrecpp = cc_library_shared {
-    name = "libpcrecpp";
-    cflags = [
-        "-Wall"
-        "-Werror"
-        "-Wno-unused-parameter"
-        "-Wno-unused-variable"
-    ];
-    tidy_checks = [
-        "-google-build-using-namespace"
-        "-google-global-names-in-headers"
-    ];
-    local_include_dirs = ["pcrecpp/include"];
-    shared_libs = ["libpcre2"];
-    export_include_dirs = [
-        "pcrecpp/include"
-        "include"
-    ];
-    srcs = [
-        "pcrecpp/pcrecpp.cc"
-        "pcrecpp/pcre_scanner.cc"
-        "pcrecpp/pcre_stringpiece.cc"
-    ];
-};
-
-in { inherit libpcre2 libpcrecpp pcre_defaults; }
+in { inherit libpcre2 pcre_defaults; }

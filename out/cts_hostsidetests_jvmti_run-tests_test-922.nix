@@ -21,9 +21,10 @@ CtsJvmtiRunTest922HostTestCases = java_test_host {
     jarjar_rules = "jarjar-rules.txt";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
+    data = [":CtsJvmtiRunTest922DeviceApp"];
 };
 
 in { inherit CtsJvmtiRunTest922HostTestCases; }

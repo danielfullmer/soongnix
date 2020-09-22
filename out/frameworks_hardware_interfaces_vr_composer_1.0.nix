@@ -7,7 +7,7 @@ let
     name = "android.frameworks.vr.composer@1.0";
     root = "android.frameworks";
     vndk = {
-        enabled = true;
+        enabled = false;
     };
     srcs = [
         "IVrComposerClient.hal"

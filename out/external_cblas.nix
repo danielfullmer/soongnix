@@ -172,6 +172,8 @@ cblas-defaults = cc_defaults {
 libblas = cc_library_shared {
     name = "libblas";
     vendor_available = false;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
         support_system_process = true;

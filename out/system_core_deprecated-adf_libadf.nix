@@ -28,6 +28,4 @@ libadf = cc_library {
     export_include_dirs = ["include"];
 };
 
-subdirs = ["tests"];
-
 in { inherit libadf; }

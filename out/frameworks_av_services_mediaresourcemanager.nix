@@ -15,6 +15,7 @@ libresourcemanagerservice = cc_library_shared {
         "libmedia"
         "libmediautils"
         "libbinder"
+        "libbinder_ndk"
         "libutils"
         "liblog"
     ];
@@ -25,6 +26,8 @@ libresourcemanagerservice = cc_library_shared {
         "-Werror"
         "-Wall"
     ];
+
+    export_include_dirs = ["."];
 
 };
 

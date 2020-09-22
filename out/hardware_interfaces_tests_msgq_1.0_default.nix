@@ -29,8 +29,6 @@ let
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];
@@ -52,7 +50,6 @@ let
         "libbase"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.tests.msgq@1.0"
@@ -71,8 +68,6 @@ let
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];

@@ -10,6 +10,7 @@ libmediaplayerservice = cc_library_shared {
         "MediaPlayerService.cpp"
         "MediaRecorderClient.cpp"
         "MetadataRetrieverClient.cpp"
+        "StagefrightMetadataRetriever.cpp"
         "StagefrightRecorder.cpp"
         "TestPlayerStub.cpp"
     ];
@@ -24,11 +25,14 @@ libmediaplayerservice = cc_library_shared {
         "libcodec2_client"
         "libcrypto"
         "libcutils"
+        "libdatasource"
         "libdl"
+        "libdrmframework"
         "libgui"
         "libhidlbase"
         "liblog"
         "libmedia"
+        "libmedia_codeclist"
         "libmedia_omx"
         "libmediadrm"
         "libmediametrics"
@@ -47,6 +51,7 @@ libmediaplayerservice = cc_library_shared {
     ];
 
     static_libs = [
+        "libplayerservice_datasource"
         "libstagefright_nuplayer"
         "libstagefright_rtsp"
         "libstagefright_timedtext"

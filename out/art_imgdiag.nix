@@ -60,6 +60,10 @@ imgdiag = art_cc_binary {
         "libartbase"
         "libart-compiler"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 imgdiagd = art_cc_binary {
@@ -72,6 +76,9 @@ imgdiagd = art_cc_binary {
         "libartd"
         "libartbased"
         "libartd-compiler"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

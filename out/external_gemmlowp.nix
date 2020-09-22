@@ -34,6 +34,11 @@ gemmlowp_headers = cc_library_headers {
     vendor_available = true;
     host_supported = true;
     export_include_dirs = ["."];
+    apex_available = [
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+        "//apex_available:platform"
+    ];
 };
 
 subdirs = ["eight_bit_int_gemm"];

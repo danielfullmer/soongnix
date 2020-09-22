@@ -26,9 +26,15 @@ BroadcastRadioTests = android_test {
         "compatibility-device-util-axt"
         "androidx.test.rules"
         "testng"
+        "services.core"
     ];
     libs = ["android.test.base"];
-    srcs = ["src/android/hardware/radio/tests/functional/RadioTunerTest.java"];
+    srcs = [
+        "src/android/hardware/radio/tests/functional/RadioTunerTest.java"
+        "src/com/android/server/broadcastradio/hal2/ProgramInfoCacheTest.java"
+        "src/com/android/server/broadcastradio/hal2/StartProgramListUpdatesFanoutTest.java"
+        "src/com/android/server/broadcastradio/hal2/TestUtils.java"
+    ];
     dex_preopt = {
         enabled = false;
     };

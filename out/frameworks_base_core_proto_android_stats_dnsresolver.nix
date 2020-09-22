@@ -24,7 +24,6 @@ dnsresolverprotosnano = java_library_static {
         "dns_resolver.proto"
     ];
     sdk_version = "system_current";
-    no_framework_libs = true;
 };
 
 in { inherit dnsresolverprotosnano; }

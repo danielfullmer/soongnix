@@ -23,6 +23,14 @@ let
 media_ndk_headers = cc_library_headers {
     name = "media_ndk_headers";
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
     export_include_dirs = ["include"];
 };
 
@@ -30,6 +38,7 @@ libmediandk = cc_library_shared {
     name = "libmediandk";
 
     srcs = [
+        "NdkJavaVMHelper.cpp"
         "NdkMediaCodec.cpp"
         "NdkMediaCrypto.cpp"
         "NdkMediaDataSource.cpp"
@@ -42,7 +51,6 @@ libmediandk = cc_library_shared {
     ];
 
     include_dirs = [
-        "bionic/libc/private"
         "frameworks/base/core/jni"
         "frameworks/native/include/media/openmax"
         "system/media/camera/include"
@@ -58,28 +66,32 @@ libmediandk = cc_library_shared {
         "libgrallocusage"
     ];
 
+    header_libs = [
+        "libmediadrm_headers"
+        "libmediametrics_headers"
+    ];
+
     shared_libs = [
         "android.hardware.graphics.bufferqueue@1.0"
         "android.hidl.token@1.0-utils"
         "libandroid_runtime_lazy"
         "libbase"
-        "libbinder"
+        "libdatasource"
         "libmedia"
+        "libmediadrm"
         "libmedia_omx"
         "libmedia_jni_utils"
-        "libmediadrm"
         "libstagefright"
         "libstagefright_foundation"
         "liblog"
         "libutils"
         "libcutils"
         "libnativewindow"
-        "libbinder"
         "libhidlbase"
         "libgui"
         "libui"
-        "libmedia2_jni_core"
         "libmediandk_utils"
+        "libnativehelper"
     ];
 
     export_include_dirs = ["include"];
@@ -122,6 +134,10 @@ libmediandk_utils = cc_library {
         "-Wall"
     ];
 
+    header_libs = [
+        "libmedia_headers"
+    ];
+
     shared_libs = [
     ];
 
@@ -148,6 +164,10 @@ AImageReaderWindowHandleTest = cc_test {
         "libcutils"
         "android.hardware.graphics.bufferqueue@1.0"
     ];
+    header_libs = [
+        "libstagefright_foundation_headers"
+    ];
+
     cflags = [
         "-D__ANDROID_VNDK__"
     ];

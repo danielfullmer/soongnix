@@ -26,7 +26,6 @@ let
         "libbase"
         "liblog"
         "libhidlbase"
-        "libhidltransport"
         "libhardware"
         "libutils"
         "android.hardware.light@2.0"
@@ -47,7 +46,6 @@ light_service_defaults = cc_defaults {
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.light@2.0"
     ];
 };

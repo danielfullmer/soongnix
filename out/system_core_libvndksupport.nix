@@ -1,11 +1,10 @@
 { cc_library }:
 let
 
-subdirs = ["tests"];
-
 libvndksupport = cc_library {
     name = "libvndksupport";
-    srcs = ["linker.c"];
+    native_bridge_supported = true;
+    srcs = ["linker.cpp"];
     cflags = [
         "-Wall"
         "-Werror"

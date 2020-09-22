@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_headers, cc_library_shared }:
+{ cc_defaults, cc_library_headers, cc_library_shared, filegroup }:
 let
 
 #  Copyright (C) 2010 The Android Open Source Project
@@ -29,38 +29,16 @@ libui = cc_library_shared {
         "-Werror"
     ];
     cppflags = [
-        "-Weverything"
-
-        #  The static constructors and destructors in this library have not been noted to
-        #  introduce significant overheads
-        "-Wno-exit-time-destructors"
-        "-Wno-global-constructors"
-
-        #  We only care about compiling as C++14
-        "-Wno-c++98-compat-pedantic"
-
-        #  We are aware of the risks inherent in comparing floats for equality
-        "-Wno-float-equal"
-
-        #  We use four-character constants for the GraphicBuffer header, and don't care
-        #  that they're non-portable as long as they're consistent within one execution
-        "-Wno-four-char-constants"
-
-        #  Don't warn about struct padding
-        "-Wno-padded"
-
-        "-Wno-switch-enum"
+        "-Wextra"
     ];
 
     sanitize = {
         integer_overflow = true;
+        misc_undefined = ["bounds"];
     };
 
     srcs = [
         "ColorSpace.cpp"
-        "BufferHubBuffer.cpp"
-        "BufferHubEventFd.cpp"
-        "BufferHubMetadata.cpp"
         "DebugUtils.cpp"
         "Fence.cpp"
         "FenceTime.cpp"
@@ -68,6 +46,7 @@ libui = cc_library_shared {
         "Gralloc.cpp"
         "Gralloc2.cpp"
         "Gralloc3.cpp"
+        "Gralloc4.cpp"
         "GraphicBuffer.cpp"
         "GraphicBufferAllocator.cpp"
         "GraphicBufferMapper.cpp"
@@ -84,24 +63,28 @@ libui = cc_library_shared {
     include_dirs = [
         "frameworks/native/include"
     ];
+    export_include_dirs = [
+        "include"
+        "include_private"
+    ];
 
     #  Uncomment the following line to enable VALIDATE_REGIONS traces
     # defaults: ["libui-validate-regions-defaults"],
 
     shared_libs = [
-        "android.frameworks.bufferhub@1.0"
         "android.hardware.graphics.allocator@2.0"
         "android.hardware.graphics.allocator@3.0"
+        "android.hardware.graphics.allocator@4.0"
+        "android.hardware.graphics.common-ndk_platform"
         "android.hardware.graphics.common@1.2"
         "android.hardware.graphics.mapper@2.0"
         "android.hardware.graphics.mapper@2.1"
         "android.hardware.graphics.mapper@3.0"
+        "android.hardware.graphics.mapper@4.0"
         "libbase"
         "libcutils"
-        "libhardware"
+        "libgralloctypes"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libsync"
         "libutils"
         "liblog"
@@ -109,6 +92,9 @@ libui = cc_library_shared {
 
     export_shared_lib_headers = [
         "android.hardware.graphics.common@1.2"
+        "android.hardware.graphics.common-ndk_platform"
+        "android.hardware.graphics.mapper@4.0"
+        "libgralloctypes"
     ];
 
     static_libs = [
@@ -122,30 +108,20 @@ libui = cc_library_shared {
         vendor = {
             cflags = ["-DLIBUI_IN_VNDK"];
             exclude_srcs = [
-                "BufferHubBuffer.cpp"
-                "BufferHubEventFd.cpp"
-                "BufferHubMetadata.cpp"
             ];
             exclude_header_libs = [
-                "libbufferhub_headers"
-                "libdvr_headers"
             ];
             exclude_shared_libs = [
-                "android.frameworks.bufferhub@1.0"
-                "libpdx_default_transport"
             ];
         };
     };
 
     header_libs = [
         "libbase_headers"
-        "libbufferhub_headers"
-        "libdvr_headers"
         "libnativebase_headers"
         "libnativewindow_headers"
         "libhardware_headers"
         "libui_headers"
-        "libpdx_headers"
     ];
 
     export_static_lib_headers = [
@@ -160,6 +136,7 @@ libui = cc_library_shared {
         "libhardware_headers"
         "libui_headers"
     ];
+    min_sdk_version = "29";
 };
 
 libui_headers = cc_library_headers {
@@ -178,6 +155,7 @@ libui_headers = cc_library_headers {
     export_header_lib_headers = [
         "libnativewindow_headers"
     ];
+    min_sdk_version = "29";
 };
 
 #  defaults to enable VALIDATE_REGIONS traces
@@ -192,4 +170,12 @@ subdirs = [
     "tools"
 ];
 
-in { inherit libui libui-validate-regions-defaults libui_headers; }
+libui_host_common = filegroup {
+    name = "libui_host_common";
+    srcs = [
+        "Rect.cpp"
+        "PixelFormat.cpp"
+    ];
+};
+
+in { inherit libui libui-validate-regions-defaults libui_headers libui_host_common; }

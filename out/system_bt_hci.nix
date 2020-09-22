@@ -6,9 +6,8 @@ libbt-hci_defaults = cc_defaults {
     defaults = ["fluoride_defaults"];
     shared_libs = [
         "android.hardware.bluetooth@1.0"
+        "android.hardware.bluetooth@1.1"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
     ];
 };
 
@@ -81,4 +80,76 @@ net_test_hci = cc_test {
     ];
 };
 
-in { inherit libbt-hci libbt-hci_defaults net_test_hci; }
+#  HCI native unit tests for target
+#  ========================================================
+net_test_hci_native = cc_test {
+    name = "net_test_hci_native";
+    test_suites = ["device-tests"];
+    defaults = ["libbt-hci_defaults"];
+    host_supported = true;
+    local_include_dirs = [
+        "include"
+    ];
+    include_dirs = [
+        "system/bt"
+        "system/bt/stack/include"
+    ];
+    srcs = [
+        "test/hci_layer_test.cc"
+        "test/other_stack_stub.cc"
+    ];
+    shared_libs = [
+        "libcrypto"
+        "liblog"
+        "libprotobuf-cpp-lite"
+    ];
+    static_libs = [
+        "libbt-common"
+        "libbt-protos-lite"
+        "libosi"
+        "libosi-AllocationTestHarness"
+    ];
+    sanitize = {
+        address = true;
+        cfi = true;
+        misc_undefined = ["bounds"];
+    };
+};
+
+net_test_hci_fragmenter_native = cc_test {
+    name = "net_test_hci_fragmenter_native";
+    test_suites = ["device-tests"];
+    defaults = ["fluoride_defaults"];
+    host_supported = true;
+    local_include_dirs = [
+        "include"
+    ];
+    include_dirs = [
+        "system/bt"
+        "system/bt/stack/include"
+        "system/bt/btcore/include"
+        "system/bt/osi/test"
+    ];
+    srcs = [
+        "src/buffer_allocator.cc"
+        "test/packet_fragmenter_host_test.cc"
+    ];
+    shared_libs = [
+        "libcrypto"
+        "liblog"
+        "libprotobuf-cpp-lite"
+    ];
+    static_libs = [
+        "libbt-common"
+        "libbt-protos-lite"
+        "libosi"
+        "libosi-AllocationTestHarness"
+    ];
+    sanitize = {
+        address = true;
+        cfi = true;
+        misc_undefined = ["bounds"];
+    };
+};
+
+in { inherit libbt-hci libbt-hci_defaults net_test_hci net_test_hci_fragmenter_native net_test_hci_native; }

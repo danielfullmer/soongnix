@@ -1,4 +1,4 @@
-{ art_cc_library, cc_defaults }:
+{ art_cc_library, cc_defaults, cc_library }:
 let
 
 #
@@ -18,31 +18,46 @@ let
 #
 
 #  Build variants {target,host} x {debug,ndebug} x {32,64}
-fieldnull-defaults = cc_defaults {
-    name = "fieldnull-defaults";
-    host_supported = true;
+fieldnull-base-defaults = cc_defaults {
+    name = "fieldnull-base-defaults";
     srcs = ["fieldnull.cc"];
     defaults = ["art_defaults"];
 
     #  Note that this tool needs to be built for both 32-bit and 64-bit since it requires
     #  to be same ISA as what it is attached to.
     compile_multilib = "both";
-
-    shared_libs = [
-        "libbase"
-    ];
     header_libs = [
         "libopenjdkjvmti_headers"
     ];
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
-    symlink_preferred_arch = true;
+};
+
+fieldnull-defaults = cc_defaults {
+    name = "fieldnull-defaults";
+    host_supported = true;
+    shared_libs = [
+        "libbase"
+    ];
+    defaults = ["fieldnull-base-defaults"];
+};
+
+fieldnull-static-defaults = cc_defaults {
+    name = "fieldnull-static-defaults";
+    host_supported = false;
+    defaults = ["fieldnull-base-defaults"];
+
+    shared_libs = [
+        "liblog"
+    ];
+    static_libs = [
+        "libbase_ndk"
+    ];
+    sdk_version = "current";
+    stl = "c++_static";
+};
+
+libfieldnulls = cc_library {
+    name = "libfieldnulls";
+    defaults = ["fieldnull-static-defaults"];
 };
 
 libfieldnull = art_cc_library {
@@ -58,4 +73,4 @@ libfieldnulld = art_cc_library {
     ];
 };
 
-in { inherit fieldnull-defaults libfieldnull libfieldnulld; }
+in { inherit fieldnull-base-defaults fieldnull-defaults fieldnull-static-defaults libfieldnull libfieldnulld libfieldnulls; }

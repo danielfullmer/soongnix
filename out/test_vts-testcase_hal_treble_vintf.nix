@@ -24,17 +24,19 @@ vts_treble_vintf_test_defaults = cc_defaults {
     ];
     shared_libs = [
         "libbase"
+        "libbinder"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libz"
     ];
     static_libs = [
+        "libaidlmetadata"
         "libgmock"
         "libhidl-gen-hash"
         "libhidl-gen-utils"
+        "libhidlmetadata"
         "libprocpartition"
         "libselinux"
         "libtinyxml2"
@@ -46,16 +48,11 @@ vts_treble_vintf_test_defaults = cc_defaults {
         "utils.cpp"
         "main.cpp"
     ];
-};
-
-#  Do similar tests as vts_treble_vintf_test from O-MR1 vendor image branch. The
-#  test is modified to compile against latest libvintf.
-#  VendorFrameworkCompatibility is removed because it has framework dependency.
-vts_treble_vintf_test_o_mr1 = cc_test {
-    name = "vts_treble_vintf_test_o_mr1";
-    defaults = ["vts_treble_vintf_test_defaults"];
-    srcs = [
-        "vts_treble_vintf_test_o_mr1.cpp"
+    data = [
+        ":android.hardware"
+        ":android.frameworks"
+        ":android.system"
+        ":android.hidl"
     ];
 };
 
@@ -63,6 +60,12 @@ vts_treble_vintf_test_o_mr1 = cc_test {
 #  has no system XML dependencies.
 vts_treble_vintf_vendor_test = cc_test {
     name = "vts_treble_vintf_vendor_test";
+    # Use test_config for vts suite.
+    test_config = "vts_treble_vintf_vendor_test.xml";
+    test_suites = [
+        "vts"
+        "device-tests"
+    ];
     defaults = ["vts_treble_vintf_test_defaults"];
     srcs = [
         "DeviceManifestTest.cpp"
@@ -75,6 +78,12 @@ vts_treble_vintf_vendor_test = cc_test {
 #  test the current framework.
 vts_treble_vintf_framework_test = cc_test {
     name = "vts_treble_vintf_framework_test";
+    # Use test_config for vts suite.
+    test_config = "vts_treble_vintf_framework_test.xml";
+    test_suites = [
+        "vts"
+        "device-tests"
+    ];
     defaults = ["vts_treble_vintf_test_defaults"];
     srcs = [
         "SingleManifestTest.cpp"
@@ -100,4 +109,4 @@ VtsTrebleVintfTestOMr1 = vts_config {
     name = "VtsTrebleVintfTestOMr1";
 };
 
-in { inherit VtsTrebleVintfTestOMr1 vts_treble_vintf_framework_test vts_treble_vintf_test_all vts_treble_vintf_test_defaults vts_treble_vintf_test_o_mr1 vts_treble_vintf_vendor_test; }
+in { inherit VtsTrebleVintfTestOMr1 vts_treble_vintf_framework_test vts_treble_vintf_test_all vts_treble_vintf_test_defaults vts_treble_vintf_vendor_test; }

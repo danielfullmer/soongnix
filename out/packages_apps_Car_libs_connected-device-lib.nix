@@ -23,6 +23,7 @@ connected-device-lib = android_library {
     srcs = [
         "src/com/android/car/connecteddevice/AssociationCallback.java"
         "src/com/android/car/connecteddevice/ConnectedDeviceManager.java"
+        "src/com/android/car/connecteddevice/ble/AssociationSecureChannel.java"
         "src/com/android/car/connecteddevice/ble/BleCentralManager.java"
         "src/com/android/car/connecteddevice/ble/BleDeviceMessageStream.java"
         "src/com/android/car/connecteddevice/ble/BlePacketFactory.java"
@@ -32,9 +33,11 @@ connected-device-lib = android_library {
         "src/com/android/car/connecteddevice/ble/CarBleManager.java"
         "src/com/android/car/connecteddevice/ble/CarBlePeripheralManager.java"
         "src/com/android/car/connecteddevice/ble/DeviceMessage.java"
+        "src/com/android/car/connecteddevice/ble/ReconnectSecureChannel.java"
         "src/com/android/car/connecteddevice/ble/SecureBleChannel.java"
         "src/com/android/car/connecteddevice/model/AssociatedDevice.java"
         "src/com/android/car/connecteddevice/model/ConnectedDevice.java"
+        "src/com/android/car/connecteddevice/storage/AssociatedDeviceChallengeSecretEntity.java"
         "src/com/android/car/connecteddevice/storage/AssociatedDeviceDao.java"
         "src/com/android/car/connecteddevice/storage/AssociatedDeviceEntity.java"
         "src/com/android/car/connecteddevice/storage/AssociatedDeviceKeyEntity.java"
@@ -59,13 +62,14 @@ connected-device-lib = android_library {
     libs = ["android.car"];
 
     static_libs = [
-        "EncryptionRunner-lib"
         "androidx.room_room-runtime"
         "connected-device-protos"
+        "encryption-runner"
+        "guava"
     ];
 
     plugins = [
-        "car-androidx-room-compiler"
+        "androidx.room_room-compiler-plugin"
     ];
 
     platform_apis = true;

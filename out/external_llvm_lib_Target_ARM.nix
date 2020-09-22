@@ -57,6 +57,8 @@ llvm-arm-headers = cc_library_static {
     name = "llvm-arm-headers";
     vendor_available = true;
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     target = {
         windows = {
             enabled = true;

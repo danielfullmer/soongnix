@@ -14,7 +14,6 @@ let
         "libbase"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.sensors@1.0"
     ];
     static_libs = [
@@ -37,7 +36,6 @@ let
         "libbase"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.sensors@1.0"
     ];
     local_include_dirs = ["include/sensors"];
@@ -60,7 +58,6 @@ let
         "libbase"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.sensors@1.0"
     ];
 };

@@ -22,25 +22,39 @@ philox_random_headers = cc_library_headers {
     host_supported = false;
     vendor_available = true;
     export_include_dirs = ["."];
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+    ];
 };
 
 philox_random = cc_library_static {
     name = "philox_random";
     host_supported = false;
     vendor_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+    ];
     srcs = [
         "guarded_philox_random.cc"
         "random.cc"
         "simple_philox.cc"
     ];
     cflags = [
-        "-Wno-unused-parameter"
+        "-DLOG_TAG=\"Random\""
         "-Wno-invalid-partial-specialization"
+        "-Wno-unused-parameter"
     ];
     header_libs = [
         "libeigen"
         "philox_random_headers"
         "tensorflow_headers"
+    ];
+    shared_libs = [
+        "libbase"
     ];
 };
 

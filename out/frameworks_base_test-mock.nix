@@ -1,4 +1,4 @@
-{ java_sdk_library }:
+{ filegroup, java_sdk_library }:
 let
 
 #
@@ -34,16 +34,34 @@ let
         "src/android/test/mock/MockPackageManager.java"
         "src/android/test/mock/MockResources.java"
         "src/android/test/mock/MockService.java"
+        #  Note: Below are NOT APIs of this library. We only take APIs under
+        #  the android.test.mock package. They however provide private APIs that
+        #  android.test.mock APIs references to.
+        ":framework-core-sources-for-test-mock"
+        ":framework_native_aidl"
+    ];
+    libs = [
+        "framework"
+        "app-compat-annotations"
+        "unsupportedappusage"
     ];
 
     api_packages = [
         "android.test.mock"
     ];
-
-    srcs_lib = "framework";
-    srcs_lib_whitelist_dirs = ["core/java"];
-    srcs_lib_whitelist_pkgs = ["android"];
     compile_dex = true;
 };
 
-in { inherit "android.test.mock"; }
+#  Make the current.txt available for use by the cts/tests/signature tests.
+#  ========================================================================
+"android-test-mock-current.txt" = filegroup {
+    name = "android-test-mock-current.txt";
+    visibility = [
+        "//cts/tests/signature/api"
+    ];
+    srcs = [
+        "api/current.txt"
+    ];
+};
+
+in { inherit "android-test-mock-current.txt" "android.test.mock"; }

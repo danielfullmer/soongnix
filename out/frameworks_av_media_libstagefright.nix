@@ -5,10 +5,21 @@ libstagefright_headers = cc_library_headers {
     name = "libstagefright_headers";
     export_include_dirs = ["include"];
     vendor_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 libstagefright_esds = cc_library_static {
     name = "libstagefright_esds";
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+    ];
+    min_sdk_version = "29";
 
     srcs = ["ESDS.cpp"];
 
@@ -22,12 +33,19 @@ libstagefright_esds = cc_library_static {
         ];
         cfi = true;
     };
-
-    shared_libs = ["libmedia"];
+    shared_libs = [
+        "libstagefright_foundation"
+        "libutils"
+    ];
 };
 
 libstagefright_metadatautils = cc_library_static {
     name = "libstagefright_metadatautils";
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+    ];
+    min_sdk_version = "29";
 
     srcs = ["MetaDataUtils.cpp"];
 
@@ -42,10 +60,11 @@ libstagefright_metadatautils = cc_library_static {
         cfi = true;
     };
 
-    shared_libs = [
-        "libmedia"
-        "libmediandk"
+    header_libs = [
+        "libstagefright_foundation_headers"
     ];
+    shared_libs = ["libmediandk"];
+    export_include_dirs = ["include"];
 };
 
 libstagefright_codecbase = cc_library_shared {
@@ -57,6 +76,7 @@ libstagefright_codecbase = cc_library_shared {
         "CodecBase.cpp"
         "FrameRenderTracker.cpp"
         "MediaCodecListWriter.cpp"
+        "SkipCutBuffer.cpp"
     ];
 
     cflags = [
@@ -64,14 +84,22 @@ libstagefright_codecbase = cc_library_shared {
         "-Wall"
     ];
 
+    header_libs = [
+        "libmediadrm_headers"
+        "media_ndk_headers"
+    ];
+
     shared_libs = [
         "libgui"
+        "libhidlallocatorutils"
         "liblog"
+        "libmedia_codeclist"
         "libmedia_omx"
         "libstagefright_foundation"
         "libui"
         "libutils"
         "android.hardware.cas.native@1.0"
+        "android.hardware.drm@1.0"
     ];
 
     sanitize = {
@@ -85,6 +113,11 @@ libstagefright_codecbase = cc_library_shared {
 
 libstagefright_mpeg2extractor = cc_library_static {
     name = "libstagefright_mpeg2extractor";
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+    ];
+    min_sdk_version = "29";
 
     srcs = [
         "Utils.cpp"
@@ -94,12 +127,16 @@ libstagefright_mpeg2extractor = cc_library_static {
 
     shared_libs = [
         "liblog"
-        "libmedia"
-        "libmedia_omx"
     ];
 
     export_include_dirs = [
         "include"
+    ];
+
+    header_libs = [
+        "libaudioclient_headers"
+        "libmedia_headers"
+        "media_ndk_headers"
     ];
 
     cflags = [
@@ -118,6 +155,54 @@ libstagefright_mpeg2extractor = cc_library_static {
     };
 };
 
+libstagefright_framecapture_utils = cc_library_shared {
+    name = "libstagefright_framecapture_utils";
+
+    srcs = [
+        "FrameCaptureLayer.cpp"
+        "FrameCaptureProcessor.cpp"
+    ];
+
+    shared_libs = [
+        "libbase"
+        "libcutils"
+        "libEGL"
+        "libGLESv1_CM"
+        "libGLESv2"
+        "libgui"
+        "liblog"
+        "libprocessgroup"
+        "libstagefright_foundation"
+        "libsync"
+        "libui"
+        "libutils"
+    ];
+
+    static_libs = [
+        "librenderengine"
+    ];
+
+    export_include_dirs = [
+        "include"
+    ];
+
+    cflags = [
+        "-Wno-multichar"
+        "-Werror"
+        "-Wno-error=deprecated-declarations"
+        "-Wall"
+    ];
+
+    sanitize = {
+        #  TODO: re-enabled cfi for this lib after b/139945549 fixed
+        cfi = false;
+        misc_undefined = [
+            "unsigned-integer-overflow"
+            "signed-integer-overflow"
+        ];
+    };
+};
+
 libstagefright = cc_library {
     name = "libstagefright";
 
@@ -127,7 +212,6 @@ libstagefright = cc_library {
         "ACodecBufferChannel.cpp"
         "AHierarchicalStateMachine.cpp"
         "AMRWriter.cpp"
-        "AudioPlayer.cpp"
         "AudioSource.cpp"
         "BufferImpl.cpp"
         "CallbackDataSource.cpp"
@@ -135,12 +219,7 @@ libstagefright = cc_library {
         "CameraSource.cpp"
         "CameraSourceTimeLapse.cpp"
         "DataConverter.cpp"
-        "DataSourceFactory.cpp"
-        "DataURISource.cpp"
-        "ClearFileSource.cpp"
-        "FileSource.cpp"
         "FrameDecoder.cpp"
-        "HTTPBase.cpp"
         "HevcUtils.cpp"
         "InterfaceUtils.cpp"
         "JPEGSource.cpp"
@@ -157,10 +236,7 @@ libstagefright = cc_library {
         "MediaSource.cpp"
         "MediaSync.cpp"
         "MediaTrack.cpp"
-        "http/ClearMediaHTTP.cpp"
-        "http/MediaHTTP.cpp"
         "MediaMuxer.cpp"
-        "NuCachedSource2.cpp"
         "NuMediaExtractor.cpp"
         "OggWriter.cpp"
         "OMXClient.cpp"
@@ -168,37 +244,40 @@ libstagefright = cc_library {
         "RemoteMediaExtractor.cpp"
         "RemoteMediaSource.cpp"
         "SimpleDecodingSource.cpp"
-        "SkipCutBuffer.cpp"
         "StagefrightMediaScanner.cpp"
-        "StagefrightMetadataRetriever.cpp"
-        "StagefrightPluginLoader.cpp"
         "SurfaceUtils.cpp"
-        "Utils.cpp"
         "ThrottledSource.cpp"
+        "Utils.cpp"
         "VideoFrameSchedulerBase.cpp"
         "VideoFrameScheduler.cpp"
     ];
 
     shared_libs = [
+        "libstagefright_framecapture_utils"
         "libaudioutils"
         "libbase"
         "libbinder"
+        "libbinder_ndk"
         "libcamera_client"
+        "libcodec2"
+        "libcodec2_vndk"
         "libcutils"
+        "libdatasource"
         "libdl"
         "libdl_android"
-        "libdrmframework"
         "libgui"
         "liblog"
         "libmedia"
+        "libmedia_codeclist"
         "libmedia_omx"
         "libmedia_omx_client"
         "libaudioclient"
         "libmediametrics"
-        "libmediautils"
         "libui"
         "libutils"
         "libmedia_helper"
+        "libsfplugin_ccodec"
+        "libsfplugin_ccodec_utils"
         "libstagefright_codecbase"
         "libstagefright_foundation"
         "libstagefright_omx_utils"
@@ -208,10 +287,12 @@ libstagefright = cc_library {
         "libhidlmemory"
         "android.hidl.allocator@1.0"
         "android.hardware.cas.native@1.0"
+        "android.hardware.drm@1.0"
         "android.hardware.media.omx@1.0"
     ];
 
     static_libs = [
+        "libstagefright_esds"
         "libstagefright_color_conversion"
         "libyuv_static"
         "libstagefright_mediafilter"
@@ -219,13 +300,12 @@ libstagefright = cc_library {
         "libstagefright_timedtext"
         "libogg"
         "libwebm"
-        "libstagefright_esds"
         "libstagefright_id3"
-        "libFLAC"
     ];
 
     header_libs = [
-        "libnativeloader-dummy-headers"
+        "libmediadrm_headers"
+        "libnativeloader-headers"
         "libstagefright_xmlparser_headers"
         "media_ndk_headers"
     ];
@@ -266,62 +346,4 @@ libstagefright = cc_library {
     };
 };
 
-libstagefright_player2 = cc_library_static {
-    name = "libstagefright_player2";
-
-    srcs = [
-        "ClearFileSource.cpp"
-        "DataURISource.cpp"
-        "HTTPBase.cpp"
-        "HevcUtils.cpp"
-        "MediaClock.cpp"
-        "MediaSource.cpp"
-        "NdkUtils.cpp"
-        "Utils.cpp"
-        "VideoFrameSchedulerBase.cpp"
-        "VideoFrameScheduler2.cpp"
-        "http/ClearMediaHTTP.cpp"
-    ];
-
-    shared_libs = [
-        "libgui"
-        "liblog"
-        "libnetd_client"
-        "libutils"
-        "libstagefright_foundation"
-        "libandroid"
-    ];
-
-    static_libs = [
-        "libmedia_player2_util"
-        "libmedia2_jni_core"
-    ];
-
-    export_include_dirs = [
-        "include"
-    ];
-
-    cflags = [
-        "-Wno-multichar"
-        "-Werror"
-        "-Wno-error=deprecated-declarations"
-        "-Wall"
-    ];
-
-    product_variables = {
-        debuggable = {
-            #  enable experiments only in userdebug and eng builds
-            cflags = ["-DENABLE_STAGEFRIGHT_EXPERIMENTS"];
-        };
-    };
-
-    sanitize = {
-        cfi = true;
-        misc_undefined = [
-            "unsigned-integer-overflow"
-            "signed-integer-overflow"
-        ];
-    };
-};
-
-in { inherit libstagefright libstagefright_codecbase libstagefright_esds libstagefright_headers libstagefright_metadatautils libstagefright_mpeg2extractor libstagefright_player2; }
+in { inherit libstagefright libstagefright_codecbase libstagefright_esds libstagefright_framecapture_utils libstagefright_headers libstagefright_metadatautils libstagefright_mpeg2extractor; }

@@ -33,6 +33,7 @@ CollectorDeviceLibPlatformTest = android_test {
         "ub-uiautomator"
     ];
     platform_apis = true;
+    min_sdk_version = "26";
 };
 
 in { inherit CollectorDeviceLibPlatformTest; }

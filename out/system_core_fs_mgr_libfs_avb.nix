@@ -34,16 +34,15 @@ libfs_avb = cc_library_static {
     static_libs = [
         "libavb"
         "libdm"
+        "libgsi"
         "libfstab"
     ];
     export_static_lib_headers = [
         "libfstab"
     ];
     shared_libs = [
+        "libbase"
         "libcrypto"
-    ];
-    header_libs = [
-        "libbase_headers"
     ];
     target = {
         darwin = {
@@ -66,6 +65,7 @@ libfs_avb_host_test_defaults = cc_defaults {
         "libavb"
         "libavb_host_sysdeps"
         "libdm"
+        "libext2_uuid"
         "libfs_avb"
         "libfstab"
         "libgtest_host"
@@ -127,6 +127,7 @@ libfs_avb_internal_test = cc_test_host {
 libfs_avb_device_test = cc_test {
     name = "libfs_avb_device_test";
     test_suites = ["device-tests"];
+    require_root = true;
     static_libs = [
         "libavb"
         "libdm"

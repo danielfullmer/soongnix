@@ -1,7 +1,7 @@
-{ cc_library_shared }:
+{ cc_library_static }:
 let
 
-libwifikeystorehal = cc_library_shared {
+libwifikeystorehal = cc_library_static {
     name = "libwifikeystorehal";
     cppflags = [
         "-Wall"
@@ -13,13 +13,14 @@ libwifikeystorehal = cc_library_shared {
         "android.system.wifi.keystore@1.0"
         "libbase"
         "libbinder"
+        "libcrypto"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "libkeystore_aidl"
         "libkeystore_binder"
         "libkeystore_parcelables"
         "liblog"
+        "libssl"
         "libutils"
     ];
     export_include_dirs = ["include"];

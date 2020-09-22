@@ -28,7 +28,6 @@ libese-hw-nxp-pn80t-common = cc_library {
         "libese-teq1"
         "libese-sysdeps"
     ];
-    local_include_dirs = ["include"];
     export_include_dirs = ["include"];
     cflags = [
         "-Wall"
@@ -68,6 +67,7 @@ libese-hw-nxp-pn80t-spidev = cc_library {
     cflags = [
         "-Wno-format"
     ];
+    export_include_dirs = ["include"];
 };
 
 libese-hw-nxp-pn80t-nq-nci = cc_library {
@@ -80,6 +80,7 @@ libese-hw-nxp-pn80t-nq-nci = cc_library {
         "-Wno-error=unused-variable"
         "-Wno-format"
     ];
+    export_include_dirs = ["include"];
 };
 
 in { inherit libese-hw-nxp-pn80t-common libese-hw-nxp-pn80t-nq-nci libese-hw-nxp-pn80t-spidev pn80t_platform; }

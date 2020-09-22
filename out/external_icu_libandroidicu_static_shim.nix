@@ -17,6 +17,7 @@ let
 libandroidicu_static = cc_library_static {
     name = "libandroidicu_static";
     host_supported = true;
+    native_bridge_supported = true;
     srcs = [
         "shim.cpp"
     ];
@@ -30,6 +31,7 @@ libandroidicu_static = cc_library_static {
     cflags = [
         "-Wall"
         "-Werror"
+        "-DU_SHOW_CPLUSPLUS_API=0"
     ];
     target = {
         android = {
@@ -39,11 +41,14 @@ libandroidicu_static = cc_library_static {
         };
         windows = {
             enabled = true;
-            cflags = [
-                "-Wno-ignored-attributes" #  ICU-20356
-            ];
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        #  b/133140750 Clean this up. This is due to the dependency to from libmedia
+        "//apex_available:platform"
+    ];
 };
 
 in { inherit libandroidicu_static; }

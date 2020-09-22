@@ -1,4 +1,4 @@
-{ cc_library, droidstubs, genrule, java_library, stubs_defaults }:
+{ cc_library, droidstubs, filegroup, genrule, java_library, stubs_defaults }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,8 +15,19 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+libcarpowermanager_aidl = filegroup {
+    name = "libcarpowermanager_aidl";
+    srcs = [
+        "src/android/car/ICar.aidl"
+        "src/android/car/hardware/power/ICarPower.aidl"
+        "src/android/car/hardware/power/ICarPowerStateListener.aidl"
+    ];
+    path = "src";
+};
+
 libcarpowermanager = cc_library {
     name = "libcarpowermanager";
+    vendor_available = true;
 
     aidl = {
         export_aidl_headers = true;
@@ -43,9 +54,7 @@ libcarpowermanager = cc_library {
     ];
 
     srcs = [
-        "src/android/car/ICar.aidl"
-        "src/android/car/hardware/power/ICarPower.aidl"
-        "src/android/car/hardware/power/ICarPowerStateListener.aidl"
+        ":libcarpowermanager_aidl"
         "native/CarPowerManager/CarPowerManager.cpp"
     ];
 };
@@ -73,10 +82,12 @@ libcarpowermanager = cc_library {
         "src/android/car/CarAppFocusManager.java"
         "src/android/car/CarBluetoothManager.java"
         "src/android/car/CarBugreportManager.java"
+        "src/android/car/CarFeatures.java"
         "src/android/car/CarInfoManager.java"
         "src/android/car/CarLibLog.java"
         "src/android/car/CarManagerBase.java"
         "src/android/car/CarNotConnectedException.java"
+        "src/android/car/CarOccupantZoneManager.java"
         "src/android/car/CarProjectionManager.java"
         "src/android/car/CarTransactionException.java"
         "src/android/car/EvConnectorType.java"
@@ -88,6 +99,7 @@ libcarpowermanager = cc_library {
         "src/android/car/VehicleAreaType.java"
         "src/android/car/VehicleAreaWheel.java"
         "src/android/car/VehicleAreaWindow.java"
+        "src/android/car/VehicleGear.java"
         "src/android/car/VehicleHvacFanDirection.java"
         "src/android/car/VehicleLightState.java"
         "src/android/car/VehicleLightSwitch.java"
@@ -97,8 +109,12 @@ libcarpowermanager = cc_library {
         "src/android/car/VehiclePropertyType.java"
         "src/android/car/VehicleSeatOccupancyState.java"
         "src/android/car/VehicleUnit.java"
-        "src/android/car/annotation/FutureFeature.java"
+        "src/android/car/annotation/ExperimentalFeature.java"
+        "src/android/car/annotation/MandatoryFeature.java"
+        "src/android/car/annotation/OptionalFeature.java"
+        "src/android/car/annotation/RequiredFeature.java"
         "src/android/car/annotation/ValueTypeDef.java"
+        "src/android/car/app/CarActivityView.java"
         "src/android/car/cluster/CarInstrumentClusterManager.java"
         "src/android/car/cluster/ClusterActivityState.java"
         "src/android/car/cluster/renderer/InstrumentClusterRenderer.java"
@@ -117,6 +133,7 @@ libcarpowermanager = cc_library {
         "src/android/car/drivingstate/CarUxRestrictions.java"
         "src/android/car/drivingstate/CarUxRestrictionsConfiguration.java"
         "src/android/car/drivingstate/CarUxRestrictionsManager.java"
+        "src/android/car/hardware/CarHvacFanDirection.java"
         "src/android/car/hardware/CarPropertyConfig.java"
         "src/android/car/hardware/CarPropertyValue.java"
         "src/android/car/hardware/CarSensorConfig.java"
@@ -126,14 +143,28 @@ libcarpowermanager = cc_library {
         "src/android/car/hardware/cabin/CarCabinManager.java"
         "src/android/car/hardware/hvac/CarHvacManager.java"
         "src/android/car/hardware/power/CarPowerManager.java"
+        "src/android/car/hardware/property/CarInternalErrorException.java"
         "src/android/car/hardware/property/CarPropertyEvent.java"
         "src/android/car/hardware/property/CarPropertyManager.java"
+        "src/android/car/hardware/property/PropertyAccessDeniedSecurityException.java"
+        "src/android/car/hardware/property/PropertyNotAvailableAndRetryException.java"
+        "src/android/car/hardware/property/PropertyNotAvailableException.java"
+        "src/android/car/hardware/property/VehicleHalStatusCode.java"
+        "src/android/car/hardware/property/VehicleVendorPermission.java"
         "src/android/car/input/CarInputHandlingService.java"
+        "src/android/car/input/CarInputManager.java"
+        "src/android/car/input/RotaryEvent.java"
         "src/android/car/media/CarAudioManager.java"
         "src/android/car/media/CarAudioPatchHandle.java"
         "src/android/car/media/CarMediaManager.java"
         "src/android/car/navigation/CarNavigationInstrumentCluster.java"
         "src/android/car/navigation/CarNavigationStatusManager.java"
+        "src/android/car/occupantawareness/DriverMonitoringDetection.java"
+        "src/android/car/occupantawareness/GazeDetection.java"
+        "src/android/car/occupantawareness/OccupantAwarenessDetection.java"
+        "src/android/car/occupantawareness/OccupantAwarenessManager.java"
+        "src/android/car/occupantawareness/Point3D.java"
+        "src/android/car/occupantawareness/SystemStatusEvent.java"
         "src/android/car/projection/ProjectionOptions.java"
         "src/android/car/projection/ProjectionStatus.java"
         "src/android/car/settings/CarConfigurationManager.java"
@@ -150,22 +181,34 @@ libcarpowermanager = cc_library {
         "src/android/car/test/CarTestManagerBinderWrapper.java"
         "src/android/car/trust/CarTrustAgentEnrollmentManager.java"
         "src/android/car/trust/TrustedDeviceInfo.java"
+        "src/android/car/user/CarUserManager.java"
+        "src/android/car/user/CommonResults.java"
+        "src/android/car/user/ExperimentalCarUserManager.java"
+        "src/android/car/user/UserCreationResult.java"
+        "src/android/car/user/UserIdentificationAssociationResponse.java"
+        "src/android/car/user/UserRemovalResult.java"
+        "src/android/car/user/UserSwitchResult.java"
         "src/android/car/vms/VmsAssociatedLayer.java"
         "src/android/car/vms/VmsAvailableLayers.java"
+        "src/android/car/vms/VmsClient.java"
+        "src/android/car/vms/VmsClientManager.java"
         "src/android/car/vms/VmsLayer.java"
         "src/android/car/vms/VmsLayerDependency.java"
         "src/android/car/vms/VmsLayersOffering.java"
         "src/android/car/vms/VmsOperationRecorder.java"
+        "src/android/car/vms/VmsProviderInfo.java"
         "src/android/car/vms/VmsPublisherClientService.java"
+        "src/android/car/vms/VmsRegistrationInfo.java"
         "src/android/car/vms/VmsSubscriberManager.java"
+        "src/android/car/vms/VmsSubscriptionHelper.java"
         "src/android/car/vms/VmsSubscriptionState.java"
+        "src/android/car/watchdog/CarWatchdogManager.java"
         "src/com/android/car/internal/CarPermission.java"
         "src/com/android/car/internal/CarRatedFloatListeners.java"
         "src/com/android/car/internal/CarRatedListeners.java"
         "src/com/android/car/internal/FeatureUtil.java"
         "src/com/android/car/internal/PropertyPermissionMapping.java"
         "src/com/android/car/internal/SingleMessageHandler.java"
-        "src_feature_future/com/android/car/internal/FeatureConfiguration.java"
         "src/android/car/IAppFocus.aidl"
         "src/android/car/IAppFocusListener.aidl"
         "src/android/car/IAppFocusOwnershipCallback.aidl"
@@ -176,11 +219,16 @@ libcarpowermanager = cc_library {
         "src/android/car/ICarBugreportService.aidl"
         "src/android/car/ICarConnectionListener.aidl"
         "src/android/car/ICarInfo.aidl"
+        "src/android/car/ICarOccupantZone.aidl"
+        "src/android/car/ICarOccupantZoneCallback.aidl"
         "src/android/car/ICarProjection.aidl"
         "src/android/car/ICarProjectionKeyEventHandler.aidl"
         "src/android/car/ICarProjectionStatusListener.aidl"
         "src/android/car/ICarUserService.aidl"
+        "src/android/car/IExperimentalCar.aidl"
+        "src/android/car/IExperimentalCarHelper.aidl"
         "src/android/car/ILocationManagerProxy.aidl"
+        "src/android/car/IPerUserCarService.aidl"
         "src/android/car/cluster/IInstrumentClusterManagerCallback.aidl"
         "src/android/car/cluster/IInstrumentClusterManagerService.aidl"
         "src/android/car/cluster/renderer/IInstrumentCluster.aidl"
@@ -201,11 +249,15 @@ libcarpowermanager = cc_library {
         "src/android/car/hardware/power/ICarPowerStateListener.aidl"
         "src/android/car/hardware/property/ICarProperty.aidl"
         "src/android/car/hardware/property/ICarPropertyEventListener.aidl"
+        "src/android/car/input/ICarInput.aidl"
+        "src/android/car/input/ICarInputCallback.aidl"
         "src/android/car/input/ICarInputListener.aidl"
         "src/android/car/media/ICarAudio.aidl"
         "src/android/car/media/ICarMedia.aidl"
         "src/android/car/media/ICarMediaSourceListener.aidl"
         "src/android/car/media/ICarVolumeCallback.aidl"
+        "src/android/car/occupantawareness/IOccupantAwarenessEventCallback.aidl"
+        "src/android/car/occupantawareness/IOccupantAwarenessManager.aidl"
         "src/android/car/settings/ICarConfigurationManager.aidl"
         "src/android/car/storagemonitoring/ICarStorageMonitoring.aidl"
         "src/android/car/storagemonitoring/IIoStatsListener.aidl"
@@ -216,19 +268,23 @@ libcarpowermanager = cc_library {
         "src/android/car/trust/ICarTrustAgentEnrollmentCallback.aidl"
         "src/android/car/user/IUserNotice.aidl"
         "src/android/car/user/IUserNoticeUI.aidl"
-        "src/android/car/vms/IVmsPublisherClient.aidl"
-        "src/android/car/vms/IVmsPublisherService.aidl"
-        "src/android/car/vms/IVmsSubscriberClient.aidl"
-        "src/android/car/vms/IVmsSubscriberService.aidl"
+        "src/android/car/vms/IVmsBrokerService.aidl"
+        "src/android/car/vms/IVmsClientCallback.aidl"
+        "src/android/car/watchdog/ICarWatchdogService.aidl"
     ];
     aidl = {
         include_dirs = [
             "system/bt/binder"
+            "packages/services/Car/watchdog/aidl"
         ];
     };
     exclude_srcs = [
         "src/android/car/storagemonitoring/IoStats.aidl"
         "src/android/car/storagemonitoring/IoStatsEntry.aidl"
+    ];
+    static_libs = [
+        "android.car.internal.event-log-tags"
+        "carwatchdog_aidl_interface-java"
     ];
     product_variables = {
         pdk = {
@@ -246,10 +302,12 @@ libcarpowermanager = cc_library {
         "src/android/car/CarAppFocusManager.java"
         "src/android/car/CarBluetoothManager.java"
         "src/android/car/CarBugreportManager.java"
+        "src/android/car/CarFeatures.java"
         "src/android/car/CarInfoManager.java"
         "src/android/car/CarLibLog.java"
         "src/android/car/CarManagerBase.java"
         "src/android/car/CarNotConnectedException.java"
+        "src/android/car/CarOccupantZoneManager.java"
         "src/android/car/CarProjectionManager.java"
         "src/android/car/CarTransactionException.java"
         "src/android/car/EvConnectorType.java"
@@ -261,6 +319,7 @@ libcarpowermanager = cc_library {
         "src/android/car/VehicleAreaType.java"
         "src/android/car/VehicleAreaWheel.java"
         "src/android/car/VehicleAreaWindow.java"
+        "src/android/car/VehicleGear.java"
         "src/android/car/VehicleHvacFanDirection.java"
         "src/android/car/VehicleLightState.java"
         "src/android/car/VehicleLightSwitch.java"
@@ -270,8 +329,12 @@ libcarpowermanager = cc_library {
         "src/android/car/VehiclePropertyType.java"
         "src/android/car/VehicleSeatOccupancyState.java"
         "src/android/car/VehicleUnit.java"
-        "src/android/car/annotation/FutureFeature.java"
+        "src/android/car/annotation/ExperimentalFeature.java"
+        "src/android/car/annotation/MandatoryFeature.java"
+        "src/android/car/annotation/OptionalFeature.java"
+        "src/android/car/annotation/RequiredFeature.java"
         "src/android/car/annotation/ValueTypeDef.java"
+        "src/android/car/app/CarActivityView.java"
         "src/android/car/cluster/CarInstrumentClusterManager.java"
         "src/android/car/cluster/ClusterActivityState.java"
         "src/android/car/cluster/renderer/InstrumentClusterRenderer.java"
@@ -290,6 +353,7 @@ libcarpowermanager = cc_library {
         "src/android/car/drivingstate/CarUxRestrictions.java"
         "src/android/car/drivingstate/CarUxRestrictionsConfiguration.java"
         "src/android/car/drivingstate/CarUxRestrictionsManager.java"
+        "src/android/car/hardware/CarHvacFanDirection.java"
         "src/android/car/hardware/CarPropertyConfig.java"
         "src/android/car/hardware/CarPropertyValue.java"
         "src/android/car/hardware/CarSensorConfig.java"
@@ -299,14 +363,28 @@ libcarpowermanager = cc_library {
         "src/android/car/hardware/cabin/CarCabinManager.java"
         "src/android/car/hardware/hvac/CarHvacManager.java"
         "src/android/car/hardware/power/CarPowerManager.java"
+        "src/android/car/hardware/property/CarInternalErrorException.java"
         "src/android/car/hardware/property/CarPropertyEvent.java"
         "src/android/car/hardware/property/CarPropertyManager.java"
+        "src/android/car/hardware/property/PropertyAccessDeniedSecurityException.java"
+        "src/android/car/hardware/property/PropertyNotAvailableAndRetryException.java"
+        "src/android/car/hardware/property/PropertyNotAvailableException.java"
+        "src/android/car/hardware/property/VehicleHalStatusCode.java"
+        "src/android/car/hardware/property/VehicleVendorPermission.java"
         "src/android/car/input/CarInputHandlingService.java"
+        "src/android/car/input/CarInputManager.java"
+        "src/android/car/input/RotaryEvent.java"
         "src/android/car/media/CarAudioManager.java"
         "src/android/car/media/CarAudioPatchHandle.java"
         "src/android/car/media/CarMediaManager.java"
         "src/android/car/navigation/CarNavigationInstrumentCluster.java"
         "src/android/car/navigation/CarNavigationStatusManager.java"
+        "src/android/car/occupantawareness/DriverMonitoringDetection.java"
+        "src/android/car/occupantawareness/GazeDetection.java"
+        "src/android/car/occupantawareness/OccupantAwarenessDetection.java"
+        "src/android/car/occupantawareness/OccupantAwarenessManager.java"
+        "src/android/car/occupantawareness/Point3D.java"
+        "src/android/car/occupantawareness/SystemStatusEvent.java"
         "src/android/car/projection/ProjectionOptions.java"
         "src/android/car/projection/ProjectionStatus.java"
         "src/android/car/settings/CarConfigurationManager.java"
@@ -323,22 +401,34 @@ libcarpowermanager = cc_library {
         "src/android/car/test/CarTestManagerBinderWrapper.java"
         "src/android/car/trust/CarTrustAgentEnrollmentManager.java"
         "src/android/car/trust/TrustedDeviceInfo.java"
+        "src/android/car/user/CarUserManager.java"
+        "src/android/car/user/CommonResults.java"
+        "src/android/car/user/ExperimentalCarUserManager.java"
+        "src/android/car/user/UserCreationResult.java"
+        "src/android/car/user/UserIdentificationAssociationResponse.java"
+        "src/android/car/user/UserRemovalResult.java"
+        "src/android/car/user/UserSwitchResult.java"
         "src/android/car/vms/VmsAssociatedLayer.java"
         "src/android/car/vms/VmsAvailableLayers.java"
+        "src/android/car/vms/VmsClient.java"
+        "src/android/car/vms/VmsClientManager.java"
         "src/android/car/vms/VmsLayer.java"
         "src/android/car/vms/VmsLayerDependency.java"
         "src/android/car/vms/VmsLayersOffering.java"
         "src/android/car/vms/VmsOperationRecorder.java"
+        "src/android/car/vms/VmsProviderInfo.java"
         "src/android/car/vms/VmsPublisherClientService.java"
+        "src/android/car/vms/VmsRegistrationInfo.java"
         "src/android/car/vms/VmsSubscriberManager.java"
+        "src/android/car/vms/VmsSubscriptionHelper.java"
         "src/android/car/vms/VmsSubscriptionState.java"
+        "src/android/car/watchdog/CarWatchdogManager.java"
         "src/com/android/car/internal/CarPermission.java"
         "src/com/android/car/internal/CarRatedFloatListeners.java"
         "src/com/android/car/internal/CarRatedListeners.java"
         "src/com/android/car/internal/FeatureUtil.java"
         "src/com/android/car/internal/PropertyPermissionMapping.java"
         "src/com/android/car/internal/SingleMessageHandler.java"
-        "src_feature_future/com/android/car/internal/FeatureConfiguration.java"
     ];
     libs = [
         "android.car"
@@ -366,7 +456,6 @@ android-car-last-released-api = genrule {
 android-car-last-released-system-api = genrule {
     name = "android-car-last-released-system-api";
     srcs = [
-        "api/system-released/system-1.txt"
         "api/system-released/system-2.txt"
     ];
     cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -n | tail -1) $(genDir)/last-released-system-api.txt";
@@ -378,9 +467,7 @@ android-car-last-released-system-api = genrule {
 "android.car-stubs-docs" = droidstubs {
     name = "android.car-stubs-docs";
     defaults = ["android.car-docs-default"];
-    api_tag_name = "ANDROID_CAR";
-    api_filename = "api.txt";
-    removed_api_filename = "removed.txt";
+    removed_dex_api_filename = "removed-dex.txt";
     args = "--hide UnavailableSymbol --no-docs --stub-packages android.car* ";
     installable = false;
     check_api = {
@@ -398,15 +485,17 @@ android-car-last-released-system-api = genrule {
                 " -error 12 -error 13 -error 14 -error 15 -error 16 -error 17 -error 18 -error 19 -error 20 " +
                 " -error 21 -error 23 -error 24 -error 25 -hide 113 ";
         };
+        api_lint = {
+            enabled = true;
+            baseline_file = "api/lint-baseline.txt";
+        };
     };
 };
 
 "android.car-system-stubs-docs" = droidstubs {
     name = "android.car-system-stubs-docs";
     defaults = ["android.car-docs-default"];
-    api_tag_name = "ANDROID_CAR_SYSTEM";
-    api_filename = "api.txt";
-    removed_api_filename = "removed.txt";
+    removed_dex_api_filename = "system-removed-dex.txt";
     args = "--hide UnavailableSymbol --no-docs --stub-packages android.car* " +
         "--show-annotation android.annotation.SystemApi ";
     installable = false;
@@ -425,16 +514,17 @@ android-car-last-released-system-api = genrule {
                 " -error 12 -error 13 -error 14 -error 15 -error 16 -error 17 -error 18 -error 19 -error 20 " +
                 " -error 21 -error 23 -error 24 -error 25 -hide 113 ";
         };
+        api_lint = {
+            enabled = true;
+            baseline_file = "api/system-lint-baseline.txt";
+        };
     };
 };
 
 "android.car-test-stubs-docs" = droidstubs {
     name = "android.car-test-stubs-docs";
     defaults = ["android.car-docs-default"];
-    api_tag_name = "ANDROID_CAR_SYSTEM";
-    api_filename = "api.txt";
-    removed_api_filename = "removed.txt";
-    args = "--hide UnavailableSymbol --no-docs --stub-packages android.car* " +
+    args = "--hide HiddenSuperclass --hide UnavailableSymbol --no-docs --stub-packages android.car* " +
         "--show-annotation android.annotation.TestApi ";
     installable = false;
     check_api = {
@@ -456,10 +546,12 @@ android-car-last-released-system-api = genrule {
         "src/android/car/CarAppFocusManager.java"
         "src/android/car/CarBluetoothManager.java"
         "src/android/car/CarBugreportManager.java"
+        "src/android/car/CarFeatures.java"
         "src/android/car/CarInfoManager.java"
         "src/android/car/CarLibLog.java"
         "src/android/car/CarManagerBase.java"
         "src/android/car/CarNotConnectedException.java"
+        "src/android/car/CarOccupantZoneManager.java"
         "src/android/car/CarProjectionManager.java"
         "src/android/car/CarTransactionException.java"
         "src/android/car/EvConnectorType.java"
@@ -471,6 +563,7 @@ android-car-last-released-system-api = genrule {
         "src/android/car/VehicleAreaType.java"
         "src/android/car/VehicleAreaWheel.java"
         "src/android/car/VehicleAreaWindow.java"
+        "src/android/car/VehicleGear.java"
         "src/android/car/VehicleHvacFanDirection.java"
         "src/android/car/VehicleLightState.java"
         "src/android/car/VehicleLightSwitch.java"
@@ -480,8 +573,12 @@ android-car-last-released-system-api = genrule {
         "src/android/car/VehiclePropertyType.java"
         "src/android/car/VehicleSeatOccupancyState.java"
         "src/android/car/VehicleUnit.java"
-        "src/android/car/annotation/FutureFeature.java"
+        "src/android/car/annotation/ExperimentalFeature.java"
+        "src/android/car/annotation/MandatoryFeature.java"
+        "src/android/car/annotation/OptionalFeature.java"
+        "src/android/car/annotation/RequiredFeature.java"
         "src/android/car/annotation/ValueTypeDef.java"
+        "src/android/car/app/CarActivityView.java"
         "src/android/car/cluster/CarInstrumentClusterManager.java"
         "src/android/car/cluster/ClusterActivityState.java"
         "src/android/car/cluster/renderer/InstrumentClusterRenderer.java"
@@ -500,6 +597,7 @@ android-car-last-released-system-api = genrule {
         "src/android/car/drivingstate/CarUxRestrictions.java"
         "src/android/car/drivingstate/CarUxRestrictionsConfiguration.java"
         "src/android/car/drivingstate/CarUxRestrictionsManager.java"
+        "src/android/car/hardware/CarHvacFanDirection.java"
         "src/android/car/hardware/CarPropertyConfig.java"
         "src/android/car/hardware/CarPropertyValue.java"
         "src/android/car/hardware/CarSensorConfig.java"
@@ -509,14 +607,28 @@ android-car-last-released-system-api = genrule {
         "src/android/car/hardware/cabin/CarCabinManager.java"
         "src/android/car/hardware/hvac/CarHvacManager.java"
         "src/android/car/hardware/power/CarPowerManager.java"
+        "src/android/car/hardware/property/CarInternalErrorException.java"
         "src/android/car/hardware/property/CarPropertyEvent.java"
         "src/android/car/hardware/property/CarPropertyManager.java"
+        "src/android/car/hardware/property/PropertyAccessDeniedSecurityException.java"
+        "src/android/car/hardware/property/PropertyNotAvailableAndRetryException.java"
+        "src/android/car/hardware/property/PropertyNotAvailableException.java"
+        "src/android/car/hardware/property/VehicleHalStatusCode.java"
+        "src/android/car/hardware/property/VehicleVendorPermission.java"
         "src/android/car/input/CarInputHandlingService.java"
+        "src/android/car/input/CarInputManager.java"
+        "src/android/car/input/RotaryEvent.java"
         "src/android/car/media/CarAudioManager.java"
         "src/android/car/media/CarAudioPatchHandle.java"
         "src/android/car/media/CarMediaManager.java"
         "src/android/car/navigation/CarNavigationInstrumentCluster.java"
         "src/android/car/navigation/CarNavigationStatusManager.java"
+        "src/android/car/occupantawareness/DriverMonitoringDetection.java"
+        "src/android/car/occupantawareness/GazeDetection.java"
+        "src/android/car/occupantawareness/OccupantAwarenessDetection.java"
+        "src/android/car/occupantawareness/OccupantAwarenessManager.java"
+        "src/android/car/occupantawareness/Point3D.java"
+        "src/android/car/occupantawareness/SystemStatusEvent.java"
         "src/android/car/projection/ProjectionOptions.java"
         "src/android/car/projection/ProjectionStatus.java"
         "src/android/car/settings/CarConfigurationManager.java"
@@ -533,15 +645,28 @@ android-car-last-released-system-api = genrule {
         "src/android/car/test/CarTestManagerBinderWrapper.java"
         "src/android/car/trust/CarTrustAgentEnrollmentManager.java"
         "src/android/car/trust/TrustedDeviceInfo.java"
+        "src/android/car/user/CarUserManager.java"
+        "src/android/car/user/CommonResults.java"
+        "src/android/car/user/ExperimentalCarUserManager.java"
+        "src/android/car/user/UserCreationResult.java"
+        "src/android/car/user/UserIdentificationAssociationResponse.java"
+        "src/android/car/user/UserRemovalResult.java"
+        "src/android/car/user/UserSwitchResult.java"
         "src/android/car/vms/VmsAssociatedLayer.java"
         "src/android/car/vms/VmsAvailableLayers.java"
+        "src/android/car/vms/VmsClient.java"
+        "src/android/car/vms/VmsClientManager.java"
         "src/android/car/vms/VmsLayer.java"
         "src/android/car/vms/VmsLayerDependency.java"
         "src/android/car/vms/VmsLayersOffering.java"
         "src/android/car/vms/VmsOperationRecorder.java"
+        "src/android/car/vms/VmsProviderInfo.java"
         "src/android/car/vms/VmsPublisherClientService.java"
+        "src/android/car/vms/VmsRegistrationInfo.java"
         "src/android/car/vms/VmsSubscriberManager.java"
+        "src/android/car/vms/VmsSubscriptionHelper.java"
         "src/android/car/vms/VmsSubscriptionState.java"
+        "src/android/car/watchdog/CarWatchdogManager.java"
         "src/com/android/car/internal/CarPermission.java"
         "src/com/android/car/internal/CarRatedFloatListeners.java"
         "src/com/android/car/internal/CarRatedListeners.java"
@@ -552,9 +677,8 @@ android-car-last-released-system-api = genrule {
     libs = [
         "android.car"
     ];
-    api_tag_name = "ANDROID_CAR_STUB";
     api_filename = "api.txt";
-    args = "--hide UnavailableSymbol --no-docs --stub-packages android.car* ";
+    args = "--hide HiddenSuperclass --hide UnavailableSymbol --no-docs --stub-packages android.car* ";
     installable = false;
     product_variables = {
         pdk = {
@@ -574,17 +698,28 @@ android-car-last-released-system-api = genrule {
             enabled = false;
         };
     };
-    compile_dex = true;
+    installable = false;
     dist = {
         targets = ["dist_files"];
     };
+};
+
+"android.car-stubs-dex" = java_library {
+    name = "android.car-stubs-dex";
+    static_libs = ["android.car-stubs"];
+    sdk_version = "current";
+    product_variables = {
+        pdk = {
+            enabled = false;
+        };
+    };
+    compile_dex = true;
 };
 
 "android.car-system-stubs" = java_library {
     name = "android.car-system-stubs";
     srcs = [
         ":android.car-system-stubs-docs"
-        "src_stub/android/media/AudioPatch.java"
     ];
     sdk_version = "system_current";
     product_variables = {
@@ -592,10 +727,22 @@ android-car-last-released-system-api = genrule {
             enabled = false;
         };
     };
-    compile_dex = true;
+    installable = false;
     dist = {
         targets = ["dist_files"];
     };
+};
+
+"android.car-system-stubs-dex" = java_library {
+    name = "android.car-system-stubs-dex";
+    static_libs = ["android.car-system-stubs"];
+    sdk_version = "system_current";
+    product_variables = {
+        pdk = {
+            enabled = false;
+        };
+    };
+    compile_dex = true;
 };
 
 "android.car-test-stubs" = java_library {
@@ -609,10 +756,44 @@ android-car-last-released-system-api = genrule {
             enabled = false;
         };
     };
+    installable = false;
+};
+
+"android.car-test-stubs-dex" = java_library {
+    name = "android.car-test-stubs-dex";
+    static_libs = ["android.car-test-stubs"];
+    sdk_version = "test_current";
+    product_variables = {
+        pdk = {
+            enabled = false;
+        };
+    };
     compile_dex = true;
     dist = {
         targets = ["dist_files"];
     };
 };
 
-in { inherit "android.car" "android.car-docs-default" "android.car-stub-docs" "android.car-stubs" "android.car-stubs-docs" "android.car-system-stubs" "android.car-system-stubs-docs" "android.car-test-stubs" "android.car-test-stubs-docs" "android.car.cluster.navigation" "android.car.settings" android-car-last-released-api android-car-last-released-system-api libcarpowermanager; }
+#  Export the api/system-current.txt file.
+"car-api-system-current.txt" = filegroup {
+    name = "car-api-system-current.txt";
+    visibility = [
+        "//cts/tests/signature/api"
+    ];
+    srcs = [
+        "api/system-current.txt"
+    ];
+};
+
+#  Export the api/system-removed.txt file.
+"car-api-system-removed.txt" = filegroup {
+    name = "car-api-system-removed.txt";
+    visibility = [
+        "//cts/tests/signature/api"
+    ];
+    srcs = [
+        "api/system-removed.txt"
+    ];
+};
+
+in { inherit "android.car" "android.car-docs-default" "android.car-stub-docs" "android.car-stubs" "android.car-stubs-dex" "android.car-stubs-docs" "android.car-system-stubs" "android.car-system-stubs-dex" "android.car-system-stubs-docs" "android.car-test-stubs" "android.car-test-stubs-dex" "android.car-test-stubs-docs" "android.car.cluster.navigation" "android.car.settings" "car-api-system-current.txt" "car-api-system-removed.txt" android-car-last-released-api android-car-last-released-system-api libcarpowermanager libcarpowermanager_aidl; }

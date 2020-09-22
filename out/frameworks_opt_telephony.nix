@@ -1,4 +1,4 @@
-{ filegroup, java_library }:
+{ filegroup, genrule, java_library }:
 let
 
 #  Copyright 2018 Google Inc. All rights reserved.
@@ -18,11 +18,10 @@ let
 opt-telephony-srcs = filegroup {
     name = "opt-telephony-srcs";
     srcs = [
-        "src/java/android/telephony/CarrierMessagingServiceManager.java"
-        "src/java/android/telephony/CellBroadcastMessage.java"
         "src/java/android/telephony/gsm/SmsManager.java"
         "src/java/android/telephony/gsm/SmsMessage.java"
     ];
+    path = "src/java";
 };
 
 opt-telephony-htmls = filegroup {
@@ -35,8 +34,6 @@ opt-telephony-htmls = filegroup {
 opt-telephony-common-srcs = filegroup {
     name = "opt-telephony-common-srcs";
     srcs = [
-        "src/java/android/telephony/CarrierMessagingServiceManager.java"
-        "src/java/android/telephony/CellBroadcastMessage.java"
         "src/java/android/telephony/gsm/SmsManager.java"
         "src/java/android/telephony/gsm/SmsMessage.java"
         "src/java/com/android/internal/telephony/ATParseEx.java"
@@ -55,13 +52,14 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/CarrierActionAgent.java"
         "src/java/com/android/internal/telephony/CarrierInfoManager.java"
         "src/java/com/android/internal/telephony/CarrierKeyDownloadManager.java"
+        "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java"
         "src/java/com/android/internal/telephony/CarrierResolver.java"
         "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java"
         "src/java/com/android/internal/telephony/CarrierServiceStateTracker.java"
         "src/java/com/android/internal/telephony/CarrierServicesSmsFilter.java"
         "src/java/com/android/internal/telephony/CarrierSignalAgent.java"
         "src/java/com/android/internal/telephony/CarrierSmsUtils.java"
-        "src/java/com/android/internal/telephony/CellBroadcastHandler.java"
+        "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java"
         "src/java/com/android/internal/telephony/CellularNetworkService.java"
         "src/java/com/android/internal/telephony/CellularNetworkValidator.java"
         "src/java/com/android/internal/telephony/ClientWakelockAccountant.java"
@@ -72,6 +70,7 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/DebugService.java"
         "src/java/com/android/internal/telephony/DefaultPhoneNotifier.java"
         "src/java/com/android/internal/telephony/DeviceStateMonitor.java"
+        "src/java/com/android/internal/telephony/DisplayInfoController.java"
         "src/java/com/android/internal/telephony/DriverCall.java"
         "src/java/com/android/internal/telephony/GlobalSettingsHelper.java"
         "src/java/com/android/internal/telephony/GsmCdmaCall.java"
@@ -80,8 +79,6 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/GsmCdmaPhone.java"
         "src/java/com/android/internal/telephony/HalVersion.java"
         "src/java/com/android/internal/telephony/HardwareConfig.java"
-        "src/java/com/android/internal/telephony/HbpcdLookup.java"
-        "src/java/com/android/internal/telephony/HbpcdUtils.java"
         "src/java/com/android/internal/telephony/IccCard.java"
         "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java"
         "src/java/com/android/internal/telephony/IccProvider.java"
@@ -95,13 +92,14 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/LinkCapacityEstimate.java"
         "src/java/com/android/internal/telephony/LocaleTracker.java"
         "src/java/com/android/internal/telephony/MccTable.java"
+        "src/java/com/android/internal/telephony/MissedIncomingCallSmsFilter.java"
         "src/java/com/android/internal/telephony/MmiCode.java"
         "src/java/com/android/internal/telephony/MultiSimSettingController.java"
         "src/java/com/android/internal/telephony/NetworkRegistrationManager.java"
         "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java"
+        "src/java/com/android/internal/telephony/NetworkTypeController.java"
         "src/java/com/android/internal/telephony/NitzData.java"
         "src/java/com/android/internal/telephony/NitzStateMachine.java"
-        "src/java/com/android/internal/telephony/NitzStateMachineImpl.java"
         "src/java/com/android/internal/telephony/OemHookIndication.java"
         "src/java/com/android/internal/telephony/OemHookResponse.java"
         "src/java/com/android/internal/telephony/PackageBasedTokenUtil.java"
@@ -110,7 +108,6 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/PhoneFactory.java"
         "src/java/com/android/internal/telephony/PhoneInternalInterface.java"
         "src/java/com/android/internal/telephony/PhoneNotifier.java"
-        "src/java/com/android/internal/telephony/PhoneStateIntentReceiver.java"
         "src/java/com/android/internal/telephony/PhoneSubInfoController.java"
         "src/java/com/android/internal/telephony/PhoneSwitcher.java"
         "src/java/com/android/internal/telephony/ProxyController.java"
@@ -125,6 +122,7 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/RadioNVItems.java"
         "src/java/com/android/internal/telephony/RadioResponse.java"
         "src/java/com/android/internal/telephony/RatRatcheter.java"
+        "src/java/com/android/internal/telephony/RegistrationFailedEvent.java"
         "src/java/com/android/internal/telephony/RestrictedState.java"
         "src/java/com/android/internal/telephony/RetryManager.java"
         "src/java/com/android/internal/telephony/RilWakelockInfo.java"
@@ -135,21 +133,16 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java"
         "src/java/com/android/internal/telephony/SmsController.java"
         "src/java/com/android/internal/telephony/SmsDispatchersController.java"
-        "src/java/com/android/internal/telephony/SmsNumberUtils.java"
         "src/java/com/android/internal/telephony/SmsPermissions.java"
         "src/java/com/android/internal/telephony/SmsResponse.java"
         "src/java/com/android/internal/telephony/SmsStorageMonitor.java"
         "src/java/com/android/internal/telephony/SmsUsageMonitor.java"
         "src/java/com/android/internal/telephony/SubscriptionController.java"
         "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java"
-        "src/java/com/android/internal/telephony/SubscriptionMonitor.java"
         "src/java/com/android/internal/telephony/TelephonyCapabilities.java"
         "src/java/com/android/internal/telephony/TelephonyComponentFactory.java"
         "src/java/com/android/internal/telephony/TelephonyDevController.java"
         "src/java/com/android/internal/telephony/TelephonyTester.java"
-        "src/java/com/android/internal/telephony/TimeServiceHelper.java"
-        "src/java/com/android/internal/telephony/TimeServiceHelperImpl.java"
-        "src/java/com/android/internal/telephony/TimeZoneLookupHelper.java"
         "src/java/com/android/internal/telephony/UUSInfo.java"
         "src/java/com/android/internal/telephony/UiccPhoneBookController.java"
         "src/java/com/android/internal/telephony/VisualVoicemailSmsFilter.java"
@@ -195,7 +188,6 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/cdma/CdmaInformationRecords.java"
         "src/java/com/android/internal/telephony/cdma/CdmaMmiCode.java"
         "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java"
-        "src/java/com/android/internal/telephony/cdma/CdmaServiceCategoryProgramHandler.java"
         "src/java/com/android/internal/telephony/cdma/CdmaSmsBroadcastConfigInfo.java"
         "src/java/com/android/internal/telephony/cdma/CdmaSubscriptionSourceManager.java"
         "src/java/com/android/internal/telephony/cdma/EriInfo.java"
@@ -211,6 +203,8 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/cdnr/RuimEfData.java"
         "src/java/com/android/internal/telephony/cdnr/UsimEfData.java"
         "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java"
+        "src/java/com/android/internal/telephony/dataconnection/ApnConfigType.java"
+        "src/java/com/android/internal/telephony/dataconnection/ApnConfigTypeRepository.java"
         "src/java/com/android/internal/telephony/dataconnection/ApnContext.java"
         "src/java/com/android/internal/telephony/dataconnection/ApnSettingUtils.java"
         "src/java/com/android/internal/telephony/dataconnection/CellularDataService.java"
@@ -234,7 +228,6 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/euicc/EuiccConnector.java"
         "src/java/com/android/internal/telephony/euicc/EuiccController.java"
         "src/java/com/android/internal/telephony/euicc/EuiccOperation.java"
-        "src/java/com/android/internal/telephony/gsm/GsmCellBroadcastHandler.java"
         "src/java/com/android/internal/telephony/gsm/GsmInboundSmsHandler.java"
         "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java"
         "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java"
@@ -248,18 +241,9 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/ims/ImsResolver.java"
         "src/java/com/android/internal/telephony/ims/ImsServiceController.java"
         "src/java/com/android/internal/telephony/ims/ImsServiceControllerCompat.java"
-        "src/java/com/android/internal/telephony/ims/ImsServiceControllerStaticCompat.java"
         "src/java/com/android/internal/telephony/ims/ImsServiceFeatureQueryManager.java"
-        "src/java/com/android/internal/telephony/ims/ImsServiceInterfaceAdapter.java"
         "src/java/com/android/internal/telephony/ims/MmTelFeatureCompatAdapter.java"
         "src/java/com/android/internal/telephony/ims/MmTelInterfaceAdapter.java"
-        "src/java/com/android/internal/telephony/ims/RcsEventQueryHelper.java"
-        "src/java/com/android/internal/telephony/ims/RcsMessageQueryHelper.java"
-        "src/java/com/android/internal/telephony/ims/RcsMessageStoreController.java"
-        "src/java/com/android/internal/telephony/ims/RcsMessageStoreUtil.java"
-        "src/java/com/android/internal/telephony/ims/RcsParticipantQueryHelper.java"
-        "src/java/com/android/internal/telephony/ims/RcsPermissions.java"
-        "src/java/com/android/internal/telephony/ims/RcsThreadQueryHelper.java"
         "src/java/com/android/internal/telephony/imsphone/ImsExternalCall.java"
         "src/java/com/android/internal/telephony/imsphone/ImsExternalCallTracker.java"
         "src/java/com/android/internal/telephony/imsphone/ImsExternalConnection.java"
@@ -272,25 +256,34 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/imsphone/ImsPhoneFactory.java"
         "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java"
         "src/java/com/android/internal/telephony/imsphone/ImsPullCall.java"
+        "src/java/com/android/internal/telephony/imsphone/ImsRcsStatusListener.java"
+        "src/java/com/android/internal/telephony/imsphone/ImsRegistrationCallbackHelper.java"
         "src/java/com/android/internal/telephony/imsphone/ImsRttTextHandler.java"
         "src/java/com/android/internal/telephony/metrics/CallQualityMetrics.java"
         "src/java/com/android/internal/telephony/metrics/CallSessionEventBuilder.java"
         "src/java/com/android/internal/telephony/metrics/InProgressCallSession.java"
         "src/java/com/android/internal/telephony/metrics/InProgressSmsSession.java"
+        "src/java/com/android/internal/telephony/metrics/MetricsCollector.java"
         "src/java/com/android/internal/telephony/metrics/ModemPowerMetrics.java"
+        "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java"
+        "src/java/com/android/internal/telephony/metrics/SimSlotState.java"
         "src/java/com/android/internal/telephony/metrics/SmsSessionEventBuilder.java"
         "src/java/com/android/internal/telephony/metrics/TelephonyEventBuilder.java"
         "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java"
+        "src/java/com/android/internal/telephony/metrics/VoiceCallRatTracker.java"
+        "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java"
+        "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java"
+        "src/java/com/android/internal/telephony/nitz/NitzStateMachineImpl.java"
+        "src/java/com/android/internal/telephony/nitz/TimeServiceHelper.java"
+        "src/java/com/android/internal/telephony/nitz/TimeServiceHelperImpl.java"
+        "src/java/com/android/internal/telephony/nitz/TimeZoneLookupHelper.java"
+        "src/java/com/android/internal/telephony/nitz/TimeZoneSuggesterImpl.java"
         "src/java/com/android/internal/telephony/sip/SipCallBase.java"
         "src/java/com/android/internal/telephony/sip/SipCommandInterface.java"
         "src/java/com/android/internal/telephony/sip/SipConnectionBase.java"
         "src/java/com/android/internal/telephony/sip/SipPhone.java"
         "src/java/com/android/internal/telephony/sip/SipPhoneBase.java"
         "src/java/com/android/internal/telephony/sip/SipPhoneFactory.java"
-        "src/java/com/android/internal/telephony/test/ModelInterpreter.java"
-        "src/java/com/android/internal/telephony/test/SimulatedCommands.java"
-        "src/java/com/android/internal/telephony/test/SimulatedCommandsVerifier.java"
-        "src/java/com/android/internal/telephony/test/SimulatedGsmCallState.java"
         "src/java/com/android/internal/telephony/test/SimulatedRadioControl.java"
         "src/java/com/android/internal/telephony/test/TestConferenceEventPackageParser.java"
         "src/java/com/android/internal/telephony/uicc/AdnRecord.java"
@@ -353,41 +346,33 @@ opt-telephony-common-srcs = filegroup {
         "src/java/com/android/internal/telephony/uicc/euicc/async/AsyncMessageInvocation.java"
         "src/java/com/android/internal/telephony/uicc/euicc/async/AsyncResultCallback.java"
         "src/java/com/android/internal/telephony/uicc/euicc/async/AsyncResultHelper.java"
+        "src/java/com/android/internal/telephony/util/LocaleUtils.java"
         "src/java/com/android/internal/telephony/util/NotificationChannelController.java"
         "src/java/com/android/internal/telephony/util/SMSDispatcherUtil.java"
         "src/java/com/android/internal/telephony/util/VoicemailNotificationSettingsUtil.java"
-        "src/java/com/google/android/mms/ContentType.java"
-        "src/java/com/google/android/mms/InvalidHeaderValueException.java"
-        "src/java/com/google/android/mms/MmsException.java"
-        "src/java/com/google/android/mms/pdu/AcknowledgeInd.java"
-        "src/java/com/google/android/mms/pdu/Base64.java"
-        "src/java/com/google/android/mms/pdu/CharacterSets.java"
-        "src/java/com/google/android/mms/pdu/DeliveryInd.java"
-        "src/java/com/google/android/mms/pdu/EncodedStringValue.java"
-        "src/java/com/google/android/mms/pdu/GenericPdu.java"
-        "src/java/com/google/android/mms/pdu/MultimediaMessagePdu.java"
-        "src/java/com/google/android/mms/pdu/NotificationInd.java"
-        "src/java/com/google/android/mms/pdu/NotifyRespInd.java"
-        "src/java/com/google/android/mms/pdu/PduBody.java"
-        "src/java/com/google/android/mms/pdu/PduComposer.java"
-        "src/java/com/google/android/mms/pdu/PduContentTypes.java"
-        "src/java/com/google/android/mms/pdu/PduHeaders.java"
-        "src/java/com/google/android/mms/pdu/PduParser.java"
-        "src/java/com/google/android/mms/pdu/PduPart.java"
-        "src/java/com/google/android/mms/pdu/PduPersister.java"
-        "src/java/com/google/android/mms/pdu/QuotedPrintable.java"
-        "src/java/com/google/android/mms/pdu/ReadOrigInd.java"
-        "src/java/com/google/android/mms/pdu/ReadRecInd.java"
-        "src/java/com/google/android/mms/pdu/RetrieveConf.java"
-        "src/java/com/google/android/mms/pdu/SendConf.java"
-        "src/java/com/google/android/mms/pdu/SendReq.java"
-        "src/java/com/google/android/mms/util/AbstractCache.java"
-        "src/java/com/google/android/mms/util/DownloadDrmHelper.java"
-        "src/java/com/google/android/mms/util/DrmConvertSession.java"
-        "src/java/com/google/android/mms/util/PduCache.java"
-        "src/java/com/google/android/mms/util/PduCacheEntry.java"
-        "src/java/com/google/android/mms/util/SqliteWrapper.java"
+        "src/java/com/android/internal/telephony/vendor/VendorGsmCdmaPhone.java"
+        "src/java/com/android/internal/telephony/vendor/VendorMultiSimSettingController.java"
+        "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java"
+        "src/java/com/android/internal/telephony/vendor/VendorServiceStateTracker.java"
+        "src/java/com/android/internal/telephony/vendor/VendorSubscriptionController.java"
+        "src/java/com/android/internal/telephony/vendor/VendorSubscriptionInfoUpdater.java"
+        "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDataResetEventTracker.java"
+        "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java"
     ];
+    path = "src/java";
+};
+
+jarjar-rules-shared = filegroup {
+    name = "jarjar-rules-shared";
+    srcs = ["jarjar-rules-shared.txt"];
+};
+
+statslog-telephony-java-gen = genrule {
+    name = "statslog-telephony-java-gen";
+    tools = ["stats-log-api-gen"];
+    cmd = "$(location stats-log-api-gen) --java $(out) --module telephony" +
+        " --javaPackage com.android.internal.telephony --javaClass TelephonyStatsLog";
+    out = ["com/android/internal/telephony/TelephonyStatsLog.java"];
 };
 
 telephony-common = java_library {
@@ -399,11 +384,15 @@ telephony-common = java_library {
     };
     srcs = [
         ":opt-telephony-common-srcs"
+        ":framework-telephony-common-shared-srcs"
+        ":net-utils-telephony-common-srcs"
+        ":statslog-telephony-java-gen"
+        ":statslog-cellbroadcast-java-gen"
         "src/java/com/android/internal/telephony/IIccPhoneBook.aidl"
         "src/java/com/android/internal/telephony/EventLogTags.logtags"
     ];
 
-    jarjar_rules = ":framework-jarjar-rules";
+    jarjar_rules = ":jarjar-rules-shared";
 
     libs = [
         "android.hardware.radio-V1.0-java"
@@ -411,17 +400,21 @@ telephony-common = java_library {
         "android.hardware.radio-V1.2-java"
         "android.hardware.radio-V1.3-java"
         "android.hardware.radio-V1.4-java"
+        "android.hardware.radio-V1.5-java"
         "voip-common"
         "ims-common"
-        "services"
+        "unsupportedappusage"
     ];
     static_libs = [
         "android.hardware.radio.config-V1.0-java-shallow"
         "android.hardware.radio.config-V1.1-java-shallow"
         "android.hardware.radio.config-V1.2-java-shallow"
         "android.hardware.radio.deprecated-V1.0-java-shallow"
-        "telephony-protos"
         "ecc-protos-lite"
+        "libphonenumber-nogeocoder"
+        "PlatformProperties"
+        "net-utils-framework-common"
+        "telephony-protos"
     ];
 
     product_variables = {
@@ -432,4 +425,4 @@ telephony-common = java_library {
     };
 };
 
-in { inherit opt-telephony-common-srcs opt-telephony-htmls opt-telephony-srcs telephony-common; }
+in { inherit jarjar-rules-shared opt-telephony-common-srcs opt-telephony-htmls opt-telephony-srcs statslog-telephony-java-gen telephony-common; }

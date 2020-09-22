@@ -17,6 +17,9 @@ let
 
 signature-common-javalib = java_library_static {
     name = "signature-common-javalib";
+    visibility = [
+        "//cts/tests/signature:__subpackages__"
+    ];
     host_supported = true;
     installable = false;
     srcs = [

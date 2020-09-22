@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_fuzz, cc_test }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -19,12 +19,27 @@ libhidl-gen-utils_test = cc_test {
     name = "libhidl-gen-utils_test";
     defaults = ["hidl-gen-defaults"];
     host_supported = true;
-
-    shared_libs = [
-        "libhidl-gen-utils"
-    ];
-
+    shared_libs = ["libhidl-gen-utils"];
     srcs = ["main.cpp"];
+    test_suites = ["general-tests"];
 };
 
-in { inherit libhidl-gen-utils_test; }
+fqname_fuzzer = cc_fuzz {
+    name = "fqname_fuzzer";
+    defaults = ["hidl-gen-defaults"];
+    host_supported = true;
+    fuzz_config = {
+        cc = [
+            "elsk@google.com"
+            "smoreland@google.com"
+        ];
+    };
+    static_libs = [
+        "libbase"
+        "libhidl-gen-utils"
+        "liblog"
+    ];
+    srcs = ["fuzzer.cpp"];
+};
+
+in { inherit fqname_fuzzer libhidl-gen-utils_test; }

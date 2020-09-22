@@ -38,6 +38,7 @@ LIBUNWIND_LOCAL_INCLUDES = [
 LIBUNWIND_CFLAGS = [
     "-Wall"
     "-Werror"
+    "-D_LIBUNWIND_USE_DLADDR=0"
 ];
 
 LIBUNWIND_CPPFLAGS = [
@@ -49,19 +50,24 @@ LIBUNWIND_CPPFLAGS = [
     "-Wno-unused-function"
     "-Wno-unused-parameter"
     "-Wno-unused-local-typedef"
+    "-Wno-bitwise-conditional-parentheses" #  in src/UnwindCursor.hpp:1437
 ];
 
 libunwind_llvm = cc_library_static {
     name = "libunwind_llvm";
     sdk_version = "21";
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     srcs = LIBUNWIND_SRC_FILES;
     include_dirs = LIBUNWIND_INCLUDES;
     local_include_dirs = LIBUNWIND_LOCAL_INCLUDES;
     cflags = LIBUNWIND_CFLAGS;
     cppflags = LIBUNWIND_CPPFLAGS;
     stl = "none";
+    system_shared_libs = [];
+    header_libs = ["libc_headers"];
     sanitize = {
         never = true;
     };
@@ -71,6 +77,7 @@ libunwind_llvm = cc_library_static {
             enabled = true;
         };
     };
+    min_sdk_version = "apex_inherit";
 };
 
 in { inherit libunwind_llvm; }

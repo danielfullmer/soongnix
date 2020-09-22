@@ -1,4 +1,4 @@
-{ cc_binary_host, cc_defaults, cc_library_static, cc_test, java_library_host, sh_binary_host }:
+{ cc_binary_host, cc_defaults, cc_library_static, cc_test, java_binary_host, python_binary_host }:
 let
 
 generate_verity_key = cc_binary_host {
@@ -15,8 +15,8 @@ generate_verity_key = cc_binary_host {
     ];
 };
 
-VeritySigner = java_library_host {
-    name = "VeritySigner";
+verity_signer = java_binary_host {
+    name = "verity_signer";
     srcs = [
         "VeritySigner.java"
         "Utils.java"
@@ -26,8 +26,8 @@ VeritySigner = java_library_host {
     static_libs = ["bouncycastle-unbundled"];
 };
 
-BootSignature = java_library_host {
-    name = "BootSignature";
+boot_signer = java_binary_host {
+    name = "boot_signer";
     srcs = [
         "BootSignature.java"
         "VeritySigner.java"
@@ -54,9 +54,11 @@ verity_verifier = cc_binary_host {
     static_libs = [
         "libfec"
         "libfec_rs"
+        "libavb"
         "libcrypto_utils"
         "libcrypto"
         "libext4_utils"
+        "liblog"
         "libsparse"
         "libsquashfs_utils"
         "libbase"
@@ -134,24 +136,19 @@ build_verity_tree_test = cc_test {
     ];
 };
 
-#  VeritySigner should probably just be a java_binary
-verity_signer = sh_binary_host {
-    name = "verity_signer";
-    src = "verity_signer";
-    required = ["VeritySigner"];
+build_verity_metadata = python_binary_host {
+    name = "build_verity_metadata";
+    srcs = ["build_verity_metadata.py"];
+    version = {
+        py2 = {
+            enabled = true;
+            embedded_launcher = true;
+        };
+        py3 = {
+            enabled = false;
+            embedded_launcher = false;
+        };
+    };
 };
 
-#  BootSignature should probably just be a java_binary
-boot_signer = sh_binary_host {
-    name = "boot_signer";
-    src = "boot_signer";
-    required = ["BootSignature"];
-};
-
-#  This should probably be a python_binary_host
-"build_verity_metadata.py" = sh_binary_host {
-    name = "build_verity_metadata.py";
-    src = "build_verity_metadata.py";
-};
-
-in { inherit "build_verity_metadata.py" BootSignature VeritySigner boot_signer build_verity_tree build_verity_tree_test generate_verity_key libverity_tree verity_signer verity_tree_defaults verity_verifier; }
+in { inherit boot_signer build_verity_metadata build_verity_tree build_verity_tree_test generate_verity_key libverity_tree verity_signer verity_tree_defaults verity_verifier; }

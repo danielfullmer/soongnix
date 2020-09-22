@@ -32,25 +32,22 @@ keystore = cc_binary {
     defaults = ["keystore_defaults"];
 
     srcs = [
-        ":IKeyAttestationApplicationIdProvider.aidl"
         "KeyStore.cpp"
         "auth_token_table.cpp"
         "blob.cpp"
         "confirmation_manager.cpp"
         "grant_store.cpp"
-        "key_config.proto"
-        "key_proto_handler.cpp"
+        "key_creation_log_handler.cpp"
+        "key_operation_log_handler.cpp"
+        "key_attestation_log_handler.cpp"
         "key_store_service.cpp"
         "keyblob_utils.cpp"
         "keymaster_enforcement.cpp"
         "keymaster_worker.cpp"
-        "keystore_attestation_id.cpp"
         "keystore_main.cpp"
         "keystore_utils.cpp"
         "legacy_keymaster_device_wrapper.cpp"
         "operation.cpp"
-        "operation_config.proto"
-        "operation_proto_handler.cpp"
         "permissions.cpp"
         "user_state.cpp"
     ];
@@ -58,18 +55,18 @@ keystore = cc_binary {
         "android.hardware.confirmationui@1.0"
         "android.hardware.keymaster@3.0"
         "android.hardware.keymaster@4.0"
-        "android.system.wifi.keystore@1.0"
+        "android.hardware.keymaster@4.1"
         "libbase"
         "libbinder"
         "libcrypto"
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libkeymaster4support"
+        "libkeymaster4_1support"
         "libkeymaster_messages"
         "libkeymaster_portable"
+        "libkeystore-attestation-application-id"
         "libkeystore_aidl"
         "libkeystore_binder"
         "libkeystore_parcelables"
@@ -79,7 +76,7 @@ keystore = cc_binary {
         "libservices"
         "libsoftkeymasterdevice"
         "libutils"
-        "libwifikeystorehal"
+        "libstatslog"
     ];
     init_rc = ["keystore.rc"];
     aidl = {
@@ -113,7 +110,6 @@ keystore_cli = cc_binary {
         "libcrypto"
         "libcutils"
         "libhidlbase"
-        "libhwbinder"
         "libkeystore_aidl" #  for IKeyStoreService.asInterface()
         "libkeystore_binder"
         "libkeystore_parcelables"
@@ -138,7 +134,6 @@ keystore_cli_v2 = cc_binary {
         "libchrome"
         "libutils"
         "libhidlbase"
-        "libhwbinder"
         "libkeymaster4support"
         "libkeystore_aidl"
         "libkeystore_binder"
@@ -153,31 +148,30 @@ libkeystore_parcelables = cc_library_shared {
     defaults = ["keystore_defaults"];
     export_include_dirs = ["include"];
     srcs = [
-        "KeyAttestationApplicationId.cpp"
-        "KeyAttestationPackageInfo.cpp"
         "KeymasterArguments.cpp"
         "keystore_aidl_hidl_marshalling_utils.cpp"
         "KeystoreResponse.cpp"
         "OperationResult.cpp"
-        "Signature.cpp"
     ];
     shared_libs = [
         "android.hardware.keymaster@4.0"
+        "android.hardware.keymaster@4.1"
         "libbinder"
         "libhardware"
         "libhidlbase"
-        "libhwbinder"
         "libkeymaster4support"
+        "libkeymaster4_1support"
         "liblog"
         "libprotobuf-cpp-lite"
         "libutils"
+        "libkeystore-attestation-application-id"
     ];
     export_shared_lib_headers = [
         "android.hardware.keymaster@4.0"
+        "android.hardware.keymaster@4.1"
         "libbinder"
         "libhidlbase"
-        "libhwbinder"
-        "libkeymaster4support"
+        "libkeymaster4_1support"
     ];
 };
 
@@ -196,7 +190,6 @@ libkeystore_binder = cc_library_shared {
         "android.hardware.keymaster@4.0"
         "libbinder"
         "libhidlbase"
-        "libhwbinder"
         "libkeymaster4support"
         "libkeystore_aidl"
         "libkeystore_parcelables"
@@ -218,10 +211,34 @@ libkeystore_binder = cc_library_shared {
         "android.hardware.keymaster@4.0"
         "libbinder"
         "libhidlbase"
-        "libhwbinder"
         "libkeystore_aidl"
         "libkeystore_parcelables"
     ];
+};
+
+#  Library used by both keystore and credstore for generating the ASN.1 stored
+#  in Tag::ATTESTATION_APPLICATION_ID
+libkeystore-attestation-application-id = cc_library_shared {
+    name = "libkeystore-attestation-application-id";
+    defaults = ["keystore_defaults"];
+
+    srcs = [
+        ":IKeyAttestationApplicationIdProvider.aidl"
+        "keystore_attestation_id.cpp"
+        "KeyAttestationApplicationId.cpp"
+        "KeyAttestationPackageInfo.cpp"
+        "Signature.cpp"
+    ];
+    shared_libs = [
+        "libbase"
+        "libbinder"
+        "libhidlbase"
+        "liblog"
+        "libutils"
+        "libcrypto"
+    ];
+
+    export_include_dirs = ["include"];
 };
 
 #  Library for keystore clients using the WiFi HIDL interface
@@ -234,7 +251,6 @@ libkeystore-wifi-hidl = cc_library_shared {
         "android.system.wifi.keystore@1.0"
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
@@ -250,13 +266,8 @@ libkeystore_test = cc_library_static {
     defaults = ["keystore_defaults"];
 
     srcs = [
-        ":IKeyAttestationApplicationIdProvider.aidl"
         "auth_token_table.cpp"
         "blob.cpp"
-        "keystore_attestation_id.cpp"
-        "KeyAttestationApplicationId.cpp"
-        "KeyAttestationPackageInfo.cpp"
-        "Signature.cpp"
     ];
     cflags = ["-O0"];
     static_libs = ["libgtest_main"];
@@ -265,8 +276,8 @@ libkeystore_test = cc_library_static {
         "libbinder"
         "libcrypto"
         "libhidlbase"
-        "libhwbinder"
         "libkeymaster4support"
+        "libkeystore-attestation-application-id"
         "libutils"
         "libkeystore_aidl"
         "libkeystore_parcelables"
@@ -274,7 +285,6 @@ libkeystore_test = cc_library_static {
     export_shared_lib_headers = [
         "android.hardware.keymaster@4.0"
         "libhidlbase"
-        "libhwbinder"
         "libkeymaster4support"
     ];
 
@@ -288,6 +298,7 @@ keystore_aidl = filegroup {
     name = "keystore_aidl";
     srcs = [
         "binder/android/security/IConfirmationPromptCallback.aidl"
+        "binder/android/security/keystore/ICredstoreTokenCallback.aidl"
         "binder/android/security/keystore/IKeystoreCertificateChainCallback.aidl"
         "binder/android/security/keystore/IKeystoreExportKeyCallback.aidl"
         "binder/android/security/keystore/IKeystoreKeyCharacteristicsCallback.aidl"
@@ -312,8 +323,6 @@ libkeystore_aidl = cc_library_shared {
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libkeystore_parcelables"
         "liblog"
         "libselinux"
@@ -325,4 +334,4 @@ libkeystore_aidl = cc_library_shared {
     ];
 };
 
-in { inherit keystore keystore_aidl keystore_cli keystore_cli_v2 keystore_defaults libkeystore-wifi-hidl libkeystore_aidl libkeystore_binder libkeystore_parcelables libkeystore_test; }
+in { inherit keystore keystore_aidl keystore_cli keystore_cli_v2 keystore_defaults libkeystore-attestation-application-id libkeystore-wifi-hidl libkeystore_aidl libkeystore_binder libkeystore_parcelables libkeystore_test; }

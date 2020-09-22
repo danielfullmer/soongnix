@@ -25,7 +25,6 @@ let
         "libbinder"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

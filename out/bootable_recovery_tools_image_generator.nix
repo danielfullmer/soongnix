@@ -22,7 +22,7 @@ RecoveryImageGenerator = java_library_host {
 
     static_libs = [
         "commons-cli-1.2"
-        "icu4j-host"
+        "icu4j"
     ];
 
     srcs = [

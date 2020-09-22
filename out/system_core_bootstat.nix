@@ -33,8 +33,8 @@ bootstat_defaults = cc_defaults {
         "libbase"
         "libcutils"
         "liblog"
-        "libmetricslogger"
     ];
+    static_libs = ["libgtest_prod"];
 };
 
 #  bootstat static library

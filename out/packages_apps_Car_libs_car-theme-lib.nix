@@ -17,8 +17,8 @@ let
 #  limitations under the License.
 #
 
-car-theme-lib-bp = android_library {
-    name = "car-theme-lib-bp";
+car-theme-lib = android_library {
+    name = "car-theme-lib";
 
     srcs = [];
 
@@ -29,7 +29,6 @@ car-theme-lib-bp = android_library {
     optimize = {
         enabled = false;
     };
-
 };
 
-in { inherit car-theme-lib-bp; }
+in { inherit car-theme-lib; }

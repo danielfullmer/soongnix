@@ -32,7 +32,10 @@ VtsHalRadioConfigV1_1TargetTest = cc_test {
         "android.hardware.radio.config@1.1"
     ];
     header_libs = ["radio.util.header@1.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalRadioConfigV1_1TargetTest; }

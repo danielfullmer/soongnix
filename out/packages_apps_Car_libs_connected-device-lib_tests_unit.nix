@@ -22,6 +22,7 @@ connected-device-lib-unit-tests = android_test {
 
     srcs = [
         "src/com/android/car/connecteddevice/ConnectedDeviceManagerTest.java"
+        "src/com/android/car/connecteddevice/ble/AssociationSecureChannelTest.java"
         "src/com/android/car/connecteddevice/ble/BleDeviceMessageStreamTest.java"
         "src/com/android/car/connecteddevice/ble/BlePacketFactoryTest.java"
         "src/com/android/car/connecteddevice/ble/CarBlePeripheralManagerTest.java"
@@ -44,6 +45,9 @@ connected-device-lib-unit-tests = android_test {
         "connected-device-lib"
         "mockito-target-extended-minus-junit4"
         "testables"
+        #  TODO: remove once Android migrates to JUnit 4.13,
+        #  which provides assertThrows
+        "testng"
         "truth-prebuilt"
     ];
 

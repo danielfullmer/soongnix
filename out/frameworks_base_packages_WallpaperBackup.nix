@@ -1,4 +1,4 @@
-{ android_app }:
+{ android_app, android_test }:
 let
 
 #
@@ -28,4 +28,29 @@ WallpaperBackup = android_app {
     privileged = false;
 };
 
-in { inherit WallpaperBackup; }
+WallpaperBackupAgentTests = android_test {
+    name = "WallpaperBackupAgentTests";
+    manifest = "test/AndroidManifest.xml";
+    test_config = "test/AndroidTest.xml";
+    srcs = [
+        #  Include the app source code because the app runs as the system user on-device.
+        "src/com/android/wallpaperbackup/WallpaperBackupAgent.java"
+        "test/src/com/android/wallpaperbackup/WallpaperBackupAgentTest.java"
+        "test/src/com/android/wallpaperbackup/utils/ContextWithServiceOverrides.java"
+    ];
+    libs = [
+        "android.test.base"
+        "android.test.runner"
+    ];
+    static_libs = [
+        "androidx.test.core"
+        "androidx.test.rules"
+        "mockito-target-minus-junit4"
+        "truth-prebuilt"
+    ];
+    certificate = "platform";
+    platform_apis = true;
+    test_suites = ["device-tests"];
+};
+
+in { inherit WallpaperBackup WallpaperBackupAgentTests; }

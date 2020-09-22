@@ -21,7 +21,17 @@ EasterEgg = android_app {
     #  the build system in pi-dev can't quite handle R.java in kt
     #  so we will have a mix of java and kotlin files
     srcs = [
+        "src/com/android/egg/neko/Cat.java"
+        "src/com/android/egg/neko/Food.java"
+        "src/com/android/egg/neko/NekoActivationActivity.java"
+        "src/com/android/egg/neko/NekoDialog.java"
+        "src/com/android/egg/neko/NekoLand.java"
+        "src/com/android/egg/neko/NekoLockedActivity.java"
+        "src/com/android/egg/neko/NekoService.java"
+        "src/com/android/egg/neko/NekoTile.java"
+        "src/com/android/egg/neko/PrefState.java"
         "src/com/android/egg/paint/PaintActivity.java"
+        "src/com/android/egg/neko/NekoControlsService.kt"
         "src/com/android/egg/paint/BrushPropertyDrawable.kt"
         "src/com/android/egg/paint/CutoutAvoidingToolbar.kt"
         "src/com/android/egg/paint/Painting.kt"
@@ -36,13 +46,25 @@ EasterEgg = android_app {
 
     name = "EasterEgg";
 
+    platform_apis = true;
     certificate = "platform";
-
-    sdk_version = "current";
 
     optimize = {
         enabled = false;
     };
+
+    static_libs = [
+        "androidx.core_core"
+        "androidx.recyclerview_recyclerview"
+        "androidx.annotation_annotation"
+        "kotlinx-coroutines-android"
+        "kotlinx-coroutines-core"
+        # "kotlinx-coroutines-reactive",
+    ];
+
+    manifest = "AndroidManifest.xml";
+
+    kotlincflags = ["-Xjvm-default=enable"];
 };
 
 in { inherit EasterEgg; }

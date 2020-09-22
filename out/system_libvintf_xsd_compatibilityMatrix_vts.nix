@@ -34,6 +34,14 @@ vts_compatibilityMatrix_validate_test = cc_test {
         "-Wall"
         "-Werror"
     ];
+    data = [
+        ":compatibility_matrix"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    test_config = "vts_compatibilityMatrix_validate_test.xml";
 };
 
 in { inherit vts_compatibilityMatrix_validate_test; }

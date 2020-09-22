@@ -18,7 +18,6 @@ libskqp_app = cc_library_shared {
         "-D_FORTIFY_SOURCE=1"
         "-Wall"
         "-Werror"
-        "-Weverything"
         "-Wextra"
         "-Winit-self"
         "-Wno-bad-function-cast"

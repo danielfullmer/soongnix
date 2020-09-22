@@ -25,9 +25,7 @@ let
     shared_libs = [
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "libhidlmemory"
-        "libhwbinder"
         "liblog"
         "libutils"
         "android.hidl.memory@1.0"

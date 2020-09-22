@@ -2,7 +2,7 @@ let
   pkgs = import <nixpkgs> {};
   lib = pkgs.lib;
 
-  repo = lib.importJSON ./repo-android-10.0.0_r40.json;
+  repo = lib.importJSON ./repo-android-11.0.0_r1.json;
   _sourceDirs = lib.mapAttrs (n: v: pkgs.fetchgit { inherit (v) url rev sha256; }) repo;
   sourceDirs = lib.mapAttrs (n: v:
     if n == "system/core"

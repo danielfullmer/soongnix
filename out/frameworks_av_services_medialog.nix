@@ -9,6 +9,10 @@ libmedialogservice = cc_library_shared {
         "MediaLogService.cpp"
     ];
 
+    header_libs = [
+        "libmedia_headers"
+    ];
+
     shared_libs = [
         "libaudioutils"
         "libbinder"

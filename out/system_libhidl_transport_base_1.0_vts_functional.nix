@@ -17,6 +17,7 @@ let
 
 vts_ibase_test = cc_test {
     name = "vts_ibase_test";
+    defaults = ["libinit_test_utils_libraries_defaults"];
     srcs = [
         "vts_ibase_test.cpp"
     ];
@@ -27,11 +28,20 @@ vts_ibase_test = cc_test {
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
+        "libprotobuf-cpp-lite"
+        "libhidl-gen-utils"
     ];
+    static_libs = [
+        "libinit_test_utils"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    require_root = true;
+    auto_gen_config = true;
 };
 
 in { inherit vts_ibase_test; }

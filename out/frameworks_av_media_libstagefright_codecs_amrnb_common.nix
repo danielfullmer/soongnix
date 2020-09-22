@@ -1,9 +1,11 @@
-{ cc_library_shared }:
+{ cc_library }:
 let
 
-libstagefright_amrnb_common = cc_library_shared {
+libstagefright_amrnb_common = cc_library {
     name = "libstagefright_amrnb_common";
     vendor_available = true;
+    host_supported = true;
+    min_sdk_version = "29";
 
     srcs = [
         "src/add.cpp"
@@ -75,6 +77,12 @@ libstagefright_amrnb_common = cc_library_shared {
 
         "-Werror"
     ];
+
+    target = {
+        darwin = {
+            enabled = false;
+        };
+    };
 
     # addressing b/25409744
     # sanitize: {

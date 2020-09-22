@@ -1,4 +1,4 @@
-{ python_binary_host }:
+{ python_binary_host, sh_binary }:
 let
 
 #
@@ -32,4 +32,12 @@ generate_operator_out = python_binary_host {
     };
 };
 
-in { inherit generate_operator_out; }
+#  Copy the art shell script to the host and target's bin directory
+art-script = sh_binary {
+    name = "art-script";
+    host_supported = true;
+    src = "art";
+    filename_from_src = true;
+};
+
+in { inherit art-script generate_operator_out; }

@@ -24,7 +24,6 @@ mockito = java_library_static {
     name = "mockito";
     host_supported = true;
     hostdex = true;
-    no_framework_libs = true;
     srcs = [
         "src/main/java/org/mockito/AdditionalAnswers.java"
         "src/main/java/org/mockito/AdditionalMatchers.java"
@@ -431,6 +430,7 @@ mockito = java_library_static {
         "src/main/java/org/mockito/mock/SerializableMode.java"
         "src/main/java/org/mockito/mock/package-info.java"
         "src/main/java/org/mockito/plugins/AnnotationEngine.java"
+        "src/main/java/org/mockito/plugins/InlineMockMaker.java"
         "src/main/java/org/mockito/plugins/InstantiatorProvider.java"
         "src/main/java/org/mockito/plugins/InstantiatorProvider2.java"
         "src/main/java/org/mockito/plugins/MockMaker.java"
@@ -515,7 +515,6 @@ mockito-host = java_library_host {
 mockito-api = java_library_static {
     name = "mockito-api";
     hostdex = true;
-    no_framework_libs = true;
     static_libs = ["mockito"];
     sdk_version = "core_current";
 };

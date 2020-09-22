@@ -34,7 +34,7 @@ CtsDeviceAdminService1 = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "package1/AndroidManifest.xml";
@@ -59,7 +59,7 @@ CtsDeviceAdminService2 = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "package2/AndroidManifest.xml";
@@ -84,7 +84,7 @@ CtsDeviceAdminService3 = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "package3/AndroidManifest.xml";
@@ -109,7 +109,7 @@ CtsDeviceAdminService4 = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "package4/AndroidManifest.xml";
@@ -134,7 +134,7 @@ CtsDeviceAdminServiceB = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "packageb/AndroidManifest.xml";

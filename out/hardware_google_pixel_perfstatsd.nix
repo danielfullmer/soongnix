@@ -25,7 +25,6 @@ perfstatsd_defaults = cc_defaults {
         "libbinder"
         "libcutils"
         "libhidlbase"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];

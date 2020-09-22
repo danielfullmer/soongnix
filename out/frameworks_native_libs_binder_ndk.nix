@@ -1,4 +1,4 @@
-{ cc_library }:
+{ cc_defaults, cc_library }:
 let
 
 /*
@@ -17,13 +17,30 @@ let
  * limitations under the License.
  */
 
+#  TODO(b/31559095): bionic on host should define this
+libbinder_ndk_host_user = cc_defaults {
+    name = "libbinder_ndk_host_user";
+    target = {
+        host = {
+            cflags = [
+                "-D__INTRODUCED_IN(n)="
+                "-D__assert(a,b,c)="
+                #  We want all the APIs to be available on the host.
+                "-D__ANDROID_API__=10000"
+            ];
+        };
+    };
+};
+
 libbinder_ndk = cc_library {
     name = "libbinder_ndk";
-    vendor_available = true;
+
+    defaults = ["libbinder_ndk_host_user"];
+    host_supported = true;
 
     export_include_dirs = [
         "include_ndk"
-        "include_apex"
+        "include_platform"
     ];
 
     cflags = [
@@ -36,7 +53,9 @@ libbinder_ndk = cc_library {
         "ibinder.cpp"
         "ibinder_jni.cpp"
         "parcel.cpp"
+        "parcel_jni.cpp"
         "process.cpp"
+        "stability.cpp"
         "status.cpp"
         "service_manager.cpp"
     ];
@@ -55,11 +74,24 @@ libbinder_ndk = cc_library {
         "jni_headers"
     ];
 
-    version_script = "libbinder_ndk.map.txt";
+    target = {
+        android = {
+            #  Only one copy of this library on an Android device
+            static = {
+                enabled = false;
+            };
+        };
+        linux = {
+            version_script = "libbinder_ndk.map.txt";
+        };
+    };
     stubs = {
         symbol_file = "libbinder_ndk.map.txt";
-        versions = ["29"];
+        versions = [
+            "29"
+            "30"
+        ];
     };
 };
 
-in { inherit libbinder_ndk; }
+in { inherit libbinder_ndk libbinder_ndk_host_user; }

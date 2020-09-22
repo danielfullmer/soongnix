@@ -37,6 +37,7 @@ FrameSequenceSample = android_app {
         "com.android.framesequence.samples"
     ];
 
+    product_specific = true;
 };
 
 in { inherit FrameSequenceSample; }

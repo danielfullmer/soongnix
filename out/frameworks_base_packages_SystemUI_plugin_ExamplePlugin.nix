@@ -18,6 +18,7 @@ ExamplePlugin = android_app {
         "src/com/android/systemui/plugin/testoverlayplugin/SampleOverlayPlugin.java"
     ];
 
+    platform_apis = true;
 };
 
 in { inherit ExamplePlugin; }

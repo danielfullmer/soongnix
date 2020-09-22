@@ -8,7 +8,7 @@ fuzzy_fastboot = cc_test_host {
     srcs = [
         "main.cpp"
         "extensions.cpp"
-        "usb_transport_sniffer.cpp"
+        "transport_sniffer.cpp"
         "fixtures.cpp"
         "test_utils.cpp"
     ];
@@ -34,6 +34,8 @@ fuzzy_fastboot = cc_test_host {
         "libext4_utils"
     ];
 
+    stl = "libc++_static";
+
     #  Static libs (libfastboot2) shared library dependencies are not transitively included
     #  This is needed to avoid link time errors when building for mac
     target = {
@@ -44,6 +46,14 @@ fuzzy_fastboot = cc_test_host {
             ];
         };
     };
+
+    #  Disable auto-generation of test config as this binary itself is not a test in the test suites,
+    #  rather it is used by other tests.
+    auto_gen_config = false;
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit fuzzy_fastboot; }

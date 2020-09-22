@@ -5,6 +5,7 @@ let
     name = "android.hardware.biometrics.fingerprint@2.1-service";
     defaults = ["hidl_defaults"];
     init_rc = ["android.hardware.biometrics.fingerprint@2.1-service.rc"];
+    vintf_fragments = ["android.hardware.biometrics.fingerprint@2.1-service.xml"];
     vendor = true;
     relative_install_path = "hw";
     srcs = [
@@ -16,7 +17,6 @@ let
         "libcutils"
         "liblog"
         "libhidlbase"
-        "libhidltransport"
         "libhardware"
         "libutils"
         "android.hardware.biometrics.fingerprint@2.1"

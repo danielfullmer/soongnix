@@ -16,6 +16,7 @@ apct-perftests-utils = java_library {
         "src/android/perftests/utils/OneTimeSettingsListener.java"
         "src/android/perftests/utils/PerfManualStatusReporter.java"
         "src/android/perftests/utils/PerfStatusReporter.java"
+        "src/android/perftests/utils/PerfTestActivity.java"
         "src/android/perftests/utils/SettingsHelper.java"
         "src/android/perftests/utils/SettingsStateKeeperRule.java"
         "src/android/perftests/utils/SettingsStateManager.java"
@@ -23,7 +24,8 @@ apct-perftests-utils = java_library {
         "src/android/perftests/utils/StateKeeperRule.java"
         "src/android/perftests/utils/StateManager.java"
         "src/android/perftests/utils/Stats.java"
-        "src/android/perftests/utils/StubActivity.java"
+        "src/android/perftests/utils/TestPackageInstaller.java"
+        "src/android/perftests/utils/TraceMarkParser.java"
     ];
 };
 

@@ -21,6 +21,7 @@ rs_defaults = cc_defaults {
 libRSDriver = cc_library_shared {
     name = "libRSDriver";
     vendor_available = true;
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
         support_system_process = true;
@@ -87,6 +88,27 @@ libRSDriver = cc_library_shared {
             };
         };
     };
+
+    target = {
+        native_bridge = {
+            header_libs = [
+                "libnativewindow_headers"
+                "media_ndk_headers"
+            ];
+            shared_libs = [
+                "libnative_bridge_guest_libEGL"
+                "libnative_bridge_guest_libGLESv1_CM"
+                "libnative_bridge_guest_libGLESv2"
+                "libnative_bridge_guest_libnativewindow"
+            ];
+            exclude_shared_libs = [
+                "libEGL"
+                "libGLESv1_CM"
+                "libGLESv2"
+                "libnativewindow"
+            ];
+        };
+    };
 };
 
 #  Build rsg-generator ====================
@@ -144,6 +166,7 @@ rs_generated_sources = gensrcs {
 libRS_internal = cc_library_shared {
     name = "libRS_internal";
     vendor_available = true;
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
         support_system_process = true;
@@ -252,6 +275,29 @@ libRS_internal = cc_library_shared {
             enabled = false;
         };
     };
+
+    target = {
+        native_bridge = {
+            header_libs = [
+                "libnativewindow_headers"
+                "media_ndk_headers"
+            ];
+            shared_libs = [
+                "libnative_bridge_guest_libEGL"
+                "libnative_bridge_guest_libGLESv1_CM"
+                "libnative_bridge_guest_libGLESv2"
+                "libnative_bridge_guest_libmediandk"
+                "libnative_bridge_guest_libnativewindow"
+            ];
+            exclude_shared_libs = [
+                "libEGL"
+                "libGLESv1_CM"
+                "libGLESv2"
+                "libmediandk"
+                "libnativewindow"
+            ];
+        };
+    };
 };
 
 libRS = cc_library_shared {
@@ -273,8 +319,6 @@ libRS = cc_library_shared {
     #  Treble configuration
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutilscallstack"
         "libutils"
         "android.hardware.renderscript@1.0"

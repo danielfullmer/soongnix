@@ -13,6 +13,10 @@ libbuildversion = cc_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
 };
 
 in { inherit libbuildversion; }

@@ -1,4 +1,4 @@
-{ java_library_static }:
+{ java_library }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -15,16 +15,24 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-cts-signature-common = java_library_static {
+cts-signature-common = java_library {
     name = "cts-signature-common";
-    host_supported = false;
+    visibility = [
+        "//cts/tests/signature:__subpackages__"
+    ];
     installable = false;
     srcs = [
         "src/android/signature/cts/ApiDocumentParser.java"
+        "src/android/signature/cts/ApiParser.java"
         "src/android/signature/cts/CurrentApi.java"
         "src/android/signature/cts/DexMemberChecker.java"
+        "src/android/signature/cts/VirtualPath.java"
+        "src/android/signature/cts/XmlApiParser.java"
+
     ];
-    static_libs = ["signature-common-javalib"];
+    static_libs = [
+        "signature-common-javalib"
+    ];
     sdk_version = "current";
 };
 

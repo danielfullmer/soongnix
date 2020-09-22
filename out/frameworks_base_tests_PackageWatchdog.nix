@@ -18,7 +18,10 @@ let
 #  PackageWatchdogTest
 PackageWatchdogTest = android_test {
     name = "PackageWatchdogTest";
-    srcs = ["src/com/android/server/PackageWatchdogTest.java"];
+    srcs = [
+        "src/com/android/server/ExplicitHealthCheckServiceTest.java"
+        "src/com/android/server/PackageWatchdogTest.java"
+    ];
     static_libs = [
         "junit"
         "mockito-target-extended-minus-junit4"
@@ -26,6 +29,7 @@ PackageWatchdogTest = android_test {
         "androidx.test.rules"
         "services.core"
         "services.net"
+        "truth-prebuilt"
     ];
     libs = ["android.test.runner"];
     jni_libs = [

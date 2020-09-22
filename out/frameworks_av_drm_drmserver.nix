@@ -27,12 +27,15 @@ drmserver = cc_binary {
     ];
 
     shared_libs = [
-        "libmedia"
+        "libmediametrics"
+        "libmediautils"
+        "libcutils"
         "libutils"
         "liblog"
         "libbinder"
         "libdl"
         "libselinux"
+        "libstagefright_foundation"
     ];
 
     static_libs = ["libdrmframeworkcommon"];

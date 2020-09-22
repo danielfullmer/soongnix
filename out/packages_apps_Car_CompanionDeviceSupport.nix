@@ -129,21 +129,21 @@ CompanionDeviceSupport-lib = android_library {
     static_libs = [
         "CompanionDeviceSupport-aidl"
         "CompanionDeviceSupport-proto"
-        "EncryptionRunner-lib"
         "androidx-constraintlayout_constraintlayout"
         "androidx-constraintlayout_constraintlayout-solver"
         "androidx.legacy_legacy-support-v4"
         "androidx.room_room-runtime"
         "car-messenger-common"
         "car-messenger-protos"
-        "car-ui-lib-bp"
+        "car-ui-lib"
         "com.google.android.material_material"
         "companion-feature-calendarsync-protos"
         "connected-device-lib"
+        "encryption-runner"
     ];
 
     plugins = [
-        "car-androidx-room-compiler"
+        "androidx.room_room-compiler-plugin"
     ];
 };
 

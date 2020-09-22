@@ -59,10 +59,12 @@ app-helpers-auto-interfaces = java_library {
         "auto/src/android/platform/helpers/IAutoAppInfoSettingsHelper.java"
         "auto/src/android/platform/helpers/IAutoBluetoothHelper.java"
         "auto/src/android/platform/helpers/IAutoDateTimeSettingsHelper.java"
+        "auto/src/android/platform/helpers/IAutoDialContactDetailsHelper.java"
         "auto/src/android/platform/helpers/IAutoDialHelper.java"
         "auto/src/android/platform/helpers/IAutoGenericAppHelper.java"
         "auto/src/android/platform/helpers/IAutoGooglePlayHelper.java"
         "auto/src/android/platform/helpers/IAutoHomeHelper.java"
+        "auto/src/android/platform/helpers/IAutoLockScreenHelper.java"
         "auto/src/android/platform/helpers/IAutoMapsHelper.java"
         "auto/src/android/platform/helpers/IAutoMediaCenterHelper.java"
         "auto/src/android/platform/helpers/IAutoMediaCenterMinimizeControlBarHelper.java"
@@ -73,9 +75,11 @@ app-helpers-auto-interfaces = java_library {
         "auto/src/android/platform/helpers/IAutoOverviewHelper.java"
         "auto/src/android/platform/helpers/IAutoRadioHelper.java"
         "auto/src/android/platform/helpers/IAutoSUWHelper.java"
+        "auto/src/android/platform/helpers/IAutoSecuritySettingsHelper.java"
         "auto/src/android/platform/helpers/IAutoSettingHelper.java"
         "auto/src/android/platform/helpers/IAutoSystemSettingsHelper.java"
         "auto/src/android/platform/helpers/IAutoUiProviderHelper.java"
+        "auto/src/android/platform/helpers/IAutoUsersSettingsHelper.java"
         "auto/src/android/platform/helpers/IAutoVehicleHardKeysHelper.java"
         "auto/src/android/platform/helpers/IAutoWifiHelper.java"
         "auto/src/android/platform/helpers/utility/Scrollable.java"
@@ -114,7 +118,10 @@ app-helpers-handheld-interfaces = java_library {
         "ub-uiautomator"
         "app-helpers-core"
     ];
-    static_libs = ["app-helpers-common-interfaces"];
+    static_libs = [
+        "app-helpers-common-interfaces"
+        "androidx.annotation_annotation"
+    ];
     srcs = [
         "handheld/src/android/platform/helpers/HandheldHelperTest.java"
         "handheld/src/android/platform/helpers/IBusinessCardHelper.java"

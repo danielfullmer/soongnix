@@ -19,6 +19,7 @@ libotautil = cc_library_static {
     name = "libotautil";
 
     host_supported = true;
+    vendor_available = true;
     recovery_available = true;
 
     defaults = [
@@ -27,46 +28,21 @@ libotautil = cc_library_static {
 
     #  Minimal set of files to support host build.
     srcs = [
+        "dirutil.cpp"
         "paths.cpp"
         "rangeset.cpp"
+        "sysutil.cpp"
     ];
 
     shared_libs = [
         "libbase"
+        "libcutils"
+        "libselinux"
     ];
 
     export_include_dirs = [
         "include"
     ];
-
-    target = {
-        android = {
-            srcs = [
-                "dirutil.cpp"
-                "logging.cpp"
-                "mounts.cpp"
-                "parse_install_logs.cpp"
-                "roots.cpp"
-                "sysutil.cpp"
-                "thermalutil.cpp"
-            ];
-
-            include_dirs = [
-                "system/vold"
-            ];
-
-            static_libs = [
-                "libfstab"
-            ];
-
-            shared_libs = [
-                "libcutils"
-                "libext4_utils"
-                "libfs_mgr"
-                "libselinux"
-            ];
-        };
-    };
 };
 
 in { inherit libotautil; }

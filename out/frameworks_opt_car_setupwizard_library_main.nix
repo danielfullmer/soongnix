@@ -43,8 +43,8 @@ car-setup-wizard-lib = android_library {
         "src/com/android/car/setupwizardlib/util/ResultCodes.java"
     ];
     resource_dirs = ["res"];
-    libs = ["android.car"];
-    static_libs = ["androidx.car_car"];
+    libs = ["android.car-system-stubs"];
+    static_libs = ["androidx.car_car-resources-partially-dejetified"];
     optimize = {
         enabled = false;
     };

@@ -1,4 +1,4 @@
-{ cc_binary, cc_library, java_library }:
+{ cc_binary, cc_library_static, java_library }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -16,10 +16,25 @@ let
 #  limitations under the License.
 #
 
-libbrotli = cc_library {
+libbrotli = cc_library_static {
     name = "libbrotli";
     host_supported = true;
+    vendor_available = true;
     recovery_available = true;
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.adbd"
+    ];
+
+    visibility = [
+        "//bootable/recovery:__subpackages__"
+        "//external/bsdiff:__subpackages__"
+        "//external/puffin:__subpackages__"
+        "//system/core/adb:__subpackages__"
+        "//system/update_engine:__subpackages__"
+    ];
+
     cflags = [
         "-Werror"
         "-O2"
@@ -55,6 +70,9 @@ libbrotli = cc_library {
         linux_bionic = {
             enabled = true;
         };
+        windows = {
+            enabled = true;
+        };
     };
     stl = "none";
 };
@@ -69,7 +87,7 @@ brotli = cc_binary {
             enabled = true;
         };
     };
-    shared_libs = ["libbrotli"];
+    static_libs = ["libbrotli"];
 };
 
 #

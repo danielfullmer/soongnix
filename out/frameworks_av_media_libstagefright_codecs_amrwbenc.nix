@@ -4,6 +4,7 @@ let
 libstagefright_amrwbenc = cc_library_static {
     name = "libstagefright_amrwbenc";
     vendor_available = true;
+    min_sdk_version = "29";
 
     srcs = [
         "src/autocorr.c"

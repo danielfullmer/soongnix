@@ -1,4 +1,4 @@
-{ cc_library_static, cc_test }:
+{ cc_fuzz, cc_library_static, cc_test }:
 let
 
 avrcp-target-service = cc_library_static {
@@ -66,4 +66,36 @@ net_test_avrcp = cc_test {
     cflags = ["-DBUILDCFG"];
 };
 
-in { inherit avrcp-target-service net_test_avrcp; }
+avrcp_device_fuzz = cc_fuzz {
+    name = "avrcp_device_fuzz";
+    host_supported = true;
+    defaults = [
+        "fluoride_defaults_fuzzable"
+    ];
+    srcs = [
+        "tests/avrcp_device_fuzz/avrcp_device_fuzz.cc"
+    ];
+    include_dirs = [
+        "system/bt"
+        "system/bt/packet/tests"
+        "system/bt/btcore/include"
+        "system/bt/internal_include"
+        "system/bt/stack/include"
+    ];
+    static_libs = [
+        "avrcp-target-service"
+        "lib-bt-packets"
+        "libbase"
+        "libchrome"
+        "libcutils"
+        "libevent"
+        "liblog"
+        "libstatslog"
+    ];
+    header_libs = ["libbluetooth_headers"];
+    corpus = [
+        "tests/avrcp_device_fuzz/corpus/*"
+    ];
+};
+
+in { inherit avrcp-target-service avrcp_device_fuzz net_test_avrcp; }

@@ -32,7 +32,10 @@ VtsHalCasV1_0TargetTest = cc_test {
     shared_libs = [
         "libbinder"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalCasV1_0TargetTest; }

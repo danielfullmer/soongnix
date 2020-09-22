@@ -11,9 +11,4 @@ let
     srcs = ["com/android/internal/os/IDropBoxManagerService.aidl"];
 };
 
-"ICarStatsService.aidl" = filegroup {
-    name = "ICarStatsService.aidl";
-    srcs = ["com/android/internal/car/ICarStatsService.aidl"];
-};
-
-in { inherit "ICarStatsService.aidl" "IDropBoxManagerService.aidl" "IKeyAttestationApplicationIdProvider.aidl"; }
+in { inherit "IDropBoxManagerService.aidl" "IKeyAttestationApplicationIdProvider.aidl"; }

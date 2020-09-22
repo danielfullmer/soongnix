@@ -53,7 +53,6 @@ let
         "libhardware"
         "libhardware_legacy"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

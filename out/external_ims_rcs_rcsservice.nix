@@ -1,4 +1,4 @@
-{ android_app }:
+{ android_app, java_library }:
 let
 
 #  Copyright (c) 2015, Motorola Mobility LLC
@@ -31,38 +31,50 @@ let
 #  Build the application : Presence.apk
 # #########################################################################
 
+ucepresencelib = java_library {
+    name = "ucepresencelib";
+    #  We only want this to be used as a static import.
+    installable = false;
+    srcs = [
+        "src/com/android/service/ims/presence/ContactCapabilityResponse.java"
+        "src/com/android/service/ims/presence/PresenceAvailabilityTask.java"
+        "src/com/android/service/ims/presence/PresenceBase.java"
+        "src/com/android/service/ims/presence/PresenceCapabilityTask.java"
+        "src/com/android/service/ims/presence/PresencePublication.java"
+        "src/com/android/service/ims/presence/PresencePublishTask.java"
+        "src/com/android/service/ims/presence/PresencePublisher.java"
+        "src/com/android/service/ims/presence/PresenceSubscriber.java"
+        "src/com/android/service/ims/presence/PresenceTask.java"
+        "src/com/android/service/ims/presence/PresenceUtils.java"
+        "src/com/android/service/ims/presence/SubscribePublisher.java"
+        "src/com/android/service/ims/RcsSettingUtils.java"
+        "src/com/android/service/ims/Task.java"
+        "src/com/android/service/ims/TaskManager.java"
+        ":rcsmanager-utils"
+    ];
+};
+
 RcsService = android_app {
     #  This is the target being built. (Name of APK)
     name = "RcsService";
     platform_apis = true;
     #  Only compile source java files in this apk.
     srcs = [
+        "src/com/android/service/ims/AlarmBroadcastReceiver.java"
         "src/com/android/service/ims/DeviceShutdown.java"
         "src/com/android/service/ims/LauncherUtils.java"
+        "src/com/android/service/ims/PresenceInfoParser.java"
         "src/com/android/service/ims/RcsService.java"
         "src/com/android/service/ims/RcsServiceApp.java"
-        "src/com/android/service/ims/RcsSettingUtils.java"
         "src/com/android/service/ims/RcsStackAdaptor.java"
         "src/com/android/service/ims/RcsUtils.java"
-        "src/com/android/service/ims/Task.java"
-        "src/com/android/service/ims/TaskManager.java"
-        "src/com/android/service/ims/presence/AlarmBroadcastReceiver.java"
-        "src/com/android/service/ims/presence/PresenceAvailabilityTask.java"
-        "src/com/android/service/ims/presence/PresenceBase.java"
-        "src/com/android/service/ims/presence/PresenceCapabilityTask.java"
-        "src/com/android/service/ims/presence/PresenceInfoParser.java"
-        "src/com/android/service/ims/presence/PresencePublication.java"
-        "src/com/android/service/ims/presence/PresencePublishTask.java"
-        "src/com/android/service/ims/presence/PresenceSubscriber.java"
-        "src/com/android/service/ims/presence/PresenceTask.java"
-        "src/com/android/service/ims/presence/StackListener.java"
+        "src/com/android/service/ims/StackListener.java"
     ];
-    libs = [
-        "telephony-common"
-        "ims-common"
+    static_libs = [
+        "ucepresencelib"
+        "com.android.ims.rcsmanager"
     ];
-    static_libs = ["com.android.ims.rcsmanager"];
     certificate = "platform";
 };
 
-in { inherit RcsService; }
+in { inherit RcsService ucepresencelib; }

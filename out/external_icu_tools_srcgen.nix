@@ -1,4 +1,4 @@
-{ filegroup, java_binary_host, java_library_host }:
+{ filegroup, java_binary_host, java_library_host, package }:
 let
 
 #  Copyright (C) 2015 The Android Open Source Project
@@ -14,6 +14,10 @@ let
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
 
 #  build the android_icu4j srcgen jar
 #  ============================================================
@@ -56,7 +60,8 @@ android_icu4j_srcgen_binary = java_binary_host {
 
 generate_android_icu4j_script = filegroup {
     name = "generate_android_icu4j_script";
+    visibility = ["//external/icu/icu4j"];
     srcs = ["generate_android_icu4j.sh"];
 };
 
-in { inherit android_icu4j_srcgen android_icu4j_srcgen_binary generate_android_icu4j_script; }
+in { inherit _missingName android_icu4j_srcgen android_icu4j_srcgen_binary generate_android_icu4j_script; }

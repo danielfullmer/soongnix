@@ -1,4 +1,4 @@
-{ cc_defaults }:
+{ cc_defaults, cc_library_headers }:
 let
 
 #
@@ -17,14 +17,23 @@ let
 #  limitations under the License.
 #
 
+libese-app-headers = cc_library_headers {
+    name = "libese-app-headers";
+    host_supported = true;
+    proprietary = true;
+    export_include_dirs = ["include"];
+    visibility = ["//external/libese:__subpackages__"];
+};
+
 libese-app-defaults = cc_defaults {
     name = "libese-app-defaults";
     proprietary = true;
     defaults = ["libese-defaults"];
 
+    header_libs = ["libese-app-headers"];
+    export_header_lib_headers = ["libese-app-headers"];
+
     #  Ensure that only explicitly exported symbols are visible.
-    local_include_dirs = ["include"];
-    export_include_dirs = ["include"];
     cflags = ["-fvisibility=internal"];
 };
 
@@ -33,4 +42,4 @@ subdirs = [
     "weaver"
 ];
 
-in { inherit libese-app-defaults; }
+in { inherit libese-app-defaults libese-app-headers; }

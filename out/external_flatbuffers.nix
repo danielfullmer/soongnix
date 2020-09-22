@@ -19,6 +19,13 @@ flatbuffer_headers = cc_library_headers {
     name = "flatbuffer_headers";
     export_include_dirs = ["include"];
     vendor_available = true;
+    sdk_version = "current";
+    apex_available = [
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+        "com.android.extservices"
+        "//apex_available:platform"
+    ];
 };
 
 flatc = cc_binary_host {

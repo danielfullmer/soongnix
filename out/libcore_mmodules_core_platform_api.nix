@@ -15,19 +15,29 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  Build rules for the APIs that various core libraries provide to other parts
-#  of the Android software stack: these include the public SDK APIs plus some
-#  "core platform APIs" that only the Android software stack can use.
-
-#  Generates stub source files for the {public SDK + core platform} API of the
-#  core jars.
-core-platform-api-stubs = droidstubs {
-    name = "core-platform-api-stubs";
-    srcs = [":core_api_files"];
-    no_standard_libs = true;
+#  Generates stub source files for the core platform API of the ART module.
+#  i.e. every class/member that is either in the public API or annotated with
+#  @CorePlatformApi.
+#
+#  The API specification .txt files managed by this only contain the additional
+#  classes/members that are in the intra-core API but which are not in the public
+#  API.
+art-module-platform-api-stubs-source = droidstubs {
+    name = "art-module-platform-api-stubs-source";
+    srcs = [
+        ":art_module_api_files"
+    ];
+    sdk_version = "none";
+    system_modules = "none";
+    libs = [
+        #  Needed to break the cycle in the platform api caused by
+        #  b/141747409.
+        "i18n.module.intra.core.api.stubs"
+    ];
 
     installable = false;
-    args = "--hide-annotation libcore.api.Hide " +
+    args = "--hide HiddenSuperclass " +
+        "--hide-annotation libcore.api.Hide " +
         "--show-single-annotation libcore.api.CorePlatformApi " +
         "--skip-annotation-instance-methods=false ";
     merge_inclusion_annotations_dirs = ["ojluni-annotated-mmodule-stubs"];
@@ -48,7 +58,52 @@ core-platform-api-stubs = droidstubs {
     };
 };
 
-#  A library containing the {public SDK + core platform} API stubs for the core jars.
+#  A special set of system modules that is needed to break the cycle in the
+#  platform api caused by b/141747409.
+break-cycle-in-core-platform-system-modules = java_system_modules {
+    name = "break-cycle-in-core-platform-system-modules";
+    libs = [
+        "art.module.intra.core.api.stubs"
+        "i18n.module.intra.core.api.stubs"
+    ];
+};
+
+#  A library containing the core platform API stubs of the ART module.
+#
+#  Core platform APIs are only intended for use of other parts of the platform, not the
+#  core library modules.
+"art.module.platform.api.stubs" = java_library {
+    name = "art.module.platform.api.stubs";
+    srcs = [
+        ":art-module-platform-api-stubs-source"
+    ];
+    hostdex = true;
+
+    sdk_version = "none";
+    system_modules = "break-cycle-in-core-platform-system-modules";
+    patch_module = "java.base";
+};
+
+#  Used when compiling higher-level code against core.platform.api.stubs.
+art-module-platform-api-stubs-system-modules = java_system_modules {
+    name = "art-module-platform-api-stubs-system-modules";
+    visibility = [
+        "//art/build/sdk"
+        "//external/conscrypt"
+        "//external/icu/android_icu4j"
+        "//external/wycheproof"
+    ];
+    libs = [
+        "art.module.platform.api.stubs"
+    ];
+};
+
+#  Ideally this should be a restricted whitelist but there are hundreds of modules that depend on
+#  this.
+#  TODO(http://b/134561230) - limit the number of dependents on this.
+core_platform_visibility = ["//visibility:public"];
+
+#  A library containing the core platform API stubs for the core libraries.
 #
 #  Although this stubs library is primarily used by the Java compiler / build to indicate
 #  the core platform API surface area, compile_dex: true is used so that the Core Platform
@@ -56,24 +111,35 @@ core-platform-api-stubs = droidstubs {
 #  accessibility. b/119068555
 "core.platform.api.stubs" = java_library {
     name = "core.platform.api.stubs";
-    srcs = [":core-platform-api-stubs"];
+    visibility = core_platform_visibility;
     hostdex = true;
     compile_dex = true;
 
-    no_standard_libs = true;
+    sdk_version = "none";
     system_modules = "none";
+    static_libs = [
+        "art.module.platform.api.stubs"
+        "conscrypt.module.platform.api.stubs"
+        "i18n.module.platform.api.stubs"
+    ];
     patch_module = "java.base";
 };
 
 #  Used when compiling higher-level code against core.platform.api.stubs.
 core-platform-api-stubs-system-modules = java_system_modules {
     name = "core-platform-api-stubs-system-modules";
+    visibility = core_platform_visibility;
     libs = [
         "core.platform.api.stubs"
         #  This one is not on device but it's needed when javac compiles code
         #  containing lambdas.
         "core-lambda-stubs-for-system-modules"
+        #  This one is not on device but it's needed when javac compiles code
+        #  containing @Generated annotations produced by some code generation
+        #  tools.
+        #  See http://b/123891440.
+        "core-generated-annotation-stubs"
     ];
 };
 
-in { inherit "core.platform.api.stubs" core-platform-api-stubs core-platform-api-stubs-system-modules; }
+in { inherit "art.module.platform.api.stubs" "core.platform.api.stubs" art-module-platform-api-stubs-source art-module-platform-api-stubs-system-modules break-cycle-in-core-platform-system-modules core-platform-api-stubs-system-modules; }

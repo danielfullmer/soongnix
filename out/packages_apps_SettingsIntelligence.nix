@@ -25,6 +25,7 @@ SettingsIntelligence = android_app {
     privileged = true;
     required = ["privapp_whitelist_com.android.settings.intelligence"];
 
+    libs = ["android.car-stubs"];
     static_libs = [
         "androidx.legacy_legacy-support-v4"
         "androidx.legacy_legacy-support-v13"
@@ -33,6 +34,7 @@ SettingsIntelligence = android_app {
         "androidx.preference_preference"
         "androidx.recyclerview_recyclerview"
         "androidx.legacy_legacy-preference-v14"
+        "car-ui-lib"
     ];
     resource_dirs = ["res"];
     srcs = [
@@ -48,6 +50,7 @@ SettingsIntelligence = android_app {
         "src/com/android/settings/intelligence/search/ResultPayload.java"
         "src/com/android/settings/intelligence/search/ResultPayloadUtils.java"
         "src/com/android/settings/intelligence/search/SearchActivity.java"
+        "src/com/android/settings/intelligence/search/SearchCommon.java"
         "src/com/android/settings/intelligence/search/SearchFeatureProvider.java"
         "src/com/android/settings/intelligence/search/SearchFeatureProviderImpl.java"
         "src/com/android/settings/intelligence/search/SearchFragment.java"
@@ -58,6 +61,12 @@ SettingsIntelligence = android_app {
         "src/com/android/settings/intelligence/search/SearchResultLoader.java"
         "src/com/android/settings/intelligence/search/SearchResultsAdapter.java"
         "src/com/android/settings/intelligence/search/SearchViewHolder.java"
+        "src/com/android/settings/intelligence/search/car/CarFeatureFactoryImpl.java"
+        "src/com/android/settings/intelligence/search/car/CarIntentSearchViewHolder.java"
+        "src/com/android/settings/intelligence/search/car/CarSearchFeatureProviderImpl.java"
+        "src/com/android/settings/intelligence/search/car/CarSearchFragment.java"
+        "src/com/android/settings/intelligence/search/car/CarSearchResultsAdapter.java"
+        "src/com/android/settings/intelligence/search/car/CarSearchViewHolder.java"
         "src/com/android/settings/intelligence/search/indexing/DatabaseIndexingManager.java"
         "src/com/android/settings/intelligence/search/indexing/DatabaseIndexingUtils.java"
         "src/com/android/settings/intelligence/search/indexing/IndexData.java"
@@ -67,6 +76,9 @@ SettingsIntelligence = android_app {
         "src/com/android/settings/intelligence/search/indexing/PreIndexData.java"
         "src/com/android/settings/intelligence/search/indexing/PreIndexDataCollector.java"
         "src/com/android/settings/intelligence/search/indexing/XmlParserUtils.java"
+        "src/com/android/settings/intelligence/search/indexing/car/CarDatabaseIndexingManager.java"
+        "src/com/android/settings/intelligence/search/indexing/car/CarIndexData.java"
+        "src/com/android/settings/intelligence/search/indexing/car/CarIndexDataConverter.java"
         "src/com/android/settings/intelligence/search/query/AccessibilityServiceResultTask.java"
         "src/com/android/settings/intelligence/search/query/CursorToSearchResultConverter.java"
         "src/com/android/settings/intelligence/search/query/DatabaseResultTask.java"
@@ -81,6 +93,8 @@ SettingsIntelligence = android_app {
         "src/com/android/settings/intelligence/search/savedqueries/SavedQueryRecorder.java"
         "src/com/android/settings/intelligence/search/savedqueries/SavedQueryRemover.java"
         "src/com/android/settings/intelligence/search/savedqueries/SavedQueryViewHolder.java"
+        "src/com/android/settings/intelligence/search/savedqueries/car/CarSavedQueryController.java"
+        "src/com/android/settings/intelligence/search/savedqueries/car/CarSavedQueryViewHolder.java"
         "src/com/android/settings/intelligence/search/sitemap/SiteMapManager.java"
         "src/com/android/settings/intelligence/search/sitemap/SiteMapPair.java"
         "src/com/android/settings/intelligence/suggestions/SuggestionFeatureProvider.java"

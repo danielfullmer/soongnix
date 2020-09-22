@@ -36,6 +36,13 @@ libpac = cc_library_shared {
             "1"
         ];
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
+    sanitize = {
+        cfi = true;
+    };
 };
 
 in { inherit libpac; }

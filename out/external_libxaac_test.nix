@@ -5,6 +5,7 @@ xaacdec = cc_test {
     name = "xaacdec";
 
     vendor_available = true;
+    host_supported = true;
     gtest = false;
 
     cflags = [

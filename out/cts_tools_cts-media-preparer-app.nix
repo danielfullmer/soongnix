@@ -32,11 +32,12 @@ CtsMediaPreparerApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
         "mts"
     ];
     sdk_version = "test_current";
+    min_sdk_version = "29";
 };
 
 in { inherit CtsMediaPreparerApp; }

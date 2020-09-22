@@ -19,6 +19,14 @@ libmath = cc_library_static {
     name = "libmath";
     host_supported = true;
     vendor_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+        "com.android.media.swcodec"
+        "com.android.neuralnetworks"
+    ];
+    min_sdk_version = "29";
+
     export_include_dirs = ["include"];
 };
 

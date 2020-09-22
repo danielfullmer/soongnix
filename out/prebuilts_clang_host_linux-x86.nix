@@ -38,8 +38,10 @@ libomp = llvm_prebuilt_library_static {
     name = "libclang_rt.builtins-arm-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
+    native_bridge_supported = true;
     sanitize = {
         never = true;
     };
@@ -49,14 +51,20 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     stl = "none";
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.builtins-aarch64-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.builtins-aarch64-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
+    native_bridge_supported = true;
     sanitize = {
         never = true;
     };
@@ -66,14 +74,20 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     stl = "none";
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.builtins-i686-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.builtins-i686-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
+    native_bridge_supported = true;
     sanitize = {
         never = true;
     };
@@ -83,6 +97,10 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     stl = "none";
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.builtins-x86_64-android" = libclang_rt_prebuilt_library_static {
@@ -90,13 +108,49 @@ libomp = llvm_prebuilt_library_static {
     sdk_version = "minimum";
     defaults = ["linux_bionic_supported"];
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
+    native_bridge_supported = true;
     sanitize = {
         never = true;
     };
     arch = {
         x86_64 = {
+            enabled = true;
+        };
+    };
+    stl = "none";
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.builtins-x86_64" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.builtins-x86_64";
+    enabled = false;
+    host_supported = true;
+    sanitize = {
+        never = true;
+    };
+    target = {
+        linux_glibc_x86_64 = {
+            enabled = true;
+        };
+    };
+    stl = "none";
+};
+
+"libclang_rt.builtins-i386" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.builtins-i386";
+    enabled = false;
+    host_supported = true;
+    sanitize = {
+        never = true;
+    };
+    target = {
+        linux_glibc_x86 = {
             enabled = true;
         };
     };
@@ -107,7 +161,9 @@ libomp = llvm_prebuilt_library_static {
     name = "libclang_rt.asan-arm-android";
     sdk_version = "24";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     arch = {
         arm = {
             enabled = true;
@@ -115,13 +171,19 @@ libomp = llvm_prebuilt_library_static {
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
     has_stubs = true;
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.asan-aarch64-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.asan-aarch64-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     arch = {
         arm64 = {
             enabled = true;
@@ -129,13 +191,19 @@ libomp = llvm_prebuilt_library_static {
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
     has_stubs = true;
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.asan-i686-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.asan-i686-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     arch = {
         x86 = {
             enabled = true;
@@ -143,26 +211,31 @@ libomp = llvm_prebuilt_library_static {
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
     has_stubs = true;
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.asan-x86_64-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.asan-x86_64-android";
+    defaults = ["linux_bionic_supported"];
     sdk_version = "minimum";
-    host_supported = true;
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     arch = {
         x86_64 = {
             enabled = true;
         };
     };
-    target = {
-        linux_bionic = {
-            enabled = true;
-        };
-    };
     check_elf_files = false; #  Bypass circular dependency between libc++
     has_stubs = true;
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.ubsan_standalone-arm-android" = libclang_rt_prebuilt_library_shared {
@@ -170,8 +243,10 @@ libomp = llvm_prebuilt_library_static {
     sdk_version = "24";
     enabled = false;
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
     double_loadable = true;
+    stl = "c++_shared";
     vndk = {
         enabled = true;
     };
@@ -181,6 +256,10 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.ubsan_standalone-aarch64-android" = libclang_rt_prebuilt_library_shared {
@@ -188,6 +267,7 @@ libomp = llvm_prebuilt_library_static {
     sdk_version = "minimum";
     enabled = false;
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
     double_loadable = true;
     vndk = {
@@ -199,15 +279,22 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.ubsan_standalone-i686-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.ubsan_standalone-i686-android";
+    defaults = ["linux_bionic_supported"];
     sdk_version = "minimum";
     enabled = false;
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
     double_loadable = true;
+    stl = "c++_shared";
     vndk = {
         enabled = true;
     };
@@ -217,13 +304,19 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.ubsan_standalone-x86_64-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.ubsan_standalone-x86_64-android";
+    defaults = ["linux_bionic_supported"];
     sdk_version = "minimum";
     enabled = false;
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
     double_loadable = true;
     vndk = {
@@ -235,6 +328,32 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.ubsan_standalone-i386" = libclang_rt_prebuilt_library_shared {
+    name = "libclang_rt.ubsan_standalone-i386";
+    enabled = false;
+    host_supported = true;
+    target = {
+        linux_glibc_x86 = {
+            enabled = true;
+        };
+    };
+};
+
+"libclang_rt.ubsan_standalone-x86_64" = libclang_rt_prebuilt_library_shared {
+    name = "libclang_rt.ubsan_standalone-x86_64";
+    enabled = false;
+    host_supported = true;
+    target = {
+        linux_glibc_x86_64 = {
+            enabled = true;
+        };
+    };
 };
 
 "libclang_rt.ubsan_minimal-arm-android" = libclang_rt_prebuilt_library_static {
@@ -242,14 +361,15 @@ libomp = llvm_prebuilt_library_static {
     sdk_version = "minimum";
     enabled = false;
     vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
     arch = {
         arm = {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.ubsan_minimal-aarch64-android" = libclang_rt_prebuilt_library_static {
@@ -257,41 +377,68 @@ libomp = llvm_prebuilt_library_static {
     sdk_version = "minimum";
     enabled = false;
     vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
     arch = {
         arm64 = {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.ubsan_minimal-i686-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.ubsan_minimal-i686-android";
+    defaults = ["linux_bionic_supported"];
     sdk_version = "minimum";
     enabled = false;
     vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
     arch = {
         x86 = {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.ubsan_minimal-x86_64-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.ubsan_minimal-x86_64-android";
+    defaults = ["linux_bionic_supported"];
     sdk_version = "minimum";
     enabled = false;
     vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
     arch = {
         x86_64 = {
+            enabled = true;
+        };
+    };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.ubsan_minimal-i386" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.ubsan_minimal-i386";
+    enabled = false;
+    host_supported = true;
+    target = {
+        linux_glibc_x86 = {
+            enabled = true;
+        };
+    };
+};
+
+"libclang_rt.ubsan_minimal-x86_64" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.ubsan_minimal-x86_64";
+    enabled = false;
+    host_supported = true;
+    target = {
+        linux_glibc_x86_64 = {
             enabled = true;
         };
     };
@@ -301,6 +448,7 @@ libomp = llvm_prebuilt_library_static {
     name = "libclang_rt.hwasan_static-aarch64-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
     arch = {
@@ -308,12 +456,17 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.hwasan-aarch64-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.hwasan-aarch64-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     arch = {
         arm64 = {
@@ -322,12 +475,17 @@ libomp = llvm_prebuilt_library_static {
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
     has_stubs = true;
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.profile-arm-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.profile-arm-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
     arch = {
@@ -335,12 +493,17 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.profile-aarch64-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.profile-aarch64-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
     arch = {
@@ -348,12 +511,17 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.profile-i686-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.profile-i686-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
     arch = {
@@ -361,12 +529,17 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.profile-x86_64-android" = libclang_rt_prebuilt_library_static {
     name = "libclang_rt.profile-x86_64-android";
     sdk_version = "minimum";
     enabled = false;
+    ramdisk_available = true;
     recovery_available = true;
     vendor_available = true;
     arch = {
@@ -374,6 +547,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.profile-x86_64" = libclang_rt_prebuilt_library_static {
@@ -386,6 +563,154 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.fuzzer-x86_64" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.fuzzer-x86_64";
+    sdk_version = "minimum";
+    enabled = false;
+    host_supported = true;
+    sanitize = {
+        never = true;
+    };
+    target = {
+        linux_glibc_x86_64 = {
+            enabled = true;
+        };
+    };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.fuzzer-i386" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.fuzzer-i386";
+    sdk_version = "minimum";
+    enabled = false;
+    host_supported = true;
+    sanitize = {
+        never = true;
+    };
+    target = {
+        linux_glibc_x86 = {
+            enabled = true;
+        };
+    };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.asan-x86_64" = libclang_rt_prebuilt_library_shared {
+    name = "libclang_rt.asan-x86_64";
+    enabled = false;
+    host_supported = true;
+    target = {
+        linux_glibc_x86_64 = {
+            enabled = true;
+        };
+    };
+};
+
+"libclang_rt.asan-i386" = libclang_rt_prebuilt_library_shared {
+    name = "libclang_rt.asan-i386";
+    enabled = false;
+    host_supported = true;
+    target = {
+        linux_glibc_x86 = {
+            enabled = true;
+        };
+    };
+};
+
+"libclang_rt.fuzzer-arm-android" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.fuzzer-arm-android";
+    sdk_version = "minimum";
+    enabled = false;
+    ramdisk_available = true;
+    recovery_available = true;
+    vendor_available = true;
+    sanitize = {
+        never = true;
+    };
+    arch = {
+        arm = {
+            enabled = true;
+        };
+    };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.fuzzer-aarch64-android" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.fuzzer-aarch64-android";
+    sdk_version = "minimum";
+    enabled = false;
+    ramdisk_available = true;
+    recovery_available = true;
+    vendor_available = true;
+    sanitize = {
+        never = true;
+    };
+    arch = {
+        arm64 = {
+            enabled = true;
+        };
+    };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.fuzzer-i686-android" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.fuzzer-i686-android";
+    sdk_version = "minimum";
+    enabled = false;
+    ramdisk_available = true;
+    recovery_available = true;
+    vendor_available = true;
+    sanitize = {
+        never = true;
+    };
+    arch = {
+        x86 = {
+            enabled = true;
+        };
+    };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"libclang_rt.fuzzer-x86_64-android" = libclang_rt_prebuilt_library_static {
+    name = "libclang_rt.fuzzer-x86_64-android";
+    sdk_version = "minimum";
+    enabled = false;
+    ramdisk_available = true;
+    recovery_available = true;
+    vendor_available = true;
+    sanitize = {
+        never = true;
+    };
+    arch = {
+        x86_64 = {
+            enabled = true;
+        };
+    };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.profile-i386" = libclang_rt_prebuilt_library_static {
@@ -399,6 +724,10 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-arm-android" = libclang_rt_prebuilt_library_shared {
@@ -415,6 +744,10 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-aarch64-android" = libclang_rt_prebuilt_library_shared {
@@ -431,6 +764,10 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-i686-android" = libclang_rt_prebuilt_library_shared {
@@ -447,6 +784,10 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-x86_64-android" = libclang_rt_prebuilt_library_shared {
@@ -463,6 +804,10 @@ libomp = llvm_prebuilt_library_static {
         };
     };
     check_elf_files = false; #  Bypass circular dependency between libc++
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-arm-android.static" = libclang_rt_prebuilt_library_static {
@@ -477,6 +822,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-aarch64-android.static" = libclang_rt_prebuilt_library_static {
@@ -491,6 +840,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-i686-android.static" = libclang_rt_prebuilt_library_static {
@@ -505,6 +858,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo-x86_64-android.static" = libclang_rt_prebuilt_library_static {
@@ -519,6 +876,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo_minimal-arm-android" = libclang_rt_prebuilt_library_shared {
@@ -539,11 +900,15 @@ libomp = llvm_prebuilt_library_static {
         "libdl"
         "liblog"
     ];
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo_minimal-aarch64-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.scudo_minimal-aarch64-android";
-    sdk_version = "minimum";
+    sdk_version = "23";
     enabled = false;
     vendor_available = true;
     vndk = {
@@ -559,11 +924,15 @@ libomp = llvm_prebuilt_library_static {
         "libdl"
         "liblog"
     ];
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo_minimal-i686-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.scudo_minimal-i686-android";
-    sdk_version = "minimum";
+    sdk_version = "23";
     enabled = false;
     vendor_available = true;
     vndk = {
@@ -579,11 +948,15 @@ libomp = llvm_prebuilt_library_static {
         "libdl"
         "liblog"
     ];
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo_minimal-x86_64-android" = libclang_rt_prebuilt_library_shared {
     name = "libclang_rt.scudo_minimal-x86_64-android";
-    sdk_version = "minimum";
+    sdk_version = "23";
     enabled = false;
     vendor_available = true;
     vndk = {
@@ -598,6 +971,10 @@ libomp = llvm_prebuilt_library_static {
         "libc"
         "libdl"
         "liblog"
+    ];
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
     ];
 };
 
@@ -613,6 +990,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo_minimal-aarch64-android.static" = libclang_rt_prebuilt_library_static {
@@ -627,6 +1008,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo_minimal-i686-android.static" = libclang_rt_prebuilt_library_static {
@@ -641,6 +1026,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 "libclang_rt.scudo_minimal-x86_64-android.static" = libclang_rt_prebuilt_library_static {
@@ -655,6 +1044,10 @@ libomp = llvm_prebuilt_library_static {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
 };
 
 #  -----------------------------------------------------------------------------
@@ -685,6 +1078,13 @@ libclang_cxx_host = llvm_host_prebuilt_library_shared {
     };
     compile_multilib = "64";
     shared_libs = ["libc++_host"];
+    target = {
+        darwin = {
+            strip = {
+                none = true;
+            };
+        };
+    };
 };
 
 #  Export libc++.so for the host LLVM tools
@@ -720,4 +1120,4 @@ subdirs = [
     "soong"
 ];
 
-in { inherit "libc++_host" "libc++abi_host" "libclang_rt.asan-aarch64-android" "libclang_rt.asan-arm-android" "libclang_rt.asan-i686-android" "libclang_rt.asan-x86_64-android" "libclang_rt.builtins-aarch64-android" "libclang_rt.builtins-arm-android" "libclang_rt.builtins-i686-android" "libclang_rt.builtins-x86_64-android" "libclang_rt.hwasan-aarch64-android" "libclang_rt.hwasan_static-aarch64-android" "libclang_rt.profile-aarch64-android" "libclang_rt.profile-arm-android" "libclang_rt.profile-i386" "libclang_rt.profile-i686-android" "libclang_rt.profile-x86_64" "libclang_rt.profile-x86_64-android" "libclang_rt.scudo-aarch64-android" "libclang_rt.scudo-aarch64-android.static" "libclang_rt.scudo-arm-android" "libclang_rt.scudo-arm-android.static" "libclang_rt.scudo-i686-android" "libclang_rt.scudo-i686-android.static" "libclang_rt.scudo-x86_64-android" "libclang_rt.scudo-x86_64-android.static" "libclang_rt.scudo_minimal-aarch64-android" "libclang_rt.scudo_minimal-aarch64-android.static" "libclang_rt.scudo_minimal-arm-android" "libclang_rt.scudo_minimal-arm-android.static" "libclang_rt.scudo_minimal-i686-android" "libclang_rt.scudo_minimal-i686-android.static" "libclang_rt.scudo_minimal-x86_64-android" "libclang_rt.scudo_minimal-x86_64-android.static" "libclang_rt.ubsan_minimal-aarch64-android" "libclang_rt.ubsan_minimal-arm-android" "libclang_rt.ubsan_minimal-i686-android" "libclang_rt.ubsan_minimal-x86_64-android" "libclang_rt.ubsan_standalone-aarch64-android" "libclang_rt.ubsan_standalone-arm-android" "libclang_rt.ubsan_standalone-i686-android" "libclang_rt.ubsan_standalone-x86_64-android" clang_builtin_headers_resources libFuzzer libLLVM_host libclang_cxx_host libomp llvm-build-host-tools-defaults; }
+in { inherit "libc++_host" "libc++abi_host" "libclang_rt.asan-aarch64-android" "libclang_rt.asan-arm-android" "libclang_rt.asan-i386" "libclang_rt.asan-i686-android" "libclang_rt.asan-x86_64" "libclang_rt.asan-x86_64-android" "libclang_rt.builtins-aarch64-android" "libclang_rt.builtins-arm-android" "libclang_rt.builtins-i386" "libclang_rt.builtins-i686-android" "libclang_rt.builtins-x86_64" "libclang_rt.builtins-x86_64-android" "libclang_rt.fuzzer-aarch64-android" "libclang_rt.fuzzer-arm-android" "libclang_rt.fuzzer-i386" "libclang_rt.fuzzer-i686-android" "libclang_rt.fuzzer-x86_64" "libclang_rt.fuzzer-x86_64-android" "libclang_rt.hwasan-aarch64-android" "libclang_rt.hwasan_static-aarch64-android" "libclang_rt.profile-aarch64-android" "libclang_rt.profile-arm-android" "libclang_rt.profile-i386" "libclang_rt.profile-i686-android" "libclang_rt.profile-x86_64" "libclang_rt.profile-x86_64-android" "libclang_rt.scudo-aarch64-android" "libclang_rt.scudo-aarch64-android.static" "libclang_rt.scudo-arm-android" "libclang_rt.scudo-arm-android.static" "libclang_rt.scudo-i686-android" "libclang_rt.scudo-i686-android.static" "libclang_rt.scudo-x86_64-android" "libclang_rt.scudo-x86_64-android.static" "libclang_rt.scudo_minimal-aarch64-android" "libclang_rt.scudo_minimal-aarch64-android.static" "libclang_rt.scudo_minimal-arm-android" "libclang_rt.scudo_minimal-arm-android.static" "libclang_rt.scudo_minimal-i686-android" "libclang_rt.scudo_minimal-i686-android.static" "libclang_rt.scudo_minimal-x86_64-android" "libclang_rt.scudo_minimal-x86_64-android.static" "libclang_rt.ubsan_minimal-aarch64-android" "libclang_rt.ubsan_minimal-arm-android" "libclang_rt.ubsan_minimal-i386" "libclang_rt.ubsan_minimal-i686-android" "libclang_rt.ubsan_minimal-x86_64" "libclang_rt.ubsan_minimal-x86_64-android" "libclang_rt.ubsan_standalone-aarch64-android" "libclang_rt.ubsan_standalone-arm-android" "libclang_rt.ubsan_standalone-i386" "libclang_rt.ubsan_standalone-i686-android" "libclang_rt.ubsan_standalone-x86_64" "libclang_rt.ubsan_standalone-x86_64-android" clang_builtin_headers_resources libFuzzer libLLVM_host libclang_cxx_host libomp llvm-build-host-tools-defaults; }

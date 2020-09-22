@@ -45,16 +45,6 @@ libart-dex2oat-defaults = art_cc_defaults {
                 "linker/arm64/relative_patcher_arm64.cc"
             ];
         };
-        mips = {
-            srcs = [
-                "linker/mips/relative_patcher_mips.cc"
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "linker/mips64/relative_patcher_mips64.cc"
-            ];
-        };
         x86 = {
             srcs = [
                 "linker/x86/relative_patcher_x86.cc"
@@ -83,22 +73,18 @@ libart-dex2oat-defaults = art_cc_defaults {
     generated_sources = ["art_dex2oat_operator_srcs"];
     shared_libs = [
         "libbase"
+
+        #  For SHA-1 checksumming of build ID
+        "libcrypto"
     ];
     export_include_dirs = ["."];
-
-    #  For SHA-1 checksumming of build ID
-    static = {
-        whole_static_libs = ["libcrypto"];
-    };
-    shared = {
-        shared_libs = ["libcrypto"];
-    };
 };
 
 libart-dex2oat_static_base_defaults = cc_defaults {
     name = "libart-dex2oat_static_base_defaults";
     static_libs = [
         "libbase"
+        "libcrypto"
         "libz"
     ];
 };
@@ -124,6 +110,10 @@ libart-dex2oat = art_cc_library_static {
         "libart"
         "libartpalette"
         "libprofile"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
     ];
 };
 
@@ -154,6 +144,9 @@ libartd-dex2oat = art_cc_library_static {
         "libartpalette"
         "libprofiled"
     ];
+    apex_available = [
+        "com.android.art.debug"
+    ];
 };
 
 libartd-dex2oat_static_defaults = cc_defaults {
@@ -172,8 +165,18 @@ libartd-dex2oat_static_defaults = cc_defaults {
 
 dex2oat_headers = cc_library_headers {
     name = "dex2oat_headers";
+    visibility = [
+        #  TODO(b/133140750): Clean this up.
+        "//frameworks/native/cmds/installd"
+    ];
     host_supported = true;
     export_include_dirs = ["include"];
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 dex2oat-defaults = cc_defaults {
@@ -187,8 +190,7 @@ dex2oat-defaults = cc_defaults {
 
     target = {
         android = {
-            #  Use the 32-bit version of dex2oat on devices.
-            compile_multilib = "prefer32";
+            compile_multilib = "both";
         };
     };
     header_libs = [
@@ -199,6 +201,10 @@ dex2oat-defaults = cc_defaults {
 
 dex2oat-pgo-defaults = cc_defaults {
     name = "dex2oat-pgo-defaults";
+    defaults_visibility = [
+        "//art:__subpackages__"
+        "//external/vixl"
+    ];
     pgo = {
         instrumentation = true;
         benchmarks = ["dex2oat"];
@@ -224,16 +230,6 @@ dex2oat-pgo-defaults = cc_defaults {
                 profile_file = "art/dex2oat_x86_x86_64.profdata";
             };
         };
-        android_mips64 = {
-            pgo = {
-                profile_file = "art/dex2oat_mips_mips64.profdata";
-            };
-        };
-        android_mips = {
-            pgo = {
-                profile_file = "art/dex2oat_mips_mips64.profdata";
-            };
-        };
     };
 };
 
@@ -243,11 +239,15 @@ dex2oat = art_cc_binary {
         "dex2oat-defaults"
         "dex2oat-pgo-defaults"
     ];
+    #  Modules that do dexpreopting, e.g. android_app, depend implicitly on
+    #  either dex2oat or dex2oatd in ART source builds.
+    visibility = ["//visibility:public"];
     shared_libs = [
         "libprofile"
         "libart-compiler"
         "libart-dexlayout"
         "libart"
+        "libcrypto"
         "libdexfile"
         "libartbase"
         "libartpalette"
@@ -257,6 +257,15 @@ dex2oat = art_cc_binary {
     static_libs = [
         "libart-dex2oat"
     ];
+
+    multilib = {
+        lib32 = {
+            suffix = "32";
+        };
+        lib64 = {
+            suffix = "64";
+        };
+    };
 
     pgo = {
         #  Additional cflags just for dex2oat during PGO instrumentation
@@ -279,8 +288,21 @@ dex2oat = art_cc_binary {
             shared_libs = [
                 "libz"
             ];
+            #  Override the prefer32 added by art_cc_binary when
+            #  HOST_PREFER_32_BIT is in use. Necessary because the logic in
+            #  Soong for setting ctx.Config().BuildOSTarget (used in
+            #  dexpreopt.RegisterToolDeps) doesn't take host prefer32 into
+            #  account. Note that this override cannot be in cc_default because
+            #  it'd get overridden by the load hook even when it uses
+            #  PrependProperties.
+            compile_multilib = "64";
+            symlink_preferred_arch = true;
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 dex2oatd = art_cc_binary {
@@ -289,11 +311,15 @@ dex2oatd = art_cc_binary {
         "art_debug_defaults"
         "dex2oat-defaults"
     ];
+    #  Modules that do dexpreopting, e.g. android_app, depend implicitly on
+    #  either dex2oat or dex2oatd in ART source builds.
+    visibility = ["//visibility:public"];
     shared_libs = [
         "libprofiled"
         "libartd-compiler"
         "libartd-dexlayout"
         "libartd"
+        "libcrypto"
         "libdexfiled"
         "libartbased"
         "libartpalette"
@@ -308,22 +334,31 @@ dex2oatd = art_cc_binary {
             static_libs = [
                 "libz"
             ];
-            compile_multilib = "prefer32";
         };
         host = {
             shared_libs = [
                 "libz"
             ];
-            compile_multilib = "both";
+            #  Override the prefer32 added by art_cc_binary when
+            #  HOST_PREFER_32_BIT is in use. Necessary because the logic in
+            #  Soong for setting ctx.Config().BuildOSTarget (used in
+            #  dexpreopt.RegisterToolDeps) doesn't take host prefer32 into
+            #  account. Note that this override cannot be in cc_default because
+            #  it'd get overridden by the load hook even when it uses
+            #  PrependProperties.
+            compile_multilib = "64";
             symlink_preferred_arch = true;
         };
-        linux_glibc_x86 = {
+    };
+    apex_available = [
+        "com.android.art.debug"
+    ];
+
+    multilib = {
+        lib32 = {
             suffix = "32";
         };
-        linux_glibc_x86_64 = {
-            suffix = "64";
-        };
-        linux_bionic_x86_64 = {
+        lib64 = {
             suffix = "64";
         };
     };
@@ -438,17 +473,6 @@ art_dex2oat_tests = art_cc_test {
                 "linker/arm64/relative_patcher_arm64_test.cc"
             ];
         };
-        mips = {
-            srcs = [
-                "linker/mips/relative_patcher_mips_test.cc"
-                "linker/mips/relative_patcher_mips32r6_test.cc"
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "linker/mips64/relative_patcher_mips64_test.cc"
-            ];
-        };
         x86 = {
             srcs = [
                 "linker/x86/relative_patcher_x86_test.cc"
@@ -462,15 +486,13 @@ art_dex2oat_tests = art_cc_test {
     };
 
     header_libs = ["dex2oat_headers"];
-    include_dirs = [
-        "external/zlib"
-    ];
     shared_libs = [
         "libartbased"
         "libartd-compiler"
         "libartd-dexlayout"
         "libartpalette"
         "libbase"
+        "libcrypto"
         "libprofiled"
         "libsigchain"
         "libziparchive"

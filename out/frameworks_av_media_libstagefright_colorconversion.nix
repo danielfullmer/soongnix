@@ -18,6 +18,11 @@ libstagefright_color_conversion = cc_library_static {
         "libnativewindow"
     ];
 
+    header_libs = [
+        "libstagefright_headers"
+        "libstagefright_foundation_headers"
+    ];
+
     static_libs = ["libyuv_static"];
 
     cflags = ["-Werror"];

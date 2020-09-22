@@ -24,18 +24,24 @@ CtsSimpleApp = android_test_helper_app {
         "src/com/android/cts/launcherapps/simpleapp/SimpleActivity.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleActivityChainExit.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleActivityImmediateExit.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleActivityStartFgService.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleActivityStartService.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleProvider.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleReceiver.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleReceiverStartService.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleRemoteReceiver.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleService.java"
         "src/com/android/cts/launcherapps/simpleapp/SimpleService2.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleService3.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleService4.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleService5.java"
+        "src/com/android/cts/launcherapps/simpleapp/SimpleService6.java"
     ];
     #  Tag this module as a cts test artifact
     test_suites = [
         "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     sdk_version = "current";

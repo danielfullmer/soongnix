@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_prebuilt_binary }:
+{ cc_binary, cc_defaults, sh_binary }:
 let
 
 #
@@ -24,10 +24,10 @@ logcat_defaults = cc_defaults {
         "-Wall"
         "-Wextra"
         "-Werror"
+        "-DANDROID_BASE_UNIQUE_FD_DISABLE_IMPLICIT_CONVERSION=1"
     ];
     shared_libs = [
         "libbase"
-        "libpcrecpp"
         "libprocessgroup"
     ];
     static_libs = ["liblog"];
@@ -39,33 +39,24 @@ logcat = cc_binary {
 
     defaults = ["logcat_defaults"];
     srcs = [
-        "logcat_main.cpp"
         "logcat.cpp"
     ];
 };
 
-logcatd = cc_binary {
+logcatd = sh_binary {
     name = "logcatd";
-
-    defaults = ["logcat_defaults"];
-    srcs = [
-        "logcatd_main.cpp"
-        "logcat.cpp"
-    ];
+    src = "logcatd";
 };
 
-"logpersist.start" = cc_prebuilt_binary {
+"logpersist.start" = sh_binary {
     name = "logpersist.start";
-    srcs = ["logpersist"];
+    src = "logpersist";
     init_rc = ["logcatd.rc"];
     required = ["logcatd"];
     symlinks = [
         "logpersist.stop"
         "logpersist.cat"
     ];
-    strip = {
-        none = true;
-    };
 };
 
 in { inherit "logpersist.start" logcat logcat_defaults logcatd; }

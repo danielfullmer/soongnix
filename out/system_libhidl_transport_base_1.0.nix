@@ -6,6 +6,8 @@ let
 "android.hidl.base@1.0" = hidl_interface {
     name = "android.hidl.base@1.0";
     root = "android.hidl";
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
     };

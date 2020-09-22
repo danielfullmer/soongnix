@@ -33,6 +33,7 @@ setupdesign = android_library {
         "main/src/com/google/android/setupdesign/SetupWizardListLayout.java"
         "main/src/com/google/android/setupdesign/SetupWizardPreferenceLayout.java"
         "main/src/com/google/android/setupdesign/SetupWizardRecyclerLayout.java"
+        "main/src/com/google/android/setupdesign/accessibility/LinkAccessibilityHelper.java"
         "main/src/com/google/android/setupdesign/gesture/ConsecutiveTapsGestureDetector.java"
         "main/src/com/google/android/setupdesign/items/AbstractItem.java"
         "main/src/com/google/android/setupdesign/items/AbstractItemHierarchy.java"
@@ -65,11 +66,13 @@ setupdesign = android_library {
         "main/src/com/google/android/setupdesign/template/RecyclerViewScrollHandlingDelegate.java"
         "main/src/com/google/android/setupdesign/template/RequireScrollMixin.java"
         "main/src/com/google/android/setupdesign/template/ScrollViewScrollHandlingDelegate.java"
+        "main/src/com/google/android/setupdesign/util/ContentStyler.java"
         "main/src/com/google/android/setupdesign/util/DescriptionStyler.java"
         "main/src/com/google/android/setupdesign/util/DrawableLayoutDirectionHelper.java"
-        "main/src/com/google/android/setupdesign/util/LinkAccessibilityHelper.java"
+        "main/src/com/google/android/setupdesign/util/HeaderAreaStyler.java"
         "main/src/com/google/android/setupdesign/util/Partner.java"
         "main/src/com/google/android/setupdesign/util/PartnerStyleHelper.java"
+        "main/src/com/google/android/setupdesign/util/TextViewPartnerStyler.java"
         "main/src/com/google/android/setupdesign/util/ThemeHelper.java"
         "main/src/com/google/android/setupdesign/util/ThemeResolver.java"
         "main/src/com/google/android/setupdesign/view/BottomScrollView.java"
@@ -102,6 +105,7 @@ setupdesign-strings = android_library {
         "strings/res"
     ];
     min_sdk_version = "14";
+    sdk_version = "current";
 };
 
 in { inherit setupdesign setupdesign-strings; }

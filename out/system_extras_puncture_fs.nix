@@ -18,7 +18,7 @@ let
 puncture_fs = cc_binary {
     name = "puncture_fs";
 
-    srcs = ["puncture_fs.c"];
+    srcs = ["puncture_fs.cpp"];
     cflags = [
         "-Wall"
         "-Werror"

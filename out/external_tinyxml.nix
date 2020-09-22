@@ -2,14 +2,7 @@
 let
 
 #  Copyright 2005 The Android Open Source Project
-#
-#  Android.mk for TinyXml.
-#
-#  Add -DTIXML_USE_STL to CFLAGS to use STL.
-#
 
-#  For the device
-#  =====================================================
 libtinyxml = cc_library_shared {
     name = "libtinyxml";
 
@@ -21,6 +14,10 @@ libtinyxml = cc_library_shared {
     ];
 
     vendor = true;
+
+    #  DO NOT USE!
+    #  Use tinyxml2 (or expat or libxml2 or...) instead.
+    visibility = ["//vendor:__subpackages__"];
 
     cflags = [
         "-Wno-implicit-fallthrough"

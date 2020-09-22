@@ -14,6 +14,7 @@ shared_libs = [
     "libutils"
     "libnativewindow"
     "libpdx_default_transport"
+    "libSurfaceFlingerProp"
 ];
 
 static_libs = [
@@ -35,6 +36,7 @@ vrflinger_test = cc_test {
         "-Wall"
         "-Werror"
     ];
+    header_libs = ["libsurfaceflinger_headers"];
     name = "vrflinger_test";
 };
 

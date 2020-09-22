@@ -1,4 +1,4 @@
-{ cc_binary, cc_library, cc_test }:
+{ cc_binary, cc_library, cc_test, filegroup }:
 let
 
 
@@ -65,7 +65,7 @@ VirtualTouchpad_test = cc_test {
 service_src = [
     "main.cpp"
     "VirtualTouchpadService.cpp"
-    "aidl/android/dvr/IVirtualTouchpadService.aidl"
+    ":virtualtouchpad_aidl"
 ];
 
 service_static_libs = [
@@ -102,7 +102,7 @@ virtual_touchpad = cc_binary {
 client_src = [
     "VirtualTouchpadClient.cpp"
     "DvrVirtualTouchpadClient.cpp"
-    "aidl/android/dvr/IVirtualTouchpadService.aidl"
+    ":virtualtouchpad_aidl"
 ];
 
 client_shared_libs = [
@@ -126,4 +126,10 @@ libvirtualtouchpadclient = cc_library {
     export_include_dirs = ["include"];
 };
 
-in { inherit VirtualTouchpad_test libvirtualtouchpad libvirtualtouchpadclient virtual_touchpad; }
+virtualtouchpad_aidl = filegroup {
+    name = "virtualtouchpad_aidl";
+    srcs = ["aidl/android/dvr/IVirtualTouchpadService.aidl"];
+    path = "aidl";
+};
+
+in { inherit VirtualTouchpad_test libvirtualtouchpad libvirtualtouchpadclient virtual_touchpad virtualtouchpad_aidl; }

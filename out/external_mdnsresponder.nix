@@ -1,11 +1,6 @@
 { cc_binary, cc_defaults, cc_library }:
 let
 
-commonLibs = [
-    "libcutils"
-    "liblog"
-];
-
 mdnsresponder_default_cflags = cc_defaults {
     name = "mdnsresponder_default_cflags";
 
@@ -28,7 +23,7 @@ mdnsresponder_default_cflags = cc_defaults {
         "-Wno-array-bounds"
         "-Wno-pointer-sign"
         "-Wno-unused"
-        #"-Wno-unused-but-set-variable"
+        "-Wno-unused-but-set-variable"
         "-Wno-unused-parameter"
         "-Werror=implicit-function-declaration"
     ];
@@ -44,6 +39,7 @@ mdnsresponder_default_cflags = cc_defaults {
         darwin = {
             cflags = [
                 "-DTARGET_OS_MAC"
+                "-DMDNS_UDS_SERVERPATH=\"/var/run/mDNSResponder\""
                 "-Wno-error"
             ];
         };
@@ -154,7 +150,10 @@ mdnsd = cc_binary {
         };
     };
 
-    static_libs = commonLibs;
+    static_libs = [
+        "libcutils"
+        "liblog"
+    ];
 };
 
 # #########################
@@ -187,6 +186,7 @@ libmdnssd = cc_library {
                 "-DNOT_HAVE_SA_LENGTH"
                 "-Wno-unknown-pragmas"
                 "-Wno-overflow"
+                "-Wno-pragma-pack"
                 "-include iphlpapi.h"
                 "-include stdlib.h"
                 "-include stdio.h"
@@ -196,7 +196,13 @@ libmdnssd = cc_library {
 
     export_include_dirs = ["mDNSShared"];
 
-    static_libs = commonLibs;
+    static_libs = ["libcutils"];
+    shared_libs = ["liblog"];
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.adbd"
+    ];
 };
 
 # ###########################

@@ -27,6 +27,7 @@ TestSmsApp22 = android_test {
 
     test_suites = [
         "cts"
+        "mts"
     ];
 };
 

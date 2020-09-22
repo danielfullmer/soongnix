@@ -1,0 +1,38 @@
+{ android_app }:
+let
+
+#
+#  Copyright (C) 2018 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
+#  A fake framework that mimics an older, pre-release SDK for the purposes of
+#  testing what happens when an app linked against a pre-release SDK is installed
+#  on release device.
+
+fake-framework = android_app {
+    name = "fake-framework";
+    installable = false;
+    sdk_version = "core_platform";
+    srcs = [
+        "src/android/app/Activity.java"
+        "src/android/content/ComponentName.java"
+    ];
+    export_package_resources = true;
+    optimize = {
+        enabled = false;
+    };
+};
+
+in { inherit fake-framework; }

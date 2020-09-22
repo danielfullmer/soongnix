@@ -31,8 +31,6 @@ mq_test_client = cc_test {
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];
@@ -55,8 +53,6 @@ mq_test = cc_test {
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];

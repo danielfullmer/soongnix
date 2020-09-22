@@ -28,11 +28,6 @@ CtsJvmtiAttachingDeviceApp = android_test_helper_app {
         "app/src/android/jvmti/JvmtiApplication.java"
     ];
     manifest = "app/AndroidManifest.xml";
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
     jni_libs = ["libctsjvmtiattachagent"];
     compile_multilib = "both";
     sdk_version = "test_current";
@@ -92,10 +87,11 @@ CtsJvmtiAttachingHostTestCases = java_test_host {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     test_config = "host/AndroidTest.xml";
+    data = [":CtsJvmtiAttachingDeviceApp"];
 };
 
 in { inherit CtsJvmtiAttachingDeviceApp CtsJvmtiAttachingHostTestCases libctsjvmtiattachagent; }

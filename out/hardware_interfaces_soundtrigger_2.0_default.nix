@@ -31,7 +31,6 @@ let
 
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libhardware"

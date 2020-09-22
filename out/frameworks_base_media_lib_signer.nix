@@ -21,9 +21,6 @@ let
     name = "com.android.mediadrm.signer";
     srcs = ["java/com/android/mediadrm/signer/MediaDrmSigner.java"];
     api_packages = ["com.android.mediadrm.signer"];
-    srcs_lib = "framework";
-    srcs_lib_whitelist_dirs = ["media/java"];
-    srcs_lib_whitelist_pkgs = ["android.media"];
 };
 
 in { inherit "com.android.mediadrm.signer"; }

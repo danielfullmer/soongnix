@@ -40,6 +40,9 @@ libjni_pacprocessor = cc_library_shared {
         "-Wunused"
         "-Wunreachable-code"
     ];
+    sanitize = {
+        cfi = true;
+    };
 };
 
 in { inherit libjni_pacprocessor; }

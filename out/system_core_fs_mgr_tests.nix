@@ -15,9 +15,22 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-fs_mgr_unit_test = cc_test {
-    name = "fs_mgr_unit_test";
-    test_suites = ["device-tests"];
+CtsFsMgrTestCases = cc_test {
+    name = "CtsFsMgrTestCases";
+    test_suites = [
+        "cts"
+        "device-tests"
+        "vts10"
+    ];
+    compile_multilib = "both";
+    multilib = {
+        lib32 = {
+            suffix = "32";
+        };
+        lib64 = {
+            suffix = "64";
+        };
+    };
 
     shared_libs = [
         "libbase"
@@ -28,6 +41,7 @@ fs_mgr_unit_test = cc_test {
         "libfstab"
     ];
     srcs = [
+        "file_wait_test.cpp"
         "fs_mgr_test.cpp"
     ];
 
@@ -75,4 +89,4 @@ fs_mgr_vendor_overlay_test = java_test_host {
     test_suites = ["general-tests"];
 };
 
-in { inherit "adb-remount-test.sh" adb-remount-sh fs_mgr_unit_test fs_mgr_vendor_overlay_test; }
+in { inherit "adb-remount-test.sh" CtsFsMgrTestCases adb-remount-sh fs_mgr_vendor_overlay_test; }

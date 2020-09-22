@@ -15,16 +15,6 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  The legacy library that brings in android-support-test transitively
-ctstestrunner = java_library {
-    name = "ctstestrunner";
-
-    static_libs = ["cts-test-runner"];
-
-    sdk_version = "current";
-
-};
-
 #  The library variant that brings in androidx-test transitively
 ctstestrunner-axt = java_library {
     name = "ctstestrunner-axt";
@@ -35,4 +25,4 @@ ctstestrunner-axt = java_library {
 
 };
 
-in { inherit ctstestrunner ctstestrunner-axt; }
+in { inherit ctstestrunner-axt; }

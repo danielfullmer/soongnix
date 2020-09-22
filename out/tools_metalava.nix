@@ -1,4 +1,4 @@
-{ droiddoc_exported_dir, genrule, java_binary_host, java_library }:
+{ droiddoc_exported_dir, genrule, java_binary, java_library }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,21 +15,21 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-metalava = java_binary_host {
+metalava = java_binary {
     name = "metalava";
+    host_supported = true;
     srcs = [
         "src/main/java/com/android/resources/ResourceType.java"
+        "src/main/java/com/android/tools/metalava/ManagementWrapper.java"
         "src/main/java/com/android/tools/metalava/apilevels/AndroidJarReader.java"
         "src/main/java/com/android/tools/metalava/apilevels/Api.java"
         "src/main/java/com/android/tools/metalava/apilevels/ApiClass.java"
         "src/main/java/com/android/tools/metalava/apilevels/ApiElement.java"
         "src/main/java/com/android/tools/metalava/apilevels/ApiGenerator.java"
         "src/main/java/com/android/tools/metalava/doclava1/ApiFile.java"
-        "src/main/java/com/android/tools/metalava/doclava1/ApiParseException.java"
-        "src/main/java/com/android/tools/metalava/doclava1/Errors.java"
-        "src/main/java/com/android/tools/metalava/doclava1/SourcePositionInfo.java"
         "src/main/java/com/android/tools/lint/checks/infrastructure/ClassName.kt"
         "src/main/java/com/android/tools/metalava/AndroidApiChecks.kt"
+        "src/main/java/com/android/tools/metalava/AnnotationFilter.kt"
         "src/main/java/com/android/tools/metalava/AnnotationStatistics.kt"
         "src/main/java/com/android/tools/metalava/AnnotationsDiffer.kt"
         "src/main/java/com/android/tools/metalava/AnnotationsMerger.kt"
@@ -38,6 +38,7 @@ metalava = java_binary_host {
         "src/main/java/com/android/tools/metalava/ApiType.kt"
         "src/main/java/com/android/tools/metalava/ArtifactTagger.kt"
         "src/main/java/com/android/tools/metalava/Baseline.kt"
+        "src/main/java/com/android/tools/metalava/CommandArgsPreprocessor.kt"
         "src/main/java/com/android/tools/metalava/ComparisonVisitor.kt"
         "src/main/java/com/android/tools/metalava/Compatibility.kt"
         "src/main/java/com/android/tools/metalava/CompatibilityCheck.kt"
@@ -47,16 +48,20 @@ metalava = java_binary_host {
         "src/main/java/com/android/tools/metalava/Diff.kt"
         "src/main/java/com/android/tools/metalava/DocAnalyzer.kt"
         "src/main/java/com/android/tools/metalava/DocLevel.kt"
+        "src/main/java/com/android/tools/metalava/DocReplacement.kt"
         "src/main/java/com/android/tools/metalava/Driver.kt"
         "src/main/java/com/android/tools/metalava/DriverException.kt"
         "src/main/java/com/android/tools/metalava/ExtractAnnotations.kt"
         "src/main/java/com/android/tools/metalava/FileFormat.kt"
+        "src/main/java/com/android/tools/metalava/FileReadSandbox.kt"
         "src/main/java/com/android/tools/metalava/JDiffXmlWriter.kt"
         "src/main/java/com/android/tools/metalava/KotlinInteropChecks.kt"
+        "src/main/java/com/android/tools/metalava/MarkPackagesAsRecent.kt"
         "src/main/java/com/android/tools/metalava/NullabilityAnnotationsValidator.kt"
         "src/main/java/com/android/tools/metalava/NullnessMigration.kt"
         "src/main/java/com/android/tools/metalava/Options.kt"
         "src/main/java/com/android/tools/metalava/PackageFilter.kt"
+        "src/main/java/com/android/tools/metalava/Progress.kt"
         "src/main/java/com/android/tools/metalava/ProguardWriter.kt"
         "src/main/java/com/android/tools/metalava/ReleaseType.kt"
         "src/main/java/com/android/tools/metalava/Reporter.kt"
@@ -64,13 +69,15 @@ metalava = java_binary_host {
         "src/main/java/com/android/tools/metalava/SdkFileWriter.kt"
         "src/main/java/com/android/tools/metalava/SignatureFileLoader.kt"
         "src/main/java/com/android/tools/metalava/SignatureWriter.kt"
-        "src/main/java/com/android/tools/metalava/StubWriter.kt"
         "src/main/java/com/android/tools/metalava/Terminal.kt"
         "src/main/java/com/android/tools/metalava/Version.kt"
         "src/main/java/com/android/tools/metalava/apilevels/AddApisFromCodebase.kt"
+        "src/main/java/com/android/tools/metalava/doclava1/ApiParseException.kt"
         "src/main/java/com/android/tools/metalava/doclava1/ApiPredicate.kt"
         "src/main/java/com/android/tools/metalava/doclava1/ElidingPredicate.kt"
         "src/main/java/com/android/tools/metalava/doclava1/FilterPredicate.kt"
+        "src/main/java/com/android/tools/metalava/doclava1/Issues.kt"
+        "src/main/java/com/android/tools/metalava/doclava1/SourcePositionInfo.kt"
         "src/main/java/com/android/tools/metalava/doclava1/TextCodebase.kt"
         "src/main/java/com/android/tools/metalava/model/AnnotationItem.kt"
         "src/main/java/com/android/tools/metalava/model/AnnotationRetention.kt"
@@ -80,8 +87,8 @@ metalava = java_binary_host {
         "src/main/java/com/android/tools/metalava/model/CompilationUnit.kt"
         "src/main/java/com/android/tools/metalava/model/ConstructorItem.kt"
         "src/main/java/com/android/tools/metalava/model/DefaultModifierList.kt"
-        "src/main/java/com/android/tools/metalava/model/ErrorConfiguration.kt"
         "src/main/java/com/android/tools/metalava/model/FieldItem.kt"
+        "src/main/java/com/android/tools/metalava/model/IssueConfiguration.kt"
         "src/main/java/com/android/tools/metalava/model/Item.kt"
         "src/main/java/com/android/tools/metalava/model/MemberItem.kt"
         "src/main/java/com/android/tools/metalava/model/MethodItem.kt"
@@ -96,6 +103,7 @@ metalava = java_binary_host {
         "src/main/java/com/android/tools/metalava/model/TypeParameterItem.kt"
         "src/main/java/com/android/tools/metalava/model/TypeParameterList.kt"
         "src/main/java/com/android/tools/metalava/model/TypeParameterListOwner.kt"
+        "src/main/java/com/android/tools/metalava/model/VisibilityLevel.kt"
         "src/main/java/com/android/tools/metalava/model/Xml.kt"
         "src/main/java/com/android/tools/metalava/model/psi/ClassType.kt"
         "src/main/java/com/android/tools/metalava/model/psi/CodePrinter.kt"
@@ -135,6 +143,8 @@ metalava = java_binary_host {
         "src/main/java/com/android/tools/metalava/model/visitors/ItemVisitor.kt"
         "src/main/java/com/android/tools/metalava/model/visitors/TypeVisitor.kt"
         "src/main/java/com/android/tools/metalava/model/visitors/VisibleItemVisitor.kt"
+        "src/main/java/com/android/tools/metalava/stub/JavaStubWriter.kt"
+        "src/main/java/com/android/tools/metalava/stub/StubWriter.kt"
     ];
     java_resource_dirs = ["src/main/resources/"];
     static_libs = [
@@ -143,8 +153,12 @@ metalava = java_binary_host {
         "metalava-gradle-plugin-deps"
     ];
     manifest = "manifest.txt";
-    dist = {
-        targets = ["sdk"];
+    target = {
+        host = {
+            dist = {
+                targets = ["sdk"];
+            };
+        };
     };
 };
 
@@ -202,7 +216,8 @@ stub-annotations = java_library {
         "stub-annotations/src/main/java/androidx/annotation/WorkerThread.java"
         "stub-annotations/src/main/java/androidx/annotation/XmlRes.java"
     ];
-    sdk_version = "core_current";
+    #  Allow core_current to use stub-annotations.
+    sdk_version = "28";
     target = {
         host = {
             dist = {

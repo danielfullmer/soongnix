@@ -47,6 +47,7 @@ crasher = cc_binary {
     name = "crasher";
 
     defaults = ["crasher-defaults"];
+    header_libs = ["bionic_libc_platform_headers"];
     shared_libs = [
         "libbase"
         "liblog"
@@ -68,6 +69,7 @@ static_crasher = cc_binary {
     defaults = ["crasher-defaults"];
     cppflags = ["-DSTATIC_CRASHER"];
     static_executable = true;
+    header_libs = ["bionic_libc_platform_headers"];
     static_libs = [
         "libdebuggerd_handler"
         "libbase"

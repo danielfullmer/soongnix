@@ -19,8 +19,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];

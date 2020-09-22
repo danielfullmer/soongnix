@@ -5,7 +5,14 @@ ccodec_unit_test = cc_test {
     name = "ccodec_unit_test";
 
     srcs = [
+        "CCodecBuffers_test.cpp"
+        "CCodecConfig_test.cpp"
         "ReflectedParamUpdater_test.cpp"
+    ];
+
+    defaults = [
+        "libcodec2-impl-defaults"
+        "libcodec2-internal-defaults"
     ];
 
     include_dirs = [
@@ -13,10 +20,22 @@ ccodec_unit_test = cc_test {
     ];
 
     shared_libs = [
+        "android.hardware.media.bufferpool@2.0"
+        "android.hardware.media.c2@1.0"
         "libcodec2"
+        "libcodec2_client"
+        "libhidlbase"
+        "libfmq"
+        "libmedia_omx"
         "libsfplugin_ccodec"
+        "libsfplugin_ccodec_utils"
         "libstagefright_foundation"
         "libutils"
+    ];
+
+    static_libs = [
+        "libcodec2_hidl@1.0"
+        "libstagefright_bufferpool@2.0"
     ];
 
     cflags = [
@@ -34,6 +53,11 @@ mc_sanity_test = cc_test {
 
     include_dirs = [
         "frameworks/av/media/codec2/sfplugin"
+    ];
+
+    header_libs = [
+        "libmediadrm_headers"
+        "libmediametrics_headers"
     ];
 
     shared_libs = [

@@ -71,6 +71,10 @@ libnfc_nci_jni = cc_library_shared {
             cflags = ["-DDCHECK_ALWAYS_ON"];
         };
     };
+    sanitize = {
+        integer_overflow = true;
+        misc_undefined = ["bounds"];
+    };
 };
 
 in { inherit libnfc_nci_jni; }

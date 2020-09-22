@@ -32,7 +32,6 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.vibrator@1.0"

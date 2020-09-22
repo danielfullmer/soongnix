@@ -3,6 +3,7 @@ let
 
 ksoap2 = java_library {
     name = "ksoap2";
+    sdk_version = "system_current";
     srcs = [
         "kobjects/org/ksoap2/kobjects/base64/Base64.java"
         "kobjects/org/ksoap2/kobjects/isodate/IsoDate.java"

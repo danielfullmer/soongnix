@@ -16,25 +16,25 @@ let
 #  limitations under the License.
 #
 
-car-apps-common-bp = android_library {
-    name = "car-apps-common-bp";
+#  Unbundled target (should stay that way).
+car-apps-common = android_library {
+    name = "car-apps-common";
 
     srcs = [
-        "src/com/android/car/apps/common/AccountImageHelper.java"
         "src/com/android/car/apps/common/BackgroundImageView.java"
         "src/com/android/car/apps/common/BitmapUtils.java"
         "src/com/android/car/apps/common/CarControlBar.java"
-        "src/com/android/car/apps/common/CarUxRestrictionsUtil.java"
-        "src/com/android/car/apps/common/ClickThroughToolbar.java"
         "src/com/android/car/apps/common/CommonFlags.java"
         "src/com/android/car/apps/common/ControlBar.java"
         "src/com/android/car/apps/common/CropAlignedImageView.java"
         "src/com/android/car/apps/common/CrossfadeImageView.java"
         "src/com/android/car/apps/common/ExpandableControlBar.java"
         "src/com/android/car/apps/common/FragmentUtils.java"
+        "src/com/android/car/apps/common/IconCropper.java"
         "src/com/android/car/apps/common/ImageUtils.java"
         "src/com/android/car/apps/common/LetterTileDrawable.java"
         "src/com/android/car/apps/common/MinimizedControlBar.java"
+        "src/com/android/car/apps/common/NavigationUtils.java"
         "src/com/android/car/apps/common/RefcountObject.java"
         "src/com/android/car/apps/common/UriUtils.java"
         "src/com/android/car/apps/common/UxrButton.java"
@@ -43,19 +43,16 @@ car-apps-common-bp = android_library {
         "src/com/android/car/apps/common/imaging/ImageKey.java"
         "src/com/android/car/apps/common/imaging/ImageViewBinder.java"
         "src/com/android/car/apps/common/imaging/LocalImageFetcher.java"
+        "src/com/android/car/apps/common/log/L.java"
         "src/com/android/car/apps/common/util/Assert.java"
         "src/com/android/car/apps/common/util/CarAppsDebugUtils.java"
         "src/com/android/car/apps/common/util/CarAppsIOUtils.java"
         "src/com/android/car/apps/common/util/CarPackageManagerUtils.java"
         "src/com/android/car/apps/common/util/PagedSmoothScroller.java"
         "src/com/android/car/apps/common/util/SafeLog.java"
-        "src/com/android/car/apps/common/util/ScrollBarUI.java"
         "src/com/android/car/apps/common/util/Themes.java"
+        "src/com/android/car/apps/common/util/VectorMath.java"
         "src/com/android/car/apps/common/util/ViewUtils.java"
-        "src/com/android/car/apps/common/widget/CarScrollBar.java"
-        "src/com/android/car/apps/common/widget/CarTabLayout.java"
-        "src/com/android/car/apps/common/widget/PagedRecyclerView.java"
-        "src/com/android/car/apps/common/widget/PagedRecyclerViewAdapter.java"
         "src/com/android/car/apps/common/widget/PagedSnapHelper.java"
     ];
 
@@ -65,7 +62,8 @@ car-apps-common-bp = android_library {
         enabled = false;
     };
 
-    libs = ["android.car"];
+    libs = ["android.car-stubs"];
+    sdk_version = "system_current";
 
     static_libs = [
         "androidx.annotation_annotation"
@@ -76,7 +74,8 @@ car-apps-common-bp = android_library {
         "androidx-constraintlayout_constraintlayout"
         "androidx.recyclerview_recyclerview"
         "androidx-constraintlayout_constraintlayout-solver"
+        "car-ui-lib"
     ];
 };
 
-in { inherit car-apps-common-bp; }
+in { inherit car-apps-common; }

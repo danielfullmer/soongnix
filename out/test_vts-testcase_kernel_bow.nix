@@ -28,6 +28,7 @@ vts_test_binary_bow_module = cc_test {
     ];
     static_libs = [
         "libdm"
+        "libext2_uuid"
         "libtestUtil"
     ];
     cflags = [
@@ -36,6 +37,11 @@ vts_test_binary_bow_module = cc_test {
         "-Werror"
         "-Wno-unused-variable"
     ];
+    test_suites = [
+        "vts"
+    ];
+    require_root = true;
+    auto_gen_config = true;
 };
 
 in { inherit vts_test_binary_bow_module; }

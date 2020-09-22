@@ -34,6 +34,14 @@ vts_permission_validate_test = cc_test {
         "-Wall"
         "-Werror"
     ];
+    data = [
+        ":permission"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    test_config = "vts_permission_validate_test.xml";
 };
 
 in { inherit vts_permission_validate_test; }

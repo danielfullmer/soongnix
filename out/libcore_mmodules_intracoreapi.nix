@@ -15,17 +15,20 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  Build rules for the APIs that the various core libraries can depend on from
-#  each other: public SDK APIs and "intra-core" APIs. Intra-core APIs are not
-#  for use by other parts of the Android software stack.
-
-#  Generates stub source files for the {public SDK + intra-core} API
-#  of the core jars.
-core-intra-stubs = droidstubs {
-    name = "core-intra-stubs";
-    srcs = [":core_api_files"];
-    no_standard_libs = true;
-    libs = ["core-all"];
+#  Generates stub source files for the intra-core API of the ART module.
+#  i.e. every class/member that is either in the public API or annotated with
+#  @IntraCoreApi.
+#
+#  The API specification .txt files managed by this only contain the additional
+#  classes/members that are in the intra-core API but which are not in the public
+#  API.
+art-module-intra-core-api-stubs-source = droidstubs {
+    name = "art-module-intra-core-api-stubs-source";
+    srcs = [
+        ":art_module_api_files"
+    ];
+    sdk_version = "none";
+    system_modules = "none";
 
     installable = false;
     args = "--hide-annotation libcore.api.Hide " +
@@ -48,52 +51,35 @@ core-intra-stubs = droidstubs {
     };
 };
 
-#  A library containing the {public SDK + intra-core} API stubs for the
-#  core jars.
-"core.intra.stubs" = java_library {
-    name = "core.intra.stubs";
-    srcs = [":core-intra-stubs"];
-
-    no_standard_libs = true;
-    libs = ["core-all"];
-    system_modules = "core-all-system-modules";
-    openjdk9 = {
-        javacflags = ["--patch-module=java.base=."];
-    };
-};
-
-#  Used when compiling against core.intra.stubs.
-core-intra-stubs-system-modules = java_system_modules {
-    name = "core-intra-stubs-system-modules";
-    libs = ["core.intra.stubs"];
-};
-
-#  A rule that checks we can build core-libart and core-oj using only the source
-#  for core-libart and core-oj and the APIs in core-intra-stubs. This proves we
-#  don't actually depend on things from (for example) conscrypt we haven't added
-#  to the intra-core API.
-"core-libart-oj.depscheck" = java_library {
-    name = "core-libart-oj.depscheck";
-    srcs = [
-        ":core_libart_java_files"
-        ":core_oj_java_files"
+#  A library containing the intra-core API stubs of the ART module.
+#
+#  Intra-core APIs are only intended for the use of other core library modules.
+"art.module.intra.core.api.stubs" = java_library {
+    name = "art.module.intra.core.api.stubs";
+    visibility = [
+        "//libcore/mmodules/core_platform_api"
     ];
-    errorprone = {
-        javacflags = [
-            "-Xep:MissingOverride:OFF" #  Ignore missing @Override.
-            "-Xep:ConstantOverflow:WARN" #  Known constant overflow in SplittableRandom
-        ];
-    };
+    srcs = [
+        ":art-module-intra-core-api-stubs-source"
+        ":openjdk_lambda_stub_files"
+        ":openjdk_generated_annotation_stub_files"
+    ];
 
-    installable = false;
-
-    no_standard_libs = true;
-    libs = ["core.intra.stubs"];
-    system_modules = "core-intra-stubs-system-modules";
-    java_version = "1.9";
-    openjdk9 = {
-        javacflags = ["--patch-module=java.base=."];
-    };
+    sdk_version = "none";
+    system_modules = "none";
+    patch_module = "java.base";
 };
 
-in { inherit "core-libart-oj.depscheck" "core.intra.stubs" core-intra-stubs core-intra-stubs-system-modules; }
+#  Used when compiling against art.module.intra.core.api.stubs.
+art-module-intra-core-api-stubs-system-modules = java_system_modules {
+    name = "art-module-intra-core-api-stubs-system-modules";
+    visibility = [
+        "//art/build/sdk"
+        "//external/bouncycastle"
+        "//external/conscrypt"
+        "//external/icu/android_icu4j"
+    ];
+    libs = ["art.module.intra.core.api.stubs"];
+};
+
+in { inherit "art.module.intra.core.api.stubs" art-module-intra-core-api-stubs-source art-module-intra-core-api-stubs-system-modules; }

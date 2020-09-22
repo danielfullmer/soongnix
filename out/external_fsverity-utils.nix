@@ -3,6 +3,7 @@ let
 
 fsverity = cc_binary {
     name = "fsverity";
+    host_supported = true;
     shared_libs = ["libcrypto"];
     cflags = [
         "-Wall"
@@ -12,11 +13,9 @@ fsverity = cc_binary {
     srcs = [
         "cmd_enable.c"
         "cmd_measure.c"
-        "cmd_setup.c"
-        "elide_patch.c"
+        "cmd_sign.c"
         "fsverity.c"
         "hash_algs.c"
-        "sign.c"
         "util.c"
     ];
 };

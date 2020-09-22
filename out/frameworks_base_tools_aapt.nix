@@ -74,8 +74,6 @@ libaapt = cc_library_host_static {
     cflags = [
         "-Wno-format-y2k"
         "-DSTATIC_ANDROIDFW_FOR_TOOLS"
-        #  Allow implicit fallthroughs in AaptAssets.cpp until they are fixed.
-        "-Wno-error=implicit-fallthrough"
     ];
 
     srcs = [

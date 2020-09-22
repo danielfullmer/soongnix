@@ -20,43 +20,72 @@ CarSystemUI-core = android_library {
     name = "CarSystemUI-core";
 
     srcs = [
+        "src/com/android/systemui/CarComponentBinder.java"
+        "src/com/android/systemui/CarSystemUIBinder.java"
         "src/com/android/systemui/CarSystemUIFactory.java"
         "src/com/android/systemui/CarSystemUIModule.java"
         "src/com/android/systemui/CarSystemUIRootComponent.java"
-        "src/com/android/systemui/car/CarNotificationEntryManager.java"
-        "src/com/android/systemui/car/CarNotificationInterruptionStateProvider.java"
+        "src/com/android/systemui/car/CarDeviceProvisionedController.java"
+        "src/com/android/systemui/car/CarDeviceProvisionedControllerImpl.java"
+        "src/com/android/systemui/car/CarDeviceProvisionedListener.java"
         "src/com/android/systemui/car/CarServiceProvider.java"
-        "src/com/android/systemui/car/SUWProgressController.java"
-        "src/com/android/systemui/qs/car/CarQSFooter.java"
-        "src/com/android/systemui/qs/car/CarQSFragment.java"
-        "src/com/android/systemui/qs/car/CarStatusBarHeader.java"
-        "src/com/android/systemui/statusbar/car/AssitantButton.java"
-        "src/com/android/systemui/statusbar/car/CarBatteryController.java"
-        "src/com/android/systemui/statusbar/car/CarFacetButton.java"
-        "src/com/android/systemui/statusbar/car/CarFacetButtonController.java"
-        "src/com/android/systemui/statusbar/car/CarNavigationBarView.java"
-        "src/com/android/systemui/statusbar/car/CarNavigationButton.java"
-        "src/com/android/systemui/statusbar/car/CarStatusBar.java"
-        "src/com/android/systemui/statusbar/car/CarStatusBarKeyguardViewManager.java"
-        "src/com/android/systemui/statusbar/car/CarTrustAgentUnlockDialogHelper.java"
-        "src/com/android/systemui/statusbar/car/ConnectedDeviceSignalController.java"
-        "src/com/android/systemui/statusbar/car/DrivingStateHelper.java"
-        "src/com/android/systemui/statusbar/car/FullscreenUserSwitcher.java"
-        "src/com/android/systemui/statusbar/car/PowerManagerHelper.java"
-        "src/com/android/systemui/statusbar/car/SwitchToGuestTimer.java"
-        "src/com/android/systemui/statusbar/car/UserGridRecyclerView.java"
-        "src/com/android/systemui/statusbar/car/hvac/HvacController.java"
-        "src/com/android/systemui/statusbar/car/hvac/TemperatureTextView.java"
-        "src/com/android/systemui/statusbar/car/hvac/TemperatureView.java"
-        "src/com/android/systemui/statusbar/hvac/AnimatedTemperatureView.java"
-        "src/com/android/systemui/statusbar/hvac/TemperatureBackgroundAnimator.java"
-        "src/com/android/systemui/statusbar/hvac/TemperatureColorStore.java"
-        "src/com/android/systemui/statusbar/hvac/TemperatureTextAnimator.java"
-        "src/com/android/systemui/voicerecognition/car/ConnectedDeviceVoiceRecognitionNotifier.java"
-        "src/com/android/systemui/volume/CarVolumeDialogComponent.java"
-        "src/com/android/systemui/volume/CarVolumeDialogImpl.java"
-        "src/com/android/systemui/volume/CarVolumeItem.java"
-        "src/com/android/systemui/volume/CarVolumeItemAdapter.java"
+        "src/com/android/systemui/car/bluetooth/CarBatteryController.java"
+        "src/com/android/systemui/car/bluetooth/ConnectedDeviceSignalController.java"
+        "src/com/android/systemui/car/hvac/AnimatedTemperatureView.java"
+        "src/com/android/systemui/car/hvac/HvacController.java"
+        "src/com/android/systemui/car/hvac/TemperatureBackgroundAnimator.java"
+        "src/com/android/systemui/car/hvac/TemperatureColorStore.java"
+        "src/com/android/systemui/car/hvac/TemperatureTextAnimator.java"
+        "src/com/android/systemui/car/hvac/TemperatureTextView.java"
+        "src/com/android/systemui/car/hvac/TemperatureView.java"
+        "src/com/android/systemui/car/keyguard/CarKeyguardViewController.java"
+        "src/com/android/systemui/car/keyguard/CarKeyguardViewMediator.java"
+        "src/com/android/systemui/car/navigationbar/AssitantButton.java"
+        "src/com/android/systemui/car/navigationbar/ButtonRoleHolderController.java"
+        "src/com/android/systemui/car/navigationbar/ButtonSelectionStateController.java"
+        "src/com/android/systemui/car/navigationbar/ButtonSelectionStateListener.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationBar.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationBarController.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationBarView.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationButton.java"
+        "src/com/android/systemui/car/navigationbar/NavigationBarViewFactory.java"
+        "src/com/android/systemui/car/notification/BottomNotificationPanelViewMediator.java"
+        "src/com/android/systemui/car/notification/CarHeadsUpNotificationSystemContainer.java"
+        "src/com/android/systemui/car/notification/CarNotificationModule.java"
+        "src/com/android/systemui/car/notification/NotificationPanelViewController.java"
+        "src/com/android/systemui/car/notification/NotificationPanelViewMediator.java"
+        "src/com/android/systemui/car/notification/NotificationVisibilityLogger.java"
+        "src/com/android/systemui/car/notification/PowerManagerHelper.java"
+        "src/com/android/systemui/car/notification/TopNotificationPanelViewMediator.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppController.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppDetector.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppListener.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppStateController.java"
+        "src/com/android/systemui/car/statusbar/CarStatusBar.java"
+        "src/com/android/systemui/car/statusbar/CarStatusBarKeyguardViewManager.java"
+        "src/com/android/systemui/car/statusbar/CarStatusBarModule.java"
+        "src/com/android/systemui/car/statusbar/DozeServiceHost.java"
+        "src/com/android/systemui/car/statusbar/DummyNotificationShadeWindowController.java"
+        "src/com/android/systemui/car/userswitcher/CarStatusBarHeader.java"
+        "src/com/android/systemui/car/userswitcher/FullScreenUserSwitcherViewController.java"
+        "src/com/android/systemui/car/userswitcher/FullscreenUserSwitcherViewMediator.java"
+        "src/com/android/systemui/car/userswitcher/UserGridRecyclerView.java"
+        "src/com/android/systemui/car/userswitcher/UserIconProvider.java"
+        "src/com/android/systemui/car/userswitcher/UserSwitchTransitionViewController.java"
+        "src/com/android/systemui/car/userswitcher/UserSwitchTransitionViewMediator.java"
+        "src/com/android/systemui/car/voicerecognition/ConnectedDeviceVoiceRecognitionNotifier.java"
+        "src/com/android/systemui/car/volume/CarVolumeDialogComponent.java"
+        "src/com/android/systemui/car/volume/CarVolumeDialogImpl.java"
+        "src/com/android/systemui/car/volume/CarVolumeItem.java"
+        "src/com/android/systemui/car/volume/CarVolumeItemAdapter.java"
+        "src/com/android/systemui/car/volume/VolumeUI.java"
+        "src/com/android/systemui/car/window/OverlayPanelViewController.java"
+        "src/com/android/systemui/car/window/OverlayViewController.java"
+        "src/com/android/systemui/car/window/OverlayViewGlobalStateController.java"
+        "src/com/android/systemui/car/window/OverlayViewMediator.java"
+        "src/com/android/systemui/car/window/OverlayWindowModule.java"
+        "src/com/android/systemui/car/window/SystemUIOverlayWindowController.java"
+        "src/com/android/systemui/car/window/SystemUIOverlayWindowManager.java"
 
     ];
 
@@ -71,6 +100,7 @@ CarSystemUI-core = android_library {
         "SystemUIPluginLib"
         "SystemUISharedLib"
         "SettingsLib"
+        "car-ui-lib"
         "android.car.userlib"
         "androidx.legacy_legacy-support-v4"
         "androidx.recyclerview_recyclerview"
@@ -92,7 +122,6 @@ CarSystemUI-core = android_library {
     ];
 
     libs = [
-        "telephony-common"
         "android.car"
     ];
 
@@ -100,6 +129,148 @@ CarSystemUI-core = android_library {
 
     plugins = ["dagger2-compiler-2.19"];
 
+};
+
+CarSystemUI-tests = android_library {
+    name = "CarSystemUI-tests";
+    manifest = "tests/AndroidManifest.xml";
+    resource_dirs = [
+        "tests/res"
+        "res-keyguard"
+        "res"
+    ];
+    srcs = [
+        "tests/src/com/android/AAAPlusPlusVerifySysuiRequiredTestPropertiesTest.java"
+        "tests/src/com/android/systemui/car/hvac/HvacControllerTest.java"
+        "tests/src/com/android/systemui/car/keyguard/CarKeyguardViewControllerTest.java"
+        "tests/src/com/android/systemui/car/navigationbar/ButtonRoleHolderControllerTest.java"
+        "tests/src/com/android/systemui/car/navigationbar/ButtonSelectionStateControllerTest.java"
+        "tests/src/com/android/systemui/car/navigationbar/CarNavigationBarControllerTest.java"
+        "tests/src/com/android/systemui/car/navigationbar/CarNavigationBarTest.java"
+        "tests/src/com/android/systemui/car/navigationbar/CarNavigationBarViewTest.java"
+        "tests/src/com/android/systemui/car/navigationbar/CarNavigationButtonTest.java"
+        "tests/src/com/android/systemui/car/notification/CarHeadsUpNotificationSystemContainerTest.java"
+        "tests/src/com/android/systemui/car/notification/NotificationVisibilityLoggerTest.java"
+        "tests/src/com/android/systemui/car/sideloaded/SideLoadedAppDetectorTest.java"
+        "tests/src/com/android/systemui/car/sideloaded/SideLoadedAppListenerTest.java"
+        "tests/src/com/android/systemui/car/userswitcher/UserSwitchTransitionViewControllerTest.java"
+        "tests/src/com/android/systemui/car/userswitcher/UserSwitchTransitionViewMediatorTest.java"
+        "tests/src/com/android/systemui/car/voicerecognition/ConnectedDeviceVoiceRecognitionNotifierTest.java"
+        "tests/src/com/android/systemui/car/window/OverlayPanelViewControllerTest.java"
+        "tests/src/com/android/systemui/car/window/OverlayViewControllerTest.java"
+        "tests/src/com/android/systemui/car/window/OverlayViewGlobalStateControllerTest.java"
+        "src/com/android/systemui/CarComponentBinder.java"
+        "src/com/android/systemui/CarSystemUIBinder.java"
+        "src/com/android/systemui/CarSystemUIFactory.java"
+        "src/com/android/systemui/CarSystemUIModule.java"
+        "src/com/android/systemui/CarSystemUIRootComponent.java"
+        "src/com/android/systemui/car/CarDeviceProvisionedController.java"
+        "src/com/android/systemui/car/CarDeviceProvisionedControllerImpl.java"
+        "src/com/android/systemui/car/CarDeviceProvisionedListener.java"
+        "src/com/android/systemui/car/CarServiceProvider.java"
+        "src/com/android/systemui/car/bluetooth/CarBatteryController.java"
+        "src/com/android/systemui/car/bluetooth/ConnectedDeviceSignalController.java"
+        "src/com/android/systemui/car/hvac/AnimatedTemperatureView.java"
+        "src/com/android/systemui/car/hvac/HvacController.java"
+        "src/com/android/systemui/car/hvac/TemperatureBackgroundAnimator.java"
+        "src/com/android/systemui/car/hvac/TemperatureColorStore.java"
+        "src/com/android/systemui/car/hvac/TemperatureTextAnimator.java"
+        "src/com/android/systemui/car/hvac/TemperatureTextView.java"
+        "src/com/android/systemui/car/hvac/TemperatureView.java"
+        "src/com/android/systemui/car/keyguard/CarKeyguardViewController.java"
+        "src/com/android/systemui/car/keyguard/CarKeyguardViewMediator.java"
+        "src/com/android/systemui/car/navigationbar/AssitantButton.java"
+        "src/com/android/systemui/car/navigationbar/ButtonRoleHolderController.java"
+        "src/com/android/systemui/car/navigationbar/ButtonSelectionStateController.java"
+        "src/com/android/systemui/car/navigationbar/ButtonSelectionStateListener.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationBar.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationBarController.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationBarView.java"
+        "src/com/android/systemui/car/navigationbar/CarNavigationButton.java"
+        "src/com/android/systemui/car/navigationbar/NavigationBarViewFactory.java"
+        "src/com/android/systemui/car/notification/BottomNotificationPanelViewMediator.java"
+        "src/com/android/systemui/car/notification/CarHeadsUpNotificationSystemContainer.java"
+        "src/com/android/systemui/car/notification/CarNotificationModule.java"
+        "src/com/android/systemui/car/notification/NotificationPanelViewController.java"
+        "src/com/android/systemui/car/notification/NotificationPanelViewMediator.java"
+        "src/com/android/systemui/car/notification/NotificationVisibilityLogger.java"
+        "src/com/android/systemui/car/notification/PowerManagerHelper.java"
+        "src/com/android/systemui/car/notification/TopNotificationPanelViewMediator.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppController.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppDetector.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppListener.java"
+        "src/com/android/systemui/car/sideloaded/SideLoadedAppStateController.java"
+        "src/com/android/systemui/car/statusbar/CarStatusBar.java"
+        "src/com/android/systemui/car/statusbar/CarStatusBarKeyguardViewManager.java"
+        "src/com/android/systemui/car/statusbar/CarStatusBarModule.java"
+        "src/com/android/systemui/car/statusbar/DozeServiceHost.java"
+        "src/com/android/systemui/car/statusbar/DummyNotificationShadeWindowController.java"
+        "src/com/android/systemui/car/userswitcher/CarStatusBarHeader.java"
+        "src/com/android/systemui/car/userswitcher/FullScreenUserSwitcherViewController.java"
+        "src/com/android/systemui/car/userswitcher/FullscreenUserSwitcherViewMediator.java"
+        "src/com/android/systemui/car/userswitcher/UserGridRecyclerView.java"
+        "src/com/android/systemui/car/userswitcher/UserIconProvider.java"
+        "src/com/android/systemui/car/userswitcher/UserSwitchTransitionViewController.java"
+        "src/com/android/systemui/car/userswitcher/UserSwitchTransitionViewMediator.java"
+        "src/com/android/systemui/car/voicerecognition/ConnectedDeviceVoiceRecognitionNotifier.java"
+        "src/com/android/systemui/car/volume/CarVolumeDialogComponent.java"
+        "src/com/android/systemui/car/volume/CarVolumeDialogImpl.java"
+        "src/com/android/systemui/car/volume/CarVolumeItem.java"
+        "src/com/android/systemui/car/volume/CarVolumeItemAdapter.java"
+        "src/com/android/systemui/car/volume/VolumeUI.java"
+        "src/com/android/systemui/car/window/OverlayPanelViewController.java"
+        "src/com/android/systemui/car/window/OverlayViewController.java"
+        "src/com/android/systemui/car/window/OverlayViewGlobalStateController.java"
+        "src/com/android/systemui/car/window/OverlayViewMediator.java"
+        "src/com/android/systemui/car/window/OverlayWindowModule.java"
+        "src/com/android/systemui/car/window/SystemUIOverlayWindowController.java"
+        "src/com/android/systemui/car/window/SystemUIOverlayWindowManager.java"
+
+    ];
+    static_libs = [
+        "SystemUI-tests"
+        "CarNotificationLib"
+        "SystemUIPluginLib"
+        "SystemUISharedLib"
+        "SettingsLib"
+        "android.car.userlib"
+        "androidx.legacy_legacy-support-v4"
+        "androidx.recyclerview_recyclerview"
+        "androidx.preference_preference"
+        "androidx.appcompat_appcompat"
+        "androidx.mediarouter_mediarouter"
+        "androidx.palette_palette"
+        "androidx.legacy_legacy-preference-v14"
+        "androidx.leanback_leanback"
+        "androidx.slice_slice-core"
+        "androidx.slice_slice-view"
+        "androidx.slice_slice-builders"
+        "androidx.arch.core_core-runtime"
+        "androidx.lifecycle_lifecycle-extensions"
+        "car-ui-lib"
+        "SystemUI-tags"
+        "SystemUI-proto"
+        "metrics-helper-lib"
+        "androidx.test.rules"
+        "hamcrest-library"
+        "mockito-target-inline-minus-junit4"
+        "testables"
+        "truth-prebuilt"
+        "dagger2-2.19"
+        "//external/kotlinc:kotlin-annotations"
+    ];
+    libs = [
+        "android.test.runner"
+        "android.test.base"
+        "android.car"
+    ];
+
+    aaptflags = [
+        "--extra-packages"
+        "com.android.systemui"
+    ];
+
+    plugins = ["dagger2-compiler-2.19"];
 };
 
 CarSystemUI = android_app {
@@ -110,7 +281,6 @@ CarSystemUI = android_app {
     ];
 
     libs = [
-        "telephony-common"
         "android.car"
     ];
 
@@ -121,7 +291,7 @@ CarSystemUI = android_app {
     ];
 
     platform_apis = true;
-    product_specific = true;
+    system_ext_specific = true;
     certificate = "platform";
     privileged = true;
 
@@ -144,4 +314,4 @@ CarSystemUI = android_app {
     required = ["privapp_whitelist_com.android.systemui"];
 };
 
-in { inherit CarSystemUI CarSystemUI-core; }
+in { inherit CarSystemUI CarSystemUI-core CarSystemUI-tests; }

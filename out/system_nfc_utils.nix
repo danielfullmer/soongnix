@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_static, cc_test }:
+{ cc_defaults, cc_fuzz, cc_library_static, cc_test }:
 let
 
 nfc_utils_defaults = cc_defaults {
@@ -18,6 +18,11 @@ nfc_utils_defaults = cc_defaults {
             enabled = false;
         };
     };
+    sanitize = {
+        integer_overflow = true;
+        misc_undefined = ["bounds"];
+    };
+
 };
 
 libnfcutils = cc_library_static {
@@ -32,6 +37,7 @@ libnfcutils = cc_library_static {
     shared_libs = [
         "libbase"
     ];
+
 };
 
 nfc_test_utils = cc_test {
@@ -52,4 +58,18 @@ nfc_test_utils = cc_test {
     ];
 };
 
-in { inherit libnfcutils nfc_test_utils nfc_utils_defaults; }
+nfc_utils_ringbuffer_fuzzer = cc_fuzz {
+    name = "nfc_utils_ringbuffer_fuzzer";
+    host_supported = true;
+    srcs = [
+        "test/ringbuffer_fuzzer/ringbuffer_fuzzer.cpp"
+    ];
+    static_libs = [
+        "libnfcutils"
+    ];
+    corpus = [
+        "test/ringbuffer_fuzzer/corpus/*"
+    ];
+};
+
+in { inherit libnfcutils nfc_test_utils nfc_utils_defaults nfc_utils_ringbuffer_fuzzer; }

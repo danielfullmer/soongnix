@@ -22,7 +22,6 @@ let
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
@@ -44,7 +43,6 @@ libbluetooth_audio_session = cc_library_shared {
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

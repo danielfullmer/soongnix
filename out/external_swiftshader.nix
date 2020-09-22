@@ -33,8 +33,10 @@ swiftshader_common = cc_defaults {
 
     cppflags = [
         "-Woverloaded-virtual"
+        "-DVK_USE_PLATFORM_ANDROID_KHR"
+        "-DVK_EXPORT= "
     ];
-    cpp_std = "c++11";
+    cpp_std = "c++14";
 
     target = {
         host = {
@@ -77,24 +79,11 @@ swiftshader_common_debug = cc_defaults {
     ];
 };
 
-swiftshader_subzero = cc_defaults {
-    name = "swiftshader_subzero";
-
-    cflags = [
-        "-DALLOW_DUMP=0"
-        "-DALLOW_TIMERS=0"
-        "-DALLOW_LLVM_CL=0"
-        "-DALLOW_LLVM_IR=0"
-        "-DALLOW_LLVM_IR_AS_INPUT=0"
-        "-DALLOW_MINIMAL_BUILD=0"
-        "-DALLOW_WASM=0"
-        "-DICE_THREAD_LOCAL_HACK=1"
-    ];
-};
-
 swiftshader_platform_headers = cc_library_headers {
     name = "swiftshader_platform_headers";
     host_supported = true;
+    device_supported = true;
+    vendor_available = true;
     export_include_dirs = ["include"];
 };
 
@@ -105,11 +94,4 @@ swiftshader_host_headers = cc_library_headers {
     export_include_dirs = ["include/Android"];
 };
 
-subdirs = [
-    "src"
-    "third_party/llvm-subzero"
-    "third_party/LLVM"
-    "third_party/subzero"
-];
-
-in { inherit swiftshader_common swiftshader_common_debug swiftshader_common_release swiftshader_host_headers swiftshader_platform_headers swiftshader_subzero; }
+in { inherit swiftshader_common swiftshader_common_debug swiftshader_common_release swiftshader_host_headers swiftshader_platform_headers; }

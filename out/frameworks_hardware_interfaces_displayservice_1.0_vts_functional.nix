@@ -19,21 +19,18 @@ let
 
 VtsFwkDisplayServiceV1_0TargetTest = cc_test {
     name = "VtsFwkDisplayServiceV1_0TargetTest";
+    defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsFwkDisplayServiceV1_0TargetTest.cpp"];
-    shared_libs = [
+    static_libs = [
         "android.frameworks.displayservice@1.0"
-        "libhidlbase"
-        "libhidltransport"
-        "liblog"
-        "libutils"
     ];
-    static_libs = ["VtsHalHidlTargetTestBase"];
     cflags = [
         "-Wall"
         "-Werror"
         "-O0"
         "-g"
     ];
+    test_suites = ["vts"];
 };
 
 in { inherit VtsFwkDisplayServiceV1_0TargetTest; }

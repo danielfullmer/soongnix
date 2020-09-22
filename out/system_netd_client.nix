@@ -22,15 +22,19 @@ libnetd_client = cc_library {
         "NetdClient.cpp"
     ];
     header_libs = [
+        "dnsproxyd_protocol_headers" #  NETID_USE_LOCAL_NAMESERVERS
         "libnetd_client_headers"
         "libbase_headers" #  for unique_fd.h
+        "libnetd_resolv_headers"
     ];
     export_header_lib_headers = ["libnetd_client_headers"];
     include_dirs = [
-        "system/netd/resolv"
         "system/netd/libnetdutils/include"
     ];
     defaults = ["netd_defaults"];
+    sanitize = {
+        cfi = true;
+    };
 };
 
 netdclient_test = cc_test {
@@ -41,9 +45,10 @@ netdclient_test = cc_test {
     defaults = ["netd_defaults"];
     test_suites = ["device-tests"];
     include_dirs = [
-        "system/netd/resolv"
         "system/netd/include"
-        "system/netd/libnetdutils/include"
+    ];
+    header_libs = [
+        "libnetd_resolv_headers"
     ];
     static_libs = [
         "libgmock"

@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsEphemeralTestsEphemeralApp2 = android_test {
+CtsEphemeralTestsEphemeralApp2 = android_test_helper_app {
     name = "CtsEphemeralTestsEphemeralApp2";
     defaults = ["cts_support_defaults"];
     libs = [
@@ -33,7 +33,7 @@ CtsEphemeralTestsEphemeralApp2 = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     srcs = [

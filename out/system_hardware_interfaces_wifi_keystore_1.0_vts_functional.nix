@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_test, vts_config }:
 let
 
 #
@@ -19,6 +19,7 @@ let
 
 VtsHalWifiKeystoreV1_0TargetTest = cc_test {
     name = "VtsHalWifiKeystoreV1_0TargetTest";
+    defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
         "VtsHalWifiKeystoreV1_0TargetTest.cpp"
     ];
@@ -27,7 +28,6 @@ VtsHalWifiKeystoreV1_0TargetTest = cc_test {
         "liblog"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "libnativehelper"
         "libutils"
         "libkeystore_binder"
@@ -35,8 +35,6 @@ VtsHalWifiKeystoreV1_0TargetTest = cc_test {
         "libkeystore_aidl"
         "libkeystore_parcelables"
         "libkeymaster4support"
-        "libbinderthreadstate"
-        "libhwbinder"
     ];
     static_libs = [
         "VtsHalHidlTargetTestBase"
@@ -48,6 +46,15 @@ VtsHalWifiKeystoreV1_0TargetTest = cc_test {
         "-Wall"
         "-Werror"
     ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
-in { inherit VtsHalWifiKeystoreV1_0TargetTest; }
+VtsHalWifiKeystoreV1_0Target = vts_config {
+    name = "VtsHalWifiKeystoreV1_0Target";
+    test_config = "wifi_keystore_target.xml";
+};
+
+in { inherit VtsHalWifiKeystoreV1_0Target VtsHalWifiKeystoreV1_0TargetTest; }

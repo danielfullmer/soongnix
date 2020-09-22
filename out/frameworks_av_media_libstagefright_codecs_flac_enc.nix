@@ -18,8 +18,10 @@ libstagefright_soft_flacenc = cc_library_shared {
     };
 
     header_libs = ["libbase_headers"];
-    static_libs = [
+    shared_libs = [
         "libaudioutils"
+    ];
+    static_libs = [
         "libFLAC"
     ];
 };

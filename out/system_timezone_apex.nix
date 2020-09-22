@@ -18,13 +18,15 @@ let
 #  Defaults shared between real and test versions of the APEX.
 "com.android.tzdata-defaults" = apex_defaults {
     name = "com.android.tzdata-defaults";
+    updatable = true;
+    min_sdk_version = "R";
 
     #  Use a custom AndroidManifest.xml used for API targeting.
     androidManifest = ":com.android.tzdata-androidManifest";
 
     #  Explicit because the defaulting behavior only works for the real
     #  module.
-    file_contexts = "com.android.tzdata";
+    file_contexts = ":com.android.tzdata-file_contexts";
 
     #  Shared signing information.
     key = "apex.tzdata.key";
@@ -55,6 +57,7 @@ let
     prebuilts = [
         "apex_tz_version"
         "apex_tzlookup.xml"
+        "apex_telephonylookup.xml"
         "apex_tzdata"
         "apex_icu_tzdata.dat"
     ];

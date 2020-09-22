@@ -1,4 +1,4 @@
-{ genrule, java_defaults, java_genrule, java_import, java_library, java_library_host, java_library_static, java_test }:
+{ genrule, java_defaults, java_genrule, java_import, java_library, java_library_host, java_test, package }:
 let
 
 #
@@ -17,6 +17,10 @@ let
 #  limitations under the License.
 #
 
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
+
 icu4j-defaults = java_defaults {
     name = "icu4j-defaults";
     host_supported = true;
@@ -29,6 +33,14 @@ icu4j-defaults = java_defaults {
 
 icu4j = java_library {
     name = "icu4j";
+    visibility = [
+        "//bootable/recovery/tools/image_generator"
+        "//external/icu/tools/srcgen"
+        "//external/robolectric-shadows/robolectric"
+        "//external/robolectric-shadows/shadows/framework"
+        "//system/timezone/input_tools/android/telephonylookup_generator"
+        "//system/timezone/input_tools/android/tzlookup_generator"
+    ];
     defaults = ["icu4j-defaults"];
 
     srcs = [
@@ -124,6 +136,9 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/impl/DayPeriodRules.java"
         "main/classes/core/src/com/ibm/icu/impl/DontCareFieldPosition.java"
         "main/classes/core/src/com/ibm/icu/impl/EraRules.java"
+        "main/classes/core/src/com/ibm/icu/impl/FormattedStringBuilder.java"
+        "main/classes/core/src/com/ibm/icu/impl/FormattedValueFieldPositionIteratorImpl.java"
+        "main/classes/core/src/com/ibm/icu/impl/FormattedValueStringBuilderImpl.java"
         "main/classes/core/src/com/ibm/icu/impl/Grego.java"
         "main/classes/core/src/com/ibm/icu/impl/ICUBinary.java"
         "main/classes/core/src/com/ibm/icu/impl/ICUCache.java"
@@ -265,7 +280,9 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/impl/locale/Extension.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/InternalLocaleBuilder.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/KeyTypeData.java"
+        "main/classes/core/src/com/ibm/icu/impl/locale/LSR.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/LanguageTag.java"
+        "main/classes/core/src/com/ibm/icu/impl/locale/LocaleDistance.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/LocaleExtensions.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/LocaleObjectCache.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/LocaleSyntaxException.java"
@@ -275,8 +292,6 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/impl/locale/UnicodeLocaleExtension.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/XCldrStub.java"
         "main/classes/core/src/com/ibm/icu/impl/locale/XLikelySubtags.java"
-        "main/classes/core/src/com/ibm/icu/impl/locale/XLocaleDistance.java"
-        "main/classes/core/src/com/ibm/icu/impl/locale/XLocaleMatcher.java"
         "main/classes/core/src/com/ibm/icu/impl/number/AdoptingModifierStore.java"
         "main/classes/core/src/com/ibm/icu/impl/number/AffixPatternProvider.java"
         "main/classes/core/src/com/ibm/icu/impl/number/AffixUtils.java"
@@ -302,7 +317,6 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/impl/number/MultiplierFormatHandler.java"
         "main/classes/core/src/com/ibm/icu/impl/number/MultiplierProducer.java"
         "main/classes/core/src/com/ibm/icu/impl/number/MutablePatternModifier.java"
-        "main/classes/core/src/com/ibm/icu/impl/number/NumberStringBuilder.java"
         "main/classes/core/src/com/ibm/icu/impl/number/Padder.java"
         "main/classes/core/src/com/ibm/icu/impl/number/PatternStringParser.java"
         "main/classes/core/src/com/ibm/icu/impl/number/PatternStringUtils.java"
@@ -354,11 +368,9 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/math/MathContext.java"
         "main/classes/core/src/com/ibm/icu/number/CompactNotation.java"
         "main/classes/core/src/com/ibm/icu/number/CurrencyPrecision.java"
-        "main/classes/core/src/com/ibm/icu/number/CurrencyRounder.java"
         "main/classes/core/src/com/ibm/icu/number/FormattedNumber.java"
         "main/classes/core/src/com/ibm/icu/number/FormattedNumberRange.java"
         "main/classes/core/src/com/ibm/icu/number/FractionPrecision.java"
-        "main/classes/core/src/com/ibm/icu/number/FractionRounder.java"
         "main/classes/core/src/com/ibm/icu/number/IntegerWidth.java"
         "main/classes/core/src/com/ibm/icu/number/LocalizedNumberFormatter.java"
         "main/classes/core/src/com/ibm/icu/number/LocalizedNumberRangeFormatter.java"
@@ -372,7 +384,6 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/number/NumberRangeFormatterSettings.java"
         "main/classes/core/src/com/ibm/icu/number/NumberSkeletonImpl.java"
         "main/classes/core/src/com/ibm/icu/number/Precision.java"
-        "main/classes/core/src/com/ibm/icu/number/Rounder.java"
         "main/classes/core/src/com/ibm/icu/number/Scale.java"
         "main/classes/core/src/com/ibm/icu/number/ScientificNotation.java"
         "main/classes/core/src/com/ibm/icu/number/SimpleNotation.java"
@@ -407,6 +418,7 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/text/CjkBreakEngine.java"
         "main/classes/core/src/com/ibm/icu/text/CompactDecimalFormat.java"
         "main/classes/core/src/com/ibm/icu/text/ComposedCharIter.java"
+        "main/classes/core/src/com/ibm/icu/text/ConstrainedFieldPosition.java"
         "main/classes/core/src/com/ibm/icu/text/CurrencyDisplayNames.java"
         "main/classes/core/src/com/ibm/icu/text/CurrencyFormat.java"
         "main/classes/core/src/com/ibm/icu/text/CurrencyMetaInfo.java"
@@ -418,16 +430,15 @@ icu4j = java_library {
         "main/classes/core/src/com/ibm/icu/text/DateTimePatternGenerator.java"
         "main/classes/core/src/com/ibm/icu/text/DecimalFormat.java"
         "main/classes/core/src/com/ibm/icu/text/DecimalFormatSymbols.java"
-        "main/classes/core/src/com/ibm/icu/text/DecimalFormat_ICU58_Android.java"
         "main/classes/core/src/com/ibm/icu/text/DictionaryBreakEngine.java"
         "main/classes/core/src/com/ibm/icu/text/DictionaryData.java"
         "main/classes/core/src/com/ibm/icu/text/DictionaryMatcher.java"
-        "main/classes/core/src/com/ibm/icu/text/DigitList_Android.java"
         "main/classes/core/src/com/ibm/icu/text/DisplayContext.java"
         "main/classes/core/src/com/ibm/icu/text/DurationFormat.java"
         "main/classes/core/src/com/ibm/icu/text/Edits.java"
         "main/classes/core/src/com/ibm/icu/text/FilteredBreakIteratorBuilder.java"
         "main/classes/core/src/com/ibm/icu/text/FilteredNormalizer2.java"
+        "main/classes/core/src/com/ibm/icu/text/FormattedValue.java"
         "main/classes/core/src/com/ibm/icu/text/IDNA.java"
         "main/classes/core/src/com/ibm/icu/text/KhmerBreakEngine.java"
         "main/classes/core/src/com/ibm/icu/text/LanguageBreakEngine.java"
@@ -798,6 +809,8 @@ icu4j-tests = java_test {
         "main/tests/core/src/com/ibm/icu/dev/test/format/DateFormatTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/DateIntervalFormatTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/DateTimeGeneratorTest.java"
+        "main/tests/core/src/com/ibm/icu/dev/test/format/FormattedStringBuilderTest.java"
+        "main/tests/core/src/com/ibm/icu/dev/test/format/FormattedValueTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/IntlTestDateFormat.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/IntlTestDateFormatAPI.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/IntlTestDateFormatAPIC.java"
@@ -815,6 +828,7 @@ icu4j-tests = java_test {
         "main/tests/core/src/com/ibm/icu/dev/test/format/MessagePatternUtilTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/MessageRegressionTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatDataDrivenTest.java"
+        "main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatJavaCompatilityTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRegistrationTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatRoundTripTest.java"
@@ -877,9 +891,9 @@ icu4j-tests = java_test {
         "main/tests/core/src/com/ibm/icu/dev/test/number/MutablePatternModifierTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/number/NumberFormatterApiTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/number/NumberParserTest.java"
+        "main/tests/core/src/com/ibm/icu/dev/test/number/NumberPermutationTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/number/NumberRangeFormatterTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/number/NumberSkeletonTest.java"
-        "main/tests/core/src/com/ibm/icu/dev/test/number/NumberStringBuilderTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/number/PatternStringTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/number/PropertiesTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/rbbi/AbstractBreakIteratorTests.java"
@@ -896,6 +910,7 @@ icu4j-tests = java_test {
         "main/tests/core/src/com/ibm/icu/dev/test/serializable/CoverageTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/serializable/ExceptionHandler.java"
         "main/tests/core/src/com/ibm/icu/dev/test/serializable/FormatHandler.java"
+        "main/tests/core/src/com/ibm/icu/dev/test/serializable/SerializableChecker.java"
         "main/tests/core/src/com/ibm/icu/dev/test/serializable/SerializableTestUtility.java"
         "main/tests/core/src/com/ibm/icu/dev/test/serializable/SerializableWriter.java"
         "main/tests/core/src/com/ibm/icu/dev/test/shaping/ArabicShapingRegTest.java"
@@ -944,7 +959,7 @@ icu4j-tests = java_test {
         "main/tests/core/src/com/ibm/icu/dev/test/util/LocaleAliasTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/util/LocaleBuilderTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/util/LocaleDataTest.java"
-        "main/tests/core/src/com/ibm/icu/dev/test/util/LocaleMatcherShim.java"
+        "main/tests/core/src/com/ibm/icu/dev/test/util/LocaleDistanceTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/util/LocaleMatcherTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/util/LocalePriorityListTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/util/RegionTest.java"
@@ -960,8 +975,6 @@ icu4j-tests = java_test {
         "main/tests/core/src/com/ibm/icu/dev/test/util/ULocaleTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/util/UtilityTest.java"
         "main/tests/core/src/com/ibm/icu/dev/test/util/VersionInfoTest.java"
-        "main/tests/core/src/com/ibm/icu/dev/test/util/XLocaleDistanceTest.java"
-        "main/tests/core/src/com/ibm/icu/dev/test/util/XLocaleMatcherTest.java"
         "main/tests/framework/src/com/ibm/icu/dev/test/AbstractTestLog.java"
         "main/tests/framework/src/com/ibm/icu/dev/test/ModuleTest.java"
         "main/tests/framework/src/com/ibm/icu/dev/test/ResourceModule.java"
@@ -1007,6 +1020,8 @@ icu4j-tests = java_test {
         "main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeSetBoilerplateTest.java"
         "main/tests/translit/src/com/ibm/icu/dev/test/translit/WriteCharts.java"
         "main/tests/translit/src/com/ibm/icu/dev/test/util/TestUtilities.java"
+        "tools/misc/src/com/ibm/icu/dev/tool/locale/LikelySubtagsBuilder.java"
+        "tools/misc/src/com/ibm/icu/dev/tool/locale/LocaleDistanceBuilder.java"
     ];
     java_resource_dirs = [
         "main/tests/charset/src/"
@@ -1057,23 +1072,34 @@ icu4j-testdata = java_import {
     jars = ["main/shared/data/testdata.jar"];
 };
 
-#  LayoutLib (frameworks/layoutlib) needs JarJar'd versions of the
-#  icudata and icutzdata, so add rules for it.
-icu4j-icudata-jarjar = java_library_static {
+#  LayoutLib (frameworks/layoutlib) and robolectric need JarJar'd versions of
+#  the icudata and icutzdata, so add rules for it.
+icu4j-icudata-jarjar = java_library {
     name = "icu4j-icudata-jarjar";
+    visibility = [
+        "//external/robolectric-shadows"
+        "//frameworks/layoutlib"
+    ];
     defaults = ["icu4j-defaults"];
     static_libs = ["icu4j-icudata"];
     jarjar_rules = "liblayout-jarjar-rules.txt";
 };
 
-icu4j-icutzdata-jarjar = java_library_static {
+icu4j-icutzdata-jarjar = java_library {
     name = "icu4j-icutzdata-jarjar";
+    visibility = [
+        "//external/robolectric-shadows"
+        "//frameworks/layoutlib"
+    ];
     defaults = ["icu4j-defaults"];
     static_libs = ["icu4j-icutzdata"];
     jarjar_rules = "liblayout-jarjar-rules.txt";
 };
 
 #  Compatibility alias until references to icu4j-host are removed
+#
+#  When converting .mk files to .bp files do not change the visibility of this
+#  module, instead replace usages of this with icu4j
 icu4j-host = java_library_host {
     name = "icu4j-host";
     static_libs = ["icu4j"];
@@ -1152,4 +1178,4 @@ generated_android_icu4j_test_resources = java_genrule {
         "-D $(genDir)/android_icu4j/src/main/tests";
 };
 
-in { inherit generated_android_icu4j_resources generated_android_icu4j_src_files generated_android_icu4j_test_files generated_android_icu4j_test_resources icu4j icu4j-defaults icu4j-host icu4j-icudata icu4j-icudata-jarjar icu4j-icutzdata icu4j-icutzdata-jarjar icu4j-testdata icu4j-tests; }
+in { inherit _missingName generated_android_icu4j_resources generated_android_icu4j_src_files generated_android_icu4j_test_files generated_android_icu4j_test_resources icu4j icu4j-defaults icu4j-host icu4j-icudata icu4j-icudata-jarjar icu4j-icutzdata icu4j-icutzdata-jarjar icu4j-testdata icu4j-tests; }

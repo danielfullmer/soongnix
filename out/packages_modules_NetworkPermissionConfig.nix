@@ -23,7 +23,6 @@ NetworkPermissionConfigDefaults = java_defaults {
     #  a classes.dex.
     srcs = ["src/com/android/server/NetworkPermissionConfig.java"];
     platform_apis = true;
-    min_sdk_version = "28";
     privileged = true;
     manifest = "AndroidManifest.xml";
 };
@@ -33,6 +32,8 @@ NetworkPermissionConfig = android_app {
     name = "NetworkPermissionConfig";
     defaults = ["NetworkPermissionConfigDefaults"];
     certificate = "networkstack";
+    target_sdk_version = "30";
+    min_sdk_version = "29";
 };
 
 #  Alternative stub APK signed with platform certificate. To use with InProcessNetworkStack.

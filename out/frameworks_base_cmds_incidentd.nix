@@ -58,7 +58,7 @@ incidentd = cc_binary {
     ];
 
     local_include_dirs = ["src"];
-    generated_headers = ["gen-platform-proto-constants"];
+    generated_headers = ["framework-cppstream-protos"];
 
     proto = {
         type = "lite";
@@ -69,7 +69,7 @@ incidentd = cc_binary {
         "libbinder"
         "libdebuggerd_client"
         "libdumputils"
-        "libincident"
+        "libincidentpriv"
         "liblog"
         "libprotoutil"
         "libservices"
@@ -112,7 +112,7 @@ incidentd_test = cc_test {
     ];
 
     local_include_dirs = ["src"];
-    generated_headers = ["gen-platform-proto-constants"];
+    generated_headers = ["framework-cppstream-protos"];
 
     srcs = [
         "tests/FdBuffer_test.cpp"
@@ -153,7 +153,7 @@ incidentd_test = cc_test {
         "libbinder"
         "libdebuggerd_client"
         "libdumputils"
-        "libincident"
+        "libincidentpriv"
         "liblog"
         "libprotobuf-cpp-full"
         "libprotoutil"

@@ -1,4 +1,4 @@
-{ vts_config }:
+{ python_test_host, vts_config }:
 let
 
 #
@@ -21,4 +21,33 @@ VtsTrebleSysProp = vts_config {
     name = "VtsTrebleSysProp";
 };
 
-in { inherit VtsTrebleSysProp; }
+vts_treble_sys_prop_test = python_test_host {
+    name = "vts_treble_sys_prop_test";
+    main = "vts_treble_sys_prop_test.py";
+    srcs = [
+        "vts_treble_sys_prop_test.py"
+    ];
+    libs = [
+        "vndk_utils"
+        "vts_vndk_utils"
+    ];
+    data = [
+        ":public_property_contexts"
+    ];
+    test_suites = [
+        "vts"
+    ];
+    test_config = "vts_treble_sys_prop_test.xml";
+    version = {
+        py2 = {
+            enabled = false;
+            embedded_launcher = false;
+        };
+        py3 = {
+            enabled = true;
+            embedded_launcher = true;
+        };
+    };
+};
+
+in { inherit VtsTrebleSysProp vts_treble_sys_prop_test; }

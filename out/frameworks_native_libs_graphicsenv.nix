@@ -38,6 +38,10 @@ libgraphicsenv = cc_library_shared {
         "libutils"
     ];
 
+    header_libs = [
+        "libnativeloader-headers"
+    ];
+
     export_include_dirs = ["include"];
 };
 

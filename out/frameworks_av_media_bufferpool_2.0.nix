@@ -19,8 +19,6 @@ let
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhwbinder"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.media.bufferpool@2.0"
@@ -35,6 +33,9 @@ let
     name = "libstagefright_bufferpool@2.0.1";
     defaults = ["libstagefright_bufferpool@2.0-default"];
     vendor_available = true;
+    min_sdk_version = "29";
+    #  TODO: b/147147992
+    double_loadable = true;
     cflags = [
         "-DBUFFERPOOL_CLONE_HANDLES"
     ];
@@ -45,6 +46,8 @@ let
     name = "libstagefright_bufferpool@2.0";
     defaults = ["libstagefright_bufferpool@2.0-default"];
     vendor_available = true;
+    #  TODO: b/147147992
+    double_loadable = true;
     vndk = {
         enabled = true;
     };

@@ -34,7 +34,6 @@ hwvulkan_headers = cc_library_headers {
 subdirs = [
     "nulldrv"
     "libvulkan"
-    "tools"
     "vkjson"
 ];
 

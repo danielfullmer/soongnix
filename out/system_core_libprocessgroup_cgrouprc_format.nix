@@ -19,6 +19,7 @@ libcgrouprc_format = cc_library_static {
     name = "libcgrouprc_format";
     host_supported = true;
     recovery_available = true;
+    native_bridge_supported = true;
     srcs = [
         "cgroup_controller.cpp"
     ];

@@ -21,25 +21,31 @@ CtsPackageInstallTestCases = android_test {
 
     srcs = [
         "src/android/packageinstaller/install/cts/ExternalSourcesInstantAppsTest.kt"
-        "src/android/packageinstaller/install/cts/ExternalSourcesTest.kt"
-        "src/android/packageinstaller/install/cts/InstallConfirmDialogStarter.kt"
+        "src/android/packageinstaller/install/cts/ExternalSourcesTestAppOpAllowed.kt"
+        "src/android/packageinstaller/install/cts/InstallSourceInfoTest.kt"
         "src/android/packageinstaller/install/cts/IntentTest.kt"
         "src/android/packageinstaller/install/cts/PackageInstallerTestBase.kt"
         "src/android/packageinstaller/install/cts/SessionTest.kt"
         "src/android/packageinstaller/install/cts/SessionTestInstant.kt"
     ];
+    exclude_srcs = [
+        "src/android/packageinstaller/install/cts/ExternalSourcesTestAppOpDenied.kt"
+        "src/android/packageinstaller/install/cts/ExternalSourcesTestAppOpDefault.kt"
+    ];
 
     static_libs = [
         "ub-uiautomator"
         "androidx.test.rules"
+        "androidx.test.ext.junit"
         "compatibility-device-util-axt"
         "androidx.legacy_legacy-support-v4"
         "platform-test-annotations"
+        "truth-prebuilt"
     ];
 
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

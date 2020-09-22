@@ -39,8 +39,6 @@ let
         "android.hardware.nfc@1.1"
         "android.hardware.nfc@1.2"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
     ];
 };
 

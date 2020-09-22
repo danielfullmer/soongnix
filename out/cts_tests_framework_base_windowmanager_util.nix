@@ -1,4 +1,4 @@
-{ java_test }:
+{ filegroup, java_test_helper_library }:
 let
 
 #  Copyright (C) 2012 The Android Open Source Project
@@ -15,23 +15,42 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-cts-wm-util = java_test {
+cts-wm-app-util = filegroup {
+    name = "cts-wm-app-util";
+    srcs = [
+        "src/android/server/wm/ActivityLauncher.java"
+        "src/android/server/wm/CommandSession.java"
+        "src/android/server/wm/ComponentNameUtils.java"
+        "src/android/server/wm/TestJournalProvider.java"
+        "src/android/server/wm/TestLogClient.java"
+        ":cts-wm-components"
+    ];
+};
+
+cts-wm-util = java_test_helper_library {
     name = "cts-wm-util";
 
     srcs = [
-        "src/android/server/wm/ActivityAndWindowManagersState.java"
         "src/android/server/wm/ActivityLauncher.java"
-        "src/android/server/wm/ActivityManagerState.java"
         "src/android/server/wm/ActivityManagerTestBase.java"
         "src/android/server/wm/BarTestUtils.java"
         "src/android/server/wm/CommandSession.java"
         "src/android/server/wm/ComponentNameUtils.java"
+        "src/android/server/wm/Condition.java"
+        "src/android/server/wm/ObjectTracker.java"
         "src/android/server/wm/ProtoExtractors.java"
         "src/android/server/wm/StateLogger.java"
         "src/android/server/wm/TestJournalProvider.java"
+        "src/android/server/wm/TestLogClient.java"
+        "src/android/server/wm/TestTaskOrganizer.java"
         "src/android/server/wm/UiDeviceUtils.java"
         "src/android/server/wm/WaitForValidActivityState.java"
+        "src/android/server/wm/WindowInsetsAnimationUtils.java"
         "src/android/server/wm/WindowManagerState.java"
+        "src/android/server/wm/WindowManagerStateHelper.java"
+        "src/android/server/wm/annotation/Group1.java"
+        "src/android/server/wm/annotation/Group2.java"
+        "src/android/server/wm/annotation/Group3.java"
         "src/android/server/wm/settings/SettingsSession.java"
         ":cts-wm-components"
         ":cts-wm-components-base"
@@ -47,4 +66,4 @@ cts-wm-util = java_test {
     sdk_version = "test_current";
 };
 
-in { inherit cts-wm-util; }
+in { inherit cts-wm-app-util cts-wm-util; }

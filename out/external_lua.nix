@@ -18,6 +18,7 @@ let
 
 liblua = cc_library_static {
     name = "liblua";
+    sdk_version = "current";
     cflags = [
         "-Werror"
         "-Wall"
@@ -30,6 +31,11 @@ liblua = cc_library_static {
     export_include_dirs = ["src"];
     srcs = [
         ":liblua-sources"
+    ];
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.extservices"
     ];
 };
 

@@ -12,15 +12,16 @@ libcodec2_client = cc_library {
         "android.hardware.graphics.bufferqueue@1.0"
         "android.hardware.media.bufferpool@2.0"
         "android.hardware.media.c2@1.0"
+        "android.hardware.media.c2@1.1"
         "libbase"
         "libbinder"
         "libcodec2"
         "libcodec2_hidl_client@1.0"
+        "libcodec2_hidl_client@1.1"
         "libcodec2_vndk"
         "libcutils"
         "libgui"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libstagefright_bufferpool@2.0.1"
         "libui"
@@ -32,8 +33,11 @@ libcodec2_client = cc_library {
     ];
 
     export_shared_lib_headers = [
+        "android.hardware.media.c2@1.0"
+        "android.hardware.media.c2@1.1"
         "libcodec2"
         "libcodec2_hidl_client@1.0"
+        "libcodec2_hidl_client@1.1"
         "libcodec2_vndk"
     ];
 

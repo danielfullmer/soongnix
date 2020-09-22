@@ -15,10 +15,14 @@ libvr_hwc-hal = cc_library_shared {
     ];
 
     shared_libs = [
-        "android.frameworks.vr.composer@1.0"
+        "android.frameworks.vr.composer@2.0"
         "android.hardware.graphics.composer@2.1"
+        "android.hardware.graphics.composer@2.2"
+        "android.hardware.graphics.composer@2.3"
+        "android.hardware.graphics.composer@2.1-resources"
         "android.hardware.graphics.mapper@2.0"
         "android.hardware.graphics.mapper@3.0"
+        "android.hardware.graphics.mapper@4.0"
         "libbase"
         "libbufferhubqueue"
         "libbinder"
@@ -26,7 +30,6 @@ libvr_hwc-hal = cc_library_shared {
         "libfmq"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libsync"
         "libui"
@@ -36,11 +39,11 @@ libvr_hwc-hal = cc_library_shared {
 
     header_libs = [
         "android.hardware.graphics.composer@2.1-command-buffer"
-        "android.hardware.graphics.composer@2.1-hal"
+        "android.hardware.graphics.composer@2.3-hal"
     ];
 
     export_header_lib_headers = [
-        "android.hardware.graphics.composer@2.1-hal"
+        "android.hardware.graphics.composer@2.3-hal"
     ];
 
     export_static_lib_headers = [
@@ -48,8 +51,10 @@ libvr_hwc-hal = cc_library_shared {
     ];
 
     export_shared_lib_headers = [
-        "android.frameworks.vr.composer@1.0"
+        "android.frameworks.vr.composer@2.0"
         "android.hardware.graphics.composer@2.1"
+        "android.hardware.graphics.composer@2.2"
+        "android.hardware.graphics.composer@2.3"
     ];
 
     export_include_dirs = ["."];
@@ -65,34 +70,6 @@ libvr_hwc-hal = cc_library_shared {
         "-Wno-unused-parameter"
     ];
 
-};
-
-libvr_hwc-binder = cc_library_static {
-    name = "libvr_hwc-binder";
-    srcs = [
-        "aidl/android/dvr/IVrComposer.aidl"
-        "aidl/android/dvr/IVrComposerCallback.aidl"
-        "aidl/android/dvr/parcelable_composer_frame.cpp"
-        "aidl/android/dvr/parcelable_composer_layer.cpp"
-        "aidl/android/dvr/parcelable_unique_fd.cpp"
-    ];
-    aidl = {
-        include_dirs = ["frameworks/native/services/vr/hardware_composer/aidl"];
-        export_aidl_headers = true;
-    };
-    export_include_dirs = ["aidl"];
-
-    cflags = [
-        "-Wall"
-        "-Werror"
-    ];
-
-    shared_libs = [
-        "libbinder"
-        "libui"
-        "libutils"
-        "libvr_hwc-hal"
-    ];
 };
 
 libvr_hwc-impl = cc_library_static {
@@ -134,8 +111,8 @@ vr_hwc = cc_binary {
         "libvr_hwc-binder"
     ];
     shared_libs = [
-        "android.frameworks.vr.composer@1.0"
-        "android.hardware.graphics.composer@2.1"
+        "android.frameworks.vr.composer@2.0"
+        "android.hardware.graphics.composer@2.3"
         "libbase"
         "libbinder"
         "liblog"
@@ -182,4 +159,4 @@ vr_hwc_test = cc_test {
     ];
 };
 
-in { inherit libvr_hwc-binder libvr_hwc-hal libvr_hwc-impl vr_hwc vr_hwc_test; }
+in { inherit libvr_hwc-hal libvr_hwc-impl vr_hwc vr_hwc_test; }

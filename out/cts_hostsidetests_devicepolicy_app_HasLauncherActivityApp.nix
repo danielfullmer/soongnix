@@ -31,8 +31,9 @@ CtsHasLauncherActivityApp = android_test_helper_app {
     ];
     #  tag this module as a cts test artifact
     test_suites = [
+        "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     sdk_version = "current";
@@ -53,8 +54,9 @@ CtsNoLauncherActivityApp = android_test_helper_app {
     ];
     #  tag this module as a cts test artifact
     test_suites = [
+        "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "no_launcher_activity_AndroidManifest.xml";
@@ -76,8 +78,9 @@ CtsNoPermissionApp = android_test_helper_app {
     ];
     #  tag this module as a cts test artifact
     test_suites = [
+        "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "no_permission_AndroidManifest.xml";

@@ -1,4 +1,4 @@
-{ cc_library_shared }:
+{ cc_library_shared, filegroup }:
 let
 
 #  Copyright 2018 The Android Open Source Project
@@ -31,8 +31,7 @@ libsensorprivacy = cc_library_shared {
     ];
 
     srcs = [
-        "aidl/android/hardware/ISensorPrivacyListener.aidl"
-        "aidl/android/hardware/ISensorPrivacyManager.aidl"
+        ":libsensorprivacy_aidl"
         "SensorPrivacyManager.cpp"
     ];
 
@@ -49,4 +48,13 @@ libsensorprivacy = cc_library_shared {
     export_shared_lib_headers = ["libbinder"];
 };
 
-in { inherit libsensorprivacy; }
+libsensorprivacy_aidl = filegroup {
+    name = "libsensorprivacy_aidl";
+    srcs = [
+        "aidl/android/hardware/ISensorPrivacyListener.aidl"
+        "aidl/android/hardware/ISensorPrivacyManager.aidl"
+    ];
+    path = "aidl";
+};
+
+in { inherit libsensorprivacy libsensorprivacy_aidl; }

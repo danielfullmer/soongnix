@@ -22,7 +22,10 @@ VtsHalGatekeeperV1_0TargetTest = cc_test {
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalGatekeeperV1_0TargetTest.cpp"];
     static_libs = ["android.hardware.gatekeeper@1.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalGatekeeperV1_0TargetTest; }

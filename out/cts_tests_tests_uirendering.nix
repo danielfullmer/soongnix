@@ -76,8 +76,10 @@ CtsUiRenderingTestCases = android_test {
         "src/android/uirendering/cts/testclasses/ViewAnimationUtilsTests.java"
         "src/android/uirendering/cts/testclasses/ViewClippingTests.java"
         "src/android/uirendering/cts/testclasses/ViewFadingEdgeTests.java"
+        "src/android/uirendering/cts/testclasses/ViewPropertyAnimatorTests.java"
         "src/android/uirendering/cts/testclasses/WideColorGamutTests.java"
         "src/android/uirendering/cts/testclasses/XfermodeTest.java"
+        "src/android/uirendering/cts/testclasses/view/AlphaTestView.java"
         "src/android/uirendering/cts/testclasses/view/BitmapView.java"
         "src/android/uirendering/cts/testclasses/view/CircleClipFrameLayout.java"
         "src/android/uirendering/cts/testclasses/view/SkewLayout.java"
@@ -98,12 +100,14 @@ CtsUiRenderingTestCases = android_test {
         "src/android/uirendering/cts/util/SneakyThrow.java"
         "src/android/uirendering/cts/util/WebViewReadyHelper.java"
         "src/android/uirendering/cts/testclasses/HardwareRendererTests.kt"
+        "src/android/uirendering/cts/testclasses/PaintTests.kt"
         "src/android/uirendering/cts/testinfrastructure/DrawActivity.kt"
     ];
 
     static_libs = [
         "compatibility-device-util-axt"
         "ctsdeviceutillegacy-axt"
+        "cts-wm-util"
         "mockito-target-minus-junit4"
         "androidx.test.rules"
         "kotlin-test"
@@ -113,7 +117,7 @@ CtsUiRenderingTestCases = android_test {
 
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

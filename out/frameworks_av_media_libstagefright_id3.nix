@@ -3,10 +3,12 @@ let
 
 libstagefright_id3 = cc_library_static {
     name = "libstagefright_id3";
+    min_sdk_version = "29";
 
     srcs = ["ID3.cpp"];
 
     header_libs = [
+        "libmedia_headers"
         "media_ndk_headers"
     ];
 
@@ -36,6 +38,7 @@ testid3 = cc_test {
     ];
 
     shared_libs = [
+        "libdatasource"
         "libstagefright"
         "libutils"
         "liblog"

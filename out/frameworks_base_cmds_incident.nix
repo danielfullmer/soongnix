@@ -29,7 +29,7 @@ incident = cc_binary {
         "libcutils"
         "liblog"
         "libutils"
-        "libincident"
+        "libincidentpriv"
     ];
 
     static_libs = [

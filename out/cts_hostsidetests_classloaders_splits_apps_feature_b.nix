@@ -33,11 +33,6 @@ CtsClassloaderSplitAppFeatureB = android_test_helper_app {
         "--package-id"
         "0x81"
     ];
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
 };
 
 in { inherit CtsClassloaderSplitAppFeatureB; }

@@ -15,16 +15,29 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-networkstackprotosnano = java_library_static {
-    name = "networkstackprotosnano";
+networkstackprotos = java_library_static {
+    name = "networkstackprotos";
     proto = {
-        type = "nano";
+        type = "lite";
     };
     srcs = [
         "network_stack.proto"
     ];
-    sdk_version = "system_current";
-    no_framework_libs = true;
+    sdk_version = "system_29";
 };
 
-in { inherit networkstackprotosnano; }
+tetheringprotos = java_library_static {
+    name = "tetheringprotos";
+    proto = {
+        type = "lite";
+    };
+    srcs = [
+        "tethering.proto"
+    ];
+    apex_available = [
+        "com.android.tethering"
+    ];
+    sdk_version = "system_current";
+};
+
+in { inherit networkstackprotos tetheringprotos; }

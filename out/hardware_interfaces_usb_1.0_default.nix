@@ -19,6 +19,7 @@ let
     name = "android.hardware.usb@1.0-service";
     defaults = ["hidl_defaults"];
     init_rc = ["android.hardware.usb@1.0-service.rc"];
+    vintf_fragments = ["android.hardware.usb@1.0-service.xml"];
     relative_install_path = "hw";
     vendor = true;
     srcs = [
@@ -29,7 +30,6 @@ let
     shared_libs = [
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libhardware"

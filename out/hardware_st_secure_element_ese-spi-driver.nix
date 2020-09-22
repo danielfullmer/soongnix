@@ -35,7 +35,6 @@ ese_spi_st = cc_library_shared {
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "liblog"
         "libbase"

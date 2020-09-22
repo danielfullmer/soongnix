@@ -21,6 +21,7 @@ android-ex-camera2 = java_library {
     srcs = [
         "src/com/android/ex/camera2/blocking/BlockingCameraManager.java"
         "src/com/android/ex/camera2/blocking/BlockingCaptureCallback.java"
+        "src/com/android/ex/camera2/blocking/BlockingOfflineSessionCallback.java"
         "src/com/android/ex/camera2/blocking/BlockingSessionCallback.java"
         "src/com/android/ex/camera2/blocking/BlockingStateCallback.java"
         "src/com/android/ex/camera2/exceptions/TimeoutRuntimeException.java"

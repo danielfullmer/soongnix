@@ -4,7 +4,6 @@ let
 propertyinfoserializer_defaults = cc_defaults {
     name = "propertyinfoserializer_defaults";
     host_supported = true;
-    vendor_available = true;
     cpp_std = "experimental";
     cppflags = [
         "-Wall"
@@ -12,8 +11,8 @@ propertyinfoserializer_defaults = cc_defaults {
         "-Werror"
     ];
     static_libs = [
-        "libpropertyinfoparser"
         "libbase"
+        "libpropertyinfoparser"
     ];
 };
 

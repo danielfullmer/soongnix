@@ -1,4 +1,4 @@
-{ cc_library }:
+{ cc_library, cc_test }:
 let
 
 libpixelhealth = cc_library {
@@ -12,6 +12,7 @@ libpixelhealth = cc_library {
         "CycleCountBackupRestore.cpp"
         "DeviceHealth.cpp"
         "LowBatteryShutdownMetrics.cpp"
+        "BatteryDefender.cpp"
     ];
 
     cflags = [
@@ -32,10 +33,46 @@ libpixelhealth = cc_library {
         "libbase"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
     ];
 };
 
-in { inherit libpixelhealth; }
+HealthTestCases = cc_test {
+    name = "HealthTestCases";
+
+    compile_multilib = "both";
+    multilib = {
+        lib32 = {
+            suffix = "32";
+        };
+        lib64 = {
+            suffix = "64";
+        };
+    };
+
+    srcs = [
+        "test/TestBatteryDefender.cpp"
+    ];
+
+    local_include_dirs = [
+        "include/pixelhealth"
+    ];
+
+    static_libs = [
+        "libgmock"
+        "libpixelhealth"
+    ];
+
+    shared_libs = [
+        "libbase"
+        "libcutils"
+        "libutils"
+    ];
+
+    test_suites = [
+        "device-tests"
+    ];
+    vendor = true;
+};
+
+in { inherit HealthTestCases libpixelhealth; }

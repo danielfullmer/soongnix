@@ -35,7 +35,10 @@ VtsHalRadioV1_3TargetTest = cc_test {
         "android.hardware.radio@1.0"
     ];
     header_libs = ["radio.util.header@1.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalRadioV1_3TargetTest; }

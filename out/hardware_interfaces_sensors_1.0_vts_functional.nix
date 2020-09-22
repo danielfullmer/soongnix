@@ -26,15 +26,13 @@ VtsHalSensorsV1_0TargetTest = cc_test {
         "VtsHalSensorsV1_0TargetTest.cpp"
     ];
     static_libs = [
-        "android.hardware.graphics.allocator@2.0"
-        "android.hardware.graphics.allocator@3.0"
-        "android.hardware.graphics.mapper@2.0"
-        "android.hardware.graphics.mapper@2.1"
-        "android.hardware.graphics.mapper@3.0"
         "android.hardware.sensors@1.0"
         "VtsHalSensorsTargetTestUtils"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalSensorsV1_0TargetTest; }

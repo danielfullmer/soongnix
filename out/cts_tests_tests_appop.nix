@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test, cc_test_library }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,18 +15,47 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+libCtsAppOpsTestCases_jni = cc_test_library {
+    name = "libCtsAppOpsTestCases_jni";
+
+    stl = "libc++_static";
+    gtest = false;
+    cflags = [
+        "-Wall"
+        "-Werror"
+        "-Wno-unused-parameter"
+    ];
+
+    srcs = ["jni/android/app/appops/cts/AppOpsLoggingTest.cpp"];
+
+    shared_libs = [
+        "libbinder"
+        "libutils"
+        "liblog"
+    ];
+};
+
 CtsAppOpsTestCases = android_test {
     name = "CtsAppOpsTestCases";
-    sdk_version = "test_current";
+
+    compile_multilib = "both";
 
     srcs = [
+        "src/android/app/appops/cts/AppOpEventCollectionTest.kt"
+        "src/android/app/appops/cts/AppOpsLoggingTest.kt"
         "src/android/app/appops/cts/AppOpsTest.kt"
-        "src/android/app/appops/cts/AppOpsUtils.kt"
+        "src/android/app/appops/cts/AttributionTest.kt"
+        "src/android/app/appops/cts/ForegroundModeTest.kt"
         "src/android/app/appops/cts/HistoricalAppopsTest.kt"
+        "src/android/app/appops/cts/RuntimeMessageCollectionTest.kt"
         "src/android/app/appops/cts/UidStateForceActivity.kt"
     ];
 
     static_libs = [
+        "bluetooth-test-util-lib"
+        "appops-test-util-lib"
+        "AppOpsUserServiceAidl"
+        "AppOpsForegroundControlServiceAidl"
         "androidx.test.rules"
         "compatibility-device-util-axt"
         "androidx.legacy_legacy-support-v4"
@@ -35,11 +64,47 @@ CtsAppOpsTestCases = android_test {
         "androidx.test.uiautomator_uiautomator"
     ];
 
+    jni_libs = [
+        "ld-android"
+        "libbacktrace"
+        "libbase"
+        "libbinder"
+        "libbpf"
+        "libbpf_android"
+        "libc++"
+        "libcgrouprc"
+        "libcrypto"
+        "libcutils"
+        "libdl_android"
+        "libhidl-gen-utils"
+        "libhidlbase"
+        "libjsoncpp"
+        "liblog"
+        "liblzma"
+        "libnativehelper"
+        "libnetdbpf"
+        "libnetdutils"
+        "libnetworkstatsfactorytestjni"
+        "libpackagelistparser"
+        "libpcre2"
+        "libprocessgroup"
+        "libselinux"
+        "libtinyxml2"
+        "libui"
+        "libunwindstack"
+        "libutils"
+        "libutilscallstack"
+        "libvndksupport"
+        "libziparchive"
+        "libz"
+        "libCtsAppOpsTestCases_jni"
+    ];
+
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
-in { inherit CtsAppOpsTestCases; }
+in { inherit CtsAppOpsTestCases libCtsAppOpsTestCases_jni; }

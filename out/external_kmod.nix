@@ -1,36 +1,8 @@
-{ cc_binary_host }:
+{ cc_binary_host, cc_defaults, cc_library_static }:
 let
 
-depmod = cc_binary_host {
-    srcs = [
-        "libkmod/libkmod.c"
-        "libkmod/libkmod-file.c"
-        "libkmod/libkmod-module.c"
-        "libkmod/libkmod-config.c"
-        "libkmod/libkmod-index.c"
-        "libkmod/libkmod-elf.c"
-        "libkmod/libkmod-list.c"
-        "libkmod/libkmod-signature.c"
-        "shared/array.c"
-        "shared/scratchbuf.c"
-        "shared/util.c"
-        "shared/hash.c"
-        "shared/strbuf.c"
-        "tools/port.c"
-        "tools/depmod.c"
-        "tools/kmod.c"
-        "tools/modinfo.c"
-        "tools/rmmod.c"
-        "tools/insert.c"
-        "tools/log.c"
-        "tools/modprobe.c"
-        "tools/static-nodes.c"
-        "tools/insmod.c"
-        "tools/lsmod.c"
-        "tools/remove.c"
-    ];
-
-    name = "depmod";
+libkmod_cflags_common = cc_defaults {
+    name = "libkmod_cflags_common";
     local_include_dirs = ["port-gnu"];
     cflags = [
         "-include config.h"
@@ -45,7 +17,56 @@ depmod = cc_binary_host {
         "-DHAVE_CONFIG_H"
         "-DANOTHER_BRICK_IN_THE"
         "-DSYSCONFDIR=\"/tmp\""
+        "-UNDEBUG"
     ];
+    target = {
+        linux_glibc = {
+            cflags = ["-DHAVE_DECL_STRNDUPA"];
+        };
+    };
 };
 
-in { inherit depmod; }
+libkmod = cc_library_static {
+    defaults = ["libkmod_cflags_common"];
+    export_include_dirs = ["libkmod"];
+    host_supported = true;
+    name = "libkmod";
+    srcs = [
+        "libkmod/libkmod.c"
+        "libkmod/libkmod-file.c"
+        "libkmod/libkmod-module.c"
+        "libkmod/libkmod-config.c"
+        "libkmod/libkmod-index.c"
+        "libkmod/libkmod-elf.c"
+        "libkmod/libkmod-list.c"
+        "libkmod/libkmod-signature.c"
+        "shared/array.c"
+        "shared/scratchbuf.c"
+        "shared/util.c"
+        "shared/hash.c"
+        "shared/strbuf.c"
+    ];
+    visibility = ["//external/igt-gpu-tools"];
+};
+
+depmod = cc_binary_host {
+    defaults = ["libkmod_cflags_common"];
+    name = "depmod";
+    srcs = [
+        "tools/port.c"
+        "tools/depmod.c"
+        "tools/kmod.c"
+        "tools/modinfo.c"
+        "tools/rmmod.c"
+        "tools/insert.c"
+        "tools/log.c"
+        "tools/modprobe.c"
+        "tools/static-nodes.c"
+        "tools/insmod.c"
+        "tools/lsmod.c"
+        "tools/remove.c"
+    ];
+    static_libs = ["libkmod"];
+};
+
+in { inherit depmod libkmod libkmod_cflags_common; }

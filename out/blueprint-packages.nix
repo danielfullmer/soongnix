@@ -10,7 +10,10 @@
     art_debug_defaults art_defaults soong-art;
 
   inherit (callBPPackage "art/build/apex" ./art_build_apex.nix {})
-    "com.android.runtime-defaults" "com.android.runtime.debug" "com.android.runtime.debug.certificate" "com.android.runtime.host" "com.android.runtime.key" "com.android.runtime.ld.config.txt" "com.android.runtime.release" "com.android.runtime.release.certificate" art-apex-tester art-check-debug-apex-gen art-check-debug-apex-gen-fakebin art-check-release-apex-gen art-check-release-apex-gen-fakebin art_apex_boot_integrity art_postinstall_hook art_preinstall_hook art_preinstall_hook_boot art_preinstall_hook_system_server art_prepostinstall_utils;
+    "com.android.art-defaults" "com.android.art-dev-defaults" "com.android.art.certificate" "com.android.art.debug" "com.android.art.host" "com.android.art.key" "com.android.art.ld.config.txt" "com.android.art.release" "com.android.art.testing" art-apex-tester art-check-apex-gen-defaults art-check-apex-gen-fakebin-defaults art-check-debug-apex-gen art-check-debug-apex-gen-fakebin art-check-release-apex-gen art-check-release-apex-gen-fakebin art-check-testing-apex-gen art-check-testing-apex-gen-fakebin;
+
+  inherit (callBPPackage "art/build/sdk" ./art_build_sdk.nix {})
+    art-module-host-exports art-module-sdk art-module-test-exports;
 
   inherit (callBPPackage "art/cmdline" ./art_cmdline.nix {})
     art_cmdline_tests art_cmdlineparser_headers;
@@ -25,7 +28,7 @@
     art_dex2oat_operator_srcs art_dex2oat_tests dex2oat dex2oat-defaults dex2oat-pgo-defaults dex2oat_headers dex2oatd dex2oatds dex2oats dex2oats-defaults libart-dex2oat libart-dex2oat-defaults libart-dex2oat-gtest libart-dex2oat_static_base_defaults libart-dex2oat_static_defaults libartd-dex2oat libartd-dex2oat_static_defaults;
 
   inherit (callBPPackage "art/dexdump" ./art_dexdump.nix {})
-    art_dexdump_tests dexdump2 dexdump_defaults dexdumps;
+    art_dexdump_tests dexdump dexdump_defaults;
 
   inherit (callBPPackage "art/dexlayout" ./art_dexlayout.nix {})
     art_dexdiag_tests art_dexlayout_tests dexdiag dexlayout dexlayout-defaults dexlayoutd dexlayouts libart-dexlayout libart-dexlayout-defaults libart-dexlayout_static_base_defaults libart-dexlayout_static_defaults libartd-dexlayout libartd-dexlayout_static_defaults;
@@ -37,7 +40,7 @@
     art_dexoptanalyzer_tests dexoptanalyzer dexoptanalyzer-defaults dexoptanalyzerd;
 
   inherit (callBPPackage "art/disassembler" ./art_disassembler.nix {})
-    libart-disassembler libart-disassembler-defaults libartd-disassembler;
+    art_disassembler_headers libart-disassembler libart-disassembler-defaults libartd-disassembler;
 
   inherit (callBPPackage "art/dt_fd_forward" ./art_dt_fd_forward.nix {})
     dt_fd_forward-defaults libdt_fd_forward libdt_fd_forwardd;
@@ -51,14 +54,29 @@
   inherit (callBPPackage "art/libartbase" ./art_libartbase.nix {})
     art_libartbase_headers art_libartbase_operator_srcs art_libartbase_tests libartbase libartbase-art-gtest libartbase_defaults libartbase_static_base_defaults libartbase_static_defaults libartbased libartbased_static_defaults;
 
+  inherit (callBPPackage "art/libartimagevalues" ./art_libartimagevalues.nix {})
+    libartimagevalues libartimagevalues_defaults;
+
   inherit (callBPPackage "art/libartpalette" ./art_libartpalette.nix {})
-    art_libartpalette_tests libartpalette libartpalette-system libartpalette_defaults;
+    art_libartpalette_tests libartpalette libartpalette-headers libartpalette_defaults;
 
   inherit (callBPPackage "art/libdexfile" ./art_libdexfile.nix {})
-    art_libdexfile_external_tests art_libdexfile_support_static_tests art_libdexfile_support_tests art_libdexfile_tests dexfile_operator_srcs libdexfile libdexfile_defaults libdexfile_external libdexfile_external_headers libdexfile_static_base_defaults libdexfile_static_defaults libdexfile_support libdexfile_support_static libdexfiled libdexfiled_static_defaults;
+    art_libdexfile_external_tests art_libdexfile_support_static_tests art_libdexfile_support_tests art_libdexfile_tests dexfile_operator_srcs libdexfile libdexfile_all_headers libdexfile_defaults libdexfile_external libdexfile_external-defaults libdexfile_external_headers libdexfile_static_base_defaults libdexfile_static_defaults libdexfile_support libdexfile_support_static libdexfile_support_static_defaults libdexfiled libdexfiled_external libdexfiled_static_defaults libdexfiled_support_static;
 
   inherit (callBPPackage "art/libelffile" ./art_libelffile.nix {})
     libelffile libelffile-defaults libelffiled;
+
+  inherit (callBPPackage "art/libnativebridge" ./art_libnativebridge.nix {})
+    libnativebridge libnativebridge-defaults libnativebridge-headers libnativebridge_lazy;
+
+  inherit (callBPPackage "art/libnativebridge/tests" ./art_libnativebridge_tests.nix {})
+    libnativebridge-api-tests libnativebridge-dummy libnativebridge-dummy-defaults libnativebridge-lazy-tests libnativebridge-tests libnativebridge-tests-defaults libnativebridge2-dummy libnativebridge3-dummy libnativebridge6-dummy libnativebridge6prezygotefork;
+
+  inherit (callBPPackage "art/libnativeloader" ./art_libnativeloader.nix {})
+    libnativeloader libnativeloader-defaults libnativeloader-headers libnativeloader_lazy libnativeloader_test;
+
+  inherit (callBPPackage "art/libnativeloader/test" ./art_libnativeloader_test.nix {})
+    "libbar.oem1" "libbar.oem2" "libbar.product1" "libfoo.oem1" "libfoo.oem2" "libfoo.product1" libnativeloader-api-tests;
 
   inherit (callBPPackage "art/libprofile" ./art_libprofile.nix {})
     art_libprofile_tests libprofile libprofile_defaults libprofile_static_base_defaults libprofile_static_defaults libprofiled libprofiled_static_defaults;
@@ -72,11 +90,14 @@
   inherit (callBPPackage "art/openjdkjvmti" ./art_openjdkjvmti.nix {})
     libopenjdkjvmti libopenjdkjvmti_defaults libopenjdkjvmti_headers libopenjdkjvmtid;
 
+  inherit (callBPPackage "art/perfetto_hprof" ./art_perfetto_hprof.nix {})
+    art_perfetto_hprof_operator_srcs libperfetto_hprof libperfetto_hprofd perfetto_hprof-defaults;
+
   inherit (callBPPackage "art/profman" ./art_profman.nix {})
     art_profman_tests profman profman-defaults profmand profmans;
 
   inherit (callBPPackage "art/runtime" ./art_runtime.nix {})
-    "libart_mterp.arm" "libart_mterp.arm64" "libart_mterp.mips" "libart_mterp.mips64" "libart_mterp.x86" "libart_mterp.x86_64" art_operator_srcs art_runtime_compiler_tests art_runtime_tests libart libart-runtime-gtest libart_defaults libart_runtime_headers libart_static_base_defaults libart_static_defaults libartd libartd_static_defaults;
+    "libart_mterp.arm" "libart_mterp.arm64" "libart_mterp.x86" "libart_mterp.x86_64" "libart_mterp.x86_64ng" art_operator_srcs art_runtime_compiler_tests art_runtime_tests libart libart-runtime-gtest libart_defaults libart_nativeunwind_defaults libart_runtime_headers_ndk libart_static_base_defaults libart_static_defaults libartd libartd_static_defaults;
 
   inherit (callBPPackage "art/sigchainlib" ./art_sigchainlib.nix {})
     "art_sigchain_version_script32.txt" "art_sigchain_version_script64.txt" art_sigchain_tests libsigchain libsigchain_dummy;
@@ -85,28 +106,31 @@
     libart-simulator libart-simulator-container libart_simulator_container_defaults libart_simulator_defaults libart_simulator_headers libartd-simulator libartd-simulator-container;
 
   inherit (callBPPackage "art/test" ./art_test.nix {})
-    art_cts_jvmti_test_library art_gtest_defaults art_test_defaults expected_cts_outputs libart-gtest libart-gtest-defaults libartagent libartagent-defaults libartagentd libarttest libarttest-defaults libarttestd libctstiagent libnativebridgetest libtiagent libtiagent-base-defaults libtiagent-defaults libtiagentd libtistress libtistress-defaults libtistress-srcs libtistress-static-defaults libtistressd libtistressds libtistresss;
+    art-gtest-jars art-gtest-jars-AbstractMethod art-gtest-jars-AllFields art-gtest-jars-DefaultMethods art-gtest-jars-DexToDexDecompiler art-gtest-jars-ErroneousA art-gtest-jars-ErroneousB art-gtest-jars-ErroneousInit art-gtest-jars-ExceptionHandle art-gtest-jars-Extension1 art-gtest-jars-Extension2 art-gtest-jars-ForClassLoaderA art-gtest-jars-ForClassLoaderB art-gtest-jars-ForClassLoaderC art-gtest-jars-ForClassLoaderD art-gtest-jars-GetMethodSignature art-gtest-jars-HiddenApi art-gtest-jars-HiddenApiSignatures art-gtest-jars-HiddenApiStubs art-gtest-jars-IMTA art-gtest-jars-IMTB art-gtest-jars-ImageLayoutA art-gtest-jars-ImageLayoutB art-gtest-jars-Instrumentation art-gtest-jars-Interfaces art-gtest-jars-Lookup art-gtest-jars-Main art-gtest-jars-MainEmptyUncompressed art-gtest-jars-MainEmptyUncompressedAligned art-gtest-jars-MainStripped art-gtest-jars-MainUncompressed art-gtest-jars-MainUncompressedAligned art-gtest-jars-ManyMethods art-gtest-jars-MethodTypes art-gtest-jars-MultiDex art-gtest-jars-MultiDexModifiedSecondary art-gtest-jars-MultiDexUncompressed art-gtest-jars-MultiDexUncompressedAligned art-gtest-jars-MyClass art-gtest-jars-MyClassNatives art-gtest-jars-Nested art-gtest-jars-NonStaticLeafMethods art-gtest-jars-Packages art-gtest-jars-ProfileTestMultiDex art-gtest-jars-ProtoCompare art-gtest-jars-ProtoCompare2 art-gtest-jars-StaticLeafMethods art-gtest-jars-Statics art-gtest-jars-StaticsFromCode art-gtest-jars-StringLiterals art-gtest-jars-Transaction art-gtest-jars-VerifierDeps art-gtest-jars-VerifierDepsMulti art-gtest-jars-VerifySoftFailDuringClinit art-gtest-jars-XandY art-gtest-jars-align-defaults art-gtest-jars-defaults art-gtest-jars-smali-defaults art-gtest-jars-uncompress-defaults art_cts_jvmti_test_library art_gtest_defaults art_test_defaults expected_cts_outputs libart-gtest libart-gtest-defaults libartagent libartagent-defaults libartagentd libarttest libarttest-defaults libarttestd libctstiagent libnativebridgetest libnativebridgetest-defaults libnativebridgetestd libtiagent libtiagent-base-defaults libtiagent-defaults libtiagentd libtistress libtistress-defaults libtistress-shared-defaults libtistress-srcs libtistressd libtistressds libtistresss;
 
   inherit (callBPPackage "art/tools" ./art_tools.nix {})
-    generate_operator_out;
+    art-script generate_operator_out;
 
   inherit (callBPPackage "art/tools/ahat" ./art_tools_ahat.nix {})
-    ahat ahat-docs;
-
-  inherit (callBPPackage "art/tools/amm" ./art_tools_amm.nix {})
-    libammtestjni;
+    ahat ahat-docs ahat-ri-test-dump ahat-test-dump;
 
   inherit (callBPPackage "art/tools/art_verifier" ./art_tools_art_verifier.nix {})
-    art_verifier art_verifier-defaults;
+    art_verifier art_verifier-defaults art_verifierd;
 
   inherit (callBPPackage "art/tools/class2greylist" ./art_tools_class2greylist.nix {})
     class2greylist class2greylistlib;
+
+  inherit (callBPPackage "art/tools/class2greylist/test" ./art_tools_class2greylist_test.nix {})
+    class2greylisttest;
 
   inherit (callBPPackage "art/tools/cpp-define-generator" ./art_tools_cpp-define-generator.nix {})
     "asm_defines.s" cpp-define-generator-asm-support cpp-define-generator-definitions cpp-define-generator-test;
 
   inherit (callBPPackage "art/tools/dexanalyze" ./art_tools_dexanalyze.nix {})
     art_dexanalyze_tests dexanalyze dexanalyze-defaults;
+
+  inherit (callBPPackage "art/tools/dexfuzz" ./art_tools_dexfuzz.nix {})
+    dexfuzz dexfuzz-script;
 
   inherit (callBPPackage "art/tools/dmtracedump" ./art_tools_dmtracedump.nix {})
     create_test_dmtrace dmtracedump;
@@ -120,20 +144,32 @@
   inherit (callBPPackage "art/tools/jvmti-agents/breakpoint-logger" ./art_tools_jvmti-agents_breakpoint-logger.nix {})
     breakpointlogger-defaults libbreakpointlogger libbreakpointloggerd;
 
+  inherit (callBPPackage "art/tools/jvmti-agents/chain-agents" ./art_tools_jvmti-agents_chain-agents.nix {})
+    chainagents-base-defaults chainagents-defaults chainagents-static-defaults libchainagents libchainagentsd libchainagentss;
+
   inherit (callBPPackage "art/tools/jvmti-agents/dump-jvmti-state" ./art_tools_jvmti-agents_dump-jvmti-state.nix {})
     dumpjvmti-defaults libdumpjvmti libdumpjvmtid;
 
+  inherit (callBPPackage "art/tools/jvmti-agents/field-counts" ./art_tools_jvmti-agents_field-counts.nix {})
+    fieldcount-base-defaults fieldcount-defaults fieldcount-static-defaults libfieldcount libfieldcountd libfieldcounts;
+
   inherit (callBPPackage "art/tools/jvmti-agents/field-null-percent" ./art_tools_jvmti-agents_field-null-percent.nix {})
-    fieldnull-defaults libfieldnull libfieldnulld;
+    fieldnull-base-defaults fieldnull-defaults fieldnull-static-defaults libfieldnull libfieldnulld libfieldnulls;
 
   inherit (callBPPackage "art/tools/jvmti-agents/jit-load" ./art_tools_jvmti-agents_jit-load.nix {})
     jitload-defaults libjitload libjitloadd;
 
+  inherit (callBPPackage "art/tools/jvmti-agents/list-extensions" ./art_tools_jvmti-agents_list-extensions.nix {})
+    liblistextensions liblistextensionsd listextensions-defaults;
+
   inherit (callBPPackage "art/tools/jvmti-agents/simple-force-redefine" ./art_tools_jvmti-agents_simple-force-redefine.nix {})
     forceredefine-defaults libforceredefine libforceredefined;
 
+  inherit (callBPPackage "art/tools/jvmti-agents/ti-alloc-sample" ./art_tools_jvmti-agents_ti-alloc-sample.nix {})
+    libtiallocsample libtiallocsampled libtiallocsamples ti-alloc-sample-base-defaults ti-alloc-sample-defaults ti-alloc-sample-static-defaults;
+
   inherit (callBPPackage "art/tools/jvmti-agents/ti-fast" ./art_tools_jvmti-agents_ti-fast.nix {})
-    libtifast libtifastd tifast-defaults;
+    libtifast libtifastd libtifasts tifast-base-defaults tifast-defaults tifast-static-defaults;
 
   inherit (callBPPackage "art/tools/jvmti-agents/titrace" ./art_tools_jvmti-agents_titrace.nix {})
     libtitrace libtitraced titrace-defaults;
@@ -141,20 +177,35 @@
   inherit (callBPPackage "art/tools/jvmti-agents/wrapagentproperties" ./art_tools_jvmti-agents_wrapagentproperties.nix {})
     libwrapagentproperties libwrapagentpropertiesd wrapagentproperties-defaults;
 
-  inherit (callBPPackage "art/tools/timeout_dumper" ./art_tools_timeout_dumper.nix {})
-    timeout_dumper;
+  inherit (callBPPackage "art/tools/libjavac" ./art_tools_libjavac.nix {})
+    libjavac;
+
+  inherit (callBPPackage "art/tools/signal_dumper" ./art_tools_signal_dumper.nix {})
+    signal_dumper signal_dumper_libbacktrace_static_deps signal_dumper_libbase_static_deps signal_dumper_libunwindstack_static_deps;
 
   inherit (callBPPackage "art/tools/tracefast-plugin" ./art_tools_tracefast-plugin.nix {})
     libtracefast-interpreter libtracefast-interpreterd libtracefast-trampoline libtracefast-trampolined tracefast-defaults tracefast-interpreter-defaults tracefast-trampoline-defaults;
 
   inherit (callBPPackage "art/tools/veridex" ./art_tools_veridex.nix {})
-    veridex;
+    veridex veridex-appcompat;
+
+  inherit (callBPPackage "bionic/apex" ./bionic_apex.nix {})
+    "com.android.runtime" "com.android.runtime.certificate" "com.android.runtime.key";
 
   inherit (callBPPackage "bionic/benchmarks" ./bionic_benchmarks.nix {})
     bionic-benchmarks bionic-benchmarks-defaults bionic-benchmarks-extras-defaults bionic-benchmarks-glibc bionic-benchmarks-tests libBionicBenchmarksUtils;
 
+  inherit (callBPPackage "bionic/benchmarks/linker_relocation" ./bionic_benchmarks_linker_relocation.nix {})
+    linker-reloc-bench linker_reloc_bench_binary linker_reloc_bench_headers linker_reloc_bench_library;
+
+  inherit (callBPPackage "bionic/benchmarks/linker_relocation/gen" ./bionic_benchmarks_linker_relocation_gen.nix {})
+    liblinker_reloc_bench_000 liblinker_reloc_bench_001 liblinker_reloc_bench_002 liblinker_reloc_bench_003 liblinker_reloc_bench_004 liblinker_reloc_bench_005 liblinker_reloc_bench_006 liblinker_reloc_bench_007 liblinker_reloc_bench_008 liblinker_reloc_bench_009 liblinker_reloc_bench_010 liblinker_reloc_bench_011 liblinker_reloc_bench_012 liblinker_reloc_bench_013 liblinker_reloc_bench_014 liblinker_reloc_bench_015 liblinker_reloc_bench_016 liblinker_reloc_bench_017 liblinker_reloc_bench_018 liblinker_reloc_bench_019 liblinker_reloc_bench_020 liblinker_reloc_bench_021 liblinker_reloc_bench_022 liblinker_reloc_bench_023 liblinker_reloc_bench_024 liblinker_reloc_bench_025 liblinker_reloc_bench_026 liblinker_reloc_bench_027 liblinker_reloc_bench_028 liblinker_reloc_bench_029 liblinker_reloc_bench_030 liblinker_reloc_bench_031 liblinker_reloc_bench_032 liblinker_reloc_bench_033 liblinker_reloc_bench_034 liblinker_reloc_bench_035 liblinker_reloc_bench_036 liblinker_reloc_bench_037 liblinker_reloc_bench_038 liblinker_reloc_bench_039 liblinker_reloc_bench_040 liblinker_reloc_bench_041 liblinker_reloc_bench_042 liblinker_reloc_bench_043 liblinker_reloc_bench_044 liblinker_reloc_bench_045 liblinker_reloc_bench_046 liblinker_reloc_bench_047 liblinker_reloc_bench_048 liblinker_reloc_bench_049 liblinker_reloc_bench_050 liblinker_reloc_bench_051 liblinker_reloc_bench_052 liblinker_reloc_bench_053 liblinker_reloc_bench_054 liblinker_reloc_bench_055 liblinker_reloc_bench_056 liblinker_reloc_bench_057 liblinker_reloc_bench_058 liblinker_reloc_bench_059 liblinker_reloc_bench_060 liblinker_reloc_bench_061 liblinker_reloc_bench_062 liblinker_reloc_bench_063 liblinker_reloc_bench_064 liblinker_reloc_bench_065 liblinker_reloc_bench_066 liblinker_reloc_bench_067 liblinker_reloc_bench_068 liblinker_reloc_bench_069 liblinker_reloc_bench_070 liblinker_reloc_bench_071 liblinker_reloc_bench_072 liblinker_reloc_bench_073 liblinker_reloc_bench_074 liblinker_reloc_bench_075 liblinker_reloc_bench_076 liblinker_reloc_bench_077 liblinker_reloc_bench_078 liblinker_reloc_bench_079 liblinker_reloc_bench_080 liblinker_reloc_bench_081 liblinker_reloc_bench_082 liblinker_reloc_bench_083 liblinker_reloc_bench_084 liblinker_reloc_bench_085 liblinker_reloc_bench_086 liblinker_reloc_bench_087 liblinker_reloc_bench_088 liblinker_reloc_bench_089 liblinker_reloc_bench_090 liblinker_reloc_bench_091 liblinker_reloc_bench_092 liblinker_reloc_bench_093 liblinker_reloc_bench_094 liblinker_reloc_bench_095 liblinker_reloc_bench_096 liblinker_reloc_bench_097 liblinker_reloc_bench_098 liblinker_reloc_bench_099 liblinker_reloc_bench_100 liblinker_reloc_bench_101 liblinker_reloc_bench_102 liblinker_reloc_bench_103 liblinker_reloc_bench_104 liblinker_reloc_bench_105 liblinker_reloc_bench_106 liblinker_reloc_bench_107 liblinker_reloc_bench_108 liblinker_reloc_bench_109 liblinker_reloc_bench_110 liblinker_reloc_bench_111 liblinker_reloc_bench_112 liblinker_reloc_bench_113 liblinker_reloc_bench_114 liblinker_reloc_bench_115 liblinker_reloc_bench_116 liblinker_reloc_bench_117 liblinker_reloc_bench_118 liblinker_reloc_bench_119 liblinker_reloc_bench_120 liblinker_reloc_bench_121 liblinker_reloc_bench_122 liblinker_reloc_bench_123 liblinker_reloc_bench_124 liblinker_reloc_bench_125 liblinker_reloc_bench_126 liblinker_reloc_bench_127 liblinker_reloc_bench_128 liblinker_reloc_bench_129 liblinker_reloc_bench_130 liblinker_reloc_bench_131 liblinker_reloc_bench_132 liblinker_reloc_bench_133 liblinker_reloc_bench_134 liblinker_reloc_bench_135 liblinker_reloc_bench_136 liblinker_reloc_bench_137 liblinker_reloc_bench_138 liblinker_reloc_bench_139 liblinker_reloc_bench_140 liblinker_reloc_bench_141 liblinker_reloc_bench_142 liblinker_reloc_bench_143 liblinker_reloc_bench_144 liblinker_reloc_bench_145 liblinker_reloc_bench_146 liblinker_reloc_bench_147 liblinker_reloc_bench_148 liblinker_reloc_bench_149 liblinker_reloc_bench_150 liblinker_reloc_bench_151 liblinker_reloc_bench_152 liblinker_reloc_bench_153 liblinker_reloc_bench_154 liblinker_reloc_bench_155 liblinker_reloc_bench_156 liblinker_reloc_bench_157 liblinker_reloc_bench_158 liblinker_reloc_bench_159 liblinker_reloc_bench_160 liblinker_reloc_bench_161 liblinker_reloc_bench_162 liblinker_reloc_bench_163 liblinker_reloc_bench_164 liblinker_reloc_bench_165 liblinker_reloc_bench_166 liblinker_reloc_bench_167 liblinker_reloc_bench_168 linker_reloc_bench_all_libs linker_reloc_bench_main;
+
+  inherit (callBPPackage "bionic/benchmarks/spawn" ./bionic_benchmarks_spawn.nix {})
+    bench_noop bench_noop_nostl bench_noop_static bionic-spawn-benchmarks bionic_spawn_benchmark_targets libbionic_spawn_benchmark noop_binary_defaults;
+
   inherit (callBPPackage "bionic/libc" ./bionic_libc.nix {})
-    "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_bionic libc_bionic_ndk libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_malloc libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_sources_shared libc_sources_shared_arm libc_sources_static libc_sources_static_arm libc_stack_protector libc_syscalls libc_tzcode libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_mips libseccomp_gen_syscall_nrs_mips64 libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_global_sources libseccomp_policy_system_sources;
+    "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" "syscalls-arm.S" "syscalls-arm64.S" "syscalls-x86.S" "syscalls-x86_64.S" bionic_libc_platform_headers crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_bionic libc_bionic_ndk libc_bootstrap libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_dynamic_dispatch libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_jemalloc_wrapper libc_native_allocator_defaults libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_scudo_wrapper_defaults libc_sources_shared libc_sources_shared_arm libc_sources_static libc_static_dispatch libc_syscalls libc_tzcode libc_unwind_static libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_system_sources;
 
   inherit (callBPPackage "bionic/libc/async_safe" ./bionic_libc_async_safe.nix {})
     libasync_safe libasync_safe_headers;
@@ -166,28 +217,34 @@
     libc_malloc_debug libc_malloc_debug_backtrace malloc_debug_system_tests malloc_debug_unit_tests;
 
   inherit (callBPPackage "bionic/libc/malloc_hooks" ./bionic_libc_malloc_hooks.nix {})
-    libc_malloc_hooks malloc_hooks_unit_tests;
+    libc_malloc_hooks malloc_hooks_system_tests;
 
   inherit (callBPPackage "bionic/libc/system_properties" ./bionic_libc_system_properties.nix {})
     libsystemproperties;
 
+  inherit (callBPPackage "bionic/libc/tools" ./bionic_libc_tools.nix {})
+    bionic-gensyscalls;
+
   inherit (callBPPackage "bionic/libdl" ./bionic_libdl.nix {})
     "libdl.arm.map" "libdl.arm64.map" "libdl.x86.map" "libdl.x86_64.map" libdl libdl_android libdl_static;
+
+  inherit (callBPPackage "bionic/libfdtrack" ./bionic_libfdtrack.nix {})
+    fdtrack_test libfdtrack;
 
   inherit (callBPPackage "bionic/libm" ./bionic_libm.nix {})
     "libm.arm.map" "libm.arm64.map" "libm.x86.map" "libm.x86_64.map" libm;
 
   inherit (callBPPackage "bionic/linker" ./bionic_linker.nix {})
-    ld-android liblinker_malloc linker linker-unit-tests linker_defaults linker_sources linker_sources_arm linker_sources_arm64 linker_sources_mips linker_sources_mips64 linker_sources_x86 linker_sources_x86_64 linker_version_script linker_version_script_arm linker_wrapper;
+    ld-android ldd liblinker_debuggerd_stub liblinker_main liblinker_malloc linker linker-benchmarks linker-unit-tests linker_all_targets linker_bin_template linker_defaults linker_sources linker_sources_arm linker_sources_arm64 linker_sources_x86 linker_sources_x86_64 linker_version_script_overlay linker_wrapper;
 
   inherit (callBPPackage "bionic/tests" ./bionic_tests.nix {})
-    bionic-unit-tests bionic-unit-tests-glibc bionic-unit-tests-scudo bionic-unit-tests-static bionic_fortify_tests_defaults bionic_tests_defaults bionic_unit_tests_defaults clang_diagnostic_tests fortify_disabled_for_asan fortify_disabled_for_tidy libBionicCtsGtestMain libBionicElfTlsLoaderTests libBionicElfTlsTests libBionicLoaderTests libBionicStandardTests libBionicTests libfortify1-tests-clang libfortify2-tests-clang;
+    bionic-fortify-runtime-asan-test bionic-stress-tests bionic-unit-tests bionic-unit-tests-glibc bionic-unit-tests-scudo bionic-unit-tests-static bionic_clang_fortify_tests_w_flags bionic_fortify_tests_defaults bionic_new_fortify_tests_defaults bionic_tests_defaults bionic_unit_tests_defaults clang_diagnostic_tests fortify_disabled_for_tidy libBionicCtsGtestMain libBionicElfTlsLoaderTests libBionicElfTlsTests libBionicFramePointerTests libBionicLoaderTests libBionicStandardTests libBionicTests libfortify1-new-tests-clang libfortify1-tests-clang libfortify2-new-tests-clang libfortify2-tests-clang;
 
   inherit (callBPPackage "bionic/tests/headers/posix" ./bionic_tests_headers_posix.nix {})
     libbionic_tests_headers_posix;
 
   inherit (callBPPackage "bionic/tests/libs" ./bionic_tests_libs.nix {})
-    bionic_testlib_defaults bionic_tests_zipalign cfi_test_helper cfi_test_helper2 elftls_dlopen_ie_error_helper exec_linker_helper exec_linker_helper_lib ld_config_test_helper ld_config_test_helper_lib1 ld_config_test_helper_lib2 ld_config_test_helper_lib3 ld_preload_test_helper ld_preload_test_helper_lib1 ld_preload_test_helper_lib2 libcfi-test libcfi-test-bad libdl_preempt_test_1 libdl_preempt_test_2 libdl_test_df_1_global libdlext_test_norelro libgnu-hash-table-library libnstest_dlopened libnstest_ns_a_public1 libnstest_ns_a_public1_internal libnstest_ns_b_public2 libnstest_ns_b_public3 libnstest_private libnstest_public libnstest_public_internal libnstest_root libsegment_gap_inner libsegment_gap_outer libsysv-hash-table-library libtest_atexit libtest_check_rtld_next_from_library libtest_dlopen_df_1_global libtest_dlopen_from_ctor libtest_dlopen_from_ctor_main libtest_dlopen_weak_undefined_func libtest_dlsym_df_1_global libtest_dlsym_from_this libtest_dlsym_from_this_child libtest_dlsym_from_this_grandchild libtest_dlsym_weak_func libtest_elftls_dynamic libtest_elftls_dynamic_filler_1 libtest_elftls_dynamic_filler_2 libtest_elftls_dynamic_filler_3 libtest_elftls_shared_var libtest_elftls_shared_var_ie libtest_elftls_tprel libtest_empty libtest_ifunc libtest_ifunc_variable libtest_ifunc_variable_impl libtest_indirect_thread_local_dtor libtest_init_fini_order_child libtest_init_fini_order_grand_child libtest_init_fini_order_root libtest_init_fini_order_root2 libtest_missing_symbol libtest_missing_symbol_child_private libtest_missing_symbol_child_public libtest_missing_symbol_root libtest_nodelete_1 libtest_nodelete_2 libtest_nodelete_dt_flags_1 libtest_relo_check_dt_needed_order libtest_relo_check_dt_needed_order_1 libtest_relo_check_dt_needed_order_2 libtest_simple libtest_thread_local_dtor libtest_thread_local_dtor2 libtest_with_dependency_loop libtest_with_dependency_loop_a libtest_with_dependency_loop_b libtest_with_dependency_loop_b_tmp libtest_with_dependency_loop_c libtestshared preinit_getauxval_test_helper preinit_syscall_test_helper;
+    bionic_testlib_defaults bionic_tests_zipalign cfi_test_helper cfi_test_helper2 elftls_dlopen_ie_error_helper exec_linker_helper exec_linker_helper_lib ld_config_test_helper ld_config_test_helper_lib1 ld_config_test_helper_lib2 ld_config_test_helper_lib3 ld_preload_test_helper ld_preload_test_helper_lib1 ld_preload_test_helper_lib2 libatest_simple_zip libcfi-test libcfi-test-bad libdl_preempt_test_1 libdl_preempt_test_2 libdl_test_df_1_global libdlext_test libdlext_test_different_soname libdlext_test_fd libdlext_test_norelro libdlext_test_recursive libdlext_test_zip libgnu-hash-table-library libns_hidden_child_app libns_hidden_child_global libns_hidden_child_internal libns_hidden_child_public libnstest_dlopened libnstest_ns_a_public1 libnstest_ns_a_public1_internal libnstest_ns_b_public2 libnstest_ns_b_public3 libnstest_private libnstest_private_external libnstest_public libnstest_public_internal libnstest_root libnstest_root_not_isolated librelocations-ANDROID_REL librelocations-ANDROID_RELR librelocations-RELR librelocations-fat libsegment_gap_inner libsegment_gap_outer libsysv-hash-table-library libtest_atexit libtest_check_order_dlsym libtest_check_order_dlsym_1_left libtest_check_order_dlsym_2_right libtest_check_order_dlsym_3_c libtest_check_order_dlsym_a libtest_check_order_dlsym_b libtest_check_order_dlsym_d libtest_check_order_reloc_root libtest_check_order_reloc_root_1 libtest_check_order_reloc_root_2 libtest_check_order_reloc_siblings libtest_check_order_reloc_siblings_1 libtest_check_order_reloc_siblings_2 libtest_check_order_reloc_siblings_3 libtest_check_order_reloc_siblings_a libtest_check_order_reloc_siblings_b libtest_check_order_reloc_siblings_c libtest_check_order_reloc_siblings_c_1 libtest_check_order_reloc_siblings_c_2 libtest_check_order_reloc_siblings_d libtest_check_order_reloc_siblings_e libtest_check_order_reloc_siblings_f libtest_check_rtld_next_from_library libtest_dlopen_df_1_global libtest_dlopen_from_ctor libtest_dlopen_from_ctor_main libtest_dlopen_weak_undefined_func libtest_dlsym_df_1_global libtest_dlsym_from_this libtest_dlsym_from_this_child libtest_dlsym_from_this_grandchild libtest_dlsym_weak_func libtest_dt_runpath_a libtest_dt_runpath_b libtest_dt_runpath_c libtest_dt_runpath_d libtest_dt_runpath_d_zip libtest_dt_runpath_x libtest_dt_runpath_y libtest_elftls_dynamic libtest_elftls_dynamic_filler_1 libtest_elftls_dynamic_filler_2 libtest_elftls_dynamic_filler_3 libtest_elftls_shared_var libtest_elftls_shared_var_ie libtest_elftls_tprel libtest_empty libtest_ifunc libtest_ifunc_variable libtest_ifunc_variable_impl libtest_indirect_thread_local_dtor libtest_init_fini_order_child libtest_init_fini_order_grand_child libtest_init_fini_order_root libtest_init_fini_order_root2 libtest_missing_symbol libtest_missing_symbol_child_private libtest_missing_symbol_child_public libtest_missing_symbol_root libtest_nodelete_1 libtest_nodelete_2 libtest_nodelete_dt_flags_1 libtest_pthread_atfork libtest_relo_check_dt_needed_order libtest_relo_check_dt_needed_order_1 libtest_relo_check_dt_needed_order_2 libtest_simple libtest_thread_local_dtor libtest_thread_local_dtor2 libtest_two_parents_child libtest_two_parents_parent1 libtest_two_parents_parent2 libtest_versioned_lib libtest_versioned_libv1 libtest_versioned_libv2 libtest_versioned_otherlib libtest_versioned_otherlib_empty libtest_versioned_uselibv1 libtest_versioned_uselibv2 libtest_versioned_uselibv2_other libtest_versioned_uselibv3_other libtest_with_dependency libtest_with_dependency_loop libtest_with_dependency_loop_a libtest_with_dependency_loop_b libtest_with_dependency_loop_b_tmp libtest_with_dependency_loop_c libtestshared ns_hidden_child_helper preinit_getauxval_test_helper preinit_syscall_test_helper;
 
   inherit (callBPPackage "bionic/tools" ./bionic_tools.nix {})
     bionic-generate-version-script;
@@ -196,13 +253,10 @@
     versioner;
 
   inherit (callBPPackage "bootable/recovery" ./bootable_recovery.nix {})
-    librecovery librecovery_defaults librecovery_fastboot recovery recovery-persist recovery-refresh recovery_defaults res-testdata;
+    "init_recovery.rc" librecovery librecovery_defaults librecovery_fastboot recovery recovery-persist recovery-refresh recovery_defaults res-testdata;
 
   inherit (callBPPackage "bootable/recovery/applypatch" ./bootable_recovery_applypatch.nix {})
-    applypatch applypatch_defaults imgdiff libapplypatch libapplypatch_modes libimgdiff libimgpatch;
-
-  inherit (callBPPackage "bootable/recovery/boot_control" ./bootable_recovery_boot_control.nix {})
-    "bootctrl.default";
+    applypatch applypatch_defaults imgdiff libapplypatch libapplypatch_modes libimgdiff;
 
   inherit (callBPPackage "bootable/recovery/bootloader_message" ./bootable_recovery_bootloader_message.nix {})
     libbootloader_message libbootloader_message_defaults libbootloader_message_vendor;
@@ -222,17 +276,17 @@
   inherit (callBPPackage "bootable/recovery/minui" ./bootable_recovery_minui.nix {})
     libminui;
 
-  inherit (callBPPackage "bootable/recovery/misc_writer" ./bootable_recovery_misc_writer.nix {})
-    misc_writer;
-
   inherit (callBPPackage "bootable/recovery/otautil" ./bootable_recovery_otautil.nix {})
     libotautil;
 
   inherit (callBPPackage "bootable/recovery/recovery_ui" ./bootable_recovery_recovery_ui.nix {})
-    librecovery_ui librecovery_ui_default librecovery_ui_vr librecovery_ui_wear;
+    librecovery_ui librecovery_ui_default librecovery_ui_ethernet librecovery_ui_vr librecovery_ui_wear;
+
+  inherit (callBPPackage "bootable/recovery/recovery_utils" ./bootable_recovery_recovery_utils.nix {})
+    librecovery_utils librecovery_utils_defaults;
 
   inherit (callBPPackage "bootable/recovery/tests" ./bootable_recovery_tests.nix {})
-    recovery_component_test recovery_host_test recovery_manual_test recovery_test_defaults recovery_unit_test;
+    recovery_host_test recovery_manual_test recovery_test_defaults recovery_unit_test;
 
   inherit (callBPPackage "bootable/recovery/tools/image_generator" ./bootable_recovery_tools_image_generator.nix {})
     RecoveryImageGenerator;
@@ -247,7 +301,7 @@
     care_map_generator libupdate_verifier update_verifier update_verifier_defaults;
 
   inherit (callBPPackage "bootable/recovery/updater" ./bootable_recovery_updater.nix {})
-    libupdater libupdater_defaults;
+    libupdater_core libupdater_defaults libupdater_device libupdater_device_defaults libupdater_host libupdater_static_libs update_host_simulator;
 
   inherit (callBPPackage "bootable/recovery/updater_sample" ./bootable_recovery_updater_sample.nix {})
     SystemUpdaterSample;
@@ -255,8 +309,17 @@
   inherit (callBPPackage "bootable/recovery/updater_sample/tests" ./bootable_recovery_updater_sample_tests.nix {})
     SystemUpdaterSampleTests;
 
-  inherit (callBPPackage "build/kati" ./build_kati.nix {})
-    ckati ckati_defaults ckati_fileutil_bench ckati_stamp_dump ckati_test libckati;
+  inherit (callBPPackage "build/make/target/product/gsi" ./build_make_target_product_gsi.nix {})
+    vndk_lib_lists;
+
+  inherit (callBPPackage "build/make/target/product/security" ./build_make_target_product_security.nix {})
+    aosp-testkey fsverity-release-cert-der;
+
+  inherit (callBPPackage "build/make/target/product/sysconfig" ./build_make_target_product_sysconfig.nix {})
+    "preinstalled-packages-platform-aosp-product.xml" "preinstalled-packages-platform-full-base.xml" "preinstalled-packages-platform-handheld-product.xml";
+
+  inherit (callBPPackage "build/make/tools" ./build_make_tools.nix {})
+    generate-self-extracting-archive;
 
   inherit (callBPPackage "build/make/tools/acp" ./build_make_tools_acp.nix {})
     acp;
@@ -271,7 +334,7 @@
     droiddoc-templates-pdk;
 
   inherit (callBPPackage "build/make/tools/fs_config" ./build_make_tools_fs_config.nix {})
-    fs_config group group_gen oemaids_header_gen oemaids_headers passwd passwd_gen soong-fs_config target_fs_config_gen;
+    fs_config group_gen_odm group_gen_product group_gen_system group_gen_system_ext group_gen_vendor group_odm group_product group_system group_system_ext group_vendor oemaids_header_gen oemaids_headers passwd_gen_odm passwd_gen_product passwd_gen_system passwd_gen_system_ext passwd_gen_vendor passwd_odm passwd_product passwd_system passwd_system_ext passwd_vendor soong-fs_config target_fs_config_gen;
 
   inherit (callBPPackage "build/make/tools/fs_get_stats" ./build_make_tools_fs_get_stats.nix {})
     fs_get_stats;
@@ -279,8 +342,8 @@
   inherit (callBPPackage "build/make/tools/libhost" ./build_make_tools_libhost.nix {})
     libhost;
 
-  inherit (callBPPackage "build/make/tools/makeparallel" ./build_make_tools_makeparallel.nix {})
-    makeparallel;
+  inherit (callBPPackage "build/make/tools/releasetools" ./build_make_tools_releasetools.nix {})
+    add_img_to_target_files build_image build_super_image check_ota_package_signature check_partition_sizes check_target_files_signatures check_target_files_vintf img_from_target_files make_recovery_patch merge_builds merge_target_files ota_from_target_files ota_package_parser releasetools_add_img_to_target_files releasetools_add_img_to_target_files_defaults releasetools_apex_utils releasetools_binary_defaults releasetools_build_image releasetools_build_image_defaults releasetools_build_super_image releasetools_build_super_image_defaults releasetools_check_target_files_vintf releasetools_check_target_files_vintf_defaults releasetools_common releasetools_img_from_target_files releasetools_img_from_target_files_defaults releasetools_library_defaults releasetools_ota_from_target_files releasetools_ota_from_target_files_defaults releasetools_py3_test releasetools_test releasetools_test_defaults releasetools_verity_utils sign_apex sign_target_files_apks sparse_img validate_target_files;
 
   inherit (callBPPackage "build/make/tools/signapk" ./build_make_tools_signapk.nix {})
     signapk;
@@ -295,16 +358,31 @@
     ziptime;
 
   inherit (callBPPackage "build/soong" ./build_soong.nix {})
-    device_kernel_headers host_bionic_linker_asm host_bionic_linker_flags libatomic libgcc libgcc_stripped libgcov libwinpthread linux_bionic_supported soong soong-android soong-apex soong-cc soong-cc-config soong-env soong-genrule soong-java soong-java-config soong-phony soong-python soong-shared soong-sysprop soong-tradefed soong-xml;
+    device_kernel_headers host_bionic_linker_asm host_bionic_linker_flags libatomic libgcc libgcc_stripped libgcov libwinpthread linux_bionic_supported soong;
+
+  inherit (callBPPackage "build/soong/android" ./build_soong_android.nix {})
+    soong-android;
+
+  inherit (callBPPackage "build/soong/android/soongconfig" ./build_soong_android_soongconfig.nix {})
+    soong-android-soongconfig;
 
   inherit (callBPPackage "build/soong/androidmk" ./build_soong_androidmk.nix {})
-    androidmk androidmk-parser;
+    androidmk androidmk-lib androidmk-parser;
+
+  inherit (callBPPackage "build/soong/apex" ./build_soong_apex.nix {})
+    soong-apex;
 
   inherit (callBPPackage "build/soong/bpf" ./build_soong_bpf.nix {})
     soong-bpf;
 
   inherit (callBPPackage "build/soong/bpfix" ./build_soong_bpfix.nix {})
-    bpfix bpfix-lib;
+    bpfix bpfix-cmd bpfix-lib;
+
+  inherit (callBPPackage "build/soong/cc" ./build_soong_cc.nix {})
+    soong-cc;
+
+  inherit (callBPPackage "build/soong/cc/config" ./build_soong_cc_config.nix {})
+    soong-cc-config;
 
   inherit (callBPPackage "build/soong/cc/libbuildversion" ./build_soong_cc_libbuildversion.nix {})
     libbuildversion;
@@ -317,6 +395,9 @@
 
   inherit (callBPPackage "build/soong/cmd/diff_target_files" ./build_soong_cmd_diff_target_files.nix {})
     diff_target_files;
+
+  inherit (callBPPackage "build/soong/cmd/extract_apks" ./build_soong_cmd_extract_apks.nix {})
+    extract_apks soong-cmd-extract_apks-proto;
 
   inherit (callBPPackage "build/soong/cmd/extract_jar_packages" ./build_soong_cmd_extract_jar_packages.nix {})
     extract_jar_packages;
@@ -366,11 +447,20 @@
   inherit (callBPPackage "build/soong/cmd/zipsync" ./build_soong_cmd_zipsync.nix {})
     zipsync;
 
+  inherit (callBPPackage "build/soong/cuj" ./build_soong_cuj.nix {})
+    cuj_tests;
+
   inherit (callBPPackage "build/soong/dexpreopt" ./build_soong_dexpreopt.nix {})
     soong-dexpreopt;
 
   inherit (callBPPackage "build/soong/dexpreopt/dexpreopt_gen" ./build_soong_dexpreopt_dexpreopt_gen.nix {})
     dexpreopt_gen;
+
+  inherit (callBPPackage "build/soong/env" ./build_soong_env.nix {})
+    soong-env;
+
+  inherit (callBPPackage "build/soong/etc" ./build_soong_etc.nix {})
+    soong-etc;
 
   inherit (callBPPackage "build/soong/finder" ./build_soong_finder.nix {})
     soong-finder;
@@ -381,14 +471,53 @@
   inherit (callBPPackage "build/soong/finder/fs" ./build_soong_finder_fs.nix {})
     soong-finder-fs;
 
+  inherit (callBPPackage "build/soong/genrule" ./build_soong_genrule.nix {})
+    soong-genrule;
+
   inherit (callBPPackage "build/soong/jar" ./build_soong_jar.nix {})
     soong-jar;
+
+  inherit (callBPPackage "build/soong/java" ./build_soong_java.nix {})
+    soong-java;
+
+  inherit (callBPPackage "build/soong/java/config" ./build_soong_java_config.nix {})
+    soong-java-config;
 
   inherit (callBPPackage "build/soong/makedeps" ./build_soong_makedeps.nix {})
     soong-makedeps;
 
+  inherit (callBPPackage "build/soong/partner" ./build_soong_partner.nix {})
+    partner-bpfix-extensions partner_androidmk partner_bpfix;
+
+  inherit (callBPPackage "build/soong/phony" ./build_soong_phony.nix {})
+    soong-phony;
+
+  inherit (callBPPackage "build/soong/python" ./build_soong_python.nix {})
+    soong-python;
+
   inherit (callBPPackage "build/soong/python/tests" ./build_soong_python_tests.nix {})
-    par_test;
+    par_test par_test3;
+
+  inherit (callBPPackage "build/soong/remoteexec" ./build_soong_remoteexec.nix {})
+    soong-remoteexec;
+
+  inherit (callBPPackage "build/soong/rust" ./build_soong_rust.nix {})
+    soong-rust;
+
+  inherit (callBPPackage "build/soong/rust/config" ./build_soong_rust_config.nix {})
+    soong-rust-config;
+
+  inherit (callBPPackage "build/soong/scripts" ./build_soong_scripts.nix {})
+    jsonmodify lint-project-xml manifest_check manifest_check_test manifest_fixer manifest_fixer_test manifest_utils test_config_fixer test_config_fixer_test;
+
+  inherit (callBPPackage "build/soong/sdk" ./build_soong_sdk.nix {})
+    soong-sdk;
+
+  inherit (callBPPackage "build/soong/sh" ./build_soong_sh.nix {})
+    soong-sh;
+
+  inherit (callBPPackage "build/soong/shared" ./build_soong_shared.nix {})
+    soong-shared;
 
   inherit (callBPPackage "build/soong/symbol_inject" ./build_soong_symbol_inject.nix {})
     soong-symbol_inject;
@@ -396,8 +525,14 @@
   inherit (callBPPackage "build/soong/symbol_inject/cmd" ./build_soong_symbol_inject_cmd.nix {})
     symbol_inject;
 
+  inherit (callBPPackage "build/soong/sysprop" ./build_soong_sysprop.nix {})
+    soong-sysprop;
+
   inherit (callBPPackage "build/soong/third_party/zip" ./build_soong_third_party_zip.nix {})
     android-archive-zip;
+
+  inherit (callBPPackage "build/soong/tradefed" ./build_soong_tradefed.nix {})
+    soong-tradefed;
 
   inherit (callBPPackage "build/soong/ui/build" ./build_soong_ui_build.nix {})
     soong-ui-build soong-ui-build-paths;
@@ -409,13 +544,16 @@
     soong-ui-metrics soong-ui-metrics_proto;
 
   inherit (callBPPackage "build/soong/ui/status" ./build_soong_ui_status.nix {})
-    soong-ui-status soong-ui-status-ninja_frontend;
+    soong-ui-status soong-ui-status-build_error_proto soong-ui-status-ninja_frontend;
 
   inherit (callBPPackage "build/soong/ui/terminal" ./build_soong_ui_terminal.nix {})
     soong-ui-terminal;
 
   inherit (callBPPackage "build/soong/ui/tracer" ./build_soong_ui_tracer.nix {})
     soong-ui-tracer;
+
+  inherit (callBPPackage "build/soong/xml" ./build_soong_xml.nix {})
+    soong-xml;
 
   inherit (callBPPackage "build/soong/zip" ./build_soong_zip.nix {})
     soong-zip;
@@ -425,6 +563,48 @@
 
   inherit (callBPPackage "cts" ./cts.nix {})
     cts_defaults cts_error_prone_rules cts_error_prone_rules_tests cts_support_defaults;
+
+  inherit (callBPPackage "cts/apps/CrossProfileTestApp" ./cts_apps_CrossProfileTestApp.nix {})
+    CrossProfileTestApp;
+
+  inherit (callBPPackage "cts/apps/CtsVerifier" ./cts_apps_CtsVerifier.nix {})
+    CtsVerifierMockVrListenerServiceFiles;
+
+  inherit (callBPPackage "cts/apps/CtsVerifier/jni/audio_loopback" ./cts_apps_CtsVerifier_jni_audio_loopback.nix {})
+    libaudioloopback_jni;
+
+  inherit (callBPPackage "cts/apps/CtsVerifier/jni/midi" ./cts_apps_CtsVerifier_jni_midi.nix {})
+    libctsnativemidi_jni;
+
+  inherit (callBPPackage "cts/apps/CtsVerifier/jni/verifier" ./cts_apps_CtsVerifier_jni_verifier.nix {})
+    libctsverifier_jni;
+
+  inherit (callBPPackage "cts/apps/CtsVerifierInstantApp" ./cts_apps_CtsVerifierInstantApp.nix {})
+    CtsVerifierInstantApp;
+
+  inherit (callBPPackage "cts/apps/CtsVerifierUSBCompanion" ./cts_apps_CtsVerifierUSBCompanion.nix {})
+    CtsVerifierUSBCompanion;
+
+  inherit (callBPPackage "cts/apps/EmptyDeviceAdmin" ./cts_apps_EmptyDeviceAdmin.nix {})
+    CtsEmptyDeviceAdmin;
+
+  inherit (callBPPackage "cts/apps/EmptyDeviceOwner" ./cts_apps_EmptyDeviceOwner.nix {})
+    CtsEmptyDeviceOwner;
+
+  inherit (callBPPackage "cts/apps/ForceStopHelperApp" ./cts_apps_ForceStopHelperApp.nix {})
+    CtsForceStopHelper;
+
+  inherit (callBPPackage "cts/apps/NotificationBot" ./cts_apps_NotificationBot.nix {})
+    NotificationBot;
+
+  inherit (callBPPackage "cts/apps/OomCatcher" ./cts_apps_OomCatcher.nix {})
+    OomCatcher;
+
+  inherit (callBPPackage "cts/apps/PermissionApp" ./cts_apps_PermissionApp.nix {})
+    CtsPermissionApp;
+
+  inherit (callBPPackage "cts/apps/VpnApp" ./cts_apps_VpnApp.nix {})
+    CtsVpnAppDefaults CtsVpnFirewallApp CtsVpnFirewallAppApi23 CtsVpnFirewallAppApi24 CtsVpnFirewallAppNotAlwaysOn;
 
   inherit (callBPPackage "cts/common/device-side/device-info" ./cts_common_device-side_device-info.nix {})
     compatibility-device-info;
@@ -450,17 +630,65 @@
   inherit (callBPPackage "cts/common/device-side/util-axt/tests" ./cts_common_device-side_util-axt_tests.nix {})
     compatibility-device-util-tests-axt;
 
-  inherit (callBPPackage "cts/common/device-side/util" ./cts_common_device-side_util.nix {})
-    compatibility-device-util;
-
   inherit (callBPPackage "cts/common/device-side/util/jni" ./cts_common_device-side_util_jni.nix {})
     libcts_jni;
 
-  inherit (callBPPackage "cts/common/device-side/util/tests" ./cts_common_device-side_util_tests.nix {})
-    compatibility-device-util-tests;
+  inherit (callBPPackage "cts/common/host-side/util-axt" ./cts_common_host-side_util-axt.nix {})
+    compatibility-host-util-axt;
+
+  inherit (callBPPackage "cts/helpers/default" ./cts_helpers_default.nix {})
+    "com.android.cts.helpers.aosp";
+
+  inherit (callBPPackage "cts/hostsidetests/abioverride" ./cts_hostsidetests_abioverride.nix {})
+    CtsAbiOverrideHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/abioverride/app" ./cts_hostsidetests_abioverride_app.nix {})
+    CtsAbiOverrideTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/abioverride/app/jni" ./cts_hostsidetests_abioverride_app_jni.nix {})
+    libctsabioverride;
+
+  inherit (callBPPackage "cts/hostsidetests/accounts" ./cts_hostsidetests_accounts.nix {})
+    CtsAccountsHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/accounts/test-apps/AccountManagerCrossUserApp" ./cts_hostsidetests_accounts_test-apps_AccountManagerCrossUserApp.nix {})
+    CtsAccountManagerCrossUserApp;
+
+  inherit (callBPPackage "cts/hostsidetests/angle" ./cts_hostsidetests_angle.nix {})
+    CtsAngleIntegrationHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/angle/app/common" ./cts_hostsidetests_angle_app_common.nix {})
+    AngleIntegrationTestCommon;
+
+  inherit (callBPPackage "cts/hostsidetests/angle/app/driverTest" ./cts_hostsidetests_angle_app_driverTest.nix {})
+    CtsAngleDriverTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/angle/app/driverTestSecondary" ./cts_hostsidetests_angle_app_driverTestSecondary.nix {})
+    CtsAngleDriverTestCasesSecondary;
 
   inherit (callBPPackage "cts/hostsidetests/apex" ./cts_hostsidetests_apex.nix {})
     CtsApexTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/appbinding/app" ./cts_hostsidetests_appbinding_app.nix {})
+    CtsAppBindingService1 CtsAppBindingService2 CtsAppBindingService3 CtsAppBindingService4 CtsAppBindingService5 CtsAppBindingService6 CtsAppBindingService7 CtsAppBindingServiceB cts_hostside_appbinding_defaults;
+
+  inherit (callBPPackage "cts/hostsidetests/appbinding/hostside" ./cts_hostsidetests_appbinding_hostside.nix {})
+    CtsAppBindingHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/appcompat/compatchanges" ./cts_hostsidetests_appcompat_compatchanges.nix {})
+    CtsAppCompatHostTestCases cts-global-compat-config;
+
+  inherit (callBPPackage "cts/hostsidetests/appcompat/compatchanges/app" ./cts_hostsidetests_appcompat_compatchanges_app.nix {})
+    CtsHostsideCompatChangeTestsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/appcompat/host/lib" ./cts_hostsidetests_appcompat_host_lib.nix {})
+    CompatChangeGatingTestBase;
+
+  inherit (callBPPackage "cts/hostsidetests/appcompat/strictjavapackages" ./cts_hostsidetests_appcompat_strictjavapackages.nix {})
+    CtsStrictJavaPackagesTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity" ./cts_hostsidetests_appsecurity.nix {})
+    CtsAppSecurityHostTestCases CtsHostsideTestsAppSecurityUtil;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/certs" ./cts_hostsidetests_appsecurity_certs.nix {})
     cts-testkey1 cts-testkey2;
@@ -474,8 +702,20 @@
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/AccessSerialModern" ./cts_hostsidetests_appsecurity_test-apps_AccessSerialModern.nix {})
     CtsAccessSerialModern;
 
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ApkVerityTestApp" ./cts_hostsidetests_appsecurity_test-apps_ApkVerityTestApp.nix {})
+    CtsApkVerityTestApp CtsApkVerityTestAppSplit libCtsApkVerityTestAppJni;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ApkVerityTestApp/testdata" ./cts_hostsidetests_appsecurity_test-apps_ApkVerityTestApp_testdata.nix {})
+    CtsApkVerityTestAppDm CtsApkVerityTestAppDmFsvSig CtsApkVerityTestAppFsvSig CtsApkVerityTestAppSplitDm CtsApkVerityTestAppSplitDmFsvSig CtsApkVerityTestAppSplitFsvSig CtsApkVerityTestDebugFiles cts_apk_verity_sig_gen_default fsverity-debug-cert fsverity-debug-key;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ApkVerityTestAppPrebuilt" ./cts_hostsidetests_appsecurity_test-apps_ApkVerityTestAppPrebuilt.nix {})
+    CtsApkVerityTestPrebuiltFiles;
+
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/AppAccessData" ./cts_hostsidetests_appsecurity_test-apps_AppAccessData.nix {})
     CtsAppAccessData;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/AppDataIsolationTestApp" ./cts_hostsidetests_appsecurity_test-apps_AppDataIsolationTestApp.nix {})
+    CtsAppDataIsolationAppA CtsAppDataIsolationAppB CtsAppDataIsolationAppDirectBootA CtsAppDataIsolationAppSharedA CtsAppDataIsolationAppSharedB;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/AppWithData" ./cts_hostsidetests_appsecurity_test-apps_AppWithData.nix {})
     CtsAppWithData;
@@ -483,8 +723,14 @@
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ApplicationVisibilityCrossUserApp" ./cts_hostsidetests_appsecurity_test-apps_ApplicationVisibilityCrossUserApp.nix {})
     CtsApplicationVisibilityCrossUserApp;
 
-  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/DeclareNotRuntimePermissions" ./cts_hostsidetests_appsecurity_test-apps_DeclareNotRuntimePermissions.nix {})
-    CtsDeclareNonRuntimePermissions;
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/AuthBoundKeyApp" ./cts_hostsidetests_appsecurity_test-apps_AuthBoundKeyApp.nix {})
+    AuthBoundKeyApp;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/CorruptApkTests" ./cts_hostsidetests_appsecurity_test-apps_CorruptApkTests.nix {})
+    CtsCorruptApkTests_b71360999 CtsCorruptApkTests_b71361168 CtsCorruptApkTests_b79488511;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/CorruptApkTests/compressed_arsc" ./cts_hostsidetests_appsecurity_test-apps_CorruptApkTests_compressed_arsc.nix {})
+    CtsCorruptApkTests_Compressed_Q CtsCorruptApkTests_Compressed_R CtsCorruptApkTests_Unaligned_Q CtsCorruptApkTests_Unaligned_R;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/DeviceIdentifiers" ./cts_hostsidetests_appsecurity_test-apps_DeviceIdentifiers.nix {})
     CtsAccessDeviceIdentifiers;
@@ -494,6 +740,12 @@
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/DocumentProvider" ./cts_hostsidetests_appsecurity_test-apps_DocumentProvider.nix {})
     CtsDocumentProvider;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/DuplicatePermissionDeclareApp" ./cts_hostsidetests_appsecurity_test-apps_DuplicatePermissionDeclareApp.nix {})
+    CtsDuplicatePermissionDeclareApp;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/EncryptionApp" ./cts_hostsidetests_appsecurity_test-apps_EncryptionApp.nix {})
+    CtsEncryptionApp;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/EphemeralTestApp/EphemeralApp1" ./cts_hostsidetests_appsecurity_test-apps_EphemeralTestApp_EphemeralApp1.nix {})
     CtsEphemeralTestsEphemeralApp1;
@@ -519,9 +771,6 @@
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/EphemeralTestApp/util" ./cts_hostsidetests_appsecurity_test-apps_EphemeralTestApp_util.nix {})
     cts-aia-util;
 
-  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/EscalateToRuntimePermissions" ./cts_hostsidetests_appsecurity_test-apps_EscalateToRuntimePermissions.nix {})
-    CtsEscalateToRuntimePermissions;
-
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ExternalStorageApp" ./cts_hostsidetests_appsecurity_test-apps_ExternalStorageApp.nix {})
     CtsExternalStorageApp CtsExternalStorageTestLib;
 
@@ -536,6 +785,24 @@
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/InstrumentationAppDiffCert" ./cts_hostsidetests_appsecurity_test-apps_InstrumentationAppDiffCert.nix {})
     CtsInstrumentationAppDiffCert;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/IsolatedSplitApp" ./cts_hostsidetests_appsecurity_test-apps_IsolatedSplitApp.nix {})
+    CtsIsolatedSplitApp;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/IsolatedSplitApp/feature_a" ./cts_hostsidetests_appsecurity_test-apps_IsolatedSplitApp_feature_a.nix {})
+    CtsIsolatedSplitAppFeatureA;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/IsolatedSplitApp/feature_b" ./cts_hostsidetests_appsecurity_test-apps_IsolatedSplitApp_feature_b.nix {})
+    CtsIsolatedSplitAppFeatureB;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/IsolatedSplitApp/feature_c" ./cts_hostsidetests_appsecurity_test-apps_IsolatedSplitApp_feature_c.nix {})
+    CtsIsolatedSplitAppFeatureC;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ListeningPortsApp" ./cts_hostsidetests_appsecurity_test-apps_ListeningPortsApp.nix {})
+    CtsListeningPortsTest;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/LocationPolicyApp" ./cts_hostsidetests_appsecurity_test-apps_LocationPolicyApp.nix {})
+    CtsLocationPolicyApp;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/MajorVersionApp/Version000000000000ffff" ./cts_hostsidetests_appsecurity_test-apps_MajorVersionApp_Version000000000000ffff.nix {})
     CtsMajorVersion000000000000ffff;
@@ -552,8 +819,17 @@
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/MajorVersionApp/src-common" ./cts_hostsidetests_appsecurity_test-apps_MajorVersionApp_src-common.nix {})
     CtsMajorVersionCommon;
 
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/MediaStorageApp" ./cts_hostsidetests_appsecurity_test-apps_MediaStorageApp.nix {})
+    CtsMediaStorageApp CtsMediaStorageApp28 CtsMediaStorageApp29;
+
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/MultiUserStorageApp" ./cts_hostsidetests_appsecurity_test-apps_MultiUserStorageApp.nix {})
     CtsMultiUserStorageApp;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/NoRestartApp" ./cts_hostsidetests_appsecurity_test-apps_NoRestartApp.nix {})
+    CtsNoRestartBase;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/NoRestartApp/feature" ./cts_hostsidetests_appsecurity_test-apps_NoRestartApp_feature.nix {})
+    CtsNoRestartFeature;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/OrderedActivityApp" ./cts_hostsidetests_appsecurity_test-apps_OrderedActivityApp.nix {})
     CtsOrderedActivityApp;
@@ -561,20 +837,26 @@
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/PackageAccessApp" ./cts_hostsidetests_appsecurity_test-apps_PackageAccessApp.nix {})
     CtsPkgAccessApp;
 
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/PackageInstallerPermissionRequestApp" ./cts_hostsidetests_appsecurity_test-apps_PackageInstallerPermissionRequestApp.nix {})
+    CtsPkgInstallerConstants CtsPkgInstallerPermRequestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/PackageInstallerWhitelistApp" ./cts_hostsidetests_appsecurity_test-apps_PackageInstallerWhitelistApp.nix {})
+    CtsPkgInstallerPermWhitelistApp;
+
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/PermissionDeclareApp" ./cts_hostsidetests_appsecurity_test-apps_PermissionDeclareApp.nix {})
-    CtsPermissionDeclareApp;
+    CtsPermissionDeclareApp CtsPermissionDeclareUtilLib;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/PermissionDeclareAppCompat" ./cts_hostsidetests_appsecurity_test-apps_PermissionDeclareAppCompat.nix {})
     CtsPermissionDeclareAppCompat;
 
-  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/PermissionPolicy25" ./cts_hostsidetests_appsecurity_test-apps_PermissionPolicy25.nix {})
-    CtsPermissionPolicyTest25;
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/PrivilegedUpdateApp" ./cts_hostsidetests_appsecurity_test-apps_PrivilegedUpdateApp.nix {})
+    CtsPrivilegedUpdateTests;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ReadExternalStorageApp" ./cts_hostsidetests_appsecurity_test-apps_ReadExternalStorageApp.nix {})
     CtsReadExternalStorageApp;
 
-  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/ReviewPermissionHelper" ./cts_hostsidetests_appsecurity_test-apps_ReviewPermissionHelper.nix {})
-    ReviewPermissionHelper;
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/SessionInspector" ./cts_hostsidetests_appsecurity_test-apps_SessionInspector.nix {})
+    CtsSessionInspectorAppA CtsSessionInspectorAppB;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/SharedUidInstall" ./cts_hostsidetests_appsecurity_test-apps_SharedUidInstall.nix {})
     CtsSharedUidInstall;
@@ -589,7 +871,7 @@
     CtsSimpleAppInstallDiffCert;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/StorageApp" ./cts_hostsidetests_appsecurity_test-apps_StorageApp.nix {})
-    CtsStorageAppLib;
+    CtsStorageAppA CtsStorageAppB CtsStorageAppLib;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/StorageStatsApp" ./cts_hostsidetests_appsecurity_test-apps_StorageStatsApp.nix {})
     CtsStorageStatsApp;
@@ -597,8 +879,38 @@
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/TargetInstrumentationApp" ./cts_hostsidetests_appsecurity_test-apps_TargetInstrumentationApp.nix {})
     CtsTargetInstrumentationApp;
 
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UseEmbeddedDexApp" ./cts_hostsidetests_appsecurity_test-apps_UseEmbeddedDexApp.nix {})
+    CtsUseEmbeddedDexAppSplit_Canonical CtsUseEmbeddedDexAppSplit_CompressedDex CtsUseEmbeddedDexApp_Canonical CtsUseEmbeddedDexApp_DexCompressed CtsUseEmbeddedDexApp_NotPreferred;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UsePermissionDiffCert" ./cts_hostsidetests_appsecurity_test-apps_UsePermissionDiffCert.nix {})
+    CtsUsePermissionDiffCert;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UseProcessFailActivity" ./cts_hostsidetests_appsecurity_test-apps_UseProcessFailActivity.nix {})
+    CtsUseProcessFailActivity;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UseProcessFailApplication" ./cts_hostsidetests_appsecurity_test-apps_UseProcessFailApplication.nix {})
+    CtsUseProcessFailApplication;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UseProcessFailProvider" ./cts_hostsidetests_appsecurity_test-apps_UseProcessFailProvider.nix {})
+    CtsUseProcessFailProvider;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UseProcessFailReceiver" ./cts_hostsidetests_appsecurity_test-apps_UseProcessFailReceiver.nix {})
+    CtsUseProcessFailReceiver;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UseProcessFailService" ./cts_hostsidetests_appsecurity_test-apps_UseProcessFailService.nix {})
+    CtsUseProcessFailService;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/UseProcessSuccess" ./cts_hostsidetests_appsecurity_test-apps_UseProcessSuccess.nix {})
+    CtsUseProcessSuccess;
+
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/V3SigningSchemeRotation" ./cts_hostsidetests_appsecurity_test-apps_V3SigningSchemeRotation.nix {})
     CtsV3SigningSchemeRotationTest;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/WriteExternalStorageApp" ./cts_hostsidetests_appsecurity_test-apps_WriteExternalStorageApp.nix {})
+    CtsWriteExternalStorageApp CtsWriteExternalStorageWriteGiftLib;
+
+  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/WriteExternalStorageApp2" ./cts_hostsidetests_appsecurity_test-apps_WriteExternalStorageApp2.nix {})
+    CtsWriteExternalStorageApp2;
 
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/dummyime" ./cts_hostsidetests_appsecurity_test-apps_dummyime.nix {})
     CtsDummyIme;
@@ -666,11 +978,92 @@
   inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/rro/OverlayTarget" ./cts_hostsidetests_appsecurity_test-apps_rro_OverlayTarget.nix {})
     CtsOverlayTarget CtsOverlayTargetNoOverlayable;
 
-  inherit (callBPPackage "cts/hostsidetests/appsecurity/test-apps/tinyapp" ./cts_hostsidetests_appsecurity_test-apps_tinyapp.nix {})
-    CtsPkgInstallTinyApp;
+  inherit (callBPPackage "cts/hostsidetests/atrace" ./cts_hostsidetests_atrace.nix {})
+    CtsAtraceHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/atrace/AtraceTestApp" ./cts_hostsidetests_atrace_AtraceTestApp.nix {})
+    CtsAtraceTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/atrace/AtraceTestApp/jni" ./cts_hostsidetests_atrace_AtraceTestApp_jni.nix {})
+    libctstrace_jni;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/AllowBackup" ./cts_hostsidetests_backup_AllowBackup.nix {})
+    CtsAllowBackupLib;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/AllowBackup/BackupAllowedApp" ./cts_hostsidetests_backup_AllowBackup_BackupAllowedApp.nix {})
+    BackupAllowedApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/AllowBackup/BackupNotAllowedApp" ./cts_hostsidetests_backup_AllowBackup_BackupNotAllowedApp.nix {})
+    BackupNotAllowedApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup" ./cts_hostsidetests_backup.nix {})
+    CtsBackupHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/AutoRestoreApp" ./cts_hostsidetests_backup_AutoRestoreApp.nix {})
+    CtsAutoRestoreApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/BackupTransportApp" ./cts_hostsidetests_backup_BackupTransportApp.nix {})
+    CtsBackupTransportApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/FullBackupOnly" ./cts_hostsidetests_backup_FullBackupOnly.nix {})
+    CtsFullBackupOnlyLib;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/FullBackupOnly/FullBackupOnlyFalseNoAgentApp" ./cts_hostsidetests_backup_FullBackupOnly_FullBackupOnlyFalseNoAgentApp.nix {})
+    FullBackupOnlyFalseNoAgentApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/FullBackupOnly/FullBackupOnlyFalseWithAgentApp" ./cts_hostsidetests_backup_FullBackupOnly_FullBackupOnlyFalseWithAgentApp.nix {})
+    FullBackupOnlyFalseWithAgentApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/FullBackupOnly/FullBackupOnlyTrueWithAgentApp" ./cts_hostsidetests_backup_FullBackupOnly_FullBackupOnlyTrueWithAgentApp.nix {})
+    FullBackupOnlyTrueWithAgentApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/KeyValueApp" ./cts_hostsidetests_backup_KeyValueApp.nix {})
+    CtsKeyValueBackupRestoreApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/OtherSoundsSettingsApp" ./cts_hostsidetests_backup_OtherSoundsSettingsApp.nix {})
+    CtsBackupOtherSoundsSettingsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/PreservedSettingsApp" ./cts_hostsidetests_backup_PreservedSettingsApp.nix {})
+    CtsPreservedSettingsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/ProfileFullBackupApp" ./cts_hostsidetests_backup_ProfileFullBackupApp.nix {})
+    CtsProfileFullBackupApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/ProfileKeyValueApp" ./cts_hostsidetests_backup_ProfileKeyValueApp.nix {})
+    CtsProfileKeyValueApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/ProfileSerialNumberApp" ./cts_hostsidetests_backup_ProfileSerialNumberApp.nix {})
+    CtsProfileSerialNumberApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/RestoreAnyVersion" ./cts_hostsidetests_backup_RestoreAnyVersion.nix {})
+    CtsRestoreAnyVersionLib;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/RestoreAnyVersion/NewVersionApp" ./cts_hostsidetests_backup_RestoreAnyVersion_NewVersionApp.nix {})
+    CtsBackupRestoreAnyVersionAppUpdate;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/RestoreAnyVersion/NoRestoreAnyVersionApp" ./cts_hostsidetests_backup_RestoreAnyVersion_NoRestoreAnyVersionApp.nix {})
+    CtsBackupRestoreAnyVersionNoRestoreApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/RestoreAnyVersion/RestoreAnyVersionApp" ./cts_hostsidetests_backup_RestoreAnyVersion_RestoreAnyVersionApp.nix {})
+    CtsBackupRestoreAnyVersionApp;
 
   inherit (callBPPackage "cts/hostsidetests/backup/RestoreSessionTest" ./cts_hostsidetests_backup_RestoreSessionTest.nix {})
     CtsRestoreSessionApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/SharedPreferencesRestoreApp" ./cts_hostsidetests_backup_SharedPreferencesRestoreApp.nix {})
+    CtsSharedPreferencesRestoreApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/SuccessNotificationApp" ./cts_hostsidetests_backup_SuccessNotificationApp.nix {})
+    CtsBackupSuccessNotificationApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/SyncAdapterSettingsApp" ./cts_hostsidetests_backup_SyncAdapterSettingsApp.nix {})
+    CtsBackupSyncAdapterSettingsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/fullbackupapp" ./cts_hostsidetests_backup_fullbackupapp.nix {})
+    CtsHostsideTestsFullBackupApp;
+
+  inherit (callBPPackage "cts/hostsidetests/backup/includeexcludeapp" ./cts_hostsidetests_backup_includeexcludeapp.nix {})
+    CtsIncludeExcludeApp;
 
   inherit (callBPPackage "cts/hostsidetests/backup/restoresessionapp1" ./cts_hostsidetests_backup_restoresessionapp1.nix {})
     CtsRestoreSessionApp1;
@@ -680,6 +1073,15 @@
 
   inherit (callBPPackage "cts/hostsidetests/backup/restoresessionapp3" ./cts_hostsidetests_backup_restoresessionapp3.nix {})
     CtsRestoreSessionApp3;
+
+  inherit (callBPPackage "cts/hostsidetests/blobstore" ./cts_hostsidetests_blobstore.nix {})
+    CtsBlobStoreHostTestCases CtsBlobStoreHostTestHelper;
+
+  inherit (callBPPackage "cts/hostsidetests/bootstats" ./cts_hostsidetests_bootstats.nix {})
+    CtsBootStatsTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/car" ./cts_hostsidetests_car.nix {})
+    CtsCarHostTestCases;
 
   inherit (callBPPackage "cts/hostsidetests/classloaders/splits" ./cts_hostsidetests_classloaders_splits.nix {})
     CtsClassloaderSplitsHostTestCases;
@@ -698,6 +1100,42 @@
 
   inherit (callBPPackage "cts/hostsidetests/classloaders/useslibrary/app" ./cts_hostsidetests_classloaders_useslibrary_app.nix {})
     CtsUsesLibraryApp;
+
+  inherit (callBPPackage "cts/hostsidetests/compilation" ./cts_hostsidetests_compilation.nix {})
+    CtsCompilationTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/compilation/app" ./cts_hostsidetests_compilation_app.nix {})
+    CtsCompilationApp;
+
+  inherit (callBPPackage "cts/hostsidetests/content" ./cts_hostsidetests_content.nix {})
+    CtsSyncContentHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/content/test-apps/ContextCrossProfileApps/ContextCrossProfileApp" ./cts_hostsidetests_content_test-apps_ContextCrossProfileApps_ContextCrossProfileApp.nix {})
+    CtsContextCrossProfileApp;
+
+  inherit (callBPPackage "cts/hostsidetests/content/test-apps/ContextCrossProfileApps/ContextCrossProfileTestServiceApp" ./cts_hostsidetests_content_test-apps_ContextCrossProfileApps_ContextCrossProfileTestServiceApp.nix {})
+    CtsContextCrossProfileTestServiceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/content/test-apps/CtsSyncInvalidAccountAuthorityTestCases" ./cts_hostsidetests_content_test-apps_CtsSyncInvalidAccountAuthorityTestCases.nix {})
+    CtsSyncInvalidAccountAuthorityTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/cpptools" ./cts_hostsidetests_cpptools.nix {})
+    CtsCppToolsTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/cpptools/test-apps/BasicApp" ./cts_hostsidetests_cpptools_test-apps_BasicApp.nix {})
+    CtsCppToolsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/cpptools/test-apps/ConnectorNativeProgram" ./cts_hostsidetests_cpptools_test-apps_ConnectorNativeProgram.nix {})
+    connector;
+
+  inherit (callBPPackage "cts/hostsidetests/cpptools/test-apps/DomainSocketApp" ./cts_hostsidetests_cpptools_test-apps_DomainSocketApp.nix {})
+    CtsDomainSocket;
+
+  inherit (callBPPackage "cts/hostsidetests/deviceidle" ./cts_hostsidetests_deviceidle.nix {})
+    CtsDeviceIdleHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy" ./cts_hostsidetests_devicepolicy.nix {})
+    CtsDevicePolicyManagerTestCases;
 
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/AccountCheck" ./cts_hostsidetests_devicepolicy_app_AccountCheck.nix {})
     CtsAccountCheckNonTestOnlyOwnerApp CtsAccountCheckTestOnlyOwnerApp CtsAccountCheckTestOnlyOwnerUpdateApp;
@@ -732,11 +1170,32 @@
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/ContentCaptureService" ./cts_hostsidetests_devicepolicy_app_ContentCaptureService.nix {})
     CtsDevicePolicyContentCaptureService;
 
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/ContentSuggestionsApp" ./cts_hostsidetests_devicepolicy_app_ContentSuggestionsApp.nix {})
+    CtsDevicePolicyContentSuggestionsApp;
+
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CorpOwnedManagedProfile" ./cts_hostsidetests_devicepolicy_app_CorpOwnedManagedProfile.nix {})
     CtsCorpOwnedManagedProfile CtsCorpOwnedManagedProfile2;
 
-  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileAppsTest" ./cts_hostsidetests_devicepolicy_app_CrossProfileAppsTest.nix {})
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileTestApps/CrossProfileAppsTest" ./cts_hostsidetests_devicepolicy_app_CrossProfileTestApps_CrossProfileAppsTest.nix {})
     CtsCrossProfileAppsTests;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileTestApps/CrossProfileAppsWithNoPermissionTest" ./cts_hostsidetests_devicepolicy_app_CrossProfileTestApps_CrossProfileAppsWithNoPermissionTest.nix {})
+    CtsCrossProfileAppsWithNoPermissionTests;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileTestApps/CrossProfileEnabledApp" ./cts_hostsidetests_devicepolicy_app_CrossProfileTestApps_CrossProfileEnabledApp.nix {})
+    CtsCrossProfileEnabledApp;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileTestApps/CrossProfileEnabledNoPermsApp" ./cts_hostsidetests_devicepolicy_app_CrossProfileTestApps_CrossProfileEnabledNoPermsApp.nix {})
+    CtsCrossProfileEnabledNoPermsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileTestApps/CrossProfileNotEnabledApp" ./cts_hostsidetests_devicepolicy_app_CrossProfileTestApps_CrossProfileNotEnabledApp.nix {})
+    CtsCrossProfileNotEnabledApp;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileTestApps/CrossProfileUserEnabledApp" ./cts_hostsidetests_devicepolicy_app_CrossProfileTestApps_CrossProfileUserEnabledApp.nix {})
+    CtsCrossProfileUserEnabledApp;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CrossProfileTestApps/ModifyQuietModeEnabledApp" ./cts_hostsidetests_devicepolicy_app_CrossProfileTestApps_ModifyQuietModeEnabledApp.nix {})
+    CtsModifyQuietModeEnabledApp;
 
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/CustomizationApp" ./cts_hostsidetests_devicepolicy_app_CustomizationApp.nix {})
     CtsCustomizationApp;
@@ -756,6 +1215,15 @@
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/DeviceOwner" ./cts_hostsidetests_devicepolicy_app_DeviceOwner.nix {})
     CtsDeviceOwnerApp;
 
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/DummyApps" ./cts_hostsidetests_devicepolicy_app_DummyApps.nix {})
+    DummyApp1 DummyApp2 DummyApp3 DummyApp4;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/DummyIme" ./cts_hostsidetests_devicepolicy_app_DummyIme.nix {})
+    DummyIme;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/DummyLauncher" ./cts_hostsidetests_devicepolicy_app_DummyLauncher.nix {})
+    DummyLauncher;
+
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/HasLauncherActivityApp" ./cts_hostsidetests_devicepolicy_app_HasLauncherActivityApp.nix {})
     CtsHasLauncherActivityApp CtsNoLauncherActivityApp CtsNoPermissionApp;
 
@@ -764,6 +1232,9 @@
 
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/IntentSender" ./cts_hostsidetests_devicepolicy_app_IntentSender.nix {})
     CtsIntentSenderApp;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/LauncherTests" ./cts_hostsidetests_devicepolicy_app_LauncherTests.nix {})
+    CtsLauncherAppsTests;
 
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/LauncherTestsSupport" ./cts_hostsidetests_devicepolicy_app_LauncherTestsSupport.nix {})
     CtsLauncherAppsTestsSupport;
@@ -789,14 +1260,23 @@
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/ProfileOwner" ./cts_hostsidetests_devicepolicy_app_ProfileOwner.nix {})
     CtsProfileOwnerApp;
 
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/SharingApps" ./cts_hostsidetests_devicepolicy_app_SharingApps.nix {})
+    SharingApp1 SharingApp2;
+
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/SimpleApp" ./cts_hostsidetests_devicepolicy_app_SimpleApp.nix {})
     CtsSimpleApp;
 
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/SimplePreMApp" ./cts_hostsidetests_devicepolicy_app_SimplePreMApp.nix {})
     CtsSimplePreMApp;
 
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/SimpleSmsApp" ./cts_hostsidetests_devicepolicy_app_SimpleSmsApp.nix {})
+    SimpleSmsApp;
+
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/SingleAdminApp" ./cts_hostsidetests_devicepolicy_app_SingleAdminApp.nix {})
     CtsDevicePolicySingleAdminTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/SuspensionChecker" ./cts_hostsidetests_devicepolicy_app_SuspensionChecker.nix {})
+    cts-devicepolicy-suspensionchecker;
 
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/TransferOwnerIncomingApp" ./cts_hostsidetests_devicepolicy_app_TransferOwnerIncomingApp.nix {})
     CtsTransferOwnerIncomingApp;
@@ -809,6 +1289,150 @@
 
   inherit (callBPPackage "cts/hostsidetests/devicepolicy/app/WifiConfigCreator" ./cts_hostsidetests_devicepolicy_app_WifiConfigCreator.nix {})
     CtsWifiConfigCreator;
+
+  inherit (callBPPackage "cts/hostsidetests/devicepolicy/src/com/android/cts/devicepolicy/metrics" ./cts_hostsidetests_devicepolicy_src_com_android_cts_devicepolicy_metrics.nix {})
+    device-policy-log-verifier-util;
+
+  inherit (callBPPackage "cts/hostsidetests/dexmetadata/app" ./cts_hostsidetests_dexmetadata_app.nix {})
+    CtsDexMetadataDeviceTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/dexmetadata/app/SplitApp" ./cts_hostsidetests_dexmetadata_app_SplitApp.nix {})
+    CtsDexMetadataSplitApp;
+
+  inherit (callBPPackage "cts/hostsidetests/dexmetadata/app/SplitApp/SplitAppFeatureA" ./cts_hostsidetests_dexmetadata_app_SplitApp_SplitAppFeatureA.nix {})
+    CtsDexMetadataSplitAppFeatureA;
+
+  inherit (callBPPackage "cts/hostsidetests/dexmetadata/host" ./cts_hostsidetests_dexmetadata_host.nix {})
+    CtsDexMetadataHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/dumpsys" ./cts_hostsidetests_dumpsys.nix {})
+    CtsDumpsysHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/dumpsys/apps/FramestatsTestApp" ./cts_hostsidetests_dumpsys_apps_FramestatsTestApp.nix {})
+    CtsFramestatsTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/dumpsys/apps/ProcStatsHelperApp" ./cts_hostsidetests_dumpsys_apps_ProcStatsHelperApp.nix {})
+    CtsProcStatsHelperApp;
+
+  inherit (callBPPackage "cts/hostsidetests/dumpsys/apps/ProcStatsTestApp" ./cts_hostsidetests_dumpsys_apps_ProcStatsTestApp.nix {})
+    CtsProcStatsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/dumpsys/apps/storagedapp" ./cts_hostsidetests_dumpsys_apps_storagedapp.nix {})
+    CtsStoragedTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/edi" ./cts_hostsidetests_edi.nix {})
+    CtsEdiHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/gputools" ./cts_hostsidetests_gputools.nix {})
+    CtsGpuToolsHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/gputools/apps" ./cts_hostsidetests_gputools_apps.nix {})
+    CtsGpuToolsRootlessGpuDebugApp-DEBUG CtsGpuToolsRootlessGpuDebugApp-INJECT CtsGpuToolsRootlessGpuDebugApp-RELEASE libctsgputools_jni;
+
+  inherit (callBPPackage "cts/hostsidetests/gputools/layers" ./cts_hostsidetests_gputools_layers.nix {})
+    CtsGpuToolsRootlessGpuDebugApp-GLES_LAYERS CtsGpuToolsRootlessGpuDebugApp-LAYERS libGLES_glesLayerA libGLES_glesLayerB libGLES_glesLayerC libVkLayer_nullLayerA libVkLayer_nullLayerB libVkLayer_nullLayerC libVkLayer_nullLayerD libVkLayer_nullLayerE;
+
+  inherit (callBPPackage "cts/hostsidetests/graphics/gpuprofiling" ./cts_hostsidetests_graphics_gpuprofiling.nix {})
+    CtsGpuProfilingDataTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/graphics/gpuprofiling/app" ./cts_hostsidetests_graphics_gpuprofiling_app.nix {})
+    CtsGraphicsProfilingDataApp ctsgraphicsgpucountersinit libctsgraphicsgpuprofiling_jni;
+
+  inherit (callBPPackage "cts/hostsidetests/harmfulappwarning" ./cts_hostsidetests_harmfulappwarning.nix {})
+    CtsHarmfulAppWarningHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/harmfulappwarning/sampleapp" ./cts_hostsidetests_harmfulappwarning_sampleapp.nix {})
+    CtsHarmfulAppWarningSampleApp;
+
+  inherit (callBPPackage "cts/hostsidetests/harmfulappwarning/testapp" ./cts_hostsidetests_harmfulappwarning_testapp.nix {})
+    CtsHarmfulAppWarningTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/hdmicec" ./cts_hostsidetests_hdmicec.nix {})
+    CtsHdmiCecHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/hdmicec/app" ./cts_hostsidetests_hdmicec_app.nix {})
+    HdmiCecKeyEventCaptureApp;
+
+  inherit (callBPPackage "cts/hostsidetests/incident" ./cts_hostsidetests_incident.nix {})
+    CtsIncidentHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/incident/apps/batterystatsapp" ./cts_hostsidetests_incident_apps_batterystatsapp.nix {})
+    CtsBatteryStatsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/incident/apps/boundwidgetapp" ./cts_hostsidetests_incident_apps_boundwidgetapp.nix {})
+    CtsAppWidgetApp;
+
+  inherit (callBPPackage "cts/hostsidetests/incident/apps/errorsapp" ./cts_hostsidetests_incident_apps_errorsapp.nix {})
+    CtsErrorsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/incident/apps/errorsapp/jni" ./cts_hostsidetests_incident_apps_errorsapp_jni.nix {})
+    libcrash-jni;
+
+  inherit (callBPPackage "cts/hostsidetests/incident/apps/graphicsstatsapp" ./cts_hostsidetests_incident_apps_graphicsstatsapp.nix {})
+    CtsGraphicsStatsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/incident/apps/notificationsapp" ./cts_hostsidetests_incident_apps_notificationsapp.nix {})
+    CtsNotificationIncidentTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/incident/apps/procstatsapp" ./cts_hostsidetests_incident_apps_procstatsapp.nix {})
+    CtsProcStatsProtoApp;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall" ./cts_hostsidetests_incrementalinstall.nix {})
+    CtsIncrementalInstallHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/app" ./cts_hostsidetests_incrementalinstall_app.nix {})
+    IncrementalTestApp IncrementalTestApp2_v1 IncrementalTestApp2_v2;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/app/dynamicasset" ./cts_hostsidetests_incrementalinstall_app_dynamicasset.nix {})
+    IncrementalTestAppDynamicAsset;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/app/dynamiccode" ./cts_hostsidetests_incrementalinstall_app_dynamiccode.nix {})
+    IncrementalTestAppDynamicCode;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/app/nativelibcompressed" ./cts_hostsidetests_incrementalinstall_app_nativelibcompressed.nix {})
+    IncrementalTestAppCompressedNativeLib libcompressednativeincrementaltest;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/app/nativelibuncompressed" ./cts_hostsidetests_incrementalinstall_app_nativelibuncompressed.nix {})
+    IncrementalTestAppUncompressedNativeLib libuncompressednativeincrementaltest;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/appvalidator" ./cts_hostsidetests_incrementalinstall_appvalidator.nix {})
+    IncrementalTestAppValidator;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/appvalidator/src/android/incrementalinstall/inrementaltestappvalidation/jni" ./cts_hostsidetests_incrementalinstall_appvalidator_src_android_incrementalinstall_inrementaltestappvalidation_jni.nix {})
+    libpath_checker_jni;
+
+  inherit (callBPPackage "cts/hostsidetests/incrementalinstall/common" ./cts_hostsidetests_incrementalinstall_common.nix {})
+    incremental-install-common-host-lib incremental-install-common-lib;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/common" ./cts_hostsidetests_inputmethodservice_common.nix {})
+    CtsInputMethodServiceCommon cts-inputmethodservice-common-host;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/deviceside/devicetest" ./cts_hostsidetests_inputmethodservice_deviceside_devicetest.nix {})
+    CtsInputMethodServiceDeviceTests;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/deviceside/edittextapp" ./cts_hostsidetests_inputmethodservice_deviceside_edittextapp.nix {})
+    EditTextApp;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/deviceside/ime1" ./cts_hostsidetests_inputmethodservice_deviceside_ime1.nix {})
+    CtsInputMethod1;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/deviceside/ime2" ./cts_hostsidetests_inputmethodservice_deviceside_ime2.nix {})
+    CtsInputMethod2;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/deviceside/lib" ./cts_hostsidetests_inputmethodservice_deviceside_lib.nix {})
+    CtsInputMethodServiceLib;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/deviceside/provider" ./cts_hostsidetests_inputmethodservice_deviceside_provider.nix {})
+    CtsInputMethodServiceEventProvider;
+
+  inherit (callBPPackage "cts/hostsidetests/inputmethodservice/hostside" ./cts_hostsidetests_inputmethodservice_hostside.nix {})
+    CtsInputMethodServiceHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jdwpsecurity" ./cts_hostsidetests_jdwpsecurity.nix {})
+    CtsJdwpSecurityHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jdwpsecurity/app" ./cts_hostsidetests_jdwpsecurity_app.nix {})
+    CtsJdwpApp;
 
   inherit (callBPPackage "cts/hostsidetests/jdwptunnel" ./cts_hostsidetests_jdwptunnel.nix {})
     CtsJdwpTunnelHostTestCases;
@@ -1079,6 +1703,210 @@
 
   inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1958/app" ./cts_hostsidetests_jvmti_run-tests_test-1958_app.nix {})
     CtsJvmtiRunTest1958DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1962" ./cts_hostsidetests_jvmti_run-tests_test-1962.nix {})
+    CtsJvmtiRunTest1962HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1962/app" ./cts_hostsidetests_jvmti_run-tests_test-1962_app.nix {})
+    CtsJvmtiRunTest1962DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1967" ./cts_hostsidetests_jvmti_run-tests_test-1967.nix {})
+    CtsJvmtiRunTest1967HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1967/app" ./cts_hostsidetests_jvmti_run-tests_test-1967_app.nix {})
+    CtsJvmtiRunTest1967DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1968" ./cts_hostsidetests_jvmti_run-tests_test-1968.nix {})
+    CtsJvmtiRunTest1968HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1968/app" ./cts_hostsidetests_jvmti_run-tests_test-1968_app.nix {})
+    CtsJvmtiRunTest1968DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1969" ./cts_hostsidetests_jvmti_run-tests_test-1969.nix {})
+    CtsJvmtiRunTest1969HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1969/app" ./cts_hostsidetests_jvmti_run-tests_test-1969_app.nix {})
+    CtsJvmtiRunTest1969DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1970" ./cts_hostsidetests_jvmti_run-tests_test-1970.nix {})
+    CtsJvmtiRunTest1970HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1970/app" ./cts_hostsidetests_jvmti_run-tests_test-1970_app.nix {})
+    CtsJvmtiRunTest1970DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1971" ./cts_hostsidetests_jvmti_run-tests_test-1971.nix {})
+    CtsJvmtiRunTest1971HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1971/app" ./cts_hostsidetests_jvmti_run-tests_test-1971_app.nix {})
+    CtsJvmtiRunTest1971DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1974" ./cts_hostsidetests_jvmti_run-tests_test-1974.nix {})
+    CtsJvmtiRunTest1974HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1974/app" ./cts_hostsidetests_jvmti_run-tests_test-1974_app.nix {})
+    CtsJvmtiRunTest1974DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1975" ./cts_hostsidetests_jvmti_run-tests_test-1975.nix {})
+    CtsJvmtiRunTest1975HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1975/app" ./cts_hostsidetests_jvmti_run-tests_test-1975_app.nix {})
+    CtsJvmtiRunTest1975DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1976" ./cts_hostsidetests_jvmti_run-tests_test-1976.nix {})
+    CtsJvmtiRunTest1976HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1976/app" ./cts_hostsidetests_jvmti_run-tests_test-1976_app.nix {})
+    CtsJvmtiRunTest1976DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1977" ./cts_hostsidetests_jvmti_run-tests_test-1977.nix {})
+    CtsJvmtiRunTest1977HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1977/app" ./cts_hostsidetests_jvmti_run-tests_test-1977_app.nix {})
+    CtsJvmtiRunTest1977DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1978" ./cts_hostsidetests_jvmti_run-tests_test-1978.nix {})
+    CtsJvmtiRunTest1978HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1978/app" ./cts_hostsidetests_jvmti_run-tests_test-1978_app.nix {})
+    CtsJvmtiRunTest1978DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1979" ./cts_hostsidetests_jvmti_run-tests_test-1979.nix {})
+    CtsJvmtiRunTest1979HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1979/app" ./cts_hostsidetests_jvmti_run-tests_test-1979_app.nix {})
+    CtsJvmtiRunTest1979DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1981" ./cts_hostsidetests_jvmti_run-tests_test-1981.nix {})
+    CtsJvmtiRunTest1981HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1981/app" ./cts_hostsidetests_jvmti_run-tests_test-1981_app.nix {})
+    CtsJvmtiRunTest1981DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1982" ./cts_hostsidetests_jvmti_run-tests_test-1982.nix {})
+    CtsJvmtiRunTest1982HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1982/app" ./cts_hostsidetests_jvmti_run-tests_test-1982_app.nix {})
+    CtsJvmtiRunTest1982DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1983" ./cts_hostsidetests_jvmti_run-tests_test-1983.nix {})
+    CtsJvmtiRunTest1983HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1983/app" ./cts_hostsidetests_jvmti_run-tests_test-1983_app.nix {})
+    CtsJvmtiRunTest1983DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1984" ./cts_hostsidetests_jvmti_run-tests_test-1984.nix {})
+    CtsJvmtiRunTest1984HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1984/app" ./cts_hostsidetests_jvmti_run-tests_test-1984_app.nix {})
+    CtsJvmtiRunTest1984DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1988" ./cts_hostsidetests_jvmti_run-tests_test-1988.nix {})
+    CtsJvmtiRunTest1988HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1988/app" ./cts_hostsidetests_jvmti_run-tests_test-1988_app.nix {})
+    CtsJvmtiRunTest1988DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1989" ./cts_hostsidetests_jvmti_run-tests_test-1989.nix {})
+    CtsJvmtiRunTest1989HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1989/app" ./cts_hostsidetests_jvmti_run-tests_test-1989_app.nix {})
+    CtsJvmtiRunTest1989DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1990" ./cts_hostsidetests_jvmti_run-tests_test-1990.nix {})
+    CtsJvmtiRunTest1990HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1990/app" ./cts_hostsidetests_jvmti_run-tests_test-1990_app.nix {})
+    CtsJvmtiRunTest1990DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1991" ./cts_hostsidetests_jvmti_run-tests_test-1991.nix {})
+    CtsJvmtiRunTest1991HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1991/app" ./cts_hostsidetests_jvmti_run-tests_test-1991_app.nix {})
+    CtsJvmtiRunTest1991DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1992" ./cts_hostsidetests_jvmti_run-tests_test-1992.nix {})
+    CtsJvmtiRunTest1992HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1992/app" ./cts_hostsidetests_jvmti_run-tests_test-1992_app.nix {})
+    CtsJvmtiRunTest1992DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1994" ./cts_hostsidetests_jvmti_run-tests_test-1994.nix {})
+    CtsJvmtiRunTest1994HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1994/app" ./cts_hostsidetests_jvmti_run-tests_test-1994_app.nix {})
+    CtsJvmtiRunTest1994DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1995" ./cts_hostsidetests_jvmti_run-tests_test-1995.nix {})
+    CtsJvmtiRunTest1995HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1995/app" ./cts_hostsidetests_jvmti_run-tests_test-1995_app.nix {})
+    CtsJvmtiRunTest1995DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1996" ./cts_hostsidetests_jvmti_run-tests_test-1996.nix {})
+    CtsJvmtiRunTest1996HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1996/app" ./cts_hostsidetests_jvmti_run-tests_test-1996_app.nix {})
+    CtsJvmtiRunTest1996DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1997" ./cts_hostsidetests_jvmti_run-tests_test-1997.nix {})
+    CtsJvmtiRunTest1997HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1997/app" ./cts_hostsidetests_jvmti_run-tests_test-1997_app.nix {})
+    CtsJvmtiRunTest1997DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1998" ./cts_hostsidetests_jvmti_run-tests_test-1998.nix {})
+    CtsJvmtiRunTest1998HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1998/app" ./cts_hostsidetests_jvmti_run-tests_test-1998_app.nix {})
+    CtsJvmtiRunTest1998DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1999" ./cts_hostsidetests_jvmti_run-tests_test-1999.nix {})
+    CtsJvmtiRunTest1999HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-1999/app" ./cts_hostsidetests_jvmti_run-tests_test-1999_app.nix {})
+    CtsJvmtiRunTest1999DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2001" ./cts_hostsidetests_jvmti_run-tests_test-2001.nix {})
+    CtsJvmtiRunTest2001HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2001/app" ./cts_hostsidetests_jvmti_run-tests_test-2001_app.nix {})
+    CtsJvmtiRunTest2001DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2002" ./cts_hostsidetests_jvmti_run-tests_test-2002.nix {})
+    CtsJvmtiRunTest2002HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2002/app" ./cts_hostsidetests_jvmti_run-tests_test-2002_app.nix {})
+    CtsJvmtiRunTest2002DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2003" ./cts_hostsidetests_jvmti_run-tests_test-2003.nix {})
+    CtsJvmtiRunTest2003HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2003/app" ./cts_hostsidetests_jvmti_run-tests_test-2003_app.nix {})
+    CtsJvmtiRunTest2003DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2004" ./cts_hostsidetests_jvmti_run-tests_test-2004.nix {})
+    CtsJvmtiRunTest2004HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2004/app" ./cts_hostsidetests_jvmti_run-tests_test-2004_app.nix {})
+    CtsJvmtiRunTest2004DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2005" ./cts_hostsidetests_jvmti_run-tests_test-2005.nix {})
+    CtsJvmtiRunTest2005HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2005/app" ./cts_hostsidetests_jvmti_run-tests_test-2005_app.nix {})
+    CtsJvmtiRunTest2005DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2006" ./cts_hostsidetests_jvmti_run-tests_test-2006.nix {})
+    CtsJvmtiRunTest2006HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2006/app" ./cts_hostsidetests_jvmti_run-tests_test-2006_app.nix {})
+    CtsJvmtiRunTest2006DeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2007" ./cts_hostsidetests_jvmti_run-tests_test-2007.nix {})
+    CtsJvmtiRunTest2007HostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-2007/app" ./cts_hostsidetests_jvmti_run-tests_test-2007_app.nix {})
+    CtsJvmtiRunTest2007DeviceApp;
 
   inherit (callBPPackage "cts/hostsidetests/jvmti/run-tests/test-902" ./cts_hostsidetests_jvmti_run-tests_test-902.nix {})
     CtsJvmtiRunTest902HostTestCases;
@@ -1368,14 +2196,179 @@
   inherit (callBPPackage "cts/hostsidetests/jvmti/tagging/app" ./cts_hostsidetests_jvmti_tagging_app.nix {})
     CtsJvmtiTaggingDeviceApp;
 
+  inherit (callBPPackage "cts/hostsidetests/media" ./cts_hostsidetests_media.nix {})
+    CtsMediaHostTestCases CtsMediaSessionTestCommon;
+
+  inherit (callBPPackage "cts/hostsidetests/media/app/MediaSessionTest" ./cts_hostsidetests_media_app_MediaSessionTest.nix {})
+    CtsMediaSessionHostTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/media/app/MediaSessionTestHelper" ./cts_hostsidetests_media_app_MediaSessionTestHelper.nix {})
+    CtsMediaSessionTestHelper;
+
+  inherit (callBPPackage "cts/hostsidetests/media/bitstreams" ./cts_hostsidetests_media_bitstreams.nix {})
+    CtsMediaBitstreamsTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/media/bitstreams/app" ./cts_hostsidetests_media_bitstreams_app.nix {})
+    CtsMediaBitstreamsDeviceSideTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/media/bitstreams/common" ./cts_hostsidetests_media_bitstreams_common.nix {})
+    media-bitstreams-common-devicesidelib;
+
+  inherit (callBPPackage "cts/hostsidetests/monkey" ./cts_hostsidetests_monkey.nix {})
+    CtsMonkeyTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/monkey/test-apps/CtsMonkeyApp" ./cts_hostsidetests_monkey_test-apps_CtsMonkeyApp.nix {})
+    CtsMonkeyApp;
+
+  inherit (callBPPackage "cts/hostsidetests/monkey/test-apps/CtsMonkeyApp2" ./cts_hostsidetests_monkey_test-apps_CtsMonkeyApp2.nix {})
+    CtsMonkeyApp2;
+
+  inherit (callBPPackage "cts/hostsidetests/multiuser" ./cts_hostsidetests_multiuser.nix {})
+    CtsMultiUserHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/net" ./cts_hostsidetests_net.nix {})
+    CtsHostsideNetworkTests;
+
+  inherit (callBPPackage "cts/hostsidetests/net/aidl" ./cts_hostsidetests_net_aidl.nix {})
+    CtsHostsideNetworkTestsAidl;
+
+  inherit (callBPPackage "cts/hostsidetests/net/app" ./cts_hostsidetests_net_app.nix {})
+    CtsHostsideNetworkTestsApp;
+
+  inherit (callBPPackage "cts/hostsidetests/net/app2" ./cts_hostsidetests_net_app2.nix {})
+    CtsHostsideNetworkTestsApp2;
+
+  inherit (callBPPackage "cts/hostsidetests/net/certs" ./cts_hostsidetests_net_certs.nix {})
+    cts-net-app;
+
+  inherit (callBPPackage "cts/hostsidetests/numberblocking" ./cts_hostsidetests_numberblocking.nix {})
+    CtsHostsideNumberBlockingTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/numberblocking/app" ./cts_hostsidetests_numberblocking_app.nix {})
+    CtsHostsideNumberBlockingAppTest;
+
+  inherit (callBPPackage "cts/hostsidetests/os" ./cts_hostsidetests_os.nix {})
+    CtsOsHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/os/app" ./cts_hostsidetests_os_app.nix {})
+    CtsDeviceOsTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/EnvironmentTestApp" ./cts_hostsidetests_os_test-apps_EnvironmentTestApp.nix {})
+    CtsHostEnvironmentTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/HostLinkVerificationApp" ./cts_hostsidetests_os_test-apps_HostLinkVerificationApp.nix {})
+    CtsHostLinkVerificationApp;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/InattentiveSleepTestApp" ./cts_hostsidetests_os_test-apps_InattentiveSleepTestApp.nix {})
+    CtsInattentiveSleepTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/PowerManagerTestApp" ./cts_hostsidetests_os_test-apps_PowerManagerTestApp.nix {})
+    CtsHostPowerManagerTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/ProcfsTestApp" ./cts_hostsidetests_os_test-apps_ProcfsTestApp.nix {})
+    CtsHostProcfsTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibConsumerApp1" ./cts_hostsidetests_os_test-apps_StaticSharedLibConsumerApp1.nix {})
+    CtsStaticSharedLibConsumerApp1;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibConsumerApp2" ./cts_hostsidetests_os_test-apps_StaticSharedLibConsumerApp2.nix {})
+    CtsStaticSharedLibConsumerApp2;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibConsumerApp3" ./cts_hostsidetests_os_test-apps_StaticSharedLibConsumerApp3.nix {})
+    CtsStaticSharedLibConsumerApp3;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderApp1" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderApp1.nix {})
+    CtsStaticSharedLibProviderApp1;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderApp2" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderApp2.nix {})
+    CtsStaticSharedLibProviderApp2;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderApp3" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderApp3.nix {})
+    CtsStaticSharedLibProviderApp3;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderApp4" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderApp4.nix {})
+    CtsStaticSharedLibProviderApp4;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderApp5" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderApp5.nix {})
+    CtsStaticSharedLibProviderApp5;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderApp6" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderApp6.nix {})
+    CtsStaticSharedLibProviderApp6;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderApp7" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderApp7.nix {})
+    CtsStaticSharedLibProviderApp7;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedLibProviderAppRecursive" ./cts_hostsidetests_os_test-apps_StaticSharedLibProviderAppRecursive.nix {})
+    CtsStaticSharedLibProviderRecursive;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedNativeLibConsumer" ./cts_hostsidetests_os_test-apps_StaticSharedNativeLibConsumer.nix {})
+    CtsStaticSharedNativeLibConsumer libstaticsharednativelibconsumerjni;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedNativeLibProvider" ./cts_hostsidetests_os_test-apps_StaticSharedNativeLibProvider.nix {})
+    CtsStaticSharedNativeLibProvider libstaticsharednativelibprovider;
+
+  inherit (callBPPackage "cts/hostsidetests/os/test-apps/StaticSharedNativeLibProvider1" ./cts_hostsidetests_os_test-apps_StaticSharedNativeLibProvider1.nix {})
+    CtsStaticSharedNativeLibProvider1;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/codepath" ./cts_hostsidetests_packagemanager_codepath.nix {})
+    CtsCodePathHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/codepath/app" ./cts_hostsidetests_packagemanager_codepath_app.nix {})
+    CodePathTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/dynamicmime" ./cts_hostsidetests_packagemanager_dynamicmime.nix {})
+    CtsDynamicMimeHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/dynamicmime/app" ./cts_hostsidetests_packagemanager_dynamicmime_app.nix {})
+    CtsDynamicMimeHelperApp CtsDynamicMimePreferredApp CtsDynamicMimeUpdateAppBothGroups CtsDynamicMimeUpdateAppFirstGroup CtsDynamicMimeUpdateAppSecondGroup;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/dynamicmime/common" ./cts_hostsidetests_packagemanager_dynamicmime_common.nix {})
+    CtsDynamicMimeCommon;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/dynamicmime/test" ./cts_hostsidetests_packagemanager_dynamicmime_test.nix {})
+    CtsDynamicMimeTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/extractnativelibs" ./cts_hostsidetests_packagemanager_extractnativelibs.nix {})
+    CtsExtractNativeLibsHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/packagemanager/extractnativelibs/apps" ./cts_hostsidetests_packagemanager_extractnativelibs_apps.nix {})
+    CtsExtractNativeLibsAppFalse CtsExtractNativeLibsAppTrue libtest_extract_native_libs;
+
   inherit (callBPPackage "cts/hostsidetests/rollback" ./cts_hostsidetests_rollback.nix {})
-    CtsRollbackManagerHostTestCases CtsRollbackManagerHostTestHelperApp;
+    CtsRollbackManagerHostTestCases CtsRollbackManagerHostTestHelperApp CtsRollbackManagerHostTestHelperApp2;
+
+  inherit (callBPPackage "cts/hostsidetests/sample" ./cts_hostsidetests_sample.nix {})
+    CtsSampleHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/sample/app" ./cts_hostsidetests_sample_app.nix {})
+    CtsSampleDeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/sample/app2" ./cts_hostsidetests_sample_app2.nix {})
+    CtsSampleDeviceApp2;
+
+  inherit (callBPPackage "cts/hostsidetests/scopedstorage" ./cts_hostsidetests_scopedstorage.nix {})
+    CtsScopedStorageHostTest CtsScopedStoragePublicVolumeHostTest CtsScopedStorageTestAppA CtsScopedStorageTestAppB CtsScopedStorageTestAppC CtsScopedStorageTestAppCLegacy LegacyStorageTest ScopedStorageTest;
+
+  inherit (callBPPackage "cts/hostsidetests/scopedstorage/libs/ScopedStorageTestLib" ./cts_hostsidetests_scopedstorage_libs_ScopedStorageTestLib.nix {})
+    cts-scopedstorage-lib;
+
+  inherit (callBPPackage "cts/hostsidetests/seccomp" ./cts_hostsidetests_seccomp.nix {})
+    CtsSeccompHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/seccomp/app" ./cts_hostsidetests_seccomp_app.nix {})
+    CtsSeccompDeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/seccomp/app/jni" ./cts_hostsidetests_seccomp_app_jni.nix {})
+    libctsseccomp_jni;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin" ./cts_hostsidetests_securitybulletin.nix {})
     CtsSecurityBulletinHostTestCases cts_hostsidetests_securitybulletin_defaults;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/Bug-115739809" ./cts_hostsidetests_securitybulletin_securityPatch_Bug-115739809.nix {})
     Bug-115739809;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/Bug-137878930" ./cts_hostsidetests_securitybulletin_securityPatch_Bug-137878930.nix {})
+    Bug-137878930;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/Bug-38195738" ./cts_hostsidetests_securitybulletin_securityPatch_Bug-38195738.nix {})
     Bug-38195738;
@@ -1413,14 +2406,32 @@
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-2471" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-2471.nix {})
     CVE-2016-2471;
 
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-2482" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-2482.nix {})
+    CVE-2016-2482;
+
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-3746" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-3746.nix {})
     CVE-2016-3746;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-3747" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-3747.nix {})
+    CVE-2016-3747;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-3818" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-3818.nix {})
     CVE-2016-3818;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-3913" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-3913.nix {})
     CVE-2016-3913;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-4658" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-4658.nix {})
+    CVE-2016-4658;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-5131" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-5131.nix {})
+    CVE-2016-5131;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-5862" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-5862.nix {})
+    CVE-2016-5862;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-5867" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-5867.nix {})
+    CVE-2016-5867;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2016-6730" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2016-6730.nix {})
     CVE-2016-6730;
@@ -1506,8 +2517,14 @@
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2017-0553" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2017-0553.nix {})
     CVE-2017-0553;
 
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2017-0814" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2017-0814.nix {})
+    CVE-2017-0814;
+
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2017-13232" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2017-13232.nix {})
     CVE-2017-13232;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2017-13253" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2017-13253.nix {})
+    CVE-2017-13253;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2017-13273" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2017-13273.nix {})
     CVE-2017-13273;
@@ -1521,23 +2538,254 @@
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2018-9424" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2018-9424.nix {})
     CVE-2018-9424;
 
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2018-9472" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2018-9472.nix {})
+    CVE-2018-9472;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2018-9491" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2018-9491.nix {})
+    CVE-2018-9491;
+
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2018-9515" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2018-9515.nix {})
     CVE-2018-9515;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2018-9527" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2018-9527.nix {})
+    CVE-2018-9527;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2018-9539" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2018-9539.nix {})
+    CVE-2018-9539;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2019-2025" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2019-2025.nix {})
+    CVE-2019-2025;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2019-9313" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2019-9313.nix {})
+    CVE-2019-9313;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/CVE-2020-0069" ./cts_hostsidetests_securitybulletin_securityPatch_CVE-2020-0069.nix {})
+    CVE-2020-0069;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/includes" ./cts_hostsidetests_securitybulletin_securityPatch_includes.nix {})
+    cts_hostsidetests_securitybulletin_memutils cts_hostsidetests_securitybulletin_memutils_track cts_hostsidetests_securitybulletin_omxutils;
+
+  inherit (callBPPackage "cts/hostsidetests/securitybulletin/securityPatch/pac" ./cts_hostsidetests_securitybulletin_securityPatch_pac.nix {})
+    pacrunner;
 
   inherit (callBPPackage "cts/hostsidetests/securitybulletin/test-apps/launchanywhere" ./cts_hostsidetests_securitybulletin_test-apps_launchanywhere.nix {})
     CtsHostLaunchAnyWhereApp;
 
+  inherit (callBPPackage "cts/hostsidetests/settings" ./cts_hostsidetests_settings.nix {})
+    CtsSettingsHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/settings/app/DeviceOwnerApp" ./cts_hostsidetests_settings_app_DeviceOwnerApp.nix {})
+    CtsSettingsDeviceOwnerApp;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside" ./cts_hostsidetests_shortcuts_deviceside.nix {})
+    hostsidetests-shortcuts-deviceside-defaults;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/launcher1" ./cts_hostsidetests_shortcuts_deviceside_backup_launcher1.nix {})
+    CtsShortcutBackupLauncher1;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/launcher2" ./cts_hostsidetests_shortcuts_deviceside_backup_launcher2.nix {})
+    CtsShortcutBackupLauncher2;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/launcher3" ./cts_hostsidetests_shortcuts_deviceside_backup_launcher3.nix {})
+    CtsShortcutBackupLauncher3;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/launcher4new" ./cts_hostsidetests_shortcuts_deviceside_backup_launcher4new.nix {})
+    CtsShortcutBackupLauncher4new;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/launcher4old" ./cts_hostsidetests_shortcuts_deviceside_backup_launcher4old.nix {})
+    CtsShortcutBackupLauncher4old CtsShortcutBackupLauncher4oldLib;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher1" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher1.nix {})
+    CtsShortcutBackupPublisher1;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher2" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher2.nix {})
+    CtsShortcutBackupPublisher2;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher3" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher3.nix {})
+    CtsShortcutBackupPublisher3;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher4new" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher4new.nix {})
+    CtsShortcutBackupPublisher4new;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher4new_nobackup" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher4new_nobackup.nix {})
+    CtsShortcutBackupPublisher4new_nobackup;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher4new_nomanifest" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher4new_nomanifest.nix {})
+    CtsShortcutBackupPublisher4new_nomanifest;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher4new_wrongkey" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher4new_wrongkey.nix {})
+    CtsShortcutBackupPublisher4new_wrongkey;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher4old" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher4old.nix {})
+    CtsShortcutBackupPublisher4old CtsShortcutBackupPublisher4oldLib;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/backup/publisher4old_nomanifest" ./cts_hostsidetests_shortcuts_deviceside_backup_publisher4old_nomanifest.nix {})
+    CtsShortcutBackupPublisher4old_nomanifest;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/common" ./cts_hostsidetests_shortcuts_deviceside_common.nix {})
+    hostsidetests-shortcuts-deviceside-common;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/multiuser" ./cts_hostsidetests_shortcuts_deviceside_multiuser.nix {})
+    CtsShortcutMultiuserTest;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/deviceside/upgrade" ./cts_hostsidetests_shortcuts_deviceside_upgrade.nix {})
+    CtsShortcutUpgradeVersion1 CtsShortcutUpgradeVersion2;
+
+  inherit (callBPPackage "cts/hostsidetests/shortcuts/hostside" ./cts_hostsidetests_shortcuts_hostside.nix {})
+    CtsShortcutHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/signedconfig/app" ./cts_hostsidetests_signedconfig_app.nix {})
+    CtsSignedConfigDefaults CtsSignedConfigTestApp2V1 CtsSignedConfigTestApp2V2 CtsSignedConfigTestAppV1 CtsSignedConfigTestAppV1_badb64_config CtsSignedConfigTestAppV1_badb64_signature CtsSignedConfigTestAppV1_badsignature CtsSignedConfigTestAppV1_debug_key CtsSignedConfigTestAppV1_instant CtsSignedConfigTestAppV2 CtsSignedConfigTestAppV2_instant CtsSignedConfigTestAppV3_configv1;
+
+  inherit (callBPPackage "cts/hostsidetests/signedconfig/hostside" ./cts_hostsidetests_signedconfig_hostside.nix {})
+    CtsSignedConfigHostTestCases;
+
   inherit (callBPPackage "cts/hostsidetests/stagedinstall" ./cts_hostsidetests_stagedinstall.nix {})
-    CtsStagedInstallHostTestCases StagedInstallTest StagedInstallTestApexV1_NotPreInstalled StagedInstallTestApexV2 StagedInstallTestApexV2_AdditionalFile StagedInstallTestApexV2_AdditionalFolder StagedInstallTestApexV2_WithPostInstallHook StagedInstallTestApexV2_WithPreInstallHook StagedInstallTestApexV2_WrongSha StagedInstallTestApexV3 StagedInstallTestAppAv1 StagedInstallTestAppAv2 StagedInstallTestAppBv1 StagedInstallTestAppSamePackageNameAsApex;
+    "deapexer.zip" ApexKeyRotationTestV2_SignedBob ApexKeyRotationTestV2_SignedBobRot ApexKeyRotationTestV2_SignedBobRotRollback ApexKeyRotationTestV3_SignedBob ApexKeyRotationTestV3_SignedBobRot CtsStagedInstallHostTestCases StagedInstallTest StagedInstallTestApexV1 StagedInstallTestApexV1_NotPreInstalled StagedInstallTestApexV2 StagedInstallTestApexV2_AdditionalFile StagedInstallTestApexV2_AdditionalFolder StagedInstallTestApexV2_ApkInApexSdkTargetP StagedInstallTestApexV2_DifferentCertificate StagedInstallTestApexV2_DifferentPackageName StagedInstallTestApexV2_NoApkSignature StagedInstallTestApexV2_NoHashtree StagedInstallTestApexV2_SdkTargetP StagedInstallTestApexV2_UnsignedPayload StagedInstallTestApexV2_WithPostInstallHook StagedInstallTestApexV2_WithPreInstallHook StagedInstallTestApexV2_WithoutApkInApex StagedInstallTestApexV2_WrongSha StagedInstallTestApexV3 StagedInstallTestAppSamePackageNameAsApex StagedInstallTestCorruptedApex_b146895998;
+
+  inherit (callBPPackage "cts/hostsidetests/stagedinstall/testdata/apk/CtsShimTargetPSdk" ./cts_hostsidetests_stagedinstall_testdata_apk_CtsShimTargetPSdk.nix {})
+    CtsShimTargetPSdkPrebuilt;
+
+  inherit (callBPPackage "cts/hostsidetests/statsd" ./cts_hostsidetests_statsd.nix {})
+    CtsStatsdHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/statsd/apps/emptyapp" ./cts_hostsidetests_statsd_apps_emptyapp.nix {})
+    CtsStatsdEmptyApp CtsStatsdEmptySplitApp;
 
   inherit (callBPPackage "cts/hostsidetests/statsd/apps/statsdapp" ./cts_hostsidetests_statsd_apps_statsdapp.nix {})
     CtsStatsdApp liblmkhelper statslog-statsd-cts-java-gen;
 
+  inherit (callBPPackage "cts/hostsidetests/systemui" ./cts_hostsidetests_systemui.nix {})
+    CtsSystemUiHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/systemui/app" ./cts_hostsidetests_systemui_app.nix {})
+    CtsSystemUiDeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/systemui/audiorecorder_app_audiorecord" ./cts_hostsidetests_systemui_audiorecorder_app_audiorecord.nix {})
+    CtsSystemUiDeviceAudioRecorderAppAudioRecord;
+
+  inherit (callBPPackage "cts/hostsidetests/systemui/audiorecorder_app_mediarecorder" ./cts_hostsidetests_systemui_audiorecorder_app_mediarecorder.nix {})
+    CtsSystemUiDeviceAudioRecorderAppMediaRecorder;
+
+  inherit (callBPPackage "cts/hostsidetests/systemui/audiorecorder_base" ./cts_hostsidetests_systemui_audiorecorder_base.nix {})
+    CtsSystemUiDeviceAudioRecorderBase;
+
+  inherit (callBPPackage "cts/hostsidetests/tagging" ./cts_hostsidetests_tagging.nix {})
+    CtsTaggingHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/tagging/common" ./cts_hostsidetests_tagging_common.nix {})
+    libtagging-common-devicesidelib-jni tagging-common-devicesidelib;
+
+  inherit (callBPPackage "cts/hostsidetests/tagging/disabled" ./cts_hostsidetests_tagging_disabled.nix {})
+    CtsHostsideTaggingDisabledApp;
+
+  inherit (callBPPackage "cts/hostsidetests/tagging/enabled" ./cts_hostsidetests_tagging_enabled.nix {})
+    CtsHostsideTaggingEnabledApp;
+
+  inherit (callBPPackage "cts/hostsidetests/tagging/none" ./cts_hostsidetests_tagging_none.nix {})
+    CtsHostsideTaggingNoneApp;
+
+  inherit (callBPPackage "cts/hostsidetests/telephony" ./cts_hostsidetests_telephony.nix {})
+    CtsTelephonyHostCases;
+
+  inherit (callBPPackage "cts/hostsidetests/telephony/devicetest" ./cts_hostsidetests_telephony_devicetest.nix {})
+    TelephonyDeviceTest;
+
+  inherit (callBPPackage "cts/hostsidetests/telephonyprovider" ./cts_hostsidetests_telephonyprovider.nix {})
+    CtsTelephonyProviderHostCases;
+
+  inherit (callBPPackage "cts/hostsidetests/telephonyprovider/devicetest" ./cts_hostsidetests_telephonyprovider_devicetest.nix {})
+    TelephonyProviderDeviceTest;
+
+  inherit (callBPPackage "cts/hostsidetests/testharness" ./cts_hostsidetests_testharness.nix {})
+    CtsTestHarnessModeTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/testharness/app" ./cts_hostsidetests_testharness_app.nix {})
+    CtsTestHarnessModeDeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/theme/app" ./cts_hostsidetests_theme_app.nix {})
+    CtsThemeDeviceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/trustedvoice" ./cts_hostsidetests_trustedvoice.nix {})
+    CtsTrustedVoiceHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/trustedvoice/app" ./cts_hostsidetests_trustedvoice_app.nix {})
+    CtsTrustedVoiceApp;
+
+  inherit (callBPPackage "cts/hostsidetests/tv" ./cts_hostsidetests_tv.nix {})
+    CtsHostsideTvTests;
+
+  inherit (callBPPackage "cts/hostsidetests/tv/app" ./cts_hostsidetests_tv_app.nix {})
+    CtsHostsideTvInputApp;
+
+  inherit (callBPPackage "cts/hostsidetests/tv/app2" ./cts_hostsidetests_tv_app2.nix {})
+    CtsHostsideTvInputMonitor;
+
+  inherit (callBPPackage "cts/hostsidetests/tzdata" ./cts_hostsidetests_tzdata.nix {})
+    CtsHostTzDataTests;
+
+  inherit (callBPPackage "cts/hostsidetests/ui/appA" ./cts_hostsidetests_ui_appA.nix {})
+    CtsDeviceTaskSwitchingAppA;
+
+  inherit (callBPPackage "cts/hostsidetests/ui/appB" ./cts_hostsidetests_ui_appB.nix {})
+    CtsDeviceTaskSwitchingAppB;
+
+  inherit (callBPPackage "cts/hostsidetests/ui/control" ./cts_hostsidetests_ui_control.nix {})
+    CtsDeviceTaskSwitchingControl;
+
+  inherit (callBPPackage "cts/hostsidetests/usage" ./cts_hostsidetests_usage.nix {})
+    CtsAppUsageHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/usage/app" ./cts_hostsidetests_usage_app.nix {})
+    CtsAppUsageTestApp CtsAppUsageTestAppToo;
+
+  inherit (callBPPackage "cts/hostsidetests/usb" ./cts_hostsidetests_usb.nix {})
+    CtsUsbTests;
+
+  inherit (callBPPackage "cts/hostsidetests/usb/SerialTestApp" ./cts_hostsidetests_usb_SerialTestApp.nix {})
+    CtsUsbSerialTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/userspacereboot" ./cts_hostsidetests_userspacereboot.nix {})
+    CtsUserspaceRebootHostSideTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/userspacereboot/testapps/BasicTestApp" ./cts_hostsidetests_userspacereboot_testapps_BasicTestApp.nix {})
+    BasicUserspaceRebootTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/userspacereboot/testapps/BootCompletedTestApp" ./cts_hostsidetests_userspacereboot_testapps_BootCompletedTestApp.nix {})
+    BootCompletedUserspaceRebootTestApp;
+
+  inherit (callBPPackage "cts/hostsidetests/utils" ./cts_hostsidetests_utils.nix {})
+    cts-host-utils;
+
+  inherit (callBPPackage "cts/hostsidetests/webkit" ./cts_hostsidetests_webkit.nix {})
+    CtsHostsideWebViewTests;
+
+  inherit (callBPPackage "cts/hostsidetests/webkit/app" ./cts_hostsidetests_webkit_app.nix {})
+    CtsWebViewStartupApp;
+
+  inherit (callBPPackage "cts/hostsidetests/wifibroadcasts" ./cts_hostsidetests_wifibroadcasts.nix {})
+    CtsWifiBroadcastsHostTestCases;
+
+  inherit (callBPPackage "cts/hostsidetests/wifibroadcasts/app" ./cts_hostsidetests_wifibroadcasts_app.nix {})
+    CtsWifiBroadcastsDeviceApp;
+
   inherit (callBPPackage "cts/libs/deviceutillegacy" ./cts_libs_deviceutillegacy.nix {})
-    ctsdeviceutillegacy ctsdeviceutillegacy-axt;
+    ctsdeviceutillegacy-axt;
+
+  inherit (callBPPackage "cts/libs/helpers/core" ./cts_libs_helpers_core.nix {})
+    cts-helpers-core;
+
+  inherit (callBPPackage "cts/libs/helpers/core/tests" ./cts_libs_helpers_core_tests.nix {})
+    cts-helpers-core-tests;
+
+  inherit (callBPPackage "cts/libs/helpers/interfaces" ./cts_libs_helpers_interfaces.nix {})
+    cts-helpers-interfaces;
 
   inherit (callBPPackage "cts/libs/input" ./cts_libs_input.nix {})
     cts-input-lib;
+
+  inherit (callBPPackage "cts/libs/install" ./cts_libs_install.nix {})
+    TestAppACrashingV2 TestAppASplitV1 TestAppASplitV2 TestAppAv1 TestAppAv2 TestAppAv3 TestAppBv1 TestAppBv2 TestAppCv1 cts-install-lib;
 
   inherit (callBPPackage "cts/libs/json" ./cts_libs_json.nix {})
     json jsonlib;
@@ -1546,10 +2794,10 @@
     cts-midi-lib;
 
   inherit (callBPPackage "cts/libs/rollback" ./cts_libs_rollback.nix {})
-    RollbackManagerTestAppA1 RollbackManagerTestAppA2 cts-rollback-lib;
+    cts-rollback-lib;
 
   inherit (callBPPackage "cts/libs/runner" ./cts_libs_runner.nix {})
-    ctstestrunner ctstestrunner-axt;
+    ctstestrunner-axt;
 
   inherit (callBPPackage "cts/libs/testserver" ./cts_libs_testserver.nix {})
     ctstestserver;
@@ -1575,11 +2823,32 @@
   inherit (callBPPackage "cts/tests/AlarmManager/app" ./cts_tests_AlarmManager_app.nix {})
     AlarmTestApp;
 
+  inherit (callBPPackage "cts/tests/BlobStore" ./cts_tests_BlobStore.nix {})
+    CtsBlobStoreTestCases CtsBlobStoreTestHelper CtsBlobStoreTestHelperDiffSig CtsBlobStoreTestHelperDiffSig2 CtsBlobStoreTestsAidl;
+
+  inherit (callBPPackage "cts/tests/BlobStore/certs" ./cts_tests_BlobStore_certs.nix {})
+    cts-blob-helper-cert cts-blob-helper-cert2;
+
+  inherit (callBPPackage "cts/tests/DropBoxManager" ./cts_tests_DropBoxManager.nix {})
+    CtsDropBoxManagerTestCases;
+
   inherit (callBPPackage "cts/tests/JobScheduler" ./cts_tests_JobScheduler.nix {})
     CtsJobSchedulerTestCases;
 
   inherit (callBPPackage "cts/tests/JobScheduler/JobTestApp" ./cts_tests_JobScheduler_JobTestApp.nix {})
     CtsJobTestApp;
+
+  inherit (callBPPackage "cts/tests/JobSchedulerSharedUid" ./cts_tests_JobSchedulerSharedUid.nix {})
+    CtsJobSchedulerSharedUidTestCases;
+
+  inherit (callBPPackage "cts/tests/JobSchedulerSharedUid/JobSharedUidTestApp" ./cts_tests_JobSchedulerSharedUid_JobSharedUidTestApp.nix {})
+    CtsJobSharedUidTestApp;
+
+  inherit (callBPPackage "cts/tests/JobSchedulerSharedUid/jobperm" ./cts_tests_JobSchedulerSharedUid_jobperm.nix {})
+    CtsJobSchedulerJobPerm;
+
+  inherit (callBPPackage "cts/tests/JobSchedulerSharedUid/shareduid" ./cts_tests_JobSchedulerSharedUid_shareduid.nix {})
+    CtsJobSchedulerSharedUid;
 
   inherit (callBPPackage "cts/tests/ProcessTest" ./cts_tests_ProcessTest.nix {})
     ProcessTests;
@@ -1590,23 +2859,89 @@
   inherit (callBPPackage "cts/tests/ProcessTest/ShareUidApp" ./cts_tests_ProcessTest_ShareUidApp.nix {})
     ShareUidApp;
 
+  inherit (callBPPackage "cts/tests/acceleration" ./cts_tests_acceleration.nix {})
+    CtsAccelerationTestCases;
+
   inherit (callBPPackage "cts/tests/accessibility" ./cts_tests_accessibility.nix {})
     CtsAccessibilityCommon CtsAccessibilityTestCases;
+
+  inherit (callBPPackage "cts/tests/accessibilityservice" ./cts_tests_accessibilityservice.nix {})
+    CtsAccessibilityServiceTestCases;
 
   inherit (callBPPackage "cts/tests/accessibilityservice/test-apps/WidgetProvider" ./cts_tests_accessibilityservice_test-apps_WidgetProvider.nix {})
     CtsAccessibilityWidgetProvider;
 
+  inherit (callBPPackage "cts/tests/accessibilityservice/testsdk29" ./cts_tests_accessibilityservice_testsdk29.nix {})
+    CtsAccessibilityServiceSdk29TestCases;
+
+  inherit (callBPPackage "cts/tests/admin" ./cts_tests_admin.nix {})
+    CtsAdminTestCases;
+
   inherit (callBPPackage "cts/tests/admin/app" ./cts_tests_admin_app.nix {})
     CtsAdminApp;
+
+  inherit (callBPPackage "cts/tests/app/ActivityManagerApi29Test" ./cts_tests_app_ActivityManagerApi29Test.nix {})
+    CtsActivityManagerApi29;
+
+  inherit (callBPPackage "cts/tests/app" ./cts_tests_app.nix {})
+    CtsAppExitTestCases CtsAppTestCases CtsDownloadManagerApi28 CtsDownloadManagerInstaller;
+
+  inherit (callBPPackage "cts/tests/app/BadProviderStubs" ./cts_tests_app_BadProviderStubs.nix {})
+    CtsBadProviderStubs;
+
+  inherit (callBPPackage "cts/tests/app/CantSaveState1" ./cts_tests_app_CantSaveState1.nix {})
+    CtsCantSaveState1;
+
+  inherit (callBPPackage "cts/tests/app/CantSaveState2" ./cts_tests_app_CantSaveState2.nix {})
+    CtsCantSaveState2;
+
+  inherit (callBPPackage "cts/tests/app/NotificationDelegator" ./cts_tests_app_NotificationDelegator.nix {})
+    NotificationDelegator;
+
+  inherit (callBPPackage "cts/tests/app/StorageDelegator" ./cts_tests_app_StorageDelegator.nix {})
+    StorageDelegator;
+
+  inherit (callBPPackage "cts/tests/app/app" ./cts_tests_app_app.nix {})
+    CtsAppTestStubs CtsAppTestStubsApp1 CtsAppTestStubsApp2 CtsAppTestStubsApp3;
+
+  inherit (callBPPackage "cts/tests/appintegrity" ./cts_tests_appintegrity.nix {})
+    CtsAppIntegrityDeviceTestCases;
+
+  inherit (callBPPackage "cts/tests/apppredictionservice" ./cts_tests_apppredictionservice.nix {})
+    CtsAppPredictionServiceTestCases;
 
   inherit (callBPPackage "cts/tests/aslr" ./cts_tests_aslr.nix {})
     CtsAslrMallocTestCases;
 
+  inherit (callBPPackage "cts/tests/attentionservice" ./cts_tests_attentionservice.nix {})
+    CtsAttentionServiceDeviceTestCases;
+
+  inherit (callBPPackage "cts/tests/autofillservice" ./cts_tests_autofillservice.nix {})
+    CtsAutoFillServiceTestCases;
+
+  inherit (callBPPackage "cts/tests/backup" ./cts_tests_backup.nix {})
+    CtsBackupTestCases;
+
+  inherit (callBPPackage "cts/tests/backup/app" ./cts_tests_backup_app.nix {})
+    CtsFullBackupApp CtsKeyValueBackupApp CtsPermissionBackupApp CtsPermissionBackupApp22;
+
+  inherit (callBPPackage "cts/tests/bugreport" ./cts_tests_bugreport.nix {})
+    CtsBugreportTestCases;
+
+  inherit (callBPPackage "cts/tests/contentcaptureservice" ./cts_tests_contentcaptureservice.nix {})
+    CtsContentCaptureServiceTestCases;
+
+  inherit (callBPPackage "cts/tests/contentcaptureservice/OutsideOfPackageActivity" ./cts_tests_contentcaptureservice_OutsideOfPackageActivity.nix {})
+    CtsOutsideOfPackageActivity;
+
+  inherit (callBPPackage "cts/tests/contentsuggestions" ./cts_tests_contentsuggestions.nix {})
+    CtsContentSuggestionsTestCases;
+
+  inherit (callBPPackage "cts/tests/controls" ./cts_tests_controls.nix {})
+    CtsControlsDeviceTestCases;
+
   inherit (callBPPackage "cts/tests/core/runner-axt" ./cts_tests_core_runner-axt.nix {})
     cts-core-test-runner-axt cts-test-runner-axt;
-
-  inherit (callBPPackage "cts/tests/core/runner" ./cts_tests_core_runner.nix {})
-    cts-core-test-runner cts-test-runner;
 
   inherit (callBPPackage "cts/tests/filesystem" ./cts_tests_filesystem.nix {})
     CtsFileSystemTestCases;
@@ -1618,13 +2953,100 @@
     CtsFragmentTestCasesSdk26;
 
   inherit (callBPPackage "cts/tests/framework/base/windowmanager" ./cts_tests_framework_base_windowmanager.nix {})
-    cts-wm-components;
+    cts-wm-aspect-ratio-test-base cts-wm-components cts-wm-decor-inset-test-base cts-wm-force-relayout-test-base;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/alertwindowapp" ./cts_tests_framework_base_windowmanager_alertwindowapp.nix {})
+    CtsDeviceAlertWindowTestApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/alertwindowappsdk25" ./cts_tests_framework_base_windowmanager_alertwindowappsdk25.nix {})
+    CtsDeviceAlertWindowTestAppSdk25 cts-wm-alertwindow-test-base;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/alertwindowservice" ./cts_tests_framework_base_windowmanager_alertwindowservice.nix {})
+    CtsAlertWindowService;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/app" ./cts_tests_framework_base_windowmanager_app.nix {})
+    CtsDeviceServicesTestApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/app27" ./cts_tests_framework_base_windowmanager_app27.nix {})
+    CtsDeviceServicesTestApp27;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appAShareUid" ./cts_tests_framework_base_windowmanager_appAShareUid.nix {})
+    CtsDeviceServicesTestShareUidAppA;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appBShareUid" ./cts_tests_framework_base_windowmanager_appBShareUid.nix {})
+    CtsDeviceServicesTestShareUidAppB;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appDeprecatedSdk" ./cts_tests_framework_base_windowmanager_appDeprecatedSdk.nix {})
+    CtsDeviceDeprecatedSdkApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appDisplaySize" ./cts_tests_framework_base_windowmanager_appDisplaySize.nix {})
+    CtsDeviceDisplaySizeApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appPrereleaseSdk" ./cts_tests_framework_base_windowmanager_appPrereleaseSdk.nix {})
+    CtsDevicePrereleaseSdkApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appPrereleaseSdk/fake-framework" ./cts_tests_framework_base_windowmanager_appPrereleaseSdk_fake-framework.nix {})
+    fake-framework;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appProfileable" ./cts_tests_framework_base_windowmanager_appProfileable.nix {})
+    CtsDeviceProfileableApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appSecondUid" ./cts_tests_framework_base_windowmanager_appSecondUid.nix {})
+    CtsDeviceServicesTestSecondApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/appThirdUid" ./cts_tests_framework_base_windowmanager_appThirdUid.nix {})
+    CtsDeviceServicesTestThirdApp;
 
   inherit (callBPPackage "cts/tests/framework/base/windowmanager/app_base" ./cts_tests_framework_base_windowmanager_app_base.nix {})
-    cts-wm-components-base;
+    cts-wm-app-base cts-wm-components-base;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/backgroundactivity" ./cts_tests_framework_base_windowmanager_backgroundactivity.nix {})
+    CtsActivityManagerBackgroundActivityTestCases;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/backgroundactivity/AppA" ./cts_tests_framework_base_windowmanager_backgroundactivity_AppA.nix {})
+    CtsBackgroundActivityAppA;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/backgroundactivity/AppB" ./cts_tests_framework_base_windowmanager_backgroundactivity_AppB.nix {})
+    CtsBackgroundActivityAppB;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/backgroundactivity/common" ./cts_tests_framework_base_windowmanager_backgroundactivity_common.nix {})
+    cts-background-activity-common;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/dndsourceapp" ./cts_tests_framework_base_windowmanager_dndsourceapp.nix {})
+    CtsDragAndDropSourceApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/dndtargetapp" ./cts_tests_framework_base_windowmanager_dndtargetapp.nix {})
+    CtsDragAndDropTargetApp;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/dndtargetappsdk23" ./cts_tests_framework_base_windowmanager_dndtargetappsdk23.nix {})
+    CtsDragAndDropTargetAppSdk23;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/jetpack" ./cts_tests_framework_base_windowmanager_jetpack.nix {})
+    CtsWindowManagerJetpackTestCases cts_window-extensions cts_window-extensions_nodeps cts_window-sidecar cts_window-sidecar_nodeps;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/testsdk25" ./cts_tests_framework_base_windowmanager_testsdk25.nix {})
+    CtsWindowManagerSdk25TestCases;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/testsdk28" ./cts_tests_framework_base_windowmanager_testsdk28.nix {})
+    CtsWindowManagerSdk28TestCases;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/testsdk29" ./cts_tests_framework_base_windowmanager_testsdk29.nix {})
+    CtsWindowManagerSdk29TestCases;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/translucentapp" ./cts_tests_framework_base_windowmanager_translucentapp.nix {})
+    CtsDeviceTranslucentTestApp cts-wm-translucent-app;
+
+  inherit (callBPPackage "cts/tests/framework/base/windowmanager/translucentappsdk26" ./cts_tests_framework_base_windowmanager_translucentappsdk26.nix {})
+    CtsDeviceTranslucentTestApp26;
 
   inherit (callBPPackage "cts/tests/framework/base/windowmanager/util" ./cts_tests_framework_base_windowmanager_util.nix {})
-    cts-wm-util;
+    cts-wm-app-util cts-wm-util;
+
+  inherit (callBPPackage "cts/tests/inputmethod" ./cts_tests_inputmethod.nix {})
+    CtsInputMethodTestCases;
+
+  inherit (callBPPackage "cts/tests/inputmethod/mockime" ./cts_tests_inputmethod_mockime.nix {})
+    CtsMockInputMethod CtsMockInputMethodLib;
 
   inherit (callBPPackage "cts/tests/jdwp" ./cts_tests_jdwp.nix {})
     CtsJdwpTestCases;
@@ -1635,17 +3057,74 @@
   inherit (callBPPackage "cts/tests/jdwp/runner/host-side" ./cts_tests_jdwp_runner_host-side.nix {})
     cts-dalvik-host-test-runner;
 
+  inherit (callBPPackage "cts/tests/leanbackjank" ./cts_tests_leanbackjank.nix {})
+    CtsLeanbackJankTestCases;
+
+  inherit (callBPPackage "cts/tests/leanbackjank/app" ./cts_tests_leanbackjank_app.nix {})
+    CtsLeanbackJankApp;
+
+  inherit (callBPPackage "cts/tests/libcore/jsr166" ./cts_tests_libcore_jsr166.nix {})
+    CtsLibcoreJsr166TestCases;
+
+  inherit (callBPPackage "cts/tests/libcore/luni" ./cts_tests_libcore_luni.nix {})
+    CtsLibcoreTestCases;
+
+  inherit (callBPPackage "cts/tests/libcore/ojluni" ./cts_tests_libcore_ojluni.nix {})
+    CtsLibcoreOjTestCases;
+
+  inherit (callBPPackage "cts/tests/libcore/okhttp" ./cts_tests_libcore_okhttp.nix {})
+    CtsLibcoreOkHttpTestCases;
+
+  inherit (callBPPackage "cts/tests/libcore/runner" ./cts_tests_libcore_runner.nix {})
+    CtsLibcoreTestRunner;
+
+  inherit (callBPPackage "cts/tests/libcore/wycheproof-bc" ./cts_tests_libcore_wycheproof-bc.nix {})
+    CtsLibcoreWycheproofBCTestCases;
+
+  inherit (callBPPackage "cts/tests/libcore/wycheproof" ./cts_tests_libcore_wycheproof.nix {})
+    CtsLibcoreWycheproofConscryptTestCases;
+
+  inherit (callBPPackage "cts/tests/location/common" ./cts_tests_location_common.nix {})
+    LocationCtsCommon;
+
+  inherit (callBPPackage "cts/tests/location/location_coarse" ./cts_tests_location_location_coarse.nix {})
+    CtsLocationCoarseTestCases;
+
+  inherit (callBPPackage "cts/tests/location/location_fine" ./cts_tests_location_location_fine.nix {})
+    CtsLocationFineTestCases;
+
+  inherit (callBPPackage "cts/tests/location/location_gnss" ./cts_tests_location_location_gnss.nix {})
+    CtsLocationGnssTestCases cts-location-gnss-tests;
+
+  inherit (callBPPackage "cts/tests/location/location_none" ./cts_tests_location_location_none.nix {})
+    CtsLocationNoneTestCases;
+
+  inherit (callBPPackage "cts/tests/location/location_privileged" ./cts_tests_location_location_privileged.nix {})
+    CtsLocationPrivilegedTestCases;
+
+  inherit (callBPPackage "cts/tests/media" ./cts_tests_media.nix {})
+    CtsMediaV2TestCases;
+
+  inherit (callBPPackage "cts/tests/media/jni" ./cts_tests_media_jni.nix {})
+    libctsmediav2codec_jni libctsmediav2extractor_jni libctsmediav2muxer_jni;
+
   inherit (callBPPackage "cts/tests/mocking" ./cts_tests_mocking.nix {})
     CtsMockingTestCases;
 
   inherit (callBPPackage "cts/tests/mocking/debuggable" ./cts_tests_mocking_debuggable.nix {})
     CtsMockingDebuggableTestCases;
 
+  inherit (callBPPackage "cts/tests/mocking/extended" ./cts_tests_mocking_extended.nix {})
+    CtsExtendedMockingTestCases;
+
   inherit (callBPPackage "cts/tests/mocking/inline" ./cts_tests_mocking_inline.nix {})
     CtsInlineMockingTestCases;
 
   inherit (callBPPackage "cts/tests/netlegacy22.permission" ./cts_tests_netlegacy22.permission.nix {})
     CtsNetTestCasesLegacyPermission22;
+
+  inherit (callBPPackage "cts/tests/netsecpolicy" ./cts_tests_netsecpolicy.nix {})
+    CtsNetSecPolicyUsesCleartextTrafficFalse CtsNetSecPolicyUsesCleartextTrafficTrue CtsNetSecPolicyUsesCleartextTrafficUnspecified;
 
   inherit (callBPPackage "cts/tests/openglperf2/jni" ./cts_tests_openglperf2_jni.nix {})
     libctsopengl_jni libctsopengl_test;
@@ -1655,6 +3134,12 @@
 
   inherit (callBPPackage "cts/tests/pdf" ./cts_tests_pdf.nix {})
     CtsPdfTestCases;
+
+  inherit (callBPPackage "cts/tests/providerui" ./cts_tests_providerui.nix {})
+    CtsProviderUiTestCases;
+
+  inherit (callBPPackage "cts/tests/quickaccesswallet" ./cts_tests_quickaccesswallet.nix {})
+    CtsQuickAccessWalletTestCases;
 
   inherit (callBPPackage "cts/tests/rollback" ./cts_tests_rollback.nix {})
     CtsRollbackManagerTestCases;
@@ -1669,10 +3154,67 @@
     signature-hostside;
 
   inherit (callBPPackage "cts/tests/signature/api-check" ./cts_tests_signature_api-check.nix {})
-    cts-api-signature-test libclassdescriptors;
+    cts-api-signature-test cts-hiddenapi-flags-csv hiddenapi-blacklist-check-defaults hiddenapi-killswitch-check-defaults libclassdescriptors signature-api-check-defaults;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/android-test-base-28-api" ./cts_tests_signature_api-check_android-test-base-28-api.nix {})
+    CtsAndroidTestBase28ApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/android-test-base-current-api" ./cts_tests_signature_api-check_android-test-base-current-api.nix {})
+    CtsAndroidTestBaseCurrentApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/android-test-mock-current-api" ./cts_tests_signature_api-check_android-test-mock-current-api.nix {})
+    CtsAndroidTestMockCurrentApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/android-test-runner-current-api" ./cts_tests_signature_api-check_android-test-runner-current-api.nix {})
+    CtsAndroidTestRunnerCurrentApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/apache-http-legacy-27-api" ./cts_tests_signature_api-check_apache-http-legacy-27-api.nix {})
+    CtsApacheHttpLegacy27ApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/apache-http-legacy-current-api" ./cts_tests_signature_api-check_apache-http-legacy-current-api.nix {})
+    CtsApacheHttpLegacyCurrentApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/apache-http-legacy-uses-library-api" ./cts_tests_signature_api-check_apache-http-legacy-uses-library-api.nix {})
+    CtsApacheHttpLegacyUsesLibraryApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/current-api" ./cts_tests_signature_api-check_current-api.nix {})
+    CtsCurrentApiSignatureTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-blacklist-27-api" ./cts_tests_signature_api-check_hidden-api-blacklist-27-api.nix {})
+    CtsHiddenApiBlacklistApi27TestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-blacklist-28-api" ./cts_tests_signature_api-check_hidden-api-blacklist-28-api.nix {})
+    CtsHiddenApiBlacklistApi28TestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-blacklist-current-api" ./cts_tests_signature_api-check_hidden-api-blacklist-current-api.nix {})
+    CtsHiddenApiBlacklistCurrentApiTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-blacklist-debug-class" ./cts_tests_signature_api-check_hidden-api-blacklist-debug-class.nix {})
+    CtsHiddenApiBlacklistDebugClassTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-blacklist-test-api" ./cts_tests_signature_api-check_hidden-api-blacklist-test-api.nix {})
+    CtsHiddenApiBlacklistTestApiTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-killswitch-debug-class" ./cts_tests_signature_api-check_hidden-api-killswitch-debug-class.nix {})
+    CtsHiddenApiKillswitchDebugClassTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-killswitch-whitelist" ./cts_tests_signature_api-check_hidden-api-killswitch-whitelist.nix {})
+    CtsHiddenApiKillswitchWhitelistTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/hidden-api-killswitch-wildcard" ./cts_tests_signature_api-check_hidden-api-killswitch-wildcard.nix {})
+    CtsHiddenApiKillswitchWildcardTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api-check/system-annotation" ./cts_tests_signature_api-check_system-annotation.nix {})
+    CtsSystemApiAnnotationTestCases;
+
+  inherit (callBPPackage "cts/tests/signature/api" ./cts_tests_signature_api.nix {})
+    cts-android-test-base-current-api-gz cts-android-test-mock-current-api-gz cts-android-test-runner-current-api-gz cts-apache-http-legacy-current-api-gz cts-car-system-current-api-gz cts-car-system-removed-api-gz cts-current-api-gz cts-system-current-api-gz cts-system-removed-api-gz signature-cts-api-api-gz;
 
   inherit (callBPPackage "cts/tests/signature/dex-checker" ./cts_tests_signature_dex-checker.nix {})
     libcts_dexchecker;
+
+  inherit (callBPPackage "cts/tests/signature/intent-check" ./cts_tests_signature_intent-check.nix {})
+    CtsIntentSignatureTestCases;
 
   inherit (callBPPackage "cts/tests/signature/lib/android" ./cts_tests_signature_lib_android.nix {})
     cts-signature-common;
@@ -1686,17 +3228,167 @@
   inherit (callBPPackage "cts/tests/simplecpu/jni" ./cts_tests_simplecpu_jni.nix {})
     libctscpu_jni;
 
+  inherit (callBPPackage "cts/tests/suspendapps" ./cts_tests_suspendapps.nix {})
+    CtsSuspendHelpersAidl CtsSuspendHelpersConstants;
+
+  inherit (callBPPackage "cts/tests/suspendapps/permission" ./cts_tests_suspendapps_permission.nix {})
+    CtsSuspendAppsPermissionTestCases;
+
+  inherit (callBPPackage "cts/tests/suspendapps/test-apps/SuspendTestApp" ./cts_tests_suspendapps_test-apps_SuspendTestApp.nix {})
+    CtsSuspendTestApp CtsSuspendTestApp2;
+
+  inherit (callBPPackage "cts/tests/suspendapps/test-apps/TestDeviceAdmin" ./cts_tests_suspendapps_test-apps_TestDeviceAdmin.nix {})
+    CtsSuspendTestDeviceAdmin;
+
+  inherit (callBPPackage "cts/tests/suspendapps/tests" ./cts_tests_suspendapps_tests.nix {})
+    CtsSuspendAppsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/accounts" ./cts_tests_tests_accounts.nix {})
+    CtsAccountManagerTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/accounts/CtsUnaffiliatedAccountAuthenticators" ./cts_tests_tests_accounts_CtsUnaffiliatedAccountAuthenticators.nix {})
+    CtsUnaffiliatedAccountAuthenticators;
+
+  inherit (callBPPackage "cts/tests/tests/accounts/common" ./cts_tests_tests_accounts_common.nix {})
+    CtsAccountTestsCommon;
+
   inherit (callBPPackage "cts/tests/tests/animation" ./cts_tests_tests_animation.nix {})
     CtsAnimationTestCases;
 
+  inherit (callBPPackage "cts/tests/tests/app.usage" ./cts_tests_tests_app.usage.nix {})
+    CtsUsageStatsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/app.usage/TestApp1" ./cts_tests_tests_app.usage_TestApp1.nix {})
+    CtsUsageStatsTestApp1;
+
+  inherit (callBPPackage "cts/tests/tests/app" ./cts_tests_tests_app.nix {})
+    CtsAndroidAppTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/appcomponentfactory" ./cts_tests_tests_appcomponentfactory.nix {})
+    CtsAppComponentFactoryTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/appenumeration" ./cts_tests_tests_appenumeration.nix {})
+    CtsAppEnumerationTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/appenumeration/app/source" ./cts_tests_tests_appenumeration_app_source.nix {})
+    CtsAppEnumerationQueriesActivityViaAction CtsAppEnumerationQueriesDefaults CtsAppEnumerationQueriesNothing CtsAppEnumerationQueriesNothingHasPermission CtsAppEnumerationQueriesNothingHasProvider CtsAppEnumerationQueriesNothingReceivesPermissionProtectedUri CtsAppEnumerationQueriesNothingReceivesUri CtsAppEnumerationQueriesNothingSeesInstaller CtsAppEnumerationQueriesNothingTargetsQ CtsAppEnumerationQueriesPackage CtsAppEnumerationQueriesProviderViaAction CtsAppEnumerationQueriesProviderViaAuthority CtsAppEnumerationQueriesServiceViaAction CtsAppEnumerationQueriesUnexportedActivityViaAction CtsAppEnumerationQueriesUnexportedProviderViaAction CtsAppEnumerationQueriesUnexportedProviderViaAuthority CtsAppEnumerationQueriesUnexportedServiceViaAction CtsAppEnumerationSharedUidSource CtsAppEnumerationWildcardActionSource CtsAppEnumerationWildcardBrowsableActivitySource CtsAppEnumerationWildcardBrowserActivitySource CtsAppEnumerationWildcardContactsActivitySource CtsAppEnumerationWildcardDocumentEditorActivitySource CtsAppEnumerationWildcardShareActivitySource CtsAppEnumerationWildcardWebActivitySource;
+
+  inherit (callBPPackage "cts/tests/tests/appenumeration/app/target" ./cts_tests_tests_appenumeration_app_target.nix {})
+    CtsAppEnumerationBrowserActivityTarget CtsAppEnumerationBrowserWildcardActivityTarget CtsAppEnumerationContactsActivityTarget CtsAppEnumerationDocumentsActivityTarget CtsAppEnumerationFilters CtsAppEnumerationForceQueryable CtsAppEnumerationNoApi CtsAppEnumerationShareActivityTarget CtsAppEnumerationSharedUidTarget CtsAppEnumerationWebActivityTarget;
+
+  inherit (callBPPackage "cts/tests/tests/appenumeration/lib" ./cts_tests_tests_appenumeration_lib.nix {})
+    CtsAppEnumerationTestLib;
+
   inherit (callBPPackage "cts/tests/tests/appop" ./cts_tests_tests_appop.nix {})
-    CtsAppOpsTestCases;
+    CtsAppOpsTestCases libCtsAppOpsTestCases_jni;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppInBackground" ./cts_tests_tests_appop_AppInBackground.nix {})
+    AppInBackground;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppThatCanBeForcedIntoForegroundStates" ./cts_tests_tests_appop_AppThatCanBeForcedIntoForegroundStates.nix {})
+    AppThatCanBeForcedIntoForegroundStates;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppThatUsesAppOps" ./cts_tests_tests_appop_AppThatUsesAppOps.nix {})
+    CtsAppThatUsesAppOps libAppThatUsesAppOps_jni;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppToBlame1" ./cts_tests_tests_appop_AppToBlame1.nix {})
+    CtsAppToBlame1;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppToBlame2" ./cts_tests_tests_appop_AppToBlame2.nix {})
+    CtsAppToBlame2;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppToCollect" ./cts_tests_tests_appop_AppToCollect.nix {})
+    CtsAppToCollect;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppWithAttributionInheritingFromExisting" ./cts_tests_tests_appop_AppWithAttributionInheritingFromExisting.nix {})
+    AppWithAttributionInheritingFromExisting;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppWithAttributionInheritingFromSameAsOther" ./cts_tests_tests_appop_AppWithAttributionInheritingFromSameAsOther.nix {})
+    AppWithAttributionInheritingFromSameAsOther;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppWithAttributionInheritingFromSelf" ./cts_tests_tests_appop_AppWithAttributionInheritingFromSelf.nix {})
+    AppWithAttributionInheritingFromSelf;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppWithDuplicateAttribution" ./cts_tests_tests_appop_AppWithDuplicateAttribution.nix {})
+    AppWithDuplicateAttribution;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppWithLongAttributionTag" ./cts_tests_tests_appop_AppWithLongAttributionTag.nix {})
+    AppWithLongAttributionTag;
+
+  inherit (callBPPackage "cts/tests/tests/appop/AppWithTooManyAttributions" ./cts_tests_tests_appop_AppWithTooManyAttributions.nix {})
+    AppWithTooManyAttributions;
+
+  inherit (callBPPackage "cts/tests/tests/appop/aidl/AppOpsForegroundControlService" ./cts_tests_tests_appop_aidl_AppOpsForegroundControlService.nix {})
+    AppOpsForegroundControlServiceAidl;
+
+  inherit (callBPPackage "cts/tests/tests/appop/aidl/AppOpsUserService" ./cts_tests_tests_appop_aidl_AppOpsUserService.nix {})
+    AppOpsUserServiceAidl AppOpsUserServiceAidlNative;
+
+  inherit (callBPPackage "cts/tests/tests/appop/appopsTestUtilLib" ./cts_tests_tests_appop_appopsTestUtilLib.nix {})
+    appops-test-util-lib;
+
+  inherit (callBPPackage "cts/tests/tests/appwidget" ./cts_tests_tests_appwidget.nix {})
+    CtsAppWidgetSources CtsAppWidgetTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/appwidget/packages/launchermanifest" ./cts_tests_tests_appwidget_packages_launchermanifest.nix {})
+    CtsAppWidgetLauncher1 CtsAppWidgetLauncher2 CtsAppWidgetLauncher3;
+
+  inherit (callBPPackage "cts/tests/tests/appwidget/packages/widgetprovider" ./cts_tests_tests_appwidget_packages_widgetprovider.nix {})
+    CtsAppWidgetProvider1 CtsAppWidgetProvider2 CtsAppWidgetProvider3;
+
+  inherit (callBPPackage "cts/tests/tests/assist" ./cts_tests_tests_assist.nix {})
+    CtsAssistTestCases;
 
   inherit (callBPPackage "cts/tests/tests/assist/common" ./cts_tests_tests_assist_common.nix {})
     CtsAssistCommon;
 
+  inherit (callBPPackage "cts/tests/tests/assist/service" ./cts_tests_tests_assist_service.nix {})
+    CtsAssistService;
+
+  inherit (callBPPackage "cts/tests/tests/assist/testapp" ./cts_tests_tests_assist_testapp.nix {})
+    CtsAssistApp;
+
+  inherit (callBPPackage "cts/tests/tests/background" ./cts_tests_tests_background.nix {})
+    CtsBackgroundRestrictionsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/batterysaving" ./cts_tests_tests_batterysaving.nix {})
+    CtsBatterySavingTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/batterysaving/apps/app_target_api_25" ./cts_tests_tests_batterysaving_apps_app_target_api_25.nix {})
+    CtsBatterySavingAppTargetApi25;
+
+  inherit (callBPPackage "cts/tests/tests/batterysaving/apps/app_target_api_current" ./cts_tests_tests_batterysaving_apps_app_target_api_current.nix {})
+    CtsBatterSavingAppTargetLib CtsBatterySavingAppTargetApiCurrent;
+
+  inherit (callBPPackage "cts/tests/tests/batterysaving/common" ./cts_tests_tests_batterysaving_common.nix {})
+    BatterySavingCtsCommon;
+
+  inherit (callBPPackage "cts/tests/tests/binder_ndk" ./cts_tests_tests_binder_ndk.nix {})
+    CtsNdkBinderTestCases;
+
   inherit (callBPPackage "cts/tests/tests/binder_ndk/libbinder_ndk_test" ./cts_tests_tests_binder_ndk_libbinder_ndk_test.nix {})
     libbinder_ndk_test libbinder_ndk_test_defaults libbinder_ndk_test_interface libbinder_ndk_test_interface_new libbinder_ndk_test_interface_old libbinder_ndk_test_utilities;
+
+  inherit (callBPPackage "cts/tests/tests/bionic_app" ./cts_tests_tests_bionic_app.nix {})
+    CtsBionicAppTestCases libbionic_app_jni;
+
+  inherit (callBPPackage "cts/tests/tests/bluetooth" ./cts_tests_tests_bluetooth.nix {})
+    CtsBluetoothTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/bluetooth/bluetoothTestUtilLib" ./cts_tests_tests_bluetooth_bluetoothTestUtilLib.nix {})
+    bluetooth-test-util-lib;
+
+  inherit (callBPPackage "cts/tests/tests/calendarcommon" ./cts_tests_tests_calendarcommon.nix {})
+    CtsCalendarcommon2TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/calendarprovider" ./cts_tests_tests_calendarprovider.nix {})
+    CtsCalendarProviderTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/car" ./cts_tests_tests_car.nix {})
+    CtsCarTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/carrierapi" ./cts_tests_tests_carrierapi.nix {})
+    CtsCarrierApiTestCases;
 
   inherit (callBPPackage "cts/tests/tests/classloaderfactory" ./cts_tests_tests_classloaderfactory.nix {})
     ClassLoaderFactoryTestSecondary cts-classloaderfactorytest-srcs cts_classloaderfactorytest_defaults;
@@ -1707,26 +3399,218 @@
   inherit (callBPPackage "cts/tests/tests/classloaderfactory/test-pathcl" ./cts_tests_tests_classloaderfactory_test-pathcl.nix {})
     CtsClassLoaderFactoryPathClassLoaderTestCases;
 
+  inherit (callBPPackage "cts/tests/tests/colormode" ./cts_tests_tests_colormode.nix {})
+    CtsColorModeTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/contactsprovider" ./cts_tests_tests_contactsprovider.nix {})
+    CtsContactsProviderTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/contactsproviderwipe" ./cts_tests_tests_contactsproviderwipe.nix {})
+    CtsContactsProviderWipe;
+
+  inherit (callBPPackage "cts/tests/tests/content" ./cts_tests_tests_content.nix {})
+    CtsContentTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/content/BinderPermissionTestService" ./cts_tests_tests_content_BinderPermissionTestService.nix {})
+    CtsBinderPermissionTestService;
+
+  inherit (callBPPackage "cts/tests/tests/content/CtsSyncAccountAccessOtherCertTests" ./cts_tests_tests_content_CtsSyncAccountAccessOtherCertTests.nix {})
+    CtsSyncAccountAccessOtherCertTestCases;
+
   inherit (callBPPackage "cts/tests/tests/content/DirectBootUnawareTestApp" ./cts_tests_tests_content_DirectBootUnawareTestApp.nix {})
     CtsContentDirectBootUnawareTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/content/HelloWorldApp" ./cts_tests_tests_content_HelloWorldApp.nix {})
+    HelloWorld5 HelloWorld7 hello_world_defaults;
 
   inherit (callBPPackage "cts/tests/tests/content/PartiallyDirectBootAwareTestApp" ./cts_tests_tests_content_PartiallyDirectBootAwareTestApp.nix {})
     CtsContentPartiallyDirectBootAwareTestApp;
 
+  inherit (callBPPackage "cts/tests/tests/content/SyncAccountAccessStubs" ./cts_tests_tests_content_SyncAccountAccessStubs.nix {})
+    CtsSyncAccountAccessStubs;
+
+  inherit (callBPPackage "cts/tests/tests/content/emptytestapp" ./cts_tests_tests_content_emptytestapp.nix {})
+    CtsContentEmptyTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/content/jni" ./cts_tests_tests_content_jni.nix {})
+    libnativecursorwindow_jni;
+
+  inherit (callBPPackage "cts/tests/tests/content/lib/accountaccess" ./cts_tests_tests_content_lib_accountaccess.nix {})
+    accountaccesslib;
+
+  inherit (callBPPackage "cts/tests/tests/content/pm/SecureFrp" ./cts_tests_tests_content_pm_SecureFrp.nix {})
+    CtsSecureFrpInstallTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/database" ./cts_tests_tests_database.nix {})
+    CtsDatabaseTestCases;
+
   inherit (callBPPackage "cts/tests/tests/database/apps" ./cts_tests_tests_database_apps.nix {})
     CtsProviderApp;
+
+  inherit (callBPPackage "cts/tests/tests/deviceconfig" ./cts_tests_tests_deviceconfig.nix {})
+    CtsDeviceConfigTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/display" ./cts_tests_tests_display.nix {})
+    CtsDisplayTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/dpi" ./cts_tests_tests_dpi.nix {})
+    "android.cts.dpi" CtsDpiTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/dpi2" ./cts_tests_tests_dpi2.nix {})
+    CtsDpiTestCases2;
+
+  inherit (callBPPackage "cts/tests/tests/dreams" ./cts_tests_tests_dreams.nix {})
+    CtsDreamsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/drm" ./cts_tests_tests_drm.nix {})
+    CtsDrmTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/drm/jni" ./cts_tests_tests_drm_jni.nix {})
+    libctsdrm_jni;
+
+  inherit (callBPPackage "cts/tests/tests/drm/lib" ./cts_tests_tests_drm_lib.nix {})
+    libdrmtestplugin;
+
+  inherit (callBPPackage "cts/tests/tests/dynamic_linker" ./cts_tests_tests_dynamic_linker.nix {})
+    CtsDynamicLinkerTestCases libdynamiclinker_native_lib_a libdynamiclinker_native_lib_b;
+
+  inherit (callBPPackage "cts/tests/tests/effect" ./cts_tests_tests_effect.nix {})
+    CtsEffectTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/externalservice" ./cts_tests_tests_externalservice.nix {})
+    CtsExternalServiceTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/externalservice/common" ./cts_tests_tests_externalservice_common.nix {})
+    CtsExternalServiceCommon;
+
+  inherit (callBPPackage "cts/tests/tests/externalservice/service" ./cts_tests_tests_externalservice_service.nix {})
+    CtsExternalServiceService;
+
+  inherit (callBPPackage "cts/tests/tests/gesture" ./cts_tests_tests_gesture.nix {})
+    CtsGestureTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/graphics" ./cts_tests_tests_graphics.nix {})
+    CtsGraphicsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/graphics/jni" ./cts_tests_tests_graphics_jni.nix {})
+    libctsgraphics_jni;
+
+  inherit (callBPPackage "cts/tests/tests/gwp-asan/enabled" ./cts_tests_tests_gwp-asan_enabled.nix {})
+    CtsGwpAsanTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/hardware" ./cts_tests_tests_hardware.nix {})
+    CtsHardwareTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/hardware/jni" ./cts_tests_tests_hardware_jni.nix {})
+    libctshardware_jni;
+
+  inherit (callBPPackage "cts/tests/tests/icu" ./cts_tests_tests_icu.nix {})
+    CtsIcuTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/identity" ./cts_tests_tests_identity.nix {})
+    CtsIdentityTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/instantapp" ./cts_tests_tests_instantapp.nix {})
+    CtsInstantAppTests;
+
+  inherit (callBPPackage "cts/tests/tests/jni" ./cts_tests_tests_jni.nix {})
+    CtsJniTestCases libjninamespacea1 libjninamespacea2 libjninamespaceb;
+
+  inherit (callBPPackage "cts/tests/tests/jni/libjnicommon" ./cts_tests_tests_jni_libjnicommon.nix {})
+    libjnicommon;
+
+  inherit (callBPPackage "cts/tests/tests/jni/libjnitest" ./cts_tests_tests_jni_libjnitest.nix {})
+    libjni_test_dlclose libjnitest;
+
+  inherit (callBPPackage "cts/tests/tests/jvmti/attaching" ./cts_tests_tests_jvmti_attaching.nix {})
+    CtsJvmtiAttachingTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/jvmti/attaching/jni" ./cts_tests_tests_jvmti_attaching_jni.nix {})
+    libjvmtiattachingtestagent1 libjvmtiattachingtestagent2 libjvmtiattachingtestagent3 libjvmtiattachingtestagent4;
+
+  inherit (callBPPackage "cts/tests/tests/keystore" ./cts_tests_tests_keystore.nix {})
+    CtsKeystoreTestCases cts-keystore-user-auth-helper-library;
+
+  inherit (callBPPackage "cts/tests/tests/libcoreapievolution" ./cts_tests_tests_libcoreapievolution.nix {})
+    CtsLibcoreApiEvolutionTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/libcorefileio" ./cts_tests_tests_libcorefileio.nix {})
+    CtsLibcoreFileIOTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/libcorelegacy22" ./cts_tests_tests_libcorelegacy22.nix {})
+    CtsLibcoreLegacy22TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/libthermalndk" ./cts_tests_tests_libthermalndk.nix {})
+    CtsThermalTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/libthermalndk/jni" ./cts_tests_tests_libthermalndk_jni.nix {})
+    libctsthermal_jni;
+
+  inherit (callBPPackage "cts/tests/tests/match_flags" ./cts_tests_tests_match_flags.nix {})
+    CtsMatchFlagTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/match_flags/app/a" ./cts_tests_tests_match_flags_app_a.nix {})
+    CtsMatchFlagsUniqueAndSharedUri;
+
+  inherit (callBPPackage "cts/tests/tests/match_flags/app/b" ./cts_tests_tests_match_flags_app_b.nix {})
+    CtsMatchFlagsSharedUri;
+
+  inherit (callBPPackage "cts/tests/tests/media" ./cts_tests_tests_media.nix {})
+    CtsMediaTestCases ctsmediautil;
+
+  inherit (callBPPackage "cts/tests/tests/media/libaudiojni" ./cts_tests_tests_media_libaudiojni.nix {})
+    libaudio_jni;
+
+  inherit (callBPPackage "cts/tests/tests/media/libimagereaderjni" ./cts_tests_tests_media_libimagereaderjni.nix {})
+    libctsimagereader_jni;
+
+  inherit (callBPPackage "cts/tests/tests/media/libmediandkjni" ./cts_tests_tests_media_libmediandkjni.nix {})
+    libctscodecutils_jni libctsmediacodec_jni libctsmediadrm_jni;
+
+  inherit (callBPPackage "cts/tests/tests/media/libndkaudio" ./cts_tests_tests_media_libndkaudio.nix {})
+    libndkaudioLib ndkaudio;
+
+  inherit (callBPPackage "cts/tests/tests/mediaparser" ./cts_tests_tests_mediaparser.nix {})
+    CtsMediaParserTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/mediastress" ./cts_tests_tests_mediastress.nix {})
+    CtsMediaStressTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/mediastress/jni" ./cts_tests_tests_mediastress_jni.nix {})
+    libctsmediastress_jni;
 
   inherit (callBPPackage "cts/tests/tests/midi" ./cts_tests_tests_midi.nix {})
     CtsMidiTestCases;
 
+  inherit (callBPPackage "cts/tests/tests/mimemap" ./cts_tests_tests_mimemap.nix {})
+    CtsMimeMapTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/multiuser" ./cts_tests_tests_multiuser.nix {})
+    CtsMultiUserTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/nativehardware" ./cts_tests_tests_nativehardware.nix {})
+    CtsNativeHardwareTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/nativehardware/jni" ./cts_tests_tests_nativehardware_jni.nix {})
+    libahardwarebuffertest;
+
+  inherit (callBPPackage "cts/tests/tests/nativemedia/mediametrics" ./cts_tests_tests_nativemedia_mediametrics.nix {})
+    CtsNativeMediaMetricsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/ndef" ./cts_tests_tests_ndef.nix {})
+    CtsNdefTestCases;
+
   inherit (callBPPackage "cts/tests/tests/net" ./cts_tests_tests_net.nix {})
-    CtsNetTestCases;
+    CtsNetTestCases CtsNetTestCasesDefaults CtsNetTestCasesLatestSdk;
 
   inherit (callBPPackage "cts/tests/tests/net/api23Test" ./cts_tests_tests_net_api23Test.nix {})
     CtsNetApi23TestCases;
 
   inherit (callBPPackage "cts/tests/tests/net/appForApi23" ./cts_tests_tests_net_appForApi23.nix {})
     CtsNetTestAppForApi23;
+
+  inherit (callBPPackage "cts/tests/tests/net/ipsec" ./cts_tests_tests_net_ipsec.nix {})
+    CtsIkeTestCases;
 
   inherit (callBPPackage "cts/tests/tests/net/jni" ./cts_tests_tests_net_jni.nix {})
     libnativedns_jni libnativemultinetwork_jni;
@@ -1746,14 +3630,101 @@
   inherit (callBPPackage "cts/tests/tests/netpermission/updatestatspermission" ./cts_tests_tests_netpermission_updatestatspermission.nix {})
     CtsNetTestCasesUpdateStatsPermission;
 
+  inherit (callBPPackage "cts/tests/tests/netsecpolicy/usescleartexttraffic-false" ./cts_tests_tests_netsecpolicy_usescleartexttraffic-false.nix {})
+    CtsNetSecPolicyUsesCleartextTrafficFalseTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/netsecpolicy/usescleartexttraffic-true" ./cts_tests_tests_netsecpolicy_usescleartexttraffic-true.nix {})
+    CtsNetSecPolicyUsesCleartextTrafficTrueTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/netsecpolicy/usescleartexttraffic-unspecified" ./cts_tests_tests_netsecpolicy_usescleartexttraffic-unspecified.nix {})
+    CtsNetSecPolicyUsesCleartextTrafficUnspecifiedTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig" ./cts_tests_tests_networksecurityconfig.nix {})
+    tests-tests-networksecurityconfig-lib;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-attributes" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-attributes.nix {})
+    CtsNetSecConfigAttributeTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-basic-domain" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-basic-domain.nix {})
+    CtsNetSecConfigBasicDomainConfigTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-cleartext-pre-P" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-cleartext-pre-P.nix {})
+    CtsNetSecConfigPrePCleartextTrafficTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-cleartext" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-cleartext.nix {})
+    CtsNetSecConfigCleartextTrafficTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-debug-basic-disabled" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-debug-basic-disabled.nix {})
+    CtsNetSecConfigBasicDebugDisabledTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-debug-basic-enabled" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-debug-basic-enabled.nix {})
+    CtsNetSecConfigBasicDebugEnabledTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-downloadmanager" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-downloadmanager.nix {})
+    CtsNetSecConfigDownloadManagerTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-invalid-pin" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-invalid-pin.nix {})
+    CtsNetSecConfigInvalidPinTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-nested-domains" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-nested-domains.nix {})
+    CtsNetSecConfigNestedDomainConfigTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/networksecurityconfig/networksecurityconfig-resourcesrc" ./cts_tests_tests_networksecurityconfig_networksecurityconfig-resourcesrc.nix {})
+    CtsNetSecConfigResourcesSrcTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/nfc" ./cts_tests_tests_nfc.nix {})
+    CtsNfcTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/notificationlegacy/notificationlegacy20" ./cts_tests_tests_notificationlegacy_notificationlegacy20.nix {})
+    CtsLegacyNotification20TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/notificationlegacy/notificationlegacy27" ./cts_tests_tests_notificationlegacy_notificationlegacy27.nix {})
+    CtsLegacyNotification27TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/notificationlegacy/notificationlegacy28" ./cts_tests_tests_notificationlegacy_notificationlegacy28.nix {})
+    CtsLegacyNotification28TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/notificationlegacy/notificationlegacy29" ./cts_tests_tests_notificationlegacy_notificationlegacy29.nix {})
+    CtsLegacyNotification29TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/opengl" ./cts_tests_tests_opengl.nix {})
+    CtsOpenGLTestCases cts-opengl-app-util cts-opengl-util;
+
+  inherit (callBPPackage "cts/tests/tests/opengl/libopengltest" ./cts_tests_tests_opengl_libopengltest.nix {})
+    libopengltest_jni;
+
+  inherit (callBPPackage "cts/tests/tests/openglperf" ./cts_tests_tests_openglperf.nix {})
+    CtsOpenGlPerfTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/openglperf/jni" ./cts_tests_tests_openglperf_jni.nix {})
+    libctsopenglperf_jni;
+
+  inherit (callBPPackage "cts/tests/tests/os" ./cts_tests_tests_os.nix {})
+    CtsOsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/os/AutoRevokeDummyApp" ./cts_tests_tests_os_AutoRevokeDummyApp.nix {})
+    CtsAutoRevokeDummyApp;
+
   inherit (callBPPackage "cts/tests/tests/os/jni" ./cts_tests_tests_os_jni.nix {})
     libctsos_jni libctsos_jni_arm libctsos_jni_defaults;
 
+  inherit (callBPPackage "cts/tests/tests/packageinstaller/adminpackageinstaller" ./cts_tests_tests_packageinstaller_adminpackageinstaller.nix {})
+    CtsAdminPackageInstallerTestCases;
+
   inherit (callBPPackage "cts/tests/tests/packageinstaller/atomicinstall" ./cts_tests_tests_packageinstaller_atomicinstall.nix {})
-    AtomicInstallCorrupt AtomicInstallTestAppAv1 AtomicInstallTestAppAv2 AtomicInstallTestAppBv1 CtsAtomicInstallTestCases;
+    AtomicInstallCorrupt CtsAtomicInstallTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/packageinstaller/emptytestapp" ./cts_tests_tests_packageinstaller_emptytestapp.nix {})
+    CtsEmptyTestApp;
 
   inherit (callBPPackage "cts/tests/tests/packageinstaller/install" ./cts_tests_tests_packageinstaller_install.nix {})
     CtsPackageInstallTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/packageinstaller/install_appop_default" ./cts_tests_tests_packageinstaller_install_appop_default.nix {})
+    CtsPackageInstallAppOpDefaultTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/packageinstaller/install_appop_denied" ./cts_tests_tests_packageinstaller_install_appop_denied.nix {})
+    CtsPackageInstallAppOpDeniedTestCases;
 
   inherit (callBPPackage "cts/tests/tests/packageinstaller/nopermission" ./cts_tests_tests_packageinstaller_nopermission.nix {})
     CtsNoPermissionTestCases CtsNoPermissionTestCasesBase;
@@ -1761,14 +3732,116 @@
   inherit (callBPPackage "cts/tests/tests/packageinstaller/nopermission25" ./cts_tests_tests_packageinstaller_nopermission25.nix {})
     CtsNoPermissionTestCases25;
 
+  inherit (callBPPackage "cts/tests/tests/packageinstaller/tapjacking" ./cts_tests_tests_packageinstaller_tapjacking.nix {})
+    CtsPackageInstallerTapjackingTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/packageinstaller/uninstall" ./cts_tests_tests_packageinstaller_uninstall.nix {})
+    CtsPackageUninstallTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/packagewatchdog" ./cts_tests_tests_packagewatchdog.nix {})
+    CtsPackageWatchdogTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/permission" ./cts_tests_tests_permission.nix {})
+    CtsPermissionTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatAccessesCalendarContactsBodySensorCustomPermission" ./cts_tests_tests_permission_AppThatAccessesCalendarContactsBodySensorCustomPermission.nix {})
+    CtsAppThatRequestsCalendarContactsBodySensorCustomPermission;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatAccessesLocationOnCommand" ./cts_tests_tests_permission_AppThatAccessesLocationOnCommand.nix {})
+    CtsAppThatAccessesLocationOnCommand;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatDefinesUndefinedPermissionGroupElement" ./cts_tests_tests_permission_AppThatDefinesUndefinedPermissionGroupElement.nix {})
+    AppThatDefinesUndefinedPermissionGroupElement;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatDoesNotHaveBgLocationAccess" ./cts_tests_tests_permission_AppThatDoesNotHaveBgLocationAccess.nix {})
+    AppThatDoesNotHaveBgLocationAccess;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestContactsAndCallLogPermission16" ./cts_tests_tests_permission_AppThatRequestContactsAndCallLogPermission16.nix {})
+    CtsAppThatRequestsContactsAndCallLogPermission16;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestContactsPermission15" ./cts_tests_tests_permission_AppThatRequestContactsPermission15.nix {})
+    CtsAppThatRequestsContactsPermission15;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestContactsPermission16" ./cts_tests_tests_permission_AppThatRequestContactsPermission16.nix {})
+    CtsAppThatRequestsContactsPermission16;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestLocationAndBackgroundPermission29" ./cts_tests_tests_permission_AppThatRequestLocationAndBackgroundPermission29.nix {})
+    CtsAppThatRequestsLocationAndBackgroundPermission29;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestLocationPermission22" ./cts_tests_tests_permission_AppThatRequestLocationPermission22.nix {})
+    CtsAppThatRequestsLocationPermission22;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestLocationPermission28" ./cts_tests_tests_permission_AppThatRequestLocationPermission28.nix {})
+    CtsAppThatRequestsLocationPermission28;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestLocationPermission29" ./cts_tests_tests_permission_AppThatRequestLocationPermission29.nix {})
+    CtsAppThatRequestsLocationPermission29;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestLocationPermission29v4" ./cts_tests_tests_permission_AppThatRequestLocationPermission29v4.nix {})
+    CtsAppThatRequestsLocationPermission29v4;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestOneTimePermission" ./cts_tests_tests_permission_AppThatRequestOneTimePermission.nix {})
+    CtsAppThatRequestsOneTimePermission;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestPermissionAandB" ./cts_tests_tests_permission_AppThatRequestPermissionAandB.nix {})
+    CtsAppThatRequestsPermissionAandB;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestPermissionAandC" ./cts_tests_tests_permission_AppThatRequestPermissionAandC.nix {})
+    CtsAppThatRequestsPermissionAandC;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestStoragePermission28" ./cts_tests_tests_permission_AppThatRequestStoragePermission28.nix {})
+    CtsAppThatRequestsStoragePermission28;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRequestStoragePermission29" ./cts_tests_tests_permission_AppThatRequestStoragePermission29.nix {})
+    CtsAppThatRequestsStoragePermission29;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppThatRunsRationaleTests" ./cts_tests_tests_permission_AppThatRunsRationaleTests.nix {})
+    CtsAppThatRunsRationaleTests;
+
   inherit (callBPPackage "cts/tests/tests/permission/AppWithSharedUidThatRequestLocationPermission28" ./cts_tests_tests_permission_AppWithSharedUidThatRequestLocationPermission28.nix {})
     CtsAppWithSharedUidThatRequestsLocationPermission28;
 
   inherit (callBPPackage "cts/tests/tests/permission/AppWithSharedUidThatRequestLocationPermission29" ./cts_tests_tests_permission_AppWithSharedUidThatRequestLocationPermission29.nix {})
     CtsAppWithSharedUidThatRequestsLocationPermission29;
 
+  inherit (callBPPackage "cts/tests/tests/permission/AppWithSharedUidThatRequestsNoPermissions" ./cts_tests_tests_permission_AppWithSharedUidThatRequestsNoPermissions.nix {})
+    CtsAppWithSharedUidThatRequestsNoPermissions;
+
+  inherit (callBPPackage "cts/tests/tests/permission/AppWithSharedUidThatRequestsPermissions" ./cts_tests_tests_permission_AppWithSharedUidThatRequestsPermissions.nix {})
+    CtsAppWithSharedUidThatRequestsPermissions;
+
+  inherit (callBPPackage "cts/tests/tests/permission/jni" ./cts_tests_tests_permission_jni.nix {})
+    libctspermission_jni;
+
   inherit (callBPPackage "cts/tests/tests/permission/permissionTestUtilLib" ./cts_tests_tests_permission_permissionTestUtilLib.nix {})
     permission-test-util-lib;
+
+  inherit (callBPPackage "cts/tests/tests/permission/sdk28" ./cts_tests_tests_permission_sdk28.nix {})
+    CtsPermissionTestCasesSdk28;
+
+  inherit (callBPPackage "cts/tests/tests/permission/telephony" ./cts_tests_tests_permission_telephony.nix {})
+    CtsPermissionTestCasesTelephony;
+
+  inherit (callBPPackage "cts/tests/tests/permission/testapps/RevokePermissionWhenRemoved/AdversarialPermissionDefinerApp" ./cts_tests_tests_permission_testapps_RevokePermissionWhenRemoved_AdversarialPermissionDefinerApp.nix {})
+    CtsAdversarialPermissionDefinerApp;
+
+  inherit (callBPPackage "cts/tests/tests/permission/testapps/RevokePermissionWhenRemoved/AdversarialPermissionUserApp" ./cts_tests_tests_permission_testapps_RevokePermissionWhenRemoved_AdversarialPermissionUserApp.nix {})
+    CtsAdversarialPermissionUserApp;
+
+  inherit (callBPPackage "cts/tests/tests/permission/testapps/RevokePermissionWhenRemoved/InstalltimePermissionDefinerApp" ./cts_tests_tests_permission_testapps_RevokePermissionWhenRemoved_InstalltimePermissionDefinerApp.nix {})
+    CtsInstalltimePermissionDefinerApp;
+
+  inherit (callBPPackage "cts/tests/tests/permission/testapps/RevokePermissionWhenRemoved/InstalltimePermissionUserApp" ./cts_tests_tests_permission_testapps_RevokePermissionWhenRemoved_InstalltimePermissionUserApp.nix {})
+    CtsInstalltimePermissionUserApp;
+
+  inherit (callBPPackage "cts/tests/tests/permission/testapps/RevokePermissionWhenRemoved/RuntimePermissionDefinerApp" ./cts_tests_tests_permission_testapps_RevokePermissionWhenRemoved_RuntimePermissionDefinerApp.nix {})
+    CtsRuntimePermissionDefinerApp;
+
+  inherit (callBPPackage "cts/tests/tests/permission/testapps/RevokePermissionWhenRemoved/RuntimePermissionUserApp" ./cts_tests_tests_permission_testapps_RevokePermissionWhenRemoved_RuntimePermissionUserApp.nix {})
+    CtsRuntimePermissionUserApp;
+
+  inherit (callBPPackage "cts/tests/tests/permission/testapps/RevokePermissionWhenRemoved/VictimPermissionDefinerApp" ./cts_tests_tests_permission_testapps_RevokePermissionWhenRemoved_VictimPermissionDefinerApp.nix {})
+    CtsVictimPermissionDefinerApp;
 
   inherit (callBPPackage "cts/tests/tests/permission2" ./cts_tests_tests_permission2.nix {})
     CtsPermission2TestCases;
@@ -1803,6 +3876,9 @@
   inherit (callBPPackage "cts/tests/tests/permission2/CtsSMSRestrictedWithSharedUid" ./cts_tests_tests_permission2_CtsSMSRestrictedWithSharedUid.nix {})
     CtsSMSRestrictedWithSharedUid;
 
+  inherit (callBPPackage "cts/tests/tests/permission2/CtsStoragePermissionsPreservedUserOptOutSdk30" ./cts_tests_tests_permission2_CtsStoragePermissionsPreservedUserOptOutSdk30.nix {})
+    CtsStoragePermissionsPreservedUserOptOutSdk30;
+
   inherit (callBPPackage "cts/tests/tests/permission2/CtsStoragePermissionsUserDefaultSdk22" ./cts_tests_tests_permission2_CtsStoragePermissionsUserDefaultSdk22.nix {})
     CtsStoragePermissionsUserDefaultSdk22;
 
@@ -1811,6 +3887,9 @@
 
   inherit (callBPPackage "cts/tests/tests/permission2/CtsStoragePermissionsUserDefaultSdk29" ./cts_tests_tests_permission2_CtsStoragePermissionsUserDefaultSdk29.nix {})
     CtsStoragePermissionsUserDefaultSdk29;
+
+  inherit (callBPPackage "cts/tests/tests/permission2/CtsStoragePermissionsUserDefaultSdk30" ./cts_tests_tests_permission2_CtsStoragePermissionsUserDefaultSdk30.nix {})
+    CtsStoragePermissionsUserOptOutSdk30;
 
   inherit (callBPPackage "cts/tests/tests/permission2/CtsStoragePermissionsUserOptInSdk22" ./cts_tests_tests_permission2_CtsStoragePermissionsUserOptInSdk22.nix {})
     CtsStoragePermissionsUserOptInSdk22;
@@ -1821,17 +3900,83 @@
   inherit (callBPPackage "cts/tests/tests/permission2/CtsStoragePermissionsUserOptOutSdk29" ./cts_tests_tests_permission2_CtsStoragePermissionsUserOptOutSdk29.nix {})
     CtsStoragePermissionsUserOptOutSdk29;
 
+  inherit (callBPPackage "cts/tests/tests/permission3" ./cts_tests_tests_permission3.nix {})
+    CtsPermission3TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/PermissionEscalationAppNonRuntime" ./cts_tests_tests_permission3_PermissionEscalationAppNonRuntime.nix {})
+    CtsPermissionEscalationAppNonRuntime;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/PermissionEscalationAppRuntime" ./cts_tests_tests_permission3_PermissionEscalationAppRuntime.nix {})
+    CtsPermissionEscalationAppRuntime;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/PermissionPolicyApp25" ./cts_tests_tests_permission3_PermissionPolicyApp25.nix {})
+    CtsPermissionPolicyApp25;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionApp22" ./cts_tests_tests_permission3_UsePermissionApp22.nix {})
+    CtsUsePermissionApp22;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionApp22CalendarOnly" ./cts_tests_tests_permission3_UsePermissionApp22CalendarOnly.nix {})
+    CtsUsePermissionApp22CalendarOnly;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionApp23" ./cts_tests_tests_permission3_UsePermissionApp23.nix {})
+    CtsUsePermissionApp23;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionApp25" ./cts_tests_tests_permission3_UsePermissionApp25.nix {})
+    CtsUsePermissionApp25;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionApp26" ./cts_tests_tests_permission3_UsePermissionApp26.nix {})
+    CtsUsePermissionApp26;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionApp28" ./cts_tests_tests_permission3_UsePermissionApp28.nix {})
+    CtsUsePermissionApp28;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionApp29" ./cts_tests_tests_permission3_UsePermissionApp29.nix {})
+    CtsUsePermissionApp29;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionAppLatest" ./cts_tests_tests_permission3_UsePermissionAppLatest.nix {})
+    CtsUsePermissionAppLatest CtsUsePermissionAppSrc;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionAppLatestWithBackground" ./cts_tests_tests_permission3_UsePermissionAppLatestWithBackground.nix {})
+    CtsUsePermissionAppLatestWithBackground;
+
+  inherit (callBPPackage "cts/tests/tests/permission3/UsePermissionAppWithOverlay" ./cts_tests_tests_permission3_UsePermissionAppWithOverlay.nix {})
+    CtsUsePermissionAppWithOverlay;
+
   inherit (callBPPackage "cts/tests/tests/preference" ./cts_tests_tests_preference.nix {})
     CtsPreferenceTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/print" ./cts_tests_tests_print.nix {})
+    CtsPrintTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/print/ExternalPrintService" ./cts_tests_tests_print_ExternalPrintService.nix {})
+    CtsExternalPrintService;
 
   inherit (callBPPackage "cts/tests/tests/print/printTestUtilLib" ./cts_tests_tests_print_printTestUtilLib.nix {})
     print-test-util-lib;
 
+  inherit (callBPPackage "cts/tests/tests/proto" ./cts_tests_tests_proto.nix {})
+    CtsProtoTestCases;
+
   inherit (callBPPackage "cts/tests/tests/provider" ./cts_tests_tests_provider.nix {})
     CtsProviderTestCases;
 
+  inherit (callBPPackage "cts/tests/tests/provider/app/GalleryTestApp" ./cts_tests_tests_provider_app_GalleryTestApp.nix {})
+    CtsProviderGalleryTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/provider/preconditions" ./cts_tests_tests_provider_preconditions.nix {})
+    compatibility-host-provider-preconditions;
+
+  inherit (callBPPackage "cts/tests/tests/renderscript/libcoremathtestcpp" ./cts_tests_tests_renderscript_libcoremathtestcpp.nix {})
+    libcoremathtestcpp_jni;
+
   inherit (callBPPackage "cts/tests/tests/resolverservice" ./cts_tests_tests_resolverservice.nix {})
     CtsResolverServiceTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/resourcesloader" ./cts_tests_tests_resourcesloader.nix {})
+    CtsResourcesLoaderTests CtsResourcesLoaderTests_Providers;
+
+  inherit (callBPPackage "cts/tests/tests/resourcesloader/resources" ./cts_tests_tests_resourcesloader_resources.nix {})
+    CtsResourcesLoaderTests_ProviderFour CtsResourcesLoaderTests_ProviderFour_ARSC CtsResourcesLoaderTests_ProviderFour_Split CtsResourcesLoaderTests_ProviderOne CtsResourcesLoaderTests_ProviderOne_ARSC CtsResourcesLoaderTests_ProviderOne_Split CtsResourcesLoaderTests_ProviderThree CtsResourcesLoaderTests_ProviderThree_ARSC CtsResourcesLoaderTests_ProviderThree_Split CtsResourcesLoaderTests_ProviderTwo CtsResourcesLoaderTests_ProviderTwo_ARSC CtsResourcesLoaderTests_ProviderTwo_Split;
 
   inherit (callBPPackage "cts/tests/tests/role" ./cts_tests_tests_role.nix {})
     CtsRoleTestCases;
@@ -1842,11 +3987,125 @@
   inherit (callBPPackage "cts/tests/tests/role/CtsRoleTestApp28" ./cts_tests_tests_role_CtsRoleTestApp28.nix {})
     CtsRoleTestApp28;
 
+  inherit (callBPPackage "cts/tests/tests/rsblas/libbnnmdata" ./cts_tests_tests_rsblas_libbnnmdata.nix {})
+    libbnnmdata_jni;
+
+  inherit (callBPPackage "cts/tests/tests/sax" ./cts_tests_tests_sax.nix {})
+    CtsSaxTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/sdkextensions" ./cts_tests_tests_sdkextensions.nix {})
+    CtsSdkExtensionsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/secure_element/access_control/AccessControlApp1" ./cts_tests_tests_secure_element_access_control_AccessControlApp1.nix {})
+    CtsSecureElementAccessControlTestCases1 signed-CtsSecureElementAccessControlTestCases1;
+
+  inherit (callBPPackage "cts/tests/tests/secure_element/access_control/AccessControlApp2" ./cts_tests_tests_secure_element_access_control_AccessControlApp2.nix {})
+    CtsSecureElementAccessControlTestCases2 signed-CtsSecureElementAccessControlTestCases2;
+
+  inherit (callBPPackage "cts/tests/tests/secure_element/access_control/AccessControlApp3" ./cts_tests_tests_secure_element_access_control_AccessControlApp3.nix {})
+    CtsSecureElementAccessControlTestCases3 signed-CtsSecureElementAccessControlTestCases3;
+
+  inherit (callBPPackage "cts/tests/tests/secure_element/omapi" ./cts_tests_tests_secure_element_omapi.nix {})
+    CtsOmapiTestCases signed-CtsOmapiTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/security" ./cts_tests_tests_security.nix {})
+    CtsSecurityTestCases PackageInstallerTestApp security_cts_test_certificate;
+
   inherit (callBPPackage "cts/tests/tests/security/jni" ./cts_tests_tests_security_jni.nix {})
     libctssecurity_jni libcve_2019_2213_jni;
 
+  inherit (callBPPackage "cts/tests/tests/security/native/encryption" ./cts_tests_tests_security_native_encryption.nix {})
+    CtsNativeEncryptionTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/security/testeffect" ./cts_tests_tests_security_testeffect.nix {})
+    libctstesteffect;
+
+  inherit (callBPPackage "cts/tests/tests/selinux/common/jni" ./cts_tests_tests_selinux_common_jni.nix {})
+    libctsselinux_jni;
+
+  inherit (callBPPackage "cts/tests/tests/selinux/selinuxEphemeral" ./cts_tests_tests_selinux_selinuxEphemeral.nix {})
+    CtsSelinuxEphemeralTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/selinux/selinuxTargetSdk25" ./cts_tests_tests_selinux_selinuxTargetSdk25.nix {})
+    CtsSelinuxTargetSdk25TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/selinux/selinuxTargetSdk27" ./cts_tests_tests_selinux_selinuxTargetSdk27.nix {})
+    CtsSelinuxTargetSdk27TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/selinux/selinuxTargetSdk28" ./cts_tests_tests_selinux_selinuxTargetSdk28.nix {})
+    CtsSelinuxTargetSdk28TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/selinux/selinuxTargetSdk29" ./cts_tests_tests_selinux_selinuxTargetSdk29.nix {})
+    CtsSelinuxTargetSdk29TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/selinux/selinuxTargetSdkCurrent" ./cts_tests_tests_selinux_selinuxTargetSdkCurrent.nix {})
+    CtsSelinuxTargetSdkCurrentTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/sharesheet" ./cts_tests_tests_sharesheet.nix {})
+    CtsSharesheetTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/sharesheet/packages" ./cts_tests_tests_sharesheet_packages.nix {})
+    CtsSharesheetActivityLabelTester CtsSharesheetExcludeTester CtsSharesheetIntentFilterLabelTester;
+
+  inherit (callBPPackage "cts/tests/tests/shortcutmanager" ./cts_tests_tests_shortcutmanager.nix {})
+    CtsShortcutManagerDefaults CtsShortcutManagerLauncher1 CtsShortcutManagerLauncher2 CtsShortcutManagerLauncher3 CtsShortcutManagerLauncher4 CtsShortcutManagerLib CtsShortcutManagerPackage1 CtsShortcutManagerPackage2 CtsShortcutManagerPackage3 CtsShortcutManagerPackage4 CtsShortcutManagerTestCases CtsShortcutManagerThrottlingTest;
+
+  inherit (callBPPackage "cts/tests/tests/simpleperf/CtsSimpleperfDebuggableApp" ./cts_tests_tests_simpleperf_CtsSimpleperfDebuggableApp.nix {})
+    CtsSimpleperfDebuggableApp;
+
+  inherit (callBPPackage "cts/tests/tests/simpleperf/CtsSimpleperfProfileableApp" ./cts_tests_tests_simpleperf_CtsSimpleperfProfileableApp.nix {})
+    CtsSimpleperfProfileableApp;
+
   inherit (callBPPackage "cts/tests/tests/slice" ./cts_tests_tests_slice.nix {})
     CtsSliceTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/soundtrigger" ./cts_tests_tests_soundtrigger.nix {})
+    CtsSoundTriggerTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/speech" ./cts_tests_tests_speech.nix {})
+    CtsSpeechTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/syncmanager" ./cts_tests_tests_syncmanager.nix {})
+    CtsSyncManagerTestsCases;
+
+  inherit (callBPPackage "cts/tests/tests/syncmanager/apps" ./cts_tests_tests_syncmanager_apps.nix {})
+    CtsSyncManagerApp1 CtsSyncManagerApp2;
+
+  inherit (callBPPackage "cts/tests/tests/syncmanager/common" ./cts_tests_tests_syncmanager_common.nix {})
+    CtsSyncManagerCommon;
+
+  inherit (callBPPackage "cts/tests/tests/systemintents" ./cts_tests_tests_systemintents.nix {})
+    CtsSystemIntentTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/systemui" ./cts_tests_tests_systemui.nix {})
+    CtsSystemUiTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/telecom" ./cts_tests_tests_telecom.nix {})
+    CtsTelecomMockLib CtsTelecomTestCases CtsTelecomUtilLib car-mode-app-aidl car-mode-app-srcs;
+
+  inherit (callBPPackage "cts/tests/tests/telecom/Api29InCallServiceTestApp" ./cts_tests_tests_telecom_Api29InCallServiceTestApp.nix {})
+    Api29InCallServiceTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/telecom/CallRedirectionServiceTestApp" ./cts_tests_tests_telecom_CallRedirectionServiceTestApp.nix {})
+    CallRedirectionServiceTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/telecom/CallScreeningServiceTestApp" ./cts_tests_tests_telecom_CallScreeningServiceTestApp.nix {})
+    CallScreeningServiceTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/telecom/CarModeTestApp" ./cts_tests_tests_telecom_CarModeTestApp.nix {})
+    CarModeTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/telecom/CarModeTestAppTwo" ./cts_tests_tests_telecom_CarModeTestAppTwo.nix {})
+    CarModeTestAppTwo;
+
+  inherit (callBPPackage "cts/tests/tests/telecom/ThirdPtyInCallServiceTestApp" ./cts_tests_tests_telecom_ThirdPtyInCallServiceTestApp.nix {})
+    ThirdPtyInCallServiceTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/telecom2" ./cts_tests_tests_telecom2.nix {})
+    CtsTelecomTestCases2;
+
+  inherit (callBPPackage "cts/tests/tests/telecom3" ./cts_tests_tests_telecom3.nix {})
+    CtsTelecomTestCases3;
 
   inherit (callBPPackage "cts/tests/tests/telephony/TestFinancialSmsApp" ./cts_tests_tests_telephony_TestFinancialSmsApp.nix {})
     TestFinancialSmsApp;
@@ -1860,11 +4119,71 @@
   inherit (callBPPackage "cts/tests/tests/telephony/TestSmsRetrieverApp" ./cts_tests_tests_telephony_TestSmsRetrieverApp.nix {})
     TestSmsRetrieverApp;
 
+  inherit (callBPPackage "cts/tests/tests/telephony/current" ./cts_tests_tests_telephony_current.nix {})
+    CtsTelephonyTestCases telephony-cts-ims-common-srcs;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/current/EmbmsMiddlewareTestApp" ./cts_tests_tests_telephony_current_EmbmsMiddlewareTestApp.nix {})
+    EmbmsMiddlewareCtsTestApp;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/current/LocationAccessingApp" ./cts_tests_tests_telephony_current_LocationAccessingApp.nix {})
+    LocationAccessingApp location_accessing_app_srcs;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/current/LocationAccessingApp/sdk28" ./cts_tests_tests_telephony_current_LocationAccessingApp_sdk28.nix {})
+    LocationAccessingAppSdk28;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/current/TestExternalImsServiceApp" ./cts_tests_tests_telephony_current_TestExternalImsServiceApp.nix {})
+    TestExternalImsServiceApp;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/current/permissions" ./cts_tests_tests_telephony_current_permissions.nix {})
+    CtsTelephonyTestCasesPermissionReadPhoneState;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/current/preconditions" ./cts_tests_tests_telephony_current_preconditions.nix {})
+    compatibility-host-telephony-preconditions;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/current/preconditions/app" ./cts_tests_tests_telephony_current_preconditions_app.nix {})
+    CtsTelephonyPreparerApp;
+
+  inherit (callBPPackage "cts/tests/tests/telephony/sdk28" ./cts_tests_tests_telephony_sdk28.nix {})
+    CtsTelephonySdk28TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/telephony2" ./cts_tests_tests_telephony2.nix {})
+    CtsTelephony2TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/telephony3" ./cts_tests_tests_telephony3.nix {})
+    CtsTelephony3TestCases;
+
+  inherit (callBPPackage "cts/tests/tests/telephony4" ./cts_tests_tests_telephony4.nix {})
+    CtsSimRestrictedApisTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/telephony4/certs" ./cts_tests_tests_telephony4_certs.nix {})
+    android_telephony_cts_testkey;
+
+  inherit (callBPPackage "cts/tests/tests/telephonyprovider" ./cts_tests_tests_telephonyprovider.nix {})
+    CtsTelephonyProviderTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/tethering" ./cts_tests_tests_tethering.nix {})
+    CtsTetheringTest;
+
   inherit (callBPPackage "cts/tests/tests/text" ./cts_tests_tests_text.nix {})
     CtsTextTestCases;
 
+  inherit (callBPPackage "cts/tests/tests/text/jni" ./cts_tests_tests_text_jni.nix {})
+    libctstext_jni;
+
+  inherit (callBPPackage "cts/tests/tests/textclassifier" ./cts_tests_tests_textclassifier.nix {})
+    CtsTextClassifierTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/textclassifier/QueryTextClassifierServiceActivity" ./cts_tests_tests_textclassifier_QueryTextClassifierServiceActivity.nix {})
+    CtsQueryTextClassifierServiceActivity;
+
   inherit (callBPPackage "cts/tests/tests/theme" ./cts_tests_tests_theme.nix {})
     CtsThemeDeviceTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/toast" ./cts_tests_tests_toast.nix {})
+    CtsToastBaseToastTest CtsToastTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/toastlegacy" ./cts_tests_tests_toastlegacy.nix {})
+    CtsToastLegacyTestCases;
 
   inherit (callBPPackage "cts/tests/tests/tools/processors/view_inspector" ./cts_tests_tests_tools_processors_view_inspector.nix {})
     CtsViewInspectorAnnotationProcessorTestCases;
@@ -1872,11 +4191,26 @@
   inherit (callBPPackage "cts/tests/tests/transition" ./cts_tests_tests_transition.nix {})
     CtsTransitionTestCases;
 
+  inherit (callBPPackage "cts/tests/tests/tv" ./cts_tests_tests_tv.nix {})
+    CtsTvTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/uiautomation" ./cts_tests_tests_uiautomation.nix {})
+    CtsUiAutomationTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/uidisolation" ./cts_tests_tests_uidisolation.nix {})
+    CtsUidIsolationTestCases;
+
   inherit (callBPPackage "cts/tests/tests/uirendering" ./cts_tests_tests_uirendering.nix {})
     CtsUiRenderingTestCases;
 
   inherit (callBPPackage "cts/tests/tests/uirendering27" ./cts_tests_tests_uirendering27.nix {})
     CtsUiRenderingTestCases27;
+
+  inherit (callBPPackage "cts/tests/tests/usb" ./cts_tests_tests_usb.nix {})
+    CtsUsbManagerTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/util" ./cts_tests_tests_util.nix {})
+    CtsUtilTestCases;
 
   inherit (callBPPackage "cts/tests/tests/view/jni" ./cts_tests_tests_view_jni.nix {})
     libctsview_jni;
@@ -1884,11 +4218,53 @@
   inherit (callBPPackage "cts/tests/tests/view/sdk28" ./cts_tests_tests_view_sdk28.nix {})
     CtsViewTestCasesSdk28;
 
+  inherit (callBPPackage "cts/tests/tests/voiceinteraction" ./cts_tests_tests_voiceinteraction.nix {})
+    CtsVoiceInteractionTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/voiceinteraction/common" ./cts_tests_tests_voiceinteraction_common.nix {})
+    CtsVoiceInteractionCommon;
+
+  inherit (callBPPackage "cts/tests/tests/voiceinteraction/service" ./cts_tests_tests_voiceinteraction_service.nix {})
+    CtsVoiceInteractionService;
+
+  inherit (callBPPackage "cts/tests/tests/voiceinteraction/testapp" ./cts_tests_tests_voiceinteraction_testapp.nix {})
+    CtsVoiceInteractionApp;
+
+  inherit (callBPPackage "cts/tests/tests/voicesettings" ./cts_tests_tests_voicesettings.nix {})
+    CtsVoiceSettingsTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/voicesettings/service" ./cts_tests_tests_voicesettings_service.nix {})
+    CtsVoiceSettingsService;
+
+  inherit (callBPPackage "cts/tests/tests/webkit" ./cts_tests_tests_webkit.nix {})
+    CtsWebkitTestCases;
+
   inherit (callBPPackage "cts/tests/tests/widget" ./cts_tests_tests_widget.nix {})
     CtsWidgetTestCases;
 
+  inherit (callBPPackage "cts/tests/tests/widget/app" ./cts_tests_tests_widget_app.nix {})
+    CtsWidgetApp;
+
+  inherit (callBPPackage "cts/tests/tests/widget29" ./cts_tests_tests_widget29.nix {})
+    CtsWidgetTestCases29;
+
+  inherit (callBPPackage "cts/tests/tests/wifi" ./cts_tests_tests_wifi.nix {})
+    CtsWifiTestCases;
+
+  inherit (callBPPackage "cts/tests/tests/wifi/CtsWifiLocationTestApp" ./cts_tests_tests_wifi_CtsWifiLocationTestApp.nix {})
+    CtsWifiLocationTestApp;
+
   inherit (callBPPackage "cts/tests/tvprovider" ./cts_tests_tvprovider.nix {})
     CtsTvProviderTestCases;
+
+  inherit (callBPPackage "cts/tests/video" ./cts_tests_video.nix {})
+    CtsVideoTestCases;
+
+  inherit (callBPPackage "cts/tests/vr" ./cts_tests_vr.nix {})
+    CtsVrTestCases;
+
+  inherit (callBPPackage "cts/tests/vr/jni" ./cts_tests_vr_jni.nix {})
+    libctsvrextensions_jni;
 
   inherit (callBPPackage "cts/tools/cfassembler" ./cts_tools_cfassembler.nix {})
     cfassembler;
@@ -1908,8 +4284,8 @@
   inherit (callBPPackage "cts/tools/cts-preconditions" ./cts_tools_cts-preconditions.nix {})
     CtsPreconditions;
 
-  inherit (callBPPackage "cts/tools/dasm" ./cts_tools_dasm.nix {})
-    dasm;
+  inherit (callBPPackage "cts/tools/device-setup/TestDeviceSetup" ./cts_tools_device-setup_TestDeviceSetup.nix {})
+    TestDeviceSetup;
 
   inherit (callBPPackage "cts/tools/release-parser" ./cts_tools_release-parser.nix {})
     release-parser;
@@ -1917,14 +4293,8 @@
   inherit (callBPPackage "cts/tools/release-parser/tests" ./cts_tools_release-parser_tests.nix {})
     release-parser-tests;
 
-  inherit (callBPPackage "cts/tools/utils" ./cts_tools_utils.nix {})
-    descGen;
-
   inherit (callBPPackage "cts/tools/vm-tests-tf" ./cts_tools_vm-tests-tf.nix {})
-    cts-vmtests-dot host-cts-vmtests vmtests-buildutil vmtests-dasm-dex-generated vmtests-dfh-dex-generated vmtests-generated-resources vmtests-mains vmtests_generated_host_test_sources vmtests_generated_mains_test_sources;
-
-  inherit (callBPPackage "dalvik/dexdump" ./dalvik_dexdump.nix {})
-    dexdump;
+    cts-vmtests-dot host-cts-vmtests vmtests-buildutil vmtests-dfh-dex-generated vmtests-generated-resources vmtests-mains vmtests_generated_host_test_sources vmtests_generated_mains_test_sources;
 
   inherit (callBPPackage "dalvik/dexgen" ./dalvik_dexgen.nix {})
     dexgen;
@@ -1938,9 +4308,6 @@
   inherit (callBPPackage "dalvik/dx/src" ./dalvik_dx_src.nix {})
     dx-doc-stubs dx-docs;
 
-  inherit (callBPPackage "dalvik/libdex" ./dalvik_libdex.nix {})
-    libdex;
-
   inherit (callBPPackage "dalvik/tools/dexdeps" ./dalvik_tools_dexdeps.nix {})
     dexdeps;
 
@@ -1950,17 +4317,254 @@
   inherit (callBPPackage "dalvik/tools/hprof-conv" ./dalvik_tools_hprof-conv.nix {})
     hprof-conv;
 
-  inherit (callBPPackage "development/build" ./development_build.nix {})
-    android_stubs_current android_stubs_current_system_modules android_system_stubs_current android_system_stubs_current_system_modules android_test_stubs_current android_test_stubs_current_system_modules framework-stubs-default;
+  inherit (callBPPackage "development/apps/BluetoothDebug" ./development_apps_BluetoothDebug.nix {})
+    BluetoothDebug;
+
+  inherit (callBPPackage "development/apps/BuildWidget" ./development_apps_BuildWidget.nix {})
+    BuildWidget;
+
+  inherit (callBPPackage "development/apps/CustomLocale" ./development_apps_CustomLocale.nix {})
+    CustomLocale;
+
+  inherit (callBPPackage "development/apps/DevelopmentSettings" ./development_apps_DevelopmentSettings.nix {})
+    DevelopmentSettings;
+
+  inherit (callBPPackage "development/apps/Fallback" ./development_apps_Fallback.nix {})
+    Fallback;
+
+  inherit (callBPPackage "development/apps/GestureBuilder" ./development_apps_GestureBuilder.nix {})
+    GestureBuilder;
+
+  inherit (callBPPackage "development/apps/NinePatchLab" ./development_apps_NinePatchLab.nix {})
+    NinePatchLab;
+
+  inherit (callBPPackage "development/apps/PushApiAuthenticator" ./development_apps_PushApiAuthenticator.nix {})
+    PushApiAuthenticator development_apps_pushapiauthenticator;
+
+  inherit (callBPPackage "development/apps/PushApiTestAppOne" ./development_apps_PushApiTestAppOne.nix {})
+    PushApiTestAppOne development_apps_pushapitestappone_cert;
+
+  inherit (callBPPackage "development/apps/PushApiTestAppTwo" ./development_apps_PushApiTestAppTwo.nix {})
+    PushApiTestAppTwo development_apps_pushapitestapptwo_cert;
+
+  inherit (callBPPackage "development/apps/SdkSetup" ./development_apps_SdkSetup.nix {})
+    "privapp_whitelist_com.android.sdksetup" SdkSetup;
+
+  inherit (callBPPackage "development/apps/SettingInjectorSample" ./development_apps_SettingInjectorSample.nix {})
+    SettingInjectorSample;
+
+  inherit (callBPPackage "development/apps/WidgetPreview" ./development_apps_WidgetPreview.nix {})
+    WidgetPreview;
+
+  inherit (callBPPackage "development/apps/launchperf" ./development_apps_launchperf.nix {})
+    launchperf;
 
   inherit (callBPPackage "development/gsi/gsi_util" ./development_gsi_gsi_util.nix {})
     gsi_util;
+
+  inherit (callBPPackage "development/gsi/repack_super_image" ./development_gsi_repack_super_image.nix {})
+    repack_super_image;
 
   inherit (callBPPackage "development/host/windows" ./development_host_windows.nix {})
     AdbWinApi AdbWinApi_defaults AdbWinUsbApi;
 
   inherit (callBPPackage "development/python-packages" ./development_python-packages.nix {})
     adb_py;
+
+  inherit (callBPPackage "development/samples/AccelerometerPlay" ./development_samples_AccelerometerPlay.nix {})
+    AccelerometerPlay;
+
+  inherit (callBPPackage "development/samples/AdaptiveIconSample" ./development_samples_AdaptiveIconSample.nix {})
+    AdaptiveIconSample;
+
+  inherit (callBPPackage "development/samples/AliasActivity" ./development_samples_AliasActivity.nix {})
+    AliasActivity;
+
+  inherit (callBPPackage "development/samples/AndroidBeamDemo" ./development_samples_AndroidBeamDemo.nix {})
+    AndroidBeamDemo;
+
+  inherit (callBPPackage "development/samples/AppNavigation" ./development_samples_AppNavigation.nix {})
+    AppNavigation;
+
+  inherit (callBPPackage "development/samples/AutofillKeyboard" ./development_samples_AutofillKeyboard.nix {})
+    AutofillKeyboard;
+
+  inherit (callBPPackage "development/samples/BackupRestore" ./development_samples_BackupRestore.nix {})
+    BackupRestore;
+
+  inherit (callBPPackage "development/samples/BasicGLSurfaceView" ./development_samples_BasicGLSurfaceView.nix {})
+    BasicGLSurfaceView;
+
+  inherit (callBPPackage "development/samples/BluetoothChat" ./development_samples_BluetoothChat.nix {})
+    BluetoothChat;
+
+  inherit (callBPPackage "development/samples/BrokenKeyDerivation" ./development_samples_BrokenKeyDerivation.nix {})
+    BrokenKeyDerivation;
+
+  inherit (callBPPackage "development/samples/BrokenKeyDerivation/tests" ./development_samples_BrokenKeyDerivation_tests.nix {})
+    BrokenKeyDerivationTests;
+
+  inherit (callBPPackage "development/samples/BusinessCard" ./development_samples_BusinessCard.nix {})
+    BusinessCard BusinessCard_LowerApi;
+
+  inherit (callBPPackage "development/samples/Compass" ./development_samples_Compass.nix {})
+    Compass;
+
+  inherit (callBPPackage "development/samples/ContactManager" ./development_samples_ContactManager.nix {})
+    ContactManager;
+
+  inherit (callBPPackage "development/samples/CubeLiveWallpaper" ./development_samples_CubeLiveWallpaper.nix {})
+    CubeLiveWallpapers;
+
+  inherit (callBPPackage "development/samples/DataWiper" ./development_samples_DataWiper.nix {})
+    DataWiper;
+
+  inherit (callBPPackage "development/samples/DeviceAdminWhitelistedAccount" ./development_samples_DeviceAdminWhitelistedAccount.nix {})
+    DeviceAdminWhitelistedAccount;
+
+  inherit (callBPPackage "development/samples/FixedGridLayout" ./development_samples_FixedGridLayout.nix {})
+    FixedGridLayout;
+
+  inherit (callBPPackage "development/samples/HelloActivity" ./development_samples_HelloActivity.nix {})
+    HelloActivity;
+
+  inherit (callBPPackage "development/samples/HelloActivity/tests" ./development_samples_HelloActivity_tests.nix {})
+    HelloActivityTests;
+
+  inherit (callBPPackage "development/samples/HelloEffects" ./development_samples_HelloEffects.nix {})
+    HelloEffects;
+
+  inherit (callBPPackage "development/samples/Home" ./development_samples_Home.nix {})
+    Home;
+
+  inherit (callBPPackage "development/samples/HoneycombGallery" ./development_samples_HoneycombGallery.nix {})
+    HoneycombGallery;
+
+  inherit (callBPPackage "development/samples/InlineFillService" ./development_samples_InlineFillService.nix {})
+    InlineFillService;
+
+  inherit (callBPPackage "development/samples/JetBoy" ./development_samples_JetBoy.nix {})
+    JETBoy;
+
+  inherit (callBPPackage "development/samples/KeyChainDemo" ./development_samples_KeyChainDemo.nix {})
+    KeyChainDemo;
+
+  inherit (callBPPackage "development/samples/LceDemo" ./development_samples_LceDemo.nix {})
+    LceDemo;
+
+  inherit (callBPPackage "development/samples/LunarLander" ./development_samples_LunarLander.nix {})
+    LunarLander;
+
+  inherit (callBPPackage "development/samples/LunarLander/tests" ./development_samples_LunarLander_tests.nix {})
+    LunarLanderTests;
+
+  inherit (callBPPackage "development/samples/MultiResolution" ./development_samples_MultiResolution.nix {})
+    MultiResolution;
+
+  inherit (callBPPackage "development/samples/MultiWindow" ./development_samples_MultiWindow.nix {})
+    MultiWindow;
+
+  inherit (callBPPackage "development/samples/NotePad" ./development_samples_NotePad.nix {})
+    NotePad;
+
+  inherit (callBPPackage "development/samples/Obb" ./development_samples_Obb.nix {})
+    ObbApp;
+
+  inherit (callBPPackage "development/samples/RSSReader" ./development_samples_RSSReader.nix {})
+    RSSReader;
+
+  inherit (callBPPackage "development/samples/ReceiveShareDemo" ./development_samples_ReceiveShareDemo.nix {})
+    ReceiveShareDemo;
+
+  inherit (callBPPackage "development/samples/SampleSyncAdapter" ./development_samples_SampleSyncAdapter.nix {})
+    SampleSyncAdapter;
+
+  inherit (callBPPackage "development/samples/SearchableDictionary" ./development_samples_SearchableDictionary.nix {})
+    SearchableDictionary;
+
+  inherit (callBPPackage "development/samples/SimpleJNI" ./development_samples_SimpleJNI.nix {})
+    SimpleJNI;
+
+  inherit (callBPPackage "development/samples/SimpleJNI/jni" ./development_samples_SimpleJNI_jni.nix {})
+    libsimplejni;
+
+  inherit (callBPPackage "development/samples/SipDemo" ./development_samples_SipDemo.nix {})
+    SipDemo;
+
+  inherit (callBPPackage "development/samples/SkeletonApp" ./development_samples_SkeletonApp.nix {})
+    SkeletonApp;
+
+  inherit (callBPPackage "development/samples/SkeletonApp/tests" ./development_samples_SkeletonApp_tests.nix {})
+    SkeletonAppTests;
+
+  inherit (callBPPackage "development/samples/Snake" ./development_samples_Snake.nix {})
+    Snake;
+
+  inherit (callBPPackage "development/samples/Snake/tests" ./development_samples_Snake_tests.nix {})
+    SnakeTests;
+
+  inherit (callBPPackage "development/samples/SoftKeyboard" ./development_samples_SoftKeyboard.nix {})
+    SoftKeyboard;
+
+  inherit (callBPPackage "development/samples/SpellChecker/HelloSpellChecker" ./development_samples_SpellChecker_HelloSpellChecker.nix {})
+    HelloSpellChecker;
+
+  inherit (callBPPackage "development/samples/SpellChecker/SampleSpellCheckerService" ./development_samples_SpellChecker_SampleSpellCheckerService.nix {})
+    SampleSpellCheckerService;
+
+  inherit (callBPPackage "development/samples/StackWidget" ./development_samples_StackWidget.nix {})
+    StackWidget;
+
+  inherit (callBPPackage "development/samples/ThemedNavBarKeyboard" ./development_samples_ThemedNavBarKeyboard.nix {})
+    ThemedNavBarKeyboard;
+
+  inherit (callBPPackage "development/samples/ToyVpn" ./development_samples_ToyVpn.nix {})
+    ToyVpn;
+
+  inherit (callBPPackage "development/samples/TtsEngine" ./development_samples_TtsEngine.nix {})
+    TtsEngine;
+
+  inherit (callBPPackage "development/samples/USB/AdbTest" ./development_samples_USB_AdbTest.nix {})
+    AdbTest;
+
+  inherit (callBPPackage "development/samples/USB/MissileLauncher" ./development_samples_USB_MissileLauncher.nix {})
+    MissileLauncher;
+
+  inherit (callBPPackage "development/samples/Vault" ./development_samples_Vault.nix {})
+    Vault;
+
+  inherit (callBPPackage "development/samples/Vault/tests" ./development_samples_Vault_tests.nix {})
+    VaultTests;
+
+  inherit (callBPPackage "development/samples/VoiceRecognitionService" ./development_samples_VoiceRecognitionService.nix {})
+    VoiceRecognitionService;
+
+  inherit (callBPPackage "development/samples/VoicemailProviderDemo" ./development_samples_VoicemailProviderDemo.nix {})
+    VoicemailProviderDemo;
+
+  inherit (callBPPackage "development/samples/WeatherListWidget" ./development_samples_WeatherListWidget.nix {})
+    WeatherListWidget;
+
+  inherit (callBPPackage "development/samples/WiFiDirectDemo" ./development_samples_WiFiDirectDemo.nix {})
+    WiFiDirectDemo;
+
+  inherit (callBPPackage "development/samples/WiFiDirectServiceDiscovery" ./development_samples_WiFiDirectServiceDiscovery.nix {})
+    WiFiDirectServiceDiscovery;
+
+  inherit (callBPPackage "development/samples/Wiktionary" ./development_samples_Wiktionary.nix {})
+    Wiktionary;
+
+  inherit (callBPPackage "development/samples/WiktionarySimple" ./development_samples_WiktionarySimple.nix {})
+    WiktionarySimple;
+
+  inherit (callBPPackage "development/samples/XmlAdapters" ./development_samples_XmlAdapters.nix {})
+    xmladapters;
+
+  inherit (callBPPackage "development/samples/apkcachetest" ./development_samples_apkcachetest.nix {})
+    ApkCacheTest;
+
+  inherit (callBPPackage "development/samples/training/NsdChat" ./development_samples_training_NsdChat.nix {})
+    NsdChat;
 
   inherit (callBPPackage "development/scripts" ./development_scripts.nix {})
     python-native_heapdump_viewer_test python-symbol python-symbol_test;
@@ -1992,6 +4596,9 @@
   inherit (callBPPackage "development/tools/rmtypedefs" ./development_tools_rmtypedefs.nix {})
     rmtypedefs;
 
+  inherit (callBPPackage "development/vndk/tools/definition-tool/datasets" ./development_vndk_tools_definition-tool_datasets.nix {})
+    vndk_lib_extra_lists;
+
   inherit (callBPPackage "development/vndk/tools/header-checker" ./development_vndk_tools_header-checker.nix {})
     header-abi-diff header-abi-dumper header-abi-linker header-abi-linker-defaults header-checker-defaults header-checker-unittests libheader-checker merge-abi-diff;
 
@@ -2001,11 +4608,20 @@
   inherit (callBPPackage "development/vndk/tools/header-checker/tests/integration/version_script_example" ./development_vndk_tools_header-checker_tests_integration_version_script_example.nix {})
     libversion_script_example;
 
+  inherit (callBPPackage "development/vndk/tools/image-diff-tool" ./development_vndk_tools_image-diff-tool.nix {})
+    compare_images;
+
+  inherit (callBPPackage "external/FP16" ./external_FP16.nix {})
+    Fp16AltFromFp32ValueTests Fp16AltToFp32BitsTests Fp16AltToFp32ValueTests Fp16BitcastsTests Fp16IEEEFromFp32ValueTests Fp16IEEEToFp32BitsTests Fp16IEEEToFp32ValueTests fp16_headers fp16_tests_default;
+
+  inherit (callBPPackage "external/FXdiv" ./external_FXdiv.nix {})
+    FxdivMultiplyHighTests FxdivQuotientTests fxdiv_headers fxdiv_tests_default;
+
   inherit (callBPPackage "external/ImageMagick" ./external_ImageMagick.nix {})
     Magick_headers;
 
   inherit (callBPPackage "external/ImageMagick/Magick++" ./external_ImageMagick_Magick++.nix {})
-    "Magick++" "Magick++_defaults" "Magick++_platform";
+    "Magick++";
 
   inherit (callBPPackage "external/ImageMagick/MagickCore" ./external_ImageMagick_MagickCore.nix {})
     MagickCore;
@@ -2019,23 +4635,38 @@
   inherit (callBPPackage "external/ImageMagick/filters" ./external_ImageMagick_filters.nix {})
     Magick_filters;
 
-  inherit (callBPPackage "external/Microsoft-GSL" ./external_Microsoft-GSL.nix {})
-    libgsl;
+  inherit (callBPPackage "external/OpenCSD" ./external_OpenCSD.nix {})
+    libopencsd_decoder;
 
   inherit (callBPPackage "external/Reactive-Extensions/RxCpp" ./external_Reactive-Extensions_RxCpp.nix {})
     librxcpp librxcpp-tests librxcpp-tests-defaults librxcpp-tests-upstream;
 
+  inherit (callBPPackage "external/XNNPACK" ./external_XNNPACK.nix {})
+    libXNNPACK xnnpack_add_nc_test xnnpack_add_nd_test xnnpack_argmax_pooling_nhwc_test xnnpack_asm_ukernels xnnpack_average_pooling_nhwc_test xnnpack_avx2_ukernels xnnpack_avx512f_ukernels xnnpack_avx_ukernels xnnpack_channel_pad_nc_test xnnpack_channel_shuffle_nc_test xnnpack_clamp_nc_test xnnpack_convolution_nchw_test xnnpack_convolution_nhwc_test xnnpack_deconvolution_nhwc_test xnnpack_divide_nd_test xnnpack_end2end_bench xnnpack_fma3_ukernels xnnpack_fully_connected_nc_test xnnpack_global_average_pooling_ncw_test xnnpack_global_average_pooling_nwc_test xnnpack_hardswish_nc_test xnnpack_im2col xnnpack_indirection xnnpack_internal_default xnnpack_leaky_relu_nc_test xnnpack_max_pooling_nhwc_test xnnpack_maximum_nd_test xnnpack_minimum_nd_test xnnpack_mobilenet_v1 xnnpack_mobilenet_v2 xnnpack_mobilenet_v3_large xnnpack_mobilenet_v3_small xnnpack_multiply_nd_test xnnpack_neon_ukernels xnnpack_neonfma_ukernels xnnpack_neonfp16arith_ukernels xnnpack_operator_run xnnpack_operators xnnpack_prelu_nc_test xnnpack_psimd_accmath_ukernels xnnpack_psimd_fastmath_ukernels xnnpack_resize_bilinear_nhwc_test xnnpack_scalar_ukernels xnnpack_sigmoid_nc_test xnnpack_softmax_nc_test xnnpack_sse2_ukernels xnnpack_sse41_ukernels xnnpack_subtract_nd_test xnnpack_tables xnnpack_tests_default xnnpack_ukernels xnnpack_unpooling_nhwc_test;
+
   inherit (callBPPackage "external/aac" ./external_aac.nix {})
     libFraunhoferAAC;
+
+  inherit (callBPPackage "external/adhd/audio_streams" ./external_adhd_audio_streams.nix {})
+    audio_streams_tests_audio_streams libaudio_streams;
+
+  inherit (callBPPackage "external/adhd/cras/client/cras-sys" ./external_adhd_cras_client_cras-sys.nix {})
+    cras-sys_tests_cras_sys libcras_sys;
+
+  inherit (callBPPackage "external/adhd/cras/client/libcras" ./external_adhd_cras_client_libcras.nix {})
+    libcras_tests_libcras liblibcras;
 
   inherit (callBPPackage "external/adhd/cras/src" ./external_adhd_cras_src.nix {})
     libcras;
 
   inherit (callBPPackage "external/android-clat" ./external_android-clat.nix {})
-    "clatd.conf" clatd clatd_common clatd_defaults clatd_microbenchmark clatd_test;
+    "clatd.conf" clatd clatd_common clatd_defaults clatd_test;
 
   inherit (callBPPackage "external/androidplot" ./external_androidplot.nix {})
     AndroidPlotDemos androidplot;
+
+  inherit (callBPPackage "external/angle" ./external_angle.nix {})
+    "angle_spvtools_vendor_tables_opencl.debuginfo.100" ANGLE ANGLE_java_defaults ANGLE_library ANGLE_srcs angle_commit_id angle_common angle_glslang_default_resource_limits_sources angle_glslang_sources angle_glslang_wrapper angle_gpu_info_util angle_image_util angle_image_util_headers angle_includes angle_jsoncpp angle_libANGLE angle_libANGLE_base angle_libANGLE_headers angle_libEGL_egl_loader angle_preprocessor angle_spv_headers angle_spvtools angle_spvtools_core_enums_unified1 angle_spvtools_core_tables_unified1 angle_spvtools_generators_inc angle_spvtools_glsl_tables_glsl1-0 angle_spvtools_headers angle_spvtools_language_header_cldebuginfo100 angle_spvtools_language_header_debuginfo angle_spvtools_opencl_tables_opencl1-0 angle_spvtools_opt angle_spvtools_val angle_spvtools_vendor_tables_debuginfo angle_spvtools_vendor_tables_spv-amd-gcn-shader angle_spvtools_vendor_tables_spv-amd-shader-ballot angle_spvtools_vendor_tables_spv-amd-shader-explicit-vertex-parameter angle_spvtools_vendor_tables_spv-amd-shader-trinary-minmax angle_system_utils angle_translator angle_translator_headers angle_version angle_vk_mem_alloc_wrapper angle_volk angle_vulkan_backend angle_vulkan_entry_points angle_vulkan_headers angle_vulkan_memory_allocator angle_xxhash libEGL_angle libGLESv1_CM_angle libGLESv2_angle libfeature_support_angle;
 
   inherit (callBPPackage "external/ant-glob" ./external_ant-glob.nix {})
     ant-glob;
@@ -2056,31 +4687,31 @@
     apache-harmony-tests;
 
   inherit (callBPPackage "external/apache-harmony/jdwp" ./external_apache-harmony_jdwp.nix {})
-    SourceDebugExtensionMockClass_gen apache-harmony-jdwp-tests apache-harmony-jdwp-tests-host;
+    SourceDebugExtensionMockClass_gen apache-harmony-jdwp-tests;
 
   inherit (callBPPackage "external/apache-http" ./external_apache-http.nix {})
-    "org.apache.http.legacy";
+    "apache-http-legacy-current.txt" "org.apache.http.legacy" "org.apache.http.legacy.android.sources" "org.apache.http.legacy.sources";
 
   inherit (callBPPackage "external/apache-xml" ./external_apache-xml.nix {})
     apache-xml apache-xml-testdex apache-xml_api_files;
-
-  inherit (callBPPackage "external/archive-patcher" ./external_archive-patcher.nix {})
-    archive-patcher;
 
   inherit (callBPPackage "external/arm-neon-tests" ./external_arm-neon-tests.nix {})
     arm_neon_tests_arm arm_neon_tests_defaults arm_neon_tests_thumb;
 
   inherit (callBPPackage "external/arm-optimized-routines" ./external_arm-optimized-routines.nix {})
-    libarm-optimized-routines mathtest;
+    arm-optimized-routines-defaults arm-optimized-routines-tests libarm-optimized-routines-math mathtest ulp;
 
   inherit (callBPPackage "external/avb" ./external_avb.nix {})
-    "bootctrl.avb" avb_defaults avb_sources avbctl avbtool avbtool_py libavb libavb_ab_host libavb_atx_host libavb_host_sysdeps libavb_host_unittest libavb_host_user_code_test libavb_things_example libavb_user;
+    "bootctrl.avb" aftl_proto aftltool aftltool_py aftltool_test avb_defaults avb_headers avb_sources avbctl avbtool avbtool_py libavb libavb_ab_host libavb_aftl_host libavb_atx_host libavb_host_sysdeps libavb_host_unittest libavb_host_user_code_test libavb_things_example libavb_user;
 
   inherit (callBPPackage "external/avb/test" ./external_avb_test.nix {})
     at_auth_unlock_unittest;
 
   inherit (callBPPackage "external/avb/tools" ./external_avb_tools.nix {})
     at_auth_unlock;
+
+  inherit (callBPPackage "external/bc" ./external_bc.nix {})
+    "bc-bc_help.c" "bc-lib.c" "bc-version.h" bc bc-defaults bc-tests bc_vendor gavinhoward-bc;
 
   inherit (callBPPackage "external/bcc" ./external_bcc.nix {})
     libbpf libbpf_defaults libbpf_headers;
@@ -2089,13 +4720,16 @@
     blkiomon blkparse blkrawverify blktrace blktrace_defaults btt verify_blkparse;
 
   inherit (callBPPackage "external/boringssl" ./external_boringssl.nix {})
-    boringssl_crypto_test boringssl_defaults boringssl_flags boringssl_ssl_test boringssl_test_support bssl cavp libcrypto libcrypto_defaults libcrypto_no_clang libcrypto_static libssl libssl_static;
+    bcm_object boringssl_crypto_test boringssl_defaults boringssl_flags boringssl_ssl_test boringssl_test_support bssl bssl_ar bssl_fipscommon bssl_inject_hash cavp libcrypto libcrypto_defaults libcrypto_static libssl test_fips;
+
+  inherit (callBPPackage "external/boringssl/selftest" ./external_boringssl_selftest.nix {})
+    boringssl_self_test boringssl_self_test_defaults boringssl_self_test_vendor;
 
   inherit (callBPPackage "external/boringssl" ./external_boringssl_sources.bp.nix {})
-    boringssl_crypto_test_sources boringssl_ssl_test_sources boringssl_test_support_sources bssl_sources libcrypto_sources libssl_sources;
+    boringssl_crypto_test_sources boringssl_ssl_test_sources boringssl_test_support_sources bssl_sources libcrypto_bcm_sources libcrypto_sources libssl_sources;
 
   inherit (callBPPackage "external/bouncycastle" ./external_bouncycastle.nix {})
-    bouncycastle bouncycastle-bcpkix-host bouncycastle-bcpkix-unbundled bouncycastle-defaults bouncycastle-errorprone-defaults bouncycastle-host bouncycastle-ocsp-unbundled bouncycastle-testdex bouncycastle-unbundled bouncycastle_java_files;
+    bouncycastle bouncycastle-bcpkix-unbundled bouncycastle-defaults bouncycastle-errorprone-defaults bouncycastle-host bouncycastle-ocsp-unbundled bouncycastle-testdex bouncycastle-unbundled bouncycastle_ike_digests bouncycastle_java_files;
 
   inherit (callBPPackage "external/brotli" ./external_brotli.nix {})
     brotli brotli-java libbrotli;
@@ -2117,6 +4751,9 @@
 
   inherit (callBPPackage "external/cblas" ./external_cblas.nix {})
     cblas-defaults libblas libblasV8;
+
+  inherit (callBPPackage "external/cbor-java" ./external_cbor-java.nix {})
+    cbor-java;
 
   inherit (callBPPackage "external/chromium-libpac" ./external_chromium-libpac.nix {})
     libpac;
@@ -2212,40 +4849,31 @@
     cn-cbor_test libcn-cbor;
 
   inherit (callBPPackage "external/compiler-rt" ./external_compiler-rt.nix {})
-    asan_arch_defaults libcompiler_rt libcompiler_rt-extras;
-
-  inherit (callBPPackage "external/compiler-rt/lib/asan" ./external_compiler-rt_lib_asan.nix {})
-    asan_test asanwrapper libasan libasan_cxx libasan_noinst_test;
-
-  inherit (callBPPackage "external/compiler-rt/lib/interception" ./external_compiler-rt_lib_interception.nix {})
-    libinterception;
-
-  inherit (callBPPackage "external/compiler-rt/lib/lsan" ./external_compiler-rt_lib_lsan.nix {})
-    liblsan;
-
-  inherit (callBPPackage "external/compiler-rt/lib/profile" ./external_compiler-rt_lib_profile.nix {})
-    libprofile_rt;
-
-  inherit (callBPPackage "external/compiler-rt/lib/sanitizer_common" ./external_compiler-rt_lib_sanitizer_common.nix {})
-    libsan;
-
-  inherit (callBPPackage "external/compiler-rt/lib/sanitizer_common/tests" ./external_compiler-rt_lib_sanitizer_common_tests.nix {})
-    san_test san_test-Nolibc san_test_defaults;
-
-  inherit (callBPPackage "external/compiler-rt/lib/tsan" ./external_compiler-rt_lib_tsan.nix {})
-    libtsan libtsan_cxx libtsan_rtl_test libtsan_unit_test;
-
-  inherit (callBPPackage "external/compiler-rt/lib/ubsan" ./external_compiler-rt_lib_ubsan.nix {})
-    libclang_rt_ubsan_defaults libubsan libubsan_cxx libubsan_standalone libubsan_standalone_cxx;
+    libcompiler_rt libcompiler_rt-extras;
 
   inherit (callBPPackage "external/conscrypt" ./external_conscrypt.nix {})
-    conscrypt conscrypt-benchmarks conscrypt-nojarjar conscrypt-nojarjar_generated_constants conscrypt-stubs conscrypt-testdex conscrypt-tests conscrypt_generate_constants conscrypt_generated_constants conscrypt_global conscrypt_java_files conscrypt_public_api_files conscrypt_unbundled conscrypt_unbundled-jni-defaults libconscrypt_jni libconscrypt_openjdk_jni libconscrypt_static libjavacrypto libjavacrypto-defaults;
+    "conscrypt.module.intra.core.api" "conscrypt.module.intra.core.api-removed.api.public.latest" "conscrypt.module.intra.core.api.api.public.latest" "conscrypt.module.platform.api" "conscrypt.module.platform.api-removed.api.public.latest" "conscrypt.module.platform.api.api.public.latest" "conscrypt.module.public.api" "conscrypt.module.public.api-removed.api.public.latest" "conscrypt.module.public.api.api.public.latest" conscrypt conscrypt-benchmarks conscrypt-module-host-exports conscrypt-module-sdk conscrypt-module-test-exports conscrypt-testdex conscrypt-tests conscrypt-unbundled conscrypt-unbundled_generated_constants conscrypt_generate_constants conscrypt_generated_constants conscrypt_global conscrypt_java_files conscrypt_public_api_files conscrypt_unbundled-jni-defaults libconscrypt_jni libconscrypt_openjdk_jni libconscrypt_static libjavacrypto libjavacrypto-defaults;
 
   inherit (callBPPackage "external/conscrypt/apex" ./external_conscrypt_apex.nix {})
-    "apex.conscrypt.key" "com.android.conscrypt" "com.android.conscrypt-androidManifest" "com.android.conscrypt-defaults" "com.android.conscrypt.certificate";
+    "apex.conscrypt.key" "com.android.conscrypt" "com.android.conscrypt-androidManifest" "com.android.conscrypt-defaults" "com.android.conscrypt.certificate" "com.android.conscrypt.ld.config.txt";
 
   inherit (callBPPackage "external/conscrypt/apex/testing" ./external_conscrypt_apex_testing.nix {})
     "test_com.android.conscrypt";
+
+  inherit (callBPPackage "external/conscrypt/apex/tests" ./external_conscrypt_apex_tests.nix {})
+    MtsConscryptTestCases;
+
+  inherit (callBPPackage "external/conscrypt/test-support" ./external_conscrypt_test-support.nix {})
+    conscrypt-support;
+
+  inherit (callBPPackage "external/cpu_features" ./external_cpu_features.nix {})
+    cpu_features-bit_utils_test cpu_features-cpuinfo_test cpu_features-defaults cpu_features-stack_line_reader_test cpu_features-string_view_test cpu_features-test-defaults cpu_features-unix_features_aggregator_test libcpu_features libcpu_features-all_libraries libcpu_features-filesystem_for_testing libcpu_features-hwcaps_for_testing libcpu_features-stack_line_reader libcpu_features-stack_line_reader_for_test libcpu_features-string_view libcpu_features-unix_based_hardware_detection libcpu_features-utils list_cpu_features stack_line_reader-defaults;
+
+  inherit (callBPPackage "external/cpuinfo" ./external_cpuinfo.nix {})
+    libcpuinfo;
+
+  inherit (callBPPackage "external/cpuinfo/deps/clog" ./external_cpuinfo_deps_clog.nix {})
+    libclog;
 
   inherit (callBPPackage "external/crcalc" ./external_crcalc.nix {})
     cr;
@@ -2253,17 +4881,125 @@
   inherit (callBPPackage "external/crcalc/tests" ./external_crcalc_tests.nix {})
     CRTests;
 
+  inherit (callBPPackage "external/crosvm" ./external_crosvm.nix {})
+    "crosvm.experimental" crosvm_defaults;
+
+  inherit (callBPPackage "external/crosvm/arch" ./external_crosvm_arch.nix {})
+    libarch;
+
+  inherit (callBPPackage "external/crosvm/assertions" ./external_crosvm_assertions.nix {})
+    libassertions;
+
+  inherit (callBPPackage "external/crosvm/bit_field" ./external_crosvm_bit_field.nix {})
+    bit_field_tests bit_field_tests_bit_field libbit_field;
+
+  inherit (callBPPackage "external/crosvm/bit_field/bit_field_derive" ./external_crosvm_bit_field_bit_field_derive.nix {})
+    libbit_field_derive;
+
+  inherit (callBPPackage "external/crosvm/data_model" ./external_crosvm_data_model.nix {})
+    libdata_model;
+
+  inherit (callBPPackage "external/crosvm/devices" ./external_crosvm_devices.nix {})
+    libdevices;
+
+  inherit (callBPPackage "external/crosvm/enumn" ./external_crosvm_enumn.nix {})
+    libenumn;
+
+  inherit (callBPPackage "external/crosvm/gpu_buffer" ./external_crosvm_gpu_buffer.nix {})
+    libgpu_buffer;
+
+  inherit (callBPPackage "external/crosvm/gpu_display" ./external_crosvm_gpu_display.nix {})
+    gpu_display_client_protocol_headers gpu_display_protocol_sources libdisplay_wl libgpu_display;
+
+  inherit (callBPPackage "external/crosvm/gpu_renderer" ./external_crosvm_gpu_renderer.nix {})
+    libgpu_renderer;
+
+  inherit (callBPPackage "external/crosvm/io_jail" ./external_crosvm_io_jail.nix {})
+    libio_jail;
+
+  inherit (callBPPackage "external/crosvm/kernel_cmdline" ./external_crosvm_kernel_cmdline.nix {})
+    libkernel_cmdline;
+
+  inherit (callBPPackage "external/crosvm/kernel_loader" ./external_crosvm_kernel_loader.nix {})
+    libkernel_loader;
+
+  inherit (callBPPackage "external/crosvm/kvm" ./external_crosvm_kvm.nix {})
+    kvm_tests kvm_tests_kvm libkvm;
+
+  inherit (callBPPackage "external/crosvm/kvm_sys" ./external_crosvm_kvm_sys.nix {})
+    kvm_sys_tests_kvm_sys kvm_sys_tests_sanity libkvm_sys;
+
+  inherit (callBPPackage "external/crosvm/msg_socket" ./external_crosvm_msg_socket.nix {})
+    libmsg_socket msg_socket_tests msg_socket_tests_msg_socket;
+
+  inherit (callBPPackage "external/crosvm/msg_socket/msg_on_socket_derive" ./external_crosvm_msg_socket_msg_on_socket_derive.nix {})
+    libmsg_on_socket_derive;
+
+  inherit (callBPPackage "external/crosvm/net_sys" ./external_crosvm_net_sys.nix {})
+    libnet_sys;
+
+  inherit (callBPPackage "external/crosvm/net_util" ./external_crosvm_net_util.nix {})
+    libnet_util;
+
+  inherit (callBPPackage "external/crosvm/p9" ./external_crosvm_p9.nix {})
+    libp9;
+
+  inherit (callBPPackage "external/crosvm/p9/wire_format_derive" ./external_crosvm_p9_wire_format_derive.nix {})
+    libwire_format_derive;
+
+  inherit (callBPPackage "external/crosvm/qcow" ./external_crosvm_qcow.nix {})
+    libqcow;
+
+  inherit (callBPPackage "external/crosvm/rand_ish" ./external_crosvm_rand_ish.nix {})
+    librand_ish;
+
+  inherit (callBPPackage "external/crosvm/resources" ./external_crosvm_resources.nix {})
+    libresources;
+
+  inherit (callBPPackage "external/crosvm/sync" ./external_crosvm_sync.nix {})
+    libsync_rust;
+
+  inherit (callBPPackage "external/crosvm/sys_util" ./external_crosvm_sys_util.nix {})
+    libsys_util;
+
+  inherit (callBPPackage "external/crosvm/sys_util/poll_token_derive" ./external_crosvm_sys_util_poll_token_derive.nix {})
+    libpoll_token_derive;
+
+  inherit (callBPPackage "external/crosvm/syscall_defines" ./external_crosvm_syscall_defines.nix {})
+    libsyscall_defines;
+
+  inherit (callBPPackage "external/crosvm/tempfile" ./external_crosvm_tempfile.nix {})
+    libtempfile;
+
+  inherit (callBPPackage "external/crosvm/usb_util" ./external_crosvm_usb_util.nix {})
+    libusb_util;
+
+  inherit (callBPPackage "external/crosvm/vhost" ./external_crosvm_vhost.nix {})
+    libvhost;
+
+  inherit (callBPPackage "external/crosvm/virtio_sys" ./external_crosvm_virtio_sys.nix {})
+    libvirtio_sys;
+
+  inherit (callBPPackage "external/crosvm/vm_control" ./external_crosvm_vm_control.nix {})
+    libvm_control;
+
+  inherit (callBPPackage "external/crosvm/x86_64" ./external_crosvm_x86_64.nix {})
+    libhost_cpuid libx86_64_rust;
+
   inherit (callBPPackage "external/curl" ./external_curl.nix {})
     curl curl_common_defaults libcurl;
 
   inherit (callBPPackage "external/dagger2" ./external_dagger2.nix {})
-    dagger2 dagger2-auto-annotation dagger2-auto-common dagger2-auto-factory dagger2-auto-factory-jar dagger2-auto-service dagger2-auto-service-jar dagger2-auto-value dagger2-auto-value-jar dagger2-compiler dagger2-google-java-format dagger2-inject dagger2-producers;
+    dagger2 dagger2-android-annotation-stubs dagger2-auto-annotation dagger2-auto-common dagger2-auto-factory dagger2-auto-factory-jar dagger2-auto-service dagger2-auto-service-annotations dagger2-auto-service-jar dagger2-auto-value dagger2-auto-value-annotations dagger2-auto-value-jar dagger2-bootstrap-compiler dagger2-bootstrap-compiler-jar dagger2-compiler dagger2-google-java-format dagger2-inject dagger2-producers;
 
   inherit (callBPPackage "external/deqp-deps/SPIRV-Headers" ./external_deqp-deps_SPIRV-Headers.nix {})
-    "deqp_spirv.core.grammar.json-1.0" "deqp_spirv.core.grammar.json-1.1" "deqp_spirv.core.grammar.json-1.2" "deqp_spirv.core.grammar.json-unified1" "deqp_spirv.glsl.grammar.json" "deqp_spirv.opencl.grammar.json" "deqp_spirv.registry.xml";
+    "deqp_spirv_headers_spir-v.xml" "deqp_spirv_headers_unified1_extinst.glsl.std.450.grammar.json" "deqp_spirv_headers_unified1_extinst.opencl.std.100.grammar.json" "deqp_spirv_headers_unified1_spirv.core.grammar.json";
 
   inherit (callBPPackage "external/deqp-deps/SPIRV-Tools" ./external_deqp-deps_SPIRV-Tools.nix {})
-    "deqp_gen_spvtools_grammar_tables_1.0" "deqp_gen_spvtools_grammar_tables_1.1" "deqp_gen_spvtools_grammar_tables_1.2" "deqp_spirv.debuginfo.grammar.json" deqp_gen_spvtools_build_version_inc deqp_gen_spvtools_enum_string_mapping deqp_gen_spvtools_generators_inc deqp_gen_spvtools_grammar_tables_amd-gcn-shader deqp_gen_spvtools_grammar_tables_amd-shader-ballot deqp_gen_spvtools_grammar_tables_amd-shader-explicit-vertex-parameter deqp_gen_spvtools_grammar_tables_amd-shader-trinary-minmax deqp_gen_spvtools_grammar_tables_debuginfo deqp_gen_spvtools_grammar_tables_unified1 deqp_gen_spvtools_lang_headers deqp_spirv-tools;
+    deqp_spirv-tools deqp_spvtools_generate_grammar_tables deqp_spvtools_generate_language_headers deqp_spvtools_generate_registry_tables deqp_spvtools_update_build_version;
+
+  inherit (callBPPackage "external/deqp-deps/amber" ./external_deqp-deps_amber.nix {})
+    deqp_amber deqp_amber_defaults;
 
   inherit (callBPPackage "external/deqp-deps/glslang" ./external_deqp-deps_glslang.nix {})
     deqp_HLSL deqp_OGLCompiler deqp_OSDependent deqp_SPIRV deqp_glslang deqp_glslang_defaults;
@@ -2275,7 +5011,7 @@
     libdeqp_gen;
 
   inherit (callBPPackage "external/deqp/android/cts" ./external_deqp_android_cts.nix {})
-    CtsDeqpTestCases deqp_angle_exclude_caselists deqp_master_caselists deqp_nyc_caselists;
+    CtsDeqpTestCases deqp_angle_exclude_caselists deqp_master_caselists;
 
   inherit (callBPPackage "external/deqp/android/cts/runner/tests" ./external_deqp_android_cts_runner_tests.nix {})
     CtsDeqpRunnerTests;
@@ -2299,7 +5035,7 @@
     dokka;
 
   inherit (callBPPackage "external/drm_hwcomposer" ./external_drm_hwcomposer.nix {})
-    "hwcomposer.drm" "hwcomposer.drm_defaults" "hwcomposer.drm_minigbm" drm_hwcomposer drm_hwcomposer_platformhisi libdrmhwc_utils;
+    "hwcomposer.drm" "hwcomposer.drm_defaults" "hwcomposer.drm_minigbm" drm_hwcomposer drm_hwcomposer_platformhisi drm_hwcomposer_platformimagination drm_hwcomposer_platformmeson libdrmhwc_utils;
 
   inherit (callBPPackage "external/drm_hwcomposer/tests" ./external_drm_hwcomposer_tests.nix {})
     hwc-drm-tests;
@@ -2329,7 +5065,7 @@
     debugfs debugfs-defaults debugfs_static;
 
   inherit (callBPPackage "external/e2fsprogs/e2fsck" ./external_e2fsprogs_e2fsck.nix {})
-    e2fsck e2fsck-defaults e2fsck_static;
+    e2fsck e2fsck-defaults e2fsck_ramdisk e2fsck_static;
 
   inherit (callBPPackage "external/e2fsprogs/lib" ./external_e2fsprogs_lib.nix {})
     libext2-headers;
@@ -2356,10 +5092,10 @@
     libext2_uuid;
 
   inherit (callBPPackage "external/e2fsprogs/misc" ./external_e2fsprogs_misc.nix {})
-    badblocks blkid chattr e2image e4crypt filefrag libext2_misc libtune2fs lsattr lsattr-defaults lsattr_static mke2fs tune2fs tune2fs-defaults tune2fs_static;
+    badblocks blkid chattr-e2fsprogs e2freefrag e2image e4crypt filefrag libext2_misc libtune2fs lsattr-defaults lsattr-e2fsprogs lsattr_static mke2fs tune2fs tune2fs-defaults tune2fs_ramdisk tune2fs_static;
 
   inherit (callBPPackage "external/e2fsprogs/resize" ./external_e2fsprogs_resize.nix {})
-    resize2fs;
+    resize2fs resize2fs-defaults resize2fs_ramdisk;
 
   inherit (callBPPackage "external/easymock" ./external_easymock.nix {})
     easymock easymocklib;
@@ -2371,7 +5107,7 @@
     eigen-defaults libF77blas libF77blasV8;
 
   inherit (callBPPackage "external/elfutils" ./external_elfutils.nix {})
-    libelf_headers;
+    elfutils_headers;
 
   inherit (callBPPackage "external/elfutils/libelf" ./external_elfutils_libelf.nix {})
     libelf;
@@ -2379,14 +5115,17 @@
   inherit (callBPPackage "external/emma" ./external_emma.nix {})
     emma;
 
-  inherit (callBPPackage "external/epid-sdk" ./external_epid-sdk.nix {})
-    epid_cflags epid_common_testhelper_utest epid_common_utest epid_member_tpm2_utest epid_member_utest epid_signmsg epid_verifier_utest epid_verifysig libargtable3 libepid_common libepid_common_testhelper libepid_member libepid_util libepid_verifier libippcp;
-
   inherit (callBPPackage "external/error_prone" ./external_error_prone.nix {})
     error_prone_annotations error_prone_core error_prone_test_helpers;
 
   inherit (callBPPackage "external/error_prone/soong" ./external_error_prone_soong.nix {})
     soong-java-config-error_prone;
+
+  inherit (callBPPackage "external/ethtool" ./external_ethtool.nix {})
+    ethtool;
+
+  inherit (callBPPackage "external/exoplayer" ./external_exoplayer.nix {})
+    exoplayer2-extractor exoplayer2-extractor-annotation-stubs exoplayer2-extractor-test-utils exoplayer2-extractor-tests-assets;
 
   inherit (callBPPackage "external/expat" ./external_expat.nix {})
     libexpat;
@@ -2415,11 +5154,14 @@
   inherit (callBPPackage "external/flatbuffers" ./external_flatbuffers.nix {})
     flatbuffer_headers flatbuffers-java flatc;
 
+  inherit (callBPPackage "external/fmtlib" ./external_fmtlib.nix {})
+    fmtlib fmtlib-defaults fmtlib_ndk;
+
   inherit (callBPPackage "external/fonttools/Lib/fontTools" ./external_fonttools_Lib_fontTools.nix {})
     fontTools fonttools_default;
 
   inherit (callBPPackage "external/freetype" ./external_freetype.nix {})
-    libft2;
+    "libft2.nodep" libft2;
 
   inherit (callBPPackage "external/fsck_msdos" ./external_fsck_msdos.nix {})
     fsck_msdos;
@@ -2443,7 +5185,7 @@
     glide;
 
   inherit (callBPPackage "external/golang-protobuf" ./external_golang-protobuf.nix {})
-    golang-protobuf-proto golang-protobuf-proto-proto3_proto golang-protobuf-proto-test-proto golang-protobuf-proto_test golang-protobuf-ptypes golang-protobuf-ptypes-any golang-protobuf-ptypes-duration golang-protobuf-ptypes-empty golang-protobuf-ptypes-struct golang-protobuf-ptypes-timestamp golang-protobuf-ptypes-wrappers protoc-gen-go protoc-gen-go_descriptor protoc-gen-go_generator protoc-gen-go_generator_internal_remap protoc-gen-go_grpc protoc-gen-go_plugin;
+    golang-protobuf-jsonpb golang-protobuf-proto golang-protobuf-proto-proto3_proto golang-protobuf-proto-test-proto golang-protobuf-proto_test golang-protobuf-ptypes golang-protobuf-ptypes-any golang-protobuf-ptypes-duration golang-protobuf-ptypes-empty golang-protobuf-ptypes-struct golang-protobuf-ptypes-timestamp golang-protobuf-ptypes-wrappers protoc-gen-go protoc-gen-go_descriptor protoc-gen-go_generator protoc-gen-go_generator_internal_remap protoc-gen-go_grpc protoc-gen-go_plugin;
 
   inherit (callBPPackage "external/google-benchmark" ./external_google-benchmark.nix {})
     google-benchmark-test libgoogle-benchmark;
@@ -2451,14 +5193,50 @@
   inherit (callBPPackage "external/google-breakpad" ./external_google-breakpad.nix {})
     breakpad_client core2md dump_syms libdisasm minidump_stackwalk sym_upload;
 
+  inherit (callBPPackage "external/google-fonts/arbutus-slab" ./external_google-fonts_arbutus-slab.nix {})
+    "ArbutusSlab-Regular.ttf";
+
+  inherit (callBPPackage "external/google-fonts/arvo" ./external_google-fonts_arvo.nix {})
+    "Arvo-Bold.ttf" "Arvo-BoldItalic.ttf" "Arvo-Italic.ttf" "Arvo-Regular.ttf";
+
+  inherit (callBPPackage "external/google-fonts/carrois-gothic-sc" ./external_google-fonts_carrois-gothic-sc.nix {})
+    "CarroisGothicSC-Regular.ttf";
+
+  inherit (callBPPackage "external/google-fonts/coming-soon" ./external_google-fonts_coming-soon.nix {})
+    "ComingSoon.ttf";
+
+  inherit (callBPPackage "external/google-fonts/cutive-mono" ./external_google-fonts_cutive-mono.nix {})
+    "CutiveMono.ttf";
+
+  inherit (callBPPackage "external/google-fonts/dancing-script" ./external_google-fonts_dancing-script.nix {})
+    "DancingScript-Bold.ttf" "DancingScript-Regular.ttf";
+
+  inherit (callBPPackage "external/google-fonts/lato" ./external_google-fonts_lato.nix {})
+    "Lato-Bold.ttf" "Lato-BoldItalic.ttf" "Lato-Italic.ttf" "Lato-Medium.ttf" "Lato-MediumItalic.ttf" "Lato-Regular.ttf";
+
+  inherit (callBPPackage "external/google-fonts/rubik" ./external_google-fonts_rubik.nix {})
+    "Rubik-Bold.ttf" "Rubik-BoldItalic.ttf" "Rubik-Italic.ttf" "Rubik-Medium.ttf" "Rubik-MediumItalic.ttf" "Rubik-Regular.ttf";
+
+  inherit (callBPPackage "external/google-fonts/source-sans-pro" ./external_google-fonts_source-sans-pro.nix {})
+    "SourceSansPro-Bold.ttf" "SourceSansPro-BoldItalic.ttf" "SourceSansPro-Italic.ttf" "SourceSansPro-Regular.ttf" "SourceSansPro-SemiBold.ttf" "SourceSansPro-SemiBoldItalic.ttf";
+
+  inherit (callBPPackage "external/google-fonts/zilla-slab" ./external_google-fonts_zilla-slab.nix {})
+    "ZillaSlab-Medium.ttf" "ZillaSlab-MediumItalic.ttf" "ZillaSlab-SemiBold.ttf" "ZillaSlab-SemiBoldItalic.ttf";
+
   inherit (callBPPackage "external/google-fruit" ./external_google-fruit.nix {})
     libfruit libfruit-example-defaults libfruit-example-hello-world;
 
   inherit (callBPPackage "external/googletest/googlemock" ./external_googletest_googlemock.nix {})
     gmock_defaults gmock_flags gmock_ndk libgmock libgmock_host libgmock_main libgmock_main_host libgmock_main_ndk libgmock_ndk;
 
+  inherit (callBPPackage "external/googletest/googlemock/test" ./external_googletest_googlemock_test.nix {})
+    gmock_link_test gmock_test_defaults gmock_tests;
+
   inherit (callBPPackage "external/googletest/googletest" ./external_googletest_googletest.nix {})
     "libgtest_main_ndk_c++" "libgtest_ndk_c++" libgtest libgtest_defaults libgtest_host libgtest_host_defaults libgtest_main libgtest_main_host libgtest_prod;
+
+  inherit (callBPPackage "external/googletest/googletest/test" ./external_googletest_googletest_test.nix {})
+    googletest-param-test-test googletest-param-test-test_ndk gtest-typed-test_test gtest-typed-test_test_ndk gtest_ndk_test_defaults gtest_ndk_tests gtest_ndk_tests_no_main gtest_prod_test gtest_prod_test_ndk gtest_test_defaults gtest_tests gtest_tests_no_main;
 
   inherit (callBPPackage "external/gptfdisk" ./external_gptfdisk.nix {})
     sgdisk;
@@ -2481,11 +5259,26 @@
   inherit (callBPPackage "external/grpc-grpc-java/stub" ./external_grpc-grpc-java_stub.nix {})
     grpc-java-stub;
 
+  inherit (callBPPackage "external/grpc-grpc" ./external_grpc-grpc.nix {})
+    "libgrpc++" "libgrpc++_base" "libgrpc++_base_unsecure" "libgrpc++_codegen_base_src" "libgrpc++_unsecure" census gpr_base grpc_defaults libalts_frame_protector libalts_util libgrpc libgrpc_base libgrpc_base_c libgrpc_client_authority_filter libgrpc_client_channel libgrpc_deadline_filter libgrpc_http_filters libgrpc_lb_policy_grpclb libgrpc_lb_policy_grpclb_secure libgrpc_lb_policy_pick_first libgrpc_lb_policy_round_robin libgrpc_max_age_filter libgrpc_message_size_filter libgrpc_plugin_support libgrpc_resolver_dns_ares libgrpc_resolver_dns_native libgrpc_resolver_fake libgrpc_resolver_sockaddr libgrpc_secure libgrpc_server_backward_compatibility libgrpc_trace libgrpc_transport_chttp2 libgrpc_transport_chttp2_alpn libgrpc_transport_chttp2_client_connector libgrpc_transport_chttp2_client_insecure libgrpc_transport_chttp2_client_secure libgrpc_transport_chttp2_server_insecure libgrpc_transport_chttp2_server_secure libgrpc_transport_inproc libgrpc_unsecure libgrpc_workaround_cronet_compression_filter libtsi libtsi_interface protoc-gen-grpc-cpp-plugin protoc-gen-grpc-python-plugin py-grpc;
+
+  inherit (callBPPackage "external/grpc-grpc/test/core/util" ./external_grpc-grpc_test_core_util.nix {})
+    libgpr_test_util;
+
+  inherit (callBPPackage "external/grpc-grpc/test/cpp/common" ./external_grpc-grpc_test_cpp_common.nix {})
+    alarm_test;
+
+  inherit (callBPPackage "external/grpc-grpc/third_party/address_sorting" ./external_grpc-grpc_third_party_address_sorting.nix {})
+    libaddress_sorting;
+
   inherit (callBPPackage "external/guava" ./external_guava.nix {})
-    guava guavalib;
+    guava guava-android guava-android-annotation-stubs guava-android-host guava-both guava-jre guavalib;
 
   inherit (callBPPackage "external/guice" ./external_guice.nix {})
     guice guice-no-guava guice_munge guice_munge_manifest guice_munge_srcjar guice_munged_srcs guice_srcs guice_test_src_files;
+
+  inherit (callBPPackage "external/gwp_asan" ./external_gwp_asan.nix {})
+    gwp_asan gwp_asan_crash_handler gwp_asan_defaults gwp_asan_headers gwp_asan_no_libs_defaults gwp_asan_unittest stack_trace_compressor_fuzzer;
 
   inherit (callBPPackage "external/hamcrest/hamcrest-core" ./external_hamcrest_hamcrest-core.nix {})
     hamcrest;
@@ -2506,7 +5299,13 @@
     icu4c_extra_headers;
 
   inherit (callBPPackage "external/icu/android_icu4j" ./external_icu_android_icu4j.nix {})
-    android-icu4j-tests android_icu4j_resources android_icu4j_src_files android_icu4j_src_files_for_docs;
+    "i18n.module.intra.core.api.stubs" "i18n.module.platform.api.stubs" "i18n.module.public.api.stubs" android-icu4j-tests android_icu4j_public_api_files android_icu4j_repackaged_src_files android_icu4j_resources_lib android_icu4j_resources_lib_sdk_core_current core-icu4j core-icu4j-testdex core-repackaged-icu4j i18n-module-intra-core-api-stubs-source i18n-module-platform-api-stubs-source i18n-module-public-api-stubs-gen libcore_icu_bridge_src_files;
+
+  inherit (callBPPackage "external/icu/android_icu4j/libcore_bridge/src/native" ./external_icu_android_icu4j_libcore_bridge_src_native.nix {})
+    libicu_jni;
+
+  inherit (callBPPackage "external/icu/build" ./external_icu_build.nix {})
+    soong-icu;
 
   inherit (callBPPackage "external/icu/icu4c/source" ./external_icu_icu4c_source.nix {})
     libicuuc_stubdata;
@@ -2520,6 +5319,21 @@
   inherit (callBPPackage "external/icu/icu4c/source/stubdata" ./external_icu_icu4c_source_stubdata.nix {})
     "apex_icu.dat";
 
+  inherit (callBPPackage "external/icu/icu4c/source/test" ./external_icu_icu4c_source_test.nix {})
+    icu4c_test_data icu_test_defaults;
+
+  inherit (callBPPackage "external/icu/icu4c/source/test/cintltst" ./external_icu_icu4c_source_test_cintltst.nix {})
+    cintltst cintltst_test;
+
+  inherit (callBPPackage "external/icu/icu4c/source/test/intltest" ./external_icu_icu4c_source_test_intltest.nix {})
+    intltest intltest_test;
+
+  inherit (callBPPackage "external/icu/icu4c/source/tools/ctestfw" ./external_icu_icu4c_source_tools_ctestfw.nix {})
+    libicuctest;
+
+  inherit (callBPPackage "external/icu/icu4c/source/tools/toolutil" ./external_icu_icu4c_source_tools_toolutil.nix {})
+    libicutoolutil;
+
   inherit (callBPPackage "external/icu/icu4j" ./external_icu_icu4j.nix {})
     generated_android_icu4j_resources generated_android_icu4j_src_files generated_android_icu4j_test_files generated_android_icu4j_test_resources icu4j icu4j-defaults icu4j-host icu4j-icudata icu4j-icudata-jarjar icu4j-icutzdata icu4j-icutzdata-jarjar icu4j-testdata icu4j-tests;
 
@@ -2529,11 +5343,20 @@
   inherit (callBPPackage "external/icu/libandroidicu/static_shim" ./external_icu_libandroidicu_static_shim.nix {})
     libandroidicu_static;
 
+  inherit (callBPPackage "external/icu/libandroidicuinit" ./external_icu_libandroidicuinit.nix {})
+    libandroidicuinit;
+
   inherit (callBPPackage "external/icu/tools/srcgen" ./external_icu_tools_srcgen.nix {})
     android_icu4j_srcgen android_icu4j_srcgen_binary generate_android_icu4j_script;
 
   inherit (callBPPackage "external/icu/tools/srcgen/currysrc" ./external_icu_tools_srcgen_currysrc.nix {})
     "currysrc_org.eclipse" currysrc;
+
+  inherit (callBPPackage "external/icu/tools/testing/test_harness" ./external_icu_tools_testing_test_harness.nix {})
+    ICU4CTestRunner;
+
+  inherit (callBPPackage "external/igt-gpu-tools" ./external_igt-gpu-tools.nix {})
+    gem_blt igt-gpu-tools igt-gpu-tools-defaults igt-gpu-tools-test-defaults ion_fb kms_atomic kms_flip kms_vblank;
 
   inherit (callBPPackage "external/image_io" ./external_image_io.nix {})
     libimage_io libimage_io-defaults libimage_io-headers libimage_io_ndk libimage_io_ndk-headers;
@@ -2545,13 +5368,13 @@
     PresencePollingTests;
 
   inherit (callBPPackage "external/ims/rcs/rcsmanager" ./external_ims_rcs_rcsmanager.nix {})
-    "com.android.ims.rcsmanager";
+    "com.android.ims.rcsmanager" rcsmanager-utils;
 
   inherit (callBPPackage "external/ims/rcs/rcsservice" ./external_ims_rcs_rcsservice.nix {})
-    RcsService;
+    RcsService ucepresencelib;
 
   inherit (callBPPackage "external/iperf3" ./external_iperf3.nix {})
-    iperf;
+    iperf3;
 
   inherit (callBPPackage "external/iproute2" ./external_iproute2.nix {})
     iproute2_defaults iproute2_headers;
@@ -2578,7 +5401,7 @@
     libext libext4 libext4_init libext4_srcs libext6 libext6_init libext6_srcs libext_defaults libext_init libext_srcs;
 
   inherit (callBPPackage "external/iptables/iptables" ./external_iptables_iptables.nix {})
-    "xtables.lock" ip6tables iptables iptables_cmd_defaults;
+    "xtables.lock" iptables iptables_cmd_defaults;
 
   inherit (callBPPackage "external/iptables/libiptc" ./external_iptables_libiptc.nix {})
     libip4tc libip6tc libiptc_defaults;
@@ -2629,7 +5452,7 @@
     libjsmn;
 
   inherit (callBPPackage "external/jsoncpp" ./external_jsoncpp.nix {})
-    libjsoncpp libjsoncpp_defaults libjsoncpp_ndk;
+    libjsoncpp libjsoncpp_defaults libjsoncpp_headers libjsoncpp_ndk;
 
   inherit (callBPPackage "external/jsr305" ./external_jsr305.nix {})
     jsr305 jsr305lib;
@@ -2644,19 +5467,22 @@
     junit junit-host;
 
   inherit (callBPPackage "external/kmod" ./external_kmod.nix {})
-    depmod;
+    depmod libkmod libkmod_cflags_common;
 
   inherit (callBPPackage "external/kotlinc" ./external_kotlinc.nix {})
-    kotlin-annotations kotlin-reflect kotlin-stdlib kotlin-test;
+    kotlin-annotations kotlin-reflect kotlin-stdlib kotlin-stdlib-jdk7 kotlin-stdlib-jdk8 kotlin-test;
 
   inherit (callBPPackage "external/ksoap2" ./external_ksoap2.nix {})
     ksoap2;
 
   inherit (callBPPackage "external/libaom" ./external_libaom.nix {})
-    libaom;
+    av1_dec_fuzzer libaom;
 
   inherit (callBPPackage "external/libavc" ./external_libavc.nix {})
     libavcdec libavcenc;
+
+  inherit (callBPPackage "external/libavc/fuzzer" ./external_libavc_fuzzer.nix {})
+    avc_dec_fuzzer;
 
   inherit (callBPPackage "external/libavc/test" ./external_libavc_test.nix {})
     avcdec avcenc;
@@ -2674,7 +5500,7 @@
     getcap libcap libcap_defaults setcap;
 
   inherit (callBPPackage "external/libchrome" ./external_libchrome.nix {})
-    "android.mojo" jni_generator jni_registration_generator libchrome libchrome-crypto libchrome-crypto-include libchrome-defaults libchrome-include libchrome-include-sources libchrome-test-defaults libchrome_test libchrome_test_helpers libchrome_test_helpers-host libmojo libmojo_common_custom_types__type_mappings libmojo_jni_headers libmojo_jni_registration_headers libmojo_mojo_sources libmojo_mojom_files libmojo_mojom_headers libmojo_mojom_java_srcs libmojo_mojom_pickles libmojo_mojom_srcs libmojo_mojom_templates libmojo_scripts mojom_bindings_generator mojom_generate_type_mappings;
+    "android.mojo" jni_generator jni_registration_generator libchrome libchrome-crypto libchrome-crypto-include libchrome-defaults libchrome-include libchrome-include-sources libchrome-test-defaults libchrome_test libchrome_test_helpers libchrome_test_helpers-host libmojo libmojo_common_custom_types__type_mappings libmojo_jni_headers libmojo_jni_registration_headers libmojo_mojo_sources libmojo_mojom_downgraded_files libmojo_mojom_files libmojo_mojom_headers libmojo_mojom_java_srcs libmojo_mojom_pickles libmojo_mojom_srcs libmojo_mojom_templates libmojo_scripts mojom_bindings_generator mojom_generate_type_mappings mojom_types_downgrader;
 
   inherit (callBPPackage "external/libchrome/soong" ./external_libchrome_soong.nix {})
     soong-libchrome;
@@ -2686,7 +5512,7 @@
     "filesystem_dynamic_test_helper.py" "libc++ defaults" "libc++" "libc++_static" "libc++experimental" "libc++fs" libcxx_test_template;
 
   inherit (callBPPackage "external/libcxxabi" ./external_libcxxabi.nix {})
-    "libc++abi";
+    "libc++abi" "libc++abi_defaults" "libc++demangle";
 
   inherit (callBPPackage "external/libdaemon" ./external_libdaemon.nix {})
     libdaemon;
@@ -2751,9 +5577,6 @@
   inherit (callBPPackage "external/libdrm/radeon" ./external_libdrm_radeon_Android.sources.bp.nix {})
     libdrm_radeon_sources;
 
-  inherit (callBPPackage "external/libdrm/rockchip" ./external_libdrm_rockchip.nix {})
-    libdrm_rockchip;
-
   inherit (callBPPackage "external/libdrm/tegra" ./external_libdrm_tegra.nix {})
     libdrm_tegra;
 
@@ -2766,12 +5589,6 @@
   inherit (callBPPackage "external/libdrm/tests/modetest" ./external_libdrm_tests_modetest_Android.sources.bp.nix {})
     modetest_sources;
 
-  inherit (callBPPackage "external/libdrm/tests/planetest" ./external_libdrm_tests_planetest.nix {})
-    atomictest planetest;
-
-  inherit (callBPPackage "external/libdrm/tests/planetest" ./external_libdrm_tests_planetest_Android.sources.bp.nix {})
-    atomictest_sources planetest_common_sources planetest_sources;
-
   inherit (callBPPackage "external/libdrm/tests/proptest" ./external_libdrm_tests_proptest.nix {})
     proptest;
 
@@ -2782,7 +5599,7 @@
     libdrm_util_sources;
 
   inherit (callBPPackage "external/libese/apps" ./external_libese_apps.nix {})
-    libese-app-defaults;
+    libese-app-defaults libese-app-headers;
 
   inherit (callBPPackage "external/libese/apps/boot" ./external_libese_apps_boot.nix {})
     ese-boot-tool libese-app-boot libese-app-boot-fortest;
@@ -2827,7 +5644,7 @@
     ese_teq1_unittests;
 
   inherit (callBPPackage "external/libese/libese" ./external_libese_libese.nix {})
-    libese libese-api-defaults libese-defaults;
+    libese libese-api-defaults libese-api-headers libese-defaults;
 
   inherit (callBPPackage "external/libese/libese/tests" ./external_libese_libese_tests.nix {})
     ese_unittests;
@@ -2853,6 +5670,9 @@
   inherit (callBPPackage "external/libffi" ./external_libffi.nix {})
     ffi_header libffi;
 
+  inherit (callBPPackage "external/libfuse" ./external_libfuse.nix {})
+    libfuse libfuse_default_flags;
+
   inherit (callBPPackage "external/libgav1" ./external_libgav1.nix {})
     libgav1;
 
@@ -2861,6 +5681,12 @@
 
   inherit (callBPPackage "external/libhevc" ./external_libhevc.nix {})
     hevcdec hevcenc libhevcdec libhevcenc;
+
+  inherit (callBPPackage "external/libhevc/fuzzer" ./external_libhevc_fuzzer.nix {})
+    hevc_dec_fuzzer;
+
+  inherit (callBPPackage "external/libiio" ./external_libiio.nix {})
+    libiio libiio_headers;
 
   inherit (callBPPackage "external/libjpeg-turbo" ./external_libjpeg-turbo.nix {})
     libjpeg libjpeg-defaults libjpeg_static_ndk tjbench;
@@ -2873,6 +5699,9 @@
 
   inherit (callBPPackage "external/libmpeg2" ./external_libmpeg2.nix {})
     libmpeg2dec;
+
+  inherit (callBPPackage "external/libmpeg2/fuzzer" ./external_libmpeg2_fuzzer.nix {})
+    mpeg2_dec_fuzzer;
 
   inherit (callBPPackage "external/libmpeg2/test" ./external_libmpeg2_test.nix {})
     mpeg2dec;
@@ -2901,8 +5730,29 @@
   inherit (callBPPackage "external/libpng" ./external_libpng.nix {})
     libpng libpng-defaults libpng_ndk pngtest;
 
-  inherit (callBPPackage "external/libtextclassifier" ./external_libtextclassifier.nix {})
-    fbgen libtextclassifier libtextclassifier-java libtextclassifier_actions_suggestions_universal_model libtextclassifier_annotator_en_model libtextclassifier_annotator_universal_model libtextclassifier_defaults libtextclassifier_fbgen_actions-entity-data libtextclassifier_fbgen_actions_model libtextclassifier_fbgen_annotator_model libtextclassifier_fbgen_codepoint_range libtextclassifier_fbgen_entity-data libtextclassifier_fbgen_flatbuffers libtextclassifier_fbgen_intent_config libtextclassifier_fbgen_lang_id_embedded_network libtextclassifier_fbgen_lang_id_model libtextclassifier_fbgen_resources_extra libtextclassifier_fbgen_tflite_text_encoder_config libtextclassifier_fbgen_tokenizer libtextclassifier_fbgen_zlib_buffer libtextclassifier_hash libtextclassifier_hash_defaults libtextclassifier_hash_headers libtextclassifier_hash_static libtextclassifier_lang_id_model libtextclassifier_tests;
+  inherit (callBPPackage "external/libprotobuf-mutator" ./external_libprotobuf-mutator.nix {})
+    libprotobuf-mutator;
+
+  inherit (callBPPackage "external/libsrtp2" ./external_libsrtp2.nix {})
+    libsrtp2;
+
+  inherit (callBPPackage "external/libtextclassifier/java" ./external_libtextclassifier_java.nix {})
+    TextClassifierService TextClassifierServiceLib TextClassifierServiceLibNoManifest statslog-textclassifier-java-gen textclassifier-statsd;
+
+  inherit (callBPPackage "external/libtextclassifier/java/tests/instrumentation" ./external_libtextclassifier_java_tests_instrumentation.nix {})
+    TextClassifierServiceTest;
+
+  inherit (callBPPackage "external/libtextclassifier/jni" ./external_libtextclassifier_jni.nix {})
+    libtextclassifier-java;
+
+  inherit (callBPPackage "external/libtextclassifier/native" ./external_libtextclassifier_native.nix {})
+    fbgen libtextclassifier libtextclassifier_actions_suggestions_universal_model libtextclassifier_annotator_en_model libtextclassifier_annotator_universal_model libtextclassifier_defaults libtextclassifier_fbgen_actions-entity-data libtextclassifier_fbgen_actions_model libtextclassifier_fbgen_annotator_experimental_model libtextclassifier_fbgen_annotator_model libtextclassifier_fbgen_codepoint_range libtextclassifier_fbgen_entity-data libtextclassifier_fbgen_flatbuffers libtextclassifier_fbgen_grammar_dates libtextclassifier_fbgen_grammar_rules libtextclassifier_fbgen_intent_config libtextclassifier_fbgen_lang_id_embedded_network libtextclassifier_fbgen_lang_id_model libtextclassifier_fbgen_language-tag libtextclassifier_fbgen_normalization libtextclassifier_fbgen_person_name_model libtextclassifier_fbgen_resources_extra libtextclassifier_fbgen_tflite_text_encoder_config libtextclassifier_fbgen_timezone_code libtextclassifier_fbgen_tokenizer libtextclassifier_fbgen_zlib_buffer libtextclassifier_hash libtextclassifier_hash_defaults libtextclassifier_hash_headers libtextclassifier_hash_static libtextclassifier_lang_id_model libtextclassifier_tests;
+
+  inherit (callBPPackage "external/libtextclassifier/notification" ./external_libtextclassifier_notification.nix {})
+    TextClassifierNotificationLib TextClassifierNotificationLibNoManifest;
+
+  inherit (callBPPackage "external/libtextclassifier/notification/tests" ./external_libtextclassifier_notification_tests.nix {})
+    TextClassifierNotificationTests;
 
   inherit (callBPPackage "external/libunwind" ./external_libunwind.nix {})
     libunwind libunwind-unit-tests libunwind_core_defaults libunwind_defaults libunwind_static libunwindbacktrace;
@@ -2917,7 +5767,7 @@
     libutf;
 
   inherit (callBPPackage "external/libvpx" ./external_libvpx.nix {})
-    libvpx;
+    libvpx vp8_dec_fuzzer vp9_dec_fuzzer;
 
   inherit (callBPPackage "external/libvpx/libwebm" ./external_libvpx_libwebm.nix {})
     libwebm;
@@ -2928,11 +5778,11 @@
   inherit (callBPPackage "external/libxaac" ./external_libxaac.nix {})
     libxaacdec;
 
+  inherit (callBPPackage "external/libxaac/fuzzer" ./external_libxaac_fuzzer.nix {})
+    xaac_dec_fuzzer;
+
   inherit (callBPPackage "external/libxaac/test" ./external_libxaac_test.nix {})
     xaacdec;
-
-  inherit (callBPPackage "external/libxcam" ./external_libxcam.nix {})
-    libxcam libxcam_defaults test-soft-image;
 
   inherit (callBPPackage "external/libxkbcommon" ./external_libxkbcommon.nix {})
     libxkbcommon;
@@ -2941,7 +5791,10 @@
     libxml2 libxml2-defaults libxml2_ndk xmllint;
 
   inherit (callBPPackage "external/libyuv/files" ./external_libyuv_files.nix {})
-    libyuv libyuv_static libyuv_unittest;
+    compare cpuid libyuv libyuv_static libyuv_unittest psnr yuvconvert;
+
+  inherit (callBPPackage "external/libyuv/files/fuzz" ./external_libyuv_files_fuzz.nix {})
+    libyuv_mjpeg_dec_fuzz;
 
   inherit (callBPPackage "external/linux-kselftest" ./external_linux-kselftest.nix {})
     "kselftest_exec_execveat.sh" "kselftest_ftrace_test.d_00basic_basic1" "kselftest_ftrace_test.d_00basic_basic2" "kselftest_ftrace_test.d_00basic_basic3" "kselftest_ftrace_test.d_00basic_basic4" "kselftest_ftrace_test.d_functions" "kselftest_ftrace_test.d_instances_instance" "kselftest_ftrace_test.d_instances_instance-event" "kselftest_ftrace_test.d_template" "kselftest_futex_functional_run.sh" "kselftest_intel_pstate_run.sh" "kselftest_splice_default_file_splice_read.sh" "kselftest_zram_zram.sh" "kselftest_zram_zram01.sh" "kselftest_zram_zram02.sh" "kselftest_zram_zram_lib.sh" kselftest_breakpoints_tests kselftest_capabilities_test kselftest_cpu-hotplug_cpu-on-off-test kselftest_defaults kselftest_efivarfs_efivarfs kselftest_efivarfs_tests kselftest_exec_test kselftest_firmware_fw_fallback kselftest_firmware_fw_filesystem kselftest_ftrace_ftracetest kselftest_futex_tests kselftest_intel_pstate_tests kselftest_kcmp_tests kselftest_lib_bitmap kselftest_lib_printf kselftest_media_tests kselftest_membarrier_tests kselftest_memory-hotplug_mem-on-off-test kselftest_mount_tests kselftest_net_test_bpf kselftest_net_tests kselftest_pstore_common_tests kselftest_pstore_pstore_crash_test kselftest_pstore_pstore_post_reboot_tests kselftest_pstore_pstore_tests kselftest_ptrace_tests kselftest_rtc_tests kselftest_seccomp_tests kselftest_size_test kselftest_splice_test kselftest_static_keys_test_static_keys kselftest_timer_tests kselftest_user_test_user_copy kselftest_vdso_test kselftest_vm64_tests kselftest_vm_run_vmtests kselftest_vm_tests kselftest_x86_check_initial_reg_state kselftest_x86_ptrace_syscall kselftest_x86_test_syscall_vdso kselftest_x86_tests;
@@ -3187,7 +6040,7 @@
     ltp_defaults ltp_syscalls_h ltp_test_defaults;
 
   inherit (callBPPackage "external/ltp" ./external_ltp_gen.bp.nix {})
-    libltp_controllers libltp_cpu_set libltp_hugetlb libltp_ipc libltp_kerntest libltp_ltp libltp_mem ltp_abort01 ltp_abs01 ltp_accept01 ltp_accept4_01 ltp_access01 ltp_access02 ltp_access03 ltp_access04 ltp_acct01 ltp_acl1 ltp_add_key01 ltp_add_key02 ltp_add_key03 ltp_add_key04 ltp_adjtimex01 ltp_adjtimex02 ltp_aio-stress ltp_aio01 ltp_aio02 ltp_aiocp ltp_aiodio_append ltp_aiodio_sparse ltp_alarm02 ltp_alarm03 ltp_alarm05 ltp_alarm06 ltp_alarm07 ltp_asapi_01 ltp_asapi_02 ltp_asapi_03 ltp_asyncio02 ltp_atof01 ltp_autogroup01 ltp_bdflush01 ltp_bind01 ltp_bind02 ltp_bind03 ltp_block_dev ltp_brk01 ltp_cacheflush01 ltp_can_filter ltp_can_rcv_own_msgs ltp_cap_bounds_r ltp_cap_bounds_rw ltp_cap_bset_inh_bounds ltp_capget01 ltp_capget02 ltp_capset01 ltp_capset02 ltp_cgroup_fj_proc ltp_cgroup_regression_6_2 ltp_cgroup_regression_fork_processes ltp_cgroup_regression_getdelays ltp_cgroup_xattr ltp_chdir01 ltp_chdir02 ltp_chdir03 ltp_chdir04 ltp_check_keepcaps ltp_check_pe ltp_check_simple_capset ltp_chmod01 ltp_chmod02 ltp_chmod03 ltp_chmod04 ltp_chmod05 ltp_chmod07 ltp_chown01 ltp_chown01_16 ltp_chown02 ltp_chown02_16 ltp_chown03 ltp_chown03_16 ltp_chown05 ltp_chown05_16 ltp_chroot01 ltp_chroot02 ltp_chroot03 ltp_chroot04 ltp_clock_getres01 ltp_clock_gettime02 ltp_clock_gettime03 ltp_clock_nanosleep01 ltp_clock_nanosleep02 ltp_clock_nanosleep2_01 ltp_clock_settime02 ltp_clock_settime03 ltp_clone01 ltp_clone02 ltp_clone03 ltp_clone04 ltp_clone05 ltp_clone06 ltp_clone07 ltp_clone08 ltp_clone09 ltp_close01 ltp_close02 ltp_close08 ltp_connect01 ltp_copy_file_range01 ltp_cpuacct_task ltp_cpuctl_def_task01 ltp_cpuctl_def_task02 ltp_cpuctl_def_task03 ltp_cpuctl_def_task04 ltp_cpuctl_fj_cpu-hog ltp_cpuctl_fj_simple_echo ltp_cpuctl_latency_check_task ltp_cpuctl_latency_test ltp_cpuctl_test01 ltp_cpuctl_test02 ltp_cpuctl_test03 ltp_cpuctl_test04 ltp_cpufreq_boost ltp_cpuset01 ltp_cpuset_cpu_hog ltp_cpuset_list_compute ltp_cpuset_mem_hog ltp_cpuset_memory_pressure ltp_cpuset_sched_domains_check ltp_cpuset_syscall_test ltp_crash01 ltp_crash02 ltp_creat01 ltp_creat03 ltp_creat04 ltp_creat05 ltp_creat07 ltp_creat07_child ltp_creat08 ltp_create-files ltp_create_datafile ltp_create_long_dirs ltp_create_short_dirs ltp_crypto_user01 ltp_cve-2014-0196 ltp_cve-2015-3290 ltp_cve-2016-10044 ltp_cve-2016-7042 ltp_cve-2016-7117 ltp_cve-2017-16939 ltp_cve-2017-17052 ltp_cve-2017-17053 ltp_cve-2017-2618 ltp_cve-2017-2671 ltp_data_space ltp_delete_module01 ltp_delete_module02 ltp_delete_module03 ltp_dio_append ltp_dio_sparse ltp_dio_truncate ltp_diotest1 ltp_diotest2 ltp_diotest3 ltp_diotest5 ltp_diotest6 ltp_dirty ltp_dirtyc0w ltp_dirtyc0w_child ltp_disktest ltp_dma_thread_diotest ltp_dup01 ltp_dup02 ltp_dup03 ltp_dup04 ltp_dup05 ltp_dup06 ltp_dup07 ltp_dup201 ltp_dup202 ltp_dup203 ltp_dup204 ltp_dup205 ltp_dup3_01 ltp_dup3_02 ltp_eas_big_to_small ltp_eas_one_big_task ltp_eas_one_small_task ltp_eas_small_big_toggle ltp_eas_small_to_big ltp_eas_two_big_three_small ltp_endian_switch01 ltp_epoll-ltp ltp_epoll_create1_01 ltp_epoll_ctl01 ltp_epoll_ctl02 ltp_epoll_pwait01 ltp_epoll_wait01 ltp_epoll_wait02 ltp_epoll_wait03 ltp_event_generator ltp_eventfd01 ltp_eventfd2_01 ltp_eventfd2_02 ltp_eventfd2_03 ltp_exec_with_inh ltp_exec_without_inh ltp_execl01 ltp_execl01_child ltp_execle01 ltp_execle01_child ltp_execlp01 ltp_execlp01_child ltp_execv01 ltp_execv01_child ltp_execve01 ltp_execve01_child ltp_execve02 ltp_execve03 ltp_execve04 ltp_execve05 ltp_execve_child ltp_execveat01 ltp_execveat02 ltp_execveat03 ltp_execveat_child ltp_execveat_errno ltp_execvp01 ltp_execvp01_child ltp_exit01 ltp_exit02 ltp_exit_group01 ltp_ext4_file_time ltp_ext4_test_inode_version ltp_f1 ltp_f2 ltp_f3 ltp_faccessat01 ltp_fallocate01 ltp_fallocate02 ltp_fallocate03 ltp_fallocate04 ltp_fallocate05 ltp_fanotify01 ltp_fanotify02 ltp_fanotify03 ltp_fanotify04 ltp_fanotify05 ltp_fanotify06 ltp_fanotify07 ltp_fanotify08 ltp_fanotify09 ltp_fanotify10 ltp_fanotify11 ltp_fanout01 ltp_fchdir01 ltp_fchdir02 ltp_fchdir03 ltp_fchmod01 ltp_fchmod02 ltp_fchmod03 ltp_fchmod04 ltp_fchmod05 ltp_fchmod06 ltp_fchmodat01 ltp_fchown01 ltp_fchown01_16 ltp_fchown02 ltp_fchown02_16 ltp_fchown03 ltp_fchown03_16 ltp_fchown04 ltp_fchown04_16 ltp_fchown05 ltp_fchown05_16 ltp_fchownat01 ltp_fchownat02 ltp_fcntl01 ltp_fcntl01_64 ltp_fcntl02 ltp_fcntl02_64 ltp_fcntl03 ltp_fcntl03_64 ltp_fcntl04 ltp_fcntl04_64 ltp_fcntl05 ltp_fcntl05_64 ltp_fcntl06 ltp_fcntl06_64 ltp_fcntl07 ltp_fcntl07_64 ltp_fcntl08 ltp_fcntl08_64 ltp_fcntl09 ltp_fcntl09_64 ltp_fcntl10 ltp_fcntl10_64 ltp_fcntl11 ltp_fcntl11_64 ltp_fcntl12 ltp_fcntl12_64 ltp_fcntl13 ltp_fcntl13_64 ltp_fcntl14 ltp_fcntl14_64 ltp_fcntl15 ltp_fcntl15_64 ltp_fcntl16 ltp_fcntl16_64 ltp_fcntl17 ltp_fcntl17_64 ltp_fcntl18 ltp_fcntl18_64 ltp_fcntl19 ltp_fcntl19_64 ltp_fcntl20 ltp_fcntl20_64 ltp_fcntl21 ltp_fcntl21_64 ltp_fcntl22 ltp_fcntl22_64 ltp_fcntl23 ltp_fcntl23_64 ltp_fcntl24 ltp_fcntl24_64 ltp_fcntl25 ltp_fcntl25_64 ltp_fcntl26 ltp_fcntl26_64 ltp_fcntl27 ltp_fcntl27_64 ltp_fcntl28 ltp_fcntl28_64 ltp_fcntl29 ltp_fcntl29_64 ltp_fcntl30 ltp_fcntl30_64 ltp_fcntl31 ltp_fcntl31_64 ltp_fcntl32 ltp_fcntl32_64 ltp_fcntl33 ltp_fcntl33_64 ltp_fcntl34 ltp_fcntl34_64 ltp_fcntl35 ltp_fcntl35_64 ltp_fcntl36 ltp_fcntl36_64 ltp_fdatasync01 ltp_fdatasync02 ltp_fgetxattr01 ltp_fgetxattr02 ltp_fgetxattr03 ltp_flistxattr01 ltp_flistxattr02 ltp_flistxattr03 ltp_float_bessel ltp_float_exp_log ltp_float_iperb ltp_float_power ltp_float_trigo ltp_flock01 ltp_flock02 ltp_flock03 ltp_flock04 ltp_flock06 ltp_fork01 ltp_fork02 ltp_fork03 ltp_fork04 ltp_fork05 ltp_fork06 ltp_fork07 ltp_fork08 ltp_fork09 ltp_fork10 ltp_fork11 ltp_fork12 ltp_fork13 ltp_fork14 ltp_fork_exec_loop ltp_fpathconf01 ltp_fptest01 ltp_fptest02 ltp_frag ltp_fremovexattr01 ltp_fremovexattr02 ltp_fs_fill ltp_fs_perms ltp_fsetxattr01 ltp_fsetxattr02 ltp_fstat01 ltp_fstat01_64 ltp_fstat02 ltp_fstat02_64 ltp_fstat03 ltp_fstat03_64 ltp_fstat05 ltp_fstat05_64 ltp_fstatat01 ltp_fstatfs01 ltp_fstatfs01_64 ltp_fstatfs02 ltp_fstatfs02_64 ltp_fsx-linux ltp_fsync01 ltp_fsync02 ltp_fsync03 ltp_ftest01 ltp_ftest02 ltp_ftest03 ltp_ftest04 ltp_ftest05 ltp_ftest06 ltp_ftest07 ltp_ftest08 ltp_ftruncate01 ltp_ftruncate01_64 ltp_ftruncate02 ltp_ftruncate02_64 ltp_ftruncate03 ltp_ftruncate03_64 ltp_ftruncate04 ltp_ftruncate04_64 ltp_futex_wait01 ltp_futex_wait03 ltp_futex_wait04 ltp_futex_wait05 ltp_futex_wait_bitset01 ltp_futex_wait_bitset02 ltp_futex_wake01 ltp_futex_wake02 ltp_futex_wake04 ltp_futimesat01 ltp_fw_load ltp_genacos ltp_genasin ltp_genatan ltp_genatan2 ltp_genbessel ltp_genceil ltp_gencos ltp_gencosh ltp_genexp ltp_genexp_log ltp_genfabs ltp_genfloor ltp_genfmod ltp_genfrexp ltp_genhypot ltp_geniperb ltp_genj0 ltp_genj1 ltp_genldexp ltp_genlgamma ltp_genlog ltp_genlog10 ltp_genmodf ltp_genpow ltp_genpower ltp_gensin ltp_gensinh ltp_gensqrt ltp_gentan ltp_gentanh ltp_gentrigo ltp_geny0 ltp_geny1 ltp_get_mempolicy01 ltp_get_robust_list01 ltp_getaddrinfo_01 ltp_getcpu01 ltp_getcwd01 ltp_getcwd02 ltp_getcwd03 ltp_getcwd04 ltp_getdents01 ltp_getdents02 ltp_getdomainname01 ltp_getdtablesize01 ltp_getegid01 ltp_getegid01_16 ltp_getegid02 ltp_getegid02_16 ltp_geteuid01 ltp_geteuid01_16 ltp_geteuid02 ltp_geteuid02_16 ltp_getgid01 ltp_getgid01_16 ltp_getgid03 ltp_getgid03_16 ltp_getgroups01 ltp_getgroups01_16 ltp_getgroups03 ltp_getgroups03_16 ltp_gethostbyname_r01 ltp_gethostname01 ltp_getitimer01 ltp_getitimer02 ltp_getitimer03 ltp_getpagesize01 ltp_getpeername01 ltp_getpgid01 ltp_getpgid02 ltp_getpgrp01 ltp_getpid01 ltp_getpid02 ltp_getppid01 ltp_getppid02 ltp_getpriority01 ltp_getpriority02 ltp_getrandom01 ltp_getrandom02 ltp_getrandom03 ltp_getrandom04 ltp_getresgid01 ltp_getresgid01_16 ltp_getresgid02 ltp_getresgid02_16 ltp_getresgid03 ltp_getresgid03_16 ltp_getresuid01 ltp_getresuid01_16 ltp_getresuid02 ltp_getresuid02_16 ltp_getresuid03 ltp_getresuid03_16 ltp_getrlimit01 ltp_getrlimit02 ltp_getrlimit03 ltp_getrusage01 ltp_getrusage02 ltp_getrusage03_child ltp_getrusage04 ltp_getsid01 ltp_getsid02 ltp_getsockname01 ltp_getsockopt01 ltp_getsockopt02 ltp_gettid01 ltp_gettimeofday01 ltp_gettimeofday02 ltp_getuid01 ltp_getuid01_16 ltp_getuid03 ltp_getuid03_16 ltp_getxattr01 ltp_getxattr02 ltp_getxattr03 ltp_getxattr04 ltp_getxattr05 ltp_hackbench ltp_hangup01 ltp_ht_affinity ltp_ht_enabled ltp_hugemmap01 ltp_hugemmap02 ltp_hugemmap04 ltp_hugemmap06 ltp_ima_boot_aggregate ltp_ima_mmap ltp_in ltp_in6_02 ltp_inh_capped ltp_inode01 ltp_inode02 ltp_inotify01 ltp_inotify02 ltp_inotify03 ltp_inotify04 ltp_inotify05 ltp_inotify06 ltp_inotify07 ltp_inotify08 ltp_inotify09 ltp_inotify_init1_01 ltp_inotify_init1_02 ltp_input01 ltp_input02 ltp_input04 ltp_input05 ltp_input06 ltp_io_cancel01 ltp_io_destroy01 ltp_io_getevents01 ltp_io_setup01 ltp_io_submit01 ltp_iobw ltp_ioctl01 ltp_ioctl03 ltp_ioctl04 ltp_ioctl05 ltp_ioctl06 ltp_ioctl07 ltp_iogen ltp_ioperm01 ltp_ioperm02 ltp_iopl01 ltp_iopl02 ltp_kcmp01 ltp_kcmp02 ltp_kcmp03 ltp_keyctl01 ltp_keyctl02 ltp_keyctl03 ltp_keyctl04 ltp_keyctl05 ltp_keyctl06 ltp_keyctl07 ltp_keyctl08 ltp_kill01 ltp_kill02 ltp_kill03 ltp_kill04 ltp_kill06 ltp_kill08 ltp_kill09 ltp_kill10 ltp_kill11 ltp_kill12 ltp_kmsg01 ltp_ksm01 ltp_ksm02 ltp_ksm03 ltp_ksm04 ltp_ksm05 ltp_ksm06 ltp_lchown01 ltp_lchown01_16 ltp_lchown02 ltp_lchown02_16 ltp_lchown03 ltp_lchown03_16 ltp_lftest ltp_lgetxattr01 ltp_lgetxattr02 ltp_link02 ltp_link03 ltp_link04 ltp_link05 ltp_link06 ltp_link07 ltp_link08 ltp_linkat01 ltp_linkat02 ltp_listen01 ltp_listxattr01 ltp_listxattr02 ltp_listxattr03 ltp_llistxattr01 ltp_llistxattr02 ltp_llistxattr03 ltp_llseek01 ltp_llseek02 ltp_llseek03 ltp_locktests ltp_lremovexattr01 ltp_lseek01 ltp_lseek02 ltp_lseek07 ltp_lseek11 ltp_lstat01 ltp_lstat01_64 ltp_lstat02 ltp_lstat02_64 ltp_lstat03 ltp_lstat03_64 ltp_ltp-diorh ltp_ltpClient ltp_ltpServer ltp_ltp_acpi ltp_madvise01 ltp_madvise02 ltp_madvise05 ltp_madvise06 ltp_madvise07 ltp_madvise08 ltp_madvise09 ltp_madvise10 ltp_max_map_count ltp_mbind01 ltp_mc_member_test ltp_mc_recv ltp_mc_send ltp_mc_verify_opts ltp_mc_verify_opts_error ltp_meltdown ltp_mem01 ltp_mem02 ltp_mem03 ltp_mem_process ltp_membarrier01 ltp_memcg_process_stress ltp_memcg_test_1 ltp_memcg_test_2 ltp_memcg_test_3 ltp_memcg_test_4 ltp_memcmp01 ltp_memcpy01 ltp_memctl_test01 ltp_memfd_create01 ltp_memfd_create02 ltp_memfd_create03 ltp_memfd_create04 ltp_memset01 ltp_memtoy ltp_migrate_pages01 ltp_migrate_pages02 ltp_migrate_pages03 ltp_mincore01 ltp_mincore02 ltp_mkdir02 ltp_mkdir03 ltp_mkdir04 ltp_mkdir05 ltp_mkdir09 ltp_mkdirat01 ltp_mkdirat02 ltp_mknod01 ltp_mknod02 ltp_mknod03 ltp_mknod04 ltp_mknod05 ltp_mknod06 ltp_mknod07 ltp_mknod08 ltp_mknod09 ltp_mknodat01 ltp_mknodat02 ltp_mlock01 ltp_mlock02 ltp_mlock03 ltp_mlock04 ltp_mlock201 ltp_mlock202 ltp_mlock203 ltp_mlockall01 ltp_mlockall02 ltp_mlockall03 ltp_mmap-corruption01 ltp_mmap001 ltp_mmap01 ltp_mmap02 ltp_mmap03 ltp_mmap04 ltp_mmap05 ltp_mmap06 ltp_mmap07 ltp_mmap08 ltp_mmap09 ltp_mmap1 ltp_mmap10 ltp_mmap11 ltp_mmap12 ltp_mmap13 ltp_mmap14 ltp_mmap15 ltp_mmap16 ltp_mmap2 ltp_mmap3 ltp_mmapstress01 ltp_mmapstress02 ltp_mmapstress03 ltp_mmapstress04 ltp_mmapstress05 ltp_mmapstress06 ltp_mmapstress07 ltp_mmapstress08 ltp_mmapstress09 ltp_mmapstress10 ltp_mmstress ltp_mmstress_dummy ltp_modify_ldt01 ltp_modify_ldt02 ltp_modify_ldt03 ltp_mount01 ltp_mount02 ltp_mount03 ltp_mount03_setuid_test ltp_mount04 ltp_mount05 ltp_mount06 ltp_move_pages01 ltp_move_pages02 ltp_move_pages03 ltp_move_pages04 ltp_move_pages05 ltp_move_pages06 ltp_move_pages07 ltp_move_pages08 ltp_move_pages09 ltp_move_pages10 ltp_move_pages11 ltp_move_pages12 ltp_mprotect01 ltp_mprotect02 ltp_mprotect03 ltp_mprotect04 ltp_mremap01 ltp_mremap02 ltp_mremap03 ltp_mremap05 ltp_msync01 ltp_msync02 ltp_msync03 ltp_msync04 ltp_mtest01 ltp_munlock01 ltp_munlock02 ltp_munlockall01 ltp_munmap01 ltp_munmap02 ltp_munmap03 ltp_nanosleep01 ltp_nanosleep02 ltp_nanosleep03 ltp_nanosleep04 ltp_netstress ltp_newns ltp_newuname01 ltp_nextafter01 ltp_nfs01_open_files ltp_nfs04_create_file ltp_nfs05_make_tree ltp_nfs_flock ltp_nfs_flock_dgen ltp_nftw01 ltp_nftw6401 ltp_nice01 ltp_nice02 ltp_nice03 ltp_nice04 ltp_nptl01 ltp_ns-icmp_redirector ltp_ns-icmpv4_sender ltp_ns-icmpv6_sender ltp_ns-igmp_querier ltp_ns-mcast_join ltp_ns-mcast_receiver ltp_ns-tcpclient ltp_ns-tcpserver ltp_ns-udpclient ltp_ns-udpsender ltp_ns-udpserver ltp_nsclone ltp_oom01 ltp_oom02 ltp_oom03 ltp_oom04 ltp_oom05 ltp_open01 ltp_open02 ltp_open03 ltp_open04 ltp_open05 ltp_open06 ltp_open07 ltp_open08 ltp_open09 ltp_open10 ltp_open11 ltp_open12_child ltp_open13 ltp_open14 ltp_openat01 ltp_openat02_child ltp_openat03 ltp_openfile ltp_overcommit_memory ltp_page01 ltp_page02 ltp_pathconf01 ltp_pause01 ltp_pause02 ltp_pause03 ltp_pcrypt_aead01 ltp_pec_listener ltp_perf_event_open01 ltp_perf_event_open02 ltp_personality01 ltp_personality02 ltp_pids_task1 ltp_pids_task2 ltp_pipe01 ltp_pipe02 ltp_pipe03 ltp_pipe04 ltp_pipe05 ltp_pipe06 ltp_pipe07 ltp_pipe08 ltp_pipe09 ltp_pipe10 ltp_pipe11 ltp_pipe2_01 ltp_pipe2_02 ltp_pivot_root01 ltp_pm_get_sched_values ltp_poll01 ltp_poll02 ltp_posix_fadvise01 ltp_posix_fadvise01_64 ltp_posix_fadvise02 ltp_posix_fadvise02_64 ltp_posix_fadvise03 ltp_posix_fadvise03_64 ltp_posix_fadvise04 ltp_posix_fadvise04_64 ltp_ppoll01 ltp_prctl01 ltp_prctl02 ltp_prctl03 ltp_pread01 ltp_pread01_64 ltp_pread02 ltp_pread02_64 ltp_pread03 ltp_pread03_64 ltp_preadv01 ltp_preadv01_64 ltp_preadv02 ltp_preadv02_64 ltp_preadv03 ltp_preadv03_64 ltp_preadv201 ltp_preadv201_64 ltp_preadv202 ltp_preadv202_64 ltp_print_caps ltp_proc01 ltp_process_vm01 ltp_process_vm_readv02 ltp_process_vm_readv03 ltp_process_vm_writev02 ltp_pselect01 ltp_pselect01_64 ltp_pselect02 ltp_pselect02_64 ltp_pselect03 ltp_pselect03_64 ltp_pt_test ltp_ptem01 ltp_pth_str01 ltp_pth_str02 ltp_pth_str03 ltp_pthcli ltp_pthserv ltp_ptrace01 ltp_ptrace02 ltp_ptrace03 ltp_ptrace04 ltp_ptrace05 ltp_ptrace07 ltp_pty01 ltp_pty02 ltp_pwrite01 ltp_pwrite01_64 ltp_pwrite02 ltp_pwrite02_64 ltp_pwrite03 ltp_pwrite03_64 ltp_pwrite04 ltp_pwrite04_64 ltp_pwritev01 ltp_pwritev01_64 ltp_pwritev02 ltp_pwritev02_64 ltp_pwritev03 ltp_pwritev03_64 ltp_pwritev201 ltp_pwritev201_64 ltp_pwritev202 ltp_pwritev202_64 ltp_quotactl01 ltp_quotactl02 ltp_quotactl03 ltp_random-access ltp_random-access-del-create ltp_read01 ltp_read02 ltp_read03 ltp_read04 ltp_read_all ltp_read_checkzero ltp_readahead01 ltp_readahead02 ltp_readdir01 ltp_readdir02 ltp_readdir21 ltp_readlink01 ltp_readlink03 ltp_readlinkat01 ltp_readlinkat02 ltp_readv01 ltp_readv02 ltp_readv03 ltp_realpath01 ltp_reboot01 ltp_reboot02 ltp_recv01 ltp_recvfrom01 ltp_recvmsg01 ltp_recvmsg02 ltp_recvmsg03 ltp_remap_file_pages02 ltp_removexattr01 ltp_removexattr02 ltp_rename01 ltp_rename02 ltp_rename03 ltp_rename04 ltp_rename05 ltp_rename06 ltp_rename07 ltp_rename08 ltp_rename09 ltp_rename10 ltp_rename11 ltp_rename12 ltp_rename13 ltp_rename14 ltp_renameat01 ltp_renameat201 ltp_renameat202 ltp_request_key01 ltp_request_key02 ltp_request_key03 ltp_request_key04 ltp_request_key05 ltp_rmdir01 ltp_rmdir02 ltp_rmdir03 ltp_rt_sigaction01 ltp_rt_sigaction02 ltp_rt_sigaction03 ltp_rt_sigpending02 ltp_rt_sigprocmask01 ltp_rt_sigprocmask02 ltp_rt_sigqueueinfo01 ltp_rt_sigsuspend01 ltp_rt_sigtimedwait01 ltp_rt_tgsigqueueinfo01 ltp_rtc01 ltp_sbrk01 ltp_sbrk02 ltp_sbrk03 ltp_sched_boost ltp_sched_cfs_prio ltp_sched_dl_runtime ltp_sched_driver ltp_sched_get_priority_max01 ltp_sched_get_priority_max02 ltp_sched_get_priority_min01 ltp_sched_get_priority_min02 ltp_sched_getaffinity01 ltp_sched_getattr01 ltp_sched_getattr02 ltp_sched_getparam01 ltp_sched_getparam02 ltp_sched_getparam03 ltp_sched_getscheduler01 ltp_sched_getscheduler02 ltp_sched_latency_dl ltp_sched_latency_rt ltp_sched_prio_3_fifo ltp_sched_prio_3_rr ltp_sched_rr_get_interval01 ltp_sched_rr_get_interval02 ltp_sched_rr_get_interval03 ltp_sched_setaffinity01 ltp_sched_setattr01 ltp_sched_setparam01 ltp_sched_setparam02 ltp_sched_setparam03 ltp_sched_setparam04 ltp_sched_setparam05 ltp_sched_setscheduler01 ltp_sched_setscheduler02 ltp_sched_setscheduler03 ltp_sched_tc0 ltp_sched_tc1 ltp_sched_tc2 ltp_sched_tc3 ltp_sched_tc4 ltp_sched_tc5 ltp_sched_tc6 ltp_sched_yield01 ltp_sctp_big_chunk ltp_select01 ltp_select01_SYS__newselect ltp_select01_SYS_pselect6 ltp_select01_SYS_select ltp_select02 ltp_select02_SYS__newselect ltp_select02_SYS_pselect6 ltp_select02_SYS_select ltp_select03 ltp_select03_SYS__newselect ltp_select03_SYS_pselect6 ltp_select03_SYS_select ltp_select04 ltp_select04_SYS__newselect ltp_select04_SYS_pselect6 ltp_select04_SYS_select ltp_send01 ltp_sendfile02 ltp_sendfile02_64 ltp_sendfile03 ltp_sendfile03_64 ltp_sendfile04 ltp_sendfile04_64 ltp_sendfile05 ltp_sendfile05_64 ltp_sendfile06 ltp_sendfile06_64 ltp_sendfile07 ltp_sendfile07_64 ltp_sendfile08 ltp_sendfile08_64 ltp_sendfile09 ltp_sendfile09_64 ltp_sendmmsg01 ltp_sendmsg01 ltp_sendto01 ltp_sendto02 ltp_set_robust_list01 ltp_set_thread_area01 ltp_set_tid_address01 ltp_setdomainname01 ltp_setdomainname02 ltp_setdomainname03 ltp_setegid01 ltp_setegid02 ltp_setfsgid01 ltp_setfsgid01_16 ltp_setfsgid02 ltp_setfsgid02_16 ltp_setfsgid03 ltp_setfsgid03_16 ltp_setfsuid01 ltp_setfsuid01_16 ltp_setfsuid02 ltp_setfsuid02_16 ltp_setfsuid03 ltp_setfsuid03_16 ltp_setfsuid04 ltp_setfsuid04_16 ltp_setgid01 ltp_setgid01_16 ltp_setgid02 ltp_setgid02_16 ltp_setgid03 ltp_setgid03_16 ltp_setgroups01 ltp_setgroups01_16 ltp_setgroups02 ltp_setgroups02_16 ltp_setgroups03 ltp_setgroups03_16 ltp_setgroups04 ltp_setgroups04_16 ltp_sethostname01 ltp_sethostname02 ltp_sethostname03 ltp_setitimer01 ltp_setitimer02 ltp_setitimer03 ltp_setns01 ltp_setpgid01 ltp_setpgid02 ltp_setpgid03 ltp_setpgid03_child ltp_setpgrp01 ltp_setpgrp02 ltp_setpriority01 ltp_setpriority02 ltp_setregid01 ltp_setregid01_16 ltp_setregid02 ltp_setregid02_16 ltp_setregid03 ltp_setregid03_16 ltp_setregid04 ltp_setregid04_16 ltp_setresgid01 ltp_setresgid01_16 ltp_setresgid02 ltp_setresgid02_16 ltp_setresgid03 ltp_setresgid03_16 ltp_setresgid04 ltp_setresgid04_16 ltp_setresuid01 ltp_setresuid01_16 ltp_setresuid02 ltp_setresuid02_16 ltp_setresuid03 ltp_setresuid03_16 ltp_setresuid04 ltp_setresuid04_16 ltp_setresuid05 ltp_setresuid05_16 ltp_setreuid01 ltp_setreuid01_16 ltp_setreuid02 ltp_setreuid02_16 ltp_setreuid03 ltp_setreuid03_16 ltp_setreuid04 ltp_setreuid04_16 ltp_setreuid05 ltp_setreuid05_16 ltp_setreuid06 ltp_setreuid06_16 ltp_setreuid07 ltp_setreuid07_16 ltp_setrlimit01 ltp_setrlimit02 ltp_setrlimit03 ltp_setrlimit04 ltp_setrlimit05 ltp_setsid01 ltp_setsockopt01 ltp_setsockopt02 ltp_setsockopt03 ltp_settimeofday01 ltp_settimeofday02 ltp_setuid01 ltp_setuid01_16 ltp_setuid03 ltp_setuid03_16 ltp_setuid04 ltp_setuid04_16 ltp_setxattr01 ltp_setxattr02 ltp_setxattr03 ltp_sgetmask01 ltp_shmctl05 ltp_sigaction01 ltp_sigaction02 ltp_sigaltstack01 ltp_sigaltstack02 ltp_sighold02 ltp_signal01 ltp_signal02 ltp_signal03 ltp_signal04 ltp_signal05 ltp_signal06 ltp_signalfd01 ltp_signalfd4_01 ltp_signalfd4_02 ltp_sigpending02 ltp_sigprocmask01 ltp_sigrelse01 ltp_sigsuspend01 ltp_sigtimedwait01 ltp_sigwait01 ltp_sigwaitinfo01 ltp_smack_notroot ltp_smack_set_socket_labels ltp_smount ltp_socket01 ltp_socket02 ltp_socketcall01 ltp_socketcall02 ltp_socketcall03 ltp_socketcall04 ltp_socketpair01 ltp_socketpair02 ltp_sockioctl01 ltp_splice01 ltp_splice02 ltp_splice03 ltp_splice04 ltp_splice05 ltp_ssetmask01 ltp_stack_clash ltp_stack_space ltp_stat01 ltp_stat01_64 ltp_stat02 ltp_stat02_64 ltp_stat03 ltp_stat03_64 ltp_stat05 ltp_stat05_64 ltp_stat06 ltp_stat06_64 ltp_statfs01 ltp_statfs01_64 ltp_statfs02 ltp_statfs02_64 ltp_statfs03 ltp_statfs03_64 ltp_statvfs01 ltp_statvfs02 ltp_statx01 ltp_statx02 ltp_statx03 ltp_statx04 ltp_statx06 ltp_stream01 ltp_stream02 ltp_stream03 ltp_stream04 ltp_stream05 ltp_stress_cd ltp_string01 ltp_sugov_latency ltp_sugov_stale_util ltp_sugov_wakeups ltp_support_numa ltp_swapoff01 ltp_swapoff02 ltp_swapon01 ltp_swapon02 ltp_swapon03 ltp_swapping01 ltp_symlink01 ltp_symlink02 ltp_symlink03 ltp_symlink04 ltp_symlink05 ltp_symlinkat01 ltp_sync01 ltp_sync02 ltp_sync_file_range01 ltp_syncfs01 ltp_syscall01 ltp_sysconf01 ltp_sysctl01 ltp_sysctl03 ltp_sysctl04 ltp_sysfs01 ltp_sysfs02 ltp_sysfs03 ltp_sysfs04 ltp_sysfs05 ltp_sysfs06 ltp_sysinfo01 ltp_sysinfo02 ltp_syslog11 ltp_syslog12 ltp_syslogtst ltp_tbio ltp_tee01 ltp_tee02 ltp_test01 ltp_test02 ltp_test03 ltp_test04 ltp_test05 ltp_test06 ltp_test07 ltp_test08 ltp_test09 ltp_test10 ltp_test11 ltp_test12 ltp_test13 ltp_test14 ltp_test15 ltp_test16 ltp_test17 ltp_test18 ltp_test19 ltp_test_exec ltp_test_exec_child ltp_testsf_c ltp_testsf_c6 ltp_testsf_s ltp_testsf_s6 ltp_tgkill01 ltp_tgkill02 ltp_tgkill03 ltp_thp01 ltp_thp02 ltp_thp03 ltp_time-schedule ltp_time01 ltp_time02 ltp_timed_forkbomb ltp_timer_create02 ltp_timer_create03 ltp_timer_create04 ltp_timer_delete02 ltp_timer_delete03 ltp_timer_getoverrun01 ltp_timer_gettime01 ltp_timer_settime02 ltp_timer_settime03 ltp_timerfd01 ltp_timerfd02 ltp_timerfd03 ltp_timerfd_create01 ltp_timerfd_gettime01 ltp_timerfd_settime01 ltp_times01 ltp_times03 ltp_tkill01 ltp_tkill02 ltp_tomoyo_accept_test ltp_tomoyo_file_test ltp_tomoyo_filesystem_test ltp_tomoyo_new_file_test ltp_tomoyo_new_test ltp_tomoyo_policy_io_test ltp_tomoyo_policy_memory_test ltp_tomoyo_rewrite_test ltp_tpci ltp_trace_sched ltp_trerrno ltp_truncate01 ltp_truncate01_64 ltp_truncate02 ltp_truncate02_64 ltp_truncate03 ltp_truncate03_64 ltp_tst_brk ltp_tst_brkm ltp_tst_check_drivers ltp_tst_checkpoint ltp_tst_checkpoint_wait_timeout ltp_tst_checkpoint_wake_timeout ltp_tst_cleanup_once ltp_tst_dataroot01 ltp_tst_dataroot02 ltp_tst_dataroot03 ltp_tst_device ltp_tst_exit ltp_tst_expiration_timer ltp_tst_fs_fill_hardlinks ltp_tst_fs_fill_subdirs ltp_tst_fs_has_free ltp_tst_get_unused_port ltp_tst_getconf ltp_tst_kvcmp ltp_tst_ncpus ltp_tst_ncpus_conf ltp_tst_ncpus_max ltp_tst_net_iface_prefix ltp_tst_net_ip_prefix ltp_tst_net_vars ltp_tst_process_state ltp_tst_random ltp_tst_record_childstatus ltp_tst_res ltp_tst_res_hexd ltp_tst_resm ltp_tst_rod ltp_tst_safe_fileops ltp_tst_safe_macros ltp_tst_sleep ltp_tst_strerrno ltp_tst_strsig ltp_tst_strstatus ltp_tst_supported_fs ltp_tst_tmpdir_test ltp_uaccess ltp_umask01 ltp_umount01 ltp_umount02 ltp_umount03 ltp_umount2_01 ltp_umount2_02 ltp_umount2_03 ltp_uname01 ltp_uname02 ltp_uname03 ltp_uname04 ltp_unlink05 ltp_unlink07 ltp_unlink08 ltp_unlinkat01 ltp_unshare01 ltp_unshare02 ltp_ustat01 ltp_ustat02 ltp_utime01 ltp_utime02 ltp_utime03 ltp_utime04 ltp_utime05 ltp_utime06 ltp_utimensat01 ltp_utimes01 ltp_verify_caps_exec ltp_vfork ltp_vfork01 ltp_vfork02 ltp_vhangup01 ltp_vhangup02 ltp_vma01 ltp_vma02 ltp_vma03 ltp_vma04 ltp_vma05_vdso ltp_vmsplice01 ltp_vmsplice02 ltp_wait01 ltp_wait02 ltp_wait401 ltp_wait402 ltp_waitid01 ltp_waitid02 ltp_waitpid01 ltp_waitpid02 ltp_waitpid03 ltp_waitpid04 ltp_waitpid05 ltp_waitpid06 ltp_waitpid07 ltp_waitpid08 ltp_waitpid09 ltp_waitpid10 ltp_waitpid11 ltp_waitpid12 ltp_waitpid13 ltp_write01 ltp_write02 ltp_write03 ltp_write04 ltp_write05 ltp_writetest ltp_writev01 ltp_writev02 ltp_writev05 ltp_writev06 ltp_writev07 ltp_zram03;
+    "ltp_testcases_bin_ar01.sh" "ltp_testcases_bin_arping01.sh" "ltp_testcases_bin_ask_password.sh" "ltp_testcases_bin_assign_password.sh" "ltp_testcases_bin_bbr01.sh" "ltp_testcases_bin_bbr02.sh" "ltp_testcases_bin_bind_noport01.sh" "ltp_testcases_bin_binfmt_misc01.sh" "ltp_testcases_bin_binfmt_misc02.sh" "ltp_testcases_bin_binfmt_misc_lib.sh" "ltp_testcases_bin_busy_poll01.sh" "ltp_testcases_bin_busy_poll02.sh" "ltp_testcases_bin_busy_poll03.sh" "ltp_testcases_bin_busy_poll_lib.sh" "ltp_testcases_bin_can_run_tests.sh" "ltp_testcases_bin_cgroup_fj_common.sh" "ltp_testcases_bin_cgroup_fj_function.sh" "ltp_testcases_bin_cgroup_fj_stress.sh" "ltp_testcases_bin_cgroup_lib.sh" "ltp_testcases_bin_cgroup_regression_3_1.sh" "ltp_testcases_bin_cgroup_regression_3_2.sh" "ltp_testcases_bin_cgroup_regression_5_1.sh" "ltp_testcases_bin_cgroup_regression_5_2.sh" "ltp_testcases_bin_cgroup_regression_6_1.sh" "ltp_testcases_bin_cgroup_regression_9_1.sh" "ltp_testcases_bin_cgroup_regression_9_2.sh" "ltp_testcases_bin_cgroup_regression_test.sh" "ltp_testcases_bin_change_password.sh" "ltp_testcases_bin_clockdiff01.sh" "ltp_testcases_bin_cmdlib.sh" "ltp_testcases_bin_connector_test.sh" "ltp_testcases_bin_cp_tests.sh" "ltp_testcases_bin_cpio_tests.sh" "ltp_testcases_bin_cpuacct.sh" "ltp_testcases_bin_cpuhotplug01.sh" "ltp_testcases_bin_cpuhotplug02.sh" "ltp_testcases_bin_cpuhotplug03.sh" "ltp_testcases_bin_cpuhotplug04.sh" "ltp_testcases_bin_cpuhotplug05.sh" "ltp_testcases_bin_cpuhotplug06.sh" "ltp_testcases_bin_cpuhotplug07.sh" "ltp_testcases_bin_cpuhotplug_hotplug.sh" "ltp_testcases_bin_cpuhotplug_testsuite.sh" "ltp_testcases_bin_cpuset_base_ops_testset.sh" "ltp_testcases_bin_cpuset_exclusive_test.sh" "ltp_testcases_bin_cpuset_funcs.sh" "ltp_testcases_bin_cpuset_hierarchy_test.sh" "ltp_testcases_bin_cpuset_hotplug_test.sh" "ltp_testcases_bin_cpuset_inherit_testset.sh" "ltp_testcases_bin_cpuset_load_balance_test.sh" "ltp_testcases_bin_cpuset_memory_pressure_testset.sh" "ltp_testcases_bin_cpuset_memory_spread_testset.sh" "ltp_testcases_bin_cpuset_memory_testset.sh" "ltp_testcases_bin_cpuset_regression_test.sh" "ltp_testcases_bin_cpuset_sched_domains_test.sh" "ltp_testcases_bin_cpuset_syscall_testset.sh" "ltp_testcases_bin_daemonlib.sh" "ltp_testcases_bin_dccp01.sh" "ltp_testcases_bin_dccp_ipsec.sh" "ltp_testcases_bin_dccp_ipsec_vti.sh" "ltp_testcases_bin_dctcp01.sh" "ltp_testcases_bin_dhcp_lib.sh" "ltp_testcases_bin_dhcpd_tests.sh" "ltp_testcases_bin_dns-stress-lib.sh" "ltp_testcases_bin_dns-stress.sh" "ltp_testcases_bin_dns-stress01-rmt.sh" "ltp_testcases_bin_dns-stress02-rmt.sh" "ltp_testcases_bin_dnsmasq_tests.sh" "ltp_testcases_bin_dynamic_debug01.sh" "ltp_testcases_bin_evm_overlay.sh" "ltp_testcases_bin_file01.sh" "ltp_testcases_bin_filecapstest.sh" "ltp_testcases_bin_force_erase.sh" "ltp_testcases_bin_fork_freeze.sh" "ltp_testcases_bin_freeze_cancel.sh" "ltp_testcases_bin_freeze_kill_thaw.sh" "ltp_testcases_bin_freeze_move_thaw.sh" "ltp_testcases_bin_freeze_self_thaw.sh" "ltp_testcases_bin_freeze_sleep_thaw.sh" "ltp_testcases_bin_freeze_thaw.sh" "ltp_testcases_bin_freeze_write_freezing.sh" "ltp_testcases_bin_fs-bench-test.sh" "ltp_testcases_bin_fs-bench-test2.sh" "ltp_testcases_bin_fs_racer.sh" "ltp_testcases_bin_fs_racer_dir_create.sh" "ltp_testcases_bin_fs_racer_dir_test.sh" "ltp_testcases_bin_fs_racer_file_concat.sh" "ltp_testcases_bin_fs_racer_file_create.sh" "ltp_testcases_bin_fs_racer_file_link.sh" "ltp_testcases_bin_fs_racer_file_list.sh" "ltp_testcases_bin_fs_racer_file_rename.sh" "ltp_testcases_bin_fs_racer_file_rm.sh" "ltp_testcases_bin_fs_racer_file_symlink.sh" "ltp_testcases_bin_fsx.sh" "ltp_testcases_bin_ftp-download-stress.sh" "ltp_testcases_bin_ftp-download-stress01-rmt.sh" "ltp_testcases_bin_ftp-download-stress02-rmt.sh" "ltp_testcases_bin_ftp-upload-stress.sh" "ltp_testcases_bin_ftp-upload-stress01-rmt.sh" "ltp_testcases_bin_ftp-upload-stress02-rmt.sh" "ltp_testcases_bin_ftp01.sh" "ltp_testcases_bin_ftrace_lib.sh" "ltp_testcases_bin_ftrace_regression01.sh" "ltp_testcases_bin_ftrace_regression02.sh" "ltp_testcases_bin_ftrace_stress_ftrace_buffer_size_kb.sh" "ltp_testcases_bin_ftrace_stress_ftrace_current_tracer.sh" "ltp_testcases_bin_ftrace_stress_ftrace_ftrace_enabled.sh" "ltp_testcases_bin_ftrace_stress_ftrace_function_profile_enabled.sh" "ltp_testcases_bin_ftrace_stress_ftrace_set_event.sh" "ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_filter.sh" "ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_pid.sh" "ltp_testcases_bin_ftrace_stress_ftrace_stack_max_size.sh" "ltp_testcases_bin_ftrace_stress_ftrace_stack_trace.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_clock.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_options.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_pipe.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_stat.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_cpumask.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_enabled.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_max_latency.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_on.sh" "ltp_testcases_bin_ftrace_stress_test.sh" "ltp_testcases_bin_gdb01.sh" "ltp_testcases_bin_geneve01.sh" "ltp_testcases_bin_geneve02.sh" "ltp_testcases_bin_gre01.sh" "ltp_testcases_bin_gre02.sh" "ltp_testcases_bin_host01.sh" "ltp_testcases_bin_http-stress.sh" "ltp_testcases_bin_http-stress01-rmt.sh" "ltp_testcases_bin_http-stress02-rmt.sh" "ltp_testcases_bin_icmp-uni-basic.sh" "ltp_testcases_bin_icmp-uni-vti.sh" "ltp_testcases_bin_if-addr-adddel.sh" "ltp_testcases_bin_if-addr-addlarge.sh" "ltp_testcases_bin_if-lib.sh" "ltp_testcases_bin_if-mtu-change.sh" "ltp_testcases_bin_if-route-adddel.sh" "ltp_testcases_bin_if-route-addlarge.sh" "ltp_testcases_bin_if-updown.sh" "ltp_testcases_bin_if4-addr-change.sh" "ltp_testcases_bin_ima_measurements.sh" "ltp_testcases_bin_ima_policy.sh" "ltp_testcases_bin_ima_setup.sh" "ltp_testcases_bin_ima_tpm.sh" "ltp_testcases_bin_ima_violations.sh" "ltp_testcases_bin_ip_tests.sh" "ltp_testcases_bin_ipneigh01.sh" "ltp_testcases_bin_ipsec_lib.sh" "ltp_testcases_bin_iptables01.sh" "ltp_testcases_bin_iptables_lib.sh" "ltp_testcases_bin_ipvlan01.sh" "ltp_testcases_bin_isofs.sh" "ltp_testcases_bin_ld01.sh" "ltp_testcases_bin_ldd01.sh" "ltp_testcases_bin_linktest.sh" "ltp_testcases_bin_ln_tests.sh" "ltp_testcases_bin_lock_torture.sh" "ltp_testcases_bin_ltpSockets.sh" "ltp_testcases_bin_macsec01.sh" "ltp_testcases_bin_macsec02.sh" "ltp_testcases_bin_macsec03.sh" "ltp_testcases_bin_macsec_lib.sh" "ltp_testcases_bin_macvlan01.sh" "ltp_testcases_bin_macvtap01.sh" "ltp_testcases_bin_mc_cmds.sh" "ltp_testcases_bin_mc_commo.sh" "ltp_testcases_bin_mc_member.sh" "ltp_testcases_bin_mc_opts.sh" "ltp_testcases_bin_mcast-lib.sh" "ltp_testcases_bin_memcg_control_test.sh" "ltp_testcases_bin_memcg_failcnt.sh" "ltp_testcases_bin_memcg_force_empty.sh" "ltp_testcases_bin_memcg_lib.sh" "ltp_testcases_bin_memcg_limit_in_bytes.sh" "ltp_testcases_bin_memcg_max_usage_in_bytes_test.sh" "ltp_testcases_bin_memcg_memsw_limit_in_bytes_test.sh" "ltp_testcases_bin_memcg_move_charge_at_immigrate_test.sh" "ltp_testcases_bin_memcg_regression_test.sh" "ltp_testcases_bin_memcg_stat_rss.sh" "ltp_testcases_bin_memcg_stat_test.sh" "ltp_testcases_bin_memcg_stress_test.sh" "ltp_testcases_bin_memcg_subgroup_charge.sh" "ltp_testcases_bin_memcg_test_4.sh" "ltp_testcases_bin_memcg_usage_in_bytes_test.sh" "ltp_testcases_bin_memcg_use_hierarchy_test.sh" "ltp_testcases_bin_mkdir_tests.sh" "ltp_testcases_bin_modaltr.sh" "ltp_testcases_bin_mpls01.sh" "ltp_testcases_bin_mpls02.sh" "ltp_testcases_bin_mpls03.sh" "ltp_testcases_bin_mpls04.sh" "ltp_testcases_bin_mpls_lib.sh" "ltp_testcases_bin_myfunctions-io.sh" "ltp_testcases_bin_myfunctions.sh" "ltp_testcases_bin_net_cmdlib.sh" "ltp_testcases_bin_netstat01.sh" "ltp_testcases_bin_nfs_lib.sh" "ltp_testcases_bin_nft01.sh" "ltp_testcases_bin_nm01.sh" "ltp_testcases_bin_numa01.sh" "ltp_testcases_bin_parameters.sh" "ltp_testcases_bin_pids.sh" "ltp_testcases_bin_ping01.sh" "ltp_testcases_bin_ping02.sh" "ltp_testcases_bin_pm_cpu_consolidation.py" "ltp_testcases_bin_pm_ilb_test.py" "ltp_testcases_bin_pm_include.sh" "ltp_testcases_bin_pm_sched_domain.py" "ltp_testcases_bin_pm_sched_mc.py" "ltp_testcases_bin_quota_remount_test01.sh" "ltp_testcases_bin_rcp01.sh" "ltp_testcases_bin_rcu_torture.sh" "ltp_testcases_bin_remove_password.sh" "ltp_testcases_bin_rlogin01.sh" "ltp_testcases_bin_route-change-dst.sh" "ltp_testcases_bin_route-change-gw.sh" "ltp_testcases_bin_route-change-if.sh" "ltp_testcases_bin_route-lib.sh" "ltp_testcases_bin_rsh01.sh" "ltp_testcases_bin_run_capbounds.sh" "ltp_testcases_bin_run_cpuctl_latency_test.sh" "ltp_testcases_bin_run_cpuctl_stress_test.sh" "ltp_testcases_bin_run_cpuctl_test.sh" "ltp_testcases_bin_run_cpuctl_test_fj.sh" "ltp_testcases_bin_run_freezer.sh" "ltp_testcases_bin_run_io_throttle_test.sh" "ltp_testcases_bin_run_memctl_test.sh" "ltp_testcases_bin_run_sched_cliserv.sh" "ltp_testcases_bin_runpwtests01.sh" "ltp_testcases_bin_runpwtests02.sh" "ltp_testcases_bin_runpwtests03.sh" "ltp_testcases_bin_runpwtests04.sh" "ltp_testcases_bin_runpwtests05.sh" "ltp_testcases_bin_runpwtests06.sh" "ltp_testcases_bin_runpwtests_exclusive01.sh" "ltp_testcases_bin_runpwtests_exclusive02.sh" "ltp_testcases_bin_runpwtests_exclusive03.sh" "ltp_testcases_bin_runpwtests_exclusive04.sh" "ltp_testcases_bin_runpwtests_exclusive05.sh" "ltp_testcases_bin_sched_stress.sh" "ltp_testcases_bin_sctp01.sh" "ltp_testcases_bin_sctp_ipsec.sh" "ltp_testcases_bin_sctp_ipsec_vti.sh" "ltp_testcases_bin_sendfile01.sh" "ltp_testcases_bin_sit01.sh" "ltp_testcases_bin_smack_common.sh" "ltp_testcases_bin_smack_file_access.sh" "ltp_testcases_bin_smack_set_ambient.sh" "ltp_testcases_bin_smack_set_cipso.sh" "ltp_testcases_bin_smack_set_current.sh" "ltp_testcases_bin_smack_set_direct.sh" "ltp_testcases_bin_smack_set_doi.sh" "ltp_testcases_bin_smack_set_load.sh" "ltp_testcases_bin_smack_set_netlabel.sh" "ltp_testcases_bin_smack_set_onlycap.sh" "ltp_testcases_bin_smt_smp_affinity.sh" "ltp_testcases_bin_smt_smp_enabled.sh" "ltp_testcases_bin_ssh-stress.sh" "ltp_testcases_bin_ssh-stress01-rmt.sh" "ltp_testcases_bin_ssh-stress02-rmt.sh" "ltp_testcases_bin_ssh-stress03-rmt.sh" "ltp_testcases_bin_stop_freeze_sleep_thaw_cont.sh" "ltp_testcases_bin_stop_freeze_thaw_cont.sh" "ltp_testcases_bin_sysctl01.sh" "ltp_testcases_bin_sysctl02.sh" "ltp_testcases_bin_tcp_cc_lib.sh" "ltp_testcases_bin_tcp_fastopen_run.sh" "ltp_testcases_bin_tcp_ipsec.sh" "ltp_testcases_bin_tcp_ipsec_vti.sh" "ltp_testcases_bin_tcpdump01.sh" "ltp_testcases_bin_telnet01.sh" "ltp_testcases_bin_test.sh" "ltp_testcases_bin_test_controllers.sh" "ltp_testcases_bin_test_robind.sh" "ltp_testcases_bin_testall.sh" "ltp_testcases_bin_tracepath01.sh" "ltp_testcases_bin_traceroute01.sh" "ltp_testcases_bin_tst_ansi_color.sh" "ltp_testcases_bin_tst_net.sh" "ltp_testcases_bin_tst_net_stress.sh" "ltp_testcases_bin_tst_security.sh" "ltp_testcases_bin_tst_test.sh" "ltp_testcases_bin_udp_ipsec.sh" "ltp_testcases_bin_udp_ipsec_vti.sh" "ltp_testcases_bin_unshare01.sh" "ltp_testcases_bin_unzip01.sh" "ltp_testcases_bin_utimensat_tests.sh" "ltp_testcases_bin_vfork_freeze.sh" "ltp_testcases_bin_virt_lib.sh" "ltp_testcases_bin_vlan01.sh" "ltp_testcases_bin_vlan02.sh" "ltp_testcases_bin_vlan03.sh" "ltp_testcases_bin_vma05.sh" "ltp_testcases_bin_vxlan01.sh" "ltp_testcases_bin_vxlan02.sh" "ltp_testcases_bin_vxlan03.sh" "ltp_testcases_bin_vxlan04.sh" "ltp_testcases_bin_write_freezing.sh" "ltp_testcases_bin_xinetd_tests.sh" "ltp_testcases_bin_zram01.sh" "ltp_testcases_bin_zram02.sh" "ltp_testcases_bin_zram_lib.sh" libltp_controllers libltp_cpu_set libltp_hugetlb libltp_ipc libltp_kerntest libltp_ltp libltp_ltpnuma libltp_ltpuinput libltp_mem ltp_abort01 ltp_abs01 ltp_accept01 ltp_accept02 ltp_accept4_01 ltp_access01 ltp_access02 ltp_access03 ltp_access04 ltp_acct01 ltp_acct02 ltp_acct02_helper ltp_acl1 ltp_add_key01 ltp_add_key02 ltp_add_key03 ltp_add_key04 ltp_adjtimex01 ltp_adjtimex02 ltp_af_alg01 ltp_af_alg03 ltp_af_alg04 ltp_af_alg05 ltp_af_alg06 ltp_aio-stress ltp_aio01 ltp_aio02 ltp_aiocp ltp_aiodio_append ltp_aiodio_sparse ltp_alarm02 ltp_alarm03 ltp_alarm05 ltp_alarm06 ltp_alarm07 ltp_asapi_01 ltp_asapi_02 ltp_asapi_03 ltp_atof01 ltp_autogroup01 ltp_bind01 ltp_bind02 ltp_bind03 ltp_block_dev ltp_bpf_map01 ltp_bpf_prog01 ltp_bpf_prog02 ltp_bpf_prog03 ltp_brk01 ltp_cacheflush01 ltp_can_filter ltp_can_rcv_own_msgs ltp_cap_bounds_r ltp_cap_bounds_rw ltp_cap_bset_inh_bounds ltp_capget01 ltp_capget02 ltp_capset01 ltp_capset02 ltp_capset03 ltp_capset04 ltp_cgroup_fj_proc ltp_cgroup_regression_6_2 ltp_cgroup_regression_fork_processes ltp_cgroup_regression_getdelays ltp_cgroup_xattr ltp_chdir01 ltp_chdir02 ltp_chdir03 ltp_chdir04 ltp_check_keepcaps ltp_check_pe ltp_check_simple_capset ltp_chmod01 ltp_chmod02 ltp_chmod03 ltp_chmod04 ltp_chmod05 ltp_chmod07 ltp_chown01 ltp_chown01_16 ltp_chown02 ltp_chown02_16 ltp_chown03 ltp_chown03_16 ltp_chown05 ltp_chown05_16 ltp_chroot01 ltp_chroot02 ltp_chroot03 ltp_chroot04 ltp_clock_adjtime01 ltp_clock_adjtime02 ltp_clock_getres01 ltp_clock_gettime01 ltp_clock_gettime02 ltp_clock_nanosleep01 ltp_clock_nanosleep02 ltp_clock_nanosleep2_01 ltp_clock_settime01 ltp_clock_settime02 ltp_clone01 ltp_clone02 ltp_clone03 ltp_clone04 ltp_clone05 ltp_clone06 ltp_clone07 ltp_clone08 ltp_clone09 ltp_close01 ltp_close02 ltp_close08 ltp_connect01 ltp_copy_file_range01 ltp_copy_file_range02 ltp_copy_file_range03 ltp_cpuacct_task ltp_cpuctl_def_task01 ltp_cpuctl_def_task02 ltp_cpuctl_def_task03 ltp_cpuctl_def_task04 ltp_cpuctl_fj_cpu-hog ltp_cpuctl_fj_simple_echo ltp_cpuctl_latency_check_task ltp_cpuctl_latency_test ltp_cpuctl_test01 ltp_cpuctl_test02 ltp_cpuctl_test03 ltp_cpuctl_test04 ltp_cpufreq_boost ltp_cpuset01 ltp_cpuset_cpu_hog ltp_cpuset_list_compute ltp_cpuset_mem_hog ltp_cpuset_memory_pressure ltp_cpuset_sched_domains_check ltp_cpuset_syscall_test ltp_crash01 ltp_crash02 ltp_creat01 ltp_creat03 ltp_creat04 ltp_creat05 ltp_creat07 ltp_creat07_child ltp_creat08 ltp_create-files ltp_create_datafile ltp_crypto_user01 ltp_crypto_user02 ltp_cve-2014-0196 ltp_cve-2015-3290 ltp_cve-2016-10044 ltp_cve-2016-7042 ltp_cve-2016-7117 ltp_cve-2017-16939 ltp_cve-2017-17052 ltp_cve-2017-17053 ltp_cve-2017-2618 ltp_cve-2017-2671 ltp_data_space ltp_delete_module01 ltp_delete_module02 ltp_delete_module03 ltp_dio_append ltp_dio_sparse ltp_dio_truncate ltp_diotest1 ltp_diotest2 ltp_diotest3 ltp_diotest5 ltp_diotest6 ltp_dirty ltp_dirtyc0w ltp_dirtyc0w_child ltp_disktest ltp_dma_thread_diotest ltp_dup01 ltp_dup02 ltp_dup03 ltp_dup04 ltp_dup05 ltp_dup06 ltp_dup07 ltp_dup201 ltp_dup202 ltp_dup203 ltp_dup204 ltp_dup205 ltp_dup3_01 ltp_dup3_02 ltp_eas_big_to_small ltp_eas_one_big_task ltp_eas_one_small_task ltp_eas_small_big_toggle ltp_eas_small_to_big ltp_eas_two_big_three_small ltp_endian_switch01 ltp_epoll-ltp ltp_epoll_create1_01 ltp_epoll_ctl01 ltp_epoll_ctl02 ltp_epoll_pwait01 ltp_epoll_wait01 ltp_epoll_wait02 ltp_epoll_wait03 ltp_event_generator ltp_eventfd01 ltp_eventfd2_01 ltp_eventfd2_02 ltp_eventfd2_03 ltp_exec_with_inh ltp_exec_without_inh ltp_execl01 ltp_execl01_child ltp_execle01 ltp_execle01_child ltp_execlp01 ltp_execlp01_child ltp_execv01 ltp_execv01_child ltp_execve01 ltp_execve01_child ltp_execve02 ltp_execve03 ltp_execve04 ltp_execve05 ltp_execve_child ltp_execveat01 ltp_execveat02 ltp_execveat03 ltp_execveat_child ltp_execveat_errno ltp_execvp01 ltp_execvp01_child ltp_exit01 ltp_exit02 ltp_exit_group01 ltp_f1 ltp_f2 ltp_f3 ltp_faccessat01 ltp_fallocate01 ltp_fallocate02 ltp_fallocate03 ltp_fallocate04 ltp_fallocate05 ltp_fanotify01 ltp_fanotify02 ltp_fanotify03 ltp_fanotify04 ltp_fanotify05 ltp_fanotify06 ltp_fanotify07 ltp_fanotify08 ltp_fanotify09 ltp_fanotify10 ltp_fanotify11 ltp_fanotify12 ltp_fanotify13 ltp_fanotify14 ltp_fanotify15 ltp_fanotify_child ltp_fanout01 ltp_fchdir01 ltp_fchdir02 ltp_fchdir03 ltp_fchmod01 ltp_fchmod02 ltp_fchmod03 ltp_fchmod04 ltp_fchmod05 ltp_fchmod06 ltp_fchmodat01 ltp_fchown01 ltp_fchown01_16 ltp_fchown02 ltp_fchown02_16 ltp_fchown03 ltp_fchown03_16 ltp_fchown04 ltp_fchown04_16 ltp_fchown05 ltp_fchown05_16 ltp_fchownat01 ltp_fchownat02 ltp_fcntl01 ltp_fcntl01_64 ltp_fcntl02 ltp_fcntl02_64 ltp_fcntl03 ltp_fcntl03_64 ltp_fcntl04 ltp_fcntl04_64 ltp_fcntl05 ltp_fcntl05_64 ltp_fcntl06 ltp_fcntl06_64 ltp_fcntl07 ltp_fcntl07_64 ltp_fcntl08 ltp_fcntl08_64 ltp_fcntl09 ltp_fcntl09_64 ltp_fcntl10 ltp_fcntl10_64 ltp_fcntl11 ltp_fcntl11_64 ltp_fcntl12 ltp_fcntl12_64 ltp_fcntl13 ltp_fcntl13_64 ltp_fcntl14 ltp_fcntl14_64 ltp_fcntl15 ltp_fcntl15_64 ltp_fcntl16 ltp_fcntl16_64 ltp_fcntl17 ltp_fcntl17_64 ltp_fcntl18 ltp_fcntl18_64 ltp_fcntl19 ltp_fcntl19_64 ltp_fcntl20 ltp_fcntl20_64 ltp_fcntl21 ltp_fcntl21_64 ltp_fcntl22 ltp_fcntl22_64 ltp_fcntl23 ltp_fcntl23_64 ltp_fcntl24 ltp_fcntl24_64 ltp_fcntl25 ltp_fcntl25_64 ltp_fcntl26 ltp_fcntl26_64 ltp_fcntl27 ltp_fcntl27_64 ltp_fcntl28 ltp_fcntl28_64 ltp_fcntl29 ltp_fcntl29_64 ltp_fcntl30 ltp_fcntl30_64 ltp_fcntl31 ltp_fcntl31_64 ltp_fcntl32 ltp_fcntl32_64 ltp_fcntl33 ltp_fcntl33_64 ltp_fcntl34 ltp_fcntl34_64 ltp_fcntl35 ltp_fcntl35_64 ltp_fcntl36 ltp_fcntl36_64 ltp_fdatasync01 ltp_fdatasync02 ltp_fdatasync03 ltp_fgetxattr01 ltp_fgetxattr02 ltp_fgetxattr03 ltp_flistxattr01 ltp_flistxattr02 ltp_flistxattr03 ltp_float_bessel ltp_float_exp_log ltp_float_iperb ltp_float_power ltp_float_trigo ltp_flock01 ltp_flock02 ltp_flock03 ltp_flock04 ltp_flock06 ltp_fork01 ltp_fork02 ltp_fork03 ltp_fork04 ltp_fork05 ltp_fork06 ltp_fork07 ltp_fork08 ltp_fork09 ltp_fork10 ltp_fork11 ltp_fork12 ltp_fork13 ltp_fork14 ltp_fork_exec_loop ltp_fpathconf01 ltp_fptest01 ltp_fptest02 ltp_frag ltp_fremovexattr01 ltp_fremovexattr02 ltp_fs_fill ltp_fs_perms ltp_fsetxattr01 ltp_fsetxattr02 ltp_fstat02 ltp_fstat02_64 ltp_fstat03 ltp_fstat03_64 ltp_fstatat01 ltp_fstatfs01 ltp_fstatfs01_64 ltp_fstatfs02 ltp_fstatfs02_64 ltp_fsx-linux ltp_fsync01 ltp_fsync02 ltp_fsync03 ltp_fsync04 ltp_ftest01 ltp_ftest02 ltp_ftest03 ltp_ftest04 ltp_ftest05 ltp_ftest06 ltp_ftest07 ltp_ftest08 ltp_ftruncate01 ltp_ftruncate01_64 ltp_ftruncate03 ltp_ftruncate03_64 ltp_ftruncate04 ltp_ftruncate04_64 ltp_futex_cmp_requeue01 ltp_futex_cmp_requeue02 ltp_futex_wait01 ltp_futex_wait03 ltp_futex_wait04 ltp_futex_wait05 ltp_futex_wait_bitset01 ltp_futex_wait_bitset02 ltp_futex_wake01 ltp_futex_wake02 ltp_futex_wake04 ltp_futimesat01 ltp_fw_load ltp_genacos ltp_genasin ltp_genatan ltp_genatan2 ltp_genbessel ltp_genceil ltp_gencos ltp_gencosh ltp_genexp ltp_genexp_log ltp_genfabs ltp_genfloor ltp_genfmod ltp_genfrexp ltp_genhypot ltp_geniperb ltp_genj0 ltp_genj1 ltp_genldexp ltp_genlgamma ltp_genlog ltp_genlog10 ltp_genmodf ltp_genpow ltp_genpower ltp_gensin ltp_gensinh ltp_gensqrt ltp_gentan ltp_gentanh ltp_gentrigo ltp_geny0 ltp_geny1 ltp_get_mempolicy01 ltp_get_robust_list01 ltp_getaddrinfo_01 ltp_getcpu01 ltp_getcwd01 ltp_getcwd02 ltp_getcwd03 ltp_getcwd04 ltp_getdents01 ltp_getdents02 ltp_getdomainname01 ltp_getdtablesize01 ltp_getegid01 ltp_getegid01_16 ltp_getegid02 ltp_getegid02_16 ltp_geteuid01 ltp_geteuid01_16 ltp_geteuid02 ltp_geteuid02_16 ltp_getgid01 ltp_getgid01_16 ltp_getgid03 ltp_getgid03_16 ltp_getgroups01 ltp_getgroups01_16 ltp_getgroups03 ltp_getgroups03_16 ltp_gethostbyname_r01 ltp_gethostname01 ltp_getitimer01 ltp_getitimer02 ltp_getitimer03 ltp_getpagesize01 ltp_getpeername01 ltp_getpgid01 ltp_getpgid02 ltp_getpgrp01 ltp_getpid01 ltp_getpid02 ltp_getppid01 ltp_getppid02 ltp_getpriority01 ltp_getpriority02 ltp_getrandom01 ltp_getrandom02 ltp_getrandom03 ltp_getrandom04 ltp_getresgid01 ltp_getresgid01_16 ltp_getresgid02 ltp_getresgid02_16 ltp_getresgid03 ltp_getresgid03_16 ltp_getresuid01 ltp_getresuid01_16 ltp_getresuid02 ltp_getresuid02_16 ltp_getresuid03 ltp_getresuid03_16 ltp_getrlimit01 ltp_getrlimit02 ltp_getrlimit03 ltp_getrusage01 ltp_getrusage02 ltp_getrusage03_child ltp_getrusage04 ltp_getsid01 ltp_getsid02 ltp_getsockname01 ltp_getsockopt01 ltp_getsockopt02 ltp_gettid01 ltp_gettimeofday01 ltp_gettimeofday02 ltp_getuid01 ltp_getuid01_16 ltp_getuid03 ltp_getuid03_16 ltp_getxattr01 ltp_getxattr02 ltp_getxattr03 ltp_getxattr04 ltp_getxattr05 ltp_hackbench ltp_hangup01 ltp_ht_affinity ltp_ht_enabled ltp_hugemmap01 ltp_hugemmap02 ltp_hugemmap04 ltp_hugemmap06 ltp_ima_boot_aggregate ltp_ima_mmap ltp_in ltp_in6_02 ltp_inh_capped ltp_inode01 ltp_inode02 ltp_inotify01 ltp_inotify02 ltp_inotify03 ltp_inotify04 ltp_inotify05 ltp_inotify06 ltp_inotify07 ltp_inotify08 ltp_inotify09 ltp_inotify_init1_01 ltp_inotify_init1_02 ltp_input01 ltp_input02 ltp_input04 ltp_input05 ltp_input06 ltp_io_cancel01 ltp_io_destroy01 ltp_io_getevents01 ltp_io_setup01 ltp_io_submit01 ltp_iobw ltp_ioctl01 ltp_ioctl03 ltp_ioctl04 ltp_ioctl05 ltp_ioctl06 ltp_ioctl07 ltp_ioctl08 ltp_ioctl_ns01 ltp_ioctl_ns02 ltp_ioctl_ns03 ltp_ioctl_ns04 ltp_ioctl_ns05 ltp_ioctl_ns06 ltp_ioctl_ns07 ltp_iogen ltp_ioperm01 ltp_ioperm02 ltp_iopl01 ltp_iopl02 ltp_ioprio_get01 ltp_ioprio_set01 ltp_ioprio_set02 ltp_ioprio_set03 ltp_kcmp01 ltp_kcmp02 ltp_kcmp03 ltp_keyctl01 ltp_keyctl02 ltp_keyctl03 ltp_keyctl04 ltp_keyctl05 ltp_keyctl06 ltp_keyctl07 ltp_keyctl08 ltp_kill01 ltp_kill02 ltp_kill03 ltp_kill04 ltp_kill06 ltp_kill08 ltp_kill09 ltp_kill10 ltp_kill11 ltp_kill12 ltp_kmsg01 ltp_ksm01 ltp_ksm02 ltp_ksm03 ltp_ksm04 ltp_ksm05 ltp_ksm06 ltp_lchown01 ltp_lchown01_16 ltp_lchown02 ltp_lchown02_16 ltp_lchown03 ltp_lchown03_16 ltp_leapsec01 ltp_lftest ltp_lgetxattr01 ltp_lgetxattr02 ltp_link02 ltp_link03 ltp_link04 ltp_link05 ltp_link06 ltp_link07 ltp_link08 ltp_linkat01 ltp_linkat02 ltp_listen01 ltp_listxattr01 ltp_listxattr02 ltp_listxattr03 ltp_llistxattr01 ltp_llistxattr02 ltp_llistxattr03 ltp_llseek01 ltp_llseek02 ltp_llseek03 ltp_locktests ltp_lremovexattr01 ltp_lseek01 ltp_lseek02 ltp_lseek07 ltp_lseek11 ltp_lstat01 ltp_lstat01_64 ltp_lstat02 ltp_lstat02_64 ltp_ltp-diorh ltp_ltpClient ltp_ltpServer ltp_ltp_acpi ltp_madvise01 ltp_madvise02 ltp_madvise05 ltp_madvise06 ltp_madvise07 ltp_madvise08 ltp_madvise09 ltp_madvise10 ltp_max_map_count ltp_mbind01 ltp_mbind02 ltp_mbind03 ltp_mbind04 ltp_mc_member_test ltp_mc_recv ltp_mc_send ltp_mc_verify_opts ltp_mc_verify_opts_error ltp_meltdown ltp_mem01 ltp_mem02 ltp_mem03 ltp_mem_process ltp_membarrier01 ltp_memcg_process_stress ltp_memcg_test_1 ltp_memcg_test_2 ltp_memcg_test_3 ltp_memcg_test_4 ltp_memcmp01 ltp_memcpy01 ltp_memctl_test01 ltp_memfd_create01 ltp_memfd_create02 ltp_memfd_create03 ltp_memfd_create04 ltp_memset01 ltp_memtoy ltp_migrate_pages01 ltp_migrate_pages02 ltp_migrate_pages03 ltp_mincore01 ltp_mincore02 ltp_mkdir02 ltp_mkdir03 ltp_mkdir04 ltp_mkdir05 ltp_mkdir09 ltp_mkdirat01 ltp_mkdirat02 ltp_mknod01 ltp_mknod02 ltp_mknod03 ltp_mknod04 ltp_mknod05 ltp_mknod06 ltp_mknod07 ltp_mknod08 ltp_mknod09 ltp_mknodat01 ltp_mknodat02 ltp_mlock01 ltp_mlock02 ltp_mlock03 ltp_mlock04 ltp_mlock201 ltp_mlock202 ltp_mlock203 ltp_mlockall01 ltp_mlockall02 ltp_mlockall03 ltp_mmap-corruption01 ltp_mmap001 ltp_mmap01 ltp_mmap02 ltp_mmap03 ltp_mmap04 ltp_mmap05 ltp_mmap06 ltp_mmap07 ltp_mmap08 ltp_mmap09 ltp_mmap1 ltp_mmap10 ltp_mmap11 ltp_mmap12 ltp_mmap13 ltp_mmap14 ltp_mmap15 ltp_mmap16 ltp_mmap2 ltp_mmap3 ltp_mmapstress01 ltp_mmapstress02 ltp_mmapstress03 ltp_mmapstress04 ltp_mmapstress05 ltp_mmapstress06 ltp_mmapstress07 ltp_mmapstress08 ltp_mmapstress09 ltp_mmapstress10 ltp_mmstress ltp_mmstress_dummy ltp_modify_ldt01 ltp_modify_ldt02 ltp_modify_ldt03 ltp_mount01 ltp_mount02 ltp_mount03 ltp_mount03_setuid_test ltp_mount04 ltp_mount05 ltp_mount06 ltp_move_pages01 ltp_move_pages02 ltp_move_pages03 ltp_move_pages04 ltp_move_pages05 ltp_move_pages06 ltp_move_pages07 ltp_move_pages09 ltp_move_pages10 ltp_move_pages11 ltp_move_pages12 ltp_mprotect01 ltp_mprotect02 ltp_mprotect03 ltp_mprotect04 ltp_mremap01 ltp_mremap02 ltp_mremap03 ltp_mremap05 ltp_msync01 ltp_msync02 ltp_msync03 ltp_msync04 ltp_mtest01 ltp_munlock01 ltp_munlock02 ltp_munlockall01 ltp_munmap01 ltp_munmap02 ltp_munmap03 ltp_nanosleep01 ltp_nanosleep02 ltp_nanosleep04 ltp_netstress ltp_newns ltp_newuname01 ltp_nextafter01 ltp_nfs01_open_files ltp_nfs04_create_file ltp_nfs05_make_tree ltp_nfs_flock ltp_nfs_flock_dgen ltp_nftw01 ltp_nftw6401 ltp_nice01 ltp_nice02 ltp_nice03 ltp_nice04 ltp_nptl01 ltp_ns-icmp_redirector ltp_ns-icmpv4_sender ltp_ns-icmpv6_sender ltp_ns-igmp_querier ltp_ns-mcast_join ltp_ns-mcast_receiver ltp_ns-tcpclient ltp_ns-tcpserver ltp_ns-udpclient ltp_ns-udpsender ltp_ns-udpserver ltp_nsclone ltp_oom01 ltp_oom02 ltp_oom03 ltp_oom04 ltp_oom05 ltp_open01 ltp_open02 ltp_open03 ltp_open04 ltp_open05 ltp_open06 ltp_open07 ltp_open08 ltp_open09 ltp_open10 ltp_open11 ltp_open12_child ltp_open13 ltp_open14 ltp_openat01 ltp_openat02_child ltp_openat03 ltp_openfile ltp_overcommit_memory ltp_page01 ltp_page02 ltp_pathconf01 ltp_pause01 ltp_pause02 ltp_pause03 ltp_pcrypt_aead01 ltp_pec_listener ltp_perf_event_open01 ltp_perf_event_open02 ltp_personality01 ltp_personality02 ltp_pidfd_send_signal01 ltp_pidfd_send_signal02 ltp_pidfd_send_signal03 ltp_pids_task1 ltp_pids_task2 ltp_pipe01 ltp_pipe02 ltp_pipe03 ltp_pipe04 ltp_pipe05 ltp_pipe06 ltp_pipe07 ltp_pipe08 ltp_pipe09 ltp_pipe10 ltp_pipe11 ltp_pipe2_01 ltp_pipe2_02 ltp_pivot_root01 ltp_pkey01 ltp_pm_get_sched_values ltp_poll01 ltp_poll02 ltp_posix_fadvise01 ltp_posix_fadvise01_64 ltp_posix_fadvise02 ltp_posix_fadvise02_64 ltp_posix_fadvise03 ltp_posix_fadvise03_64 ltp_posix_fadvise04 ltp_posix_fadvise04_64 ltp_ppoll01 ltp_prctl01 ltp_prctl02 ltp_prctl03 ltp_prctl04 ltp_prctl05 ltp_prctl06 ltp_prctl06_execve ltp_prctl07 ltp_prctl08 ltp_prctl09 ltp_pread01 ltp_pread01_64 ltp_pread02 ltp_pread02_64 ltp_pread03 ltp_pread03_64 ltp_preadv01 ltp_preadv01_64 ltp_preadv02 ltp_preadv02_64 ltp_preadv03 ltp_preadv03_64 ltp_preadv201 ltp_preadv201_64 ltp_preadv202 ltp_preadv202_64 ltp_preadv203 ltp_preadv203_64 ltp_print_caps ltp_proc01 ltp_process_vm01 ltp_process_vm_readv02 ltp_process_vm_readv03 ltp_process_vm_writev02 ltp_pselect01 ltp_pselect01_64 ltp_pselect02 ltp_pselect02_64 ltp_pselect03 ltp_pselect03_64 ltp_pt_test ltp_ptem01 ltp_pth_str01 ltp_pth_str02 ltp_pth_str03 ltp_pthcli ltp_pthserv ltp_ptrace01 ltp_ptrace02 ltp_ptrace03 ltp_ptrace04 ltp_ptrace05 ltp_ptrace07 ltp_pty01 ltp_pty02 ltp_pwrite01 ltp_pwrite01_64 ltp_pwrite02 ltp_pwrite02_64 ltp_pwrite03 ltp_pwrite03_64 ltp_pwrite04 ltp_pwrite04_64 ltp_pwritev01 ltp_pwritev01_64 ltp_pwritev02 ltp_pwritev02_64 ltp_pwritev03 ltp_pwritev03_64 ltp_pwritev201 ltp_pwritev201_64 ltp_pwritev202 ltp_pwritev202_64 ltp_quotactl01 ltp_quotactl02 ltp_quotactl03 ltp_quotactl04 ltp_quotactl05 ltp_quotactl06 ltp_random-access ltp_random-access-del-create ltp_read01 ltp_read02 ltp_read03 ltp_read04 ltp_read_all ltp_read_checkzero ltp_readahead01 ltp_readahead02 ltp_readdir01 ltp_readdir21 ltp_readlink01 ltp_readlink03 ltp_readlinkat01 ltp_readlinkat02 ltp_readv01 ltp_readv02 ltp_readv03 ltp_realpath01 ltp_reboot01 ltp_reboot02 ltp_recv01 ltp_recvfrom01 ltp_recvmsg01 ltp_recvmsg02 ltp_recvmsg03 ltp_remap_file_pages02 ltp_removexattr01 ltp_removexattr02 ltp_rename01 ltp_rename02 ltp_rename03 ltp_rename04 ltp_rename05 ltp_rename06 ltp_rename07 ltp_rename08 ltp_rename09 ltp_rename10 ltp_rename11 ltp_rename12 ltp_rename13 ltp_rename14 ltp_renameat01 ltp_renameat201 ltp_renameat202 ltp_request_key01 ltp_request_key02 ltp_request_key03 ltp_request_key04 ltp_request_key05 ltp_rmdir01 ltp_rmdir02 ltp_rmdir03 ltp_rt_sigaction01 ltp_rt_sigaction02 ltp_rt_sigaction03 ltp_rt_sigpending02 ltp_rt_sigprocmask01 ltp_rt_sigprocmask02 ltp_rt_sigqueueinfo01 ltp_rt_sigsuspend01 ltp_rt_sigtimedwait01 ltp_rt_tgsigqueueinfo01 ltp_rtc01 ltp_sbrk01 ltp_sbrk02 ltp_sbrk03 ltp_sched_boost ltp_sched_cfs_prio ltp_sched_dl_runtime ltp_sched_driver ltp_sched_get_priority_max01 ltp_sched_get_priority_max02 ltp_sched_get_priority_min01 ltp_sched_get_priority_min02 ltp_sched_getaffinity01 ltp_sched_getattr01 ltp_sched_getattr02 ltp_sched_getparam01 ltp_sched_getparam02 ltp_sched_getparam03 ltp_sched_getscheduler01 ltp_sched_getscheduler02 ltp_sched_latency_dl ltp_sched_latency_rt ltp_sched_prio_3_fifo ltp_sched_prio_3_rr ltp_sched_rr_get_interval01 ltp_sched_rr_get_interval02 ltp_sched_rr_get_interval03 ltp_sched_setaffinity01 ltp_sched_setattr01 ltp_sched_setparam01 ltp_sched_setparam02 ltp_sched_setparam03 ltp_sched_setparam04 ltp_sched_setparam05 ltp_sched_setscheduler01 ltp_sched_setscheduler02 ltp_sched_setscheduler03 ltp_sched_tc0 ltp_sched_tc1 ltp_sched_tc2 ltp_sched_tc3 ltp_sched_tc4 ltp_sched_tc5 ltp_sched_tc6 ltp_sched_yield01 ltp_sctp_big_chunk ltp_select01 ltp_select02 ltp_select03 ltp_select04 ltp_send01 ltp_sendfile02 ltp_sendfile02_64 ltp_sendfile03 ltp_sendfile03_64 ltp_sendfile04 ltp_sendfile04_64 ltp_sendfile05 ltp_sendfile05_64 ltp_sendfile06 ltp_sendfile06_64 ltp_sendfile07 ltp_sendfile07_64 ltp_sendfile08 ltp_sendfile08_64 ltp_sendfile09 ltp_sendfile09_64 ltp_sendmmsg01 ltp_sendmsg01 ltp_sendto01 ltp_sendto02 ltp_set_mempolicy01 ltp_set_mempolicy02 ltp_set_mempolicy03 ltp_set_mempolicy04 ltp_set_robust_list01 ltp_set_thread_area01 ltp_set_tid_address01 ltp_setdomainname01 ltp_setdomainname02 ltp_setdomainname03 ltp_setegid01 ltp_setegid02 ltp_setfsgid01 ltp_setfsgid01_16 ltp_setfsgid02 ltp_setfsgid02_16 ltp_setfsgid03 ltp_setfsgid03_16 ltp_setfsuid01 ltp_setfsuid01_16 ltp_setfsuid02 ltp_setfsuid02_16 ltp_setfsuid03 ltp_setfsuid03_16 ltp_setfsuid04 ltp_setfsuid04_16 ltp_setgid01 ltp_setgid01_16 ltp_setgid02 ltp_setgid02_16 ltp_setgid03 ltp_setgid03_16 ltp_setgroups01 ltp_setgroups01_16 ltp_setgroups02 ltp_setgroups02_16 ltp_setgroups03 ltp_setgroups03_16 ltp_setgroups04 ltp_setgroups04_16 ltp_sethostname01 ltp_sethostname02 ltp_sethostname03 ltp_setitimer01 ltp_setitimer02 ltp_setitimer03 ltp_setns01 ltp_setpgid01 ltp_setpgid02 ltp_setpgid03 ltp_setpgid03_child ltp_setpgrp01 ltp_setpgrp02 ltp_setpriority01 ltp_setpriority02 ltp_setregid01 ltp_setregid01_16 ltp_setregid02 ltp_setregid02_16 ltp_setregid03 ltp_setregid03_16 ltp_setregid04 ltp_setregid04_16 ltp_setresgid01 ltp_setresgid01_16 ltp_setresgid02 ltp_setresgid02_16 ltp_setresgid03 ltp_setresgid03_16 ltp_setresgid04 ltp_setresgid04_16 ltp_setresuid01 ltp_setresuid01_16 ltp_setresuid02 ltp_setresuid02_16 ltp_setresuid03 ltp_setresuid03_16 ltp_setresuid04 ltp_setresuid04_16 ltp_setresuid05 ltp_setresuid05_16 ltp_setreuid01 ltp_setreuid01_16 ltp_setreuid02 ltp_setreuid02_16 ltp_setreuid03 ltp_setreuid03_16 ltp_setreuid04 ltp_setreuid04_16 ltp_setreuid05 ltp_setreuid05_16 ltp_setreuid06 ltp_setreuid06_16 ltp_setreuid07 ltp_setreuid07_16 ltp_setrlimit01 ltp_setrlimit02 ltp_setrlimit03 ltp_setrlimit04 ltp_setrlimit05 ltp_setrlimit06 ltp_setsid01 ltp_setsockopt01 ltp_setsockopt02 ltp_setsockopt03 ltp_setsockopt04 ltp_settimeofday01 ltp_settimeofday02 ltp_setuid01 ltp_setuid01_16 ltp_setuid03 ltp_setuid03_16 ltp_setuid04 ltp_setuid04_16 ltp_setxattr01 ltp_setxattr02 ltp_setxattr03 ltp_sgetmask01 ltp_shmctl05 ltp_sigaction01 ltp_sigaction02 ltp_sigaltstack01 ltp_sigaltstack02 ltp_sighold02 ltp_signal01 ltp_signal02 ltp_signal03 ltp_signal04 ltp_signal05 ltp_signal06 ltp_signalfd01 ltp_signalfd4_01 ltp_signalfd4_02 ltp_sigpending02 ltp_sigprocmask01 ltp_sigrelse01 ltp_sigsuspend01 ltp_sigtimedwait01 ltp_sigwait01 ltp_sigwaitinfo01 ltp_smack_notroot ltp_smack_set_socket_labels ltp_smount ltp_snd_timer01 ltp_socket01 ltp_socket02 ltp_socketcall01 ltp_socketcall02 ltp_socketcall03 ltp_socketcall04 ltp_socketpair01 ltp_socketpair02 ltp_sockioctl01 ltp_splice01 ltp_splice02 ltp_splice03 ltp_splice04 ltp_splice05 ltp_ssetmask01 ltp_stack_clash ltp_stack_space ltp_stat01 ltp_stat01_64 ltp_stat02 ltp_stat02_64 ltp_stat03 ltp_stat03_64 ltp_statfs01 ltp_statfs01_64 ltp_statfs02 ltp_statfs02_64 ltp_statfs03 ltp_statfs03_64 ltp_statvfs01 ltp_statvfs02 ltp_statx01 ltp_statx02 ltp_statx03 ltp_statx04 ltp_statx06 ltp_statx07 ltp_stream01 ltp_stream02 ltp_stream03 ltp_stream04 ltp_stream05 ltp_stress_cd ltp_string01 ltp_sugov_latency ltp_sugov_stale_util ltp_sugov_wakeups ltp_support_numa ltp_swapoff01 ltp_swapoff02 ltp_swapon01 ltp_swapon02 ltp_swapon03 ltp_swapping01 ltp_symlink01 ltp_symlink02 ltp_symlink03 ltp_symlink04 ltp_symlink05 ltp_symlinkat01 ltp_sync01 ltp_sync02 ltp_sync03 ltp_sync_file_range01 ltp_sync_file_range02 ltp_syncfs01 ltp_syscall01 ltp_sysconf01 ltp_sysctl01 ltp_sysctl03 ltp_sysctl04 ltp_sysfs01 ltp_sysfs02 ltp_sysfs03 ltp_sysfs04 ltp_sysfs05 ltp_sysfs06 ltp_sysinfo01 ltp_sysinfo02 ltp_syslog11 ltp_syslog12 ltp_syslogtst ltp_tbio ltp_tee01 ltp_tee02 ltp_test01 ltp_test02 ltp_test03 ltp_test04 ltp_test05 ltp_test06 ltp_test07 ltp_test08 ltp_test09 ltp_test10 ltp_test11 ltp_test12 ltp_test13 ltp_test14 ltp_test15 ltp_test16 ltp_test17 ltp_test18 ltp_test19 ltp_test_exec ltp_test_exec_child ltp_test_guarded_buf ltp_test_kconfig ltp_testcases_bin_add_ipv6addr ltp_testcases_bin_broken_ip-checksum ltp_testcases_bin_broken_ip-dstaddr ltp_testcases_bin_broken_ip-fragment ltp_testcases_bin_broken_ip-ihl ltp_testcases_bin_broken_ip-nexthdr ltp_testcases_bin_broken_ip-plen ltp_testcases_bin_broken_ip-protcol ltp_testcases_bin_broken_ip-totlen ltp_testcases_bin_broken_ip-version ltp_testcases_bin_check_envval ltp_testcases_bin_check_icmpv4_connectivity ltp_testcases_bin_check_icmpv6_connectivity ltp_testcases_bin_check_netem ltp_testcases_bin_check_setkey ltp_testcases_bin_cpuhotplug_do_disk_write_loop ltp_testcases_bin_cpuhotplug_do_kcompile_loop ltp_testcases_bin_cpuhotplug_do_spin_loop ltp_testcases_bin_cpuhotplug_report_proc_interrupts ltp_testcases_bin_create_file ltp_testcases_bin_data ltp_testcases_bin_find_portbundle ltp_testcases_bin_fs_bind_bin_check_prop ltp_testcases_bin_fs_bind_bin_lockfile ltp_testcases_bin_fs_bind_bin_makedir ltp_testcases_bin_fs_bind_bin_setup ltp_testcases_bin_fs_bind_bin_setupnslock ltp_testcases_bin_fs_bind_bind_test10 ltp_testcases_bin_fs_bind_bind_test11 ltp_testcases_bin_fs_bind_bind_test12 ltp_testcases_bin_fs_bind_bind_test14 ltp_testcases_bin_fs_bind_bind_test15 ltp_testcases_bin_fs_bind_bind_test16 ltp_testcases_bin_fs_bind_bind_test18 ltp_testcases_bin_fs_bind_bind_test19 ltp_testcases_bin_fs_bind_move_test08 ltp_testcases_bin_fs_bind_move_test22 ltp_testcases_bin_fs_bind_rbind_test01 ltp_testcases_bin_fs_bind_rbind_test02 ltp_testcases_bin_fs_bind_rbind_test03 ltp_testcases_bin_fs_bind_rbind_test04 ltp_testcases_bin_fs_bind_rbind_test05 ltp_testcases_bin_fs_bind_rbind_test06 ltp_testcases_bin_fs_bind_rbind_test07 ltp_testcases_bin_fs_bind_rbind_test07-2 ltp_testcases_bin_fs_bind_rbind_test09 ltp_testcases_bin_fs_bind_rbind_test13 ltp_testcases_bin_fs_bind_rbind_test17 ltp_testcases_bin_fs_bind_rbind_test20 ltp_testcases_bin_fs_bind_rbind_test21 ltp_testcases_bin_fs_bind_rbind_test23 ltp_testcases_bin_fs_bind_rbind_test24 ltp_testcases_bin_fs_bind_rbind_test25 ltp_testcases_bin_fs_bind_rbind_test26 ltp_testcases_bin_fs_bind_rbind_test27 ltp_testcases_bin_fs_bind_rbind_test28 ltp_testcases_bin_fs_bind_rbind_test29 ltp_testcases_bin_fs_bind_rbind_test30 ltp_testcases_bin_fs_bind_rbind_test31 ltp_testcases_bin_fs_bind_rbind_test32 ltp_testcases_bin_fs_bind_rbind_test33 ltp_testcases_bin_fs_bind_rbind_test34 ltp_testcases_bin_fs_bind_rbind_test35 ltp_testcases_bin_fs_bind_rbind_test36 ltp_testcases_bin_fs_bind_rbind_test37 ltp_testcases_bin_fs_bind_rbind_test38 ltp_testcases_bin_fs_bind_rbind_test39 ltp_testcases_bin_fs_di ltp_testcases_bin_fs_inod ltp_testcases_bin_fsxtest ltp_testcases_bin_fsxtest02 ltp_testcases_bin_get_ifname ltp_testcases_bin_icmp4-multi-diffip01 ltp_testcases_bin_icmp4-multi-diffip02 ltp_testcases_bin_icmp4-multi-diffip03 ltp_testcases_bin_icmp4-multi-diffip04 ltp_testcases_bin_icmp4-multi-diffip05 ltp_testcases_bin_icmp4-multi-diffip06 ltp_testcases_bin_icmp4-multi-diffip07 ltp_testcases_bin_icmp4-multi-diffnic01 ltp_testcases_bin_icmp4-multi-diffnic02 ltp_testcases_bin_icmp4-multi-diffnic03 ltp_testcases_bin_icmp4-multi-diffnic04 ltp_testcases_bin_icmp4-multi-diffnic05 ltp_testcases_bin_icmp4-multi-diffnic06 ltp_testcases_bin_icmp4-multi-diffnic07 ltp_testcases_bin_icmp6-multi-diffip01 ltp_testcases_bin_icmp6-multi-diffip02 ltp_testcases_bin_icmp6-multi-diffip03 ltp_testcases_bin_icmp6-multi-diffip04 ltp_testcases_bin_icmp6-multi-diffip05 ltp_testcases_bin_icmp6-multi-diffip06 ltp_testcases_bin_icmp6-multi-diffip07 ltp_testcases_bin_icmp6-multi-diffnic01 ltp_testcases_bin_icmp6-multi-diffnic02 ltp_testcases_bin_icmp6-multi-diffnic03 ltp_testcases_bin_icmp6-multi-diffnic04 ltp_testcases_bin_icmp6-multi-diffnic05 ltp_testcases_bin_icmp6-multi-diffnic06 ltp_testcases_bin_icmp6-multi-diffnic07 ltp_testcases_bin_initialize_if ltp_testcases_bin_killall_icmp_traffic ltp_testcases_bin_killall_tcp_traffic ltp_testcases_bin_killall_udp_traffic ltp_testcases_bin_libcgroup_freezer ltp_testcases_bin_mcast-group-multiple-socket ltp_testcases_bin_mcast-group-same-group ltp_testcases_bin_mcast-group-single-socket ltp_testcases_bin_mcast-group-source-filter ltp_testcases_bin_mcast4-pktfld01 ltp_testcases_bin_mcast4-pktfld02 ltp_testcases_bin_mcast4-queryfld01 ltp_testcases_bin_mcast4-queryfld02 ltp_testcases_bin_mcast4-queryfld03 ltp_testcases_bin_mcast4-queryfld04 ltp_testcases_bin_mcast4-queryfld05 ltp_testcases_bin_mcast4-queryfld06 ltp_testcases_bin_mcast6-pktfld01 ltp_testcases_bin_mcast6-pktfld02 ltp_testcases_bin_mcast6-queryfld01 ltp_testcases_bin_mcast6-queryfld02 ltp_testcases_bin_mcast6-queryfld03 ltp_testcases_bin_mcast6-queryfld04 ltp_testcases_bin_mcast6-queryfld05 ltp_testcases_bin_mcast6-queryfld06 ltp_testcases_bin_nfs01 ltp_testcases_bin_nfs02 ltp_testcases_bin_nfs03 ltp_testcases_bin_nfs04 ltp_testcases_bin_nfs05 ltp_testcases_bin_nfs06 ltp_testcases_bin_nfslock01 ltp_testcases_bin_nfsstat01 ltp_testcases_bin_ns-echoclient ltp_testcases_bin_output_ipsec_conf ltp_testcases_bin_route4-redirect ltp_testcases_bin_route4-rmmod ltp_testcases_bin_route6-redirect ltp_testcases_bin_route6-rmmod ltp_testcases_bin_run_pec_test ltp_testcases_bin_rwtest ltp_testcases_bin_set_ipv4addr ltp_testcases_bin_stress_floppy ltp_testcases_bin_tcp4-multi-diffip01 ltp_testcases_bin_tcp4-multi-diffip02 ltp_testcases_bin_tcp4-multi-diffip03 ltp_testcases_bin_tcp4-multi-diffip04 ltp_testcases_bin_tcp4-multi-diffip05 ltp_testcases_bin_tcp4-multi-diffip06 ltp_testcases_bin_tcp4-multi-diffip07 ltp_testcases_bin_tcp4-multi-diffip08 ltp_testcases_bin_tcp4-multi-diffip09 ltp_testcases_bin_tcp4-multi-diffip10 ltp_testcases_bin_tcp4-multi-diffip11 ltp_testcases_bin_tcp4-multi-diffip12 ltp_testcases_bin_tcp4-multi-diffip13 ltp_testcases_bin_tcp4-multi-diffip14 ltp_testcases_bin_tcp4-multi-diffnic01 ltp_testcases_bin_tcp4-multi-diffnic02 ltp_testcases_bin_tcp4-multi-diffnic03 ltp_testcases_bin_tcp4-multi-diffnic04 ltp_testcases_bin_tcp4-multi-diffnic05 ltp_testcases_bin_tcp4-multi-diffnic06 ltp_testcases_bin_tcp4-multi-diffnic07 ltp_testcases_bin_tcp4-multi-diffnic08 ltp_testcases_bin_tcp4-multi-diffnic09 ltp_testcases_bin_tcp4-multi-diffnic10 ltp_testcases_bin_tcp4-multi-diffnic11 ltp_testcases_bin_tcp4-multi-diffnic12 ltp_testcases_bin_tcp4-multi-diffnic13 ltp_testcases_bin_tcp4-multi-diffnic14 ltp_testcases_bin_tcp4-multi-diffport01 ltp_testcases_bin_tcp4-multi-diffport02 ltp_testcases_bin_tcp4-multi-diffport03 ltp_testcases_bin_tcp4-multi-diffport04 ltp_testcases_bin_tcp4-multi-diffport05 ltp_testcases_bin_tcp4-multi-diffport06 ltp_testcases_bin_tcp4-multi-diffport07 ltp_testcases_bin_tcp4-multi-diffport08 ltp_testcases_bin_tcp4-multi-diffport09 ltp_testcases_bin_tcp4-multi-diffport10 ltp_testcases_bin_tcp4-multi-diffport11 ltp_testcases_bin_tcp4-multi-diffport12 ltp_testcases_bin_tcp4-multi-diffport13 ltp_testcases_bin_tcp4-multi-diffport14 ltp_testcases_bin_tcp4-multi-sameport01 ltp_testcases_bin_tcp4-multi-sameport02 ltp_testcases_bin_tcp4-multi-sameport03 ltp_testcases_bin_tcp4-multi-sameport04 ltp_testcases_bin_tcp4-multi-sameport05 ltp_testcases_bin_tcp4-multi-sameport06 ltp_testcases_bin_tcp4-multi-sameport07 ltp_testcases_bin_tcp4-multi-sameport08 ltp_testcases_bin_tcp4-multi-sameport09 ltp_testcases_bin_tcp4-multi-sameport10 ltp_testcases_bin_tcp4-multi-sameport11 ltp_testcases_bin_tcp4-multi-sameport12 ltp_testcases_bin_tcp4-multi-sameport13 ltp_testcases_bin_tcp4-multi-sameport14 ltp_testcases_bin_tcp4-uni-basic01 ltp_testcases_bin_tcp4-uni-basic02 ltp_testcases_bin_tcp4-uni-basic03 ltp_testcases_bin_tcp4-uni-basic04 ltp_testcases_bin_tcp4-uni-basic05 ltp_testcases_bin_tcp4-uni-basic06 ltp_testcases_bin_tcp4-uni-basic07 ltp_testcases_bin_tcp4-uni-basic08 ltp_testcases_bin_tcp4-uni-basic09 ltp_testcases_bin_tcp4-uni-basic10 ltp_testcases_bin_tcp4-uni-basic11 ltp_testcases_bin_tcp4-uni-basic12 ltp_testcases_bin_tcp4-uni-basic13 ltp_testcases_bin_tcp4-uni-basic14 ltp_testcases_bin_tcp4-uni-dsackoff01 ltp_testcases_bin_tcp4-uni-dsackoff02 ltp_testcases_bin_tcp4-uni-dsackoff03 ltp_testcases_bin_tcp4-uni-dsackoff04 ltp_testcases_bin_tcp4-uni-dsackoff05 ltp_testcases_bin_tcp4-uni-dsackoff06 ltp_testcases_bin_tcp4-uni-dsackoff07 ltp_testcases_bin_tcp4-uni-dsackoff08 ltp_testcases_bin_tcp4-uni-dsackoff09 ltp_testcases_bin_tcp4-uni-dsackoff10 ltp_testcases_bin_tcp4-uni-dsackoff11 ltp_testcases_bin_tcp4-uni-dsackoff12 ltp_testcases_bin_tcp4-uni-dsackoff13 ltp_testcases_bin_tcp4-uni-dsackoff14 ltp_testcases_bin_tcp4-uni-pktlossdup01 ltp_testcases_bin_tcp4-uni-pktlossdup02 ltp_testcases_bin_tcp4-uni-pktlossdup03 ltp_testcases_bin_tcp4-uni-pktlossdup04 ltp_testcases_bin_tcp4-uni-pktlossdup05 ltp_testcases_bin_tcp4-uni-pktlossdup06 ltp_testcases_bin_tcp4-uni-pktlossdup07 ltp_testcases_bin_tcp4-uni-pktlossdup08 ltp_testcases_bin_tcp4-uni-pktlossdup09 ltp_testcases_bin_tcp4-uni-pktlossdup10 ltp_testcases_bin_tcp4-uni-pktlossdup11 ltp_testcases_bin_tcp4-uni-pktlossdup12 ltp_testcases_bin_tcp4-uni-pktlossdup13 ltp_testcases_bin_tcp4-uni-pktlossdup14 ltp_testcases_bin_tcp4-uni-sackoff01 ltp_testcases_bin_tcp4-uni-sackoff02 ltp_testcases_bin_tcp4-uni-sackoff03 ltp_testcases_bin_tcp4-uni-sackoff04 ltp_testcases_bin_tcp4-uni-sackoff05 ltp_testcases_bin_tcp4-uni-sackoff06 ltp_testcases_bin_tcp4-uni-sackoff07 ltp_testcases_bin_tcp4-uni-sackoff08 ltp_testcases_bin_tcp4-uni-sackoff09 ltp_testcases_bin_tcp4-uni-sackoff10 ltp_testcases_bin_tcp4-uni-sackoff11 ltp_testcases_bin_tcp4-uni-sackoff12 ltp_testcases_bin_tcp4-uni-sackoff13 ltp_testcases_bin_tcp4-uni-sackoff14 ltp_testcases_bin_tcp4-uni-smallsend01 ltp_testcases_bin_tcp4-uni-smallsend02 ltp_testcases_bin_tcp4-uni-smallsend03 ltp_testcases_bin_tcp4-uni-smallsend04 ltp_testcases_bin_tcp4-uni-smallsend05 ltp_testcases_bin_tcp4-uni-smallsend06 ltp_testcases_bin_tcp4-uni-smallsend07 ltp_testcases_bin_tcp4-uni-smallsend08 ltp_testcases_bin_tcp4-uni-smallsend09 ltp_testcases_bin_tcp4-uni-smallsend10 ltp_testcases_bin_tcp4-uni-smallsend11 ltp_testcases_bin_tcp4-uni-smallsend12 ltp_testcases_bin_tcp4-uni-smallsend13 ltp_testcases_bin_tcp4-uni-smallsend14 ltp_testcases_bin_tcp4-uni-tso01 ltp_testcases_bin_tcp4-uni-tso02 ltp_testcases_bin_tcp4-uni-tso03 ltp_testcases_bin_tcp4-uni-tso04 ltp_testcases_bin_tcp4-uni-tso05 ltp_testcases_bin_tcp4-uni-tso06 ltp_testcases_bin_tcp4-uni-tso07 ltp_testcases_bin_tcp4-uni-tso08 ltp_testcases_bin_tcp4-uni-tso09 ltp_testcases_bin_tcp4-uni-tso10 ltp_testcases_bin_tcp4-uni-tso11 ltp_testcases_bin_tcp4-uni-tso12 ltp_testcases_bin_tcp4-uni-tso13 ltp_testcases_bin_tcp4-uni-tso14 ltp_testcases_bin_tcp4-uni-winscale01 ltp_testcases_bin_tcp4-uni-winscale02 ltp_testcases_bin_tcp4-uni-winscale03 ltp_testcases_bin_tcp4-uni-winscale04 ltp_testcases_bin_tcp4-uni-winscale05 ltp_testcases_bin_tcp4-uni-winscale06 ltp_testcases_bin_tcp4-uni-winscale07 ltp_testcases_bin_tcp4-uni-winscale08 ltp_testcases_bin_tcp4-uni-winscale09 ltp_testcases_bin_tcp4-uni-winscale10 ltp_testcases_bin_tcp4-uni-winscale11 ltp_testcases_bin_tcp4-uni-winscale12 ltp_testcases_bin_tcp4-uni-winscale13 ltp_testcases_bin_tcp4-uni-winscale14 ltp_testcases_bin_tcp6-multi-diffip01 ltp_testcases_bin_tcp6-multi-diffip02 ltp_testcases_bin_tcp6-multi-diffip03 ltp_testcases_bin_tcp6-multi-diffip04 ltp_testcases_bin_tcp6-multi-diffip05 ltp_testcases_bin_tcp6-multi-diffip06 ltp_testcases_bin_tcp6-multi-diffip07 ltp_testcases_bin_tcp6-multi-diffip08 ltp_testcases_bin_tcp6-multi-diffip09 ltp_testcases_bin_tcp6-multi-diffip10 ltp_testcases_bin_tcp6-multi-diffip11 ltp_testcases_bin_tcp6-multi-diffip12 ltp_testcases_bin_tcp6-multi-diffip13 ltp_testcases_bin_tcp6-multi-diffip14 ltp_testcases_bin_tcp6-multi-diffnic01 ltp_testcases_bin_tcp6-multi-diffnic02 ltp_testcases_bin_tcp6-multi-diffnic03 ltp_testcases_bin_tcp6-multi-diffnic04 ltp_testcases_bin_tcp6-multi-diffnic05 ltp_testcases_bin_tcp6-multi-diffnic06 ltp_testcases_bin_tcp6-multi-diffnic07 ltp_testcases_bin_tcp6-multi-diffnic08 ltp_testcases_bin_tcp6-multi-diffnic09 ltp_testcases_bin_tcp6-multi-diffnic10 ltp_testcases_bin_tcp6-multi-diffnic11 ltp_testcases_bin_tcp6-multi-diffnic12 ltp_testcases_bin_tcp6-multi-diffnic13 ltp_testcases_bin_tcp6-multi-diffnic14 ltp_testcases_bin_tcp6-multi-diffport01 ltp_testcases_bin_tcp6-multi-diffport02 ltp_testcases_bin_tcp6-multi-diffport03 ltp_testcases_bin_tcp6-multi-diffport04 ltp_testcases_bin_tcp6-multi-diffport05 ltp_testcases_bin_tcp6-multi-diffport06 ltp_testcases_bin_tcp6-multi-diffport07 ltp_testcases_bin_tcp6-multi-diffport08 ltp_testcases_bin_tcp6-multi-diffport09 ltp_testcases_bin_tcp6-multi-diffport10 ltp_testcases_bin_tcp6-multi-diffport11 ltp_testcases_bin_tcp6-multi-diffport12 ltp_testcases_bin_tcp6-multi-diffport13 ltp_testcases_bin_tcp6-multi-diffport14 ltp_testcases_bin_tcp6-multi-sameport01 ltp_testcases_bin_tcp6-multi-sameport02 ltp_testcases_bin_tcp6-multi-sameport03 ltp_testcases_bin_tcp6-multi-sameport04 ltp_testcases_bin_tcp6-multi-sameport05 ltp_testcases_bin_tcp6-multi-sameport06 ltp_testcases_bin_tcp6-multi-sameport07 ltp_testcases_bin_tcp6-multi-sameport08 ltp_testcases_bin_tcp6-multi-sameport09 ltp_testcases_bin_tcp6-multi-sameport10 ltp_testcases_bin_tcp6-multi-sameport11 ltp_testcases_bin_tcp6-multi-sameport12 ltp_testcases_bin_tcp6-multi-sameport13 ltp_testcases_bin_tcp6-multi-sameport14 ltp_testcases_bin_tcp6-uni-basic01 ltp_testcases_bin_tcp6-uni-basic02 ltp_testcases_bin_tcp6-uni-basic03 ltp_testcases_bin_tcp6-uni-basic04 ltp_testcases_bin_tcp6-uni-basic05 ltp_testcases_bin_tcp6-uni-basic06 ltp_testcases_bin_tcp6-uni-basic07 ltp_testcases_bin_tcp6-uni-basic08 ltp_testcases_bin_tcp6-uni-basic09 ltp_testcases_bin_tcp6-uni-basic10 ltp_testcases_bin_tcp6-uni-basic11 ltp_testcases_bin_tcp6-uni-basic12 ltp_testcases_bin_tcp6-uni-basic13 ltp_testcases_bin_tcp6-uni-basic14 ltp_testcases_bin_tcp6-uni-dsackoff01 ltp_testcases_bin_tcp6-uni-dsackoff02 ltp_testcases_bin_tcp6-uni-dsackoff03 ltp_testcases_bin_tcp6-uni-dsackoff04 ltp_testcases_bin_tcp6-uni-dsackoff05 ltp_testcases_bin_tcp6-uni-dsackoff06 ltp_testcases_bin_tcp6-uni-dsackoff07 ltp_testcases_bin_tcp6-uni-dsackoff08 ltp_testcases_bin_tcp6-uni-dsackoff09 ltp_testcases_bin_tcp6-uni-dsackoff10 ltp_testcases_bin_tcp6-uni-dsackoff11 ltp_testcases_bin_tcp6-uni-dsackoff12 ltp_testcases_bin_tcp6-uni-dsackoff13 ltp_testcases_bin_tcp6-uni-dsackoff14 ltp_testcases_bin_tcp6-uni-pktlossdup01 ltp_testcases_bin_tcp6-uni-pktlossdup02 ltp_testcases_bin_tcp6-uni-pktlossdup03 ltp_testcases_bin_tcp6-uni-pktlossdup04 ltp_testcases_bin_tcp6-uni-pktlossdup05 ltp_testcases_bin_tcp6-uni-pktlossdup06 ltp_testcases_bin_tcp6-uni-pktlossdup07 ltp_testcases_bin_tcp6-uni-pktlossdup08 ltp_testcases_bin_tcp6-uni-pktlossdup09 ltp_testcases_bin_tcp6-uni-pktlossdup10 ltp_testcases_bin_tcp6-uni-pktlossdup11 ltp_testcases_bin_tcp6-uni-pktlossdup12 ltp_testcases_bin_tcp6-uni-pktlossdup13 ltp_testcases_bin_tcp6-uni-pktlossdup14 ltp_testcases_bin_tcp6-uni-sackoff01 ltp_testcases_bin_tcp6-uni-sackoff02 ltp_testcases_bin_tcp6-uni-sackoff03 ltp_testcases_bin_tcp6-uni-sackoff04 ltp_testcases_bin_tcp6-uni-sackoff05 ltp_testcases_bin_tcp6-uni-sackoff06 ltp_testcases_bin_tcp6-uni-sackoff07 ltp_testcases_bin_tcp6-uni-sackoff08 ltp_testcases_bin_tcp6-uni-sackoff09 ltp_testcases_bin_tcp6-uni-sackoff10 ltp_testcases_bin_tcp6-uni-sackoff11 ltp_testcases_bin_tcp6-uni-sackoff12 ltp_testcases_bin_tcp6-uni-sackoff13 ltp_testcases_bin_tcp6-uni-sackoff14 ltp_testcases_bin_tcp6-uni-smallsend01 ltp_testcases_bin_tcp6-uni-smallsend02 ltp_testcases_bin_tcp6-uni-smallsend03 ltp_testcases_bin_tcp6-uni-smallsend04 ltp_testcases_bin_tcp6-uni-smallsend05 ltp_testcases_bin_tcp6-uni-smallsend06 ltp_testcases_bin_tcp6-uni-smallsend07 ltp_testcases_bin_tcp6-uni-smallsend08 ltp_testcases_bin_tcp6-uni-smallsend09 ltp_testcases_bin_tcp6-uni-smallsend10 ltp_testcases_bin_tcp6-uni-smallsend11 ltp_testcases_bin_tcp6-uni-smallsend12 ltp_testcases_bin_tcp6-uni-smallsend13 ltp_testcases_bin_tcp6-uni-smallsend14 ltp_testcases_bin_tcp6-uni-tso01 ltp_testcases_bin_tcp6-uni-tso02 ltp_testcases_bin_tcp6-uni-tso03 ltp_testcases_bin_tcp6-uni-tso04 ltp_testcases_bin_tcp6-uni-tso05 ltp_testcases_bin_tcp6-uni-tso06 ltp_testcases_bin_tcp6-uni-tso07 ltp_testcases_bin_tcp6-uni-tso08 ltp_testcases_bin_tcp6-uni-tso09 ltp_testcases_bin_tcp6-uni-tso10 ltp_testcases_bin_tcp6-uni-tso11 ltp_testcases_bin_tcp6-uni-tso12 ltp_testcases_bin_tcp6-uni-tso13 ltp_testcases_bin_tcp6-uni-tso14 ltp_testcases_bin_tcp6-uni-winscale01 ltp_testcases_bin_tcp6-uni-winscale02 ltp_testcases_bin_tcp6-uni-winscale03 ltp_testcases_bin_tcp6-uni-winscale04 ltp_testcases_bin_tcp6-uni-winscale05 ltp_testcases_bin_tcp6-uni-winscale06 ltp_testcases_bin_tcp6-uni-winscale07 ltp_testcases_bin_tcp6-uni-winscale08 ltp_testcases_bin_tcp6-uni-winscale09 ltp_testcases_bin_tcp6-uni-winscale10 ltp_testcases_bin_tcp6-uni-winscale11 ltp_testcases_bin_tcp6-uni-winscale12 ltp_testcases_bin_tcp6-uni-winscale13 ltp_testcases_bin_tcp6-uni-winscale14 ltp_testcases_bin_test_ioctl ltp_testcases_bin_udp4-multi-diffip01 ltp_testcases_bin_udp4-multi-diffip02 ltp_testcases_bin_udp4-multi-diffip03 ltp_testcases_bin_udp4-multi-diffip04 ltp_testcases_bin_udp4-multi-diffip05 ltp_testcases_bin_udp4-multi-diffip06 ltp_testcases_bin_udp4-multi-diffip07 ltp_testcases_bin_udp4-multi-diffnic01 ltp_testcases_bin_udp4-multi-diffnic02 ltp_testcases_bin_udp4-multi-diffnic03 ltp_testcases_bin_udp4-multi-diffnic04 ltp_testcases_bin_udp4-multi-diffnic05 ltp_testcases_bin_udp4-multi-diffnic06 ltp_testcases_bin_udp4-multi-diffnic07 ltp_testcases_bin_udp4-multi-diffport01 ltp_testcases_bin_udp4-multi-diffport02 ltp_testcases_bin_udp4-multi-diffport03 ltp_testcases_bin_udp4-multi-diffport04 ltp_testcases_bin_udp4-multi-diffport05 ltp_testcases_bin_udp4-multi-diffport06 ltp_testcases_bin_udp4-multi-diffport07 ltp_testcases_bin_udp4-uni-basic01 ltp_testcases_bin_udp4-uni-basic02 ltp_testcases_bin_udp4-uni-basic03 ltp_testcases_bin_udp4-uni-basic04 ltp_testcases_bin_udp4-uni-basic05 ltp_testcases_bin_udp4-uni-basic06 ltp_testcases_bin_udp4-uni-basic07 ltp_testcases_bin_udp6-multi-diffip01 ltp_testcases_bin_udp6-multi-diffip02 ltp_testcases_bin_udp6-multi-diffip03 ltp_testcases_bin_udp6-multi-diffip04 ltp_testcases_bin_udp6-multi-diffip05 ltp_testcases_bin_udp6-multi-diffip06 ltp_testcases_bin_udp6-multi-diffip07 ltp_testcases_bin_udp6-multi-diffnic01 ltp_testcases_bin_udp6-multi-diffnic02 ltp_testcases_bin_udp6-multi-diffnic03 ltp_testcases_bin_udp6-multi-diffnic04 ltp_testcases_bin_udp6-multi-diffnic05 ltp_testcases_bin_udp6-multi-diffnic06 ltp_testcases_bin_udp6-multi-diffnic07 ltp_testcases_bin_udp6-multi-diffport01 ltp_testcases_bin_udp6-multi-diffport02 ltp_testcases_bin_udp6-multi-diffport03 ltp_testcases_bin_udp6-multi-diffport04 ltp_testcases_bin_udp6-multi-diffport05 ltp_testcases_bin_udp6-multi-diffport06 ltp_testcases_bin_udp6-multi-diffport07 ltp_testcases_bin_udp6-uni-basic01 ltp_testcases_bin_udp6-uni-basic02 ltp_testcases_bin_udp6-uni-basic03 ltp_testcases_bin_udp6-uni-basic04 ltp_testcases_bin_udp6-uni-basic05 ltp_testcases_bin_udp6-uni-basic06 ltp_testcases_bin_udp6-uni-basic07 ltp_testsf_c ltp_testsf_c6 ltp_testsf_s ltp_testsf_s6 ltp_tgkill01 ltp_tgkill02 ltp_tgkill03 ltp_thp01 ltp_thp02 ltp_thp03 ltp_time-schedule ltp_time01 ltp_time02 ltp_timed_forkbomb ltp_timer_create01 ltp_timer_create02 ltp_timer_create03 ltp_timer_delete01 ltp_timer_delete02 ltp_timer_getoverrun01 ltp_timer_gettime01 ltp_timer_settime01 ltp_timer_settime02 ltp_timerfd01 ltp_timerfd02 ltp_timerfd03 ltp_timerfd_create01 ltp_timerfd_gettime01 ltp_timerfd_settime01 ltp_times01 ltp_times03 ltp_tkill01 ltp_tkill02 ltp_tomoyo_accept_test ltp_tomoyo_file_test ltp_tomoyo_filesystem_test ltp_tomoyo_new_file_test ltp_tomoyo_new_test ltp_tomoyo_policy_io_test ltp_tomoyo_policy_memory_test ltp_tomoyo_rewrite_test ltp_tpci ltp_trace_sched ltp_trerrno ltp_truncate01 ltp_truncate01_64 ltp_truncate02 ltp_truncate02_64 ltp_truncate03 ltp_truncate03_64 ltp_tst_brk ltp_tst_brkm ltp_tst_capability01 ltp_tst_capability02 ltp_tst_check_drivers ltp_tst_checkpoint ltp_tst_checkpoint_wait_timeout ltp_tst_checkpoint_wake_timeout ltp_tst_cleanup_once ltp_tst_dataroot01 ltp_tst_dataroot02 ltp_tst_dataroot03 ltp_tst_device ltp_tst_exit ltp_tst_expiration_timer ltp_tst_fs_fill_hardlinks ltp_tst_fs_fill_subdirs ltp_tst_fs_has_free ltp_tst_get_unused_port ltp_tst_getconf ltp_tst_kvcmp ltp_tst_ncpus ltp_tst_ncpus_conf ltp_tst_ncpus_max ltp_tst_net_iface_prefix ltp_tst_net_ip_prefix ltp_tst_net_vars ltp_tst_process_state ltp_tst_random ltp_tst_record_childstatus ltp_tst_res ltp_tst_res_hexd ltp_tst_resm ltp_tst_rod ltp_tst_safe_fileops ltp_tst_safe_macros ltp_tst_sleep ltp_tst_strerrno ltp_tst_strsig ltp_tst_strstatus ltp_tst_supported_fs ltp_tst_tmpdir_test ltp_uaccess ltp_uevent01 ltp_uevent02 ltp_uevent03 ltp_umask01 ltp_umip_basic_test ltp_umount01 ltp_umount02 ltp_umount03 ltp_umount2_01 ltp_umount2_02 ltp_umount2_03 ltp_uname01 ltp_uname02 ltp_uname03 ltp_uname04 ltp_unlink05 ltp_unlink07 ltp_unlink08 ltp_unlinkat01 ltp_unshare01 ltp_unshare02 ltp_userfaultfd01 ltp_ustat01 ltp_ustat02 ltp_utime01 ltp_utime02 ltp_utime03 ltp_utime04 ltp_utime05 ltp_utime06 ltp_utimensat01 ltp_utimes01 ltp_variant ltp_verify_caps_exec ltp_vfork ltp_vfork01 ltp_vfork02 ltp_vhangup01 ltp_vhangup02 ltp_vma01 ltp_vma02 ltp_vma03 ltp_vma04 ltp_vma05_vdso ltp_vmsplice01 ltp_vmsplice02 ltp_vmsplice03 ltp_wait01 ltp_wait02 ltp_wait401 ltp_wait402 ltp_waitid01 ltp_waitid02 ltp_waitpid01 ltp_waitpid02 ltp_waitpid03 ltp_waitpid04 ltp_waitpid05 ltp_waitpid06 ltp_waitpid07 ltp_waitpid08 ltp_waitpid09 ltp_waitpid10 ltp_waitpid11 ltp_waitpid12 ltp_waitpid13 ltp_write01 ltp_write02 ltp_write03 ltp_write04 ltp_write05 ltp_writetest ltp_writev01 ltp_writev02 ltp_writev05 ltp_writev06 ltp_writev07 ltp_zram03;
 
   inherit (callBPPackage "external/lua" ./external_lua.nix {})
     liblua liblua-sources;
@@ -3204,14 +6057,38 @@
   inherit (callBPPackage "external/mdnsresponder" ./external_mdnsresponder.nix {})
     dnssd libmdnssd mdnsd mdnsresponder_default_cflags;
 
+  inherit (callBPPackage "external/mesa3d" ./external_mesa3d.nix {})
+    mesa_common_defaults mesa_common_headers mesa_genxml_genX;
+
+  inherit (callBPPackage "external/mesa3d" ./external_mesa3d_Android.gen.bp.nix {})
+    mesa_version_defaults;
+
+  inherit (callBPPackage "external/mesa3d/src" ./external_mesa3d_src.nix {})
+    libmesa_glsl_utils_includes libmesa_sse41_includes mesa_mapi_headers;
+
+  inherit (callBPPackage "external/mesa3d/src/intel" ./external_mesa3d_src_intel.nix {})
+    libmesa_genxml mesa_genxml_gen10 mesa_genxml_gen11 mesa_genxml_gen4 mesa_genxml_gen45 mesa_genxml_gen5 mesa_genxml_gen6 mesa_genxml_gen7 mesa_genxml_gen75 mesa_genxml_gen8 mesa_genxml_gen9 mesa_genxml_genrule_defaults;
+
+  inherit (callBPPackage "external/mesa3d/src/mesa" ./external_mesa3d_src_mesa.nix {})
+    libmesa_glsl_utils libmesa_sse41 mesa_gen_matypes;
+
+  inherit (callBPPackage "external/mesa3d/src/mesa" ./external_mesa3d_src_mesa_Android.sources.bp.nix {})
+    mesa_x86_sse41_srcs;
+
+  inherit (callBPPackage "external/mime-support" ./external_mime-support.nix {})
+    "debian.mime.types.minimized";
+
   inherit (callBPPackage "external/minigbm" ./external_minigbm.nix {})
-    "gralloc.minigbm" "gralloc.minigbm_defaults" "gralloc.minigbm_intel" "gralloc.minigbm_intel_defaults" "gralloc.minigbm_meson" "gralloc.minigbm_meson_defaults" libminigbm;
+    "gralloc.minigbm" "gralloc.minigbm_intel" "gralloc.minigbm_meson" libminigbm libminigbm_cros_gralloc minigbm_cros_gralloc_defaults minigbm_defaults;
+
+  inherit (callBPPackage "external/minigbm/cros_gralloc/gralloc4" ./external_minigbm_cros_gralloc_gralloc4.nix {})
+    "android.hardware.graphics.allocator@4.0-service.minigbm" "android.hardware.graphics.mapper@4.0-impl.minigbm";
 
   inherit (callBPPackage "external/minijail" ./external_minijail.nix {})
-    drop_privs libminijail libminijail_flags libminijail_gen_constants libminijail_gen_constants_obj libminijail_gen_syscall libminijail_gen_syscall_obj libminijail_generated libminijail_test libminijail_unittest_gtest minijail0 minijail0_cli_unittest_gtest mj_system_unittest_gtest mj_util_unittest_gtest syscall_filter_unittest_gtest;
+    drop_privs libminijail libminijail_flags libminijail_gen_constants libminijail_gen_constants_llvmir libminijail_gen_constants_obj libminijail_gen_syscall libminijail_gen_syscall_llvmir libminijail_gen_syscall_obj libminijail_generated libminijail_sys libminijail_test libminijail_unittest_gtest minijail0 minijail0_cli_unittest_gtest mj_system_unittest_gtest mj_util_unittest_gtest syscall_filter_unittest_gtest;
 
   inherit (callBPPackage "external/minijail/tools" ./external_minijail_tools.nix {})
-    minijail_compile_seccomp_policy minijail_compiler_unittest minijail_parser_unittest;
+    minijail_compile_seccomp_policy minijail_compiler_unittest minijail_constants_json minijail_generate_constants_json minijail_parser_unittest;
 
   inherit (callBPPackage "external/mksh" ./external_mksh.nix {})
     mkshrc mkshrc_vendor sh sh-defaults sh_vendor;
@@ -3244,7 +6121,7 @@
     protoc-gen-nanopb;
 
   inherit (callBPPackage "external/neven" ./external_neven.nix {})
-    libFFTEm;
+    "RFFspeed_501.bmd" "RFFstd_501.bmd" libFFTEm;
 
   inherit (callBPPackage "external/newfs_msdos" ./external_newfs_msdos.nix {})
     newfs_msdos;
@@ -3285,6 +6162,9 @@
   inherit (callBPPackage "external/nos/host/generic/nugget/proto/nugget/app/avb" ./external_nos_host_generic_nugget_proto_nugget_app_avb.nix {})
     "nos_app_avb_service_genc++" "nos_app_avb_service_genc++_headers" "nos_app_avb_service_genc++_mock" nos_app_avb;
 
+  inherit (callBPPackage "external/nos/host/generic/nugget/proto/nugget/app/identity" ./external_nos_host_generic_nugget_proto_nugget_app_identity.nix {})
+    "nos_app_identity_service_genc++" "nos_app_identity_service_genc++_headers" "nos_app_identity_service_genc++_mock" nos_app_identity;
+
   inherit (callBPPackage "external/nos/host/generic/nugget/proto/nugget/app/keymaster" ./external_nos_host_generic_nugget_proto_nugget_app_keymaster.nix {})
     "nos_app_keymaster_service_genc++" "nos_app_keymaster_service_genc++_headers" "nos_app_keymaster_service_genc++_mock" nos_app_keymaster;
 
@@ -3293,6 +6173,18 @@
 
   inherit (callBPPackage "external/noto-fonts" ./external_noto-fonts.nix {})
     recovery_noto-fonts_dep;
+
+  inherit (callBPPackage "external/noto-fonts/cjk" ./external_noto-fonts_cjk.nix {})
+    "NotoSansCJK-Regular.ttc" "NotoSerifCJK-Regular.ttc";
+
+  inherit (callBPPackage "external/noto-fonts/emoji" ./external_noto-fonts_emoji.nix {})
+    "NotoColorEmoji.ttf";
+
+  inherit (callBPPackage "external/noto-fonts/other-vf" ./external_noto-fonts_other-vf.nix {})
+    "NotoSansKhmer-VF.ttf";
+
+  inherit (callBPPackage "external/noto-fonts/other" ./external_noto-fonts_other.nix {})
+    "NotoNaskhArabic-Bold.ttf" "NotoNaskhArabic-Regular.ttf" "NotoNaskhArabicUI-Bold.ttf" "NotoNaskhArabicUI-Regular.ttf" "NotoSansAdlam-VF.ttf" "NotoSansAhom-Regular.otf" "NotoSansAnatolianHieroglyphs-Regular.otf" "NotoSansArmenian-Bold.otf" "NotoSansArmenian-Medium.otf" "NotoSansArmenian-Regular.otf" "NotoSansAvestan-Regular.ttf" "NotoSansBalinese-Regular.ttf" "NotoSansBamum-Regular.ttf" "NotoSansBassaVah-Regular.otf" "NotoSansBatak-Regular.ttf" "NotoSansBengali-Bold.otf" "NotoSansBengali-Medium.otf" "NotoSansBengali-Regular.otf" "NotoSansBengaliUI-Bold.otf" "NotoSansBengaliUI-Medium.otf" "NotoSansBengaliUI-Regular.otf" "NotoSansBhaiksuki-Regular.otf" "NotoSansBrahmi-Regular.ttf" "NotoSansBuginese-Regular.ttf" "NotoSansBuhid-Regular.ttf" "NotoSansCanadianAboriginal-Regular.ttf" "NotoSansCarian-Regular.ttf" "NotoSansChakma-Regular.otf" "NotoSansCham-Bold.ttf" "NotoSansCham-Regular.ttf" "NotoSansCherokee-Regular.ttf" "NotoSansCoptic-Regular.ttf" "NotoSansCuneiform-Regular.ttf" "NotoSansCypriot-Regular.ttf" "NotoSansDeseret-Regular.ttf" "NotoSansDevanagari-Bold.otf" "NotoSansDevanagari-Medium.otf" "NotoSansDevanagari-Regular.otf" "NotoSansDevanagariUI-Bold.otf" "NotoSansDevanagariUI-Medium.otf" "NotoSansDevanagariUI-Regular.otf" "NotoSansEgyptianHieroglyphs-Regular.ttf" "NotoSansElbasan-Regular.otf" "NotoSansEthiopic-Bold.ttf" "NotoSansEthiopic-Regular.ttf" "NotoSansGeorgian-VF.ttf" "NotoSansGlagolitic-Regular.ttf" "NotoSansGothic-Regular.ttf" "NotoSansGujarati-Bold.ttf" "NotoSansGujarati-Regular.ttf" "NotoSansGujaratiUI-Bold.ttf" "NotoSansGujaratiUI-Regular.ttf" "NotoSansGunjalaGondi-Regular.otf" "NotoSansGurmukhi-Bold.ttf" "NotoSansGurmukhi-Regular.ttf" "NotoSansGurmukhiUI-Bold.ttf" "NotoSansGurmukhiUI-Regular.ttf" "NotoSansHanifiRohingya-Regular.otf" "NotoSansHanunoo-Regular.ttf" "NotoSansHatran-Regular.otf" "NotoSansHebrew-Bold.ttf" "NotoSansHebrew-Regular.ttf" "NotoSansImperialAramaic-Regular.ttf" "NotoSansInscriptionalPahlavi-Regular.ttf" "NotoSansInscriptionalParthian-Regular.ttf" "NotoSansJavanese-Regular.otf" "NotoSansKaithi-Regular.ttf" "NotoSansKannada-Bold.ttf" "NotoSansKannada-Regular.ttf" "NotoSansKannadaUI-Bold.ttf" "NotoSansKannadaUI-Regular.ttf" "NotoSansKayahLi-Regular.ttf" "NotoSansKharoshthi-Regular.ttf" "NotoSansKhmerUI-Bold.ttf" "NotoSansKhmerUI-Regular.ttf" "NotoSansKhojki-Regular.otf" "NotoSansLao-Bold.ttf" "NotoSansLao-Regular.ttf" "NotoSansLaoUI-Bold.ttf" "NotoSansLaoUI-Regular.ttf" "NotoSansLepcha-Regular.ttf" "NotoSansLimbu-Regular.ttf" "NotoSansLinearA-Regular.otf" "NotoSansLinearB-Regular.ttf" "NotoSansLisu-Regular.ttf" "NotoSansLycian-Regular.ttf" "NotoSansLydian-Regular.ttf" "NotoSansMalayalam-Bold.otf" "NotoSansMalayalam-Medium.otf" "NotoSansMalayalam-Regular.otf" "NotoSansMalayalamUI-Bold.otf" "NotoSansMalayalamUI-Medium.otf" "NotoSansMalayalamUI-Regular.otf" "NotoSansMandaic-Regular.ttf" "NotoSansManichaean-Regular.otf" "NotoSansMarchen-Regular.otf" "NotoSansMasaramGondi-Regular.otf" "NotoSansMeeteiMayek-Regular.ttf" "NotoSansMeroitic-Regular.otf" "NotoSansMiao-Regular.otf" "NotoSansMongolian-Regular.ttf" "NotoSansMro-Regular.otf" "NotoSansMultani-Regular.otf" "NotoSansMyanmar-Bold.otf" "NotoSansMyanmar-Medium.otf" "NotoSansMyanmar-Regular.otf" "NotoSansMyanmarUI-Bold.otf" "NotoSansMyanmarUI-Medium.otf" "NotoSansMyanmarUI-Regular.otf" "NotoSansNKo-Regular.ttf" "NotoSansNabataean-Regular.otf" "NotoSansNewTaiLue-Regular.ttf" "NotoSansNewa-Regular.otf" "NotoSansOgham-Regular.ttf" "NotoSansOlChiki-Regular.ttf" "NotoSansOldItalic-Regular.ttf" "NotoSansOldNorthArabian-Regular.otf" "NotoSansOldPermic-Regular.otf" "NotoSansOldPersian-Regular.ttf" "NotoSansOldSouthArabian-Regular.ttf" "NotoSansOldTurkic-Regular.ttf" "NotoSansOriya-Bold.ttf" "NotoSansOriya-Regular.ttf" "NotoSansOriyaUI-Bold.ttf" "NotoSansOriyaUI-Regular.ttf" "NotoSansOsage-Regular.ttf" "NotoSansOsmanya-Regular.ttf" "NotoSansPahawhHmong-Regular.otf" "NotoSansPalmyrene-Regular.otf" "NotoSansPauCinHau-Regular.otf" "NotoSansPhagsPa-Regular.ttf" "NotoSansPhoenician-Regular.ttf" "NotoSansRejang-Regular.ttf" "NotoSansRunic-Regular.ttf" "NotoSansSamaritan-Regular.ttf" "NotoSansSaurashtra-Regular.ttf" "NotoSansSharada-Regular.otf" "NotoSansShavian-Regular.ttf" "NotoSansSinhala-Bold.otf" "NotoSansSinhala-Medium.otf" "NotoSansSinhala-Regular.otf" "NotoSansSinhalaUI-Bold.otf" "NotoSansSinhalaUI-Medium.otf" "NotoSansSinhalaUI-Regular.otf" "NotoSansSoraSompeng-Regular.otf" "NotoSansSundanese-Regular.ttf" "NotoSansSylotiNagri-Regular.ttf" "NotoSansSymbols-Regular-Subsetted.ttf" "NotoSansSymbols-Regular-Subsetted2.ttf" "NotoSansSyriacEastern-Regular.ttf" "NotoSansSyriacEstrangela-Regular.ttf" "NotoSansSyriacWestern-Regular.ttf" "NotoSansTagalog-Regular.ttf" "NotoSansTagbanwa-Regular.ttf" "NotoSansTaiLe-Regular.ttf" "NotoSansTaiTham-Regular.ttf" "NotoSansTaiViet-Regular.ttf" "NotoSansTamil-Bold.otf" "NotoSansTamil-Medium.otf" "NotoSansTamil-Regular.otf" "NotoSansTamilUI-Bold.otf" "NotoSansTamilUI-Medium.otf" "NotoSansTamilUI-Regular.otf" "NotoSansTelugu-Bold.ttf" "NotoSansTelugu-Regular.ttf" "NotoSansTeluguUI-Bold.ttf" "NotoSansTeluguUI-Regular.ttf" "NotoSansThaana-Bold.ttf" "NotoSansThaana-Regular.ttf" "NotoSansThai-Bold.ttf" "NotoSansThai-Regular.ttf" "NotoSansThaiUI-Bold.ttf" "NotoSansThaiUI-Regular.ttf" "NotoSansTibetan-Bold.ttf" "NotoSansTibetan-Regular.ttf" "NotoSansTifinagh-Regular.otf" "NotoSansUgaritic-Regular.ttf" "NotoSansVai-Regular.ttf" "NotoSansWancho-Regular.otf" "NotoSansWarangCiti-Regular.otf" "NotoSansYi-Regular.ttf" "NotoSerif-Bold.ttf" "NotoSerif-BoldItalic.ttf" "NotoSerif-Italic.ttf" "NotoSerif-Regular.ttf" "NotoSerifArmenian-Bold.otf" "NotoSerifArmenian-Regular.otf" "NotoSerifBengali-Bold.ttf" "NotoSerifBengali-Regular.ttf" "NotoSerifDevanagari-Bold.ttf" "NotoSerifDevanagari-Regular.ttf" "NotoSerifEthiopic-Bold.otf" "NotoSerifEthiopic-Regular.otf" "NotoSerifGeorgian-VF.ttf" "NotoSerifGujarati-Bold.ttf" "NotoSerifGujarati-Regular.ttf" "NotoSerifGurmukhi-Bold.otf" "NotoSerifGurmukhi-Regular.otf" "NotoSerifHebrew-Bold.ttf" "NotoSerifHebrew-Regular.ttf" "NotoSerifKannada-Bold.ttf" "NotoSerifKannada-Regular.ttf" "NotoSerifKhmer-Bold.otf" "NotoSerifKhmer-Regular.otf" "NotoSerifLao-Bold.ttf" "NotoSerifLao-Regular.ttf" "NotoSerifMalayalam-Bold.ttf" "NotoSerifMalayalam-Regular.ttf" "NotoSerifMyanmar-Bold.otf" "NotoSerifMyanmar-Regular.otf" "NotoSerifSinhala-Bold.otf" "NotoSerifSinhala-Regular.otf" "NotoSerifTamil-Bold.otf" "NotoSerifTamil-Regular.otf" "NotoSerifTelugu-Bold.ttf" "NotoSerifTelugu-Regular.ttf" "NotoSerifThai-Bold.ttf" "NotoSerifThai-Regular.ttf";
 
   inherit (callBPPackage "external/oauth/core/src/main/java" ./external_oauth_core_src_main_java.nix {})
     oauth;
@@ -3316,79 +6208,73 @@
     owasp-html-sanitizer;
 
   inherit (callBPPackage "external/parameter-framework" ./external_parameter-framework.nix {})
-    "ComponentLibrary.xsd" "ComponentTypeSet.xsd" "ConfigurableDomain.xsd" "ConfigurableDomains.xsd" "EddParser.py" "EddParser.py-srcs" "FileIncluder.xsd" "PFWScriptGenerator.py" "PFWScriptGenerator.py-srcs" "Parameter.xsd" "ParameterFrameworkConfiguration.xsd" "ParameterSettings.xsd" "PfwBaseTranslator.py" "PfwBaseTranslator.py-srcs" "Subsystem.xsd" "SystemClass.xsd" "W3cXmlAttributes.xsd" "domainGenerator.py" "domainGenerator.sh" "hostConfig.py" "hostConfig.py-srcs" "lightRoutingUpdate.sh" "updateRoutageDomains.sh" domainGeneratorConnector libparameter libparameter-defaults libpfw_utility libremote-processor libremote-processor-defaults pfw_defaults remote-process test-platform;
+    "ComponentLibrary.xsd" "ComponentTypeSet.xsd" "ConfigurableDomain.xsd" "ConfigurableDomains.xsd" "EddParser.py" "EddParser.py-srcs" "FileIncluder.xsd" "PFWScriptGenerator.py" "PFWScriptGenerator.py-srcs" "Parameter.xsd" "ParameterFrameworkConfiguration.xsd" "ParameterSettings.xsd" "PfwBaseTranslator.py" "PfwBaseTranslator.py-srcs" "Subsystem.xsd" "SystemClass.xsd" "W3cXmlAttributes.xsd" "domainGenerator.py" "domainGenerator.sh" "hostConfig.py" "hostConfig.py-srcs" "lightRoutingUpdate.sh" "updateRoutageDomains.sh" domainGeneratorConnector libparameter libpfw_utility libremote-processor parameter_frameworks_configuration_schemas pfw_defaults remote-process test-platform;
 
   inherit (callBPPackage "external/pcre" ./external_pcre.nix {})
-    libpcre2 libpcrecpp pcre_defaults;
+    libpcre2 pcre_defaults;
 
   inherit (callBPPackage "external/pdfium" ./external_pdfium.nix {})
-    pdfium-common pdfium-core pdfium-headers pdfium-third-party-headers;
+    libpdfium pdfium-common pdfium-core pdfium-headers pdfium-third-party-headers;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfium.bp.nix {})
-    libpdfium;
+  inherit (callBPPackage "external/pdfium/constants" ./external_pdfium_constants.nix {})
+    libpdfium-constants;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfdrm.bp.nix {})
-    libpdfiumfdrm;
+  inherit (callBPPackage "external/pdfium/core/fdrm" ./external_pdfium_core_fdrm.nix {})
+    libpdfium-fdrm;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumformfiller.bp.nix {})
-    libpdfiumformfiller;
+  inherit (callBPPackage "external/pdfium/core/fpdfapi/cmaps" ./external_pdfium_core_fpdfapi_cmaps.nix {})
+    libpdfium-cmaps;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfpdfapi.bp.nix {})
-    libpdfiumfpdfapi;
+  inherit (callBPPackage "external/pdfium/core/fpdfapi/edit" ./external_pdfium_core_fpdfapi_edit.nix {})
+    libpdfium-edit;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfpdfdoc.bp.nix {})
-    libpdfiumfpdfdoc;
+  inherit (callBPPackage "external/pdfium/core/fpdfapi/font" ./external_pdfium_core_fpdfapi_font.nix {})
+    libpdfium-font;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfpdftext.bp.nix {})
-    libpdfiumfpdftext;
+  inherit (callBPPackage "external/pdfium/core/fpdfapi/page" ./external_pdfium_core_fpdfapi_page.nix {})
+    libpdfium-page;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfxcodec.bp.nix {})
-    libpdfiumfxcodec;
+  inherit (callBPPackage "external/pdfium/core/fpdfapi/parser" ./external_pdfium_core_fpdfapi_parser.nix {})
+    libpdfium-parser;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfxcrt.bp.nix {})
-    libpdfiumfxcrt;
+  inherit (callBPPackage "external/pdfium/core/fpdfapi/render" ./external_pdfium_core_fpdfapi_render.nix {})
+    libpdfium-render;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfxge.bp.nix {})
-    libpdfiumfxge;
+  inherit (callBPPackage "external/pdfium/core/fpdfdoc" ./external_pdfium_core_fpdfdoc.nix {})
+    libpdfium-fpdfdoc;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumfxjs.bp.nix {})
-    libpdfiumfxjs;
+  inherit (callBPPackage "external/pdfium/core/fpdftext" ./external_pdfium_core_fpdftext.nix {})
+    libpdfium-fpdftext;
 
-  inherit (callBPPackage "external/pdfium" ./external_pdfium_pdfiumpwl.bp.nix {})
-    libpdfiumpwl;
+  inherit (callBPPackage "external/pdfium/core/fxcodec" ./external_pdfium_core_fxcodec.nix {})
+    libpdfium-fxcodec;
+
+  inherit (callBPPackage "external/pdfium/core/fxcrt" ./external_pdfium_core_fxcrt.nix {})
+    libpdfium-fxcrt;
+
+  inherit (callBPPackage "external/pdfium/core/fxge" ./external_pdfium_core_fxge.nix {})
+    libpdfium-fxge;
+
+  inherit (callBPPackage "external/pdfium/fpdfsdk" ./external_pdfium_fpdfsdk.nix {})
+    libpdfium-fpdfsdk;
+
+  inherit (callBPPackage "external/pdfium/fpdfsdk/formfiller" ./external_pdfium_fpdfsdk_formfiller.nix {})
+    libpdfium-formfiller;
+
+  inherit (callBPPackage "external/pdfium/fpdfsdk/pwl" ./external_pdfium_fpdfsdk_pwl.nix {})
+    libpdfium-pwl;
+
+  inherit (callBPPackage "external/pdfium/fxjs" ./external_pdfium_fxjs.nix {})
+    libpdfium-fxjs;
 
   inherit (callBPPackage "external/pdfium/third_party" ./external_pdfium_third_party.nix {})
-    pdfium-third-party;
-
-  inherit (callBPPackage "external/pdfium/third_party" ./external_pdfium_third_party_pdfiumbigint.bp.nix {})
-    libpdfiumbigint;
-
-  inherit (callBPPackage "external/pdfium/third_party" ./external_pdfium_third_party_pdfiumfx_agg.bp.nix {})
-    libpdfiumfx_agg;
-
-  inherit (callBPPackage "external/pdfium/third_party" ./external_pdfium_third_party_pdfiumfx_libopenjpeg.bp.nix {})
-    libpdfiumfx_libopenjpeg;
-
-  inherit (callBPPackage "external/pdfium/third_party" ./external_pdfium_third_party_pdfiumlcms2.bp.nix {})
-    libpdfiumlcms2;
-
-  inherit (callBPPackage "external/pdfium/third_party" ./external_pdfium_third_party_pdfiumpdfiumbase.bp.nix {})
-    libpdfiumpdfiumbase;
-
-  inherit (callBPPackage "external/perf_data_converter/src/quipper" ./external_perf_data_converter_src_quipper.nix {})
-    libquipper libquipper-full libquipper_defaults quipper-full_unit_tests quipper_android_test_defaults quipper_data_proto quipper_libelf_test quipper_stat_proto quipper_test_defaults quipper_unit_tests;
+    libpdfium-agg libpdfium-lcms2 libpdfium-libopenjpeg2 libpdfium-skia_shared libpdfium-third_party-base pdfium-third-party;
 
   inherit (callBPPackage "external/perfetto" ./external_perfetto.nix {})
-    gen_merged_sql_metrics heapprofd heapprofd_client libperfetto libperfetto_android_internal perfetto perfetto_config-full perfetto_cts_deps perfetto_cts_jni_deps perfetto_defaults perfetto_integrationtests perfetto_protos_perfetto_common_lite_gen perfetto_protos_perfetto_common_lite_gen_headers perfetto_protos_perfetto_common_zero_gen perfetto_protos_perfetto_common_zero_gen_headers perfetto_protos_perfetto_config_lite_gen perfetto_protos_perfetto_config_lite_gen_headers perfetto_protos_perfetto_config_zero_gen perfetto_protos_perfetto_config_zero_gen_headers perfetto_protos_perfetto_ipc_ipc_gen perfetto_protos_perfetto_ipc_ipc_gen_headers perfetto_protos_perfetto_metrics_android_zero_gen perfetto_protos_perfetto_metrics_android_zero_gen_headers perfetto_protos_perfetto_metrics_zero_gen perfetto_protos_perfetto_metrics_zero_gen_headers perfetto_protos_perfetto_trace_android_lite_gen perfetto_protos_perfetto_trace_android_lite_gen_headers perfetto_protos_perfetto_trace_android_zero_gen perfetto_protos_perfetto_trace_android_zero_gen_headers perfetto_protos_perfetto_trace_chrome_lite_gen perfetto_protos_perfetto_trace_chrome_lite_gen_headers perfetto_protos_perfetto_trace_chrome_zero_gen perfetto_protos_perfetto_trace_chrome_zero_gen_headers perfetto_protos_perfetto_trace_filesystem_lite_gen perfetto_protos_perfetto_trace_filesystem_lite_gen_headers perfetto_protos_perfetto_trace_filesystem_zero_gen perfetto_protos_perfetto_trace_filesystem_zero_gen_headers perfetto_protos_perfetto_trace_ftrace_lite_gen perfetto_protos_perfetto_trace_ftrace_lite_gen_headers perfetto_protos_perfetto_trace_ftrace_zero_gen perfetto_protos_perfetto_trace_ftrace_zero_gen_headers perfetto_protos_perfetto_trace_interned_data_lite_gen perfetto_protos_perfetto_trace_interned_data_lite_gen_headers perfetto_protos_perfetto_trace_interned_data_zero_gen perfetto_protos_perfetto_trace_interned_data_zero_gen_headers perfetto_protos_perfetto_trace_lite_gen perfetto_protos_perfetto_trace_lite_gen_headers perfetto_protos_perfetto_trace_minimal_lite_gen perfetto_protos_perfetto_trace_minimal_lite_gen_headers perfetto_protos_perfetto_trace_power_lite_gen perfetto_protos_perfetto_trace_power_lite_gen_headers perfetto_protos_perfetto_trace_power_zero_gen perfetto_protos_perfetto_trace_power_zero_gen_headers perfetto_protos_perfetto_trace_profiling_lite_gen perfetto_protos_perfetto_trace_profiling_lite_gen_headers perfetto_protos_perfetto_trace_profiling_zero_gen perfetto_protos_perfetto_trace_profiling_zero_gen_headers perfetto_protos_perfetto_trace_ps_lite_gen perfetto_protos_perfetto_trace_ps_lite_gen_headers perfetto_protos_perfetto_trace_ps_zero_gen perfetto_protos_perfetto_trace_ps_zero_gen_headers perfetto_protos_perfetto_trace_sys_stats_lite_gen perfetto_protos_perfetto_trace_sys_stats_lite_gen_headers perfetto_protos_perfetto_trace_sys_stats_zero_gen perfetto_protos_perfetto_trace_sys_stats_zero_gen_headers perfetto_protos_perfetto_trace_track_event_lite_gen perfetto_protos_perfetto_trace_track_event_lite_gen_headers perfetto_protos_perfetto_trace_track_event_zero_gen perfetto_protos_perfetto_trace_track_event_zero_gen_headers perfetto_protos_perfetto_trace_trusted_lite_gen perfetto_protos_perfetto_trace_trusted_lite_gen_headers perfetto_protos_perfetto_trace_zero_gen perfetto_protos_perfetto_trace_zero_gen_headers perfetto_protos_third_party_pprof_lite_gen perfetto_protos_third_party_pprof_lite_gen_headers perfetto_src_ipc_protoc_plugin_ipc_plugin___gn_standalone_toolchain_gcc_like_host_ perfetto_src_ipc_test_messages_gen perfetto_src_ipc_test_messages_gen_headers perfetto_src_ipc_wire_protocol_gen perfetto_src_ipc_wire_protocol_gen_headers perfetto_src_perfetto_cmd_protos_gen perfetto_src_perfetto_cmd_protos_gen_headers perfetto_src_protozero_protoc_plugin_protoc_plugin___gn_standalone_toolchain_gcc_like_host_ perfetto_src_protozero_testing_messages_lite_gen perfetto_src_protozero_testing_messages_lite_gen_headers perfetto_src_protozero_testing_messages_zero_gen perfetto_src_protozero_testing_messages_zero_gen_headers perfetto_src_traced_probes_ftrace_test_messages_lite_gen perfetto_src_traced_probes_ftrace_test_messages_lite_gen_headers perfetto_src_traced_probes_ftrace_test_messages_zero_gen perfetto_src_traced_probes_ftrace_test_messages_zero_gen_headers perfetto_src_tracing_ipc perfetto_trace_protos perfetto_unittests trace_to_text traced traced_probes trigger_perfetto;
+    "statslog_perfetto.cpp" "statslog_perfetto.h" "trace_processor_shell.stripped" gen_merged_sql_metrics heapprofd heapprofd_client ipc_plugin libperfetto libperfetto_android_internal libperfetto_client_example libperfetto_client_experimental libstatslog_perfetto perfetto perfetto_config-full perfetto_cts_deps perfetto_cts_jni_deps perfetto_defaults perfetto_gtest_logcat_printer perfetto_include_perfetto_base_base perfetto_include_perfetto_ext_base_base perfetto_include_perfetto_ext_ipc_ipc perfetto_include_perfetto_ext_trace_processor_export_json perfetto_include_perfetto_ext_traced_sys_stats_counters perfetto_include_perfetto_ext_traced_traced perfetto_include_perfetto_ext_tracing_core_core perfetto_include_perfetto_ext_tracing_ipc_ipc perfetto_include_perfetto_profiling_deobfuscator perfetto_include_perfetto_profiling_normalize perfetto_include_perfetto_profiling_pprof_builder perfetto_include_perfetto_protozero_protozero perfetto_include_perfetto_public_public perfetto_include_perfetto_trace_processor_basic_types perfetto_include_perfetto_trace_processor_storage perfetto_include_perfetto_trace_processor_trace_processor perfetto_include_perfetto_tracing_core_core perfetto_include_perfetto_tracing_core_forward_decls perfetto_include_perfetto_tracing_tracing perfetto_integrationtests perfetto_metrics-full perfetto_protos_perfetto_common_cpp_gen perfetto_protos_perfetto_common_cpp_gen_headers perfetto_protos_perfetto_common_lite_gen perfetto_protos_perfetto_common_lite_gen_headers perfetto_protos_perfetto_common_zero_gen perfetto_protos_perfetto_common_zero_gen_headers perfetto_protos_perfetto_config_android_cpp_gen perfetto_protos_perfetto_config_android_cpp_gen_headers perfetto_protos_perfetto_config_android_lite_gen perfetto_protos_perfetto_config_android_lite_gen_headers perfetto_protos_perfetto_config_android_zero_gen perfetto_protos_perfetto_config_android_zero_gen_headers perfetto_protos_perfetto_config_cpp_gen perfetto_protos_perfetto_config_cpp_gen_headers perfetto_protos_perfetto_config_ftrace_cpp_gen perfetto_protos_perfetto_config_ftrace_cpp_gen_headers perfetto_protos_perfetto_config_ftrace_lite_gen perfetto_protos_perfetto_config_ftrace_lite_gen_headers perfetto_protos_perfetto_config_ftrace_zero_gen perfetto_protos_perfetto_config_ftrace_zero_gen_headers perfetto_protos_perfetto_config_gpu_cpp_gen perfetto_protos_perfetto_config_gpu_cpp_gen_headers perfetto_protos_perfetto_config_gpu_lite_gen perfetto_protos_perfetto_config_gpu_lite_gen_headers perfetto_protos_perfetto_config_gpu_zero_gen perfetto_protos_perfetto_config_gpu_zero_gen_headers perfetto_protos_perfetto_config_inode_file_cpp_gen perfetto_protos_perfetto_config_inode_file_cpp_gen_headers perfetto_protos_perfetto_config_inode_file_lite_gen perfetto_protos_perfetto_config_inode_file_lite_gen_headers perfetto_protos_perfetto_config_inode_file_zero_gen perfetto_protos_perfetto_config_inode_file_zero_gen_headers perfetto_protos_perfetto_config_lite_gen perfetto_protos_perfetto_config_lite_gen_headers perfetto_protos_perfetto_config_power_cpp_gen perfetto_protos_perfetto_config_power_cpp_gen_headers perfetto_protos_perfetto_config_power_lite_gen perfetto_protos_perfetto_config_power_lite_gen_headers perfetto_protos_perfetto_config_power_zero_gen perfetto_protos_perfetto_config_power_zero_gen_headers perfetto_protos_perfetto_config_process_stats_cpp_gen perfetto_protos_perfetto_config_process_stats_cpp_gen_headers perfetto_protos_perfetto_config_process_stats_lite_gen perfetto_protos_perfetto_config_process_stats_lite_gen_headers perfetto_protos_perfetto_config_process_stats_zero_gen perfetto_protos_perfetto_config_process_stats_zero_gen_headers perfetto_protos_perfetto_config_profiling_cpp_gen perfetto_protos_perfetto_config_profiling_cpp_gen_headers perfetto_protos_perfetto_config_profiling_lite_gen perfetto_protos_perfetto_config_profiling_lite_gen_headers perfetto_protos_perfetto_config_profiling_zero_gen perfetto_protos_perfetto_config_profiling_zero_gen_headers perfetto_protos_perfetto_config_sys_stats_cpp_gen perfetto_protos_perfetto_config_sys_stats_cpp_gen_headers perfetto_protos_perfetto_config_sys_stats_lite_gen perfetto_protos_perfetto_config_sys_stats_lite_gen_headers perfetto_protos_perfetto_config_sys_stats_zero_gen perfetto_protos_perfetto_config_sys_stats_zero_gen_headers perfetto_protos_perfetto_config_track_event_cpp_gen perfetto_protos_perfetto_config_track_event_cpp_gen_headers perfetto_protos_perfetto_config_track_event_lite_gen perfetto_protos_perfetto_config_track_event_lite_gen_headers perfetto_protos_perfetto_config_track_event_zero_gen perfetto_protos_perfetto_config_track_event_zero_gen_headers perfetto_protos_perfetto_config_zero_gen perfetto_protos_perfetto_config_zero_gen_headers perfetto_protos_perfetto_ipc_cpp_gen perfetto_protos_perfetto_ipc_cpp_gen_headers perfetto_protos_perfetto_ipc_ipc_gen perfetto_protos_perfetto_ipc_ipc_gen_headers perfetto_protos_perfetto_ipc_wire_protocol_cpp_gen perfetto_protos_perfetto_ipc_wire_protocol_cpp_gen_headers perfetto_protos_perfetto_metrics_android_zero_gen perfetto_protos_perfetto_metrics_android_zero_gen_headers perfetto_protos_perfetto_metrics_zero_gen perfetto_protos_perfetto_metrics_zero_gen_headers perfetto_protos_perfetto_trace_android_cpp_gen perfetto_protos_perfetto_trace_android_cpp_gen_headers perfetto_protos_perfetto_trace_android_lite_gen perfetto_protos_perfetto_trace_android_lite_gen_headers perfetto_protos_perfetto_trace_android_zero_gen perfetto_protos_perfetto_trace_android_zero_gen_headers perfetto_protos_perfetto_trace_chrome_cpp_gen perfetto_protos_perfetto_trace_chrome_cpp_gen_headers perfetto_protos_perfetto_trace_chrome_lite_gen perfetto_protos_perfetto_trace_chrome_lite_gen_headers perfetto_protos_perfetto_trace_chrome_zero_gen perfetto_protos_perfetto_trace_chrome_zero_gen_headers perfetto_protos_perfetto_trace_filesystem_cpp_gen perfetto_protos_perfetto_trace_filesystem_cpp_gen_headers perfetto_protos_perfetto_trace_filesystem_lite_gen perfetto_protos_perfetto_trace_filesystem_lite_gen_headers perfetto_protos_perfetto_trace_filesystem_zero_gen perfetto_protos_perfetto_trace_filesystem_zero_gen_headers perfetto_protos_perfetto_trace_ftrace_cpp_gen perfetto_protos_perfetto_trace_ftrace_cpp_gen_headers perfetto_protos_perfetto_trace_ftrace_lite_gen perfetto_protos_perfetto_trace_ftrace_lite_gen_headers perfetto_protos_perfetto_trace_ftrace_zero_gen perfetto_protos_perfetto_trace_ftrace_zero_gen_headers perfetto_protos_perfetto_trace_gpu_cpp_gen perfetto_protos_perfetto_trace_gpu_cpp_gen_headers perfetto_protos_perfetto_trace_gpu_lite_gen perfetto_protos_perfetto_trace_gpu_lite_gen_headers perfetto_protos_perfetto_trace_gpu_zero_gen perfetto_protos_perfetto_trace_gpu_zero_gen_headers perfetto_protos_perfetto_trace_interned_data_cpp_gen perfetto_protos_perfetto_trace_interned_data_cpp_gen_headers perfetto_protos_perfetto_trace_interned_data_lite_gen perfetto_protos_perfetto_trace_interned_data_lite_gen_headers perfetto_protos_perfetto_trace_interned_data_zero_gen perfetto_protos_perfetto_trace_interned_data_zero_gen_headers perfetto_protos_perfetto_trace_minimal_cpp_gen perfetto_protos_perfetto_trace_minimal_cpp_gen_headers perfetto_protos_perfetto_trace_minimal_lite_gen perfetto_protos_perfetto_trace_minimal_lite_gen_headers perfetto_protos_perfetto_trace_minimal_zero_gen perfetto_protos_perfetto_trace_minimal_zero_gen_headers perfetto_protos_perfetto_trace_non_minimal_cpp_gen perfetto_protos_perfetto_trace_non_minimal_cpp_gen_headers perfetto_protos_perfetto_trace_non_minimal_lite_gen perfetto_protos_perfetto_trace_non_minimal_lite_gen_headers perfetto_protos_perfetto_trace_non_minimal_zero_gen perfetto_protos_perfetto_trace_non_minimal_zero_gen_headers perfetto_protos_perfetto_trace_perfetto_cpp_gen perfetto_protos_perfetto_trace_perfetto_cpp_gen_headers perfetto_protos_perfetto_trace_perfetto_lite_gen perfetto_protos_perfetto_trace_perfetto_lite_gen_headers perfetto_protos_perfetto_trace_perfetto_zero_gen perfetto_protos_perfetto_trace_perfetto_zero_gen_headers perfetto_protos_perfetto_trace_power_cpp_gen perfetto_protos_perfetto_trace_power_cpp_gen_headers perfetto_protos_perfetto_trace_power_lite_gen perfetto_protos_perfetto_trace_power_lite_gen_headers perfetto_protos_perfetto_trace_power_zero_gen perfetto_protos_perfetto_trace_power_zero_gen_headers perfetto_protos_perfetto_trace_processor_metrics_impl_zero_gen perfetto_protos_perfetto_trace_processor_metrics_impl_zero_gen_headers perfetto_protos_perfetto_trace_profiling_cpp_gen perfetto_protos_perfetto_trace_profiling_cpp_gen_headers perfetto_protos_perfetto_trace_profiling_lite_gen perfetto_protos_perfetto_trace_profiling_lite_gen_headers perfetto_protos_perfetto_trace_profiling_zero_gen perfetto_protos_perfetto_trace_profiling_zero_gen_headers perfetto_protos_perfetto_trace_ps_cpp_gen perfetto_protos_perfetto_trace_ps_cpp_gen_headers perfetto_protos_perfetto_trace_ps_lite_gen perfetto_protos_perfetto_trace_ps_lite_gen_headers perfetto_protos_perfetto_trace_ps_zero_gen perfetto_protos_perfetto_trace_ps_zero_gen_headers perfetto_protos_perfetto_trace_sys_stats_cpp_gen perfetto_protos_perfetto_trace_sys_stats_cpp_gen_headers perfetto_protos_perfetto_trace_sys_stats_lite_gen perfetto_protos_perfetto_trace_sys_stats_lite_gen_headers perfetto_protos_perfetto_trace_sys_stats_zero_gen perfetto_protos_perfetto_trace_sys_stats_zero_gen_headers perfetto_protos_perfetto_trace_system_info_cpp_gen perfetto_protos_perfetto_trace_system_info_cpp_gen_headers perfetto_protos_perfetto_trace_system_info_lite_gen perfetto_protos_perfetto_trace_system_info_lite_gen_headers perfetto_protos_perfetto_trace_system_info_zero_gen perfetto_protos_perfetto_trace_system_info_zero_gen_headers perfetto_protos_perfetto_trace_track_event_cpp_gen perfetto_protos_perfetto_trace_track_event_cpp_gen_headers perfetto_protos_perfetto_trace_track_event_lite_gen perfetto_protos_perfetto_trace_track_event_lite_gen_headers perfetto_protos_perfetto_trace_track_event_zero_gen perfetto_protos_perfetto_trace_track_event_zero_gen_headers perfetto_protos_third_party_pprof_zero_gen perfetto_protos_third_party_pprof_zero_gen_headers perfetto_src_android_internal_android_internal perfetto_src_android_internal_headers perfetto_src_android_internal_lazy_library_loader perfetto_src_base_base perfetto_src_base_test_support perfetto_src_base_unittests perfetto_src_base_unix_socket perfetto_src_ipc_client perfetto_src_ipc_common perfetto_src_ipc_host perfetto_src_ipc_test_messages_cpp_gen perfetto_src_ipc_test_messages_cpp_gen_headers perfetto_src_ipc_test_messages_ipc_gen perfetto_src_ipc_test_messages_ipc_gen_headers perfetto_src_ipc_unittests perfetto_src_perfetto_cmd_perfetto_atoms perfetto_src_perfetto_cmd_perfetto_cmd perfetto_src_perfetto_cmd_protos_gen perfetto_src_perfetto_cmd_protos_gen_headers perfetto_src_perfetto_cmd_trigger_perfetto_cmd perfetto_src_perfetto_cmd_trigger_producer perfetto_src_perfetto_cmd_unittests perfetto_src_profiling_common_callstack_trie perfetto_src_profiling_common_interner perfetto_src_profiling_common_interning_output perfetto_src_profiling_common_proc_utils perfetto_src_profiling_common_unittests perfetto_src_profiling_common_unwind_support perfetto_src_profiling_deobfuscator perfetto_src_profiling_memory_client perfetto_src_profiling_memory_daemon perfetto_src_profiling_memory_end_to_end_tests perfetto_src_profiling_memory_malloc_hooks perfetto_src_profiling_memory_ring_buffer perfetto_src_profiling_memory_ring_buffer_unittests perfetto_src_profiling_memory_scoped_spinlock perfetto_src_profiling_memory_unittests perfetto_src_profiling_memory_wire_protocol perfetto_src_profiling_perf_common_types perfetto_src_profiling_perf_proc_descriptors perfetto_src_profiling_perf_producer perfetto_src_profiling_perf_producer_unittests perfetto_src_profiling_perf_regs_parsing perfetto_src_profiling_perf_traced_perf_main perfetto_src_profiling_perf_unwinding perfetto_src_profiling_symbolizer_symbolize_database perfetto_src_profiling_symbolizer_symbolizer perfetto_src_profiling_unittests perfetto_src_protozero_protoc_plugin_cppgen_plugin perfetto_src_protozero_protozero perfetto_src_protozero_testing_messages_cpp_gen perfetto_src_protozero_testing_messages_cpp_gen_headers perfetto_src_protozero_testing_messages_lite_gen perfetto_src_protozero_testing_messages_lite_gen_headers perfetto_src_protozero_testing_messages_zero_gen perfetto_src_protozero_testing_messages_zero_gen_headers perfetto_src_protozero_unittests perfetto_src_trace_processor_analysis_analysis perfetto_src_trace_processor_containers_containers perfetto_src_trace_processor_containers_unittests perfetto_src_trace_processor_db_lib perfetto_src_trace_processor_db_unittests perfetto_src_trace_processor_export_json perfetto_src_trace_processor_ftrace_descriptors perfetto_src_trace_processor_importers_common perfetto_src_trace_processor_importers_unittests perfetto_src_trace_processor_lib perfetto_src_trace_processor_metatrace perfetto_src_trace_processor_metrics_lib perfetto_src_trace_processor_metrics_unittests perfetto_src_trace_processor_sqlite_sqlite perfetto_src_trace_processor_sqlite_unittests perfetto_src_trace_processor_storage_full perfetto_src_trace_processor_storage_minimal perfetto_src_trace_processor_storage_storage perfetto_src_trace_processor_tables_tables perfetto_src_trace_processor_tables_unittests perfetto_src_trace_processor_track_event_descriptor perfetto_src_trace_processor_types_types perfetto_src_trace_processor_types_unittests perfetto_src_trace_processor_unittests perfetto_src_trace_processor_util_descriptors perfetto_src_trace_processor_util_protozero_to_text perfetto_src_trace_processor_util_unittests perfetto_src_trace_processor_util_util perfetto_src_traced_probes_android_log_android_log perfetto_src_traced_probes_android_log_unittests perfetto_src_traced_probes_common_common perfetto_src_traced_probes_common_test_support perfetto_src_traced_probes_common_unittests perfetto_src_traced_probes_data_source perfetto_src_traced_probes_filesystem_filesystem perfetto_src_traced_probes_filesystem_unittests perfetto_src_traced_probes_ftrace_format_parser perfetto_src_traced_probes_ftrace_ftrace perfetto_src_traced_probes_ftrace_integrationtests perfetto_src_traced_probes_ftrace_kallsyms_kallsyms perfetto_src_traced_probes_ftrace_kallsyms_unittests perfetto_src_traced_probes_ftrace_test_messages_cpp_gen perfetto_src_traced_probes_ftrace_test_messages_cpp_gen_headers perfetto_src_traced_probes_ftrace_test_messages_lite_gen perfetto_src_traced_probes_ftrace_test_messages_lite_gen_headers perfetto_src_traced_probes_ftrace_test_messages_zero_gen perfetto_src_traced_probes_ftrace_test_messages_zero_gen_headers perfetto_src_traced_probes_ftrace_test_support perfetto_src_traced_probes_ftrace_unittests perfetto_src_traced_probes_initial_display_state_initial_display_state perfetto_src_traced_probes_initial_display_state_unittests perfetto_src_traced_probes_metatrace_metatrace perfetto_src_traced_probes_packages_list_packages_list perfetto_src_traced_probes_packages_list_unittests perfetto_src_traced_probes_power_power perfetto_src_traced_probes_probes perfetto_src_traced_probes_probes_src perfetto_src_traced_probes_ps_ps perfetto_src_traced_probes_ps_unittests perfetto_src_traced_probes_sys_stats_sys_stats perfetto_src_traced_probes_sys_stats_unittests perfetto_src_traced_probes_system_info_system_info perfetto_src_traced_probes_system_info_unittests perfetto_src_traced_probes_unittests perfetto_src_traced_service_service perfetto_src_traced_service_unittests perfetto_src_tracing_client_api_without_backends perfetto_src_tracing_common perfetto_src_tracing_consumer_api_deprecated_consumer_api_deprecated perfetto_src_tracing_core_core perfetto_src_tracing_core_service perfetto_src_tracing_core_test_support perfetto_src_tracing_core_unittests perfetto_src_tracing_in_process_backend perfetto_src_tracing_ipc_common perfetto_src_tracing_ipc_consumer_consumer perfetto_src_tracing_ipc_producer_producer perfetto_src_tracing_ipc_service_service perfetto_src_tracing_ipc_unittests perfetto_src_tracing_platform_posix perfetto_src_tracing_system_backend perfetto_src_tracing_test_api_test_support perfetto_src_tracing_test_client_api_integrationtests perfetto_src_tracing_test_test_support perfetto_src_tracing_test_tracing_integration_test perfetto_test_end_to_end_integrationtests perfetto_test_test_helper perfetto_tools_sanitizers_unittests_sanitizers_unittests perfetto_tools_trace_to_text_common perfetto_tools_trace_to_text_full perfetto_tools_trace_to_text_pprofbuilder perfetto_tools_trace_to_text_utils perfetto_trace_protos perfetto_unittests protozero_plugin trace_processor_shell trace_to_text traced traced_perf traced_probes trigger_perfetto;
 
   inherit (callBPPackage "external/perfetto/test/cts" ./external_perfetto_test_cts.nix {})
     CtsPerfettoTestCases;
-
-  inherit (callBPPackage "external/perfetto/test/cts/heapprofd_test_apps" ./external_perfetto_test_cts_heapprofd_test_apps.nix {})
-    CtsPerfettoDebuggableApp CtsPerfettoReleaseApp;
-
-  inherit (callBPPackage "external/perfetto/test/cts/heapprofd_test_apps/jni" ./external_perfetto_test_cts_heapprofd_test_apps_jni.nix {})
-    libperfettocts_heapprofdtarget;
 
   inherit (callBPPackage "external/perfetto/test/cts/producer" ./external_perfetto_test_cts_producer.nix {})
     CtsPerfettoProducerApp;
@@ -3396,14 +6282,29 @@
   inherit (callBPPackage "external/perfetto/test/cts/producer/jni" ./external_perfetto_test_cts_producer_jni.nix {})
     libperfettocts_jni;
 
+  inherit (callBPPackage "external/perfetto/test/cts/test_apps" ./external_perfetto_test_cts_test_apps.nix {})
+    CtsPerfettoDebuggableApp CtsPerfettoProfileableApp CtsPerfettoReleaseApp;
+
+  inherit (callBPPackage "external/perfetto/test/cts/test_apps/jni" ./external_perfetto_test_cts_test_apps_jni.nix {})
+    libperfettocts_native;
+
   inherit (callBPPackage "external/piex" ./external_piex.nix {})
     libbinary_parse libimage_type_recognition libpiex libtiff_directory piex_default_cflags;
+
+  inherit (callBPPackage "external/ply/ply" ./external_ply_ply.nix {})
+    py-ply;
 
   inherit (callBPPackage "external/ppp/pppd" ./external_ppp_pppd.nix {})
     ppp_defaults pppd pppol2tp-android pppopptp-android;
 
   inherit (callBPPackage "external/protobuf" ./external_protobuf.nix {})
-    "libcore_private.stubs" NanoAndroidTest android-nano-test-parcelable android-nano-test-parcelable-extendable aprotoc aprotoc-test-nano-params host-libprotobuf-java-full host-libprotobuf-java-lite host-libprotobuf-java-micro host-libprotobuf-java-nano libprotobuf-cpp-full libprotobuf-cpp-full-defaults libprotobuf-cpp-full-ndk libprotobuf-cpp-full-rtti libprotobuf-cpp-lite libprotobuf-cpp-lite-defaults libprotobuf-cpp-lite-ndk libprotobuf-cpp-lite-rtti libprotobuf-cpp-lite_static libprotobuf-internal-protos libprotobuf-internal-python-srcs libprotobuf-java-full libprotobuf-java-lite libprotobuf-java-micro libprotobuf-java-nano libprotobuf-python libprotobuf_errorprone_defaults libprotoc protobuf-cflags-defaults;
+    "libcore_private.stubs" NanoAndroidTest android-nano-test-parcelable android-nano-test-parcelable-extendable aprotoc aprotoc-test-nano-params host-libprotobuf-java-full host-libprotobuf-java-lite host-libprotobuf-java-micro host-libprotobuf-java-nano libprotobuf-cpp-full libprotobuf-cpp-full-defaults libprotobuf-cpp-full-ndk libprotobuf-cpp-lite libprotobuf-cpp-lite-defaults libprotobuf-cpp-lite-ndk libprotobuf-cpp-lite_static libprotobuf-internal-protos libprotobuf-internal-python-srcs libprotobuf-java-full libprotobuf-java-lite libprotobuf-java-micro libprotobuf-java-nano libprotobuf-java-util-full libprotobuf-python libprotobuf_errorprone_defaults libprotobuf_vendor_suffix_test libprotoc libprotoc-kythe protobuf-cflags-defaults protoc-gen-javamicro protoc-gen-javanano;
+
+  inherit (callBPPackage "external/psimd" ./external_psimd.nix {})
+    psimd_headers;
+
+  inherit (callBPPackage "external/pthreadpool" ./external_pthreadpool.nix {})
+    PthreadPoolTests libpthreadpool;
 
   inherit (callBPPackage "external/puffin" ./external_puffin.nix {})
     libpuffdiff libpuffpatch puffin puffin_defaults puffin_unittest;
@@ -3411,14 +6312,44 @@
   inherit (callBPPackage "external/python/apitools/apitools" ./external_python_apitools_apitools.nix {})
     py-apitools;
 
+  inherit (callBPPackage "external/python/asn1crypto/asn1crypto" ./external_python_asn1crypto_asn1crypto.nix {})
+    py-asn1crypto;
+
+  inherit (callBPPackage "external/python/cffi/c" ./external_python_cffi_c.nix {})
+    py-cffi-backend py-cffi-backend-files py-cffi-backend-libffi py-cffi-backend-libffi-files;
+
+  inherit (callBPPackage "external/python/cffi/cffi" ./external_python_cffi_cffi.nix {})
+    py-cffi py-cffi-headers;
+
   inherit (callBPPackage "external/python/cpython2" ./external_python_cpython2.nix {})
     py2-c-module-_bisect py2-c-module-_codecs_cn py2-c-module-_codecs_hk py2-c-module-_codecs_iso2022 py2-c-module-_codecs_jp py2-c-module-_codecs_kr py2-c-module-_codecs_tw py2-c-module-_collections py2-c-module-_csv py2-c-module-_ctypes py2-c-module-_ctypes_test py2-c-module-_functools py2-c-module-_heapq py2-c-module-_hotshot py2-c-module-_io py2-c-module-_json py2-c-module-_lsprof py2-c-module-_md5 py2-c-module-_multibytecodec py2-c-module-_multiprocessing py2-c-module-_random py2-c-module-_scproxy py2-c-module-_sha py2-c-module-_sha256 py2-c-module-_sha512 py2-c-module-_socket py2-c-module-_sqlite3 py2-c-module-_ssl py2-c-module-_struct py2-c-module-_testcapi py2-c-module-array py2-c-module-audioop py2-c-module-binascii py2-c-module-cPickle py2-c-module-cStringIO py2-c-module-cmath py2-c-module-datetime py2-c-module-fcntl py2-c-module-future_builtins py2-c-module-grp py2-c-module-itertools py2-c-module-math py2-c-module-mmap py2-c-module-operator py2-c-module-parser py2-c-module-pyexpat py2-c-module-resource py2-c-module-select py2-c-module-strop py2-c-module-syslog py2-c-module-termios py2-c-module-time py2-c-module-unicodedata py2-c-module-xxsubtype py2-c-module-zlib py2-cmd py2-interp-defaults py2-interp-object py2-interp-parser py2-interp-python py2-launcher py2-launcher-autorun py2-launcher-defaults py2-launcher-lib;
 
   inherit (callBPPackage "external/python/cpython2/Lib" ./external_python_cpython2_Lib.nix {})
     py2-plat-darwin py2-plat-linux2 py2-stdlib;
 
+  inherit (callBPPackage "external/python/cpython3" ./external_python_cpython3_Android-bionic.bp.nix {})
+    py3-c-modules-bionic;
+
+  inherit (callBPPackage "external/python/cpython3" ./external_python_cpython3_Android-darwin_x86_64.bp.nix {})
+    py3-c-modules-darwin_x86_64;
+
+  inherit (callBPPackage "external/python/cpython3" ./external_python_cpython3_Android-linux_x86_64.bp.nix {})
+    py3-c-modules-linux_x86_64;
+
+  inherit (callBPPackage "external/python/cpython3" ./external_python_cpython3.nix {})
+    py3-c-modules py3-cmd py3-interp py3-interp-defaults py3-launcher py3-launcher-autorun py3-launcher-defaults py3-launcher-lib;
+
+  inherit (callBPPackage "external/python/cpython3/Lib" ./external_python_cpython3_Lib.nix {})
+    py3-stdlib;
+
+  inherit (callBPPackage "external/python/cryptography/src/cryptography" ./external_python_cryptography_src_cryptography.nix {})
+    py-cryptography py-cryptography-libs;
+
   inherit (callBPPackage "external/python/dateutil/dateutil" ./external_python_dateutil_dateutil.nix {})
     py-dateutil;
+
+  inherit (callBPPackage "external/python/enum34/enum" ./external_python_enum34_enum.nix {})
+    py-enum34;
 
   inherit (callBPPackage "external/python/funcsigs" ./external_python_funcsigs.nix {})
     py2-funcsigs-tests py3-funcsigs-tests;
@@ -3435,17 +6366,32 @@
   inherit (callBPPackage "external/python/httplib2" ./external_python_httplib2.nix {})
     cacert_data py-httplib2 py2_httplib2_srcs py3_httplib2_srcs;
 
+  inherit (callBPPackage "external/python/ipaddress" ./external_python_ipaddress.nix {})
+    py-ipaddress;
+
   inherit (callBPPackage "external/python/mock/mock" ./external_python_mock_mock.nix {})
     py-mock;
 
   inherit (callBPPackage "external/python/oauth2client/oauth2client" ./external_python_oauth2client_oauth2client.nix {})
     py-oauth2client;
 
+  inherit (callBPPackage "external/python/parse_type/parse_type" ./external_python_parse_type_parse_type.nix {})
+    py-parse_type;
+
   inherit (callBPPackage "external/python/pyasn1-modules/pyasn1_modules" ./external_python_pyasn1-modules_pyasn1_modules.nix {})
     py-pyasn1-modules;
 
   inherit (callBPPackage "external/python/pyasn1/pyasn1" ./external_python_pyasn1_pyasn1.nix {})
     py-pyasn1;
+
+  inherit (callBPPackage "external/python/pybind11" ./external_python_pybind11.nix {})
+    pybind11_headers;
+
+  inherit (callBPPackage "external/python/pycparser/pycparser" ./external_python_pycparser_pycparser.nix {})
+    py-pycparser;
+
+  inherit (callBPPackage "external/python/pyopenssl/src/OpenSSL" ./external_python_pyopenssl_src_OpenSSL.nix {})
+    py-pyopenssl;
 
   inherit (callBPPackage "external/python/rsa/rsa" ./external_python_rsa_rsa.nix {})
     py-rsa;
@@ -3462,6 +6408,9 @@
   inherit (callBPPackage "external/rappor" ./external_rappor.nix {})
     rappor rappor-tests;
 
+  inherit (callBPPackage "external/replicaisland" ./external_replicaisland.nix {})
+    "com.replica.replicaisland";
+
   inherit (callBPPackage "external/rmi4utils/f54test" ./external_rmi4utils_f54test.nix {})
     f54test;
 
@@ -3471,11 +6420,80 @@
   inherit (callBPPackage "external/rmi4utils/rmihidtool" ./external_rmi4utils_rmihidtool.nix {})
     rmihidtool;
 
+  inherit (callBPPackage "external/robolectric-shadows" ./external_robolectric-shadows.nix {})
+    Robolectric_all Robolectric_all-target robolectric-host-android-support-multidex robolectric-host-android-support-v4 robolectric-host-android_all robolectric-host-androidx robolectric-host-androidx-test-core robolectric-host-androidx-test-ext-junit robolectric-host-androidx-test-monitor robolectric-host-androidx-test-runner robolectric-host-org_apache_http_legacy robolectric_android-all-stub robolectric_build_props robolectric_framework_raw_res robolectric_framework_raw_res_orig robolectric_framework_res;
+
+  inherit (callBPPackage "external/robolectric-shadows/annotations" ./external_robolectric-shadows_annotations.nix {})
+    Robolectric_annotations;
+
+  inherit (callBPPackage "external/robolectric-shadows/junit" ./external_robolectric-shadows_junit.nix {})
+    Robolectric_junit;
+
+  inherit (callBPPackage "external/robolectric-shadows/processor" ./external_robolectric-shadows_processor.nix {})
+    Robolectric_processor Robolectric_processor_tests Robolectric_processor_tests_resources;
+
+  inherit (callBPPackage "external/robolectric-shadows/resources" ./external_robolectric-shadows_resources.nix {})
+    Robolectric_resources Robolectric_resources_tests;
+
+  inherit (callBPPackage "external/robolectric-shadows/robolectric" ./external_robolectric-shadows_robolectric.nix {})
+    "robolectric-version.properties" Robolectric_robolectric Robolectric_robolectric_tests;
+
+  inherit (callBPPackage "external/robolectric-shadows/sandbox" ./external_robolectric-shadows_sandbox.nix {})
+    Robolectric_sandbox Robolectric_sandbox_tests;
+
+  inherit (callBPPackage "external/robolectric-shadows/shadowapi" ./external_robolectric-shadows_shadowapi.nix {})
+    Robolectric_shadowapi Robolectric_shadowapi_tests;
+
+  inherit (callBPPackage "external/robolectric-shadows/shadows/androidx/fragment" ./external_robolectric-shadows_shadows_androidx_fragment.nix {})
+    Robolectric_shadows_androidx_fragment;
+
+  inherit (callBPPackage "external/robolectric-shadows/shadows/framework" ./external_robolectric-shadows_shadows_framework.nix {})
+    Robolectric_shadows_framework;
+
+  inherit (callBPPackage "external/robolectric-shadows/shadows/httpclient" ./external_robolectric-shadows_shadows_httpclient.nix {})
+    Robolectric_shadows_httpclient Robolectric_shadows_httpclient_tests;
+
+  inherit (callBPPackage "external/robolectric-shadows/shadows/multidex" ./external_robolectric-shadows_shadows_multidex.nix {})
+    Robolectric_shadows_multidex;
+
+  inherit (callBPPackage "external/robolectric-shadows/shadows/supportv4" ./external_robolectric-shadows_shadows_supportv4.nix {})
+    Robolectric_shadows_supportv4 Robolectric_shadows_supportv4_tests;
+
+  inherit (callBPPackage "external/robolectric-shadows/soong" ./external_robolectric-shadows_soong.nix {})
+    soong-robolectric;
+
+  inherit (callBPPackage "external/robolectric-shadows/utils" ./external_robolectric-shadows_utils.nix {})
+    Robolectric_utils Robolectric_utils_tests;
+
   inherit (callBPPackage "external/roboto-fonts" ./external_roboto-fonts.nix {})
-    recovery_roboto-fonts_dep;
+    "Roboto-Black.ttf" "Roboto-BlackItalic.ttf" "Roboto-Bold.ttf" "Roboto-BoldItalic.ttf" "Roboto-Italic.ttf" "Roboto-Light.ttf" "Roboto-LightItalic.ttf" "Roboto-Medium.ttf" "Roboto-MediumItalic.ttf" "Roboto-Regular.ttf" "Roboto-Thin.ttf" "Roboto-ThinItalic.ttf" "RobotoCondensed-Bold.ttf" "RobotoCondensed-BoldItalic.ttf" "RobotoCondensed-Italic.ttf" "RobotoCondensed-Light.ttf" "RobotoCondensed-LightItalic.ttf" "RobotoCondensed-Medium.ttf" "RobotoCondensed-MediumItalic.ttf" "RobotoCondensed-Regular.ttf" recovery_roboto-fonts_dep;
 
   inherit (callBPPackage "external/rootdev" ./external_rootdev.nix {})
     librootdev rootdev;
+
+  inherit (callBPPackage "external/rust/crates/byteorder" ./external_rust_crates_byteorder.nix {})
+    libbyteorder;
+
+  inherit (callBPPackage "external/rust/crates/libc" ./external_rust_crates_libc.nix {})
+    liblibc;
+
+  inherit (callBPPackage "external/rust/crates/proc-macro2" ./external_rust_crates_proc-macro2.nix {})
+    libproc_macro2 proc-macro2_tests proc-macro2_tests_proc_macro2;
+
+  inherit (callBPPackage "external/rust/crates/quote" ./external_rust_crates_quote.nix {})
+    libquote;
+
+  inherit (callBPPackage "external/rust/crates/remain" ./external_rust_crates_remain.nix {})
+    libremain;
+
+  inherit (callBPPackage "external/rust/crates/syn/0.15.42" ./external_rust_crates_syn_0.15.42.nix {})
+    libsyn;
+
+  inherit (callBPPackage "external/rust/crates/syn/1.0.7" ./external_rust_crates_syn_1.0.7.nix {})
+    "libsyn-1.0.7";
+
+  inherit (callBPPackage "external/rust/crates/unicode-xid" ./external_rust_crates_unicode-xid.nix {})
+    libunicode_xid unicode-xid_device_tests_unicode_xid unicode-xid_host_tests_unicode_xid;
 
   inherit (callBPPackage "external/scapy" ./external_scapy.nix {})
     scapy;
@@ -3485,6 +6503,9 @@
 
   inherit (callBPPackage "external/scrypt" ./external_scrypt_sources.bp.nix {})
     libscrypt_sources;
+
+  inherit (callBPPackage "external/scudo" ./external_scudo.nix {})
+    libscudo libscudo_defaults libscudo_for_testing scudo_unit_tests;
 
   inherit (callBPPackage "external/seccomp-tests" ./external_seccomp-tests.nix {})
     external_seccomp_tests;
@@ -3522,8 +6543,26 @@
   inherit (callBPPackage "external/skqp" ./external_skqp.nix {})
     libskqp_app;
 
+  inherit (callBPPackage "external/skqp/platform_tools/android/apps/skqp/src/main" ./external_skqp_platform_tools_android_apps_skqp_src_main.nix {})
+    CtsSkQPTestCases;
+
+  inherit (callBPPackage "external/sl4a/Common" ./external_sl4a_Common.nix {})
+    "sl4a.Common";
+
+  inherit (callBPPackage "external/sl4a/InterpreterForAndroid" ./external_sl4a_InterpreterForAndroid.nix {})
+    "sl4a.InterpreterForAndroid";
+
+  inherit (callBPPackage "external/sl4a/ScriptingLayer" ./external_sl4a_ScriptingLayer.nix {})
+    "sl4a.ScriptingLayer";
+
+  inherit (callBPPackage "external/sl4a/ScriptingLayerForAndroid" ./external_sl4a_ScriptingLayerForAndroid.nix {})
+    "sl4a.locale_platform" sl4a;
+
   inherit (callBPPackage "external/sl4a/ScriptingLayerForAndroid/jni" ./external_sl4a_ScriptingLayerForAndroid_jni.nix {})
     libcom_googlecode_android_scripting_Exec;
+
+  inherit (callBPPackage "external/sl4a/Utils" ./external_sl4a_Utils.nix {})
+    "sl4a.Utils";
 
   inherit (callBPPackage "external/slf4j" ./external_slf4j.nix {})
     slf4j-jdk14;
@@ -3538,7 +6577,7 @@
     deodexerant;
 
   inherit (callBPPackage "external/smali/dexlib2" ./external_smali_dexlib2.nix {})
-    dexlib2 dexlib2-no-guava;
+    dexlib2 dexlib2-no-guava dexlib2-no-guava-no-cli;
 
   inherit (callBPPackage "external/smali/smali" ./external_smali_smali.nix {})
     smali smali_version;
@@ -3553,16 +6592,10 @@
     libsonic;
 
   inherit (callBPPackage "external/sonivox/arm-wt-22k" ./external_sonivox_arm-wt-22k.nix {})
-    libsonivox;
+    libsonivox libsonivox-defaults libsonivoxwithoutjet;
 
   inherit (callBPPackage "external/speex" ./external_speex.nix {})
     libspeexresampler;
-
-  inherit (callBPPackage "external/spirv-llvm/lib/SPIRV" ./external_spirv-llvm_lib_SPIRV.nix {})
-    libSPIRV;
-
-  inherit (callBPPackage "external/spirv-llvm/tools/llvm-spirv" ./external_spirv-llvm_tools_llvm-spirv.nix {})
-    llvm-spirv;
 
   inherit (callBPPackage "external/sqlite/android" ./external_sqlite_android.nix {})
     libsqlite3_android libsqlite3_phone_number_utils_test;
@@ -3580,16 +6613,28 @@
     stressapptest;
 
   inherit (callBPPackage "external/swiftshader" ./external_swiftshader.nix {})
-    swiftshader_common swiftshader_common_debug swiftshader_common_release swiftshader_host_headers swiftshader_platform_headers swiftshader_subzero;
+    swiftshader_common swiftshader_common_debug swiftshader_common_release swiftshader_host_headers swiftshader_platform_headers;
 
   inherit (callBPPackage "external/swiftshader/src" ./external_swiftshader_src.nix {})
-    libEGL_swiftshader libEGL_swiftshader_debug libEGL_swiftshader_defaults libGLESv1_CM_swiftshader libGLESv1_CM_swiftshader_debug libGLESv1_CM_swiftshader_defaults libGLESv2_swiftshader libGLESv2_swiftshader_debug libGLESv2_swiftshader_defaults libswiftshader libswiftshader_common libswiftshader_common_debug libswiftshader_common_defaults libswiftshader_compiler libswiftshader_compiler_debug libswiftshader_compiler_defaults libswiftshader_debug libswiftshader_llvm libswiftshader_llvm_debug libswiftshader_llvm_defaults libswiftshader_release swiftshader_client_libraries_subzero_or_llvm swiftshader_client_libraries_subzero_or_llvm_debug;
+    "vulkan.pastel" "vulkan.pastel.debug" commit_header libEGL_swiftshader libEGL_swiftshader_debug libEGL_swiftshader_defaults libGLESv1_CM_swiftshader libGLESv1_CM_swiftshader_debug libGLESv1_CM_swiftshader_defaults libGLESv2_swiftshader libGLESv2_swiftshader_debug libGLESv2_swiftshader_defaults libswiftshader libswiftshader_common libswiftshader_common_debug libswiftshader_common_defaults libswiftshader_compiler libswiftshader_compiler_debug libswiftshader_compiler_defaults libswiftshader_debug libswiftshader_llvm libswiftshader_llvm_debug libswiftshader_llvm_defaults libswiftshader_release libswiftshadervk_llvm libswiftshadervk_llvm_debug libswiftshadervk_llvm_defaults libvk_swiftshader_common_defaults libvk_swiftshader_defaults swiftshader_client_libraries swiftshader_client_libraries_debug swiftshader_debug;
 
-  inherit (callBPPackage "external/swiftshader/third_party/LLVM" ./external_swiftshader_third_party_LLVM.nix {})
-    libLLVM_swiftshader;
+  inherit (callBPPackage "external/swiftshader/third_party/SPIRV-Headers" ./external_swiftshader_third_party_SPIRV-Headers.nix {})
+    "swiftshader_spirv_headers_spir-v.xml" "swiftshader_spirv_headers_unified1_extinst.glsl.std.450.grammar.json" "swiftshader_spirv_headers_unified1_extinst.opencl.std.100.grammar.json" "swiftshader_spirv_headers_unified1_spirv.core.grammar.json";
+
+  inherit (callBPPackage "external/swiftshader/third_party/SPIRV-Tools" ./external_swiftshader_third_party_SPIRV-Tools.nix {})
+    swiftshader_spirv-tools swiftshader_spvtools_generate_grammar_tables swiftshader_spvtools_generate_language_headers swiftshader_spvtools_generate_registry_tables swiftshader_spvtools_update_build_version;
+
+  inherit (callBPPackage "external/swiftshader/third_party/astc-encoder" ./external_swiftshader_third_party_astc-encoder.nix {})
+    swiftshader_astc;
+
+  inherit (callBPPackage "external/swiftshader/third_party/llvm-7.0" ./external_swiftshader_third_party_llvm-7.0.nix {})
+    libLLVM7_swiftshader;
 
   inherit (callBPPackage "external/swiftshader/third_party/llvm-subzero" ./external_swiftshader_third_party_llvm-subzero.nix {})
     libLLVMSupport_subzero;
+
+  inherit (callBPPackage "external/swiftshader/third_party/marl" ./external_swiftshader_third_party_marl.nix {})
+    swiftshader_marl;
 
   inherit (callBPPackage "external/tagsoup" ./external_tagsoup.nix {})
     tagsoup;
@@ -3602,6 +6647,12 @@
 
   inherit (callBPPackage "external/tensorflow/tensorflow/lite" ./external_tensorflow_tensorflow_lite.nix {})
     libtflite libtflite_context libtflite_framework tflite_defaults;
+
+  inherit (callBPPackage "external/tensorflow/tensorflow/lite/delegates/nnapi/java" ./external_tensorflow_tensorflow_lite_delegates_nnapi_java.nix {})
+    tflite_nnapi_delegate_java;
+
+  inherit (callBPPackage "external/tensorflow/tensorflow/lite/java" ./external_tensorflow_tensorflow_lite_java.nix {})
+    libtensorflowlite_jni tensorflowlite_java;
 
   inherit (callBPPackage "external/tensorflow/tensorflow/lite/kernels" ./external_tensorflow_tensorflow_lite_kernels.nix {})
     libtflite_kernel_utils libtflite_kernels;
@@ -3628,13 +6679,19 @@
     libtinyxml2 tinyxml2-tests;
 
   inherit (callBPPackage "external/toybox" ./external_toybox.nix {})
-    toybox toybox-defaults toybox_vendor;
+    toybox toybox-defaults toybox-tests toybox_vendor;
 
   inherit (callBPPackage "external/tremolo" ./external_tremolo.nix {})
     libvorbisidec;
 
+  inherit (callBPPackage "external/tremolo/tests" ./external_tremolo_tests.nix {})
+    oob_oggpack_look;
+
   inherit (callBPPackage "external/turbine" ./external_turbine.nix {})
     turbine;
+
+  inherit (callBPPackage "external/u-boot" ./external_u-boot.nix {})
+    mkenvimage mkimage uboot_host_defaults;
 
   inherit (callBPPackage "external/ukey2" ./external_ukey2.nix {})
     ukey2;
@@ -3642,8 +6699,23 @@
   inherit (callBPPackage "external/universal-tween-engine" ./external_universal-tween-engine.nix {})
     universal-tween-engine;
 
-  inherit (callBPPackage "external/v4l2_codec2/vda" ./external_v4l2_codec2_vda.nix {})
-    libv4l2_codec2_vda;
+  inherit (callBPPackage "external/v4l2_codec2/accel" ./external_v4l2_codec2_accel.nix {})
+    libv4l2_codec2_accel;
+
+  inherit (callBPPackage "external/v4l2_codec2/common" ./external_v4l2_codec2_common.nix {})
+    libv4l2_codec2_common;
+
+  inherit (callBPPackage "external/v4l2_codec2/components" ./external_v4l2_codec2_components.nix {})
+    libv4l2_codec2_components;
+
+  inherit (callBPPackage "external/v4l2_codec2/plugin_store" ./external_v4l2_codec2_plugin_store.nix {})
+    libc2plugin_store;
+
+  inherit (callBPPackage "external/v4l2_codec2/service" ./external_v4l2_codec2_service.nix {})
+    "android.hardware.media.c2@1.0-service-v4l2";
+
+  inherit (callBPPackage "external/v4l2_codec2/store" ./external_v4l2_codec2_store.nix {})
+    libv4l2_codec2_store;
 
   inherit (callBPPackage "external/v8" ./external_v8_Android.base.bp.nix {})
     libv8base;
@@ -3670,7 +6742,10 @@
     virgl_headers;
 
   inherit (callBPPackage "external/vixl" ./external_vixl.nix {})
-    libvixl libvixld vixl-arm vixl-arm64 vixl-common vixl-debug vixl-release vixl-test-runner;
+    libvixl libvixl-defaults libvixld vixl-arm vixl-arm64 vixl-common vixl-debug vixl-release vixl-test-runner;
+
+  inherit (callBPPackage "external/vogar" ./external_vogar.nix {})
+    vogar-jsr305 vogar-kxml-libcore-20110123;
 
   inherit (callBPPackage "external/volley" ./external_volley.nix {})
     volley;
@@ -3682,10 +6757,7 @@
     sync_clock_jni;
 
   inherit (callBPPackage "external/wayland-protocols" ./external_wayland-protocols.nix {})
-    libwayland_extension_client_protocols soong-wayland-protocol-codegen wayland_extension_client_protocol_headers wayland_extension_protocol_sources wayland_extension_protocols wayland_extension_server_protocol_headers;
-
-  inherit (callBPPackage "external/wayland-protocols/flinger_headers" ./external_wayland-protocols_flinger_headers.nix {})
-    wayland_flinger_headers;
+    libwayland_extension_client_protocols libwayland_extension_server_protocols soong-wayland-protocol-codegen wayland_extension_client_protocol_headers wayland_extension_protocol_sources wayland_extension_protocols wayland_extension_server_protocol_headers;
 
   inherit (callBPPackage "external/wayland" ./external_wayland.nix {})
     libwayland_client libwayland_server wayland_core_client_protocol_headers wayland_core_protocol wayland_core_protocol_sources wayland_core_server_protocol_headers wayland_defaults wayland_scanner wayland_version_header;
@@ -3781,7 +6853,7 @@
     xz-java;
 
   inherit (callBPPackage "external/zlib" ./external_zlib.nix {})
-    libz minigzip zlib_example zlib_example_host;
+    libz libz_current libz_defaults minigzip zlib_bench;
 
   inherit (callBPPackage "external/zopfli" ./external_zopfli.nix {})
     libzopfli zopflipng;
@@ -3802,7 +6874,7 @@
     cameraserver;
 
   inherit (callBPPackage "frameworks/av/camera/ndk" ./frameworks_av_camera_ndk.nix {})
-    AImageReaderVendorTest libcamera2ndk libcamera2ndk_vendor;
+    ACameraNdkVendorTest libcamera2ndk libcamera2ndk_vendor;
 
   inherit (callBPPackage "frameworks/av/cmds/screenrecord" ./frameworks_av_cmds_screenrecord.nix {})
     screenrecord;
@@ -3835,10 +6907,19 @@
     libdrmpassthruplugin;
 
   inherit (callBPPackage "frameworks/av/drm/libmediadrm" ./frameworks_av_drm_libmediadrm.nix {})
-    libmediadrm libmediadrmmetrics_full libmediadrmmetrics_lite;
+    libmediadrm libmediadrm_headers libmediadrmmetrics_consumer libmediadrmmetrics_full libmediadrmmetrics_lite;
 
   inherit (callBPPackage "frameworks/av/drm/libmediadrm/tests" ./frameworks_av_drm_libmediadrm_tests.nix {})
     CounterMetric_test DrmMetrics_test EventMetric_test;
+
+  inherit (callBPPackage "frameworks/av/drm/mediacas/plugins/clearkey" ./frameworks_av_drm_mediacas_plugins_clearkey.nix {})
+    libclearkeycasplugin;
+
+  inherit (callBPPackage "frameworks/av/drm/mediacas/plugins/clearkey/tests" ./frameworks_av_drm_mediacas_plugins_clearkey_tests.nix {})
+    ClearKeyFetcherTest;
+
+  inherit (callBPPackage "frameworks/av/drm/mediacas/plugins/mock" ./frameworks_av_drm_mediacas_plugins_mock.nix {})
+    libmockcasplugin;
 
   inherit (callBPPackage "frameworks/av/drm/mediadrm/plugins/clearkey/common" ./frameworks_av_drm_mediadrm_plugins_clearkey_common.nix {})
     libclearkeycommon;
@@ -3850,7 +6931,7 @@
     ClearKeyDrmUnitTest;
 
   inherit (callBPPackage "frameworks/av/drm/mediadrm/plugins/clearkey/hidl" ./frameworks_av_drm_mediadrm_plugins_clearkey_hidl.nix {})
-    "android.hardware.drm@1.2-service-lazy.clearkey" "android.hardware.drm@1.2-service.clearkey" clearkey_service_defaults libclearkeydevicefiles-protos;
+    "android.hardware.drm@1.2-service-lazy.clearkey" "android.hardware.drm@1.2-service.clearkey" "android.hardware.drm@1.3-service-lazy.clearkey" "android.hardware.drm@1.3-service.clearkey" clearkey_service_defaults libclearkeydevicefiles-protos;
 
   inherit (callBPPackage "frameworks/av/drm/mediadrm/plugins/mock" ./frameworks_av_drm_mediadrm_plugins_mock.nix {})
     libmockdrmcryptoplugin;
@@ -3931,7 +7012,10 @@
     libcodec2_component_wrapper;
 
   inherit (callBPPackage "frameworks/av/media/codec2/hidl/1.0/utils" ./frameworks_av_media_codec2_hidl_1.0_utils.nix {})
-    "libcodec2_hidl@1.0" "libcodec2_hidl_client@1.0" libcodec2-hidl-client-defaults libcodec2-hidl-defaults;
+    "libcodec2-hidl-client-defaults@1.0" "libcodec2-hidl-defaults@1.0" "libcodec2_hidl@1.0" "libcodec2_hidl_client@1.0";
+
+  inherit (callBPPackage "frameworks/av/media/codec2/hidl/1.0/vts/functional" ./frameworks_av_media_codec2_hidl_1.0_vts_functional.nix {})
+    media_c2_v1_audio_decode_res media_c2_v1_audio_encode_res media_c2_v1_video_decode_res media_c2_v1_video_encode_res;
 
   inherit (callBPPackage "frameworks/av/media/codec2/hidl/1.0/vts/functional/audio" ./frameworks_av_media_codec2_hidl_1.0_vts_functional_audio.nix {})
     VtsHalMediaC2V1_0TargetAudioDecTest VtsHalMediaC2V1_0TargetAudioEncTest;
@@ -3948,11 +7032,14 @@
   inherit (callBPPackage "frameworks/av/media/codec2/hidl/1.0/vts/functional/video" ./frameworks_av_media_codec2_hidl_1.0_vts_functional_video.nix {})
     VtsHalMediaC2V1_0TargetVideoDecTest VtsHalMediaC2V1_0TargetVideoEncTest;
 
+  inherit (callBPPackage "frameworks/av/media/codec2/hidl/1.1/utils" ./frameworks_av_media_codec2_hidl_1.1_utils.nix {})
+    "libcodec2-hidl-client-defaults@1.1" "libcodec2-hidl-defaults@1.1" "libcodec2_hidl@1.1" "libcodec2_hidl_client@1.1" libcodec2-hidl-client-defaults libcodec2-hidl-defaults;
+
   inherit (callBPPackage "frameworks/av/media/codec2/hidl/client" ./frameworks_av_media_codec2_hidl_client.nix {})
     libcodec2_client;
 
   inherit (callBPPackage "frameworks/av/media/codec2/hidl/services" ./frameworks_av_media_codec2_hidl_services.nix {})
-    "android.hardware.media.c2@1.0-service";
+    "android.hardware.media.c2@1.1-default-seccomp_policy" "android.hardware.media.c2@1.1-default-service";
 
   inherit (callBPPackage "frameworks/av/media/codec2/sfplugin" ./frameworks_av_media_codec2_sfplugin.nix {})
     libsfplugin_ccodec;
@@ -3968,6 +7055,9 @@
 
   inherit (callBPPackage "frameworks/av/media/codec2/vndk" ./frameworks_av_media_codec2_vndk.nix {})
     libcodec2-impl-defaults libcodec2-internal-defaults libcodec2_internal libcodec2_vndk;
+
+  inherit (callBPPackage "frameworks/av/media/extractors" ./frameworks_av_media_extractors.nix {})
+    extractor-defaults;
 
   inherit (callBPPackage "frameworks/av/media/extractors/aac" ./frameworks_av_media_extractors_aac.nix {})
     libaacextractor;
@@ -3988,13 +7078,16 @@
     libmp3extractor;
 
   inherit (callBPPackage "frameworks/av/media/extractors/mp4" ./frameworks_av_media_extractors_mp4.nix {})
-    libmp4extractor libmp4extractor_defaults libmp4extractor_fuzzing;
+    libmp4extractor;
 
   inherit (callBPPackage "frameworks/av/media/extractors/mpeg2" ./frameworks_av_media_extractors_mpeg2.nix {})
     libmpeg2extractor;
 
   inherit (callBPPackage "frameworks/av/media/extractors/ogg" ./frameworks_av_media_extractors_ogg.nix {})
     liboggextractor;
+
+  inherit (callBPPackage "frameworks/av/media/extractors/tests" ./frameworks_av_media_extractors_tests.nix {})
+    ExtractorUnitTest;
 
   inherit (callBPPackage "frameworks/av/media/extractors/wav" ./frameworks_av_media_extractors_wav.nix {})
     libwavextractor;
@@ -4018,34 +7111,46 @@
     write_sine write_sine_callback;
 
   inherit (callBPPackage "frameworks/av/media/libaaudio/src" ./frameworks_av_media_libaaudio_src.nix {})
-    libaaudio;
+    libaaudio libaaudio_internal;
 
   inherit (callBPPackage "frameworks/av/media/libaaudio/tests" ./frameworks_av_media_libaaudio_tests.nix {})
-    libaaudio_tests_defaults test_aaudio_marshalling test_aaudio_monkey test_aaudio_recovery test_atomic_fifo test_attributes test_bad_disconnect test_block_adapter test_clock_model test_flowgraph test_full_queue test_interference test_n_streams test_no_close test_open_params test_return_stop test_session_id test_stop_hang test_timestamps test_various;
+    libaaudio_tests_defaults test_aaudio_marshalling test_aaudio_monkey test_aaudio_recovery test_atomic_fifo test_attributes test_bad_disconnect test_block_adapter test_clock_model test_flowgraph test_full_queue test_histogram test_interference test_n_streams test_no_close test_open_params test_return_stop test_session_id test_steal_exclusive test_stop_hang test_timestamps test_various;
 
   inherit (callBPPackage "frameworks/av/media/libaudioclient" ./frameworks_av_media_libaudioclient.nix {})
-    libaudioclient libaudioclient_aidl libaudioclient_headers libaudiopolicy;
+    capture_state_listener-aidl libaudioclient libaudioclient_aidl libaudioclient_aidl_callback libaudioclient_aidl_private libaudioclient_headers libaudiopolicy;
 
   inherit (callBPPackage "frameworks/av/media/libaudioclient/tests" ./frameworks_av_media_libaudioclient_tests.nix {})
     libaudioclient_tests_defaults test_create_audiorecord test_create_audiotrack;
+
+  inherit (callBPPackage "frameworks/av/media/libaudiofoundation" ./frameworks_av_media_libaudiofoundation.nix {})
+    libaudiofoundation libaudiofoundation_headers;
+
+  inherit (callBPPackage "frameworks/av/media/libaudiofoundation/tests" ./frameworks_av_media_libaudiofoundation_tests.nix {})
+    audiofoundation_parcelable_test;
 
   inherit (callBPPackage "frameworks/av/media/libaudiohal" ./frameworks_av_media_libaudiohal.nix {})
     libaudiohal libaudiohal_deathhandler libaudiohal_headers;
 
   inherit (callBPPackage "frameworks/av/media/libaudiohal/impl" ./frameworks_av_media_libaudiohal_impl.nix {})
-    "libaudiohal@2.0" "libaudiohal@4.0" "libaudiohal@5.0" libaudiohal_default;
+    "libaudiohal@2.0" "libaudiohal@4.0" "libaudiohal@5.0" "libaudiohal@6.0" libaudiohal_default;
 
   inherit (callBPPackage "frameworks/av/media/libaudioprocessing" ./frameworks_av_media_libaudioprocessing.nix {})
-    libaudioprocessing libaudioprocessing_arm libaudioprocessing_defaults;
+    libaudioprocessing libaudioprocessing_base libaudioprocessing_defaults;
 
   inherit (callBPPackage "frameworks/av/media/libaudioprocessing/audio-resampler" ./frameworks_av_media_libaudioprocessing_audio-resampler.nix {})
     libaudio-resampler;
 
   inherit (callBPPackage "frameworks/av/media/libaudioprocessing/tests" ./frameworks_av_media_libaudioprocessing_tests.nix {})
-    libaudioprocessing_test_defaults resampler_tests test-mixer test-resampler;
+    libaudioprocessing_test_defaults mixerops_benchmark mixerops_objdump resampler_tests test-mixer test-resampler;
+
+  inherit (callBPPackage "frameworks/av/media/libaudioprocessing/tests/fuzzer" ./frameworks_av_media_libaudioprocessing_tests_fuzzer.nix {})
+    libaudioprocessing_resampler_fuzzer;
 
   inherit (callBPPackage "frameworks/av/media/libcpustats" ./frameworks_av_media_libcpustats.nix {})
     libcpustats;
+
+  inherit (callBPPackage "frameworks/av/media/libdatasource" ./frameworks_av_media_libdatasource.nix {})
+    libdatasource;
 
   inherit (callBPPackage "frameworks/av/media/libeffects/config" ./frameworks_av_media_libeffects_config.nix {})
     libeffectsconfig;
@@ -4084,7 +7189,7 @@
     libheif;
 
   inherit (callBPPackage "frameworks/av/media/libmedia" ./frameworks_av_media_libmedia.nix {})
-    libmedia libmedia_defaults libmedia_headers libmedia_helper libmedia_midiiowrapper libmedia_omx libmedia_omx_client libmedia_player2_util;
+    libmedia libmedia_codeclist libmedia_headers libmedia_midiiowrapper libmedia_omx libmedia_omx_aidl libmedia_omx_client mediaextractorservice_aidl resourcemanager_aidl resourcemanager_aidl_interface;
 
   inherit (callBPPackage "frameworks/av/media/libmedia/xsd" ./frameworks_av_media_libmedia_xsd.nix {})
     media_profiles;
@@ -4092,23 +7197,29 @@
   inherit (callBPPackage "frameworks/av/media/libmedia/xsd/vts" ./frameworks_av_media_libmedia_xsd_vts.nix {})
     vts_mediaProfiles_validate_test;
 
+  inherit (callBPPackage "frameworks/av/media/libmediahelper" ./frameworks_av_media_libmediahelper.nix {})
+    libmedia_helper libmedia_helper_headers;
+
   inherit (callBPPackage "frameworks/av/media/libmediametrics" ./frameworks_av_media_libmediametrics.nix {})
-    libmediametrics;
-
-  inherit (callBPPackage "frameworks/av/media/libmediaplayer2" ./frameworks_av_media_libmediaplayer2.nix {})
-    libmedia2_jni_core libmediaplayer2 libmediaplayer2_headers;
-
-  inherit (callBPPackage "frameworks/av/media/libmediaplayer2/nuplayer2" ./frameworks_av_media_libmediaplayer2_nuplayer2.nix {})
-    libstagefright_nuplayer2;
+    libmediametrics libmediametrics_headers;
 
   inherit (callBPPackage "frameworks/av/media/libmediaplayerservice" ./frameworks_av_media_libmediaplayerservice.nix {})
     libmediaplayerservice;
+
+  inherit (callBPPackage "frameworks/av/media/libmediaplayerservice/datasource" ./frameworks_av_media_libmediaplayerservice_datasource.nix {})
+    libplayerservice_datasource;
 
   inherit (callBPPackage "frameworks/av/media/libmediaplayerservice/nuplayer" ./frameworks_av_media_libmediaplayerservice_nuplayer.nix {})
     libstagefright_nuplayer;
 
   inherit (callBPPackage "frameworks/av/media/libmediaplayerservice/tests" ./frameworks_av_media_libmediaplayerservice_tests.nix {})
     DrmSessionManager_test;
+
+  inherit (callBPPackage "frameworks/av/media/libmediatranscoding" ./frameworks_av_media_libmediatranscoding.nix {})
+    libmediatranscoding mediatranscoding_aidl_interface;
+
+  inherit (callBPPackage "frameworks/av/media/libmediatranscoding/tests" ./frameworks_av_media_libmediatranscoding_tests.nix {})
+    AdjustableMaxPriorityQueue_tests TranscodingClientManager_tests libmediatranscoding_test_defaults;
 
   inherit (callBPPackage "frameworks/av/media/libnbaio" ./frameworks_av_media_libnbaio.nix {})
     libnbaio libnbaio_mono libnbaio_mono_defaults;
@@ -4117,10 +7228,10 @@
     libnblog;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright" ./frameworks_av_media_libstagefright.nix {})
-    libstagefright libstagefright_codecbase libstagefright_esds libstagefright_headers libstagefright_metadatautils libstagefright_mpeg2extractor libstagefright_player2;
+    libstagefright libstagefright_codecbase libstagefright_esds libstagefright_framecapture_utils libstagefright_headers libstagefright_metadatautils libstagefright_mpeg2extractor;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/bqhelper" ./frameworks_av_media_libstagefright_bqhelper.nix {})
-    libstagefright_bufferqueue_helper;
+    libstagefright_bufferqueue-defaults libstagefright_bufferqueue_helper libstagefright_bufferqueue_helper_novndk;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/bqhelper/tests" ./frameworks_av_media_libstagefright_bqhelper_tests.nix {})
     FrameDropper_test;
@@ -4137,17 +7248,35 @@
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrnb/dec" ./frameworks_av_media_libstagefright_codecs_amrnb_dec.nix {})
     libstagefright_amrnbdec libstagefright_amrnbdec_test libstagefright_soft_amrdec;
 
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrnb/dec/test" ./frameworks_av_media_libstagefright_codecs_amrnb_dec_test.nix {})
+    AmrnbDecoderTest;
+
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrnb/enc" ./frameworks_av_media_libstagefright_codecs_amrnb_enc.nix {})
     libstagefright_amrnbenc libstagefright_amrnbenc_test libstagefright_soft_amrnbenc;
 
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrnb/enc/test" ./frameworks_av_media_libstagefright_codecs_amrnb_enc_test.nix {})
+    AmrnbEncoderTest;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrnb/fuzzer" ./frameworks_av_media_libstagefright_codecs_amrnb_fuzzer.nix {})
+    amrnb_dec_fuzzer;
+
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrwb" ./frameworks_av_media_libstagefright_codecs_amrwb.nix {})
     libstagefright_amrwbdec libstagefright_amrwbdec_test;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrwb/fuzzer" ./frameworks_av_media_libstagefright_codecs_amrwb_fuzzer.nix {})
+    amrwb_dec_fuzzer;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrwb/test" ./frameworks_av_media_libstagefright_codecs_amrwb_test.nix {})
+    AmrwbDecoderTest;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrwbenc" ./frameworks_av_media_libstagefright_codecs_amrwbenc.nix {})
     libstagefright_amrwbenc libstagefright_soft_amrwbenc;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrwbenc/SampleCode" ./frameworks_av_media_libstagefright_codecs_amrwbenc_SampleCode.nix {})
     AMRWBEncTest;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/amrwbenc/test" ./frameworks_av_media_libstagefright_codecs_amrwbenc_test.nix {})
+    AmrwbEncoderTest;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/avcdec" ./frameworks_av_media_libstagefright_codecs_avcdec.nix {})
     libstagefright_soft_avcdec;
@@ -4176,11 +7305,20 @@
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/m4v_h263/dec" ./frameworks_av_media_libstagefright_codecs_m4v_h263_dec.nix {})
     libstagefright_m4vh263dec libstagefright_soft_mpeg4dec;
 
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/m4v_h263/dec/test" ./frameworks_av_media_libstagefright_codecs_m4v_h263_dec_test.nix {})
+    Mpeg4H263DecoderTest;
+
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/m4v_h263/enc" ./frameworks_av_media_libstagefright_codecs_m4v_h263_enc.nix {})
     libstagefright_m4vh263enc libstagefright_m4vh263enc_test libstagefright_soft_mpeg4enc;
 
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/m4v_h263/enc/test" ./frameworks_av_media_libstagefright_codecs_m4v_h263_enc_test.nix {})
+    Mpeg4H263EncoderTest;
+
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/mp3dec" ./frameworks_av_media_libstagefright_codecs_mp3dec.nix {})
     libstagefright_mp3dec libstagefright_mp3dec_test libstagefright_soft_mp3dec;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/mp3dec/test" ./frameworks_av_media_libstagefright_codecs_mp3dec_test.nix {})
+    Mp3DecoderTest;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/codecs/mpeg2dec" ./frameworks_av_media_libstagefright_codecs_mpeg2dec.nix {})
     libstagefright_soft_mpeg2dec;
@@ -4215,8 +7353,14 @@
   inherit (callBPPackage "frameworks/av/media/libstagefright/flac/dec" ./frameworks_av_media_libstagefright_flac_dec.nix {})
     libstagefright_flacdec;
 
+  inherit (callBPPackage "frameworks/av/media/libstagefright/flac/dec/test" ./frameworks_av_media_libstagefright_flac_dec_test.nix {})
+    FlacDecoderTest;
+
   inherit (callBPPackage "frameworks/av/media/libstagefright/foundation" ./frameworks_av_media_libstagefright_foundation.nix {})
     libstagefright_foundation libstagefright_foundation_defaults libstagefright_foundation_headers libstagefright_foundation_without_imemory;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/foundation/tests" ./frameworks_av_media_libstagefright_foundation_tests.nix {})
+    sf_foundation_test;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/http" ./frameworks_av_media_libstagefright_http.nix {})
     libstagefright_http_support;
@@ -4226,6 +7370,9 @@
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/id3" ./frameworks_av_media_libstagefright_id3.nix {})
     libstagefright_id3 testid3;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/id3/test" ./frameworks_av_media_libstagefright_id3_test.nix {})
+    ID3Test;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/mpeg2ts" ./frameworks_av_media_libstagefright_mpeg2ts.nix {})
     libstagefright_mpeg2support;
@@ -4242,11 +7389,20 @@
   inherit (callBPPackage "frameworks/av/media/libstagefright/tests" ./frameworks_av_media_libstagefright_tests.nix {})
     BatteryChecker_test MediaCodecListOverrides_test;
 
+  inherit (callBPPackage "frameworks/av/media/libstagefright/tests/extractorFactory" ./frameworks_av_media_libstagefright_tests_extractorFactory.nix {})
+    ExtractorFactoryTest;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/tests/writer" ./frameworks_av_media_libstagefright_tests_writer.nix {})
+    writerTest;
+
   inherit (callBPPackage "frameworks/av/media/libstagefright/timedtext" ./frameworks_av_media_libstagefright_timedtext.nix {})
-    libstagefright_timedtext libstagefright_timedtext2;
+    libstagefright_timedtext;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/webm" ./frameworks_av_media_libstagefright_webm.nix {})
     libstagefright_webm;
+
+  inherit (callBPPackage "frameworks/av/media/libstagefright/webm/tests" ./frameworks_av_media_libstagefright_webm_tests.nix {})
+    WebmFrameThreadUnitTest;
 
   inherit (callBPPackage "frameworks/av/media/libstagefright/xmlparser" ./frameworks_av_media_libstagefright_xmlparser.nix {})
     libstagefright_xmlparser libstagefright_xmlparser_headers media_codecs;
@@ -4269,6 +7425,30 @@
   inherit (callBPPackage "frameworks/av/media/ndk" ./frameworks_av_media_ndk.nix {})
     AImageReaderWindowHandleTest libmediandk libmediandk_utils media_ndk_headers;
 
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/MediaBenchmarkTest" ./frameworks_av_media_tests_benchmark_MediaBenchmarkTest.nix {})
+    MediaBenchmark-defaults MediaBenchmarkTest libMediaBenchmark;
+
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/MediaBenchmarkTest/src/main/cpp" ./frameworks_av_media_tests_benchmark_MediaBenchmarkTest_src_main_cpp.nix {})
+    libmediabenchmark_jni;
+
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/src/native/common" ./frameworks_av_media_tests_benchmark_src_native_common.nix {})
+    libmediabenchmark-defaults libmediabenchmark_codec2_common libmediabenchmark_codec2_common-defaults libmediabenchmark_common libmediabenchmark_common-defaults libmediabenchmark_soft_sanitize_all-defaults;
+
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/src/native/decoder" ./frameworks_av_media_tests_benchmark_src_native_decoder.nix {})
+    libmediabenchmark_codec2_decoder libmediabenchmark_decoder;
+
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/src/native/encoder" ./frameworks_av_media_tests_benchmark_src_native_encoder.nix {})
+    libmediabenchmark_codec2_encoder libmediabenchmark_encoder;
+
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/src/native/extractor" ./frameworks_av_media_tests_benchmark_src_native_extractor.nix {})
+    libmediabenchmark_codec2_extractor libmediabenchmark_extractor;
+
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/src/native/muxer" ./frameworks_av_media_tests_benchmark_src_native_muxer.nix {})
+    libmediabenchmark_muxer;
+
+  inherit (callBPPackage "frameworks/av/media/tests/benchmark/tests" ./frameworks_av_media_tests_benchmark_tests.nix {})
+    C2DecoderTest C2EncoderTest decoderTest encoderTest extractorTest muxerTest;
+
   inherit (callBPPackage "frameworks/av/media/utils" ./frameworks_av_media_utils.nix {})
     libmediautils;
 
@@ -4284,6 +7464,9 @@
   inherit (callBPPackage "frameworks/av/services/audiopolicy/common/managerdefinitions" ./frameworks_av_services_audiopolicy_common_managerdefinitions.nix {})
     libaudiopolicycomponents;
 
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/config" ./frameworks_av_services_audiopolicy_config.nix {})
+    "a2dp_audio_policy_configuration.xml" "a2dp_in_audio_policy_configuration.xml" "audio_policy_configuration.xml" "audio_policy_volumes.xml" "default_volume_tables.xml" "primary_audio_policy_configuration.xml" "r_submix_audio_policy_configuration.xml" "surround_sound_configuration_5_0.xml" "usb_audio_policy_configuration.xml" a2dp_audio_policy_configuration a2dp_in_audio_policy_configuration audio_policy_configuration_generic audio_policy_configuration_generic_configurable audio_policy_volumes default_volume_tables primary_audio_policy_configuration r_submix_audio_policy_configuration surround_sound_configuration_5_0 usb_audio_policy_configuration;
+
   inherit (callBPPackage "frameworks/av/services/audiopolicy/engine/common" ./frameworks_av_services_audiopolicy_engine_common.nix {})
     libaudiopolicyengine_common libaudiopolicyengine_common_headers;
 
@@ -4296,11 +7479,29 @@
   inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable" ./frameworks_av_services_audiopolicy_engineconfigurable.nix {})
     libaudiopolicyengineconfigurable libaudiopolicyengineconfigurable_interface_headers;
 
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/config" ./frameworks_av_services_audiopolicy_engineconfigurable_config.nix {})
+    "audio_policy_engine_criteria.xml" audio_policy_engine_criteria audio_policy_engine_criterion_types_template;
+
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/config/example/automotive" ./frameworks_av_services_audiopolicy_engineconfigurable_config_example_automotive.nix {})
+    "audio_policy_engine_volumes.xml" audio_policy_engine_configuration audio_policy_engine_volumes;
+
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/config/example/caremu" ./frameworks_av_services_audiopolicy_engineconfigurable_config_example_caremu.nix {})
+    "audio_policy_engine_criterion_types.xml" audio_policy_configuration_files audio_policy_configuration_top_file audio_policy_engine_configuration_files audio_policy_engine_criterion_types;
+
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/config/example/phone" ./frameworks_av_services_audiopolicy_engineconfigurable_config_example_phone.nix {})
+    audio_policy_engine_default_stream_volumes audio_policy_engine_stream_volumes;
+
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/parameter-framework" ./frameworks_av_services_audiopolicy_engineconfigurable_parameter-framework.nix {})
+    "ParameterFrameworkConfigurationPolicy.user.xml" "ParameterFrameworkConfigurationPolicy.userdebug.xml" "PolicyClass.xml" "PolicySubsystem-CommonTypes.xml" "PolicySubsystem.xml" "device_for_input_source.pfw" "volumes.pfw" PolicyClass PolicySubsystem PolicySubsystem-no-strategy buildcommontypesstructure_gen common_types_structure_template product_strategies_structure_template;
+
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/parameter-framework/examples/CarEmu" ./frameworks_av_services_audiopolicy_engineconfigurable_parameter-framework_examples_CarEmu.nix {})
+    "ProductStrategies.xml" "parameter-framework.policy" audio_policy_pfw_structure_files audio_policy_pfw_toplevel buildstrategiesstructure_gen domaingeneratorpolicyrule_gen edd_files;
+
   inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/parameter-framework/plugin" ./frameworks_av_services_audiopolicy_engineconfigurable_parameter-framework_plugin.nix {})
     libpolicy-subsystem;
 
   inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/tools" ./frameworks_av_services_audiopolicy_engineconfigurable_tools.nix {})
-    "buildPolicyCriterionTypes.py" "buildStrategiesStructureFile.py" "domainGeneratorPolicy.py" tools_default;
+    "buildCommonTypesStructureFile.py" "buildPolicyCriterionTypes.py" "buildStrategiesStructureFile.py" "domainGeneratorPolicy.py" buildcommontypesstructurerule buildpolicycriteriontypesrule buildstrategiesstructurerule domaingeneratorpolicyrule tools_default;
 
   inherit (callBPPackage "frameworks/av/services/audiopolicy/engineconfigurable/wrapper" ./frameworks_av_services_audiopolicy_engineconfigurable_wrapper.nix {})
     libaudiopolicyengineconfigurable_pfwwrapper;
@@ -4308,14 +7509,23 @@
   inherit (callBPPackage "frameworks/av/services/audiopolicy/enginedefault" ./frameworks_av_services_audiopolicy_enginedefault.nix {})
     libaudiopolicyenginedefault;
 
-  inherit (callBPPackage "frameworks/av/services/camera/libcameraservice" ./frameworks_av_services_camera_libcameraservice.nix {})
-    libcameraservice libdepthphoto;
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/enginedefault/config/example" ./frameworks_av_services_audiopolicy_enginedefault_config_example.nix {})
+    "audio_policy_engine_configuration.xml" "audio_policy_engine_default_stream_volumes.xml" "audio_policy_engine_product_strategies.xml" "audio_policy_engine_stream_volumes.xml";
 
-  inherit (callBPPackage "frameworks/av/services/mediaanalytics" ./frameworks_av_services_mediaanalytics.nix {})
-    mediametrics;
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/managerdefault" ./frameworks_av_services_audiopolicy_managerdefault.nix {})
+    libaudiopolicymanagerdefault;
+
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/tests" ./frameworks_av_services_audiopolicy_tests.nix {})
+    audio_health_tests audiopolicy_tests;
+
+  inherit (callBPPackage "frameworks/av/services/audiopolicy/tests/resources" ./frameworks_av_services_audiopolicy_tests_resources.nix {})
+    audiopolicytest_configuration_files;
+
+  inherit (callBPPackage "frameworks/av/services/camera/libcameraservice" ./frameworks_av_services_camera_libcameraservice.nix {})
+    libcameraservice;
 
   inherit (callBPPackage "frameworks/av/services/mediacodec" ./frameworks_av_services_mediacodec.nix {})
-    "mediaswcodec.policy" mediaswcodec;
+    "android.hardware.media.omx@1.0-service" "mediacodec.policy" "mediaswcodec.policy" mediaswcodec;
 
   inherit (callBPPackage "frameworks/av/services/mediacodec/registrant" ./frameworks_av_services_mediacodec_registrant.nix {})
     libmedia_codecserviceregistrant;
@@ -4326,26 +7536,56 @@
   inherit (callBPPackage "frameworks/av/services/medialog" ./frameworks_av_services_medialog.nix {})
     libmedialogservice;
 
+  inherit (callBPPackage "frameworks/av/services/mediametrics" ./frameworks_av_services_mediametrics.nix {})
+    libmediametricsservice mediametrics mediametrics_flags_defaults;
+
+  inherit (callBPPackage "frameworks/av/services/mediametrics/benchmarks" ./frameworks_av_services_mediametrics_benchmarks.nix {})
+    mediametrics_benchmarks;
+
+  inherit (callBPPackage "frameworks/av/services/mediametrics/tests" ./frameworks_av_services_mediametrics_tests.nix {})
+    mediametrics_tests;
+
   inherit (callBPPackage "frameworks/av/services/mediaresourcemanager" ./frameworks_av_services_mediaresourcemanager.nix {})
     libresourcemanagerservice;
 
   inherit (callBPPackage "frameworks/av/services/mediaresourcemanager/test" ./frameworks_av_services_mediaresourcemanager_test.nix {})
     ResourceManagerService_test ServiceLog_test;
 
+  inherit (callBPPackage "frameworks/av/services/mediatranscoding" ./frameworks_av_services_mediatranscoding.nix {})
+    libmediatranscodingservice mediatranscoding;
+
+  inherit (callBPPackage "frameworks/av/services/mediatranscoding/tests" ./frameworks_av_services_mediatranscoding_tests.nix {})
+    mediatranscodingservice_test_defaults mediatranscodingservice_tests;
+
   inherit (callBPPackage "frameworks/av/services/minijail" ./frameworks_av_services_minijail.nix {})
     libavservices_minijail libavservices_minijail_defaults libavservices_minijail_unittest libavservices_minijail_vendor;
 
-  inherit (callBPPackage "frameworks/av/services/soundtrigger" ./frameworks_av_services_soundtrigger.nix {})
-    libsoundtriggerservice;
-
-  inherit (callBPPackage "frameworks/av/soundtrigger" ./frameworks_av_soundtrigger.nix {})
-    libsoundtrigger;
+  inherit (callBPPackage "frameworks/av/services/oboeservice" ./frameworks_av_services_oboeservice.nix {})
+    libaaudioservice;
 
   inherit (callBPPackage "frameworks/base" ./frameworks_base.nix {})
-    "frameworks-base-api-current.txt" "hwbinder.stubs" apache-http-stubs-sources api-stubs-docs base_default doc-comment-check-docs ds-docs ds-ref-navtree-docs ds-static-docs ext fontchain_linter framework framework-aidl-mappings framework-annotation-nonnull-srcs framework-annotation-proc framework-annotations framework-atb-backward-compatibility framework-defaults framework-doc-stubs framework-doc-stubs-default framework-doc-system-stubs framework-docs-default framework-jarjar-rules framework-javastream-protos framework-media-annotation-srcs framework-networkstack-shared-srcs framework-statslog-gen gen-platform-proto-constants hidden-docs hiddenapi-lists-docs hiddenapi-mappings hwbinder hwbinder-stubs-docs libincident_aidl libplatformprotos libplatformprotos-defaults libplatformprotos-static libplatformprotos-test libvibrator_aidl metalava-api-stubs-default offline-sdk-docs offline-sdk-referenceonly-docs offline-system-sdk-referenceonly-docs online-sdk-dev-docs online-sdk-docs online-system-api-sdk-docs platformprotoslite platformprotosnano statsd_aidl system-api-stubs-docs test-api-stubs-docs unsupportedappusage-annotation;
+    base_default dataloader_aidl ext fontchain_linter framework framework-aidl-export-defaults framework-aidl-mappings framework-all framework-all-sources framework-annotations framework-annotations-lib framework-atb-backward-compatibility framework-cellbroadcast-shared-srcs framework-core-sources framework-core-sources-for-test-mock framework-cppstream-protos framework-defaults framework-drm-sources framework-graphics-sources framework-identity-sources framework-ike-shared-srcs framework-ims-common-shared-srcs framework-internal-utils framework-jarjar-rules framework-javastream-protos framework-keystore-sources framework-location-sources framework-lowpan-sources framework-mca-effect-sources framework-mca-filterfw-sources framework-mca-filterpacks-sources framework-media-annotation-srcs framework-media-sources framework-mediaprovider-annotation-sources framework-mime-sources framework-minus-apex framework-mms-sources framework-networkstack-shared-srcs framework-non-updatable-sources framework-opengl-sources framework-platform-compat-config framework-rs-sources framework-sax-sources framework-services-net-module-wifi-shared-srcs framework-telecomm-sources framework-telephony-common-shared-srcs framework-telephony-common-sources framework-telephony-shared-srcs framework-telephony-sources framework-tethering-shared-srcs framework-updatable-sources framework-updatable-stubs-module_libs_api framework-wifi-service-shared-srcs framework-wifi-util-lib framework-wifi-util-lib-aidls hwbinder incremental_aidl incremental_manager_aidl libdataloader_aidl libincident_aidl libincremental_aidl libincremental_manager_aidl libplatformprotos libplatformprotos-defaults libplatformprotos-static libplatformprotos-test libpowermanager_aidl libvibrator_aidl platformprotoslite platformprotosnano statslog-framework-java-gen statslog-telephony-common-java-gen uieventloggerlib;
+
+  inherit (callBPPackage "frameworks/base" ./frameworks_base_ApiDocs.bp.nix {})
+    doc-comment-check-docs ds-docs ds-docs-java ds-docs-kt ds-docs-switched ds-ref-navtree-docs ds-static-docs framework-doc-stubs framework-doc-stubs-default framework-doc-system-stubs framework-docs-default framework-dokka-docs-default hidden-docs offline-sdk-docs offline-sdk-referenceonly-docs offline-system-sdk-referenceonly-docs online-sdk-dev-docs online-sdk-docs online-system-api-sdk-docs;
+
+  inherit (callBPPackage "frameworks/base" ./frameworks_base_StubLibraries.bp.nix {})
+    "frameworks-base-api-current.txt" "frameworks-base-api-system-current.txt" "frameworks-base-api-system-removed.txt" "hwbinder.stubs" android_defaults_stubs_current android_merged_stubs_current android_module_lib_stubs_current android_monolith_stubs_current android_non_updatable_stubs_current android_stubs_current android_system_merged_stubs_current android_system_monolith_stubs_current android_system_non_updatable_stubs_current android_system_stubs_current android_test_stubs_current api-stubs-docs api-stubs-docs-non-updatable hwbinder-stubs-docs metalava-base-api-stubs-default metalava-full-api-stubs-default metalava-non-updatable-api-stubs-default module-lib-api module-lib-api-stubs-docs module-lib-api-stubs-docs-non-updatable system-api-stubs-docs system-api-stubs-docs-non-updatable test-api-stubs-docs;
 
   inherit (callBPPackage "frameworks/base/apct-tests/perftests/autofill" ./frameworks_base_apct-tests_perftests_autofill.nix {})
     AutofillPerfTests;
+
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/blobstore" ./frameworks_base_apct-tests_perftests_blobstore.nix {})
+    BlobStorePerfTests;
+
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/core" ./frameworks_base_apct-tests_perftests_core.nix {})
+    CorePerfTests;
+
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/core/apps/overlay" ./frameworks_base_apct-tests_perftests_core_apps_overlay.nix {})
+    LargeOverlay0 LargeOverlay1 LargeOverlay2 LargeOverlay3 LargeOverlay4 LargeOverlay5 LargeOverlay6 LargeOverlay7 LargeOverlay8 LargeOverlay9 Overlay0 Overlay1 Overlay2 Overlay3 Overlay4 Overlay5 Overlay6 Overlay7 Overlay8 Overlay9 apct-perftests-overlay-apps;
+
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/core/apps/reources_manager" ./frameworks_base_apct-tests_perftests_core_apps_reources_manager.nix {})
+    LargeResourcesCompressed LargeResourcesUncompressed apct-perftests-resources-manager-apps;
 
   inherit (callBPPackage "frameworks/base/apct-tests/perftests/core/jni" ./frameworks_base_apct-tests_perftests_core_jni.nix {})
     libperftestscore_jni;
@@ -4353,14 +7593,101 @@
   inherit (callBPPackage "frameworks/base/apct-tests/perftests/multiuser" ./frameworks_base_apct-tests_perftests_multiuser.nix {})
     MultiUserPerfTests;
 
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/multiuser/apps/dummyapp" ./frameworks_base_apct-tests_perftests_multiuser_apps_dummyapp.nix {})
+    MultiUserPerfDummyApp;
+
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/packagemanager" ./frameworks_base_apct-tests_perftests_packagemanager.nix {})
+    PackageManagerPerfTests;
+
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/packagemanager/apps/query-all" ./frameworks_base_apct-tests_perftests_packagemanager_apps_query-all.nix {})
+    QueriesAll0 QueriesAll1 QueriesAll10 QueriesAll11 QueriesAll12 QueriesAll13 QueriesAll14 QueriesAll15 QueriesAll16 QueriesAll17 QueriesAll18 QueriesAll19 QueriesAll2 QueriesAll20 QueriesAll21 QueriesAll22 QueriesAll23 QueriesAll24 QueriesAll25 QueriesAll26 QueriesAll27 QueriesAll28 QueriesAll29 QueriesAll3 QueriesAll30 QueriesAll31 QueriesAll32 QueriesAll33 QueriesAll34 QueriesAll35 QueriesAll36 QueriesAll37 QueriesAll38 QueriesAll39 QueriesAll4 QueriesAll40 QueriesAll41 QueriesAll42 QueriesAll43 QueriesAll44 QueriesAll45 QueriesAll46 QueriesAll47 QueriesAll48 QueriesAll49 QueriesAll5 QueriesAll6 QueriesAll7 QueriesAll8 QueriesAll9;
+
   inherit (callBPPackage "frameworks/base/apct-tests/perftests/textclassifier" ./frameworks_base_apct-tests_perftests_textclassifier.nix {})
     TextClassifierPerfTests;
 
   inherit (callBPPackage "frameworks/base/apct-tests/perftests/utils" ./frameworks_base_apct-tests_perftests_utils.nix {})
     apct-perftests-utils;
 
+  inherit (callBPPackage "frameworks/base/apct-tests/perftests/windowmanager" ./frameworks_base_apct-tests_perftests_windowmanager.nix {})
+    WmPerfTests;
+
+  inherit (callBPPackage "frameworks/base/apex" ./frameworks_base_apex.nix {})
+    framework-module-api-defaults-module_libs_api framework-module-common-defaults framework-module-defaults framework-module-stubs-defaults-module_libs_api framework-module-stubs-defaults-publicapi framework-module-stubs-defaults-systemapi framework-module-stubs-lib-defaults-module_libs_api framework-module-stubs-lib-defaults-publicapi framework-module-stubs-lib-defaults-systemapi framework-system-server-module-defaults service-module-stubs-defaults service-module-stubs-srcs-defaults;
+
+  inherit (callBPPackage "frameworks/base/apex/blobstore/framework" ./frameworks_base_apex_blobstore_framework.nix {})
+    blobstore-framework framework-blobstore-sources;
+
+  inherit (callBPPackage "frameworks/base/apex/blobstore/service" ./frameworks_base_apex_blobstore_service.nix {})
+    service-blobstore;
+
+  inherit (callBPPackage "frameworks/base/apex/extservices" ./frameworks_base_apex_extservices.nix {})
+    "com.android.extservices" "com.android.extservices-defaults" "com.android.extservices.certificate" "com.android.extservices.key";
+
+  inherit (callBPPackage "frameworks/base/apex/extservices/testing" ./frameworks_base_apex_extservices_testing.nix {})
+    "test_com.android.extservices";
+
+  inherit (callBPPackage "frameworks/base/apex/jobscheduler/framework" ./frameworks_base_apex_jobscheduler_framework.nix {})
+    framework-jobscheduler framework-jobscheduler-sources;
+
+  inherit (callBPPackage "frameworks/base/apex/jobscheduler/service" ./frameworks_base_apex_jobscheduler_service.nix {})
+    service-jobscheduler;
+
+  inherit (callBPPackage "frameworks/base/apex/media/aidl" ./frameworks_base_apex_media_aidl.nix {})
+    mediasession2-aidl-srcs private-mediasession2-aidl-srcs stable-mediasession2-aidl-srcs;
+
+  inherit (callBPPackage "frameworks/base/apex/media/framework" ./frameworks_base_apex_media_framework.nix {})
+    framework-media framework_media_annotation mediaparser-srcs mediasession2-java-srcs updatable-media updatable-media-srcs;
+
+  inherit (callBPPackage "frameworks/base/apex/permission" ./frameworks_base_apex_permission.nix {})
+    "com.android.permission" "com.android.permission-defaults" "com.android.permission.certificate" "com.android.permission.key";
+
+  inherit (callBPPackage "frameworks/base/apex/permission/framework" ./frameworks_base_apex_permission_framework.nix {})
+    framework-permission framework-permission-sources;
+
+  inherit (callBPPackage "frameworks/base/apex/permission/service" ./frameworks_base_apex_permission_service.nix {})
+    service-permission service-permission-sources;
+
+  inherit (callBPPackage "frameworks/base/apex/permission/testing" ./frameworks_base_apex_permission_testing.nix {})
+    "test_com.android.permission";
+
+  inherit (callBPPackage "frameworks/base/apex/permission/tests" ./frameworks_base_apex_permission_tests.nix {})
+    PermissionApexTests;
+
+  inherit (callBPPackage "frameworks/base/apex/statsd" ./frameworks_base_apex_statsd.nix {})
+    "com.android.os.statsd" "com.android.os.statsd-defaults" "com.android.os.statsd.certificate" "com.android.os.statsd.init.rc" "com.android.os.statsd.key" libstats_jni;
+
+  inherit (callBPPackage "frameworks/base/apex/statsd/aidl" ./frameworks_base_apex_statsd_aidl.nix {})
+    framework-statsd-aidl-sources statsd-aidl;
+
+  inherit (callBPPackage "frameworks/base/apex/statsd/framework" ./frameworks_base_apex_statsd_framework.nix {})
+    framework-statsd framework-statsd-sources statslog-statsd statslog-statsd-java-gen;
+
+  inherit (callBPPackage "frameworks/base/apex/statsd/framework/test" ./frameworks_base_apex_statsd_framework_test.nix {})
+    FrameworkStatsdTest;
+
+  inherit (callBPPackage "frameworks/base/apex/statsd/service" ./frameworks_base_apex_statsd_service.nix {})
+    service-statsd service-statsd-sources;
+
+  inherit (callBPPackage "frameworks/base/apex/statsd/testing" ./frameworks_base_apex_statsd_testing.nix {})
+    "test_com.android.os.statsd";
+
+  inherit (callBPPackage "frameworks/base/apex/statsd/tests/libstatspull" ./frameworks_base_apex_statsd_tests_libstatspull.nix {})
+    LibStatsPullTests libstatspull_testhelper;
+
+  inherit (callBPPackage "frameworks/base/api" ./frameworks_base_api.nix {})
+    current-api-xml;
+
   inherit (callBPPackage "frameworks/base/cmds/am" ./frameworks_base_cmds_am.nix {})
-    libinstrumentation;
+    am libinstrumentation;
+
+  inherit (callBPPackage "frameworks/base/cmds/app_process" ./frameworks_base_cmds_app_process.nix {})
+    app_process;
+
+  inherit (callBPPackage "frameworks/base/cmds/appops" ./frameworks_base_cmds_appops.nix {})
+    appops;
+
+  inherit (callBPPackage "frameworks/base/cmds/appwidget" ./frameworks_base_cmds_appwidget.nix {})
+    appwidget;
 
   inherit (callBPPackage "frameworks/base/cmds/backup" ./frameworks_base_cmds_backup.nix {})
     btool;
@@ -4371,59 +7698,101 @@
   inherit (callBPPackage "frameworks/base/cmds/bootanimation" ./frameworks_base_cmds_bootanimation.nix {})
     bootanimation bootanimation_defaults libbootanimation;
 
-  inherit (callBPPackage "frameworks/base/cmds/bootanimation/iot" ./frameworks_base_cmds_bootanimation_iot.nix {})
-    libbootanimation_iot_test;
+  inherit (callBPPackage "frameworks/base/cmds/bu" ./frameworks_base_cmds_bu.nix {})
+    bu;
+
+  inherit (callBPPackage "frameworks/base/cmds/content" ./frameworks_base_cmds_content.nix {})
+    content;
+
+  inherit (callBPPackage "frameworks/base/cmds/dpm" ./frameworks_base_cmds_dpm.nix {})
+    dpm;
+
+  inherit (callBPPackage "frameworks/base/cmds/hid" ./frameworks_base_cmds_hid.nix {})
+    hid;
 
   inherit (callBPPackage "frameworks/base/cmds/hid/jni" ./frameworks_base_cmds_hid_jni.nix {})
     libhidcommand_jni;
 
-  inherit (callBPPackage "frameworks/base/cmds/idmap" ./frameworks_base_cmds_idmap.nix {})
-    idmap;
-
   inherit (callBPPackage "frameworks/base/cmds/idmap2" ./frameworks_base_cmds_idmap2.nix {})
-    idmap2 idmap2_aidl idmap2_defaults idmap2_tests idmap2d libidmap2 libidmap2daidl;
+    idmap2 idmap2_aidl idmap2_defaults idmap2_tests idmap2d libidmap2 libidmap2_policies libidmap2daidl overlayable_policy_aidl overlayable_policy_aidl_files;
+
+  inherit (callBPPackage "frameworks/base/cmds/ime" ./frameworks_base_cmds_ime.nix {})
+    ime;
 
   inherit (callBPPackage "frameworks/base/cmds/incident" ./frameworks_base_cmds_incident.nix {})
     incident incident_sections;
 
   inherit (callBPPackage "frameworks/base/cmds/incident_helper" ./frameworks_base_cmds_incident_helper.nix {})
-    incident_helper incident_helper_defaults incident_helper_test;
+    incident-helper-cmd incident_helper incident_helper_defaults incident_helper_test;
 
   inherit (callBPPackage "frameworks/base/cmds/incidentd" ./frameworks_base_cmds_incidentd.nix {})
     incidentd incidentd_section_list incidentd_test;
 
+  inherit (callBPPackage "frameworks/base/cmds/input" ./frameworks_base_cmds_input.nix {})
+    input;
+
   inherit (callBPPackage "frameworks/base/cmds/interrupter" ./frameworks_base_cmds_interrupter.nix {})
     interrupter;
 
-  inherit (callBPPackage "frameworks/base/cmds/media" ./frameworks_base_cmds_media.nix {})
-    media;
+  inherit (callBPPackage "frameworks/base/cmds/locksettings" ./frameworks_base_cmds_locksettings.nix {})
+    locksettings;
+
+  inherit (callBPPackage "frameworks/base/cmds/pm" ./frameworks_base_cmds_pm.nix {})
+    pm;
+
+  inherit (callBPPackage "frameworks/base/cmds/requestsync" ./frameworks_base_cmds_requestsync.nix {})
+    requestsync;
 
   inherit (callBPPackage "frameworks/base/cmds/screencap" ./frameworks_base_cmds_screencap.nix {})
     screencap;
 
+  inherit (callBPPackage "frameworks/base/cmds/settings" ./frameworks_base_cmds_settings.nix {})
+    settings;
+
+  inherit (callBPPackage "frameworks/base/cmds/sm" ./frameworks_base_cmds_sm.nix {})
+    sm;
+
   inherit (callBPPackage "frameworks/base/cmds/statsd" ./frameworks_base_cmds_statsd.nix {})
-    libstats_proto_host statsd statsd-config-proto-def statsd_benchmark statsd_defaults statsd_test statsdprotolite;
-
-  inherit (callBPPackage "frameworks/base/cmds/statsd/tools/dogfood" ./frameworks_base_cmds_statsd_tools_dogfood.nix {})
-    StatsdDogfood;
-
-  inherit (callBPPackage "frameworks/base/cmds/statsd/tools/loadtest" ./frameworks_base_cmds_statsd_tools_loadtest.nix {})
-    StatsdLoadtest;
+    "statslog_statsd.cpp" "statslog_statsd.h" "statslog_statsdtest.cpp" "statslog_statsdtest.h" libstats_proto_host libstatslog_statsd libstatslog_statsdtest statsd statsd-config-proto-def statsd_benchmark statsd_defaults statsd_test statsdprotolite;
 
   inherit (callBPPackage "frameworks/base/cmds/statsd/tools/localtools" ./frameworks_base_cmds_statsd_tools_localtools.nix {})
-    statsd_localdrive statsd_testdrive;
+    statsd_localdrive statsd_testdrive statsd_testdrive_lib statsd_testdrive_test;
+
+  inherit (callBPPackage "frameworks/base/cmds/svc" ./frameworks_base_cmds_svc.nix {})
+    svc;
+
+  inherit (callBPPackage "frameworks/base/cmds/telecom" ./frameworks_base_cmds_telecom.nix {})
+    telecom;
+
+  inherit (callBPPackage "frameworks/base/cmds/uiautomator" ./frameworks_base_cmds_uiautomator.nix {})
+    uiautomator-current-api uiautomator-last-released-api uiautomator-removed-api;
+
+  inherit (callBPPackage "frameworks/base/cmds/uiautomator/cmds/uiautomator" ./frameworks_base_cmds_uiautomator_cmds_uiautomator.nix {})
+    uiautomator;
+
+  inherit (callBPPackage "frameworks/base/cmds/uiautomator/instrumentation" ./frameworks_base_cmds_uiautomator_instrumentation.nix {})
+    uiautomator-instrumentation;
 
   inherit (callBPPackage "frameworks/base/cmds/uiautomator/library" ./frameworks_base_cmds_uiautomator_library.nix {})
-    "uiautomator.core" android_uiautomator uiautomator-stubs-docs;
+    "uiautomator.core" "uiautomator.library" android_uiautomator uiautomator-stubs-docs;
+
+  inherit (callBPPackage "frameworks/base/cmds/vr" ./frameworks_base_cmds_vr.nix {})
+    vr;
+
+  inherit (callBPPackage "frameworks/base/cmds/wm" ./frameworks_base_cmds_wm.nix {})
+    wm;
+
+  inherit (callBPPackage "frameworks/base/config" ./frameworks_base_config.nix {})
+    preloaded-classes-blacklist;
 
   inherit (callBPPackage "frameworks/base/core/java" ./frameworks_base_core_java.nix {})
-    "ICarStatsService.aidl" "IDropBoxManagerService.aidl" "IKeyAttestationApplicationIdProvider.aidl";
+    "IDropBoxManagerService.aidl" "IKeyAttestationApplicationIdProvider.aidl";
 
   inherit (callBPPackage "frameworks/base/core/java/android/service/wallpaper" ./frameworks_base_core_java_android_service_wallpaper.nix {})
     WallpaperSharedLib;
 
   inherit (callBPPackage "frameworks/base/core/jni" ./frameworks_base_core_jni.nix {})
-    "android_util_StatsLogInternal.cpp" libandroid_runtime;
+    libandroid_runtime;
 
   inherit (callBPPackage "frameworks/base/core/proto" ./frameworks_base_core_proto.nix {})
     libbt-platform-protos-lite;
@@ -4432,7 +7801,7 @@
     datastallprotosnano;
 
   inherit (callBPPackage "frameworks/base/core/proto/android/stats/connectivity" ./frameworks_base_core_proto_android_stats_connectivity.nix {})
-    networkstackprotosnano;
+    networkstackprotos tetheringprotos;
 
   inherit (callBPPackage "frameworks/base/core/proto/android/stats/devicepolicy" ./frameworks_base_core_proto_android_stats_devicepolicy.nix {})
     devicepolicyprotosnano;
@@ -4441,22 +7810,52 @@
     dnsresolverprotosnano;
 
   inherit (callBPPackage "frameworks/base/core/proto/android/stats/launcher" ./frameworks_base_core_proto_android_stats_launcher.nix {})
-    launcherprotosnano;
+    launcherprotoslite launcherprotosnano;
 
   inherit (callBPPackage "frameworks/base/core/proto/android/stats/style" ./frameworks_base_core_proto_android_stats_style.nix {})
     styleprotosnano;
 
+  inherit (callBPPackage "frameworks/base/core/proto/android/stats/textclassifier" ./frameworks_base_core_proto_android_stats_textclassifier.nix {})
+    textclassifierprotoslite;
+
   inherit (callBPPackage "frameworks/base/core/res" ./frameworks_base_core_res.nix {})
-    framework-res;
+    framework-res permission-list-normal robolectric_framework_raw_res_files;
+
+  inherit (callBPPackage "frameworks/base/core/tests/BTtraffic" ./frameworks_base_core_tests_BTtraffic.nix {})
+    bttraffic;
 
   inherit (callBPPackage "frameworks/base/core/tests/BroadcastRadioTests" ./frameworks_base_core_tests_BroadcastRadioTests.nix {})
     BroadcastRadioTests;
+
+  inherit (callBPPackage "frameworks/base/core/tests/ConnectivityManagerTest" ./frameworks_base_core_tests_ConnectivityManagerTest.nix {})
+    ConnectivityManagerTest;
+
+  inherit (callBPPackage "frameworks/base/core/tests/PackageInstallerSessions" ./frameworks_base_core_tests_PackageInstallerSessions.nix {})
+    FrameworksCorePackageInstallerSessionsTests;
+
+  inherit (callBPPackage "frameworks/base/core/tests/PlatformCompatFramework" ./frameworks_base_core_tests_PlatformCompatFramework.nix {})
+    PlatformCompatFrameworkTests;
+
+  inherit (callBPPackage "frameworks/base/core/tests/SvcMonitor" ./frameworks_base_core_tests_SvcMonitor.nix {})
+    svcmonitor;
+
+  inherit (callBPPackage "frameworks/base/core/tests/bandwidthtests" ./frameworks_base_core_tests_bandwidthtests.nix {})
+    BandwidthTests;
+
+  inherit (callBPPackage "frameworks/base/core/tests/benchmarks" ./frameworks_base_core_tests_benchmarks.nix {})
+    frameworks-base-core-benchmarks;
+
+  inherit (callBPPackage "frameworks/base/core/tests/bluetoothtests" ./frameworks_base_core_tests_bluetoothtests.nix {})
+    BluetoothTests;
 
   inherit (callBPPackage "frameworks/base/core/tests/bugreports" ./frameworks_base_core_tests_bugreports.nix {})
     BugreportManagerTestCases;
 
   inherit (callBPPackage "frameworks/base/core/tests/coretests" ./frameworks_base_core_tests_coretests.nix {})
     FrameworksCoreTests FrameworksCoreTests_apks_as_resources;
+
+  inherit (callBPPackage "frameworks/base/core/tests/coretests/BinderDeathRecipientHelperApp" ./frameworks_base_core_tests_coretests_BinderDeathRecipientHelperApp.nix {})
+    BinderDeathRecipientHelperApp1 BinderDeathRecipientHelperApp2;
 
   inherit (callBPPackage "frameworks/base/core/tests/coretests/BinderProxyCountingTestApp" ./frameworks_base_core_tests_coretests_BinderProxyCountingTestApp.nix {})
     BinderProxyCountingTestApp;
@@ -4478,12 +7877,6 @@
 
   inherit (callBPPackage "frameworks/base/core/tests/coretests/apks" ./frameworks_base_core_tests_coretests_apks.nix {})
     FrameworksCoreTests_apks_defaults;
-
-  inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/install-split-base" ./frameworks_base_core_tests_coretests_apks_install-split-base.nix {})
-    FrameworksCoreTests_install_split_base;
-
-  inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/install-split-feature-a" ./frameworks_base_core_tests_coretests_apks_install-split-feature-a.nix {})
-    FrameworksCoreTests_install_split_feature_a;
 
   inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/install" ./frameworks_base_core_tests_coretests_apks_install.nix {})
     FrameworksCoreTests_install;
@@ -4515,9 +7908,6 @@
   inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/install_loc_unspecified" ./frameworks_base_core_tests_coretests_apks_install_loc_unspecified.nix {})
     FrameworksCoreTests_install_loc_unspecified;
 
-  inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/install_multi_package" ./frameworks_base_core_tests_coretests_apks_install_multi_package.nix {})
-    FrameworksCoreTests_install_multi_package;
-
   inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/install_use_perm_good" ./frameworks_base_core_tests_coretests_apks_install_use_perm_good.nix {})
     FrameworksCoreTests_install_use_perm_good;
 
@@ -4536,6 +7926,9 @@
   inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/locales" ./frameworks_base_core_tests_coretests_apks_locales.nix {})
     FrameworksCoreTests_locales;
 
+  inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/overlay_config" ./frameworks_base_core_tests_coretests_apks_overlay_config.nix {})
+    FrameworksCoreTests_overlay_config;
+
   inherit (callBPPackage "frameworks/base/core/tests/coretests/apks/version" ./frameworks_base_core_tests_coretests_apks_version.nix {})
     FrameworksCoreTests_version_1 FrameworksCoreTests_version_1_diff FrameworksCoreTests_version_2 FrameworksCoreTests_version_2_diff FrameworksCoreTests_version_3;
 
@@ -4548,23 +7941,149 @@
   inherit (callBPPackage "frameworks/base/core/tests/featureflagtests" ./frameworks_base_core_tests_featureflagtests.nix {})
     FrameworksCoreFeatureFlagTests;
 
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/AutoLocTestApp" ./frameworks_base_core_tests_hosttests_test-apps_AutoLocTestApp.nix {})
+    AutoLocTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/AutoLocVersionedTestApp_v1" ./frameworks_base_core_tests_hosttests_test-apps_AutoLocVersionedTestApp_v1.nix {})
+    AutoLocVersionedTestApp_v1;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/AutoLocVersionedTestApp_v2" ./frameworks_base_core_tests_hosttests_test-apps_AutoLocVersionedTestApp_v2.nix {})
+    AutoLocVersionedTestApp_v2;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalLocAllPermsTestApp" ./frameworks_base_core_tests_hosttests_test-apps_ExternalLocAllPermsTestApp.nix {})
+    ExternalLocAllPermsTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalLocPermsFLTestApp" ./frameworks_base_core_tests_hosttests_test-apps_ExternalLocPermsFLTestApp.nix {})
+    ExternalLocPermFLTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalLocTestApp" ./frameworks_base_core_tests_hosttests_test-apps_ExternalLocTestApp.nix {})
+    ExternalLocTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalLocVersionedTestApp_v1" ./frameworks_base_core_tests_hosttests_test-apps_ExternalLocVersionedTestApp_v1.nix {})
+    ExternalLocVersionedTestApp_v1;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalLocVersionedTestApp_v2" ./frameworks_base_core_tests_hosttests_test-apps_ExternalLocVersionedTestApp_v2.nix {})
+    ExternalLocVersionedTestApp_v2;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalSharedPerms" ./frameworks_base_core_tests_hosttests_test-apps_ExternalSharedPerms.nix {})
+    ExternalSharedPermsTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalSharedPermsBT" ./frameworks_base_core_tests_hosttests_test-apps_ExternalSharedPermsBT.nix {})
+    ExternalSharedPermsBTTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalSharedPermsDiffKey" ./frameworks_base_core_tests_hosttests_test-apps_ExternalSharedPermsDiffKey.nix {})
+    ExternalSharedPermsDiffKeyTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/ExternalSharedPermsFL" ./frameworks_base_core_tests_hosttests_test-apps_ExternalSharedPermsFL.nix {})
+    ExternalSharedPermsFLTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/InternalLocTestApp" ./frameworks_base_core_tests_hosttests_test-apps_InternalLocTestApp.nix {})
+    InternalLocTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/MultiDexLegacyTestServicesTests" ./frameworks_base_core_tests_hosttests_test-apps_MultiDexLegacyTestServicesTests.nix {})
+    MultiDexLegacyTestServicesTests;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/NoLocTestApp" ./frameworks_base_core_tests_hosttests_test-apps_NoLocTestApp.nix {})
+    NoLocTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/NoLocVersionedTestApp_v1" ./frameworks_base_core_tests_hosttests_test-apps_NoLocVersionedTestApp_v1.nix {})
+    NoLocVersionedTestApp_v1;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/NoLocVersionedTestApp_v2" ./frameworks_base_core_tests_hosttests_test-apps_NoLocVersionedTestApp_v2.nix {})
+    NoLocVersionedTestApp_v2;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SharedUid/32" ./frameworks_base_core_tests_hosttests_test-apps_SharedUid_32.nix {})
+    PMTest_Java32;
+
   inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SharedUid/32/jni" ./frameworks_base_core_tests_hosttests_test-apps_SharedUid_32_jni.nix {})
     libpmtest32;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SharedUid/64" ./frameworks_base_core_tests_hosttests_test-apps_SharedUid_64.nix {})
+    PMTest_Java64;
 
   inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SharedUid/64/jni" ./frameworks_base_core_tests_hosttests_test-apps_SharedUid_64_jni.nix {})
     libpmtest64;
 
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SharedUid/dual" ./frameworks_base_core_tests_hosttests_test-apps_SharedUid_dual.nix {})
+    PMTest_Java_dual PMTest_Java_multiarch;
+
   inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SharedUid/dual/jni" ./frameworks_base_core_tests_hosttests_test-apps_SharedUid_dual_jni.nix {})
     libpmtestdual;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SharedUid/java_only" ./frameworks_base_core_tests_hosttests_test-apps_SharedUid_java_only.nix {})
+    PMTest_Java;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/SimpleTestApp" ./frameworks_base_core_tests_hosttests_test-apps_SimpleTestApp.nix {})
+    SimpleTestApp;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/UpdateExtToIntLocTestApp_v1_ext" ./frameworks_base_core_tests_hosttests_test-apps_UpdateExtToIntLocTestApp_v1_ext.nix {})
+    UpdateExtToIntLocTestApp_v1_ext;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/UpdateExtToIntLocTestApp_v2_int" ./frameworks_base_core_tests_hosttests_test-apps_UpdateExtToIntLocTestApp_v2_int.nix {})
+    UpdateExtToIntLocTestApp_v2_int;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/UpdateExternalLocTestApp_v1_ext" ./frameworks_base_core_tests_hosttests_test-apps_UpdateExternalLocTestApp_v1_ext.nix {})
+    UpdateExternalLocTestApp_v1_ext;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/UpdateExternalLocTestApp_v2_none" ./frameworks_base_core_tests_hosttests_test-apps_UpdateExternalLocTestApp_v2_none.nix {})
+    UpdateExternalLocTestApp_v2_none;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/VersatileTestApp_Auto" ./frameworks_base_core_tests_hosttests_test-apps_VersatileTestApp_Auto.nix {})
+    VersatileTestApp_Auto;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/VersatileTestApp_External" ./frameworks_base_core_tests_hosttests_test-apps_VersatileTestApp_External.nix {})
+    VersatileTestApp_External;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/VersatileTestApp_Internal" ./frameworks_base_core_tests_hosttests_test-apps_VersatileTestApp_Internal.nix {})
+    VersatileTestApp_Internal;
+
+  inherit (callBPPackage "frameworks/base/core/tests/hosttests/test-apps/VersatileTestApp_None" ./frameworks_base_core_tests_hosttests_test-apps_VersatileTestApp_None.nix {})
+    VersatileTestApp_None;
 
   inherit (callBPPackage "frameworks/base/core/tests/mockingcoretests" ./frameworks_base_core_tests_mockingcoretests.nix {})
     FrameworksMockingCoreTests;
 
+  inherit (callBPPackage "frameworks/base/core/tests/notificationtests" ./frameworks_base_core_tests_notificationtests.nix {})
+    NotificationStressTests;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/host" ./frameworks_base_core_tests_overlaytests_host.nix {})
+    OverlayHostTests;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount" ./frameworks_base_core_tests_overlaytests_remount.nix {})
+    OverlayRemountedTest;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount/test-apps/Overlay" ./frameworks_base_core_tests_overlaytests_remount_test-apps_Overlay.nix {})
+    OverlayRemountedTest_Overlay OverlayRemountedTest_Overlay_SameCert;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount/test-apps/SharedLibrary" ./frameworks_base_core_tests_overlaytests_remount_test-apps_SharedLibrary.nix {})
+    OverlayRemountedTest_SharedLibrary;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount/test-apps/SharedLibraryOverlay" ./frameworks_base_core_tests_overlaytests_remount_test-apps_SharedLibraryOverlay.nix {})
+    OverlayRemountedTest_SharedLibraryOverlay;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount/test-apps/Target" ./frameworks_base_core_tests_overlaytests_remount_test-apps_Target.nix {})
+    OverlayRemountedTest_Target OverlayRemountedTest_TargetUpgrade;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount/test-apps/certs" ./frameworks_base_core_tests_overlaytests_remount_test-apps_certs.nix {})
+    rro-remounted-test-a;
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount/test-apps/overlaid_apex" ./frameworks_base_core_tests_overlaytests_remount_test-apps_overlaid_apex.nix {})
+    "com.android.overlaytest.overlaid" "com.android.overlaytest.overlaid.key" "com.android.overlaytest.overlaid.pem" "com.android.overlaytest.overlaid.pubkey";
+
+  inherit (callBPPackage "frameworks/base/core/tests/overlaytests/remount/test-apps/overlay_apex" ./frameworks_base_core_tests_overlaytests_remount_test-apps_overlay_apex.nix {})
+    "com.android.overlaytest.overlay" "com.android.overlaytest.overlay.key" "com.android.overlaytest.overlay.pem" "com.android.overlaytest.overlay.pubkey";
+
   inherit (callBPPackage "frameworks/base/core/tests/screenshothelpertests" ./frameworks_base_core_tests_screenshothelpertests.nix {})
     ScreenshotHelperTests;
 
+  inherit (callBPPackage "frameworks/base/core/tests/systemproperties" ./frameworks_base_core_tests_systemproperties.nix {})
+    FrameworksCoreSystemPropertiesTests;
+
   inherit (callBPPackage "frameworks/base/core/tests/utillib" ./frameworks_base_core_tests_utillib.nix {})
     frameworks-core-util-lib;
+
+  inherit (callBPPackage "frameworks/base/core/tests/utiltests" ./frameworks_base_core_tests_utiltests.nix {})
+    FrameworksUtilTests;
 
   inherit (callBPPackage "frameworks/base/core/tests/utiltests/jni" ./frameworks_base_core_tests_utiltests_jni.nix {})
     libmemoryintarraytest;
@@ -4576,13 +8095,16 @@
     vts_permission_validate_test;
 
   inherit (callBPPackage "frameworks/base/data/etc" ./frameworks_base_data_etc.nix {})
-    "com.android.timezone.updater.xml" "framework-sysconfig.xml" "hiddenapi-package-whitelist.xml" "platform.xml" "privapp-permissions-platform.xml" "privapp_whitelist_com.android.carrierconfig" "privapp_whitelist_com.android.contacts" "privapp_whitelist_com.android.dialer" "privapp_whitelist_com.android.documentsui" "privapp_whitelist_com.android.emergency" "privapp_whitelist_com.android.launcher3" "privapp_whitelist_com.android.provision" "privapp_whitelist_com.android.settings" "privapp_whitelist_com.android.settings.intelligence" "privapp_whitelist_com.android.storagemanager" "privapp_whitelist_com.android.systemui";
+    "com.android.timezone.updater.xml" "framework-sysconfig.xml" "hiddenapi-package-whitelist.xml" "platform.xml" "preinstalled-packages-platform-overlays.xml" "preinstalled-packages-platform.xml" "privapp-permissions-platform.xml" "privapp_whitelist_com.android.carrierconfig" "privapp_whitelist_com.android.cellbroadcastreceiver" "privapp_whitelist_com.android.contacts" "privapp_whitelist_com.android.dialer" "privapp_whitelist_com.android.documentsui" "privapp_whitelist_com.android.emergency" "privapp_whitelist_com.android.launcher3" "privapp_whitelist_com.android.provision" "privapp_whitelist_com.android.settings" "privapp_whitelist_com.android.settings.intelligence" "privapp_whitelist_com.android.storagemanager" "privapp_whitelist_com.android.systemui" "services.core.protolog.json";
 
   inherit (callBPPackage "frameworks/base/data/etc/car" ./frameworks_base_data_etc_car.nix {})
-    "privapp_whitelist_android.car.cluster" "privapp_whitelist_android.car.cluster.loggingrenderer" "privapp_whitelist_android.car.cluster.sample" "privapp_whitelist_android.car.usb.handler" "privapp_whitelist_com.android.car" "privapp_whitelist_com.android.car.carlauncher" "privapp_whitelist_com.android.car.developeroptions" "privapp_whitelist_com.android.car.dialer" "privapp_whitelist_com.android.car.hvac" "privapp_whitelist_com.android.car.media" "privapp_whitelist_com.android.car.notification" "privapp_whitelist_com.android.car.radio" "privapp_whitelist_com.android.car.settings" "privapp_whitelist_com.android.car.themeplayground" "privapp_whitelist_com.android.car.trust" "privapp_whitelist_com.google.android.car.kitchensink";
+    "privapp_whitelist_android.car.cluster" "privapp_whitelist_android.car.cluster.loggingrenderer" "privapp_whitelist_android.car.cluster.sample" "privapp_whitelist_android.car.usb.handler" "privapp_whitelist_com.android.car" "privapp_whitelist_com.android.car.bugreport" "privapp_whitelist_com.android.car.carlauncher" "privapp_whitelist_com.android.car.companiondevicesupport" "privapp_whitelist_com.android.car.developeroptions" "privapp_whitelist_com.android.car.dialer" "privapp_whitelist_com.android.car.floatingcardslauncher" "privapp_whitelist_com.android.car.hvac" "privapp_whitelist_com.android.car.media" "privapp_whitelist_com.android.car.notification" "privapp_whitelist_com.android.car.radio" "privapp_whitelist_com.android.car.secondaryhome" "privapp_whitelist_com.android.car.settings" "privapp_whitelist_com.android.car.themeplayground" "privapp_whitelist_com.android.car.trust" "privapp_whitelist_com.android.car.ui.paintbooth" "privapp_whitelist_com.google.android.car.kitchensink";
 
   inherit (callBPPackage "frameworks/base/drm/jni" ./frameworks_base_drm_jni.nix {})
     libdrmframework_jni;
+
+  inherit (callBPPackage "frameworks/base/errorprone" ./frameworks_base_errorprone.nix {})
+    error_prone_android_framework error_prone_android_framework_lib;
 
   inherit (callBPPackage "frameworks/base/graphics/proto" ./frameworks_base_graphics_proto.nix {})
     game-driver-protos;
@@ -4590,17 +8112,32 @@
   inherit (callBPPackage "frameworks/base/keystore/tests" ./frameworks_base_keystore_tests.nix {})
     KeystoreTests;
 
+  inherit (callBPPackage "frameworks/base/libs/WindowManager/Jetpack" ./frameworks_base_libs_WindowManager_Jetpack.nix {})
+    "androidx.window.sidecar" "androidx.window.sidecar.xml" window-sidecar;
+
+  inherit (callBPPackage "frameworks/base/libs/WindowManager/Shell" ./frameworks_base_libs_WindowManager_Shell.nix {})
+    WindowManager-Shell;
+
+  inherit (callBPPackage "frameworks/base/libs/WindowManager/Shell/tests" ./frameworks_base_libs_WindowManager_Shell_tests.nix {})
+    WindowManagerShellTests;
+
   inherit (callBPPackage "frameworks/base/libs/androidfw" ./frameworks_base_libs_androidfw.nix {})
     libandroidfw libandroidfw_benchmarks libandroidfw_defaults libandroidfw_tests;
 
+  inherit (callBPPackage "frameworks/base/libs/hostgraphics" ./frameworks_base_libs_hostgraphics.nix {})
+    libhostgraphics;
+
   inherit (callBPPackage "frameworks/base/libs/hwui" ./frameworks_base_libs_hwui.nix {})
-    hwui_bugreport_font_cache_usage hwui_compile_for_perf hwui_debug hwui_defaults hwui_enable_opengl_validation hwui_lto hwui_pgo hwui_static_deps hwui_test_defaults hwui_unit_tests hwuimacro hwuimicro libhwui libhwui_defaults libhwui_static_debug pgo-targets-hwui;
+    android_graphics_apex android_graphics_apex_headers android_graphics_jni android_graphics_jni_headers hwui_bugreport_font_cache_usage hwui_compile_for_perf hwui_defaults hwui_lto hwui_pgo hwui_static_deps hwui_test_defaults hwui_unit_tests hwuimacro hwuimicro libhwui libhwui_defaults libhwui_internal_headers libhwui_static pgo-targets-hwui;
 
   inherit (callBPPackage "frameworks/base/libs/incident" ./frameworks_base_libs_incident.nix {})
-    libincident;
+    libincident libincident_test libincidentpriv libincidentpriv_defaults;
 
   inherit (callBPPackage "frameworks/base/libs/input" ./frameworks_base_libs_input.nix {})
     libinputservice;
+
+  inherit (callBPPackage "frameworks/base/libs/input/tests" ./frameworks_base_libs_input_tests.nix {})
+    libinputservice_test;
 
   inherit (callBPPackage "frameworks/base/libs/protoutil" ./frameworks_base_libs_protoutil.nix {})
     libprotoutil libprotoutil_defaults libprotoutil_test;
@@ -4611,8 +8148,8 @@
   inherit (callBPPackage "frameworks/base/libs/storage" ./frameworks_base_libs_storage.nix {})
     libstorage;
 
-  inherit (callBPPackage "frameworks/base/libs/usb" ./frameworks_base_libs_usb.nix {})
-    "com.android.future.usb.accessory";
+  inherit (callBPPackage "frameworks/base/libs/usb/tests/AccessoryChat" ./frameworks_base_libs_usb_tests_AccessoryChat.nix {})
+    AccessoryChat;
 
   inherit (callBPPackage "frameworks/base/libs/usb/tests/AccessoryChat/accessorychat" ./frameworks_base_libs_usb_tests_AccessoryChat_accessorychat.nix {})
     accessorychat;
@@ -4620,35 +8157,32 @@
   inherit (callBPPackage "frameworks/base/libs/usb/tests/accessorytest" ./frameworks_base_libs_usb_tests_accessorytest.nix {})
     accessorytest;
 
-  inherit (callBPPackage "frameworks/base/location/lib" ./frameworks_base_location_lib.nix {})
-    "com.android.location.provider";
-
   inherit (callBPPackage "frameworks/base/location/tests/locationtests" ./frameworks_base_location_tests_locationtests.nix {})
     FrameworksLocationTests;
 
   inherit (callBPPackage "frameworks/base/media" ./frameworks_base_media.nix {})
-    framework_media_annotation mediaplayer2-srcs mediasession2-srcs mediasession2-srcs-without-aidls updatable-media updatable-media-srcs updatable-media-srcs-without-aidls updatable-media-stubs updatable_media_stubs;
+    audio_common-aidl soundtrigger_middleware-aidl;
 
   inherit (callBPPackage "frameworks/base/media/java" ./frameworks_base_media_java.nix {})
     "IMidiDeviceServer.aidl";
 
+  inherit (callBPPackage "frameworks/base/media/java/android/media/tv/tunerresourcemanager" ./frameworks_base_media_java_android_media_tv_tunerresourcemanager.nix {})
+    framework-media-tv-trm-sources framework-media-tv-tunerresourcemanager-sources;
+
   inherit (callBPPackage "frameworks/base/media/jni" ./frameworks_base_media_jni.nix {})
-    libmedia2_jni libmedia_jni libmedia_jni_utils;
+    libmedia_jni libmedia_jni_utils libmedia_tv_tuner;
 
   inherit (callBPPackage "frameworks/base/media/jni/audioeffect" ./frameworks_base_media_jni_audioeffect.nix {})
     libaudioeffect_jni;
 
   inherit (callBPPackage "frameworks/base/media/jni/soundpool" ./frameworks_base_media_jni_soundpool.nix {})
-    libsoundpool;
+    libsoundpool soundpool_flags_defaults;
 
-  inherit (callBPPackage "frameworks/base/media/lib/remotedisplay" ./frameworks_base_media_lib_remotedisplay.nix {})
-    "com.android.media.remotedisplay";
+  inherit (callBPPackage "frameworks/base/media/jni/soundpool/tests" ./frameworks_base_media_jni_soundpool_tests.nix {})
+    soundpool_stress;
 
-  inherit (callBPPackage "frameworks/base/media/lib/signer" ./frameworks_base_media_lib_signer.nix {})
-    "com.android.mediadrm.signer";
-
-  inherit (callBPPackage "frameworks/base/media/lib/tvremote" ./frameworks_base_media_lib_tvremote.nix {})
-    "com.android.media.tv.remoteprovider";
+  inherit (callBPPackage "frameworks/base/media/lib/tvremote/tests" ./frameworks_base_media_lib_tvremote_tests.nix {})
+    TvRemoteTests;
 
   inherit (callBPPackage "frameworks/base/media/mca/filterfw" ./frameworks_base_media_mca_filterfw.nix {})
     libfilterfw libfilterfw_jni;
@@ -4669,10 +8203,13 @@
     libamidi;
 
   inherit (callBPPackage "frameworks/base/media/packages/BluetoothMidiService" ./frameworks_base_media_packages_BluetoothMidiService.nix {})
-    BluetoothMidiService;
+    BluetoothMidiLib BluetoothMidiService;
 
-  inherit (callBPPackage "frameworks/base/media/proto" ./frameworks_base_media_proto.nix {})
-    libmediaplayer2-protos mediaplayer2-protos;
+  inherit (callBPPackage "frameworks/base/media/packages/BluetoothMidiService/tests/unit" ./frameworks_base_media_packages_BluetoothMidiService_tests_unit.nix {})
+    BluetoothMidiTests;
+
+  inherit (callBPPackage "frameworks/base/media/tests/AudioPolicyTest" ./frameworks_base_media_tests_AudioPolicyTest.nix {})
+    audiopolicytest;
 
   inherit (callBPPackage "frameworks/base/media/tests/CameraBrowser" ./frameworks_base_media_tests_CameraBrowser.nix {})
     CameraBrowser;
@@ -4686,6 +8223,9 @@
   inherit (callBPPackage "frameworks/base/media/tests/MediaFrameworkTest" ./frameworks_base_media_tests_MediaFrameworkTest.nix {})
     mediaframeworktest;
 
+  inherit (callBPPackage "frameworks/base/media/tests/MediaRouter" ./frameworks_base_media_tests_MediaRouter.nix {})
+    mediaroutertest;
+
   inherit (callBPPackage "frameworks/base/media/tests/MtpTests" ./frameworks_base_media_tests_MtpTests.nix {})
     MtpTests;
 
@@ -4695,14 +8235,20 @@
   inherit (callBPPackage "frameworks/base/media/tests/SoundPoolTest" ./frameworks_base_media_tests_SoundPoolTest.nix {})
     SoundPoolTest;
 
+  inherit (callBPPackage "frameworks/base/media/tests/TunerTest" ./frameworks_base_media_tests_TunerTest.nix {})
+    mediatunertest;
+
   inherit (callBPPackage "frameworks/base/media/tests/audiotests" ./frameworks_base_media_tests_audiotests.nix {})
     shared_mem_test;
 
   inherit (callBPPackage "frameworks/base/media/tests/players" ./frameworks_base_media_tests_players.nix {})
     invoke_mock_media_player;
 
+  inherit (callBPPackage "frameworks/base/mime" ./frameworks_base_mime.nix {})
+    "android.mime.types.minimized" "mime.types.minimized" "mimemap-res.jar" "mimemap-testing-res.jar" "vendor.mime.types.minimized" mimemap mimemap-defaults mimemap-testing;
+
   inherit (callBPPackage "frameworks/base/native/android" ./frameworks_base_native_android.nix {})
-    libandroid libandroid_defaults libandroid_net;
+    lib-platform-compat-native-api libandroid libandroid_defaults libandroid_net platform-compat-native-aidl;
 
   inherit (callBPPackage "frameworks/base/native/graphics/jni" ./frameworks_base_native_graphics_jni.nix {})
     libjnigraphics;
@@ -4713,20 +8259,29 @@
   inherit (callBPPackage "frameworks/base/native/webview/plat_support" ./frameworks_base_native_webview_plat_support.nix {})
     libwebviewchromium_plat_support;
 
-  inherit (callBPPackage "frameworks/base/nfc-extras" ./frameworks_base_nfc-extras.nix {})
-    "com.android.nfc_extras";
-
-  inherit (callBPPackage "frameworks/base/obex" ./frameworks_base_obex.nix {})
-    "javax.obex";
+  inherit (callBPPackage "frameworks/base/nfc-extras/tests" ./frameworks_base_nfc-extras_tests.nix {})
+    NfcExtrasTests;
 
   inherit (callBPPackage "frameworks/base/packages/AppPredictionLib" ./frameworks_base_packages_AppPredictionLib.nix {})
     app_prediction;
+
+  inherit (callBPPackage "frameworks/base/packages/BackupEncryption" ./frameworks_base_packages_BackupEncryption.nix {})
+    BackupEncryption backup-encryption-protos;
+
+  inherit (callBPPackage "frameworks/base/packages/BackupEncryption/test/robolectric-integration" ./frameworks_base_packages_BackupEncryption_test_robolectric-integration.nix {})
+    BackupEncryptionRoboIntegTests;
+
+  inherit (callBPPackage "frameworks/base/packages/BackupEncryption/test/robolectric" ./frameworks_base_packages_BackupEncryption_test_robolectric.nix {})
+    BackupEncryptionRoboShadows BackupEncryptionRoboTests;
+
+  inherit (callBPPackage "frameworks/base/packages/BackupEncryption/test/unittest" ./frameworks_base_packages_BackupEncryption_test_unittest.nix {})
+    BackupEncryptionUnitTests;
 
   inherit (callBPPackage "frameworks/base/packages/BackupRestoreConfirmation" ./frameworks_base_packages_BackupRestoreConfirmation.nix {})
     BackupRestoreConfirmation;
 
   inherit (callBPPackage "frameworks/base/packages/CarSystemUI" ./frameworks_base_packages_CarSystemUI.nix {})
-    CarSystemUI CarSystemUI-core;
+    CarSystemUI CarSystemUI-core CarSystemUI-tests;
 
   inherit (callBPPackage "frameworks/base/packages/CarrierDefaultApp" ./frameworks_base_packages_CarrierDefaultApp.nix {})
     CarrierDefaultApp;
@@ -4737,11 +8292,29 @@
   inherit (callBPPackage "frameworks/base/packages/CompanionDeviceManager" ./frameworks_base_packages_CompanionDeviceManager.nix {})
     CompanionDeviceManager;
 
+  inherit (callBPPackage "frameworks/base/packages/CtsShim" ./frameworks_base_packages_CtsShim.nix {})
+    CtsShimPrebuilt CtsShimPrivPrebuilt;
+
+  inherit (callBPPackage "frameworks/base/packages/CtsShim/build" ./frameworks_base_packages_CtsShim_build.nix {})
+    CtsShim CtsShimPriv CtsShimPrivUpgrade CtsShimPrivUpgradeWrongSHA CtsShimTargetPSdk generate_priv_manifest;
+
   inherit (callBPPackage "frameworks/base/packages/CtsShim/build/jni" ./frameworks_base_packages_CtsShim_build_jni.nix {})
     libshim_jni;
 
+  inherit (callBPPackage "frameworks/base/packages/DynamicSystemInstallationService" ./frameworks_base_packages_DynamicSystemInstallationService.nix {})
+    DynamicSystemInstallationService;
+
+  inherit (callBPPackage "frameworks/base/packages/DynamicSystemInstallationService/tests" ./frameworks_base_packages_DynamicSystemInstallationService_tests.nix {})
+    DynamicSystemInstallationServiceTests;
+
   inherit (callBPPackage "frameworks/base/packages/EasterEgg" ./frameworks_base_packages_EasterEgg.nix {})
     EasterEgg;
+
+  inherit (callBPPackage "frameworks/base/packages/EncryptedLocalTransport" ./frameworks_base_packages_EncryptedLocalTransport.nix {})
+    EncryptedLocalTransport;
+
+  inherit (callBPPackage "frameworks/base/packages/ExtShared" ./frameworks_base_packages_ExtShared.nix {})
+    ExtShared;
 
   inherit (callBPPackage "frameworks/base/packages/ExternalStorageProvider" ./frameworks_base_packages_ExternalStorageProvider.nix {})
     ExternalStorageProvider;
@@ -4753,16 +8326,22 @@
     FakeOemFeatures;
 
   inherit (callBPPackage "frameworks/base/packages/FusedLocation" ./frameworks_base_packages_FusedLocation.nix {})
-    FusedLocation;
+    FusedLocation FusedLocationTests;
+
+  inherit (callBPPackage "frameworks/base/packages/InputDevices" ./frameworks_base_packages_InputDevices.nix {})
+    InputDevices validate_input_devices_keymaps;
 
   inherit (callBPPackage "frameworks/base/packages/LocalTransport" ./frameworks_base_packages_LocalTransport.nix {})
     LocalTransport;
 
   inherit (callBPPackage "frameworks/base/packages/OsuLogin" ./frameworks_base_packages_OsuLogin.nix {})
-    OsuLogin;
+    "com.android.hotspot2.osulogin.certificate" OsuLogin;
 
   inherit (callBPPackage "frameworks/base/packages/PackageInstaller" ./frameworks_base_packages_PackageInstaller.nix {})
     PackageInstaller;
+
+  inherit (callBPPackage "frameworks/base/packages/PrintRecommendationService" ./frameworks_base_packages_PrintRecommendationService.nix {})
+    PrintRecommendationService;
 
   inherit (callBPPackage "frameworks/base/packages/PrintSpooler" ./frameworks_base_packages_PrintSpooler.nix {})
     PrintSpooler;
@@ -4783,13 +8362,16 @@
     SettingsLibAdaptiveIcon;
 
   inherit (callBPPackage "frameworks/base/packages/SettingsLib" ./frameworks_base_packages_SettingsLib.nix {})
-    SettingsLib SettingsLibDefaults;
+    SettingsLib SettingsLibDefaults SettingsLibDependenciesWithoutWifiTracker;
 
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/AppPreference" ./frameworks_base_packages_SettingsLib_AppPreference.nix {})
     SettingsLibAppPreference;
 
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/BarChartPreference" ./frameworks_base_packages_SettingsLib_BarChartPreference.nix {})
     SettingsLibBarChartPreference;
+
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/DisplayDensityUtils" ./frameworks_base_packages_SettingsLib_DisplayDensityUtils.nix {})
+    SettingsLibDisplayDensityUtils;
 
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/EntityHeaderWidgets" ./frameworks_base_packages_SettingsLib_EntityHeaderWidgets.nix {})
     SettingsLibEntityHeaderWidgets;
@@ -4803,8 +8385,17 @@
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/ProgressBar" ./frameworks_base_packages_SettingsLib_ProgressBar.nix {})
     SettingsLibProgressBar;
 
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/RadioButtonPreference" ./frameworks_base_packages_SettingsLib_RadioButtonPreference.nix {})
+    SettingsLibRadioButtonPreference;
+
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/RestrictedLockUtils" ./frameworks_base_packages_SettingsLib_RestrictedLockUtils.nix {})
     SettingsLibRestrictedLockUtils;
+
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/SchedulesProvider" ./frameworks_base_packages_SettingsLib_SchedulesProvider.nix {})
+    SettingsLibSchedulesProvider;
+
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/SearchProvider" ./frameworks_base_packages_SettingsLib_SearchProvider.nix {})
+    SettingsLibSearchProvider;
 
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/SearchWidget" ./frameworks_base_packages_SettingsLib_SearchWidget.nix {})
     SettingsLibSearchWidget;
@@ -4812,8 +8403,23 @@
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/SettingsSpinner" ./frameworks_base_packages_SettingsLib_SettingsSpinner.nix {})
     SettingsLibSettingsSpinner;
 
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/SettingsTheme" ./frameworks_base_packages_SettingsLib_SettingsTheme.nix {})
+    SettingsLibSettingsTheme;
+
   inherit (callBPPackage "frameworks/base/packages/SettingsLib/Tile" ./frameworks_base_packages_SettingsLib_Tile.nix {})
     SettingsLibTile;
+
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/Utils" ./frameworks_base_packages_SettingsLib_Utils.nix {})
+    SettingsLibUtils;
+
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/search" ./frameworks_base_packages_SettingsLib_search.nix {})
+    SettingsLib-annotation-processor SettingsLib-search SettingsLib-search-defaults;
+
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/tests/integ" ./frameworks_base_packages_SettingsLib_tests_integ.nix {})
+    SettingsLibTests;
+
+  inherit (callBPPackage "frameworks/base/packages/SettingsLib/tests/robotests" ./frameworks_base_packages_SettingsLib_tests_robotests.nix {})
+    SettingsLib-robo-testutils SettingsLibRoboTests SettingsLibShell;
 
   inherit (callBPPackage "frameworks/base/packages/SettingsProvider" ./frameworks_base_packages_SettingsProvider.nix {})
     SettingsProvider SettingsProviderTest;
@@ -4821,11 +8427,23 @@
   inherit (callBPPackage "frameworks/base/packages/SharedStorageBackup" ./frameworks_base_packages_SharedStorageBackup.nix {})
     SharedStorageBackup;
 
+  inherit (callBPPackage "frameworks/base/packages/Shell" ./frameworks_base_packages_Shell.nix {})
+    Shell;
+
+  inherit (callBPPackage "frameworks/base/packages/Shell/tests" ./frameworks_base_packages_Shell_tests.nix {})
+    ShellTests;
+
+  inherit (callBPPackage "frameworks/base/packages/SimAppDialog" ./frameworks_base_packages_SimAppDialog.nix {})
+    SimAppDialog;
+
+  inherit (callBPPackage "frameworks/base/packages/SoundPicker" ./frameworks_base_packages_SoundPicker.nix {})
+    SoundPicker;
+
   inherit (callBPPackage "frameworks/base/packages/StatementService" ./frameworks_base_packages_StatementService.nix {})
     StatementService;
 
   inherit (callBPPackage "frameworks/base/packages/SystemUI" ./frameworks_base_packages_SystemUI.nix {})
-    SystemUI SystemUI-core SystemUI-proto SystemUI-tags SystemUI-tests SystemUIWithLegacyRecents;
+    SystemUI SystemUI-core SystemUI-proto SystemUI-tags SystemUI-tests SystemUI-tests-utils;
 
   inherit (callBPPackage "frameworks/base/packages/SystemUI/plugin" ./frameworks_base_packages_SystemUI_plugin.nix {})
     PluginDummyLib SystemUIPluginLib;
@@ -4837,7 +8455,22 @@
     PluginCoreLib;
 
   inherit (callBPPackage "frameworks/base/packages/SystemUI/shared" ./frameworks_base_packages_SystemUI_shared.nix {})
-    SystemUISharedLib;
+    SystemUI-statsd SystemUISharedLib statslog-SystemUI-java-gen;
+
+  inherit (callBPPackage "frameworks/base/packages/Tethering" ./frameworks_base_packages_Tethering.nix {})
+    InProcessTethering Tethering TetheringAndroidLibraryDefaults TetheringApiCurrentLib TetheringAppDefaults libtetherutilsjni;
+
+  inherit (callBPPackage "frameworks/base/packages/Tethering/apex" ./frameworks_base_packages_Tethering_apex.nix {})
+    "com.android.tethering" "com.android.tethering.certificate" "com.android.tethering.inprocess" "com.android.tethering.key";
+
+  inherit (callBPPackage "frameworks/base/packages/Tethering/common/TetheringLib" ./frameworks_base_packages_Tethering_common_TetheringLib.nix {})
+    framework-tethering framework-tethering-srcs;
+
+  inherit (callBPPackage "frameworks/base/packages/Tethering/tests/integration" ./frameworks_base_packages_Tethering_tests_integration.nix {})
+    TetheringCoverageTests TetheringIntegrationTests TetheringIntegrationTestsDefaults TetheringIntegrationTestsLib;
+
+  inherit (callBPPackage "frameworks/base/packages/Tethering/tests/unit" ./frameworks_base_packages_Tethering_tests_unit.nix {})
+    TetheringCommonTests TetheringTests TetheringTestsDefaults TetheringTestsLib;
 
   inherit (callBPPackage "frameworks/base/packages/VpnDialogs" ./frameworks_base_packages_VpnDialogs.nix {})
     VpnDialogs;
@@ -4849,88 +8482,118 @@
     WAPPushManagerTests;
 
   inherit (callBPPackage "frameworks/base/packages/WallpaperBackup" ./frameworks_base_packages_WallpaperBackup.nix {})
-    WallpaperBackup;
+    WallpaperBackup WallpaperBackupAgentTests;
 
   inherit (callBPPackage "frameworks/base/packages/WallpaperCropper" ./frameworks_base_packages_WallpaperCropper.nix {})
     WallpaperCropper;
 
+  inherit (callBPPackage "frameworks/base/packages/overlays/tests" ./frameworks_base_packages_overlays_tests.nix {})
+    OverlayTests;
+
   inherit (callBPPackage "frameworks/base/packages/services/PacProcessor" ./frameworks_base_packages_services_PacProcessor.nix {})
-    PacProcessor;
+    PacProcessor PacProcessor-aidl-sources;
 
   inherit (callBPPackage "frameworks/base/packages/services/PacProcessor/jni" ./frameworks_base_packages_services_PacProcessor_jni.nix {})
     libjni_pacprocessor;
 
   inherit (callBPPackage "frameworks/base/packages/services/Proxy" ./frameworks_base_packages_services_Proxy.nix {})
-    ProxyHandler;
+    ProxyHandler ProxyHandler-aidl-sources;
 
   inherit (callBPPackage "frameworks/base/proto" ./frameworks_base_proto.nix {})
-    framework-protos metrics-constants-protos;
+    framework-protos ipconnectivity-proto-src metrics-constants-protos system-messages-proto-src;
+
+  inherit (callBPPackage "frameworks/base/samples/demo/haptic-assessment" ./frameworks_base_samples_demo_haptic-assessment.nix {})
+    HapticAssessment;
 
   inherit (callBPPackage "frameworks/base/sax/tests/saxtests" ./frameworks_base_sax_tests_saxtests.nix {})
     FrameworksSaxTests;
 
   inherit (callBPPackage "frameworks/base/services" ./frameworks_base_services.nix {})
-    libandroid_servers services;
+    "services-stubs.sources" android_system_server_stubs_current art-profile libandroid_servers services services-all-sources services-main-sources services-platform-compat-config services_defaults;
 
   inherit (callBPPackage "frameworks/base/services/accessibility" ./frameworks_base_services_accessibility.nix {})
-    "services.accessibility";
+    "services.accessibility" "services.accessibility-sources";
 
   inherit (callBPPackage "frameworks/base/services/appprediction" ./frameworks_base_services_appprediction.nix {})
-    "services.appprediction";
+    "services.appprediction" "services.appprediction-sources";
 
   inherit (callBPPackage "frameworks/base/services/appwidget" ./frameworks_base_services_appwidget.nix {})
-    "services.appwidget";
+    "services.appwidget" "services.appwidget-sources";
 
   inherit (callBPPackage "frameworks/base/services/autofill" ./frameworks_base_services_autofill.nix {})
-    "services.autofill";
+    "services.autofill" "services.autofill-sources";
 
   inherit (callBPPackage "frameworks/base/services/backup" ./frameworks_base_services_backup.nix {})
-    "services.backup";
+    "services.backup" "services.backup-sources";
+
+  inherit (callBPPackage "frameworks/base/services/backup/backuplib" ./frameworks_base_services_backup_backuplib.nix {})
+    backuplib backuplib-sources;
 
   inherit (callBPPackage "frameworks/base/services/companion" ./frameworks_base_services_companion.nix {})
-    "services.companion";
+    "services.companion" "services.companion-sources";
 
   inherit (callBPPackage "frameworks/base/services/contentcapture" ./frameworks_base_services_contentcapture.nix {})
-    "services.contentcapture";
+    "services.contentcapture" "services.contentcapture-sources";
 
   inherit (callBPPackage "frameworks/base/services/contentsuggestions" ./frameworks_base_services_contentsuggestions.nix {})
-    "services.contentsuggestions";
+    "services.contentsuggestions" "services.contentsuggestions-sources";
 
   inherit (callBPPackage "frameworks/base/services/core" ./frameworks_base_services_core.nix {})
-    "gps_debug.conf" "services.core" "services.core.priorityboosted" "services.core.unboosted";
+    "checked-protolog.json" "generate-protolog.json" "gps_debug.conf" "protolog.conf.json.gz" "services.core" "services.core-sources" "services.core.json.gz" "services.core.priorityboosted" "services.core.protologsrc" "services.core.unboosted" "services.core.wm.protologgroups" core_cts_test_resources protolog-common;
 
   inherit (callBPPackage "frameworks/base/services/core/jni" ./frameworks_base_services_core_jni.nix {})
-    "libservices.core" "libservices.core-libs" lib_networkStatsFactory_native;
+    "libservices.core" "libservices.core-libs" lib_alarmManagerService_native lib_networkStatsFactory_native;
 
   inherit (callBPPackage "frameworks/base/services/core/xsd" ./frameworks_base_services_core_xsd.nix {})
-    default-permissions;
+    default-permissions display-device-config platform-compat-config;
 
   inherit (callBPPackage "frameworks/base/services/core/xsd/vts" ./frameworks_base_services_core_xsd_vts.nix {})
     vts_defaultPermissions_validate_test;
 
   inherit (callBPPackage "frameworks/base/services/coverage" ./frameworks_base_services_coverage.nix {})
-    "services.coverage";
+    "services.coverage" "services.coverage-sources";
 
   inherit (callBPPackage "frameworks/base/services/devicepolicy" ./frameworks_base_services_devicepolicy.nix {})
-    "services.devicepolicy";
+    "services.devicepolicy" "services.devicepolicy-sources";
+
+  inherit (callBPPackage "frameworks/base/services/incremental" ./frameworks_base_services_incremental.nix {})
+    "service.incremental" "service.incremental-defaults" "service.incremental-proto-defaults" "service.incremental.proto" "service.incremental_headers" "service.incremental_srcs" "service.incremental_test";
 
   inherit (callBPPackage "frameworks/base/services/midi" ./frameworks_base_services_midi.nix {})
-    "services.midi";
+    "services.midi" "services.midi-sources";
 
   inherit (callBPPackage "frameworks/base/services/net" ./frameworks_base_services_net.nix {})
-    "services.net" ipmemorystore-aidl-interfaces ipmemorystore-client networkstack-aidl-interfaces services-networkstack-shared-srcs;
+    "services.net" "services.net-module-wifi" "services.net-sources" services-tethering-shared-srcs;
+
+  inherit (callBPPackage "frameworks/base/services/people" ./frameworks_base_services_people.nix {})
+    "services.people";
 
   inherit (callBPPackage "frameworks/base/services/print" ./frameworks_base_services_print.nix {})
-    "services.print";
+    "services.print" "services.print-sources";
 
   inherit (callBPPackage "frameworks/base/services/restrictions" ./frameworks_base_services_restrictions.nix {})
-    "services.restrictions";
+    "services.restrictions" "services.restrictions-sources";
+
+  inherit (callBPPackage "frameworks/base/services/robotests" ./frameworks_base_services_robotests.nix {})
+    FrameworksServicesLib FrameworksServicesRoboShadows FrameworksServicesRoboTests;
+
+  inherit (callBPPackage "frameworks/base/services/robotests/backup" ./frameworks_base_services_robotests_backup.nix {})
+    BackupFrameworksServicesLib BackupFrameworksServicesRoboTests;
 
   inherit (callBPPackage "frameworks/base/services/startop" ./frameworks_base_services_startop.nix {})
     "services.startop";
 
   inherit (callBPPackage "frameworks/base/services/systemcaptions" ./frameworks_base_services_systemcaptions.nix {})
-    "services.systemcaptions";
+    "services.systemcaptions" "services.systemcaptions-sources";
+
+  inherit (callBPPackage "frameworks/base/services/tests/PackageManagerComponentOverrideTests" ./frameworks_base_services_tests_PackageManagerComponentOverrideTests.nix {})
+    PackageManagerComponentOverrideTests;
+
+  inherit (callBPPackage "frameworks/base/services/tests/PackageManagerServiceTests/host" ./frameworks_base_services_tests_PackageManagerServiceTests_host.nix {})
+    PackageManagerServiceHostTests PackageManagerServiceHostTestsResources;
+
+  inherit (callBPPackage "frameworks/base/services/tests/PackageManagerServiceTests/host/test-apps" ./frameworks_base_services_tests_PackageManagerServiceTests_host_test-apps.nix {})
+    PackageManagerDummyAppOriginalOverride PackageManagerDummyAppVersion1 PackageManagerDummyAppVersion2 PackageManagerDummyAppVersion3 PackageManagerDummyAppVersion4;
 
   inherit (callBPPackage "frameworks/base/services/tests/mockingservicestests" ./frameworks_base_services_tests_mockingservicestests.nix {})
     FrameworksMockingServicesTests;
@@ -4939,16 +8602,37 @@
     log_rescueparty_reset_event_reported;
 
   inherit (callBPPackage "frameworks/base/services/tests/servicestests" ./frameworks_base_services_tests_servicestests.nix {})
-    FrameworksServicesTests servicestests-SuspendTestApp-files servicestests-utils;
+    FrameworksServicesTests FrameworksServicesTests_apks_as_resources servicestests-SuspendTestApp-files servicestests-utils servicestests-utils-mockito-extended;
 
   inherit (callBPPackage "frameworks/base/services/tests/servicestests/aidl" ./frameworks_base_services_tests_servicestests_aidl.nix {})
     servicestests-aidl;
+
+  inherit (callBPPackage "frameworks/base/services/tests/servicestests/apks" ./frameworks_base_services_tests_servicestests_apks.nix {})
+    FrameworksServicesTests_apks_defaults;
+
+  inherit (callBPPackage "frameworks/base/services/tests/servicestests/apks/install-split-base" ./frameworks_base_services_tests_servicestests_apks_install-split-base.nix {})
+    FrameworksServicesTests_install_split_base;
+
+  inherit (callBPPackage "frameworks/base/services/tests/servicestests/apks/install-split-feature-a" ./frameworks_base_services_tests_servicestests_apks_install-split-feature-a.nix {})
+    FrameworksServicesTests_install_split_feature_a;
+
+  inherit (callBPPackage "frameworks/base/services/tests/servicestests/apks/install_intent_filters" ./frameworks_base_services_tests_servicestests_apks_install_intent_filters.nix {})
+    FrameworksServicesTests_install_intent_filters;
+
+  inherit (callBPPackage "frameworks/base/services/tests/servicestests/apks/install_uses_sdk" ./frameworks_base_services_tests_servicestests_apks_install_uses_sdk.nix {})
+    FrameworksServicesTests_install_uses_sdk_0 FrameworksServicesTests_install_uses_sdk_q0 FrameworksServicesTests_install_uses_sdk_r FrameworksServicesTests_install_uses_sdk_r0 FrameworksServicesTests_install_uses_sdk_r5;
 
   inherit (callBPPackage "frameworks/base/services/tests/servicestests/test-apps/ConnTestApp" ./frameworks_base_services_tests_servicestests_test-apps_ConnTestApp.nix {})
     ConnTestApp;
 
   inherit (callBPPackage "frameworks/base/services/tests/servicestests/test-apps/JobTestApp" ./frameworks_base_services_tests_servicestests_test-apps_JobTestApp.nix {})
     JobTestApp;
+
+  inherit (callBPPackage "frameworks/base/services/tests/servicestests/test-apps/PackageParserApp" ./frameworks_base_services_tests_servicestests_test-apps_PackageParserApp.nix {})
+    PackageParserTestApp1 PackageParserTestApp2 PackageParserTestApp3;
+
+  inherit (callBPPackage "frameworks/base/services/tests/servicestests/test-apps/SimpleServiceTestApp" ./frameworks_base_services_tests_servicestests_test-apps_SimpleServiceTestApp.nix {})
+    SimpleServiceTestApp;
 
   inherit (callBPPackage "frameworks/base/services/tests/servicestests/test-apps/SuspendTestApp" ./frameworks_base_services_tests_servicestests_test-apps_SuspendTestApp.nix {})
     SuspendTestApp;
@@ -4963,16 +8647,28 @@
     WmTests;
 
   inherit (callBPPackage "frameworks/base/services/usage" ./frameworks_base_services_usage.nix {})
-    "services.usage";
+    "services.usage" "services.usage-sources";
 
   inherit (callBPPackage "frameworks/base/services/usb" ./frameworks_base_services_usb.nix {})
-    "services.usb";
+    "services.usb" "services.usb-sources";
 
   inherit (callBPPackage "frameworks/base/services/voiceinteraction" ./frameworks_base_services_voiceinteraction.nix {})
-    "services.voiceinteraction";
+    "services.voiceinteraction" "services.voiceinteraction-sources";
+
+  inherit (callBPPackage "frameworks/base/services/wifi" ./frameworks_base_services_wifi.nix {})
+    "services.wifi" "services.wifi-sources";
+
+  inherit (callBPPackage "frameworks/base/startop/apps/test" ./frameworks_base_startop_apps_test.nix {})
+    startop_test_app;
 
   inherit (callBPPackage "frameworks/base/startop/iorap" ./frameworks_base_startop_iorap.nix {})
-    "services.startop.iorap";
+    "services.startop.iorap" "services.startop.iorap-javasources" "services.startop.iorap-sources";
+
+  inherit (callBPPackage "frameworks/base/startop/iorap/functional_tests" ./frameworks_base_startop_iorap_functional_tests.nix {})
+    iorap-functional-tests;
+
+  inherit (callBPPackage "frameworks/base/startop/iorap/stress" ./frameworks_base_startop_iorap_stress.nix {})
+    "iorap.stress.memory";
 
   inherit (callBPPackage "frameworks/base/startop/iorap/tests" ./frameworks_base_startop_iorap_tests.nix {})
     libiorap-java-test-lib libiorap-java-tests;
@@ -4984,16 +8680,16 @@
     dex-builder-test generate_compiled_layout1 generate_compiled_layout2;
 
   inherit (callBPPackage "frameworks/base/test-base" ./frameworks_base_test-base.nix {})
-    "android.test.base" "android.test.base-minus-junit" "android.test.base_static" "repackaged.android.test.base";
+    "android-test-base-current.txt" "android.test.base-minus-junit" "android.test.base_static" "repackaged.android.test.base";
 
   inherit (callBPPackage "frameworks/base/test-base/hiddenapi" ./frameworks_base_test-base_hiddenapi.nix {})
     "android.test.base-hiddenapi";
 
   inherit (callBPPackage "frameworks/base/test-mock" ./frameworks_base_test-mock.nix {})
-    "android.test.mock";
+    "android-test-mock-current.txt";
 
   inherit (callBPPackage "frameworks/base/test-runner" ./frameworks_base_test-runner.nix {})
-    "android.test.runner" "android.test.runner-minus-junit" "repackaged.android.test.runner";
+    "android-test-runner-current.txt" "android.test.runner-minus-junit" "repackaged.android.test.runner";
 
   inherit (callBPPackage "frameworks/base/test-runner/tests" ./frameworks_base_test-runner_tests.nix {})
     FrameworkTestRunnerTests;
@@ -5009,6 +8705,9 @@
 
   inherit (callBPPackage "frameworks/base/tests/AccessoryDisplay/source" ./frameworks_base_tests_AccessoryDisplay_source.nix {})
     AccessoryDisplaySource;
+
+  inherit (callBPPackage "frameworks/base/tests/ActivityManagerPerfTests/stub-app" ./frameworks_base_tests_ActivityManagerPerfTests_stub-app.nix {})
+    ActivityManagerPerfTestsStubApp1 ActivityManagerPerfTestsStubApp2 ActivityManagerPerfTestsStubApp3;
 
   inherit (callBPPackage "frameworks/base/tests/ActivityManagerPerfTests/test-app" ./frameworks_base_tests_ActivityManagerPerfTests_test-app.nix {})
     ActivityManagerPerfTestsTestApp;
@@ -5028,14 +8727,44 @@
   inherit (callBPPackage "frameworks/base/tests/AmSlam" ./frameworks_base_tests_AmSlam.nix {})
     AmSlam;
 
+  inherit (callBPPackage "frameworks/base/tests/ApkVerityTest" ./frameworks_base_tests_ApkVerityTest.nix {})
+    ApkVerityTest;
+
+  inherit (callBPPackage "frameworks/base/tests/ApkVerityTest/ApkVerityTestApp" ./frameworks_base_tests_ApkVerityTest_ApkVerityTestApp.nix {})
+    ApkVerityTestApp ApkVerityTestAppSplit;
+
+  inherit (callBPPackage "frameworks/base/tests/ApkVerityTest/block_device_writer" ./frameworks_base_tests_ApkVerityTest_block_device_writer.nix {})
+    block_device_writer_module;
+
+  inherit (callBPPackage "frameworks/base/tests/ApkVerityTest/testdata" ./frameworks_base_tests_ApkVerityTest_testdata.nix {})
+    ApkVerityTestAppDm ApkVerityTestAppDmFsvSig ApkVerityTestAppFsvSig ApkVerityTestAppSplitDm ApkVerityTestAppSplitDmFsvSig ApkVerityTestAppSplitFsvSig ApkVerityTestCertDer ApkVerityTestCertPem ApkVerityTestKeyPem apk_verity_sig_gen_default;
+
   inherit (callBPPackage "frameworks/base/tests/AppLaunch" ./frameworks_base_tests_AppLaunch.nix {})
     AppLaunch;
 
   inherit (callBPPackage "frameworks/base/tests/AppLaunchWear" ./frameworks_base_tests_AppLaunchWear.nix {})
     AppLaunchWear;
 
+  inherit (callBPPackage "frameworks/base/tests/AppResourcesLoaders" ./frameworks_base_tests_AppResourcesLoaders.nix {})
+    AppResourcesLoaders;
+
+  inherit (callBPPackage "frameworks/base/tests/AppResourcesLoaders/Overlay" ./frameworks_base_tests_AppResourcesLoaders_Overlay.nix {})
+    AppResourcesLoaders_Overlay;
+
   inherit (callBPPackage "frameworks/base/tests/Assist" ./frameworks_base_tests_Assist.nix {})
     Assist;
+
+  inherit (callBPPackage "frameworks/base/tests/AutoVerify/app1" ./frameworks_base_tests_AutoVerify_app1.nix {})
+    AutoVerifyTest;
+
+  inherit (callBPPackage "frameworks/base/tests/AutoVerify/app2" ./frameworks_base_tests_AutoVerify_app2.nix {})
+    AutoVerifyTest2;
+
+  inherit (callBPPackage "frameworks/base/tests/AutoVerify/app3" ./frameworks_base_tests_AutoVerify_app3.nix {})
+    AutoVerifyTest3;
+
+  inherit (callBPPackage "frameworks/base/tests/AutoVerify/app4" ./frameworks_base_tests_AutoVerify_app4.nix {})
+    AutoVerifyTest4;
 
   inherit (callBPPackage "frameworks/base/tests/BackgroundDexOptServiceIntegrationTests" ./frameworks_base_tests_BackgroundDexOptServiceIntegrationTests.nix {})
     BackgroundDexOptServiceIntegrationTests;
@@ -5049,6 +8778,12 @@
   inherit (callBPPackage "frameworks/base/tests/BiDiTests" ./frameworks_base_tests_BiDiTests.nix {})
     BiDiTests;
 
+  inherit (callBPPackage "frameworks/base/tests/BlobStoreTestUtils" ./frameworks_base_tests_BlobStoreTestUtils.nix {})
+    BlobStoreTestUtils;
+
+  inherit (callBPPackage "frameworks/base/tests/BootImageProfileTest" ./frameworks_base_tests_BootImageProfileTest.nix {})
+    BootImageProfileTest;
+
   inherit (callBPPackage "frameworks/base/tests/BrowserPowerTest" ./frameworks_base_tests_BrowserPowerTest.nix {})
     BrowserPowerTests;
 
@@ -5057,6 +8792,9 @@
 
   inherit (callBPPackage "frameworks/base/tests/CameraPrewarmTest" ./frameworks_base_tests_CameraPrewarmTest.nix {})
     CameraPrewarmTest;
+
+  inherit (callBPPackage "frameworks/base/tests/Codegen" ./frameworks_base_tests_Codegen.nix {})
+    CodegenTests;
 
   inherit (callBPPackage "frameworks/base/tests/Compatibility" ./frameworks_base_tests_Compatibility.nix {})
     AppCompatibilityTest;
@@ -5088,12 +8826,6 @@
   inherit (callBPPackage "frameworks/base/tests/FlickerTests" ./frameworks_base_tests_FlickerTests.nix {})
     FlickerTests;
 
-  inherit (callBPPackage "frameworks/base/tests/FlickerTests/lib" ./frameworks_base_tests_FlickerTests_lib.nix {})
-    flickerautomationhelperlib flickerlib;
-
-  inherit (callBPPackage "frameworks/base/tests/FlickerTests/lib/test" ./frameworks_base_tests_FlickerTests_lib_test.nix {})
-    FlickerLibTest;
-
   inherit (callBPPackage "frameworks/base/tests/FlickerTests/test-apps/flickerapp" ./frameworks_base_tests_FlickerTests_test-apps_flickerapp.nix {})
     FlickerTestApp flickertestapplib;
 
@@ -5118,6 +8850,9 @@
   inherit (callBPPackage "frameworks/base/tests/JankBench" ./frameworks_base_tests_JankBench.nix {})
     JankBench;
 
+  inherit (callBPPackage "frameworks/base/tests/JobSchedulerPerfTests" ./frameworks_base_tests_JobSchedulerPerfTests.nix {})
+    JobSchedulerPerfTests;
+
   inherit (callBPPackage "frameworks/base/tests/JobSchedulerTestApp" ./frameworks_base_tests_JobSchedulerTestApp.nix {})
     JobSchedulerTestApp;
 
@@ -5136,14 +8871,26 @@
   inherit (callBPPackage "frameworks/base/tests/LowStorageTest" ./frameworks_base_tests_LowStorageTest.nix {})
     lowstoragetest;
 
+  inherit (callBPPackage "frameworks/base/tests/ManagedProfileLifecycleStressTest" ./frameworks_base_tests_ManagedProfileLifecycleStressTest.nix {})
+    ManagedProfileLifecycleStressTest;
+
+  inherit (callBPPackage "frameworks/base/tests/ManagedProfileLifecycleStressTest/app/DummyDPC" ./frameworks_base_tests_ManagedProfileLifecycleStressTest_app_DummyDPC.nix {})
+    DummyDPC;
+
   inherit (callBPPackage "frameworks/base/tests/MemoryUsage" ./frameworks_base_tests_MemoryUsage.nix {})
     MemoryUsage;
+
+  inherit (callBPPackage "frameworks/base/tests/MirrorSurfaceTest" ./frameworks_base_tests_MirrorSurfaceTest.nix {})
+    MirrorSurfaceTest;
 
   inherit (callBPPackage "frameworks/base/tests/NativeProcessesMemoryTest" ./frameworks_base_tests_NativeProcessesMemoryTest.nix {})
     native-processes-memory-test;
 
   inherit (callBPPackage "frameworks/base/tests/NetworkSecurityConfigTest" ./frameworks_base_tests_NetworkSecurityConfigTest.nix {})
     NetworkSecurityConfigTests;
+
+  inherit (callBPPackage "frameworks/base/tests/NullHomeTest" ./frameworks_base_tests_NullHomeTest.nix {})
+    NullHomeTest;
 
   inherit (callBPPackage "frameworks/base/tests/OdmApps" ./frameworks_base_tests_OdmApps.nix {})
     OdmAppsTest;
@@ -5160,8 +8907,11 @@
   inherit (callBPPackage "frameworks/base/tests/PackageWatchdog" ./frameworks_base_tests_PackageWatchdog.nix {})
     PackageWatchdogTest;
 
-  inherit (callBPPackage "frameworks/base/tests/RcsTests" ./frameworks_base_tests_RcsTests.nix {})
-    RcsTests;
+  inherit (callBPPackage "frameworks/base/tests/PlatformCompatGating" ./frameworks_base_tests_PlatformCompatGating.nix {})
+    PlatformCompatGating;
+
+  inherit (callBPPackage "frameworks/base/tests/PlatformCompatGating/test-rules" ./frameworks_base_tests_PlatformCompatGating_test-rules.nix {})
+    platform-compat-test-rules;
 
   inherit (callBPPackage "frameworks/base/tests/RemoteDisplayProvider" ./frameworks_base_tests_RemoteDisplayProvider.nix {})
     RemoteDisplayProviderTest;
@@ -5170,7 +8920,7 @@
     RenderThreadTest;
 
   inherit (callBPPackage "frameworks/base/tests/RollbackTest" ./frameworks_base_tests_RollbackTest.nix {})
-    RollbackTest RollbackTestAppACrashingV2 RollbackTestAppASplitV1 RollbackTestAppASplitV2 RollbackTestAppAv1 RollbackTestAppAv2 RollbackTestAppAv3 RollbackTestAppBv1 RollbackTestAppBv2 StagedRollbackTest;
+    "com.android.apex.apkrollback.test.key" "com.android.apex.apkrollback.test.pem" "com.android.apex.apkrollback.test.pubkey" "com.android.apex.apkrollback.test_v1" "com.android.apex.apkrollback.test_v2" "com.android.apex.apkrollback.test_v2Crashing" MultiUserRollbackTest NetworkStagedRollbackTest RollbackTest RollbackTestLib StagedRollbackTest;
 
   inherit (callBPPackage "frameworks/base/tests/SerialChat" ./frameworks_base_tests_SerialChat.nix {})
     SerialChat;
@@ -5202,17 +8952,29 @@
   inherit (callBPPackage "frameworks/base/tests/Split" ./frameworks_base_tests_Split.nix {})
     Split;
 
+  inherit (callBPPackage "frameworks/base/tests/StagedInstallTest" ./frameworks_base_tests_StagedInstallTest.nix {})
+    StagedInstallInternalTest StagedInstallInternalTestApp;
+
   inherit (callBPPackage "frameworks/base/tests/StatusBar" ./frameworks_base_tests_StatusBar.nix {})
     StatusBarTest;
 
   inherit (callBPPackage "frameworks/base/tests/SurfaceComposition" ./frameworks_base_tests_SurfaceComposition.nix {})
     SurfaceComposition;
 
+  inherit (callBPPackage "frameworks/base/tests/SurfaceControlViewHostTest" ./frameworks_base_tests_SurfaceControlViewHostTest.nix {})
+    SurfaceControlViewHostTest;
+
   inherit (callBPPackage "frameworks/base/tests/SystemMemoryTest/host" ./frameworks_base_tests_SystemMemoryTest_host.nix {})
     system-memory-test;
 
   inherit (callBPPackage "frameworks/base/tests/SystemUIDemoModeController" ./frameworks_base_tests_SystemUIDemoModeController.nix {})
     DemoModeController;
+
+  inherit (callBPPackage "frameworks/base/tests/TaskOrganizerTest" ./frameworks_base_tests_TaskOrganizerTest.nix {})
+    TaskOrganizerTest;
+
+  inherit (callBPPackage "frameworks/base/tests/TelephonyCommonTests" ./frameworks_base_tests_TelephonyCommonTests.nix {})
+    TelephonyCommonTests;
 
   inherit (callBPPackage "frameworks/base/tests/TouchLatency" ./frameworks_base_tests_TouchLatency.nix {})
     TouchLatency;
@@ -5247,6 +9009,12 @@
   inherit (callBPPackage "frameworks/base/tests/UsbHostExternalManagmentTest/UsbHostExternalManagmentTestApp" ./frameworks_base_tests_UsbHostExternalManagmentTest_UsbHostExternalManagmentTestApp.nix {})
     UsbHostExternalManagementTestApp;
 
+  inherit (callBPPackage "frameworks/base/tests/UsbManagerTests" ./frameworks_base_tests_UsbManagerTests.nix {})
+    UsbManagerTests;
+
+  inherit (callBPPackage "frameworks/base/tests/UsbManagerTests/lib" ./frameworks_base_tests_UsbManagerTests_lib.nix {})
+    UsbManagerTestLib;
+
   inherit (callBPPackage "frameworks/base/tests/UsbTests" ./frameworks_base_tests_UsbTests.nix {})
     UsbTests;
 
@@ -5268,8 +9036,8 @@
   inherit (callBPPackage "frameworks/base/tests/WindowAnimationJank" ./frameworks_base_tests_WindowAnimationJank.nix {})
     WindowAnimationJank;
 
-  inherit (callBPPackage "frameworks/base/tests/WindowManagerStressTest" ./frameworks_base_tests_WindowManagerStressTest.nix {})
-    WindowManagerStressTest;
+  inherit (callBPPackage "frameworks/base/tests/WindowInsetsTests" ./frameworks_base_tests_WindowInsetsTests.nix {})
+    WindowInsetsTests;
 
   inherit (callBPPackage "frameworks/base/tests/appwidgets/AppWidgetHostTest" ./frameworks_base_tests_appwidgets_AppWidgetHostTest.nix {})
     AppWidgetHostTest;
@@ -5281,7 +9049,7 @@
     networkStatsFactory-benchmarks;
 
   inherit (callBPPackage "frameworks/base/tests/libs-permissions" ./frameworks_base_tests_libs-permissions.nix {})
-    "com.android.test.libs.product" "com.android.test.libs.product.xml" "com.android.test.libs.product_services" "com.android.test.libs.product_services.xml";
+    "com.android.test.libs.product" "com.android.test.libs.product.xml" "com.android.test.libs.system_ext" "com.android.test.libs.system_ext.xml";
 
   inherit (callBPPackage "frameworks/base/tests/net" ./frameworks_base_tests_net.nix {})
     FrameworksNetTests FrameworksNetTests-jni-defaults;
@@ -5289,14 +9057,17 @@
   inherit (callBPPackage "frameworks/base/tests/net/common" ./frameworks_base_tests_net_common.nix {})
     FrameworksNetCommonTests;
 
+  inherit (callBPPackage "frameworks/base/tests/net/deflake" ./frameworks_base_tests_net_deflake.nix {})
+    FrameworksNetDeflakeTest;
+
+  inherit (callBPPackage "frameworks/base/tests/net/integration" ./frameworks_base_tests_net_integration.nix {})
+    FrameworksNetIntegrationTests frameworks-net-integration-testutils;
+
   inherit (callBPPackage "frameworks/base/tests/net/jni" ./frameworks_base_tests_net_jni.nix {})
     libnetworkstatsfactorytestjni;
 
   inherit (callBPPackage "frameworks/base/tests/net/smoketest" ./frameworks_base_tests_net_smoketest.nix {})
     FrameworksNetSmokeTests;
-
-  inherit (callBPPackage "frameworks/base/tests/net/util" ./frameworks_base_tests_net_util.nix {})
-    frameworks-net-testutils;
 
   inherit (callBPPackage "frameworks/base/tests/notification" ./frameworks_base_tests_notification.nix {})
     NotificationTests;
@@ -5305,7 +9076,7 @@
     FrameworkPermissionTests;
 
   inherit (callBPPackage "frameworks/base/tests/privapp-permissions" ./frameworks_base_tests_privapp-permissions.nix {})
-    "privapp-permissions-test.xml" "product_servicesprivapp-permissions-test.xml" "productprivapp-permissions-test.xml" "vendorprivapp-permissions-test.xml" PrivAppPermissionTest ProductPrivAppPermissionTest ProductServicesPrivAppPermissionTest VendorPrivAppPermissionTest;
+    "privapp-permissions-test.xml" "productprivapp-permissions-test.xml" "system_extprivapp-permissions-test.xml" "vendorprivapp-permissions-test.xml" PrivAppPermissionTest ProductPrivAppPermissionTest SystemExtPrivAppPermissionTest VendorPrivAppPermissionTest;
 
   inherit (callBPPackage "frameworks/base/tests/testables" ./frameworks_base_tests_testables.nix {})
     testables;
@@ -5313,11 +9084,11 @@
   inherit (callBPPackage "frameworks/base/tests/testables/tests" ./frameworks_base_tests_testables_tests.nix {})
     TestablesTests;
 
-  inherit (callBPPackage "frameworks/base/tests/touchlag" ./frameworks_base_tests_touchlag.nix {})
-    test-touchlag;
-
   inherit (callBPPackage "frameworks/base/tests/utils/DummyIME" ./frameworks_base_tests_utils_DummyIME.nix {})
     DummyIME;
+
+  inherit (callBPPackage "frameworks/base/tests/utils/hostutils" ./frameworks_base_tests_utils_hostutils.nix {})
+    frameworks-base-hostutils;
 
   inherit (callBPPackage "frameworks/base/tests/utils/testutils" ./frameworks_base_tests_utils_testutils.nix {})
     frameworks-base-testutils;
@@ -5349,14 +9120,23 @@
   inherit (callBPPackage "frameworks/base/tools/bit" ./frameworks_base_tools_bit.nix {})
     bit;
 
+  inherit (callBPPackage "frameworks/base/tools/codegen" ./frameworks_base_tools_codegen.nix {})
+    codegen-version-info codegen_cli;
+
   inherit (callBPPackage "frameworks/base/tools/dump-coverage" ./frameworks_base_tools_dump-coverage.nix {})
     libdumpcoverage;
+
+  inherit (callBPPackage "frameworks/base/tools/hiddenapi" ./frameworks_base_tools_hiddenapi.nix {})
+    merge_csv;
 
   inherit (callBPPackage "frameworks/base/tools/incident_report" ./frameworks_base_tools_incident_report.nix {})
     incident_report;
 
   inherit (callBPPackage "frameworks/base/tools/incident_section_gen" ./frameworks_base_tools_incident_section_gen.nix {})
     incident-section-gen;
+
+  inherit (callBPPackage "frameworks/base/tools/lock_agent" ./frameworks_base_tools_lock_agent.nix {})
+    liblockagent lockagent lockagent_crasher lockagenttest start_with_lockagent;
 
   inherit (callBPPackage "frameworks/base/tools/locked_region_code_injection" ./frameworks_base_tools_locked_region_code_injection.nix {})
     lockedregioncodeinjection;
@@ -5367,17 +9147,23 @@
   inherit (callBPPackage "frameworks/base/tools/powermodel" ./frameworks_base_tools_powermodel.nix {})
     powermodel powermodel-test;
 
+  inherit (callBPPackage "frameworks/base/tools/preload-check" ./frameworks_base_tools_preload-check.nix {})
+    PreloadCheck;
+
   inherit (callBPPackage "frameworks/base/tools/preload" ./frameworks_base_tools_preload.nix {})
     preload;
 
   inherit (callBPPackage "frameworks/base/tools/preload/loadclass" ./frameworks_base_tools_preload_loadclass.nix {})
     loadclass;
 
-  inherit (callBPPackage "frameworks/base/tools/processors/unsupportedappusage" ./frameworks_base_tools_processors_unsupportedappusage.nix {})
-    unsupportedappusage-annotation-processor;
+  inherit (callBPPackage "frameworks/base/tools/processors/staledataclass" ./frameworks_base_tools_processors_staledataclass.nix {})
+    staledataclass-annotation-processor;
 
   inherit (callBPPackage "frameworks/base/tools/processors/view_inspector" ./frameworks_base_tools_processors_view_inspector.nix {})
     view-inspector-annotation-processor view-inspector-annotation-processor-test;
+
+  inherit (callBPPackage "frameworks/base/tools/protologtool" ./frameworks_base_tools_protologtool.nix {})
+    protologtool protologtool-lib protologtool-tests;
 
   inherit (callBPPackage "frameworks/base/tools/sdkparcelables" ./frameworks_base_tools_sdkparcelables.nix {})
     sdkparcelables sdkparcelables_test;
@@ -5389,10 +9175,16 @@
     "statslog.cpp" "statslog.h" libstatslog stats-log-api-gen stats-log-api-gen-test;
 
   inherit (callBPPackage "frameworks/base/tools/streaming_proto" ./frameworks_base_tools_streaming_proto.nix {})
-    protoc-gen-cppstream protoc-gen-javastream protoc-gen-stream-defaults;
+    StreamingProtoTest protoc-gen-cppstream protoc-gen-javastream protoc-gen-stream-defaults;
 
   inherit (callBPPackage "frameworks/base/tools/validatekeymaps" ./frameworks_base_tools_validatekeymaps.nix {})
     validatekeymaps;
+
+  inherit (callBPPackage "frameworks/base/wifi" ./frameworks_base_wifi.nix {})
+    framework-wifi framework-wifi-annotations framework-wifi-non-updatable-sources framework-wifi-pre-jarjar framework-wifi-test-defaults framework-wifi-updatable-exported-aidl-sources framework-wifi-updatable-java-sources framework-wifi-updatable-sources wifi-jarjar-rules wifi-module-sdk-version-defaults;
+
+  inherit (callBPPackage "frameworks/base/wifi/tests" ./frameworks_base_wifi_tests.nix {})
+    FrameworksWifiApiTests;
 
   inherit (callBPPackage "frameworks/compile/libbcc" ./frameworks_compile_libbcc.nix {})
     libbcc-defaults libbcc-targets;
@@ -5529,6 +9321,12 @@
   inherit (callBPPackage "frameworks/hardware/interfaces" ./frameworks_hardware_interfaces.nix {})
     "android.frameworks";
 
+  inherit (callBPPackage "frameworks/hardware/interfaces/automotive/display/1.0" ./frameworks_hardware_interfaces_automotive_display_1.0.nix {})
+    "android.frameworks.automotive.display@1.0";
+
+  inherit (callBPPackage "frameworks/hardware/interfaces/automotive/display/1.0/vts/functional" ./frameworks_hardware_interfaces_automotive_display_1.0_vts_functional.nix {})
+    VtsHalAutomotiveDisplayV1_0TargetTest;
+
   inherit (callBPPackage "frameworks/hardware/interfaces/bufferhub/1.0" ./frameworks_hardware_interfaces_bufferhub_1.0.nix {})
     "android.frameworks.bufferhub@1.0";
 
@@ -5541,8 +9339,11 @@
   inherit (callBPPackage "frameworks/hardware/interfaces/cameraservice/service/2.0" ./frameworks_hardware_interfaces_cameraservice_service_2.0.nix {})
     "android.frameworks.cameraservice.service@2.0";
 
+  inherit (callBPPackage "frameworks/hardware/interfaces/cameraservice/service/2.1" ./frameworks_hardware_interfaces_cameraservice_service_2.1.nix {})
+    "android.frameworks.cameraservice.service@2.1";
+
   inherit (callBPPackage "frameworks/hardware/interfaces/cameraservice/vts/functional" ./frameworks_hardware_interfaces_cameraservice_vts_functional.nix {})
-    VtsHalCameraServiceV2_0TargetTest;
+    VtsHalCameraServiceV2_0Target VtsHalCameraServiceV2_0TargetTest;
 
   inherit (callBPPackage "frameworks/hardware/interfaces/displayservice/1.0" ./frameworks_hardware_interfaces_displayservice_1.0.nix {})
     "android.frameworks.displayservice@1.0";
@@ -5574,6 +9375,117 @@
   inherit (callBPPackage "frameworks/hardware/interfaces/vr/composer/1.0" ./frameworks_hardware_interfaces_vr_composer_1.0.nix {})
     "android.frameworks.vr.composer@1.0";
 
+  inherit (callBPPackage "frameworks/hardware/interfaces/vr/composer/2.0" ./frameworks_hardware_interfaces_vr_composer_2.0.nix {})
+    "android.frameworks.vr.composer@2.0";
+
+  inherit (callBPPackage "frameworks/layoutlib" ./frameworks_layoutlib.nix {})
+    temp_layoutlib;
+
+  inherit (callBPPackage "frameworks/layoutlib/bridge" ./frameworks_layoutlib_bridge.nix {})
+    layoutlib layoutlib-no-framework;
+
+  inherit (callBPPackage "frameworks/layoutlib/bridge/tests" ./frameworks_layoutlib_bridge_tests.nix {})
+    layoutlib-tests;
+
+  inherit (callBPPackage "frameworks/layoutlib/common" ./frameworks_layoutlib_common.nix {})
+    layoutlib-common;
+
+  inherit (callBPPackage "frameworks/layoutlib/create" ./frameworks_layoutlib_create.nix {})
+    layoutlib_create;
+
+  inherit (callBPPackage "frameworks/layoutlib/create/tests" ./frameworks_layoutlib_create_tests.nix {})
+    layoutlib-create-tests mock_android;
+
+  inherit (callBPPackage "frameworks/layoutlib/validator" ./frameworks_layoutlib_validator.nix {})
+    layoutlib-validator;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support" ./frameworks_libs_native_bridge_support.nix {})
+    native_bridge_stub_library_defaults;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/app_process" ./frameworks_libs_native_bridge_support_app_process.nix {})
+    native_bridge_guest_app_process;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libEGL" ./frameworks_libs_native_bridge_support_libEGL.nix {})
+    libnative_bridge_guest_libEGL;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libGLESv1_CM" ./frameworks_libs_native_bridge_support_libGLESv1_CM.nix {})
+    libnative_bridge_guest_libGLESv1_CM;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libGLESv2" ./frameworks_libs_native_bridge_support_libGLESv2.nix {})
+    libnative_bridge_guest_libGLESv2;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libGLESv3" ./frameworks_libs_native_bridge_support_libGLESv3.nix {})
+    libnative_bridge_guest_libGLESv3;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libOpenMAXAL" ./frameworks_libs_native_bridge_support_libOpenMAXAL.nix {})
+    libnative_bridge_guest_libOpenMAXAL;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libOpenSLES" ./frameworks_libs_native_bridge_support_libOpenSLES.nix {})
+    libnative_bridge_guest_libOpenSLES;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libaaudio" ./frameworks_libs_native_bridge_support_libaaudio.nix {})
+    libnative_bridge_guest_libaaudio;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libamidi" ./frameworks_libs_native_bridge_support_libamidi.nix {})
+    libnative_bridge_guest_libamidi;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libandroid" ./frameworks_libs_native_bridge_support_libandroid.nix {})
+    libnative_bridge_guest_libandroid;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libandroid_runtime" ./frameworks_libs_native_bridge_support_libandroid_runtime.nix {})
+    libnative_bridge_guest_libandroid_runtime;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libbinder_ndk" ./frameworks_libs_native_bridge_support_libbinder_ndk.nix {})
+    libnative_bridge_guest_libbinder_ndk;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libcamera2ndk" ./frameworks_libs_native_bridge_support_libcamera2ndk.nix {})
+    libnative_bridge_guest_libcamera2ndk;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libjnigraphics" ./frameworks_libs_native_bridge_support_libjnigraphics.nix {})
+    libnative_bridge_guest_libjnigraphics;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libmediandk" ./frameworks_libs_native_bridge_support_libmediandk.nix {})
+    libnative_bridge_guest_libmediandk;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libnativehelper" ./frameworks_libs_native_bridge_support_libnativehelper.nix {})
+    libnative_bridge_guest_libnativehelper;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libnativewindow" ./frameworks_libs_native_bridge_support_libnativewindow.nix {})
+    libnative_bridge_guest_libnativewindow;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libneuralnetworks" ./frameworks_libs_native_bridge_support_libneuralnetworks.nix {})
+    libnative_bridge_guest_libneuralnetworks;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libvulkan" ./frameworks_libs_native_bridge_support_libvulkan.nix {})
+    libnative_bridge_guest_libvulkan;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/libwebviewchromium_plat_support" ./frameworks_libs_native_bridge_support_libwebviewchromium_plat_support.nix {})
+    libnative_bridge_guest_libwebviewchromium_plat_support;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/linker" ./frameworks_libs_native_bridge_support_linker.nix {})
+    native_bridge_guest_linker native_bridge_guest_linker_headers;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/overriding/libc" ./frameworks_libs_native_bridge_support_overriding_libc.nix {})
+    libnative_bridge_guest_libc;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/overriding/libicui18n" ./frameworks_libs_native_bridge_support_overriding_libicui18n.nix {})
+    libnative_bridge_guest_libicui18n;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/overriding/libicuuc" ./frameworks_libs_native_bridge_support_overriding_libicuuc.nix {})
+    libnative_bridge_guest_libicuuc;
+
+  inherit (callBPPackage "frameworks/libs/native_bridge_support/vdso" ./frameworks_libs_native_bridge_support_vdso.nix {})
+    libnative_bridge_vdso;
+
+  inherit (callBPPackage "frameworks/libs/net/common" ./frameworks_libs_net_common.nix {})
+    net-utils-framework-common net-utils-framework-common-srcs net-utils-framework-wifi-common-srcs net-utils-services-common net-utils-telephony-common-srcs net-utils-wifi-service-common-srcs;
+
+  inherit (callBPPackage "frameworks/libs/net/common/tests/unit" ./frameworks_libs_net_common_tests_unit.nix {})
+    NetworkStaticLibTests NetworkStaticLibTestsLib;
+
+  inherit (callBPPackage "frameworks/libs/systemui/iconloaderlib" ./frameworks_libs_systemui_iconloaderlib.nix {})
+    iconloader iconloader_base;
+
   inherit (callBPPackage "frameworks/minikin" ./frameworks_minikin.nix {})
     libminikin_headers;
 
@@ -5599,10 +9511,16 @@
     libminikin-tests-util;
 
   inherit (callBPPackage "frameworks/ml/nn" ./frameworks_ml_nn.nix {})
-    libneuralnetworks_generated_test_harness libneuralnetworks_generated_test_harness_headers libneuralnetworks_generated_tests neuralnetworks_defaults;
+    neuralnetworks_defaults neuralnetworks_float16;
+
+  inherit (callBPPackage "frameworks/ml/nn/apex" ./frameworks_ml_nn_apex.nix {})
+    "com.android.neuralnetworks" "com.android.neuralnetworks-androidManifest" "com.android.neuralnetworks-defaults" "com.android.neuralnetworks.certificate" "com.android.neuralnetworks.key";
+
+  inherit (callBPPackage "frameworks/ml/nn/apex/testing" ./frameworks_ml_nn_apex_testing.nix {})
+    "test_com.android.neuralnetworks";
 
   inherit (callBPPackage "frameworks/ml/nn/common" ./frameworks_ml_nn_common.nix {})
-    NeuralNetworksTest_operations NeuralNetworksTest_utils libneuralnetworks_common libneuralnetworks_common_headers libneuralnetworks_utils neuralnetworks_operations;
+    NeuralNetworksTest_common NeuralNetworksTest_logtag NeuralNetworksTest_operations NeuralNetworksTest_utils libneuralnetworks_common libneuralnetworks_common_headers libneuralnetworks_utils neuralnetworks_operations;
 
   inherit (callBPPackage "frameworks/ml/nn/common/random" ./frameworks_ml_nn_common_random.nix {})
     philox_random philox_random_headers;
@@ -5617,19 +9535,28 @@
     lib_nnCache nnCache_test;
 
   inherit (callBPPackage "frameworks/ml/nn/driver/sample" ./frameworks_ml_nn_driver_sample.nix {})
-    "android.hardware.neuralnetworks@1.2-service-sample-all" "android.hardware.neuralnetworks@1.2-service-sample-float-fast" "android.hardware.neuralnetworks@1.2-service-sample-float-slow" "android.hardware.neuralnetworks@1.2-service-sample-minimal" "android.hardware.neuralnetworks@1.2-service-sample-quant" NeuralNetworksSampleDriver_defaults NeuralNetworksSampleDriver_server_defaults libSampleDriver;
+    "android.hardware.neuralnetworks@1.3-service-sample-all" "android.hardware.neuralnetworks@1.3-service-sample-float-fast" "android.hardware.neuralnetworks@1.3-service-sample-float-slow" "android.hardware.neuralnetworks@1.3-service-sample-minimal" "android.hardware.neuralnetworks@1.3-service-sample-quant" NeuralNetworksSampleDriver_defaults NeuralNetworksSampleDriver_server_defaults libSampleDriver;
 
-  inherit (callBPPackage "frameworks/ml/nn/extensions/test_vendor/fibonacci" ./frameworks_ml_nn_extensions_test_vendor_fibonacci.nix {})
-    neuralnetworks_test_vendor_fibonacci_extension;
+  inherit (callBPPackage "frameworks/ml/nn/extensions/example/fibonacci" ./frameworks_ml_nn_extensions_example_fibonacci.nix {})
+    neuralnetworks_example_fibonacci_extension;
 
   inherit (callBPPackage "frameworks/ml/nn/runtime" ./frameworks_ml_nn_runtime.nix {})
-    libneuralnetworks libneuralnetworks_headers libneuralnetworks_private_headers;
+    libneuralnetworks libneuralnetworks_defaults libneuralnetworks_headers libneuralnetworks_private_headers libneuralnetworks_static;
+
+  inherit (callBPPackage "frameworks/ml/nn/runtime/packageinfo" ./frameworks_ml_nn_runtime_packageinfo.nix {})
+    libneuralnetworks_packageinfo;
 
   inherit (callBPPackage "frameworks/ml/nn/runtime/test" ./frameworks_ml_nn_runtime_test.nix {})
-    NeuralNetworksTest_default_libs NeuralNetworksTest_defaults NeuralNetworksTest_mt_defaults NeuralNetworksTest_mt_static NeuralNetworksTest_mt_static_asan NeuralNetworksTest_shared_partial NeuralNetworksTest_static NeuralNetworksTest_static_asan NeuralNetworksTest_static_defaults NeuralNetworksTest_static_fuzzing NeuralNetworksTest_static_ubsan;
+    CtsNNAPITests_static NeuralNetworksTest_default_libs NeuralNetworksTest_defaults NeuralNetworksTest_mt_defaults NeuralNetworksTest_mt_static NeuralNetworksTest_mt_static_asan NeuralNetworksTest_shared_partial NeuralNetworksTest_static NeuralNetworksTest_static_asan NeuralNetworksTest_static_defaults NeuralNetworksTest_static_fuzzing NeuralNetworksTest_static_ubsan libneuralnetworks_fuzzer neuralnetworks_generated_V1_0_example neuralnetworks_generated_V1_1_example neuralnetworks_generated_V1_2_example neuralnetworks_generated_V1_3_cts_only_example neuralnetworks_generated_V1_3_example;
+
+  inherit (callBPPackage "frameworks/ml/nn/runtime/test/android_fuzzing" ./frameworks_ml_nn_runtime_test_android_fuzzing.nix {})
+    libneuralnetworks_fuzzer_generate_corpus libneuralnetworks_fuzzer_proto libneuralnetworks_fuzzer_seed_corpus;
 
   inherit (callBPPackage "frameworks/ml/nn/tools/ion_watcher" ./frameworks_ml_nn_tools_ion_watcher.nix {})
     ion_watcher;
+
+  inherit (callBPPackage "frameworks/ml/nn/tools/test_generator/test_harness" ./frameworks_ml_nn_tools_test_generator_test_harness.nix {})
+    libneuralnetworks_generated_test_harness libneuralnetworks_generated_test_harness_for_cts libneuralnetworks_generated_test_harness_headers;
 
   inherit (callBPPackage "frameworks/multidex/instrumentation" ./frameworks_multidex_instrumentation.nix {})
     android-support-multidex-instrumentation android-support-multidex-instrumentation-version;
@@ -5638,7 +9565,7 @@
     android-support-multidex android-support-multidex-version;
 
   inherit (callBPPackage "frameworks/native" ./frameworks_native.nix {})
-    libandroid_sensor_headers;
+    framework_native_aidl framework_native_aidl_binder framework_native_aidl_gui libandroid_sensor_headers;
 
   inherit (callBPPackage "frameworks/native/cmds/atrace" ./frameworks_native_cmds_atrace.nix {})
     atrace;
@@ -5661,11 +9588,11 @@
   inherit (callBPPackage "frameworks/native/cmds/dumpsys/tests" ./frameworks_native_cmds_dumpsys_tests.nix {})
     dumpsys_test;
 
+  inherit (callBPPackage "frameworks/native/cmds/idlcli" ./frameworks_native_cmds_idlcli.nix {})
+    idlcli idlcli-defaults libidlcli;
+
   inherit (callBPPackage "frameworks/native/cmds/installd" ./frameworks_native_cmds_installd.nix {})
     "migrate_legacy_obb_data.sh" installd installd_aidl installd_defaults libinstalld libinstalld_headers libotapreoptparameters otapreopt otapreopt_chroot otapreopt_script otapreopt_slot;
-
-  inherit (callBPPackage "frameworks/native/cmds/installd/art_helper" ./frameworks_native_cmds_installd_art_helper.nix {})
-    libartimagevalues libartimagevalues_defaults;
 
   inherit (callBPPackage "frameworks/native/cmds/installd/tests" ./frameworks_native_cmds_installd_tests.nix {})
     installd_cache_test installd_dexopt_test installd_otapreopt_test installd_service_test installd_utils_test;
@@ -5686,7 +9613,7 @@
     service vndservice;
 
   inherit (callBPPackage "frameworks/native/cmds/servicemanager" ./frameworks_native_cmds_servicemanager.nix {})
-    bctest servicemanager servicemanager_flags vndservicemanager;
+    servicemanager servicemanager_defaults servicemanager_test vndservicemanager;
 
   inherit (callBPPackage "frameworks/native/cmds/surfacereplayer/proto" ./frameworks_native_cmds_surfacereplayer_proto.nix {})
     libtrace_proto;
@@ -5697,26 +9624,38 @@
   inherit (callBPPackage "frameworks/native/headers" ./frameworks_native_headers.nix {})
     media_plugin_headers;
 
+  inherit (callBPPackage "frameworks/native/libs/adbd_auth" ./frameworks_native_libs_adbd_auth.nix {})
+    libadbd_auth;
+
   inherit (callBPPackage "frameworks/native/libs/android_runtime_lazy" ./frameworks_native_libs_android_runtime_lazy.nix {})
     libandroid_runtime_lazy;
 
   inherit (callBPPackage "frameworks/native/libs/arect" ./frameworks_native_libs_arect.nix {})
-    libarect;
+    libarect libarect_headers;
 
   inherit (callBPPackage "frameworks/native/libs/binder" ./frameworks_native_libs_binder.nix {})
-    libbinder libbinder_aidl libbinder_headers;
+    libbinder libbinder_aidl libbinder_aidl_test_stub libbinder_headers;
+
+  inherit (callBPPackage "frameworks/native/libs/binder/fuzzer" ./frameworks_native_libs_binder_fuzzer.nix {})
+    binder_parcel_fuzzer;
 
   inherit (callBPPackage "frameworks/native/libs/binder/ndk" ./frameworks_native_libs_binder_ndk.nix {})
-    libbinder_ndk;
+    libbinder_ndk libbinder_ndk_host_user;
 
   inherit (callBPPackage "frameworks/native/libs/binder/ndk/test" ./frameworks_native_libs_binder_ndk_test.nix {})
-    libbinder_ndk_test_client libbinder_ndk_test_server test_libbinder_ndk_defaults test_libbinder_ndk_library test_libbinder_ndk_test_defaults;
+    IBinderNdkUnitTest IBinderVendorDoubleLoadTest binderVendorDoubleLoadTest libbinder_ndk_unit_test test_libbinder_ndk_defaults test_libbinder_ndk_library test_libbinder_ndk_test_defaults;
 
   inherit (callBPPackage "frameworks/native/libs/binder/tests" ./frameworks_native_libs_binder_tests.nix {})
-    binderDriverInterfaceTest binderDriverInterfaceTest_IPC_32 binderLibTest binderLibTest_IPC_32 binderSafeInterfaceTest binderTextOutputTest binderThroughputTest binderValueTypeTest binder_test_defaults schd-dbg;
+    binderDriverInterfaceTest binderDriverInterfaceTest_IPC_32 binderLibTest binderLibTest_IPC_32 binderSafeInterfaceTest binderStabilityTest binderStabilityTestIface binderTextOutputTest binderThroughputTest binder_test_defaults schd-dbg;
+
+  inherit (callBPPackage "frameworks/native/libs/binderthreadstate/1.0" ./frameworks_native_libs_binderthreadstate_1.0.nix {})
+    "binderthreadstateutilstest@1.0";
 
   inherit (callBPPackage "frameworks/native/libs/binderthreadstate" ./frameworks_native_libs_binderthreadstate.nix {})
-    libbinderthreadstate;
+    "binderthreadstateutilstest.aidl" binderthreadstateutilstest libbinderthreadstateutils libbinderthreadstateutils_test;
+
+  inherit (callBPPackage "frameworks/native/libs/bufferqueueconverter" ./frameworks_native_libs_bufferqueueconverter.nix {})
+    libbufferqueueconverter libbufferqueueconverter_headers;
 
   inherit (callBPPackage "frameworks/native/libs/cputimeinstate" ./frameworks_native_libs_cputimeinstate.nix {})
     libtimeinstate libtimeinstate_test;
@@ -5727,11 +9666,26 @@
   inherit (callBPPackage "frameworks/native/libs/dumputils" ./frameworks_native_libs_dumputils.nix {})
     libdumputils;
 
+  inherit (callBPPackage "frameworks/native/libs/fakeservicemanager" ./frameworks_native_libs_fakeservicemanager.nix {})
+    fakeservicemanager_defaults fakeservicemanager_test libfakeservicemanager;
+
+  inherit (callBPPackage "frameworks/native/libs/gralloc/types" ./frameworks_native_libs_gralloc_types.nix {})
+    libgralloctypes;
+
+  inherit (callBPPackage "frameworks/native/libs/gralloc/types/fuzzer" ./frameworks_native_libs_gralloc_types_fuzzer.nix {})
+    libgralloctypes_fuzzer;
+
+  inherit (callBPPackage "frameworks/native/libs/gralloc/types/tests" ./frameworks_native_libs_gralloc_types_tests.nix {})
+    GrallocTypes_test;
+
   inherit (callBPPackage "frameworks/native/libs/graphicsenv" ./frameworks_native_libs_graphicsenv.nix {})
     libgraphicsenv;
 
   inherit (callBPPackage "frameworks/native/libs/gui" ./frameworks_native_libs_gui.nix {})
-    libgui libgui_bufferqueue-defaults libgui_bufferqueue_static libgui_headers;
+    libgui libgui_bufferqueue-defaults libgui_bufferqueue_sources libgui_bufferqueue_static libgui_headers libgui_mocks;
+
+  inherit (callBPPackage "frameworks/native/libs/gui/sysprop" ./frameworks_native_libs_gui_sysprop.nix {})
+    LibGuiProperties;
 
   inherit (callBPPackage "frameworks/native/libs/gui/tests" ./frameworks_native_libs_gui_tests.nix {})
     SamplingDemo SurfaceParcelable_test libgui_test;
@@ -5754,11 +9708,14 @@
   inherit (callBPPackage "frameworks/native/libs/nativebase" ./frameworks_native_libs_nativebase.nix {})
     libnativebase_headers;
 
+  inherit (callBPPackage "frameworks/native/libs/nativedisplay" ./frameworks_native_libs_nativedisplay.nix {})
+    libnativedisplay libnativedisplay_headers;
+
   inherit (callBPPackage "frameworks/native/libs/nativewindow" ./frameworks_native_libs_nativewindow.nix {})
     libnativewindow libnativewindow_headers;
 
   inherit (callBPPackage "frameworks/native/libs/nativewindow/tests" ./frameworks_native_libs_nativewindow_tests.nix {})
-    AHardwareBufferTest;
+    libnativewindow_test;
 
   inherit (callBPPackage "frameworks/native/libs/renderengine" ./frameworks_native_libs_renderengine.nix {})
     librenderengine librenderengine_defaults librenderengine_gl_sources librenderengine_mocks librenderengine_sources renderengine_defaults;
@@ -5773,13 +9730,13 @@
     libsensor_test;
 
   inherit (callBPPackage "frameworks/native/libs/sensorprivacy" ./frameworks_native_libs_sensorprivacy.nix {})
-    libsensorprivacy;
+    libsensorprivacy libsensorprivacy_aidl;
 
   inherit (callBPPackage "frameworks/native/libs/ui" ./frameworks_native_libs_ui.nix {})
-    libui libui-validate-regions-defaults libui_headers;
+    libui libui-validate-regions-defaults libui_headers libui_host_common;
 
   inherit (callBPPackage "frameworks/native/libs/ui/tests" ./frameworks_native_libs_ui_tests.nix {})
-    BufferHub_test GraphicBufferAllocator_test GraphicBuffer_test Region_test Size_test colorspace_test;
+    GraphicBufferAllocator_test GraphicBufferOverBinder_test GraphicBuffer_test Region_test Size_test colorspace_test;
 
   inherit (callBPPackage "frameworks/native/libs/ui/tools" ./frameworks_native_libs_ui_tools.nix {})
     libui_tools_default lutgen;
@@ -5840,9 +9797,6 @@
 
   inherit (callBPPackage "frameworks/native/opengl" ./frameworks_native_opengl.nix {})
     gl_headers;
-
-  inherit (callBPPackage "frameworks/native/opengl/libagl" ./frameworks_native_opengl_libagl.nix {})
-    libGLES_android libGLES_android_arm libGLES_android_defaults;
 
   inherit (callBPPackage "frameworks/native/opengl/libs" ./frameworks_native_opengl_libs.nix {})
     egl_libs_defaults gl_libs_defaults gles_libs_defaults libEGL libEGL_blobCache libEGL_getProcAddress libEGL_test libETC1 libGLESv1_CM libGLESv2 libGLESv3;
@@ -5940,35 +9894,47 @@
   inherit (callBPPackage "frameworks/native/services/audiomanager" ./frameworks_native_services_audiomanager.nix {})
     libaudiomanager;
 
+  inherit (callBPPackage "frameworks/native/services/automotive/display" ./frameworks_native_services_automotive_display.nix {})
+    "android.frameworks.automotive.display@1.0-service";
+
   inherit (callBPPackage "frameworks/native/services/batteryservice" ./frameworks_native_services_batteryservice.nix {})
     libbatteryservice_headers;
-
-  inherit (callBPPackage "frameworks/native/services/bufferhub" ./frameworks_native_services_bufferhub.nix {})
-    "android.frameworks.bufferhub@1.0-service" libbufferhubservice;
-
-  inherit (callBPPackage "frameworks/native/services/bufferhub/tests" ./frameworks_native_services_bufferhub_tests.nix {})
-    BufferHubServer_test;
 
   inherit (callBPPackage "frameworks/native/services/displayservice" ./frameworks_native_services_displayservice.nix {})
     libdisplayservicehidl;
 
   inherit (callBPPackage "frameworks/native/services/gpuservice" ./frameworks_native_services_gpuservice.nix {})
-    gpuservice gpuservice_binary gpuservice_binary_sources gpuservice_defaults gpuservice_production_defaults gpuservice_sources;
+    gpuservice gpuservice_binary_sources gpuservice_defaults libgpuservice libgpuservice_binary libgpuservice_defaults libgpuservice_production_defaults libgpuservice_sources;
+
+  inherit (callBPPackage "frameworks/native/services/gpuservice/gpustats" ./frameworks_native_services_gpuservice_gpustats.nix {})
+    libgfxstats;
+
+  inherit (callBPPackage "frameworks/native/services/gpuservice/tests/unittests" ./frameworks_native_services_gpuservice_tests_unittests.nix {})
+    gpuservice_unittest;
 
   inherit (callBPPackage "frameworks/native/services/inputflinger" ./frameworks_native_services_inputflinger.nix {})
-    inputflinger_defaults libinputflinger libinputflinger_base libinputflinger_headers libinputreader libinputreporter;
+    inputflinger_defaults libinputflinger libinputflinger_base libinputflinger_base_defaults libinputflinger_base_sources libinputflinger_defaults libinputflinger_headers libinputflinger_sources;
+
+  inherit (callBPPackage "frameworks/native/services/inputflinger/benchmarks" ./frameworks_native_services_inputflinger_benchmarks.nix {})
+    inputflinger_benchmarks;
+
+  inherit (callBPPackage "frameworks/native/services/inputflinger/dispatcher" ./frameworks_native_services_inputflinger_dispatcher.nix {})
+    libinputdispatcher libinputdispatcher_defaults libinputdispatcher_headers libinputdispatcher_sources;
 
   inherit (callBPPackage "frameworks/native/services/inputflinger/host" ./frameworks_native_services_inputflinger_host.nix {})
     inputflinger libinputflingerhost;
 
+  inherit (callBPPackage "frameworks/native/services/inputflinger/reader" ./frameworks_native_services_inputflinger_reader.nix {})
+    libinputreader libinputreader_defaults libinputreader_headers libinputreader_sources;
+
+  inherit (callBPPackage "frameworks/native/services/inputflinger/reporter" ./frameworks_native_services_inputflinger_reporter.nix {})
+    libinputreporter libinputreporter_defaults libinputreporter_headers libinputreporter_sources;
+
   inherit (callBPPackage "frameworks/native/services/inputflinger/tests" ./frameworks_native_services_inputflinger_tests.nix {})
     inputflinger_tests;
 
-  inherit (callBPPackage "frameworks/native/services/nativeperms" ./frameworks_native_services_nativeperms.nix {})
-    nativeperms;
-
   inherit (callBPPackage "frameworks/native/services/powermanager" ./frameworks_native_services_powermanager.nix {})
-    libpowermanager;
+    libpowermanager thermalmanager-test;
 
   inherit (callBPPackage "frameworks/native/services/schedulerservice" ./frameworks_native_services_schedulerservice.nix {})
     libschedulerservicehidl;
@@ -5982,11 +9948,17 @@
   inherit (callBPPackage "frameworks/native/services/sensorservice/tests" ./frameworks_native_services_sensorservice_tests.nix {})
     test-sensorservice;
 
+  inherit (callBPPackage "frameworks/native/services/stats" ./frameworks_native_services_stats.nix {})
+    libstatshidl;
+
   inherit (callBPPackage "frameworks/native/services/surfaceflinger" ./frameworks_native_services_surfaceflinger.nix {})
     libSurfaceFlingerProp libsurfaceflinger libsurfaceflinger_binary libsurfaceflinger_defaults libsurfaceflinger_headers libsurfaceflinger_production_defaults libsurfaceflinger_sources surfaceflinger surfaceflinger_binary_sources surfaceflinger_defaults;
 
   inherit (callBPPackage "frameworks/native/services/surfaceflinger/CompositionEngine" ./frameworks_native_services_surfaceflinger_CompositionEngine.nix {})
     libcompositionengine libcompositionengine_defaults libcompositionengine_mocks libcompositionengine_test;
+
+  inherit (callBPPackage "frameworks/native/services/surfaceflinger/TimeStats" ./frameworks_native_services_surfaceflinger_TimeStats.nix {})
+    libtimestats;
 
   inherit (callBPPackage "frameworks/native/services/surfaceflinger/TimeStats/timestatsproto" ./frameworks_native_services_surfaceflinger_TimeStats_timestatsproto.nix {})
     libtimestats_proto;
@@ -5998,13 +9970,10 @@
     SurfaceFlingerProperties;
 
   inherit (callBPPackage "frameworks/native/services/surfaceflinger/tests" ./frameworks_native_services_surfaceflinger_tests.nix {})
-    SurfaceFlinger_test;
+    IPC_test SurfaceFlinger_test ipc_defaults;
 
   inherit (callBPPackage "frameworks/native/services/surfaceflinger/tests/fakehwc" ./frameworks_native_services_surfaceflinger_tests_fakehwc.nix {})
     sffakehwc_test;
-
-  inherit (callBPPackage "frameworks/native/services/surfaceflinger/tests/hwc2" ./frameworks_native_services_surfaceflinger_tests_hwc2.nix {})
-    test-hwc2;
 
   inherit (callBPPackage "frameworks/native/services/surfaceflinger/tests/unittests" ./frameworks_native_services_surfaceflinger_tests_unittests.nix {})
     libsurfaceflinger_unittest;
@@ -6025,13 +9994,16 @@
     bufferhubd libbufferhubd;
 
   inherit (callBPPackage "frameworks/native/services/vr/hardware_composer" ./frameworks_native_services_vr_hardware_composer.nix {})
-    libvr_hwc-binder libvr_hwc-hal libvr_hwc-impl vr_hwc vr_hwc_test;
+    libvr_hwc-hal libvr_hwc-impl vr_hwc vr_hwc_test;
+
+  inherit (callBPPackage "frameworks/native/services/vr/hardware_composer/aidl" ./frameworks_native_services_vr_hardware_composer_aidl.nix {})
+    libvr_hwc-binder;
 
   inherit (callBPPackage "frameworks/native/services/vr/performanced" ./frameworks_native_services_vr_performanced.nix {})
     performance_service_tests performanced performanced_defaults;
 
   inherit (callBPPackage "frameworks/native/services/vr/virtual_touchpad" ./frameworks_native_services_vr_virtual_touchpad.nix {})
-    VirtualTouchpad_test libvirtualtouchpad libvirtualtouchpadclient virtual_touchpad;
+    VirtualTouchpad_test libvirtualtouchpad libvirtualtouchpadclient virtual_touchpad virtualtouchpad_aidl;
 
   inherit (callBPPackage "frameworks/native/vulkan" ./frameworks_native_vulkan.nix {})
     hwvulkan_headers;
@@ -6041,9 +10013,6 @@
 
   inherit (callBPPackage "frameworks/native/vulkan/nulldrv" ./frameworks_native_vulkan_nulldrv.nix {})
     "vulkan.default";
-
-  inherit (callBPPackage "frameworks/native/vulkan/tools" ./frameworks_native_vulkan_tools.nix {})
-    vkinfo;
 
   inherit (callBPPackage "frameworks/native/vulkan/vkjson" ./frameworks_native_vulkan_vkjson.nix {})
     libvkjson libvkjson_ndk;
@@ -6066,6 +10035,9 @@
   inherit (callBPPackage "frameworks/opt/car/setupwizard/library/main" ./frameworks_opt_car_setupwizard_library_main.nix {})
     car-setup-wizard-lib;
 
+  inherit (callBPPackage "frameworks/opt/car/setupwizard/library/main/tests/robotests" ./frameworks_opt_car_setupwizard_library_main_tests_robotests.nix {})
+    CarSetupWizardLib CarSetupWizardLibRoboTests;
+
   inherit (callBPPackage "frameworks/opt/car/setupwizard/library/utils" ./frameworks_opt_car_setupwizard_library_utils.nix {})
     car-setup-wizard-lib-utils;
 
@@ -6081,11 +10053,8 @@
   inherit (callBPPackage "frameworks/opt/colorpicker" ./frameworks_opt_colorpicker.nix {})
     colorpicker;
 
-  inherit (callBPPackage "frameworks/opt/datetimepicker" ./frameworks_opt_datetimepicker.nix {})
-    android-opt-datetimepicker;
-
-  inherit (callBPPackage "frameworks/opt/gamesdk/samples/tuningfork/tfvalidate" ./frameworks_opt_gamesdk_samples_tuningfork_tfvalidate.nix {})
-    tfvalidate tfvalidate_defaults;
+  inherit (callBPPackage "frameworks/opt/localepicker" ./frameworks_opt_localepicker.nix {})
+    localepicker;
 
   inherit (callBPPackage "frameworks/opt/net/ethernet" ./frameworks_opt_net_ethernet.nix {})
     ethernet-service;
@@ -6105,6 +10074,12 @@
   inherit (callBPPackage "frameworks/opt/net/voip/src/jni/rtp" ./frameworks_opt_net_voip_src_jni_rtp.nix {})
     librtp_jni;
 
+  inherit (callBPPackage "frameworks/opt/net/wifi/libs/WifiTrackerLib" ./frameworks_opt_net_wifi_libs_WifiTrackerLib.nix {})
+    WifiTrackerLib;
+
+  inherit (callBPPackage "frameworks/opt/net/wifi/libs/WifiTrackerLib/tests" ./frameworks_opt_net_wifi_libs_WifiTrackerLib_tests.nix {})
+    WifiTrackerLibTests;
+
   inherit (callBPPackage "frameworks/opt/net/wifi/libwifi_system" ./frameworks_opt_net_wifi_libwifi_system.nix {})
     libwifi-system libwifi-system-defaults libwifi-system-test;
 
@@ -6112,10 +10087,22 @@
     libwifi-system-iface libwifi-system-iface-test;
 
   inherit (callBPPackage "frameworks/opt/net/wifi/service" ./frameworks_opt_net_wifi_service.nix {})
-    libwifi-service;
+    "com.android.wifi.resources.certificate" "wifi.rc" ServiceWifiResources service-wifi statslog-wifi-java-gen wifi-service-BaseWifiService wifi-service-common wifi-service-pre-jarjar wifi-service-srcs;
+
+  inherit (callBPPackage "frameworks/opt/net/wifi/service/apex" ./frameworks_opt_net_wifi_service_apex.nix {})
+    "com.android.wifi" "com.android.wifi-androidManifest" "com.android.wifi-defaults" "com.android.wifi.certificate" "com.android.wifi.key";
 
   inherit (callBPPackage "frameworks/opt/net/wifi/service/proto" ./frameworks_opt_net_wifi_service_proto.nix {})
-    wifi_service_proto;
+    wifi-lite-protos wifi-nano-protos;
+
+  inherit (callBPPackage "frameworks/opt/net/wifi/tests/mts" ./frameworks_opt_net_wifi_tests_mts.nix {})
+    MtsWifiTestCases;
+
+  inherit (callBPPackage "frameworks/opt/net/wifi/tests/wifitests" ./frameworks_opt_net_wifi_tests_wifitests.nix {})
+    FrameworksWifiTests;
+
+  inherit (callBPPackage "frameworks/opt/net/wifi/tests/wifitests/apex" ./frameworks_opt_net_wifi_tests_wifitests_apex.nix {})
+    "test_com.android.wifi";
 
   inherit (callBPPackage "frameworks/opt/photoviewer" ./frameworks_opt_photoviewer.nix {})
     libphotoviewer libphotoviewer_appcompat;
@@ -6127,16 +10114,19 @@
     setup-wizard-lib setup-wizard-lib-gingerbread-compat;
 
   inherit (callBPPackage "frameworks/opt/telephony" ./frameworks_opt_telephony.nix {})
-    opt-telephony-common-srcs opt-telephony-htmls opt-telephony-srcs telephony-common;
+    jarjar-rules-shared opt-telephony-common-srcs opt-telephony-htmls opt-telephony-srcs statslog-telephony-java-gen telephony-common;
 
   inherit (callBPPackage "frameworks/opt/telephony/proto" ./frameworks_opt_telephony_proto.nix {})
     telephony-protos;
 
   inherit (callBPPackage "frameworks/opt/telephony/tests/telephonytests" ./frameworks_opt_telephony_tests_telephonytests.nix {})
-    FrameworksTelephonyTests;
+    FrameworksTelephonyTests jarjar-rules-telephony-tests;
 
   inherit (callBPPackage "frameworks/opt/timezonepicker" ./frameworks_opt_timezonepicker.nix {})
     android-opt-timezonepicker;
+
+  inherit (callBPPackage "frameworks/opt/tv/tvsystem" ./frameworks_opt_tv_tvsystem.nix {})
+    "com.android.libraries.tv.tvsystem";
 
   inherit (callBPPackage "frameworks/opt/vcard" ./frameworks_opt_vcard.nix {})
     "com.android.vcard";
@@ -6152,12 +10142,6 @@
 
   inherit (callBPPackage "frameworks/rs/cpu_ref" ./frameworks_rs_cpu_ref.nix {})
     libRSCpuRef;
-
-  inherit (callBPPackage "frameworks/rs/rsov/compiler" ./frameworks_rs_rsov_compiler.nix {})
-    Builtin_test Wrapper_test rs2spirv;
-
-  inherit (callBPPackage "frameworks/rs/rsov/compiler/spirit" ./frameworks_rs_rsov_compiler_spirit.nix {})
-    instructions_test libspirit libspirit_gen libspirit_generate_py libspirit_test pass_queue_test spirit_defaults word_stream_test;
 
   inherit (callBPPackage "frameworks/rs/script_api" ./frameworks_rs_script_api.nix {})
     rs-api-doc-generator;
@@ -6205,109 +10189,37 @@
     slesTest_playStream;
 
   inherit (callBPPackage "hardware/google/apf" ./hardware_google_apf.nix {})
-    apf_defaults apf_disassembler apf_run libapf;
-
-  inherit (callBPPackage "hardware/google/av/codec2" ./hardware_google_av_codec2.nix {})
-    libstagefright_codec2;
-
-  inherit (callBPPackage "hardware/google/av/codec2/faultinjection" ./hardware_google_av_codec2_faultinjection.nix {})
-    libc2_component_wrapper;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/audio" ./hardware_google_av_codec2_hidl_1.0_mts_audio.nix {})
-    MtsHidlC2V1_0TargetAudioDecTest MtsHidlC2V1_0TargetAudioEncTest;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/common" ./hardware_google_av_codec2_hidl_1.0_mts_common.nix {})
-    MtsMediaC2V1_0CommonUtil MtsMediaC2V1_0Defaults;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/component" ./hardware_google_av_codec2_hidl_1.0_mts_component.nix {})
-    MtsHidlC2V1_0TargetComponentTest;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/master" ./hardware_google_av_codec2_hidl_1.0_mts_master.nix {})
-    MtsHidlC2V1_0TargetMasterTest;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/mts/video" ./hardware_google_av_codec2_hidl_1.0_mts_video.nix {})
-    MtsHidlC2V1_0TargetVideoDecTest MtsHidlC2V1_0TargetVideoEncTest;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/1.0/utils" ./hardware_google_av_codec2_hidl_1.0_utils.nix {})
-    "libcodec2_hidl_utils@1.0" libstagefright_codec2-hidl-defaults;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/client" ./hardware_google_av_codec2_hidl_client.nix {})
-    libcodec2_hidl_client;
-
-  inherit (callBPPackage "hardware/google/av/codec2/hidl/services" ./hardware_google_av_codec2_hidl_services.nix {})
-    "hardware.google.media.c2@1.0-service" libcodec2_serviceregistrant;
-
-  inherit (callBPPackage "hardware/google/av/codec2/tests" ./hardware_google_av_codec2_tests.nix {})
-    codec2_interface_test codec2_param_test codec2_test;
-
-  inherit (callBPPackage "hardware/google/av/codec2/vndk" ./hardware_google_av_codec2_vndk.nix {})
-    libstagefright_codec2-impl-defaults libstagefright_codec2-internal-defaults libstagefright_codec2_internal libstagefright_codec2_vndk;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/aac" ./hardware_google_av_media_codecs_aac.nix {})
-    libstagefright_soft_c2aacdec libstagefright_soft_c2aacenc;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/amr_nb_wb" ./hardware_google_av_media_codecs_amr_nb_wb.nix {})
-    libstagefright_soft_c2amrnbdec libstagefright_soft_c2amrnbenc libstagefright_soft_c2amrwbdec libstagefright_soft_c2amrwbenc;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/avc" ./hardware_google_av_media_codecs_avc.nix {})
-    libstagefright_soft_c2avcdec libstagefright_soft_c2avcenc;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/base" ./hardware_google_av_media_codecs_base.nix {})
-    libstagefright_simple_c2component libstagefright_soft_c2-defaults libstagefright_soft_c2_sanitize_all-defaults libstagefright_soft_c2_sanitize_signed-defaults libstagefright_soft_c2common;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/cmds" ./hardware_google_av_media_codecs_cmds.nix {})
-    codec2;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/flac" ./hardware_google_av_media_codecs_flac.nix {})
-    libstagefright_soft_c2flacdec libstagefright_soft_c2flacenc;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/g711" ./hardware_google_av_media_codecs_g711.nix {})
-    libstagefright_soft_c2g711alawdec libstagefright_soft_c2g711mlawdec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/gsm" ./hardware_google_av_media_codecs_gsm.nix {})
-    libstagefright_soft_c2gsmdec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/hevc" ./hardware_google_av_media_codecs_hevc.nix {})
-    libstagefright_soft_c2hevcdec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/mp3" ./hardware_google_av_media_codecs_mp3.nix {})
-    libstagefright_soft_c2mp3dec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/mpeg2" ./hardware_google_av_media_codecs_mpeg2.nix {})
-    libstagefright_soft_c2mpeg2dec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/mpeg4_h263" ./hardware_google_av_media_codecs_mpeg4_h263.nix {})
-    libstagefright_soft_c2h263dec libstagefright_soft_c2h263enc libstagefright_soft_c2mpeg4dec libstagefright_soft_c2mpeg4enc;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/opus" ./hardware_google_av_media_codecs_opus.nix {})
-    libstagefright_soft_c2opusdec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/raw" ./hardware_google_av_media_codecs_raw.nix {})
-    libstagefright_soft_c2rawdec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/vorbis" ./hardware_google_av_media_codecs_vorbis.nix {})
-    libstagefright_soft_c2vorbisdec;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/vpx" ./hardware_google_av_media_codecs_vpx.nix {})
-    libstagefright_soft_c2vp8dec libstagefright_soft_c2vp8enc libstagefright_soft_c2vp9dec libstagefright_soft_c2vp9enc;
-
-  inherit (callBPPackage "hardware/google/av/media/codecs/xaac" ./hardware_google_av_media_codecs_xaac.nix {})
-    libstagefright_soft_c2xaacdec;
+    apf_defaults apf_disassembler apf_run apf_run_test libapf;
 
   inherit (callBPPackage "hardware/google/av/media/eco" ./hardware_google_av_media_eco.nix {})
-    libmedia_ecoservice;
+    libmedia_ecoservice libmedia_ecoservice_aidl;
 
   inherit (callBPPackage "hardware/google/av/media/eco/tests" ./hardware_google_av_media_eco_tests.nix {})
     EcoDataTest EcoServiceTest EcoSessionTest libmedia_ecoservice_tests_defaults;
 
-  inherit (callBPPackage "hardware/google/av/media/sfplugin" ./hardware_google_av_media_sfplugin.nix {})
-    libstagefright_ccodec;
+  inherit (callBPPackage "hardware/google/camera/common/hal" ./hardware_google_camera_common_hal.nix {})
+    google_camera_hal_defaults libgooglecamerahal_headers;
 
-  inherit (callBPPackage "hardware/google/av/media/sfplugin/tests" ./hardware_google_av_media_sfplugin_tests.nix {})
-    ccodec_test mc_sanity;
+  inherit (callBPPackage "hardware/google/camera/common/hal/google_camera_hal" ./hardware_google_camera_common_hal_google_camera_hal.nix {})
+    libgooglecamerahal;
 
-  inherit (callBPPackage "hardware/google/av/media/sfplugin/utils" ./hardware_google_av_media_sfplugin_utils.nix {})
-    libstagefright_ccodec_utils;
+  inherit (callBPPackage "hardware/google/camera/common/hal/hidl_service" ./hardware_google_camera_common_hal_hidl_service.nix {})
+    "android.hardware.camera.provider@2.6-impl-google" "android.hardware.camera.provider@2.6-service-google" "android.hardware.camera.provider@2.6-service-google-lazy" camera_service_defaults;
+
+  inherit (callBPPackage "hardware/google/camera/common/hal/tests" ./hardware_google_camera_common_hal_tests.nix {})
+    google_camera_hal_tests libgoogle_camera_hal_tests libgoogle_camera_hal_tests_headers;
+
+  inherit (callBPPackage "hardware/google/camera/common/hal/utils" ./hardware_google_camera_common_hal_utils.nix {})
+    libgooglecamerahalutils;
+
+  inherit (callBPPackage "hardware/google/camera/common/lib_depth_generator" ./hardware_google_camera_common_lib_depth_generator.nix {})
+    lib_depth_generator_headers;
+
+  inherit (callBPPackage "hardware/google/camera/common/profiler" ./hardware_google_camera_common_profiler.nix {})
+    lib_profiler;
+
+  inherit (callBPPackage "hardware/google/camera/devices/EmulatedCamera/hwl" ./hardware_google_camera_devices_EmulatedCamera_hwl.nix {})
+    libgooglecamerahwl_impl;
 
   inherit (callBPPackage "hardware/google/easel/amber/camera" ./hardware_google_easel_amber_camera.nix {})
     libhdrplusclient_headers;
@@ -6330,14 +10242,29 @@
   inherit (callBPPackage "hardware/google/interfaces/media/c2/1.0" ./hardware_google_interfaces_media_c2_1.0.nix {})
     "hardware.google.media.c2@1.0";
 
+  inherit (callBPPackage "hardware/google/interfaces/power" ./hardware_google_interfaces_power.nix {})
+    pixel-power-ext;
+
   inherit (callBPPackage "hardware/google/pixel/atrace" ./hardware_google_pixel_atrace.nix {})
     "android.hardware.atrace@1.0-service.pixel";
+
+  inherit (callBPPackage "hardware/google/pixel/bootctrl" ./hardware_google_pixel_bootctrl.nix {})
+    "android.hardware.boot@1.1-impl-pixel-legacy";
+
+  inherit (callBPPackage "hardware/google/pixel/dynamic_partitions" ./hardware_google_pixel_dynamic_partitions.nix {})
+    check_dynamic_partitions;
 
   inherit (callBPPackage "hardware/google/pixel/fastboot" ./hardware_google_pixel_fastboot.nix {})
     "android.hardware.fastboot@1.0-impl.pixel";
 
   inherit (callBPPackage "hardware/google/pixel/health" ./hardware_google_pixel_health.nix {})
-    libpixelhealth;
+    HealthTestCases libpixelhealth;
+
+  inherit (callBPPackage "hardware/google/pixel/misc_writer" ./hardware_google_pixel_misc_writer.nix {})
+    libmisc_writer libmisc_writer_vendor misc_writer misc_writer_defaults misc_writer_test;
+
+  inherit (callBPPackage "hardware/google/pixel/mm" ./hardware_google_pixel_mm.nix {})
+    mm_logd;
 
   inherit (callBPPackage "hardware/google/pixel/perfstatsd" ./hardware_google_pixel_perfstatsd.nix {})
     libperfstatsd perfstatsd perfstatsd_aidl_private perfstatsd_defaults;
@@ -6346,7 +10273,10 @@
     libpixelstats pixelatoms-cpp pixelatoms-java;
 
   inherit (callBPPackage "hardware/google/pixel/power-libperfmgr" ./hardware_google_pixel_power-libperfmgr.nix {})
-    "android.hardware.power@1.3-service.pixel-libperfmgr" pixel_power_headers;
+    "android.hardware.power-service.pixel-libperfmgr" "android.hardware.power@1.3-service.pixel-libperfmgr" libdisppower-pixel pixel_power_headers;
+
+  inherit (callBPPackage "hardware/google/pixel/power-libperfmgr/libperfmgr" ./hardware_google_pixel_power-libperfmgr_libperfmgr.nix {})
+    libperfmgr libperfmgr_defaults libperfmgr_test perfmgr_config_verifier;
 
   inherit (callBPPackage "hardware/google/pixel/powerstats" ./hardware_google_pixel_powerstats.nix {})
     libpixelpowerstats;
@@ -6354,14 +10284,50 @@
   inherit (callBPPackage "hardware/google/pixel/powerstats/aidl" ./hardware_google_pixel_powerstats_aidl.nix {})
     pixelpowerstats_provider_aidl_interface;
 
+  inherit (callBPPackage "hardware/google/pixel/pwrstats_util" ./hardware_google_pixel_pwrstats_util.nix {})
+    libpowerstatsutil pwrstatsutil_defaults;
+
+  inherit (callBPPackage "hardware/google/pixel/recovery" ./hardware_google_pixel_recovery.nix {})
+    librecovery_ui_pixel;
+
   inherit (callBPPackage "hardware/google/pixel/thermal" ./hardware_google_pixel_thermal.nix {})
-    "android.hardware.thermal@2.0-service.pixel";
+    "android.hardware.thermal@2.0-service.pixel" thermal_logd;
 
   inherit (callBPPackage "hardware/google/pixel/usb" ./hardware_google_pixel_usb.nix {})
     libpixelusb;
 
+  inherit (callBPPackage "hardware/google/pixel/vibrator" ./hardware_google_pixel_vibrator.nix {})
+    PixelVibratorBinaryDefaults PixelVibratorDefaults PixelVibratorTestDefaults;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/common" ./hardware_google_pixel_vibrator_common.nix {})
+    PixelVibratorCommon;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/common/bench" ./hardware_google_pixel_vibrator_common_bench.nix {})
+    VibratorHalIntegrationBenchmark;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/cs40l25" ./hardware_google_pixel_vibrator_cs40l25.nix {})
+    "android.hardware.vibrator-defaults.cs40l25" "android.hardware.vibrator-impl.cs40l25" "android.hardware.vibrator-service.cs40l25" VibratorHalCs40l25BinaryDefaults VibratorHalCs40l25TestDefaults;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/cs40l25/bench" ./hardware_google_pixel_vibrator_cs40l25_bench.nix {})
+    VibratorHalCs40l25Benchmark;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/cs40l25/diag" ./hardware_google_pixel_vibrator_cs40l25_diag.nix {})
+    diag-vibrator;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/cs40l25/tests" ./hardware_google_pixel_vibrator_cs40l25_tests.nix {})
+    VibratorHalCs40l25TestSuite;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/drv2624" ./hardware_google_pixel_vibrator_drv2624.nix {})
+    "android.hardware.vibrator-defaults.drv2624" "android.hardware.vibrator-impl.drv2624" "android.hardware.vibrator-service.drv2624" VibratorHalDrv2624BinaryDefaults VibratorHalDrv2624TestDefaults;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/drv2624/bench" ./hardware_google_pixel_vibrator_drv2624_bench.nix {})
+    VibratorHalDrv2624Benchmark;
+
+  inherit (callBPPackage "hardware/google/pixel/vibrator/drv2624/tests" ./hardware_google_pixel_vibrator_drv2624_tests.nix {})
+    VibratorHalDrv2624TestSuite;
+
   inherit (callBPPackage "hardware/interfaces" ./hardware_interfaces.nix {})
-    "android.hardware" VtsHalTargetTestDefaults hidl_defaults;
+    "android.hardware" Vts10HalTargetTestDefaults VtsHalTargetTestDefaults hidl_defaults;
 
   inherit (callBPPackage "hardware/interfaces/atrace/1.0" ./hardware_interfaces_atrace_1.0.nix {})
     "android.hardware.atrace@1.0";
@@ -6375,6 +10341,9 @@
   inherit (callBPPackage "hardware/interfaces/audio/2.0" ./hardware_interfaces_audio_2.0.nix {})
     "android.hardware.audio@2.0";
 
+  inherit (callBPPackage "hardware/interfaces/audio/2.0/config" ./hardware_interfaces_audio_2.0_config.nix {})
+    audio_policy_configuration_V2_0;
+
   inherit (callBPPackage "hardware/interfaces/audio/4.0" ./hardware_interfaces_audio_4.0.nix {})
     "android.hardware.audio@4.0";
 
@@ -6387,6 +10356,12 @@
   inherit (callBPPackage "hardware/interfaces/audio/5.0/config" ./hardware_interfaces_audio_5.0_config.nix {})
     audio_policy_configuration_V5_0;
 
+  inherit (callBPPackage "hardware/interfaces/audio/6.0" ./hardware_interfaces_audio_6.0.nix {})
+    "android.hardware.audio@6.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/6.0/config" ./hardware_interfaces_audio_6.0_config.nix {})
+    audio_policy_configuration_V6_0;
+
   inherit (callBPPackage "hardware/interfaces/audio/common/2.0" ./hardware_interfaces_audio_common_2.0.nix {})
     "android.hardware.audio.common@2.0";
 
@@ -6396,8 +10371,14 @@
   inherit (callBPPackage "hardware/interfaces/audio/common/5.0" ./hardware_interfaces_audio_common_5.0.nix {})
     "android.hardware.audio.common@5.0";
 
+  inherit (callBPPackage "hardware/interfaces/audio/common/6.0" ./hardware_interfaces_audio_common_6.0.nix {})
+    "android.hardware.audio.common@6.0";
+
   inherit (callBPPackage "hardware/interfaces/audio/common/all-versions/default" ./hardware_interfaces_audio_common_all-versions_default.nix {})
-    "android.hardware.audio.common-util" "android.hardware.audio.common-util_default" "android.hardware.audio.common@2.0-util" "android.hardware.audio.common@4.0-util" "android.hardware.audio.common@5.0-util";
+    "android.hardware.audio.common-util" "android.hardware.audio.common-util_default" "android.hardware.audio.common@2.0-util" "android.hardware.audio.common@4.0-util" "android.hardware.audio.common@5.0-util" "android.hardware.audio.common@6.0-util";
+
+  inherit (callBPPackage "hardware/interfaces/audio/common/all-versions/default/service" ./hardware_interfaces_audio_common_all-versions_default_service.nix {})
+    "android.hardware.audio.service" "android.hardware.audio@2.0-service";
 
   inherit (callBPPackage "hardware/interfaces/audio/common/all-versions/test/utility" ./hardware_interfaces_audio_common_all-versions_test_utility.nix {})
     "android.hardware.audio.common.test.utility";
@@ -6406,28 +10387,49 @@
     "android.hardware.audio.common.util@all-versions";
 
   inherit (callBPPackage "hardware/interfaces/audio/core/all-versions/default" ./hardware_interfaces_audio_core_all-versions_default.nix {})
-    "android.hardware.audio-impl_default" "android.hardware.audio@2.0-impl" "android.hardware.audio@4.0-impl" "android.hardware.audio@5.0-impl";
+    "android.hardware.audio-impl_default" "android.hardware.audio@2.0-impl" "android.hardware.audio@4.0-impl" "android.hardware.audio@5.0-impl" "android.hardware.audio@6.0-impl";
 
   inherit (callBPPackage "hardware/interfaces/audio/core/all-versions/vts/functional" ./hardware_interfaces_audio_core_all-versions_vts_functional.nix {})
-    VtsHalAudioTargetTest_defaults VtsHalAudioV2_0TargetTest VtsHalAudioV4_0TargetTest VtsHalAudioV5_0TargetTest;
+    VtsHalAudioTargetTest_defaults VtsHalAudioV2_0TargetTest VtsHalAudioV4_0TargetTest VtsHalAudioV5_0TargetTest VtsHalAudioV6_0TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/audio/effect/2.0" ./hardware_interfaces_audio_effect_2.0.nix {})
     "android.hardware.audio.effect@2.0";
 
+  inherit (callBPPackage "hardware/interfaces/audio/effect/2.0/xml" ./hardware_interfaces_audio_effect_2.0_xml.nix {})
+    audio_effects_conf_V2_0;
+
   inherit (callBPPackage "hardware/interfaces/audio/effect/4.0" ./hardware_interfaces_audio_effect_4.0.nix {})
     "android.hardware.audio.effect@4.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/4.0/xml" ./hardware_interfaces_audio_effect_4.0_xml.nix {})
+    audio_effects_conf_V4_0;
 
   inherit (callBPPackage "hardware/interfaces/audio/effect/5.0" ./hardware_interfaces_audio_effect_5.0.nix {})
     "android.hardware.audio.effect@5.0";
 
   inherit (callBPPackage "hardware/interfaces/audio/effect/5.0/xml" ./hardware_interfaces_audio_effect_5.0_xml.nix {})
-    audio_effects_conf;
+    audio_effects_conf_V5_0;
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/6.0" ./hardware_interfaces_audio_effect_6.0.nix {})
+    "android.hardware.audio.effect@6.0";
+
+  inherit (callBPPackage "hardware/interfaces/audio/effect/6.0/xml" ./hardware_interfaces_audio_effect_6.0_xml.nix {})
+    audio_effects_conf_V6_0;
 
   inherit (callBPPackage "hardware/interfaces/audio/effect/all-versions/default" ./hardware_interfaces_audio_effect_all-versions_default.nix {})
-    "android.hardware.audio.effect-impl_default" "android.hardware.audio.effect@2.0-impl" "android.hardware.audio.effect@4.0-impl" "android.hardware.audio.effect@5.0-impl";
+    "android.hardware.audio.effect-impl_default" "android.hardware.audio.effect@2.0-impl" "android.hardware.audio.effect@4.0-impl" "android.hardware.audio.effect@5.0-impl" "android.hardware.audio.effect@6.0-impl";
 
   inherit (callBPPackage "hardware/interfaces/audio/effect/all-versions/vts/functional" ./hardware_interfaces_audio_effect_all-versions_vts_functional.nix {})
-    VtsHalAudioEffectTargetTest_default VtsHalAudioEffectV2_0TargetTest VtsHalAudioEffectV4_0TargetTest VtsHalAudioEffectV5_0TargetTest;
+    VtsHalAudioEffectTargetTest_default VtsHalAudioEffectV2_0TargetTest VtsHalAudioEffectV4_0TargetTest VtsHalAudioEffectV5_0TargetTest VtsHalAudioEffectV6_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/audio/policy/1.0/vts/functional" ./hardware_interfaces_audio_policy_1.0_vts_functional.nix {})
+    VtsHalAudioPolicyV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/audio/policy/1.0/xml" ./hardware_interfaces_audio_policy_1.0_xml.nix {})
+    audio_policy_engine_conf_V1_0;
+
+  inherit (callBPPackage "hardware/interfaces/audio/policy/1.0/xml/pfw_schemas" ./hardware_interfaces_audio_policy_1.0_xml_pfw_schemas.nix {})
+    audio_policy_engine_configurable_configuration_ComponentLibrary_V1_0 audio_policy_engine_configurable_configuration_ComponentTypeSet_V1_0 audio_policy_engine_configurable_configuration_ConfigurableDomain_V1_0 audio_policy_engine_configurable_configuration_ConfigurableDomains_V1_0 audio_policy_engine_configurable_configuration_FileIncluder_V1_0 audio_policy_engine_configurable_configuration_ParameterFrameworkConfiguration_V1_0 audio_policy_engine_configurable_configuration_ParameterSettings_V1_0 audio_policy_engine_configurable_configuration_Parameter_V1_0 audio_policy_engine_configurable_configuration_Subsystem_V1_0 audio_policy_engine_configurable_configuration_SystemClass_V1_0 audio_policy_engine_configurable_configuration_V1_0 audio_policy_engine_configurable_configuration_W3cXmlAttributes_V1_0;
 
   inherit (callBPPackage "hardware/interfaces/authsecret/1.0" ./hardware_interfaces_authsecret_1.0.nix {})
     "android.hardware.authsecret@1.0";
@@ -6447,6 +10449,45 @@
   inherit (callBPPackage "hardware/interfaces/automotive/audiocontrol/1.0/vts/functional" ./hardware_interfaces_automotive_audiocontrol_1.0_vts_functional.nix {})
     VtsHalAudioControlV1_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/automotive/audiocontrol/2.0" ./hardware_interfaces_automotive_audiocontrol_2.0.nix {})
+    "android.hardware.automotive.audiocontrol@2.0";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/audiocontrol/2.0/default" ./hardware_interfaces_automotive_audiocontrol_2.0_default.nix {})
+    "android.hardware.automotive.audiocontrol@2.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/audiocontrol/2.0/vts/functional" ./hardware_interfaces_automotive_audiocontrol_2.0_vts_functional.nix {})
+    VtsHalAudioControlV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0" ./hardware_interfaces_automotive_can_1.0.nix {})
+    "android.hardware.automotive.can@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/default" ./hardware_interfaces_automotive_can_1.0_default.nix {})
+    "android.hardware.automotive.can@1.0-service" "android.hardware.automotive.can@defaults";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/default/libc++fs" ./hardware_interfaces_automotive_can_1.0_default_libc++fs.nix {})
+    "android.hardware.automotive@libc++fs" "android.hardware.automotive@libc++fsdefaults";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/hidl-utils" ./hardware_interfaces_automotive_can_1.0_hidl-utils.nix {})
+    "android.hardware.automotive.can@hidl-utils-lib";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/tools" ./hardware_interfaces_automotive_can_1.0_tools.nix {})
+    canhalctrl canhaldump canhalsend;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/tools/configurator" ./hardware_interfaces_automotive_can_1.0_tools_configurator.nix {})
+    canhalconfigurator;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/tools/configurator/proto" ./hardware_interfaces_automotive_can_1.0_tools_configurator_proto.nix {})
+    "android.hardware.automotive.can@1.x-config-format";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/tools/libcanhaltools" ./hardware_interfaces_automotive_can_1.0_tools_libcanhaltools.nix {})
+    "android.hardware.automotive.can@libcanhaltools";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/vts/functional" ./hardware_interfaces_automotive_can_1.0_vts_functional.nix {})
+    "android.hardware.automotive.can@vts-defaults" VtsHalCanBusV1_0TargetTest VtsHalCanBusVirtualV1_0TargetTest VtsHalCanControllerV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/can/1.0/vts/utils" ./hardware_interfaces_automotive_can_1.0_vts_utils.nix {})
+    "android.hardware.automotive.can@vts-utils-lib";
+
   inherit (callBPPackage "hardware/interfaces/automotive/evs/1.0" ./hardware_interfaces_automotive_evs_1.0.nix {})
     "android.hardware.automotive.evs@1.0";
 
@@ -6456,17 +10497,59 @@
   inherit (callBPPackage "hardware/interfaces/automotive/evs/1.0/vts/functional" ./hardware_interfaces_automotive_evs_1.0_vts_functional.nix {})
     VtsHalEvsV1_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/1.1" ./hardware_interfaces_automotive_evs_1.1.nix {})
+    "android.hardware.automotive.evs@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/1.1/default" ./hardware_interfaces_automotive_evs_1.1_default.nix {})
+    "android.hardware.automotive.evs@1.1-service" "evs_default_configuration.xml";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/1.1/vts/functional" ./hardware_interfaces_automotive_evs_1.1_vts_functional.nix {})
+    VtsHalEvsV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/1.1/vts/fuzzing" ./hardware_interfaces_automotive_evs_1.1_vts_fuzzing.nix {})
+    "android.hardware.automotive.evs@fuzz-defaults" VtsHalEvsV1_1CameraOpenFuzz;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/common/utils/default" ./hardware_interfaces_automotive_evs_common_utils_default.nix {})
+    "android.hardware.automotive.evs@common-default-lib";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/evs/common/utils/default/test/fuzz" ./hardware_interfaces_automotive_evs_common_utils_default_test_fuzz.nix {})
+    FormatConvertFuzzer_copyNV21toBGR32 FormatConvertFuzzer_copyNV21toRGB32 FormatConvertFuzzer_copyYUYVtoBGR32 FormatConvertFuzzer_copyYUYVtoRGB32 FormatConvertFuzzer_copyYV12toBGR32 FormatConvertFuzzer_copyYV12toRGB32;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/occupant_awareness/aidl" ./hardware_interfaces_automotive_occupant_awareness_aidl.nix {})
+    "android.hardware.automotive.occupant_awareness";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/occupant_awareness/aidl/default" ./hardware_interfaces_automotive_occupant_awareness_aidl_default.nix {})
+    "android.hardware.automotive.occupant_awareness@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/occupant_awareness/aidl/mock" ./hardware_interfaces_automotive_occupant_awareness_aidl_mock.nix {})
+    "android.hardware.automotive.occupant_awareness@1.0-service_mock";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/occupant_awareness/aidl/vts/functional" ./hardware_interfaces_automotive_occupant_awareness_aidl_vts_functional.nix {})
+    VtsHalOccupantAwarenessV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/automotive/sv/1.0" ./hardware_interfaces_automotive_sv_1.0.nix {})
+    "android.hardware.automotive.sv@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/sv/1.0/default" ./hardware_interfaces_automotive_sv_1.0_default.nix {})
+    "android.hardware.automotive.sv@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/automotive/sv/1.0/vts/functional" ./hardware_interfaces_automotive_sv_1.0_vts_functional.nix {})
+    VtsHalSurroundViewV1_0TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/automotive/vehicle/2.0" ./hardware_interfaces_automotive_vehicle_2.0.nix {})
     "android.hardware.automotive.vehicle@2.0";
 
   inherit (callBPPackage "hardware/interfaces/automotive/vehicle/2.0/default" ./hardware_interfaces_automotive_vehicle_2.0_default.nix {})
-    "android.hardware.automotive.vehicle@2.0-default-impl-lib" "android.hardware.automotive.vehicle@2.0-manager-lib" "android.hardware.automotive.vehicle@2.0-manager-unit-tests" "android.hardware.automotive.vehicle@2.0-service" vhal_v2_0_common_headers vhal_v2_0_defaults;
+    "android.hardware.automotive.vehicle@2.0-default-impl-lib" "android.hardware.automotive.vehicle@2.0-default-impl-unit-tests" "android.hardware.automotive.vehicle@2.0-emulated-user-hal-lib" "android.hardware.automotive.vehicle@2.0-manager-lib" "android.hardware.automotive.vehicle@2.0-manager-unit-tests" "android.hardware.automotive.vehicle@2.0-server-common-lib" "android.hardware.automotive.vehicle@2.0-server-impl-lib" "android.hardware.automotive.vehicle@2.0-service" vhal_v2_0_common_headers vhal_v2_0_defaults vhal_v2_0_target_defaults;
 
   inherit (callBPPackage "hardware/interfaces/automotive/vehicle/2.0/default/impl/vhal_v2_0/proto" ./hardware_interfaces_automotive_vehicle_2.0_default_impl_vhal_v2_0_proto.nix {})
-    "android.hardware.automotive.vehicle@2.0-libproto-native";
+    "android.hardware.automotive.vehicle@2.0-libproto-native" DefaultVehicleHalProtoStub_cc DefaultVehicleHalProtoStub_h vhal-proto-src;
 
   inherit (callBPPackage "hardware/interfaces/biometrics/face/1.0" ./hardware_interfaces_biometrics_face_1.0.nix {})
     "android.hardware.biometrics.face@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/biometrics/face/1.0/default" ./hardware_interfaces_biometrics_face_1.0_default.nix {})
+    "android.hardware.biometrics.face@1.0-service.example";
 
   inherit (callBPPackage "hardware/interfaces/biometrics/face/1.0/vts/functional" ./hardware_interfaces_biometrics_face_1.0_vts_functional.nix {})
     VtsHalBiometricsFaceV1_0TargetTest;
@@ -6480,6 +10563,12 @@
   inherit (callBPPackage "hardware/interfaces/biometrics/fingerprint/2.1/vts/functional" ./hardware_interfaces_biometrics_fingerprint_2.1_vts_functional.nix {})
     VtsHalBiometricsFingerprintV2_1TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/biometrics/fingerprint/2.2" ./hardware_interfaces_biometrics_fingerprint_2.2.nix {})
+    "android.hardware.biometrics.fingerprint@2.2";
+
+  inherit (callBPPackage "hardware/interfaces/biometrics/fingerprint/2.2/vts/functional" ./hardware_interfaces_biometrics_fingerprint_2.2_vts_functional.nix {})
+    VtsHalBiometricsFingerprintV2_2TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/bluetooth/1.0" ./hardware_interfaces_bluetooth_1.0.nix {})
     "android.hardware.bluetooth@1.0";
 
@@ -6489,11 +10578,20 @@
   inherit (callBPPackage "hardware/interfaces/bluetooth/1.0/vts/functional" ./hardware_interfaces_bluetooth_1.0_vts_functional.nix {})
     VtsHalBluetoothV1_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/bluetooth/1.1" ./hardware_interfaces_bluetooth_1.1.nix {})
+    "android.hardware.bluetooth@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/1.1/default" ./hardware_interfaces_bluetooth_1.1_default.nix {})
+    "android.hardware.bluetooth@1.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/bluetooth/1.1/vts/functional" ./hardware_interfaces_bluetooth_1.1_vts_functional.nix {})
+    VtsHalBluetoothV1_1TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/bluetooth/a2dp/1.0" ./hardware_interfaces_bluetooth_a2dp_1.0.nix {})
     "android.hardware.bluetooth.a2dp@1.0";
 
   inherit (callBPPackage "hardware/interfaces/bluetooth/a2dp/1.0/default" ./hardware_interfaces_bluetooth_a2dp_1.0_default.nix {})
-    "android.hardware.bluetooth.a2dp@1.0-impl";
+    "android.hardware.bluetooth.a2dp@1.0-impl.mock";
 
   inherit (callBPPackage "hardware/interfaces/bluetooth/a2dp/1.0/vts/functional" ./hardware_interfaces_bluetooth_a2dp_1.0_vts_functional.nix {})
     VtsHalBluetoothA2dpV1_0TargetTest;
@@ -6515,6 +10613,18 @@
 
   inherit (callBPPackage "hardware/interfaces/boot/1.0/vts/functional" ./hardware_interfaces_boot_1.0_vts_functional.nix {})
     VtsHalBootV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/boot/1.1" ./hardware_interfaces_boot_1.1.nix {})
+    "android.hardware.boot@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/boot/1.1/default" ./hardware_interfaces_boot_1.1_default.nix {})
+    "android.hardware.boot@1.1-impl" "android.hardware.boot@1.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/boot/1.1/default/boot_control" ./hardware_interfaces_boot_1.1_default_boot_control.nix {})
+    "bootctrl.default" libboot_control libboot_control_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/boot/1.1/vts/functional" ./hardware_interfaces_boot_1.1_vts_functional.nix {})
+    VtsHalBootV1_1TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/broadcastradio/1.0" ./hardware_interfaces_broadcastradio_1.0.nix {})
     "android.hardware.broadcastradio@1.0";
@@ -6573,11 +10683,14 @@
   inherit (callBPPackage "hardware/interfaces/camera/metadata/3.4" ./hardware_interfaces_camera_metadata_3.4.nix {})
     "android.hardware.camera.metadata@3.4";
 
+  inherit (callBPPackage "hardware/interfaces/camera/metadata/3.5" ./hardware_interfaces_camera_metadata_3.5.nix {})
+    "android.hardware.camera.metadata@3.5";
+
   inherit (callBPPackage "hardware/interfaces/camera/provider/2.4" ./hardware_interfaces_camera_provider_2.4.nix {})
     "android.hardware.camera.provider@2.4";
 
   inherit (callBPPackage "hardware/interfaces/camera/provider/2.4/default" ./hardware_interfaces_camera_provider_2.4_default.nix {})
-    "android.hardware.camera.provider@2.4-external" "android.hardware.camera.provider@2.4-external-service" "android.hardware.camera.provider@2.4-impl" "android.hardware.camera.provider@2.4-legacy" "android.hardware.camera.provider@2.4-service" "android.hardware.camera.provider@2.4-service-lazy" "android.hardware.camera.provider@2.4-service-lazy_64" "android.hardware.camera.provider@2.4-service_64" camera_service_defaults;
+    "android.hardware.camera.provider@2.4-external" "android.hardware.camera.provider@2.4-external-service" "android.hardware.camera.provider@2.4-impl" "android.hardware.camera.provider@2.4-legacy" "android.hardware.camera.provider@2.4-service" "android.hardware.camera.provider@2.4-service-lazy" "android.hardware.camera.provider@2.4-service-lazy_64" "android.hardware.camera.provider@2.4-service_64";
 
   inherit (callBPPackage "hardware/interfaces/camera/provider/2.4/vts/functional" ./hardware_interfaces_camera_provider_2.4_vts_functional.nix {})
     VtsHalCameraProviderV2_4TargetTest;
@@ -6587,6 +10700,9 @@
 
   inherit (callBPPackage "hardware/interfaces/camera/provider/2.5/default" ./hardware_interfaces_camera_provider_2.5_default.nix {})
     "android.hardware.camera.provider@2.5-external" "android.hardware.camera.provider@2.5-external-service" "android.hardware.camera.provider@2.5-legacy" "android.hardware.camera.provider@2.5-service" "android.hardware.camera.provider@2.5-service-lazy" "android.hardware.camera.provider@2.5-service-lazy_64" "android.hardware.camera.provider@2.5-service_64" camera_service_2_5_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/camera/provider/2.6" ./hardware_interfaces_camera_provider_2.6.nix {})
+    "android.hardware.camera.provider@2.6";
 
   inherit (callBPPackage "hardware/interfaces/cas/1.0" ./hardware_interfaces_cas_1.0.nix {})
     "android.hardware.cas@1.0";
@@ -6606,11 +10722,23 @@
   inherit (callBPPackage "hardware/interfaces/cas/1.1/vts/functional" ./hardware_interfaces_cas_1.1_vts_functional.nix {})
     VtsHalCasV1_1TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/cas/1.2" ./hardware_interfaces_cas_1.2.nix {})
+    "android.hardware.cas@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.2/default" ./hardware_interfaces_cas_1.2_default.nix {})
+    "android.hardware.cas@1.2-service" "android.hardware.cas@1.2-service-lazy" "cas_service_defaults@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/cas/1.2/vts/functional" ./hardware_interfaces_cas_1.2_vts_functional.nix {})
+    VtsHalCasV1_2TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/cas/native/1.0" ./hardware_interfaces_cas_native_1.0.nix {})
     "android.hardware.cas.native@1.0";
 
+  inherit (callBPPackage "hardware/interfaces/common/aidl" ./hardware_interfaces_common_aidl.nix {})
+    "android.hardware.common";
+
   inherit (callBPPackage "hardware/interfaces/compatibility_matrices" ./hardware_interfaces_compatibility_matrices.nix {})
-    "framework_compatibility_matrix.1.xml" "framework_compatibility_matrix.2.xml" "framework_compatibility_matrix.3.xml" "framework_compatibility_matrix.4.xml" "framework_compatibility_matrix.legacy.xml";
+    "framework_compatibility_matrix.1.xml" "framework_compatibility_matrix.2.xml" "framework_compatibility_matrix.3.xml" "framework_compatibility_matrix.4.xml" "framework_compatibility_matrix.5.xml" "framework_compatibility_matrix.legacy.xml";
 
   inherit (callBPPackage "hardware/interfaces/compatibility_matrices/build" ./hardware_interfaces_compatibility_matrices_build.nix {})
     vintf-compatibility-matrix-soong-rules;
@@ -6648,6 +10776,18 @@
   inherit (callBPPackage "hardware/interfaces/contexthub/1.0/vts/functional" ./hardware_interfaces_contexthub_1.0_vts_functional.nix {})
     VtsHalContexthubV1_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/contexthub/1.1" ./hardware_interfaces_contexthub_1.1.nix {})
+    "android.hardware.contexthub@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/contexthub/1.1/default" ./hardware_interfaces_contexthub_1.1_default.nix {})
+    "android.hardware.contexthub@1.1-service.mock";
+
+  inherit (callBPPackage "hardware/interfaces/contexthub/1.1/vts/functional" ./hardware_interfaces_contexthub_1.1_vts_functional.nix {})
+    VtsHalContexthubV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/contexthub/common/vts" ./hardware_interfaces_contexthub_common_vts.nix {})
+    VtsHalContexthubUtils;
+
   inherit (callBPPackage "hardware/interfaces/drm/1.0" ./hardware_interfaces_drm_1.0.nix {})
     "android.hardware.drm@1.0";
 
@@ -6655,28 +10795,43 @@
     "android.hardware.drm@1.0-helper";
 
   inherit (callBPPackage "hardware/interfaces/drm/1.0/vts/functional" ./hardware_interfaces_drm_1.0_vts_functional.nix {})
-    VtsHalDrmV1_0TargetTest;
+    "android.hardware.drm@1.0-vts" VtsHalDrmV1_0TargetTest libdrmvtshelper;
 
   inherit (callBPPackage "hardware/interfaces/drm/1.1" ./hardware_interfaces_drm_1.1.nix {})
     "android.hardware.drm@1.1";
 
   inherit (callBPPackage "hardware/interfaces/drm/1.1/vts/functional" ./hardware_interfaces_drm_1.1_vts_functional.nix {})
-    VtsHalDrmV1_1TargetTest;
+    "android.hardware.drm@1.1-vts" VtsHalDrmV1_1TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/drm/1.2" ./hardware_interfaces_drm_1.2.nix {})
     "android.hardware.drm@1.2";
 
   inherit (callBPPackage "hardware/interfaces/drm/1.2/vts/functional" ./hardware_interfaces_drm_1.2_vts_functional.nix {})
-    VtsHalDrmV1_2TargetTest;
+    "android.hardware.drm@1.2-vts" VtsHalDrmV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.3" ./hardware_interfaces_drm_1.3.nix {})
+    "android.hardware.drm@1.3";
+
+  inherit (callBPPackage "hardware/interfaces/drm/1.3/vts/functional" ./hardware_interfaces_drm_1.3_vts_functional.nix {})
+    "android.hardware.drm@1.3-vts" VtsHalDrmV1_3TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/dumpstate/1.0" ./hardware_interfaces_dumpstate_1.0.nix {})
     "android.hardware.dumpstate@1.0";
 
   inherit (callBPPackage "hardware/interfaces/dumpstate/1.0/default" ./hardware_interfaces_dumpstate_1.0_default.nix {})
-    "android.hardware.dumpstate@1.0-service";
+    "android.hardware.dumpstate@1.0-service.example";
 
   inherit (callBPPackage "hardware/interfaces/dumpstate/1.0/vts/functional" ./hardware_interfaces_dumpstate_1.0_vts_functional.nix {})
     VtsHalDumpstateV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/dumpstate/1.1" ./hardware_interfaces_dumpstate_1.1.nix {})
+    "android.hardware.dumpstate@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/dumpstate/1.1/default" ./hardware_interfaces_dumpstate_1.1_default.nix {})
+    "android.hardware.dumpstate@1.1-service.example";
+
+  inherit (callBPPackage "hardware/interfaces/dumpstate/1.1/vts/functional" ./hardware_interfaces_dumpstate_1.1_vts_functional.nix {})
+    VtsHalDumpstateV1_1TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/fastboot/1.0" ./hardware_interfaces_fastboot_1.0.nix {})
     "android.hardware.fastboot@1.0";
@@ -6689,6 +10844,12 @@
 
   inherit (callBPPackage "hardware/interfaces/gatekeeper/1.0/default" ./hardware_interfaces_gatekeeper_1.0_default.nix {})
     "android.hardware.gatekeeper@1.0-impl" "android.hardware.gatekeeper@1.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/gatekeeper/1.0/software" ./hardware_interfaces_gatekeeper_1.0_software.nix {})
+    "android.hardware.gatekeeper@1.0-service.software";
+
+  inherit (callBPPackage "hardware/interfaces/gatekeeper/1.0/software/tests" ./hardware_interfaces_gatekeeper_1.0_software_tests.nix {})
+    gatekeeper-software-device-unit-tests;
 
   inherit (callBPPackage "hardware/interfaces/gatekeeper/1.0/vts/functional" ./hardware_interfaces_gatekeeper_1.0_vts_functional.nix {})
     VtsHalGatekeeperV1_0TargetTest;
@@ -6720,6 +10881,15 @@
   inherit (callBPPackage "hardware/interfaces/gnss/2.0/vts/functional" ./hardware_interfaces_gnss_2.0_vts_functional.nix {})
     VtsHalGnssV2_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/gnss/2.1" ./hardware_interfaces_gnss_2.1.nix {})
+    "android.hardware.gnss@2.1";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/2.1/default" ./hardware_interfaces_gnss_2.1_default.nix {})
+    "android.hardware.gnss@2.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/2.1/vts/functional" ./hardware_interfaces_gnss_2.1_vts_functional.nix {})
+    VtsHalGnssV2_1TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/gnss/common/utils/default" ./hardware_interfaces_gnss_common_utils_default.nix {})
     "android.hardware.gnss@common-default-lib";
 
@@ -6728,6 +10898,9 @@
 
   inherit (callBPPackage "hardware/interfaces/gnss/measurement_corrections/1.0" ./hardware_interfaces_gnss_measurement_corrections_1.0.nix {})
     "android.hardware.gnss.measurement_corrections@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/gnss/measurement_corrections/1.1" ./hardware_interfaces_gnss_measurement_corrections_1.1.nix {})
+    "android.hardware.gnss.measurement_corrections@1.1";
 
   inherit (callBPPackage "hardware/interfaces/gnss/visibility_control/1.0" ./hardware_interfaces_gnss_visibility_control_1.0.nix {})
     "android.hardware.gnss.visibility_control@1.0";
@@ -6750,6 +10923,9 @@
   inherit (callBPPackage "hardware/interfaces/graphics/allocator/3.0" ./hardware_interfaces_graphics_allocator_3.0.nix {})
     "android.hardware.graphics.allocator@3.0";
 
+  inherit (callBPPackage "hardware/interfaces/graphics/allocator/4.0" ./hardware_interfaces_graphics_allocator_4.0.nix {})
+    "android.hardware.graphics.allocator@4.0";
+
   inherit (callBPPackage "hardware/interfaces/graphics/bufferqueue/1.0" ./hardware_interfaces_graphics_bufferqueue_1.0.nix {})
     "android.hardware.graphics.bufferqueue@1.0";
 
@@ -6764,6 +10940,9 @@
 
   inherit (callBPPackage "hardware/interfaces/graphics/common/1.2" ./hardware_interfaces_graphics_common_1.2.nix {})
     "android.hardware.graphics.common@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/common/aidl" ./hardware_interfaces_graphics_common_aidl.nix {})
+    "android.hardware.graphics.common";
 
   inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1" ./hardware_interfaces_graphics_composer_2.1.nix {})
     "android.hardware.graphics.composer@2.1";
@@ -6786,6 +10965,9 @@
   inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/passthrough" ./hardware_interfaces_graphics_composer_2.1_utils_passthrough.nix {})
     "android.hardware.graphics.composer@2.1-passthrough";
 
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/resources" ./hardware_interfaces_graphics_composer_2.1_utils_resources.nix {})
+    "android.hardware.graphics.composer@2.1-resources";
+
   inherit (callBPPackage "hardware/interfaces/graphics/composer/2.1/utils/vts" ./hardware_interfaces_graphics_composer_2.1_utils_vts.nix {})
     "android.hardware.graphics.composer@2.1-vts";
 
@@ -6803,6 +10985,9 @@
 
   inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/utils/passthrough" ./hardware_interfaces_graphics_composer_2.2_utils_passthrough.nix {})
     "android.hardware.graphics.composer@2.2-passthrough";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/utils/resources" ./hardware_interfaces_graphics_composer_2.2_utils_resources.nix {})
+    "android.hardware.graphics.composer@2.2-resources";
 
   inherit (callBPPackage "hardware/interfaces/graphics/composer/2.2/utils/vts" ./hardware_interfaces_graphics_composer_2.2_utils_vts.nix {})
     "android.hardware.graphics.composer@2.2-vts";
@@ -6830,6 +11015,27 @@
 
   inherit (callBPPackage "hardware/interfaces/graphics/composer/2.3/vts/functional" ./hardware_interfaces_graphics_composer_2.3_vts_functional.nix {})
     VtsHalGraphicsComposerV2_3TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.4" ./hardware_interfaces_graphics_composer_2.4.nix {})
+    "android.hardware.graphics.composer@2.4";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.4/default" ./hardware_interfaces_graphics_composer_2.4_default.nix {})
+    "android.hardware.graphics.composer@2.4-service";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.4/utils/command-buffer" ./hardware_interfaces_graphics_composer_2.4_utils_command-buffer.nix {})
+    "android.hardware.graphics.composer@2.4-command-buffer";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.4/utils/hal" ./hardware_interfaces_graphics_composer_2.4_utils_hal.nix {})
+    "android.hardware.graphics.composer@2.4-hal";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.4/utils/passthrough" ./hardware_interfaces_graphics_composer_2.4_utils_passthrough.nix {})
+    "android.hardware.graphics.composer@2.4-passthrough";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.4/utils/vts" ./hardware_interfaces_graphics_composer_2.4_utils_vts.nix {})
+    "android.hardware.graphics.composer@2.4-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/composer/2.4/vts/functional" ./hardware_interfaces_graphics_composer_2.4_vts_functional.nix {})
+    VtsHalGraphicsComposerV2_4TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/graphics/mapper/2.0" ./hardware_interfaces_graphics_mapper_2.0.nix {})
     "android.hardware.graphics.mapper@2.0";
@@ -6876,11 +11082,20 @@
   inherit (callBPPackage "hardware/interfaces/graphics/mapper/3.0/vts/functional" ./hardware_interfaces_graphics_mapper_3.0_vts_functional.nix {})
     VtsHalGraphicsMapperV3_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/4.0" ./hardware_interfaces_graphics_mapper_4.0.nix {})
+    "android.hardware.graphics.mapper@4.0";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/4.0/utils/vts" ./hardware_interfaces_graphics_mapper_4.0_utils_vts.nix {})
+    "android.hardware.graphics.mapper@4.0-vts";
+
+  inherit (callBPPackage "hardware/interfaces/graphics/mapper/4.0/vts/functional" ./hardware_interfaces_graphics_mapper_4.0_vts_functional.nix {})
+    VtsHalGraphicsMapperV4_0TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/health/1.0" ./hardware_interfaces_health_1.0.nix {})
     "android.hardware.health@1.0";
 
   inherit (callBPPackage "hardware/interfaces/health/1.0/default" ./hardware_interfaces_health_1.0_default.nix {})
-    "android.hardware.health@1.0-convert";
+    "android.hardware.health@1.0-convert" "android.hardware.health@1.0-impl" "android.hardware.health@1.0-impl-helper" "android.hardware.health@1.0-service";
 
   inherit (callBPPackage "hardware/interfaces/health/1.0/default/libhealthd" ./hardware_interfaces_health_1.0_default_libhealthd.nix {})
     "libhealthd.default";
@@ -6906,6 +11121,15 @@
   inherit (callBPPackage "hardware/interfaces/health/2.0/vts/functional" ./hardware_interfaces_health_2.0_vts_functional.nix {})
     VtsHalHealthV2_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/health/2.1" ./hardware_interfaces_health_2.1.nix {})
+    "android.hardware.health@2.1";
+
+  inherit (callBPPackage "hardware/interfaces/health/2.1/default" ./hardware_interfaces_health_2.1_default.nix {})
+    "android.hardware.health@2.1-impl" "android.hardware.health@2.1-impl-defaults" "android.hardware.health@2.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/health/2.1/vts/functional" ./hardware_interfaces_health_2.1_vts_functional.nix {})
+    VtsHalHealthV2_1TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/health/storage/1.0" ./hardware_interfaces_health_storage_1.0.nix {})
     "android.hardware.health.storage@1.0";
 
@@ -6914,6 +11138,24 @@
 
   inherit (callBPPackage "hardware/interfaces/health/storage/1.0/vts/functional" ./hardware_interfaces_health_storage_1.0_vts_functional.nix {})
     VtsHalHealthStorageV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/health/utils/libhealth2impl" ./hardware_interfaces_health_utils_libhealth2impl.nix {})
+    libhealth2impl;
+
+  inherit (callBPPackage "hardware/interfaces/health/utils/libhealthloop" ./hardware_interfaces_health_utils_libhealthloop.nix {})
+    libhealthloop;
+
+  inherit (callBPPackage "hardware/interfaces/identity/aidl" ./hardware_interfaces_identity_aidl.nix {})
+    "android.hardware.identity";
+
+  inherit (callBPPackage "hardware/interfaces/identity/aidl/default" ./hardware_interfaces_identity_aidl_default.nix {})
+    "android.hardware.identity-service.example";
+
+  inherit (callBPPackage "hardware/interfaces/identity/aidl/vts" ./hardware_interfaces_identity_aidl_vts.nix {})
+    VtsHalIdentityTargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/identity/support" ./hardware_interfaces_identity_support.nix {})
+    "android.hardware.identity-support-lib" "android.hardware.identity-support-lib-test" cppbor_host_test cppbor_test libcppbor;
 
   inherit (callBPPackage "hardware/interfaces/input/classifier/1.0" ./hardware_interfaces_input_classifier_1.0.nix {})
     "android.hardware.input.classifier@1.0";
@@ -6952,7 +11194,25 @@
     libkeymaster4support;
 
   inherit (callBPPackage "hardware/interfaces/keymaster/4.0/vts/functional" ./hardware_interfaces_keymaster_4.0_vts_functional.nix {})
-    VtsHalKeymasterV4_0TargetTest;
+    VtsHalKeymasterV4_0TargetTest libkeymaster4vtstest;
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.0/vts/performance" ./hardware_interfaces_keymaster_4.0_vts_performance.nix {})
+    keymaster_benchmark;
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.1" ./hardware_interfaces_keymaster_4.1.nix {})
+    "android.hardware.keymaster@4.1";
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.1/default" ./hardware_interfaces_keymaster_4.1_default.nix {})
+    "android.hardware.keymaster@4.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.1/support" ./hardware_interfaces_keymaster_4.1_support.nix {})
+    libkeymaster4_1support;
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/4.1/vts/functional" ./hardware_interfaces_keymaster_4.1_vts_functional.nix {})
+    VtsHalKeymasterV4_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/keymaster/aidl" ./hardware_interfaces_keymaster_aidl.nix {})
+    "android.hardware.keymaster";
 
   inherit (callBPPackage "hardware/interfaces/light/2.0" ./hardware_interfaces_light_2.0.nix {})
     "android.hardware.light@2.0";
@@ -6963,11 +11223,23 @@
   inherit (callBPPackage "hardware/interfaces/light/2.0/vts/functional" ./hardware_interfaces_light_2.0_vts_functional.nix {})
     VtsHalLightV2_0TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/light/aidl" ./hardware_interfaces_light_aidl.nix {})
+    "android.hardware.light";
+
+  inherit (callBPPackage "hardware/interfaces/light/aidl/default" ./hardware_interfaces_light_aidl_default.nix {})
+    "android.hardware.lights-service.example";
+
+  inherit (callBPPackage "hardware/interfaces/light/aidl/vts/functional" ./hardware_interfaces_light_aidl_vts_functional.nix {})
+    VtsHalLightTargetTest;
+
   inherit (callBPPackage "hardware/interfaces/light/utils" ./hardware_interfaces_light_utils.nix {})
     blank_screen;
 
   inherit (callBPPackage "hardware/interfaces/media/1.0" ./hardware_interfaces_media_1.0.nix {})
     "android.hardware.media@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/media" ./hardware_interfaces_media.nix {})
+    media_omx_audio_res media_omx_video_res;
 
   inherit (callBPPackage "hardware/interfaces/media/bufferpool/1.0" ./hardware_interfaces_media_bufferpool_1.0.nix {})
     "android.hardware.media.bufferpool@1.0";
@@ -6977,6 +11249,9 @@
 
   inherit (callBPPackage "hardware/interfaces/media/c2/1.0" ./hardware_interfaces_media_c2_1.0.nix {})
     "android.hardware.media.c2@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/media/c2/1.1" ./hardware_interfaces_media_c2_1.1.nix {})
+    "android.hardware.media.c2@1.1";
 
   inherit (callBPPackage "hardware/interfaces/media/omx/1.0" ./hardware_interfaces_media_omx_1.0.nix {})
     "android.hardware.media.omx@1.0";
@@ -7009,19 +11284,25 @@
     "android.hardware.neuralnetworks@1.0";
 
   inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.0/vts/functional" ./hardware_interfaces_neuralnetworks_1.0_vts_functional.nix {})
-    PresubmitHalNeuralnetworksV1_0TargetTest VtsHalNeuralNetworksTargetTestDefaults VtsHalNeuralnetworksTest_utils VtsHalNeuralnetworksV1_0TargetTest;
+    VtsHalNeuralNetworksV1_0_utils VtsHalNeuralnetworksV1_0TargetTest neuralnetworks_vts_functional_defaults;
 
   inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.1" ./hardware_interfaces_neuralnetworks_1.1.nix {})
     "android.hardware.neuralnetworks@1.1";
 
   inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.1/vts/functional" ./hardware_interfaces_neuralnetworks_1.1_vts_functional.nix {})
-    PresubmitHalNeuralnetworksV1_1TargetTest VtsHalNeuralnetworksV1_1CompatV1_0TargetTest VtsHalNeuralnetworksV1_1TargetTest;
+    VtsHalNeuralnetworksV1_1TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.2" ./hardware_interfaces_neuralnetworks_1.2.nix {})
     "android.hardware.neuralnetworks@1.2";
 
   inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.2/vts/functional" ./hardware_interfaces_neuralnetworks_1.2_vts_functional.nix {})
-    PresubmitHalNeuralnetworksV1_2TargetTest VtsHalNeuralnetworksV1_2CompatV1_0TargetTest VtsHalNeuralnetworksV1_2CompatV1_1TargetTest VtsHalNeuralnetworksV1_2TargetTest;
+    VtsHalNeuralNetworksV1_2_utils VtsHalNeuralnetworksV1_2TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.3" ./hardware_interfaces_neuralnetworks_1.3.nix {})
+    "android.hardware.neuralnetworks@1.3";
+
+  inherit (callBPPackage "hardware/interfaces/neuralnetworks/1.3/vts/functional" ./hardware_interfaces_neuralnetworks_1.3_vts_functional.nix {})
+    VtsHalNeuralNetworksV1_3_utils VtsHalNeuralnetworksV1_3TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/nfc/1.0" ./hardware_interfaces_nfc_1.0.nix {})
     "android.hardware.nfc@1.0";
@@ -7077,6 +11358,15 @@
   inherit (callBPPackage "hardware/interfaces/power/1.3/vts/functional" ./hardware_interfaces_power_1.3_vts_functional.nix {})
     VtsHalPowerV1_3TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/power/aidl" ./hardware_interfaces_power_aidl.nix {})
+    "android.hardware.power";
+
+  inherit (callBPPackage "hardware/interfaces/power/aidl/default" ./hardware_interfaces_power_aidl_default.nix {})
+    "android.hardware.power-service.example";
+
+  inherit (callBPPackage "hardware/interfaces/power/aidl/vts" ./hardware_interfaces_power_aidl_vts.nix {})
+    VtsHalPowerTargetTest;
+
   inherit (callBPPackage "hardware/interfaces/power/stats/1.0" ./hardware_interfaces_power_stats_1.0.nix {})
     "android.hardware.power.stats@1.0";
 
@@ -7122,6 +11412,12 @@
   inherit (callBPPackage "hardware/interfaces/radio/1.4/vts/functional" ./hardware_interfaces_radio_1.4_vts_functional.nix {})
     VtsHalRadioV1_4TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/radio/1.5" ./hardware_interfaces_radio_1.5.nix {})
+    "android.hardware.radio@1.5";
+
+  inherit (callBPPackage "hardware/interfaces/radio/1.5/vts/functional" ./hardware_interfaces_radio_1.5_vts_functional.nix {})
+    VtsHalRadioV1_5TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/radio/config/1.0" ./hardware_interfaces_radio_config_1.0.nix {})
     "android.hardware.radio.config@1.0";
 
@@ -7146,6 +11442,15 @@
   inherit (callBPPackage "hardware/interfaces/radio/deprecated/1.0" ./hardware_interfaces_radio_deprecated_1.0.nix {})
     "android.hardware.radio.deprecated@1.0";
 
+  inherit (callBPPackage "hardware/interfaces/rebootescrow/aidl" ./hardware_interfaces_rebootescrow_aidl.nix {})
+    "android.hardware.rebootescrow";
+
+  inherit (callBPPackage "hardware/interfaces/rebootescrow/aidl/default" ./hardware_interfaces_rebootescrow_aidl_default.nix {})
+    "android.hardware.rebootescrow-service.default" HadamardUtilsTest libhadamardutils librebootescrowdefaultimpl;
+
+  inherit (callBPPackage "hardware/interfaces/rebootescrow/aidl/vts/functional" ./hardware_interfaces_rebootescrow_aidl_vts_functional.nix {})
+    VtsHalRebootEscrowTargetTest;
+
   inherit (callBPPackage "hardware/interfaces/renderscript/1.0" ./hardware_interfaces_renderscript_1.0.nix {})
     "android.hardware.renderscript@1.0";
 
@@ -7167,6 +11472,12 @@
   inherit (callBPPackage "hardware/interfaces/secure_element/1.1/vts/functional" ./hardware_interfaces_secure_element_1.1_vts_functional.nix {})
     VtsHalSecureElementV1_1TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/secure_element/1.2" ./hardware_interfaces_secure_element_1.2.nix {})
+    "android.hardware.secure_element@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/secure_element/1.2/vts/functional" ./hardware_interfaces_secure_element_1.2_vts_functional.nix {})
+    VtsHalSecureElementV1_2TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/sensors/1.0" ./hardware_interfaces_sensors_1.0.nix {})
     "android.hardware.sensors@1.0";
 
@@ -7182,8 +11493,38 @@
   inherit (callBPPackage "hardware/interfaces/sensors/2.0/default" ./hardware_interfaces_sensors_2.0_default.nix {})
     "android.hardware.sensors@2.0-service.mock";
 
+  inherit (callBPPackage "hardware/interfaces/sensors/2.0/multihal" ./hardware_interfaces_sensors_2.0_multihal.nix {})
+    "android.hardware.sensors@2.0-service.multihal";
+
   inherit (callBPPackage "hardware/interfaces/sensors/2.0/vts/functional" ./hardware_interfaces_sensors_2.0_vts_functional.nix {})
     VtsHalSensorsV2_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/sensors/2.1" ./hardware_interfaces_sensors_2.1.nix {})
+    "android.hardware.sensors@2.1";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/2.1/default" ./hardware_interfaces_sensors_2.1_default.nix {})
+    "android.hardware.sensors@2.1-service.mock";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/2.1/multihal" ./hardware_interfaces_sensors_2.1_multihal.nix {})
+    "android.hardware.sensors@2.1-service.multihal";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/2.1/vts/functional" ./hardware_interfaces_sensors_2.1_vts_functional.nix {})
+    VtsHalSensorsV2_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/sensors/common/default/2.X" ./hardware_interfaces_sensors_common_default_2.X.nix {})
+    "android.hardware.sensors@2.X-shared-impl";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/common/default/2.X/multihal" ./hardware_interfaces_sensors_common_default_2.X_multihal.nix {})
+    "android.hardware.sensors@2.0-ScopedWakelock" "android.hardware.sensors@2.0-ScopedWakelock.testlib" "android.hardware.sensors@2.0-multihal.header" "android.hardware.sensors@2.1-multihal.header" "android.hardware.sensors@2.X-multihal" "android.hardware.sensors@2.X-multihal-defaults" "android.hardware.sensors@2.X-multihal.header";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/common/default/2.X/multihal/tests" ./hardware_interfaces_sensors_common_default_2.X_multihal_tests.nix {})
+    "android.hardware.sensors@2.X-fakesubhal-config1" "android.hardware.sensors@2.X-fakesubhal-config2" "android.hardware.sensors@2.X-fakesubhal-config3" "android.hardware.sensors@2.X-fakesubhal-defaults" "android.hardware.sensors@2.X-fakesubhal-unittest" "android.hardware.sensors@2.X-halproxy-unit-tests";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/common/utils" ./hardware_interfaces_sensors_common_utils.nix {})
+    "android.hardware.sensors@2.X-shared-utils";
+
+  inherit (callBPPackage "hardware/interfaces/sensors/common/vts/2_X" ./hardware_interfaces_sensors_common_vts_2_X.nix {})
+    VtsHalSensorsV2_0TargetTest-lib VtsHalSensorsV2_1TargetTest-lib VtsHalSensorsV2_XTargetTest-defaults;
 
   inherit (callBPPackage "hardware/interfaces/sensors/common/vts/utils" ./hardware_interfaces_sensors_common_vts_utils.nix {})
     VtsHalSensorsTargetTestUtils;
@@ -7212,6 +11553,15 @@
   inherit (callBPPackage "hardware/interfaces/soundtrigger/2.2/vts/functional" ./hardware_interfaces_soundtrigger_2.2_vts_functional.nix {})
     VtsHalSoundtriggerV2_2TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.3" ./hardware_interfaces_soundtrigger_2.3.nix {})
+    "android.hardware.soundtrigger@2.3";
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.3/default" ./hardware_interfaces_soundtrigger_2.3_default.nix {})
+    "android.hardware.soundtrigger@2.3-impl";
+
+  inherit (callBPPackage "hardware/interfaces/soundtrigger/2.3/vts/functional" ./hardware_interfaces_soundtrigger_2.3_vts_functional.nix {})
+    VtsHalSoundtriggerV2_3TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/tests/bar/1.0" ./hardware_interfaces_tests_bar_1.0.nix {})
     "android.hardware.tests.bar@1.0";
 
@@ -7232,6 +11582,15 @@
 
   inherit (callBPPackage "hardware/interfaces/tests/extension/light/2.0/default" ./hardware_interfaces_tests_extension_light_2.0_default.nix {})
     "android.hardware.tests.extension.light@2.0-service";
+
+  inherit (callBPPackage "hardware/interfaces/tests/extension/vibrator/aidl" ./hardware_interfaces_tests_extension_vibrator_aidl.nix {})
+    "android.hardware.tests.extension.vibrator";
+
+  inherit (callBPPackage "hardware/interfaces/tests/extension/vibrator/aidl/client" ./hardware_interfaces_tests_extension_vibrator_aidl_client.nix {})
+    "android.hardware.tests.extension.vibrator-client";
+
+  inherit (callBPPackage "hardware/interfaces/tests/extension/vibrator/aidl/default" ./hardware_interfaces_tests_extension_vibrator_aidl_default.nix {})
+    "android.hardware.tests.extension.vibrator-service.example";
 
   inherit (callBPPackage "hardware/interfaces/tests/foo/1.0" ./hardware_interfaces_tests_foo_1.0.nix {})
     "android.hardware.tests.foo@1.0";
@@ -7254,11 +11613,14 @@
   inherit (callBPPackage "hardware/interfaces/tests/inheritance/1.0/default" ./hardware_interfaces_tests_inheritance_1.0_default.nix {})
     "android.hardware.tests.inheritance@1.0-impl";
 
+  inherit (callBPPackage "hardware/interfaces/tests/lazy/1.0" ./hardware_interfaces_tests_lazy_1.0.nix {})
+    "android.hardware.tests.lazy@1.0";
+
   inherit (callBPPackage "hardware/interfaces/tests/libhwbinder/1.0" ./hardware_interfaces_tests_libhwbinder_1.0.nix {})
     "android.hardware.tests.libhwbinder@1.0";
 
   inherit (callBPPackage "hardware/interfaces/tests/libhwbinder/1.0/default" ./hardware_interfaces_tests_libhwbinder_1.0_default.nix {})
-    "android.hardware.tests.libhwbinder@1.0-impl";
+    "android.hardware.tests.libhwbinder@1.0-impl.test";
 
   inherit (callBPPackage "hardware/interfaces/tests/libhwbinder/aidl" ./hardware_interfaces_tests_libhwbinder_aidl.nix {})
     "android.hardware.tests.libbinder";
@@ -7268,6 +11630,9 @@
 
   inherit (callBPPackage "hardware/interfaces/tests/memory/1.0/default" ./hardware_interfaces_tests_memory_1.0_default.nix {})
     "android.hardware.tests.memory@1.0-impl";
+
+  inherit (callBPPackage "hardware/interfaces/tests/memory/2.0" ./hardware_interfaces_tests_memory_2.0.nix {})
+    "android.hardware.tests.memory@2.0";
 
   inherit (callBPPackage "hardware/interfaces/tests/msgq/1.0" ./hardware_interfaces_tests_msgq_1.0.nix {})
     "android.hardware.tests.msgq@1.0";
@@ -7280,15 +11645,6 @@
 
   inherit (callBPPackage "hardware/interfaces/tests/multithread/1.0/default" ./hardware_interfaces_tests_multithread_1.0_default.nix {})
     "android.hardware.tests.multithread@1.0-impl";
-
-  inherit (callBPPackage "hardware/interfaces/tests/pointer/1.0" ./hardware_interfaces_tests_pointer_1.0.nix {})
-    "android.hardware.tests.pointer@1.0";
-
-  inherit (callBPPackage "hardware/interfaces/tests/pointer/1.0/default" ./hardware_interfaces_tests_pointer_1.0_default.nix {})
-    "android.hardware.tests.pointer@1.0-impl";
-
-  inherit (callBPPackage "hardware/interfaces/tests/pointer/1.0/default/lib" ./hardware_interfaces_tests_pointer_1.0_default_lib.nix {})
-    libpointertest;
 
   inherit (callBPPackage "hardware/interfaces/tests/safeunion/1.0" ./hardware_interfaces_tests_safeunion_1.0.nix {})
     "android.hardware.tests.safeunion@1.0";
@@ -7348,7 +11704,7 @@
     "android.hardware.tv.cec@1.0";
 
   inherit (callBPPackage "hardware/interfaces/tv/cec/1.0/default" ./hardware_interfaces_tv_cec_1.0_default.nix {})
-    "android.hardware.tv.cec@1.0-impl" "android.hardware.tv.cec@1.0-service";
+    "android.hardware.tv.cec@1.0-impl" "android.hardware.tv.cec@1.0-service" "android.hardware.tv.cec@1.0-service.mock";
 
   inherit (callBPPackage "hardware/interfaces/tv/cec/2.0" ./hardware_interfaces_tv_cec_2.0.nix {})
     "android.hardware.tv.cec@2.0";
@@ -7364,6 +11720,15 @@
 
   inherit (callBPPackage "hardware/interfaces/tv/input/1.0/vts/functional" ./hardware_interfaces_tv_input_1.0_vts_functional.nix {})
     VtsHalTvInputV1_0TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/tv/tuner/1.0" ./hardware_interfaces_tv_tuner_1.0.nix {})
+    "android.hardware.tv.tuner@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/tv/tuner/1.0/default" ./hardware_interfaces_tv_tuner_1.0_default.nix {})
+    "android.hardware.tv.tuner@1.0-service" "android.hardware.tv.tuner@1.0-service-lazy" tuner_service_defaults;
+
+  inherit (callBPPackage "hardware/interfaces/tv/tuner/1.0/vts/functional" ./hardware_interfaces_tv_tuner_1.0_vts_functional.nix {})
+    VtsHalTvTunerV1_0TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/usb/1.0" ./hardware_interfaces_usb_1.0.nix {})
     "android.hardware.usb@1.0";
@@ -7388,6 +11753,15 @@
 
   inherit (callBPPackage "hardware/interfaces/usb/gadget/1.0" ./hardware_interfaces_usb_gadget_1.0.nix {})
     "android.hardware.usb.gadget@1.0";
+
+  inherit (callBPPackage "hardware/interfaces/usb/gadget/1.1" ./hardware_interfaces_usb_gadget_1.1.nix {})
+    "android.hardware.usb.gadget@1.1";
+
+  inherit (callBPPackage "hardware/interfaces/usb/gadget/1.1/default" ./hardware_interfaces_usb_gadget_1.1_default.nix {})
+    "android.hardware.usb.gadget@1.1-service";
+
+  inherit (callBPPackage "hardware/interfaces/usb/gadget/1.1/default/lib" ./hardware_interfaces_usb_gadget_1.1_default_lib.nix {})
+    libusbconfigfs;
 
   inherit (callBPPackage "hardware/interfaces/vibrator/1.0" ./hardware_interfaces_vibrator_1.0.nix {})
     "android.hardware.vibrator@1.0";
@@ -7419,6 +11793,15 @@
   inherit (callBPPackage "hardware/interfaces/vibrator/1.3/vts/functional" ./hardware_interfaces_vibrator_1.3_vts_functional.nix {})
     VtsHalVibratorV1_3TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/vibrator/aidl" ./hardware_interfaces_vibrator_aidl.nix {})
+    "android.hardware.vibrator";
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/aidl/default" ./hardware_interfaces_vibrator_aidl_default.nix {})
+    "android.hardware.vibrator-service.example" libvibratorexampleimpl;
+
+  inherit (callBPPackage "hardware/interfaces/vibrator/aidl/vts" ./hardware_interfaces_vibrator_aidl_vts.nix {})
+    VtsHalVibratorTargetTest;
+
   inherit (callBPPackage "hardware/interfaces/vr/1.0" ./hardware_interfaces_vr_1.0.nix {})
     "android.hardware.vr@1.0";
 
@@ -7438,7 +11821,7 @@
     "android.hardware.wifi@1.0";
 
   inherit (callBPPackage "hardware/interfaces/wifi/1.0/vts/functional" ./hardware_interfaces_wifi_1.0_vts_functional.nix {})
-    VtsHalWifiNanV1_0TargetTest VtsHalWifiV1_0TargetTest VtsHalWifiV1_0TargetTestUtil;
+    VtsHalWifiApV1_0TargetTest VtsHalWifiNanV1_0TargetTest VtsHalWifiV1_0TargetTest VtsHalWifiV1_0TargetTestUtil;
 
   inherit (callBPPackage "hardware/interfaces/wifi/1.1" ./hardware_interfaces_wifi_1.1.nix {})
     "android.hardware.wifi@1.1";
@@ -7458,6 +11841,12 @@
   inherit (callBPPackage "hardware/interfaces/wifi/1.3/vts/functional" ./hardware_interfaces_wifi_1.3_vts_functional.nix {})
     VtsHalWifiV1_3TargetTest;
 
+  inherit (callBPPackage "hardware/interfaces/wifi/1.4" ./hardware_interfaces_wifi_1.4.nix {})
+    "android.hardware.wifi@1.4";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/1.4/vts/functional" ./hardware_interfaces_wifi_1.4_vts_functional.nix {})
+    VtsHalWifiApV1_4TargetTest VtsHalWifiNanV1_4TargetTest VtsHalWifiRttV1_4TargetTest;
+
   inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.0" ./hardware_interfaces_wifi_hostapd_1.0.nix {})
     "android.hardware.wifi.hostapd@1.0";
 
@@ -7468,7 +11857,13 @@
     "android.hardware.wifi.hostapd@1.1";
 
   inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.1/vts/functional" ./hardware_interfaces_wifi_hostapd_1.1_vts_functional.nix {})
-    VtsHalWifiHostapdV1_1TargetTest VtsHalWifiHostapdV1_1TargetTestUtil;
+    VtsHalWifiHostapdV1_1TargetTest;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.2" ./hardware_interfaces_wifi_hostapd_1.2.nix {})
+    "android.hardware.wifi.hostapd@1.2";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/hostapd/1.2/vts/functional" ./hardware_interfaces_wifi_hostapd_1.2_vts_functional.nix {})
+    VtsHalWifiHostapdV1_2TargetTest;
 
   inherit (callBPPackage "hardware/interfaces/wifi/offload/1.0" ./hardware_interfaces_wifi_offload_1.0.nix {})
     "android.hardware.wifi.offload@1.0";
@@ -7493,6 +11888,12 @@
 
   inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.2/vts/functional" ./hardware_interfaces_wifi_supplicant_1.2_vts_functional.nix {})
     VtsHalWifiSupplicantP2pV1_2TargetTest VtsHalWifiSupplicantV1_2TargetTest VtsHalWifiSupplicantV1_2TargetTestUtil;
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.3" ./hardware_interfaces_wifi_supplicant_1.3.nix {})
+    "android.hardware.wifi.supplicant@1.3";
+
+  inherit (callBPPackage "hardware/interfaces/wifi/supplicant/1.3/vts/functional" ./hardware_interfaces_wifi_supplicant_1.3_vts_functional.nix {})
+    VtsHalWifiSupplicantV1_3TargetTest VtsHalWifiSupplicantV1_3TargetTestUtil;
 
   inherit (callBPPackage "hardware/libhardware" ./hardware_libhardware.nix {})
     libhardware libhardware_headers;
@@ -7588,7 +11989,7 @@
     test-nusensors;
 
   inherit (callBPPackage "hardware/libhardware_legacy" ./hardware_libhardware_legacy.nix {})
-    libhardware_legacy libhardware_legacy_headers libpower libpower_defaults libpower_test;
+    block_suspend libhardware_legacy libhardware_legacy_headers libpower libpower_defaults libpower_test;
 
   inherit (callBPPackage "hardware/libhardware_legacy/audio" ./hardware_libhardware_legacy_audio.nix {})
     libaudiohw_legacy;
@@ -7617,29 +12018,62 @@
   inherit (callBPPackage "hardware/qcom/display/msm8909" ./hardware_qcom_display_msm8909.nix {})
     display_intf_headers;
 
-  inherit (callBPPackage "hardware/qcom/neuralnetworks/hvxservice/1.0" ./hardware_qcom_neuralnetworks_hvxservice_1.0.nix {})
-    "android.hardware.neuralnetworks@1.0-service-hvx";
-
-  inherit (callBPPackage "hardware/qcom/sdm845/display" ./hardware_qcom_sdm845_display.nix {})
-    display_defaults display_headers;
-
-  inherit (callBPPackage "hardware/qcom/sdm845/display/libqdutils" ./hardware_qcom_sdm845_display_libqdutils.nix {})
+  inherit (callBPPackage "hardware/qcom/display/msm8909/libqdutils" ./hardware_qcom_display_msm8909_libqdutils.nix {})
     "libqdMetaData.system" libqdMetaData;
 
-  inherit (callBPPackage "hardware/qcom/sdm845/display/libqservice" ./hardware_qcom_sdm845_display_libqservice.nix {})
-    libqservice;
+  inherit (callBPPackage "hardware/qcom/msm8998/gpt-utils" ./hardware_qcom_msm8998_gpt-utils.nix {})
+    "libgptutils.msm8998";
+
+  inherit (callBPPackage "hardware/qcom/neuralnetworks/hvxservice/1.0" ./hardware_qcom_neuralnetworks_hvxservice_1.0.nix {})
+    "android.hardware.neuralnetworks@1.0-service-hvx";
 
   inherit (callBPPackage "hardware/qcom/sm8150" ./hardware_qcom_sm8150.nix {})
     soong-display_defaults;
 
+  inherit (callBPPackage "hardware/qcom/sm8150/data/ipacfg-mgr/hal" ./hardware_qcom_sm8150_data_ipacfg-mgr_hal.nix {})
+    liboffloadhal;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/data/ipacfg-mgr/ipacm" ./hardware_qcom_sm8150_data_ipacfg-mgr_ipacm.nix {})
+    "IPACM_cfg.xml" ipacm;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/data/ipacfg-mgr/ipanat" ./hardware_qcom_sm8150_data_ipacfg-mgr_ipanat.nix {})
+    libipanat;
+
   inherit (callBPPackage "hardware/qcom/sm8150/display" ./hardware_qcom_sm8150_display.nix {})
-    display_go_defaults;
+    display_defaults display_go_defaults display_headers;
 
   inherit (callBPPackage "hardware/qcom/sm8150/display/composer" ./hardware_qcom_sm8150_display_composer.nix {})
-    "android.hardware.graphics.composer@2.3-service-sm8150";
+    "android.hardware.graphics.composer@2.4-service-sm8150";
 
   inherit (callBPPackage "hardware/qcom/sm8150/display/libqdutils" ./hardware_qcom_sm8150_display_libqdutils.nix {})
     libqdutils;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/display/libqservice" ./hardware_qcom_sm8150_display_libqservice.nix {})
+    libqservice;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/android/utils" ./hardware_qcom_sm8150_gps_android_utils.nix {})
+    liblocbatterylistener liblocbatterylistener_headers;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/batching" ./hardware_qcom_sm8150_gps_batching.nix {})
+    libbatching;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/core" ./hardware_qcom_sm8150_gps_core.nix {})
+    libloc_core libloc_core_headers;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/geofence" ./hardware_qcom_sm8150_gps_geofence.nix {})
+    libgeofencing;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/gnss" ./hardware_qcom_sm8150_gps_gnss.nix {})
+    libgnss;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/location" ./hardware_qcom_sm8150_gps_location.nix {})
+    liblocation_api liblocation_api_headers;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/pla" ./hardware_qcom_sm8150_gps_pla.nix {})
+    libloc_pla_headers;
+
+  inherit (callBPPackage "hardware/qcom/sm8150/gps/utils" ./hardware_qcom_sm8150_gps_utils.nix {})
+    "libgps.utils" "libgps.utils_headers";
 
   inherit (callBPPackage "hardware/ril" ./hardware_ril.nix {})
     ril_headers;
@@ -7664,6 +12098,9 @@
 
   inherit (callBPPackage "hardware/st/secure_element/1.1" ./hardware_st_secure_element_1.1.nix {})
     "android.hardware.secure_element@1.1-service.st";
+
+  inherit (callBPPackage "hardware/st/secure_element/1.2" ./hardware_st_secure_element_1.2.nix {})
+    "android.hardware.secure_element@1.2-service.st";
 
   inherit (callBPPackage "hardware/st/secure_element/ese-spi-driver" ./hardware_st_secure_element_ese-spi-driver.nix {})
     ese_spi_st;
@@ -7713,6 +12150,15 @@
   inherit (callBPPackage "kernel/configs/q/android-4.9" ./kernel_configs_q_android-4.9.nix {})
     "kernel_config_q_4.9";
 
+  inherit (callBPPackage "kernel/configs/r/android-4.14" ./kernel_configs_r_android-4.14.nix {})
+    "kernel_config_r_4.14";
+
+  inherit (callBPPackage "kernel/configs/r/android-4.19" ./kernel_configs_r_android-4.19.nix {})
+    "kernel_config_r_4.19";
+
+  inherit (callBPPackage "kernel/configs/r/android-5.4" ./kernel_configs_r_android-5.4.nix {})
+    "kernel_config_r_5.4";
+
   inherit (callBPPackage "kernel/configs/tools" ./kernel_configs_tools.nix {})
     kconfig_xml_fixup;
 
@@ -7723,19 +12169,40 @@
     dt_early_mount_test;
 
   inherit (callBPPackage "kernel/tests/net/test" ./kernel_tests_net_test.nix {})
-    kernel_net_tests;
+    kernel_net_tests kernel_net_tests_defaults vts_kernel_net_tests;
 
   inherit (callBPPackage "libcore" ./libcore.nix {})
     notices-for-framework-stubs;
 
   inherit (callBPPackage "libcore" ./libcore_JavaLibrary.bp.nix {})
-    "core.current.stubs" android_icu4j_resources_lib core-all core-all-system-modules core-current-stubs-gen core-current-stubs-nullability-validation core-lambda-stubs core-lambda-stubs-for-system-modules core-libart core-libart-testdex core-oj core-oj-hiddenapi core-oj-testdex core-ojtests core-ojtests-public core-system-modules core-test-rules core-tests core-tests-support core_api_files core_lambda_stubs_defaults core_libart_api_files core_libart_java_files core_oj_api_files core_oj_java_files core_public_api_files filesystemstest jsr166-tests known-oj-tags libcore_java_defaults ojluni-annotated-mmodule-stubs ojluni-annotated-nullability-stubs ojluni-annotated-sdk-stubs parameter-metadata-test timezone-host;
+    "art.module.api.annotations" "art.module.api.annotations.for.system.modules" "art.module.public.api.stubs" "core.current.stubs" "java.current.stubs" api-annotations-system-modules art-module-public-api-stubs-nullability-validation art-module-public-api-stubs-source art-module-public-api-stubs-system-modules art_module_api_files core-all core-all-system-modules core-compat-test-rules core-current-stubs-for-system-modules core-current-stubs-system-modules core-generated-annotation-stubs core-java-9-language-features-source core-lambda-stubs core-lambda-stubs-for-system-modules core-libart core-libart-testdex core-luni-resources core-oj core-oj-hiddenapi core-oj-testdex core-ojluni-resources core-ojtests core-ojtests-public core-test-rules core-tests core-tests-smali-dex core-tests-support core_lambda_stubs_defaults core_libart_api_files core_libart_java_files core_oj_api_files core_oj_java_files java-current-stubs-source java-current-stubs-system-modules jsr166-tests known-oj-tags libcore-crypto-tests libcore-platform-compat-config libcore_java_defaults ojluni-annotated-mmodule-stubs ojluni-annotated-nullability-stubs ojluni-annotated-sdk-stubs timezone-host;
 
   inherit (callBPPackage "libcore" ./libcore_NativeCode.bp.nix {})
     core_native_default_flags core_native_default_libs libandroidio libjavacore libjavacore-benchmarks libjavacore-unit-tests libjavacoretests libopenjdk libopenjdk_native_defaults libopenjdkd;
 
+  inherit (callBPPackage "libcore/apex" ./libcore_apex.nix {})
+    "com.android.i18n" "com.android.i18n-defaults" "com.android.i18n.certificate" "com.android.i18n.key";
+
+  inherit (callBPPackage "libcore/benchmarks" ./libcore_benchmarks.nix {})
+    benchmarks;
+
+  inherit (callBPPackage "libcore/expectations" ./libcore_expectations.nix {})
+    libcore-expectations-knownfailures libcore-expectations-virtualdeviceknownfailures;
+
   inherit (callBPPackage "libcore/luni/src/main/native" ./libcore_luni_src_main_native.nix {})
     libandroidio_srcs luni_native_srcs;
+
+  inherit (callBPPackage "libcore/luni/src/test/annotations" ./libcore_luni_src_test_annotations.nix {})
+    annotations-test;
+
+  inherit (callBPPackage "libcore/luni/src/test/filesystems" ./libcore_luni_src_test_filesystems.nix {})
+    filesystemstest;
+
+  inherit (callBPPackage "libcore/luni/src/test/java9language" ./libcore_luni_src_test_java9language.nix {})
+    core-gen-test-repackaged-java-9-language-features core-java-9-language-features-repackaged-for-test core-java-9-language-features-test-src core-java-9-language-tests core-rewrite-test-for-jarjar-sed-script;
+
+  inherit (callBPPackage "libcore/luni/src/test/parameter_metadata" ./libcore_luni_src_test_parameter_metadata.nix {})
+    parameter-metadata-test;
 
   inherit (callBPPackage "libcore/metrictests/memory/apps" ./libcore_metrictests_memory_apps.nix {})
     LibcoreHeapDumper;
@@ -7744,19 +12211,22 @@
     libcore-memory-metrics-tests;
 
   inherit (callBPPackage "libcore/mmodules/core_platform_api" ./libcore_mmodules_core_platform_api.nix {})
-    "core.platform.api.stubs" core-platform-api-stubs core-platform-api-stubs-system-modules;
+    "art.module.platform.api.stubs" "core.platform.api.stubs" art-module-platform-api-stubs-source art-module-platform-api-stubs-system-modules break-cycle-in-core-platform-system-modules core-platform-api-stubs-system-modules;
 
   inherit (callBPPackage "libcore/mmodules/intracoreapi" ./libcore_mmodules_intracoreapi.nix {})
-    "core-libart-oj.depscheck" "core.intra.stubs" core-intra-stubs core-intra-stubs-system-modules;
+    "art.module.intra.core.api.stubs" art-module-intra-core-api-stubs-source art-module-intra-core-api-stubs-system-modules;
 
   inherit (callBPPackage "libcore" ./libcore_non_openjdk_java_files.bp.nix {})
-    non_openjdk_java_files non_openjdk_javadoc_files timezone_host_files;
+    api_surface_annotation_files hidden_api_surface_annotation_files non_openjdk_java_files non_openjdk_javadoc_dalvik_files non_openjdk_javadoc_files non_openjdk_javadoc_json_files non_openjdk_javadoc_libart_files non_openjdk_javadoc_luni_files non_openjdk_javadoc_xml_files timezone_host_files visible_api_surface_annotation_files;
+
+  inherit (callBPPackage "libcore/ojluni" ./libcore_ojluni.nix {})
+    ojluni-phony;
 
   inherit (callBPPackage "libcore/ojluni/src/main/native" ./libcore_ojluni_src_main_native.nix {})
     libopenjdk_native_srcs;
 
   inherit (callBPPackage "libcore" ./libcore_openjdk_java_files.bp.nix {})
-    openjdk-mmodule-stubs-no-javadoc openjdk-sdk-stubs-no-javadoc openjdk_hiddenapi_javadoc_files openjdk_internal_files openjdk_java_files openjdk_javadoc_files openjdk_lambda_duplicate_stub_files openjdk_lambda_stub_files openjdk_mmodule_extra_files;
+    openjdk-mmodule-stubs-no-javadoc openjdk-sdk-stubs-no-javadoc openjdk_generated_annotation_stub_files openjdk_hiddenapi_javadoc_files openjdk_internal_files openjdk_java_files openjdk_javadoc_files openjdk_lambda_duplicate_stub_files openjdk_lambda_stub_files openjdk_mmodule_extra_files;
 
   inherit (callBPPackage "libcore/tools/upstream" ./libcore_tools_upstream.nix {})
     libcore-compare-upstreams libcore-copy-upstream-files;
@@ -7776,11 +12246,29 @@
   inherit (callBPPackage "packages/apps/BasicSmsReceiver/tests" ./packages_apps_BasicSmsReceiver_tests.nix {})
     BasicSmsReceiverTests;
 
-  inherit (callBPPackage "packages/apps/Bluetooth/jni" ./packages_apps_Bluetooth_jni.nix {})
-    libbluetooth_jni;
+  inherit (callBPPackage "packages/apps/Bluetooth" ./packages_apps_Bluetooth.nix {})
+    "bluetooth.mapsapi" Bluetooth libbluetooth_jni statslog-bluetooth-java-gen;
+
+  inherit (callBPPackage "packages/apps/Bluetooth/tests/unit" ./packages_apps_Bluetooth_tests_unit.nix {})
+    BluetoothInstrumentationTests;
 
   inherit (callBPPackage "packages/apps/Browser2" ./packages_apps_Browser2.nix {})
     Browser2;
+
+  inherit (callBPPackage "packages/apps/Car/Calendar" ./packages_apps_Car_Calendar.nix {})
+    CarCalendarApp;
+
+  inherit (callBPPackage "packages/apps/Car/Calendar/tests/ui" ./packages_apps_Car_Calendar_tests_ui.nix {})
+    CarCalendarUiTests;
+
+  inherit (callBPPackage "packages/apps/Car/Calendar/tests/unit" ./packages_apps_Car_Calendar_tests_unit.nix {})
+    CarCalendarUnitTests;
+
+  inherit (callBPPackage "packages/apps/Car/Cluster" ./packages_apps_Car_Cluster.nix {})
+    DirectRenderingCluster;
+
+  inherit (callBPPackage "packages/apps/Car/Cluster/tests/robotests" ./packages_apps_Car_Cluster_tests_robotests.nix {})
+    DirectRenderingClusterTests;
 
   inherit (callBPPackage "packages/apps/Car/CompanionDeviceSupport" ./packages_apps_Car_CompanionDeviceSupport.nix {})
     CompanionDeviceSupport CompanionDeviceSupport-aidl CompanionDeviceSupport-lib;
@@ -7794,17 +12282,77 @@
   inherit (callBPPackage "packages/apps/Car/CompanionDeviceSupport/tests/unit" ./packages_apps_Car_CompanionDeviceSupport_tests_unit.nix {})
     CompanionDeviceSupport-unit-tests;
 
+  inherit (callBPPackage "packages/apps/Car/Dialer" ./packages_apps_Car_Dialer.nix {})
+    CarDialerApp CarDialerAppForTesting;
+
+  inherit (callBPPackage "packages/apps/Car/Dialer/tests/instrutests" ./packages_apps_Car_Dialer_tests_instrutests.nix {})
+    CarDialerInstruTests;
+
+  inherit (callBPPackage "packages/apps/Car/Dialer/tests/robotests" ./packages_apps_Car_Dialer_tests_robotests.nix {})
+    CarDialerRoboTests;
+
+  inherit (callBPPackage "packages/apps/Car/Dialer/tests/unittests" ./packages_apps_Car_Dialer_tests_unittests.nix {})
+    CarDialerUnitTests;
+
+  inherit (callBPPackage "packages/apps/Car/Hvac" ./packages_apps_Car_Hvac.nix {})
+    CarHvacApp;
+
+  inherit (callBPPackage "packages/apps/Car/LatinIME" ./packages_apps_Car_LatinIME.nix {})
+    CarLatinIME;
+
+  inherit (callBPPackage "packages/apps/Car/Launcher" ./packages_apps_Car_Launcher.nix {})
+    CarLauncher;
+
+  inherit (callBPPackage "packages/apps/Car/LinkViewer" ./packages_apps_Car_LinkViewer.nix {})
+    LinkViewer;
+
+  inherit (callBPPackage "packages/apps/Car/LocalMediaPlayer" ./packages_apps_Car_LocalMediaPlayer.nix {})
+    LocalMediaPlayer LocalMediaPlayer-proto;
+
+  inherit (callBPPackage "packages/apps/Car/Media" ./packages_apps_Car_Media.nix {})
+    CarMediaApp;
+
+  inherit (callBPPackage "packages/apps/Car/Messenger" ./packages_apps_Car_Messenger.nix {})
+    CarMessengerApp;
+
+  inherit (callBPPackage "packages/apps/Car/Messenger/tests/robotests" ./packages_apps_Car_Messenger_tests_robotests.nix {})
+    CarMessengerRoboTests;
+
   inherit (callBPPackage "packages/apps/Car/Notification" ./packages_apps_Car_Notification.nix {})
-    CarNotification CarNotificationLib;
+    CarNotification CarNotificationForTesting CarNotificationLib;
 
-  inherit (callBPPackage "packages/apps/Car/libs/EncryptionRunner" ./packages_apps_Car_libs_EncryptionRunner.nix {})
-    EncryptionRunner-lib;
+  inherit (callBPPackage "packages/apps/Car/Notification/tests/robotests" ./packages_apps_Car_Notification_tests_robotests.nix {})
+    CarNotificationRoboTests;
 
-  inherit (callBPPackage "packages/apps/Car/libs/androidx-room" ./packages_apps_Car_libs_androidx-room.nix {})
-    car-androidx-annotation-nodeps-bp car-androidx-room-common-nodeps-bp car-androidx-room-compiler car-androidx-room-compiler-nodeps-bp car-androidx-room-migration-nodeps-bp car-androidx-room-runtime-nodeps-bp;
+  inherit (callBPPackage "packages/apps/Car/Radio" ./packages_apps_Car_Radio.nix {})
+    CarRadioApp;
+
+  inherit (callBPPackage "packages/apps/Car/RotaryController" ./packages_apps_Car_RotaryController.nix {})
+    CarRotaryController;
+
+  inherit (callBPPackage "packages/apps/Car/RotaryController/tests/robotests" ./packages_apps_Car_RotaryController_tests_robotests.nix {})
+    CarRotaryControllerRoboTests;
+
+  inherit (callBPPackage "packages/apps/Car/Settings" ./packages_apps_Car_Settings.nix {})
+    CarSettings CarSettingsForTesting;
+
+  inherit (callBPPackage "packages/apps/Car/Settings/tests/robotests" ./packages_apps_Car_Settings_tests_robotests.nix {})
+    CarSettingsRoboTests;
+
+  inherit (callBPPackage "packages/apps/Car/SystemUpdater" ./packages_apps_Car_SystemUpdater.nix {})
+    SystemUpdater;
+
+  inherit (callBPPackage "packages/apps/Car/libs/androidx-car" ./packages_apps_Car_libs_androidx-car.nix {})
+    "androidx.car_car-resources-partially-dejetified" "androidx.car_car-resources-partially-dejetified-nodeps";
 
   inherit (callBPPackage "packages/apps/Car/libs/car-apps-common" ./packages_apps_Car_libs_car-apps-common.nix {})
-    car-apps-common-bp;
+    car-apps-common;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-arch-common" ./packages_apps_Car_libs_car-arch-common.nix {})
+    car-arch-common;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-arch-common/tests/robotests" ./packages_apps_Car_libs_car-arch-common_tests_robotests.nix {})
+    CarArchCommon CarArchCommonRoboTests;
 
   inherit (callBPPackage "packages/apps/Car/libs/car-assist-client-lib" ./packages_apps_Car_libs_car-assist-client-lib.nix {})
     car-assist-client-lib;
@@ -7812,17 +12360,44 @@
   inherit (callBPPackage "packages/apps/Car/libs/car-assist-lib" ./packages_apps_Car_libs_car-assist-lib.nix {})
     car-assist-lib;
 
+  inherit (callBPPackage "packages/apps/Car/libs/car-broadcastradio-support" ./packages_apps_Car_libs_car-broadcastradio-support.nix {})
+    car-broadcastradio-support;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-media-common" ./packages_apps_Car_libs_car-media-common.nix {})
+    car-media-common;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-media-common/tests/robotests" ./packages_apps_Car_libs_car-media-common_tests_robotests.nix {})
+    CarMediaCommon CarMediaCommonRoboTests;
+
   inherit (callBPPackage "packages/apps/Car/libs/car-messenger-common" ./packages_apps_Car_libs_car-messenger-common.nix {})
     car-messenger-common;
 
   inherit (callBPPackage "packages/apps/Car/libs/car-messenger-common/proto" ./packages_apps_Car_libs_car-messenger-common_proto.nix {})
     car-messenger-protos;
 
+  inherit (callBPPackage "packages/apps/Car/libs/car-telephony-common" ./packages_apps_Car_libs_car-telephony-common.nix {})
+    car-telephony-common;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-telephony-common/tests/robotests" ./packages_apps_Car_libs_car-telephony-common_tests_robotests.nix {})
+    CarTelephonyCommonForTesting CarTelephonyCommonRoboTests;
+
   inherit (callBPPackage "packages/apps/Car/libs/car-theme-lib" ./packages_apps_Car_libs_car-theme-lib.nix {})
-    car-theme-lib-bp;
+    car-theme-lib;
 
   inherit (callBPPackage "packages/apps/Car/libs/car-ui-lib" ./packages_apps_Car_libs_car-ui-lib.nix {})
-    car-ui-lib-bp;
+    car-ui-lib car-ui-lib-testing-support;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-ui-lib/sharedlibrary" ./packages_apps_Car_libs_car-ui-lib_sharedlibrary.nix {})
+    car-ui-lib-sharedlibrary;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-ui-lib/tests/paintbooth" ./packages_apps_Car_libs_car-ui-lib_tests_paintbooth.nix {})
+    PaintBooth;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-ui-lib/tests/robotests" ./packages_apps_Car_libs_car-ui-lib_tests_robotests.nix {})
+    CarUi CarUiRoboTests;
+
+  inherit (callBPPackage "packages/apps/Car/libs/car-ui-lib/tests/unit" ./packages_apps_Car_libs_car-ui-lib_tests_unit.nix {})
+    CarUILibUnitTests;
 
   inherit (callBPPackage "packages/apps/Car/libs/connected-device-lib" ./packages_apps_Car_libs_connected-device-lib.nix {})
     connected-device-lib;
@@ -7833,6 +12408,15 @@
   inherit (callBPPackage "packages/apps/Car/libs/connected-device-lib/tests/unit" ./packages_apps_Car_libs_connected-device-lib_tests_unit.nix {})
     connected-device-lib-unit-tests;
 
+  inherit (callBPPackage "packages/apps/Car/libs/encryption-runner" ./packages_apps_Car_libs_encryption-runner.nix {})
+    encryption-runner;
+
+  inherit (callBPPackage "packages/apps/Car/tests/RotaryPlayground" ./packages_apps_Car_tests_RotaryPlayground.nix {})
+    RotaryPlayground;
+
+  inherit (callBPPackage "packages/apps/Car/tests/TestMediaApp" ./packages_apps_Car_tests_TestMediaApp.nix {})
+    TestMediaApp;
+
   inherit (callBPPackage "packages/apps/CarrierConfig" ./packages_apps_CarrierConfig.nix {})
     CarrierConfig;
 
@@ -7840,16 +12424,34 @@
     CarrierConfigTests;
 
   inherit (callBPPackage "packages/apps/CellBroadcastReceiver" ./packages_apps_CellBroadcastReceiver.nix {})
-    CellBroadcastReceiver;
+    CellBroadcastApp CellBroadcastAppPlatform CellBroadcastCommon cellbroadcast-database-sources cellbroadcastreceiver-sources;
+
+  inherit (callBPPackage "packages/apps/CellBroadcastReceiver/RROSampleTestApp" ./packages_apps_CellBroadcastReceiver_RROSampleTestApp.nix {})
+    CellBroadcastReceiverRROSample;
+
+  inherit (callBPPackage "packages/apps/CellBroadcastReceiver/apex" ./packages_apps_CellBroadcastReceiver_apex.nix {})
+    "com.android.cellbroadcast" "com.android.cellbroadcast-defaults" "com.android.cellbroadcast.certificate" "com.android.cellbroadcast.key";
+
+  inherit (callBPPackage "packages/apps/CellBroadcastReceiver/apex/testing" ./packages_apps_CellBroadcastReceiver_apex_testing.nix {})
+    "test_com.android.cellbroadcast";
+
+  inherit (callBPPackage "packages/apps/CellBroadcastReceiver/legacy" ./packages_apps_CellBroadcastReceiver_legacy.nix {})
+    CellBroadcastLegacyApp;
 
   inherit (callBPPackage "packages/apps/CellBroadcastReceiver/tests/testapp" ./packages_apps_CellBroadcastReceiver_tests_testapp.nix {})
     CellBroadcastReceiverTests;
 
   inherit (callBPPackage "packages/apps/CellBroadcastReceiver/tests/unit" ./packages_apps_CellBroadcastReceiver_tests_unit.nix {})
-    CellBroadcastReceiverUnitTests;
+    CellBroadcastReceiverOemUnitTests CellBroadcastReceiverPlatformUnitTests CellBroadcastReceiverUnitTests CellBroadcastTestCommon cellbroadcastreceiver-shared-srcs-test;
 
   inherit (callBPPackage "packages/apps/CertInstaller" ./packages_apps_CertInstaller.nix {})
     CertInstaller;
+
+  inherit (callBPPackage "packages/apps/Contacts" ./packages_apps_Contacts.nix {})
+    Contacts;
+
+  inherit (callBPPackage "packages/apps/Contacts/tests" ./packages_apps_Contacts_tests.nix {})
+    ContactsTests;
 
   inherit (callBPPackage "packages/apps/DeskClock" ./packages_apps_DeskClock.nix {})
     DeskClock;
@@ -7858,7 +12460,7 @@
     DevCamera;
 
   inherit (callBPPackage "packages/apps/DocumentsUI" ./packages_apps_DocumentsUI.nix {})
-    DocumentsUI DocumentsUI-res-lib DocumentsUI-srcs docsui-statsd documentsui_defaults statslog-docsui-java-gen;
+    DocumentsUI DocumentsUI-res-lib DocumentsUI-srcs DocumentsUIUnitTests-res-lib docsui-statsd documents-ui-compat-config documentsui_defaults statslog-docsui-java-gen;
 
   inherit (callBPPackage "packages/apps/DocumentsUI/app-perf-tests" ./packages_apps_DocumentsUI_app-perf-tests.nix {})
     DocumentsUIAppPerfTests;
@@ -7867,13 +12469,16 @@
     DocumentsUIPerfTests;
 
   inherit (callBPPackage "packages/apps/DocumentsUI/tests" ./packages_apps_DocumentsUI_tests.nix {})
-    DocumentsUIPerfTests-files DocumentsUITests DocumentsUITests-res-lib DocumentsUITests-srcs;
+    DocumentsUIPerfTests-files DocumentsUITests DocumentsUITests-res-lib DocumentsUITests-srcs DocumentsUIUnitTests-srcs;
 
   inherit (callBPPackage "packages/apps/EmergencyInfo" ./packages_apps_EmergencyInfo.nix {})
     EmergencyInfo EmergencyInfo-lib;
 
   inherit (callBPPackage "packages/apps/EmergencyInfo/tests/common" ./packages_apps_EmergencyInfo_tests_common.nix {})
     emergencyinfo-test-common;
+
+  inherit (callBPPackage "packages/apps/EmergencyInfo/tests/robolectric" ./packages_apps_EmergencyInfo_tests_robolectric.nix {})
+    EmergencyInfoRoboTests;
 
   inherit (callBPPackage "packages/apps/EmergencyInfo/tests/unit" ./packages_apps_EmergencyInfo_tests_unit.nix {})
     EmergencyInfoUnitTests;
@@ -7884,11 +12489,26 @@
   inherit (callBPPackage "packages/apps/Gallery/tests" ./packages_apps_Gallery_tests.nix {})
     GalleryTests;
 
+  inherit (callBPPackage "packages/apps/Gallery2" ./packages_apps_Gallery2.nix {})
+    Gallery2;
+
+  inherit (callBPPackage "packages/apps/Gallery2/gallerycommon" ./packages_apps_Gallery2_gallerycommon.nix {})
+    "com.android.gallery3d.common2";
+
+  inherit (callBPPackage "packages/apps/Gallery2/jni" ./packages_apps_Gallery2_jni.nix {})
+    gallery2_jni_defaults libjni_eglfence libjni_filtershow_filters;
+
+  inherit (callBPPackage "packages/apps/Gallery2/jni_jpegstream" ./packages_apps_Gallery2_jni_jpegstream.nix {})
+    libjni_jpegstream;
+
   inherit (callBPPackage "packages/apps/HTMLViewer" ./packages_apps_HTMLViewer.nix {})
     HTMLViewer;
 
   inherit (callBPPackage "packages/apps/KeyChain" ./packages_apps_KeyChain.nix {})
     KeyChain;
+
+  inherit (callBPPackage "packages/apps/KeyChain/robotests" ./packages_apps_KeyChain_robotests.nix {})
+    KeyChainRoboTests;
 
   inherit (callBPPackage "packages/apps/KeyChain/support" ./packages_apps_KeyChain_support.nix {})
     "com.android.keychain.tests.support" KeyChainTestsSupport;
@@ -7897,10 +12517,16 @@
     KeyChainTests;
 
   inherit (callBPPackage "packages/apps/Launcher3" ./packages_apps_Launcher3.nix {})
-    launcher-aosp-tapl;
+    LauncherPluginLib launcher-aosp-tapl launcher_log_protos_lite;
 
-  inherit (callBPPackage "packages/apps/Launcher3/iconloaderlib" ./packages_apps_Launcher3_iconloaderlib.nix {})
-    iconloader iconloader_base;
+  inherit (callBPPackage "packages/apps/LegacyCamera" ./packages_apps_LegacyCamera.nix {})
+    LegacyCamera;
+
+  inherit (callBPPackage "packages/apps/LegacyCamera/jni" ./packages_apps_LegacyCamera_jni.nix {})
+    libjni_legacymosaic;
+
+  inherit (callBPPackage "packages/apps/LegacyCamera/tests" ./packages_apps_LegacyCamera_tests.nix {})
+    LegacyCameraTests;
 
   inherit (callBPPackage "packages/apps/Music" ./packages_apps_Music.nix {})
     Music;
@@ -7909,7 +12535,7 @@
     MusicFX;
 
   inherit (callBPPackage "packages/apps/Nfc" ./packages_apps_Nfc.nix {})
-    NfcNci;
+    NfcNci statslog-Nfc-java-gen;
 
   inherit (callBPPackage "packages/apps/Nfc/nci/jni" ./packages_apps_Nfc_nci_jni.nix {})
     libnfc_nci_jni;
@@ -7917,20 +12543,50 @@
   inherit (callBPPackage "packages/apps/Nfc/tests" ./packages_apps_Nfc_tests.nix {})
     NfcTests;
 
+  inherit (callBPPackage "packages/apps/OnDeviceAppPrediction" ./packages_apps_OnDeviceAppPrediction.nix {})
+    AppPredictionService AppPredictionService-srcs apppredictionservice_defaults;
+
   inherit (callBPPackage "packages/apps/OneTimeInitializer" ./packages_apps_OneTimeInitializer.nix {})
     OneTimeInitializer;
 
   inherit (callBPPackage "packages/apps/PermissionController" ./packages_apps_PermissionController.nix {})
-    PermissionController permissioncontroller-statsd statslog-permissioncontroller-java-gen;
+    PermissionController permissioncontroller-protos permissioncontroller-sources permissioncontroller-statsd statslog-permissioncontroller-java-gen;
+
+  inherit (callBPPackage "packages/apps/PermissionController/tests/inprocess" ./packages_apps_PermissionController_tests_inprocess.nix {})
+    PermissionControllerInProcessTests;
+
+  inherit (callBPPackage "packages/apps/PermissionController/tests/inprocess/AppThatDefinesAdditionalPermission" ./packages_apps_PermissionController_tests_inprocess_AppThatDefinesAdditionalPermission.nix {})
+    AppThatDefinesAdditionalPermission;
+
+  inherit (callBPPackage "packages/apps/PermissionController/tests/inprocess/AppThatUsesAdditionalPermission" ./packages_apps_PermissionController_tests_inprocess_AppThatUsesAdditionalPermission.nix {})
+    AppThatUsesAdditionalPermission;
+
+  inherit (callBPPackage "packages/apps/PermissionController/tests/inprocess/AppThatUsesStoragePermission" ./packages_apps_PermissionController_tests_inprocess_AppThatUsesStoragePermission.nix {})
+    AppThatUsesStoragePermission;
+
+  inherit (callBPPackage "packages/apps/PermissionController/tests/inprocess/AppThatUsesTwoAdditionalPermissions" ./packages_apps_PermissionController_tests_inprocess_AppThatUsesTwoAdditionalPermissions.nix {})
+    AppThatUsesTwoAdditionalPermissions;
+
+  inherit (callBPPackage "packages/apps/PermissionController/tests/mocking" ./packages_apps_PermissionController_tests_mocking.nix {})
+    PermissionControllerMockingTests;
+
+  inherit (callBPPackage "packages/apps/PermissionController/tests/outofprocess" ./packages_apps_PermissionController_tests_outofprocess.nix {})
+    PermissionControllerOutOfProcessTests;
 
   inherit (callBPPackage "packages/apps/PhoneCommon" ./packages_apps_PhoneCommon.nix {})
-    "com.android.phone.common";
+    "com.android.phone.common" "com.android.phone.common-lib";
 
   inherit (callBPPackage "packages/apps/Protips" ./packages_apps_Protips.nix {})
     Protips;
 
   inherit (callBPPackage "packages/apps/Provision" ./packages_apps_Provision.nix {})
     Provision;
+
+  inherit (callBPPackage "packages/apps/QuickAccessWallet" ./packages_apps_QuickAccessWallet.nix {})
+    QuickAccessWallet;
+
+  inherit (callBPPackage "packages/apps/QuickAccessWallet/tests/robolectric" ./packages_apps_QuickAccessWallet_tests_robolectric.nix {})
+    QuickAccessWalletRoboTests;
 
   inherit (callBPPackage "packages/apps/QuickSearchBox" ./packages_apps_QuickSearchBox.nix {})
     QuickSearchBox;
@@ -7957,10 +12613,31 @@
     SafetyRegulatoryInfo;
 
   inherit (callBPPackage "packages/apps/SecureElement" ./packages_apps_SecureElement.nix {})
-    SecureElement;
+    SecureElement statslog-secure-element-java-gen;
+
+  inherit (callBPPackage "packages/apps/Settings" ./packages_apps_Settings.nix {})
+    Settings Settings-core contextualcards settings-logtags settings-platform-compat-config statslog-settings statslog-settings-java-gen;
 
   inherit (callBPPackage "packages/apps/Settings/protos" ./packages_apps_Settings_protos.nix {})
     settings-contextual-card-protos-lite settings-log-bridge-protos-lite;
+
+  inherit (callBPPackage "packages/apps/Settings/tests/anomaly-tester" ./packages_apps_Settings_tests_anomaly-tester.nix {})
+    AnomalyTester;
+
+  inherit (callBPPackage "packages/apps/Settings/tests/perftests" ./packages_apps_Settings_tests_perftests.nix {})
+    SettingsPerfTests;
+
+  inherit (callBPPackage "packages/apps/Settings/tests/robotests" ./packages_apps_Settings_tests_robotests.nix {})
+    SettingsRoboTestStub SettingsRoboTests;
+
+  inherit (callBPPackage "packages/apps/Settings/tests/uitests" ./packages_apps_Settings_tests_uitests.nix {})
+    SettingsUITests;
+
+  inherit (callBPPackage "packages/apps/Settings/tests/unit" ./packages_apps_Settings_tests_unit.nix {})
+    SettingsUnitTests;
+
+  inherit (callBPPackage "packages/apps/Settings/tests/unit/InstrumentedEntitlementApp" ./packages_apps_Settings_tests_unit_InstrumentedEntitlementApp.nix {})
+    InstrumentedEntitlementApp;
 
   inherit (callBPPackage "packages/apps/SettingsIntelligence" ./packages_apps_SettingsIntelligence.nix {})
     SettingsIntelligence;
@@ -7975,7 +12652,7 @@
     Stk;
 
   inherit (callBPPackage "packages/apps/TV" ./packages_apps_TV.nix {})
-    LiveTv;
+    "com.android.tv.xml" LiveTv;
 
   inherit (callBPPackage "packages/apps/TV/common" ./packages_apps_TV_common.nix {})
     tv-common;
@@ -7984,16 +12661,37 @@
     libtunertvinput_jni;
 
   inherit (callBPPackage "packages/apps/TV/libs" ./packages_apps_TV_libs.nix {})
-    tv-auto-factory tv-auto-factory-jar tv-auto-value tv-auto-value-jar tv-error-prone-annotations-jar tv-guava-android-jar tv-guava-jre-jar tv-javawriter-jar tv-javax-annotations-jar tv-lib-dagger tv-lib-dagger-android tv-lib-dagger-android-processor tv-lib-dagger-android-processor-import tv-lib-dagger-compiler tv-lib-dagger-compiler-deps tv-lib-dagger-compiler-import tv-lib-exoplayer tv-lib-exoplayer-v2-core tv-lib-truth;
+    tv-auto-common-jar tv-auto-factory tv-auto-factory-jar tv-auto-value tv-auto-value-jar tv-error-prone-annotations-jar tv-google-java-format-jar tv-guava-android-jar tv-guava-failureaccess-jar tv-guava-jre-jar tv-javapoet-jar tv-javax-annotations-jar tv-lib-dagger tv-lib-dagger-android tv-lib-dagger-android-processor tv-lib-dagger-android-processor-import tv-lib-dagger-compiler tv-lib-dagger-compiler-import tv-lib-exoplayer tv-lib-exoplayer-v2-core tv-lib-exoplayer-v2-ui tv-lib-truth;
 
   inherit (callBPPackage "packages/apps/TV/partner_support" ./packages_apps_TV_partner_support.nix {})
     live-channels-partner-support;
 
+  inherit (callBPPackage "packages/apps/TV/partner_support/samples" ./packages_apps_TV_partner_support_samples.nix {})
+    PartnerSupportSampleTvInput;
+
+  inherit (callBPPackage "packages/apps/TV/ratings" ./packages_apps_TV_ratings.nix {})
+    tv-ratings-resources;
+
+  inherit (callBPPackage "packages/apps/TV/tests/common" ./packages_apps_TV_tests_common.nix {})
+    tv-test-common;
+
   inherit (callBPPackage "packages/apps/TV/tuner" ./packages_apps_TV_tuner.nix {})
     live-tv-tuner;
 
+  inherit (callBPPackage "packages/apps/TV/tuner/SampleDvbTuner" ./packages_apps_TV_tuner_SampleDvbTuner.nix {})
+    SampleDvbTuner;
+
+  inherit (callBPPackage "packages/apps/TV/tuner/SampleNetworkTuner" ./packages_apps_TV_tuner_SampleNetworkTuner.nix {})
+    SampleNetworkTuner;
+
   inherit (callBPPackage "packages/apps/TV/tuner/proto" ./packages_apps_TV_tuner_proto.nix {})
     live-tv-tuner-proto;
+
+  inherit (callBPPackage "packages/apps/TV/tuner/sampletunertvinput" ./packages_apps_TV_tuner_sampletunertvinput.nix {})
+    sampletunertvinput;
+
+  inherit (callBPPackage "packages/apps/Tag" ./packages_apps_Tag.nix {})
+    Tag;
 
   inherit (callBPPackage "packages/apps/Terminal" ./packages_apps_Terminal.nix {})
     Terminal;
@@ -8010,6 +12708,12 @@
   inherit (callBPPackage "packages/apps/Test/connectivity/sl4n" ./packages_apps_Test_connectivity_sl4n.nix {})
     sl4n;
 
+  inherit (callBPPackage "packages/apps/TimeZoneData" ./packages_apps_TimeZoneData.nix {})
+    time_zone_distro_provider;
+
+  inherit (callBPPackage "packages/apps/TimeZoneData/testing/xts" ./packages_apps_TimeZoneData_testing_xts.nix {})
+    time_zone_data_app_testing;
+
   inherit (callBPPackage "packages/apps/TimeZoneUpdater" ./packages_apps_TimeZoneUpdater.nix {})
     TimeZoneUpdater time_zone_updater;
 
@@ -8018,6 +12722,15 @@
 
   inherit (callBPPackage "packages/apps/Traceur/uitests" ./packages_apps_Traceur_uitests.nix {})
     TraceurUiTests;
+
+  inherit (callBPPackage "packages/apps/TvSettings/Settings" ./packages_apps_TvSettings_Settings.nix {})
+    "privapp_whitelist_com.android.tv.settings" TvSettings;
+
+  inherit (callBPPackage "packages/apps/TvSettings/Settings/tests/robotests" ./packages_apps_TvSettings_Settings_tests_robotests.nix {})
+    TvSettingsRoboTests;
+
+  inherit (callBPPackage "packages/apps/TvSettings/TwoPanelSettingsLib" ./packages_apps_TvSettings_TwoPanelSettingsLib.nix {})
+    TwoPanelSettingsLib statslog-tvsettings statslog-tvsettings-java-gen;
 
   inherit (callBPPackage "packages/apps/UniversalMediaPlayer" ./packages_apps_UniversalMediaPlayer.nix {})
     UniversalMediaPlayer;
@@ -8049,14 +12762,56 @@
   inherit (callBPPackage "packages/inputmethods/LatinIME/tools/make-keyboard-text" ./packages_inputmethods_LatinIME_tools_make-keyboard-text.nix {})
     make-keyboard-text;
 
+  inherit (callBPPackage "packages/inputmethods/LeanbackIME" ./packages_inputmethods_LeanbackIME.nix {})
+    LeanbackIME;
+
+  inherit (callBPPackage "packages/modules/ArtPrebuilt/iorap/test" ./packages_modules_ArtPrebuilt_iorap_test.nix {})
+    iorap-functional-test-apps;
+
   inherit (callBPPackage "packages/modules/CaptivePortalLogin" ./packages_modules_CaptivePortalLogin.nix {})
-    CaptivePortalLogin CaptivePortalLoginDefaults PlatformCaptivePortalLogin;
+    CaptivePortalLogin CaptivePortalLoginDefaults CaptivePortalLoginTestLib PlatformCaptivePortalLogin;
+
+  inherit (callBPPackage "packages/modules/CaptivePortalLogin/tests" ./packages_modules_CaptivePortalLogin_tests.nix {})
+    CaptivePortalLoginTests;
+
+  inherit (callBPPackage "packages/modules/CellBroadcastService" ./packages_modules_CellBroadcastService.nix {})
+    CellBroadcastServiceCommon CellBroadcastServiceModule CellBroadcastServiceModulePlatform cellbroadcast-constants-shared-srcs cellbroadcast-shared-srcs cellbroadcast-util-shared-srcs statslog-cellbroadcast-java-gen;
+
+  inherit (callBPPackage "packages/modules/CellBroadcastService/tests" ./packages_modules_CellBroadcastService_tests.nix {})
+    CellBroadcastServiceTests;
+
+  inherit (callBPPackage "packages/modules/DnsResolver" ./packages_modules_DnsResolver.nix {})
+    "statslog_resolv.cpp" "statslog_resolv.h" dnsproxyd_protocol_headers dnsresolver_aidl_interface libnetd_resolv libnetd_resolv_headers libnetd_resolv_internal_headers libstatslog_resolv resolv_test_config_template resolv_test_defaults resolv_test_mts_coverage_defaults resolv_unit_test stats_proto;
+
+  inherit (callBPPackage "packages/modules/DnsResolver/apex" ./packages_modules_DnsResolver_apex.nix {})
+    "com.android.resolv" "com.android.resolv.certificate" "com.android.resolv.key";
+
+  inherit (callBPPackage "packages/modules/DnsResolver/tests" ./packages_modules_DnsResolver_tests.nix {})
+    golddata_proto golddata_proto_host libnetd_test_resolv_utils resolv_gold_test resolv_gold_test_pbtxt2pb resolv_gold_test_pbtxt2pb_host resolv_integration_test resolv_stats_test_utils resolv_stats_test_utils_test resolv_stress_test;
+
+  inherit (callBPPackage "packages/modules/DnsResolver/tests/dns_metrics_listener" ./packages_modules_DnsResolver_tests_dns_metrics_listener.nix {})
+    libnetd_test_metrics_listener;
+
+  inherit (callBPPackage "packages/modules/DnsResolver/tests/dns_responder" ./packages_modules_DnsResolver_tests_dns_responder.nix {})
+    libnetd_test_dnsresponder_ndk;
 
   inherit (callBPPackage "packages/modules/ExtServices" ./packages_modules_ExtServices.nix {})
     ExtServices ExtServices-core;
 
   inherit (callBPPackage "packages/modules/ExtServices/tests" ./packages_modules_ExtServices_tests.nix {})
     ExtServicesUnitTests;
+
+  inherit (callBPPackage "packages/modules/IPsec" ./packages_modules_IPsec.nix {})
+    "android.net.ipsec.ike" ike-api-srcs ike-internals ike-srcs ike_test;
+
+  inherit (callBPPackage "packages/modules/IPsec/apex" ./packages_modules_IPsec_apex.nix {})
+    "com.android.ipsec" "com.android.ipsec-defaults" "com.android.ipsec.certificate" "com.android.ipsec.key";
+
+  inherit (callBPPackage "packages/modules/IPsec/apex/testing" ./packages_modules_IPsec_apex_testing.nix {})
+    "test_com.android.ipsec";
+
+  inherit (callBPPackage "packages/modules/IPsec/tests/iketests" ./packages_modules_IPsec_tests_iketests.nix {})
+    FrameworksIkeTests ike-test-utils;
 
   inherit (callBPPackage "packages/modules/ModuleMetadata" ./packages_modules_ModuleMetadata.nix {})
     ModuleMetadata;
@@ -8065,10 +12820,52 @@
     NetworkPermissionConfig NetworkPermissionConfigDefaults PlatformNetworkPermissionConfig;
 
   inherit (callBPPackage "packages/modules/NetworkStack" ./packages_modules_NetworkStack.nix {})
-    InProcessNetworkStack NetworkStack NetworkStackAppCommon NetworkStackBase NetworkStackCommon captiveportal-lib libnetworkstackutilsjni statslog-networkstack-java-gen;
+    InProcessNetworkStack NetworkStack NetworkStackAndroidLibraryDefaults NetworkStackApiCurrentLib NetworkStackApiCurrentShims NetworkStackApiStableDependencies NetworkStackApiStableLib NetworkStackApiStableShims NetworkStackAppDefaults NetworkStackDevApiLevel NetworkStackJarJarRules NetworkStackNext NetworkStackNextManifestBase NetworkStackReleaseApiLevel NetworkStackTestAndroidManifest TestNetworkStack TestNetworkStackLib libnetworkstackutilsjni statslog-networkstack-java-gen statsprotos;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/common/captiveportal" ./packages_modules_NetworkStack_common_captiveportal.nix {})
+    captiveportal-lib;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/common/moduleutils" ./packages_modules_NetworkStack_common_moduleutils.nix {})
+    net-module-utils-srcs net-module-utils-srcs-for-tests networkstack-module-utils-srcs tethering-module-utils-srcs;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/common/netlinkclient" ./packages_modules_NetworkStack_common_netlinkclient.nix {})
+    netlink-client;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/common/networkstackclient" ./packages_modules_NetworkStack_common_networkstackclient.nix {})
+    ipmemorystore-aidl-interfaces networkstack-aidl-interfaces networkstack-client;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/tests/hostdriven" ./packages_modules_NetworkStack_tests_hostdriven.nix {})
+    NetworkStackHostTests;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/tests/hostlib" ./packages_modules_NetworkStack_tests_hostlib.nix {})
+    net-host-tests-utils;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/tests/integration" ./packages_modules_NetworkStack_tests_integration.nix {})
+    NetworkStackCoverageTests NetworkStackIntegrationTests NetworkStackIntegrationTestsDefaults NetworkStackIntegrationTestsJniDefaults NetworkStackIntegrationTestsLib NetworkStackNextIntegrationTests NetworkStackStaticLibTestsLib;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/tests/lib" ./packages_modules_NetworkStack_tests_lib.nix {})
+    lib_mockito_extended net-tests-utils net-tests-utils-multivariant;
 
   inherit (callBPPackage "packages/modules/NetworkStack/tests/unit" ./packages_modules_NetworkStack_tests_unit.nix {})
-    NetworkStackTests libnetworkstacktestsjni;
+    NetworkStackNextTests NetworkStackTests NetworkStackTestsDefaults NetworkStackTestsLib libnetworkstackutilsjni_deps;
+
+  inherit (callBPPackage "packages/modules/NetworkStack/tests/unit/jni" ./packages_modules_NetworkStack_tests_unit_jni.nix {})
+    libnetworkstacktestsjni;
+
+  inherit (callBPPackage "packages/modules/SdkExtensions" ./packages_modules_SdkExtensions.nix {})
+    "com.android.sdkext" "com.android.sdkext-defaults" "com.android.sdkext.certificate" "com.android.sdkext.key" cur_sdkinfo cur_sdkinfo_src gen_sdkinfo;
+
+  inherit (callBPPackage "packages/modules/SdkExtensions/derive_sdk" ./packages_modules_SdkExtensions_derive_sdk.nix {})
+    "derive_sdk.rc" derive_sdk derive_sdk-defaults derive_sdk_prefer32;
+
+  inherit (callBPPackage "packages/modules/SdkExtensions/framework" ./packages_modules_SdkExtensions_framework.nix {})
+    framework-sdkextensions framework-sdkextensions-sources;
+
+  inherit (callBPPackage "packages/modules/SdkExtensions/testing" ./packages_modules_SdkExtensions_testing.nix {})
+    "test_com.android.sdkext" sdkinfo_45 sdkinfo_45_src test_framework-sdkextensions test_framework-sdkextensions-sources test_framework-sdkextensions-stubs;
+
+  inherit (callBPPackage "packages/modules/vndk/apex" ./packages_modules_vndk_apex.nix {})
+    "com.android.vndk.current" "com.android.vndk.current.certificate" "com.android.vndk.current.key" "com.android.vndk.current.on_vendor" "com.android.vndk.v27" "com.android.vndk.v27.certificate" "com.android.vndk.v27.key" "com.android.vndk.v28" "com.android.vndk.v28.certificate" "com.android.vndk.v28.key" "com.android.vndk.v29" "com.android.vndk.v29.certificate" "com.android.vndk.v29.key";
 
   inherit (callBPPackage "packages/providers/BlockedNumberProvider" ./packages_providers_BlockedNumberProvider.nix {})
     BlockedNumberProvider;
@@ -8119,10 +12916,34 @@
     DownloadProviderUi;
 
   inherit (callBPPackage "packages/providers/MediaProvider" ./packages_providers_MediaProvider.nix {})
-    MediaProvider;
+    MediaProvider media-provider-platform-compat-config mediaprovider-database-sources mediaprovider-sources statslog-mediaprovider-java-gen;
+
+  inherit (callBPPackage "packages/providers/MediaProvider/apex" ./packages_providers_MediaProvider_apex.nix {})
+    "com.android.mediaprovider" "com.android.mediaprovider-defaults" "com.android.mediaprovider.certificate" "com.android.mediaprovider.key";
+
+  inherit (callBPPackage "packages/providers/MediaProvider/apex/framework" ./packages_providers_MediaProvider_apex_framework.nix {})
+    framework-mediaprovider framework-mediaprovider-sources framework_mediaprovider_annotation;
+
+  inherit (callBPPackage "packages/providers/MediaProvider/apex/testing" ./packages_providers_MediaProvider_apex_testing.nix {})
+    "test_com.android.mediaprovider";
+
+  inherit (callBPPackage "packages/providers/MediaProvider/errorprone" ./packages_providers_MediaProvider_errorprone.nix {})
+    error_prone_mediaprovider error_prone_mediaprovider_lib;
+
+  inherit (callBPPackage "packages/providers/MediaProvider/jni" ./packages_providers_MediaProvider_jni.nix {})
+    FuseUtilsTest RedactionInfoTest fuse_node_test libfuse_jni;
+
+  inherit (callBPPackage "packages/providers/MediaProvider/legacy" ./packages_providers_MediaProvider_legacy.nix {})
+    MediaProviderLegacy;
 
   inherit (callBPPackage "packages/providers/MediaProvider/tests" ./packages_providers_MediaProvider_tests.nix {})
     MediaProviderTests;
+
+  inherit (callBPPackage "packages/providers/MediaProvider/tests/client" ./packages_providers_MediaProvider_tests_client.nix {})
+    MediaProviderClientTests;
+
+  inherit (callBPPackage "packages/providers/MediaProvider/tools/dialogs" ./packages_providers_MediaProvider_tools_dialogs.nix {})
+    MediaProviderDialogsTool;
 
   inherit (callBPPackage "packages/providers/PartnerBookmarksProvider" ./packages_providers_PartnerBookmarksProvider.nix {})
     PartnerBookmarksProvider;
@@ -8131,7 +12952,10 @@
     PartnerBookmarksProviderTest;
 
   inherit (callBPPackage "packages/providers/TelephonyProvider" ./packages_providers_TelephonyProvider.nix {})
-    TelephonyProvider;
+    TelephonyProvider telephonyprovider-assets-carrierlist;
+
+  inherit (callBPPackage "packages/providers/TelephonyProvider/proto" ./packages_providers_TelephonyProvider_proto.nix {})
+    telephonyprovider-proto-sources telephonyprovider-protos;
 
   inherit (callBPPackage "packages/providers/TelephonyProvider/tests" ./packages_providers_TelephonyProvider_tests.nix {})
     TelephonyProviderTests;
@@ -8164,37 +12988,223 @@
     libwfds;
 
   inherit (callBPPackage "packages/services/Car/EncryptionRunner" ./packages_services_Car_EncryptionRunner.nix {})
-    EncryptionRunner EncryptionRunnerTest;
+    EncryptionRunner;
 
   inherit (callBPPackage "packages/services/Car/car-bugreportd" ./packages_services_Car_car-bugreportd.nix {})
     car-bugreportd;
 
+  inherit (callBPPackage "packages/services/Car/car-internal-lib" ./packages_services_Car_car-internal-lib.nix {})
+    "android.car.internal.event-log-tags";
+
   inherit (callBPPackage "packages/services/Car/car-lib" ./packages_services_Car_car-lib.nix {})
-    "android.car" "android.car-docs-default" "android.car-stub-docs" "android.car-stubs" "android.car-stubs-docs" "android.car-system-stubs" "android.car-system-stubs-docs" "android.car-test-stubs" "android.car-test-stubs-docs" "android.car.cluster.navigation" "android.car.settings" android-car-last-released-api android-car-last-released-system-api libcarpowermanager;
+    "android.car" "android.car-docs-default" "android.car-stub-docs" "android.car-stubs" "android.car-stubs-dex" "android.car-stubs-docs" "android.car-system-stubs" "android.car-system-stubs-dex" "android.car-system-stubs-docs" "android.car-test-stubs" "android.car-test-stubs-dex" "android.car-test-stubs-docs" "android.car.cluster.navigation" "android.car.settings" "car-api-system-current.txt" "car-api-system-removed.txt" android-car-last-released-api android-car-last-released-system-api libcarpowermanager libcarpowermanager_aidl;
+
+  inherit (callBPPackage "packages/services/Car/car-systemtest-lib" ./packages_services_Car_car-systemtest-lib.nix {})
+    car-systemtest;
 
   inherit (callBPPackage "packages/services/Car/car-test-lib" ./packages_services_Car_car-test-lib.nix {})
-    "android.car.testapi";
+    "android.car.test.utils" "android.car.testapi";
+
+  inherit (callBPPackage "packages/services/Car/computepipe/aidl" ./packages_services_Car_computepipe_aidl.nix {})
+    "android.automotive.computepipe.registry" "android.automotive.computepipe.runner";
+
+  inherit (callBPPackage "packages/services/Car/computepipe/example" ./packages_services_Car_computepipe_example.nix {})
+    computepipe_face_runner computepipe_face_tracker libcomputepipeface-defaults libcomputepipefaceproto libfacegraph;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/proto" ./packages_services_Car_computepipe_proto.nix {})
+    libcomputepipeprotos libcomputepipeprotos-defaults;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/router/1.0" ./packages_services_Car_computepipe_router_1.0.nix {})
+    "android.automotive.computepipe.router@1.0" "android.automotive.computepipe.router@1.0-impl";
+
+  inherit (callBPPackage "packages/services/Car/computepipe/router" ./packages_services_Car_computepipe_router.nix {})
+    computepipe_router_headers;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner" ./packages_services_Car_computepipe_runner.nix {})
+    computepipe_runner_component computepipe_runner_includes;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner/client_interface" ./packages_services_Car_computepipe_runner_client_interface.nix {})
+    computepipe_client_interface;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner/debug_display_manager" ./packages_services_Car_computepipe_runner_debug_display_manager.nix {})
+    computepipe_runner_display;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner/engine" ./packages_services_Car_computepipe_runner_engine.nix {})
+    computepipe_runner_engine;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner/graph" ./packages_services_Car_computepipe_runner_graph.nix {})
+    computepipe_grpc_graph computepipe_prebuilt_graph;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner/graph/proto" ./packages_services_Car_computepipe_runner_graph_proto.nix {})
+    computepipe_grpc_graph_proto computepipe_grpc_graph_proto_cc computepipe_grpc_graph_proto_h;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner/input_manager" ./packages_services_Car_computepipe_runner_input_manager.nix {})
+    computepipe_input_manager;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/runner/stream_manager" ./packages_services_Car_computepipe_runner_stream_manager.nix {})
+    computepipe_stream_manager mock_stream_engine_interface;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/tests" ./packages_services_Car_computepipe_tests.nix {})
+    pipequery_test piperegistration_test;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/tests/runner/client_interface" ./packages_services_Car_computepipe_tests_runner_client_interface.nix {})
+    clientinterface_test;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/tests/runner/graph" ./packages_services_Car_computepipe_tests_runner_graph.nix {})
+    computepipe_grpc_graph_test computepipe_prebuilt_graph_test;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/tests/runner/graph/stubgraph" ./packages_services_Car_computepipe_tests_runner_graph_stubgraph.nix {})
+    libstubgraphimpl;
+
+  inherit (callBPPackage "packages/services/Car/computepipe/tests/runner/stream_manager" ./packages_services_Car_computepipe_tests_runner_stream_manager.nix {})
+    computepipe_pixel_manager_test computepipe_semantic_manager_test;
+
+  inherit (callBPPackage "packages/services/Car/evs/apps/default" ./packages_services_Car_evs_apps_default.nix {})
+    "CarFromTop.png" "LabeledChecker.png" "config.json" evs_app;
+
+  inherit (callBPPackage "packages/services/Car/evs/apps/demo_app_evs_support_lib" ./packages_services_Car_evs_apps_demo_app_evs_support_lib.nix {})
+    evs_app_support_lib;
+
+  inherit (callBPPackage "packages/services/Car/evs/manager/1.0" ./packages_services_Car_evs_manager_1.0.nix {})
+    "android.automotive.evs.manager@1.0";
+
+  inherit (callBPPackage "packages/services/Car/evs/manager/1.1" ./packages_services_Car_evs_manager_1.1.nix {})
+    "android.automotive.evs.manager@1.1";
+
+  inherit (callBPPackage "packages/services/Car/evs/sampleDriver" ./packages_services_Car_evs_sampleDriver.nix {})
+    "android.hardware.automotive.evs@1.1-sample" "evs_configuration.dtd" "evs_sample_configuration.xml" libevsconfigmanager;
+
+  inherit (callBPPackage "packages/services/Car/evs/support_library" ./packages_services_Car_evs_support_library.nix {})
+    "camera_config.json" libevssupport;
+
+  inherit (callBPPackage "packages/services/Car/experimental/experimental_api" ./packages_services_Car_experimental_experimental_api.nix {})
+    car-experimental-api-static-lib;
+
+  inherit (callBPPackage "packages/services/Car/experimental/service" ./packages_services_Car_experimental_service.nix {})
+    ExperimentalCarService experimentalcar-service-test-static-lib;
+
+  inherit (callBPPackage "packages/services/Car/experimental/tests/experimentalcarservice_unit_test" ./packages_services_Car_experimental_tests_experimentalcarservice_unit_test.nix {})
+    ExperimentalCarServiceTests;
+
+  inherit (callBPPackage "packages/services/Car/procfs-inspector/client" ./packages_services_Car_procfs-inspector_client.nix {})
+    "com.android.car.procfsinspector-client";
+
+  inherit (callBPPackage "packages/services/Car/service" ./packages_services_Car_service.nix {})
+    CarService car-service-common-util-static-lib car-service-test-lib car-service-test-static-lib statslog-Car-java-gen;
 
   inherit (callBPPackage "packages/services/Car/service/proto" ./packages_services_Car_service_proto.nix {})
     blestream-protos;
 
+  inherit (callBPPackage "packages/services/Car/surround_view/app" ./packages_services_Car_surround_view_app.nix {})
+    sv_app;
+
+  inherit (callBPPackage "packages/services/Car/surround_view/service-impl" ./packages_services_Car_surround_view_service-impl.nix {})
+    "android.automotive.sv.service@1.0-impl" "cam0.png" "cam1.png" "cam2.png" "cam3.png" "sample_car.obj" "sample_car_material.mtl" "sv_sample_car_model_config.xml" "sv_sample_config.xml" animation_module_tests io_module_tests libanimation_module libcore_lib_shared libio_module libobj_reader libsvsession libvhal_handler obj_reader_tests sv_session_tests vhal_handler_tests;
+
+  inherit (callBPPackage "packages/services/Car/tests/BugReportApp" ./packages_services_Car_tests_BugReportApp.nix {})
+    BugReportApp;
+
+  inherit (callBPPackage "packages/services/Car/tests/BugReportApp/libs" ./packages_services_Car_tests_BugReportApp_libs.nix {})
+    car-br-auto-value car-br-auto-value-jar car-br-google-api-client-android-jar car-br-google-api-java-client-jar car-br-google-http-client-android-jar car-br-google-http-client-jackson2-jar car-br-google-http-client-jar car-br-google-oauth-client-jar car-br-google-storage-services-jar car-br-grpc-context-jar car-br-jackson-core-jar car-br-opencensus-api-jar car-br-opencensus-contrib-http-util-jar;
+
+  inherit (callBPPackage "packages/services/Car/tests/BugReportApp/tests" ./packages_services_Car_tests_BugReportApp_tests.nix {})
+    BugReportAppTest;
+
   inherit (callBPPackage "packages/services/Car/tests/CarDeveloperOptions/protos" ./packages_services_Car_tests_CarDeveloperOptions_protos.nix {})
     carsettings-contextual-card-protos-lite carsettings-log-bridge-protos-lite;
+
+  inherit (callBPPackage "packages/services/Car/tests/CarLibTests" ./packages_services_Car_tests_CarLibTests.nix {})
+    CarLibTestApp CarLibTests;
+
+  inherit (callBPPackage "packages/services/Car/tests/CarSecurityPermissionTest" ./packages_services_Car_tests_CarSecurityPermissionTest.nix {})
+    CarSecurityPermissionTest;
+
+  inherit (callBPPackage "packages/services/Car/tests/OccupantAwareness" ./packages_services_Car_tests_OccupantAwareness.nix {})
+    OccupantAwarenessSystemTests;
+
+  inherit (callBPPackage "packages/services/Car/tests/SecondaryHomeApp" ./packages_services_Car_tests_SecondaryHomeApp.nix {})
+    SecondaryHomeApp;
+
+  inherit (callBPPackage "packages/services/Car/tests/ThemePlayground" ./packages_services_Car_tests_ThemePlayground.nix {})
+    ThemePlayground;
+
+  inherit (callBPPackage "packages/services/Car/tests/UserSwitchMonitorApp" ./packages_services_Car_tests_UserSwitchMonitorApp.nix {})
+    UserSwitchMonitorApp;
 
   inherit (callBPPackage "packages/services/Car/user/car-user-lib" ./packages_services_Car_user_car-user-lib.nix {})
     "android.car.userlib";
 
+  inherit (callBPPackage "packages/services/Car/vehicle-hal-support-lib" ./packages_services_Car_vehicle-hal-support-lib.nix {})
+    vehicle-hal-support-lib vehicle-hal-support-lib-for-test;
+
+  inherit (callBPPackage "packages/services/Car/watchdog/aidl" ./packages_services_Car_watchdog_aidl.nix {})
+    carwatchdog_aidl_interface;
+
+  inherit (callBPPackage "packages/services/Car/watchdog/car-watchdog-lib" ./packages_services_Car_watchdog_car-watchdog-lib.nix {})
+    "android.car.watchdoglib";
+
+  inherit (callBPPackage "packages/services/Car/watchdog/server" ./packages_services_Car_watchdog_server.nix {})
+    carwatchdogd carwatchdogd_defaults libwatchdog_binder_mediator libwatchdog_ioperfcollection libwatchdog_ioperfcollection_defaults libwatchdog_process_service libwatchdog_process_service_defaults libwatchdog_test;
+
+  inherit (callBPPackage "packages/services/Car/watchdog/server/sysprop" ./packages_services_Car_watchdog_server_sysprop.nix {})
+    libwatchdog_properties;
+
+  inherit (callBPPackage "packages/services/Car/watchdog/testclient" ./packages_services_Car_watchdog_testclient.nix {})
+    carwatchdog_testclient;
+
   inherit (callBPPackage "packages/services/Mms" ./packages_services_Mms.nix {})
     MmsService;
 
+  inherit (callBPPackage "packages/services/Mms/tests/robotests" ./packages_services_Mms_tests_robotests.nix {})
+    MmsServiceRoboTests;
+
+  inherit (callBPPackage "packages/services/Mtp" ./packages_services_Mtp.nix {})
+    MtpService;
+
   inherit (callBPPackage "packages/services/Telecomm" ./packages_services_Telecomm.nix {})
-    Telecom TelecomUnitTests;
+    Telecom Telecom-srcs TelecomUnitTests statslog-telecom-java-gen;
 
   inherit (callBPPackage "packages/services/Telecomm/testapps" ./packages_services_Telecomm_testapps.nix {})
     TelecomTestApps;
 
+  inherit (callBPPackage "packages/services/Telecomm/testapps/carmodedialer" ./packages_services_Telecomm_testapps_carmodedialer.nix {})
+    TelecomCarModeApp;
+
+  inherit (callBPPackage "packages/services/Telephony" ./packages_services_Telephony.nix {})
+    TeleService;
+
+  inherit (callBPPackage "packages/services/Telephony/apex" ./packages_services_Telephony_apex.nix {})
+    "com.android.telephony" "com.android.telephony-defaults" "com.android.telephony.certificate" "com.android.telephony.key";
+
+  inherit (callBPPackage "packages/services/Telephony/apex/testing" ./packages_services_Telephony_apex_testing.nix {})
+    "test_com.android.telephony";
+
   inherit (callBPPackage "packages/services/Telephony/ecc/conversion_toolset_v1/proto" ./packages_services_Telephony_ecc_conversion_toolset_v1_proto.nix {})
     ecc-protos-lite;
+
+  inherit (callBPPackage "packages/services/Telephony/testapps/EmbmsServiceTestApp" ./packages_services_Telephony_testapps_EmbmsServiceTestApp.nix {})
+    EmbmsTestService;
+
+  inherit (callBPPackage "packages/services/Telephony/testapps/EmbmsTestDownloadApp" ./packages_services_Telephony_testapps_EmbmsTestDownloadApp.nix {})
+    EmbmsTestDownloadApp;
+
+  inherit (callBPPackage "packages/services/Telephony/testapps/EmbmsTestStreamingApp" ./packages_services_Telephony_testapps_EmbmsTestStreamingApp.nix {})
+    EmbmsTestStreamingApp;
+
+  inherit (callBPPackage "packages/services/Telephony/testapps/ImsTestService" ./packages_services_Telephony_testapps_ImsTestService.nix {})
+    ImsTestApp;
+
+  inherit (callBPPackage "packages/services/Telephony/testapps/SmsManagerTestApp" ./packages_services_Telephony_testapps_SmsManagerTestApp.nix {})
+    SmsManagerTestApp;
+
+  inherit (callBPPackage "packages/services/Telephony/testapps/TelephonyManagerTestApp" ./packages_services_Telephony_testapps_TelephonyManagerTestApp.nix {})
+    TelephonyManagerTestApp;
+
+  inherit (callBPPackage "packages/services/Telephony/testapps/TelephonyRegistryTestApp" ./packages_services_Telephony_testapps_TelephonyRegistryTestApp.nix {})
+    TelephonyRegistryTestApp;
+
+  inherit (callBPPackage "packages/services/Telephony/tests" ./packages_services_Telephony_tests.nix {})
+    TeleServiceTests;
 
   inherit (callBPPackage "packages/wallpapers/LivePicker" ./packages_wallpapers_LivePicker.nix {})
     "android.software.live_wallpaper.xml" LiveWallpapersPicker;
@@ -8244,6 +13254,12 @@
   inherit (callBPPackage "platform_testing/libraries/collectors-helper/perfetto/test" ./platform_testing_libraries_collectors-helper_perfetto_test.nix {})
     perfetto-helper-test;
 
+  inherit (callBPPackage "platform_testing/libraries/collectors-helper/power" ./platform_testing_libraries_collectors-helper_power.nix {})
+    power-helper;
+
+  inherit (callBPPackage "platform_testing/libraries/collectors-helper/power/test" ./platform_testing_libraries_collectors-helper_power_test.nix {})
+    power-helper-test;
+
   inherit (callBPPackage "platform_testing/libraries/collectors-helper/statsd" ./platform_testing_libraries_collectors-helper_statsd.nix {})
     statsd-helper;
 
@@ -8273,6 +13289,12 @@
 
   inherit (callBPPackage "platform_testing/libraries/device-collectors/src/test/platform" ./platform_testing_libraries_device-collectors_src_test_platform.nix {})
     CollectorDeviceLibPlatformTest;
+
+  inherit (callBPPackage "platform_testing/libraries/flicker" ./platform_testing_libraries_flicker.nix {})
+    flickerautomationhelperlib flickerlib flickerlib_without_helpers;
+
+  inherit (callBPPackage "platform_testing/libraries/flicker/test" ./platform_testing_libraries_flicker_test.nix {})
+    FlickerLibTest;
 
   inherit (callBPPackage "platform_testing/libraries/health/composers/host" ./platform_testing_libraries_health_composers_host.nix {})
     test-composers;
@@ -8466,6 +13488,9 @@
   inherit (callBPPackage "platform_testing/tests/jank/webview" ./platform_testing_tests_jank_webview.nix {})
     UbWebViewJankTests;
 
+  inherit (callBPPackage "platform_testing/tests/microbenchmarks/uibench" ./platform_testing_tests_microbenchmarks_uibench.nix {})
+    UiBenchMicrobenchmark;
+
   inherit (callBPPackage "platform_testing/tests/perf/BootHelperApp" ./platform_testing_tests_perf_BootHelperApp.nix {})
     BootHelperApp;
 
@@ -8493,11 +13518,17 @@
   inherit (callBPPackage "platform_testing/utils/wifistrengthscanner" ./platform_testing_utils_wifistrengthscanner.nix {})
     WifiStrengthScannerUtil;
 
+  inherit (callBPPackage "prebuilts/abi-dumps/vndk" ./prebuilts_abi-dumps_vndk.nix {})
+    vndk_abi_dump_zip;
+
+  inherit (callBPPackage "prebuilts/build-tools" ./prebuilts_build-tools.nix {})
+    FlexLexer;
+
   inherit (callBPPackage "prebuilts/clang/host/darwin-x86" ./prebuilts_clang_host_darwin-x86.nix {})
     "libc++_darwin" "libc++abi_darwin" libLLVM_darwin libclang_cxx_darwin;
 
   inherit (callBPPackage "prebuilts/clang/host/linux-x86" ./prebuilts_clang_host_linux-x86.nix {})
-    "libc++_host" "libc++abi_host" "libclang_rt.asan-aarch64-android" "libclang_rt.asan-arm-android" "libclang_rt.asan-i686-android" "libclang_rt.asan-x86_64-android" "libclang_rt.builtins-aarch64-android" "libclang_rt.builtins-arm-android" "libclang_rt.builtins-i686-android" "libclang_rt.builtins-x86_64-android" "libclang_rt.hwasan-aarch64-android" "libclang_rt.hwasan_static-aarch64-android" "libclang_rt.profile-aarch64-android" "libclang_rt.profile-arm-android" "libclang_rt.profile-i386" "libclang_rt.profile-i686-android" "libclang_rt.profile-x86_64" "libclang_rt.profile-x86_64-android" "libclang_rt.scudo-aarch64-android" "libclang_rt.scudo-aarch64-android.static" "libclang_rt.scudo-arm-android" "libclang_rt.scudo-arm-android.static" "libclang_rt.scudo-i686-android" "libclang_rt.scudo-i686-android.static" "libclang_rt.scudo-x86_64-android" "libclang_rt.scudo-x86_64-android.static" "libclang_rt.scudo_minimal-aarch64-android" "libclang_rt.scudo_minimal-aarch64-android.static" "libclang_rt.scudo_minimal-arm-android" "libclang_rt.scudo_minimal-arm-android.static" "libclang_rt.scudo_minimal-i686-android" "libclang_rt.scudo_minimal-i686-android.static" "libclang_rt.scudo_minimal-x86_64-android" "libclang_rt.scudo_minimal-x86_64-android.static" "libclang_rt.ubsan_minimal-aarch64-android" "libclang_rt.ubsan_minimal-arm-android" "libclang_rt.ubsan_minimal-i686-android" "libclang_rt.ubsan_minimal-x86_64-android" "libclang_rt.ubsan_standalone-aarch64-android" "libclang_rt.ubsan_standalone-arm-android" "libclang_rt.ubsan_standalone-i686-android" "libclang_rt.ubsan_standalone-x86_64-android" clang_builtin_headers_resources libFuzzer libLLVM_host libclang_cxx_host libomp llvm-build-host-tools-defaults;
+    "libc++_host" "libc++abi_host" "libclang_rt.asan-aarch64-android" "libclang_rt.asan-arm-android" "libclang_rt.asan-i386" "libclang_rt.asan-i686-android" "libclang_rt.asan-x86_64" "libclang_rt.asan-x86_64-android" "libclang_rt.builtins-aarch64-android" "libclang_rt.builtins-arm-android" "libclang_rt.builtins-i386" "libclang_rt.builtins-i686-android" "libclang_rt.builtins-x86_64" "libclang_rt.builtins-x86_64-android" "libclang_rt.fuzzer-aarch64-android" "libclang_rt.fuzzer-arm-android" "libclang_rt.fuzzer-i386" "libclang_rt.fuzzer-i686-android" "libclang_rt.fuzzer-x86_64" "libclang_rt.fuzzer-x86_64-android" "libclang_rt.hwasan-aarch64-android" "libclang_rt.hwasan_static-aarch64-android" "libclang_rt.profile-aarch64-android" "libclang_rt.profile-arm-android" "libclang_rt.profile-i386" "libclang_rt.profile-i686-android" "libclang_rt.profile-x86_64" "libclang_rt.profile-x86_64-android" "libclang_rt.scudo-aarch64-android" "libclang_rt.scudo-aarch64-android.static" "libclang_rt.scudo-arm-android" "libclang_rt.scudo-arm-android.static" "libclang_rt.scudo-i686-android" "libclang_rt.scudo-i686-android.static" "libclang_rt.scudo-x86_64-android" "libclang_rt.scudo-x86_64-android.static" "libclang_rt.scudo_minimal-aarch64-android" "libclang_rt.scudo_minimal-aarch64-android.static" "libclang_rt.scudo_minimal-arm-android" "libclang_rt.scudo_minimal-arm-android.static" "libclang_rt.scudo_minimal-i686-android" "libclang_rt.scudo_minimal-i686-android.static" "libclang_rt.scudo_minimal-x86_64-android" "libclang_rt.scudo_minimal-x86_64-android.static" "libclang_rt.ubsan_minimal-aarch64-android" "libclang_rt.ubsan_minimal-arm-android" "libclang_rt.ubsan_minimal-i386" "libclang_rt.ubsan_minimal-i686-android" "libclang_rt.ubsan_minimal-x86_64" "libclang_rt.ubsan_minimal-x86_64-android" "libclang_rt.ubsan_standalone-aarch64-android" "libclang_rt.ubsan_standalone-arm-android" "libclang_rt.ubsan_standalone-i386" "libclang_rt.ubsan_standalone-i686-android" "libclang_rt.ubsan_standalone-x86_64" "libclang_rt.ubsan_standalone-x86_64-android" clang_builtin_headers_resources libFuzzer libLLVM_host libclang_cxx_host libomp llvm-build-host-tools-defaults;
 
   inherit (callBPPackage "prebuilts/clang/host/linux-x86/soong" ./prebuilts_clang_host_linux-x86_soong.nix {})
     soong-clang-prebuilts;
@@ -8510,6 +13541,9 @@
 
   inherit (callBPPackage "prebuilts/manifest-merger" ./prebuilts_manifest-merger.nix {})
     manifest-merger manifest-merger-jars;
+
+  inherit (callBPPackage "prebuilts/maven_repo/bumptech" ./prebuilts_maven_repo_bumptech.nix {})
+    glide-prebuilt;
 
   inherit (callBPPackage "prebuilts/misc/common/android-support-test" ./prebuilts_misc_common_android-support-test.nix {})
     android-support-test android-support-test-monitor-nodep android-support-test-nodep android-support-test-rules-nodep android-support-test-runner-nodep espresso-contrib espresso-contrib-nodep espresso-core espresso-core-nodep espresso-idling-resource-nodep espresso-intents espresso-intents-nodep espresso-web espresso-web-nodep;
@@ -8524,7 +13558,10 @@
     "args4j-2.0.28";
 
   inherit (callBPPackage "prebuilts/misc/common/asm" ./prebuilts_misc_common_asm.nix {})
-    "asm-5.2" "asm-6.0" "asm-analysis-5.2" "asm-analysis-6.0" "asm-commons-5.2" "asm-commons-6.0" "asm-tree-5.2" "asm-tree-6.0" "asm-util-6.0";
+    "asm-5.2" "asm-6.0" "asm-7.0" "asm-7.0-defaults" "asm-analysis-5.2" "asm-analysis-6.0" "asm-analysis-7.0" "asm-commons-5.2" "asm-commons-6.0" "asm-commons-7.0" "asm-tree-5.2" "asm-tree-6.0" "asm-tree-7.0" "asm-util-6.0" "asm-util-7.0";
+
+  inherit (callBPPackage "prebuilts/misc/common/atf" ./prebuilts_misc_common_atf.nix {})
+    atf-prebuilt atf-prebuilt-jars;
 
   inherit (callBPPackage "prebuilts/misc/common/commons-cli" ./prebuilts_misc_common_commons-cli.nix {})
     "commons-cli-1.2";
@@ -8583,6 +13620,9 @@
   inherit (callBPPackage "prebuilts/misc/common/robolectric/3.6.2" ./prebuilts_misc_common_robolectric_3.6.2.nix {})
     "platform-robolectric-3.6.2-prebuilt";
 
+  inherit (callBPPackage "prebuilts/misc/common/robolectric/4.3.1" ./prebuilts_misc_common_robolectric_4.3.1.nix {})
+    "platform-robolectric-4.3.1-prebuilt";
+
   inherit (callBPPackage "prebuilts/misc/common/robolectric" ./prebuilts_misc_common_robolectric.nix {})
     platform-robolectric-android-all-stubs;
 
@@ -8607,23 +13647,38 @@
   inherit (callBPPackage "prebuilts/misc/gdbserver" ./prebuilts_misc_gdbserver.nix {})
     gdbserver;
 
+  inherit (callBPPackage "prebuilts/misc/scripts/vboot_signer" ./prebuilts_misc_scripts_vboot_signer.nix {})
+    vboot_signer;
+
   inherit (callBPPackage "prebuilts/ndk" ./prebuilts_ndk_android_native_app_glue.bp.nix {})
     android_native_app_glue;
 
   inherit (callBPPackage "prebuilts/ndk" ./prebuilts_ndk_cpufeatures.bp.nix {})
     cpufeatures;
 
+  inherit (callBPPackage "prebuilts/qemu-kernel/x86/pc-bios" ./prebuilts_qemu-kernel_x86_pc-bios.nix {})
+    "bios.bin" "vgabios-cirrus.bin";
+
   inherit (callBPPackage "prebuilts/r8" ./prebuilts_r8.nix {})
-    d8 d8-compat-dx d8-compat-dx-master r8-compat-proguard r8-compat-proguard-master r8-master;
+    d8 r8 r8-compat-proguard;
+
+  inherit (callBPPackage "prebuilts/rust/linux-x86" ./prebuilts_rust_linux-x86.nix {})
+    "liballoc.rust_sysroot" "libbacktrace_rs.rust_sysroot" "libbacktrace_sys.rust_sysroot" "libcfg_if.rust_sysroot" "libcompiler_builtins.rust_sysroot" "libcore.rust_sysroot" "libgetopts.static" "libhashbrown.rust_sysroot" "liblibc.rust_sysroot" "libpanic_abort.rust_sysroot" "libpanic_unwind.rust_sysroot" "librustc_demangle.rust_sysroot" "libstd.static" "libterm.static" "libtest.static" "libunicode_width.static" "libunwind.rust_sysroot" libgetopts libstd libstd_x86_64-unknown-linux-gnu libterm libtest libtest_x86_64-unknown-linux-gnu libunicode_width;
 
   inherit (callBPPackage "prebuilts/sdk" ./prebuilts_sdk.nix {})
-    api-version-xml current-support-api last-released-public-api last-released-system-api metalava-sdk-android-jars public-api-incompatibilities-with-last-released sdk sdk-dir system-api-incompatibilities-with-last-released;
+    api-version-xml current-androidx-api current-support-api last-released-public-api-for-metalava-annotations metalava-sdk-android-jars module-lib-api-incompatibilities-with-last-released public-api-incompatibilities-with-last-released sdk sdk-dir system-api-incompatibilities-with-last-released system-server-api-incompatibilities-with-last-released;
+
+  inherit (callBPPackage "prebuilts/sdk/current" ./prebuilts_sdk_current.nix {})
+    "android.test.base" "android.test.mock" "android.test.runner" "com.android.future.usb.accessory" "com.android.location.provider" "com.android.media.remotedisplay" "com.android.media.tv.remoteprovider" "com.android.mediadrm.signer" "com.android.nfc_extras" "javax.obex";
 
   inherit (callBPPackage "prebuilts/sdk/current/androidx-legacy" ./prebuilts_sdk_current_androidx-legacy.nix {})
-    "androidx.legacy_legacy-preference-v14" "androidx.legacy_legacy-support-v4";
+    "androidx.car_car" "androidx.car_car-nodeps" "androidx.legacy_legacy-preference-v14" "androidx.legacy_legacy-support-core-ui" "androidx.legacy_legacy-support-core-ui-nodeps" "androidx.legacy_legacy-support-v13" "androidx.legacy_legacy-support-v13-nodeps" "androidx.legacy_legacy-support-v4" "androidx.lifecycle_lifecycle-extensions" "androidx.lifecycle_lifecycle-extensions-nodeps";
 
   inherit (callBPPackage "prebuilts/sdk/current/androidx" ./prebuilts_sdk_current_androidx.nix {})
-    "androidx.activity_activity" "androidx.activity_activity-nodeps" "androidx.annotation_annotation" "androidx.annotation_annotation-nodeps" "androidx.appcompat_appcompat" "androidx.appcompat_appcompat-nodeps" "androidx.appcompat_appcompat-resources" "androidx.appcompat_appcompat-resources-nodeps" "androidx.arch.core_core-common" "androidx.arch.core_core-common-nodeps" "androidx.arch.core_core-runtime" "androidx.arch.core_core-runtime-nodeps" "androidx.asynclayoutinflater_asynclayoutinflater" "androidx.asynclayoutinflater_asynclayoutinflater-nodeps" "androidx.biometric_biometric" "androidx.biometric_biometric-nodeps" "androidx.browser_browser" "androidx.browser_browser-nodeps" "androidx.car_car" "androidx.car_car-cluster" "androidx.car_car-cluster-nodeps" "androidx.car_car-nodeps" "androidx.cardview_cardview" "androidx.cardview_cardview-nodeps" "androidx.collection_collection" "androidx.collection_collection-nodeps" "androidx.concurrent_concurrent-futures" "androidx.concurrent_concurrent-futures-nodeps" "androidx.coordinatorlayout_coordinatorlayout" "androidx.coordinatorlayout_coordinatorlayout-nodeps" "androidx.core_core" "androidx.core_core-nodeps" "androidx.cursoradapter_cursoradapter" "androidx.cursoradapter_cursoradapter-nodeps" "androidx.customview_customview" "androidx.customview_customview-nodeps" "androidx.documentfile_documentfile" "androidx.documentfile_documentfile-nodeps" "androidx.drawerlayout_drawerlayout" "androidx.drawerlayout_drawerlayout-nodeps" "androidx.dynamicanimation_dynamicanimation" "androidx.dynamicanimation_dynamicanimation-nodeps" "androidx.emoji_emoji" "androidx.emoji_emoji-appcompat" "androidx.emoji_emoji-appcompat-nodeps" "androidx.emoji_emoji-bundled" "androidx.emoji_emoji-bundled-nodeps" "androidx.emoji_emoji-nodeps" "androidx.exifinterface_exifinterface" "androidx.exifinterface_exifinterface-nodeps" "androidx.fragment_fragment" "androidx.fragment_fragment-nodeps" "androidx.gridlayout_gridlayout" "androidx.gridlayout_gridlayout-nodeps" "androidx.heifwriter_heifwriter" "androidx.heifwriter_heifwriter-nodeps" "androidx.interpolator_interpolator" "androidx.interpolator_interpolator-nodeps" "androidx.leanback_leanback" "androidx.leanback_leanback-nodeps" "androidx.leanback_leanback-preference" "androidx.leanback_leanback-preference-nodeps" "androidx.legacy_legacy-support-core-ui" "androidx.legacy_legacy-support-core-ui-nodeps" "androidx.legacy_legacy-support-core-utils" "androidx.legacy_legacy-support-core-utils-nodeps" "androidx.legacy_legacy-support-v13" "androidx.legacy_legacy-support-v13-nodeps" "androidx.lifecycle_lifecycle-common" "androidx.lifecycle_lifecycle-common-java8" "androidx.lifecycle_lifecycle-common-java8-nodeps" "androidx.lifecycle_lifecycle-common-nodeps" "androidx.lifecycle_lifecycle-extensions" "androidx.lifecycle_lifecycle-extensions-nodeps" "androidx.lifecycle_lifecycle-livedata" "androidx.lifecycle_lifecycle-livedata-core" "androidx.lifecycle_lifecycle-livedata-core-nodeps" "androidx.lifecycle_lifecycle-livedata-nodeps" "androidx.lifecycle_lifecycle-process" "androidx.lifecycle_lifecycle-process-nodeps" "androidx.lifecycle_lifecycle-runtime" "androidx.lifecycle_lifecycle-runtime-nodeps" "androidx.lifecycle_lifecycle-service" "androidx.lifecycle_lifecycle-service-nodeps" "androidx.lifecycle_lifecycle-viewmodel" "androidx.lifecycle_lifecycle-viewmodel-nodeps" "androidx.loader_loader" "androidx.loader_loader-nodeps" "androidx.localbroadcastmanager_localbroadcastmanager" "androidx.localbroadcastmanager_localbroadcastmanager-nodeps" "androidx.media2_media2" "androidx.media2_media2-exoplayer" "androidx.media2_media2-exoplayer-nodeps" "androidx.media2_media2-nodeps" "androidx.media2_media2-widget" "androidx.media2_media2-widget-nodeps" "androidx.media_media" "androidx.media_media-nodeps" "androidx.mediarouter_mediarouter" "androidx.mediarouter_mediarouter-nodeps" "androidx.paging_paging-common" "androidx.paging_paging-common-nodeps" "androidx.paging_paging-runtime" "androidx.paging_paging-runtime-nodeps" "androidx.palette_palette" "androidx.palette_palette-nodeps" "androidx.percentlayout_percentlayout" "androidx.percentlayout_percentlayout-nodeps" "androidx.preference_preference" "androidx.preference_preference-nodeps" "androidx.print_print" "androidx.print_print-nodeps" "androidx.recommendation_recommendation" "androidx.recommendation_recommendation-nodeps" "androidx.recyclerview_recyclerview" "androidx.recyclerview_recyclerview-nodeps" "androidx.recyclerview_recyclerview-selection" "androidx.recyclerview_recyclerview-selection-nodeps" "androidx.remotecallback_remotecallback" "androidx.remotecallback_remotecallback-nodeps" "androidx.remotecallback_remotecallback-processor" "androidx.remotecallback_remotecallback-processor-nodeps" "androidx.room_room-common" "androidx.room_room-common-nodeps" "androidx.room_room-runtime" "androidx.room_room-runtime-nodeps" "androidx.savedstate_savedstate" "androidx.savedstate_savedstate-nodeps" "androidx.slice_slice-builders" "androidx.slice_slice-builders-nodeps" "androidx.slice_slice-core" "androidx.slice_slice-core-nodeps" "androidx.slice_slice-view" "androidx.slice_slice-view-nodeps" "androidx.slidingpanelayout_slidingpanelayout" "androidx.slidingpanelayout_slidingpanelayout-nodeps" "androidx.sqlite_sqlite" "androidx.sqlite_sqlite-framework" "androidx.sqlite_sqlite-framework-nodeps" "androidx.sqlite_sqlite-nodeps" "androidx.swiperefreshlayout_swiperefreshlayout" "androidx.swiperefreshlayout_swiperefreshlayout-nodeps" "androidx.textclassifier_textclassifier" "androidx.textclassifier_textclassifier-nodeps" "androidx.transition_transition" "androidx.transition_transition-nodeps" "androidx.tvprovider_tvprovider" "androidx.tvprovider_tvprovider-nodeps" "androidx.vectordrawable_vectordrawable" "androidx.vectordrawable_vectordrawable-animated" "androidx.vectordrawable_vectordrawable-animated-nodeps" "androidx.vectordrawable_vectordrawable-nodeps" "androidx.versionedparcelable_versionedparcelable" "androidx.versionedparcelable_versionedparcelable-nodeps" "androidx.viewpager_viewpager" "androidx.viewpager_viewpager-nodeps" "androidx.wear_wear" "androidx.wear_wear-nodeps" "androidx.webkit_webkit" "androidx.webkit_webkit-nodeps";
+    "androidx.activity_activity" "androidx.activity_activity-ktx" "androidx.activity_activity-ktx-nodeps" "androidx.activity_activity-nodeps" "androidx.annotation_annotation" "androidx.annotation_annotation-nodeps" "androidx.appcompat_appcompat" "androidx.appcompat_appcompat-nodeps" "androidx.appcompat_appcompat-resources" "androidx.appcompat_appcompat-resources-nodeps" "androidx.arch.core_core-common" "androidx.arch.core_core-common-nodeps" "androidx.arch.core_core-runtime" "androidx.arch.core_core-runtime-nodeps" "androidx.asynclayoutinflater_asynclayoutinflater" "androidx.asynclayoutinflater_asynclayoutinflater-nodeps" "androidx.autofill_autofill" "androidx.autofill_autofill-nodeps" "androidx.biometric_biometric" "androidx.biometric_biometric-nodeps" "androidx.browser_browser" "androidx.browser_browser-nodeps" "androidx.cardview_cardview" "androidx.cardview_cardview-nodeps" "androidx.collection_collection" "androidx.collection_collection-ktx" "androidx.collection_collection-ktx-nodeps" "androidx.collection_collection-nodeps" "androidx.concurrent_concurrent-futures" "androidx.concurrent_concurrent-futures-nodeps" "androidx.coordinatorlayout_coordinatorlayout" "androidx.coordinatorlayout_coordinatorlayout-nodeps" "androidx.core_core" "androidx.core_core-animation" "androidx.core_core-animation-nodeps" "androidx.core_core-ktx" "androidx.core_core-ktx-nodeps" "androidx.core_core-nodeps" "androidx.cursoradapter_cursoradapter" "androidx.cursoradapter_cursoradapter-nodeps" "androidx.customview_customview" "androidx.customview_customview-nodeps" "androidx.documentfile_documentfile" "androidx.documentfile_documentfile-nodeps" "androidx.drawerlayout_drawerlayout" "androidx.drawerlayout_drawerlayout-nodeps" "androidx.dynamicanimation_dynamicanimation" "androidx.dynamicanimation_dynamicanimation-nodeps" "androidx.emoji_emoji" "androidx.emoji_emoji-appcompat" "androidx.emoji_emoji-appcompat-nodeps" "androidx.emoji_emoji-bundled" "androidx.emoji_emoji-bundled-nodeps" "androidx.emoji_emoji-nodeps" "androidx.exifinterface_exifinterface" "androidx.exifinterface_exifinterface-nodeps" "androidx.fragment_fragment" "androidx.fragment_fragment-ktx" "androidx.fragment_fragment-ktx-nodeps" "androidx.fragment_fragment-nodeps" "androidx.gridlayout_gridlayout" "androidx.gridlayout_gridlayout-nodeps" "androidx.heifwriter_heifwriter" "androidx.heifwriter_heifwriter-nodeps" "androidx.interpolator_interpolator" "androidx.interpolator_interpolator-nodeps" "androidx.leanback_leanback" "androidx.leanback_leanback-nodeps" "androidx.leanback_leanback-preference" "androidx.leanback_leanback-preference-nodeps" "androidx.legacy_legacy-support-core-utils" "androidx.legacy_legacy-support-core-utils-nodeps" "androidx.lifecycle_lifecycle-common" "androidx.lifecycle_lifecycle-common-java8" "androidx.lifecycle_lifecycle-common-java8-nodeps" "androidx.lifecycle_lifecycle-common-nodeps" "androidx.lifecycle_lifecycle-livedata" "androidx.lifecycle_lifecycle-livedata-core" "androidx.lifecycle_lifecycle-livedata-core-ktx" "androidx.lifecycle_lifecycle-livedata-core-ktx-nodeps" "androidx.lifecycle_lifecycle-livedata-core-nodeps" "androidx.lifecycle_lifecycle-livedata-ktx" "androidx.lifecycle_lifecycle-livedata-ktx-nodeps" "androidx.lifecycle_lifecycle-livedata-nodeps" "androidx.lifecycle_lifecycle-process" "androidx.lifecycle_lifecycle-process-nodeps" "androidx.lifecycle_lifecycle-runtime" "androidx.lifecycle_lifecycle-runtime-ktx" "androidx.lifecycle_lifecycle-runtime-ktx-nodeps" "androidx.lifecycle_lifecycle-runtime-nodeps" "androidx.lifecycle_lifecycle-service" "androidx.lifecycle_lifecycle-service-nodeps" "androidx.lifecycle_lifecycle-viewmodel" "androidx.lifecycle_lifecycle-viewmodel-ktx" "androidx.lifecycle_lifecycle-viewmodel-ktx-nodeps" "androidx.lifecycle_lifecycle-viewmodel-nodeps" "androidx.lifecycle_lifecycle-viewmodel-savedstate" "androidx.lifecycle_lifecycle-viewmodel-savedstate-nodeps" "androidx.loader_loader" "androidx.loader_loader-nodeps" "androidx.localbroadcastmanager_localbroadcastmanager" "androidx.localbroadcastmanager_localbroadcastmanager-nodeps" "androidx.media2_media2-common" "androidx.media2_media2-common-nodeps" "androidx.media2_media2-exoplayer" "androidx.media2_media2-exoplayer-nodeps" "androidx.media2_media2-player" "androidx.media2_media2-player-nodeps" "androidx.media2_media2-session" "androidx.media2_media2-session-nodeps" "androidx.media2_media2-widget" "androidx.media2_media2-widget-nodeps" "androidx.media_media" "androidx.media_media-nodeps" "androidx.mediarouter_mediarouter" "androidx.mediarouter_mediarouter-nodeps" "androidx.navigation_navigation-common" "androidx.navigation_navigation-common-ktx" "androidx.navigation_navigation-common-ktx-nodeps" "androidx.navigation_navigation-common-nodeps" "androidx.navigation_navigation-fragment" "androidx.navigation_navigation-fragment-ktx" "androidx.navigation_navigation-fragment-ktx-nodeps" "androidx.navigation_navigation-fragment-nodeps" "androidx.navigation_navigation-runtime" "androidx.navigation_navigation-runtime-ktx" "androidx.navigation_navigation-runtime-ktx-nodeps" "androidx.navigation_navigation-runtime-nodeps" "androidx.navigation_navigation-ui" "androidx.navigation_navigation-ui-ktx" "androidx.navigation_navigation-ui-ktx-nodeps" "androidx.navigation_navigation-ui-nodeps" "androidx.paging_paging-common" "androidx.paging_paging-common-ktx" "androidx.paging_paging-common-ktx-nodeps" "androidx.paging_paging-common-nodeps" "androidx.paging_paging-runtime" "androidx.paging_paging-runtime-nodeps" "androidx.palette_palette" "androidx.palette_palette-nodeps" "androidx.percentlayout_percentlayout" "androidx.percentlayout_percentlayout-nodeps" "androidx.preference_preference" "androidx.preference_preference-nodeps" "androidx.print_print" "androidx.print_print-nodeps" "androidx.recommendation_recommendation" "androidx.recommendation_recommendation-nodeps" "androidx.recyclerview_recyclerview" "androidx.recyclerview_recyclerview-nodeps" "androidx.recyclerview_recyclerview-selection" "androidx.recyclerview_recyclerview-selection-nodeps" "androidx.remotecallback_remotecallback" "androidx.remotecallback_remotecallback-nodeps" "androidx.remotecallback_remotecallback-processor" "androidx.remotecallback_remotecallback-processor-nodeps" "androidx.room_room-common" "androidx.room_room-common-nodeps" "androidx.room_room-compiler" "androidx.room_room-compiler-nodeps" "androidx.room_room-migration" "androidx.room_room-migration-nodeps" "androidx.room_room-runtime" "androidx.room_room-runtime-nodeps" "androidx.room_room-testing" "androidx.room_room-testing-nodeps" "androidx.savedstate_savedstate" "androidx.savedstate_savedstate-nodeps" "androidx.slice_slice-builders" "androidx.slice_slice-builders-nodeps" "androidx.slice_slice-core" "androidx.slice_slice-core-nodeps" "androidx.slice_slice-view" "androidx.slice_slice-view-nodeps" "androidx.slidingpanelayout_slidingpanelayout" "androidx.slidingpanelayout_slidingpanelayout-nodeps" "androidx.sqlite_sqlite" "androidx.sqlite_sqlite-framework" "androidx.sqlite_sqlite-framework-nodeps" "androidx.sqlite_sqlite-nodeps" "androidx.swiperefreshlayout_swiperefreshlayout" "androidx.swiperefreshlayout_swiperefreshlayout-nodeps" "androidx.textclassifier_textclassifier" "androidx.textclassifier_textclassifier-nodeps" "androidx.transition_transition" "androidx.transition_transition-nodeps" "androidx.tvprovider_tvprovider" "androidx.tvprovider_tvprovider-nodeps" "androidx.vectordrawable_vectordrawable" "androidx.vectordrawable_vectordrawable-animated" "androidx.vectordrawable_vectordrawable-animated-nodeps" "androidx.vectordrawable_vectordrawable-nodeps" "androidx.versionedparcelable_versionedparcelable" "androidx.versionedparcelable_versionedparcelable-nodeps" "androidx.viewpager2_viewpager2" "androidx.viewpager2_viewpager2-nodeps" "androidx.viewpager_viewpager" "androidx.viewpager_viewpager-nodeps" "androidx.wear_wear" "androidx.wear_wear-nodeps" "androidx.webkit_webkit" "androidx.webkit_webkit-nodeps";
+
+  inherit (callBPPackage "prebuilts/sdk/current/androidx" ./prebuilts_sdk_current_androidx_JavaPlugins.bp.nix {})
+    "androidx.room_room-compiler-plugin";
 
   inherit (callBPPackage "prebuilts/sdk/current/extras/app-toolkit" ./prebuilts_sdk_current_extras_app-toolkit.nix {})
     android-arch-core-common android-arch-core-common-nodeps android-arch-core-runtime android-arch-core-runtime-nodeps android-arch-lifecycle-common android-arch-lifecycle-common-java8 android-arch-lifecycle-common-java8-nodeps android-arch-lifecycle-common-nodeps android-arch-lifecycle-extensions android-arch-lifecycle-extensions-nodeps android-arch-lifecycle-livedata android-arch-lifecycle-livedata-core android-arch-lifecycle-livedata-core-nodeps android-arch-lifecycle-livedata-nodeps android-arch-lifecycle-runtime android-arch-lifecycle-runtime-nodeps android-arch-lifecycle-viewmodel android-arch-lifecycle-viewmodel-nodeps android-arch-paging-common android-arch-paging-common-nodeps android-arch-paging-runtime android-arch-paging-runtime-nodeps android-arch-persistence-db android-arch-persistence-db-framework android-arch-persistence-db-framework-nodeps android-arch-persistence-db-nodeps android-arch-room-common android-arch-room-common-nodeps android-arch-room-runtime android-arch-room-runtime-nodeps;
@@ -8644,7 +13699,7 @@
     "prebuilt-android.car-stubs";
 
   inherit (callBPPackage "prebuilts/sdk/current/support" ./prebuilts_sdk_current_support.nix {})
-    android-slices-builders android-slices-builders-nodeps android-slices-core android-slices-core-nodeps android-slices-view android-slices-view-nodeps android-support-animatedvectordrawable android-support-animatedvectordrawable-nodeps android-support-annotations android-support-annotations-nodeps android-support-asynclayoutinflater android-support-asynclayoutinflater-nodeps android-support-car android-support-car-nodeps android-support-collections android-support-collections-nodeps android-support-compat android-support-compat-nodeps android-support-coordinatorlayout android-support-coordinatorlayout-nodeps android-support-core-ui android-support-core-ui-nodeps android-support-core-utils android-support-core-utils-nodeps android-support-cursoradapter android-support-cursoradapter-nodeps android-support-customtabs android-support-customtabs-nodeps android-support-customview android-support-customview-nodeps android-support-documentfile android-support-documentfile-nodeps android-support-drawerlayout android-support-drawerlayout-nodeps android-support-dynamic-animation android-support-dynamic-animation-nodeps android-support-emoji android-support-emoji-appcompat android-support-emoji-appcompat-nodeps android-support-emoji-bundled android-support-emoji-bundled-nodeps android-support-emoji-nodeps android-support-exifinterface android-support-exifinterface-nodeps android-support-fragment android-support-fragment-nodeps android-support-heifwriter android-support-heifwriter-nodeps android-support-interpolator android-support-interpolator-nodeps android-support-loader android-support-loader-nodeps android-support-localbroadcastmanager android-support-localbroadcastmanager-nodeps android-support-media-compat android-support-media-compat-nodeps android-support-percent android-support-percent-nodeps android-support-print android-support-print-nodeps android-support-recommendation android-support-recommendation-nodeps android-support-recyclerview-selection android-support-recyclerview-selection-nodeps android-support-slidingpanelayout android-support-slidingpanelayout-nodeps android-support-swiperefreshlayout android-support-swiperefreshlayout-nodeps android-support-transition android-support-transition-nodeps android-support-tv-provider android-support-tv-provider-nodeps android-support-v13 android-support-v13-nodeps android-support-v14-preference android-support-v14-preference-nodeps android-support-v17-leanback android-support-v17-leanback-nodeps android-support-v17-preference-leanback android-support-v17-preference-leanback-nodeps android-support-v4 android-support-v4-nodeps android-support-v7-appcompat android-support-v7-appcompat-nodeps android-support-v7-cardview android-support-v7-cardview-nodeps android-support-v7-gridlayout android-support-v7-gridlayout-nodeps android-support-v7-mediarouter android-support-v7-mediarouter-nodeps android-support-v7-palette android-support-v7-palette-nodeps android-support-v7-preference android-support-v7-preference-nodeps android-support-v7-recyclerview android-support-v7-recyclerview-nodeps android-support-vectordrawable android-support-vectordrawable-nodeps android-support-viewpager android-support-viewpager-nodeps android-support-wear android-support-wear-nodeps android-support-webkit android-support-webkit-nodeps android-versionedparcelable android-versionedparcelable-nodeps;
+    android-support-animatedvectordrawable android-support-animatedvectordrawable-nodeps android-support-annotations android-support-annotations-nodeps android-support-asynclayoutinflater android-support-asynclayoutinflater-nodeps android-support-collections android-support-collections-nodeps android-support-compat android-support-compat-nodeps android-support-coordinatorlayout android-support-coordinatorlayout-nodeps android-support-core-ui android-support-core-ui-nodeps android-support-core-utils android-support-core-utils-nodeps android-support-cursoradapter android-support-cursoradapter-nodeps android-support-customview android-support-customview-nodeps android-support-documentfile android-support-documentfile-nodeps android-support-drawerlayout android-support-drawerlayout-nodeps android-support-dynamic-animation android-support-dynamic-animation-nodeps android-support-exifinterface android-support-exifinterface-nodeps android-support-fragment android-support-fragment-nodeps android-support-interpolator android-support-interpolator-nodeps android-support-loader android-support-loader-nodeps android-support-localbroadcastmanager android-support-localbroadcastmanager-nodeps android-support-media-compat android-support-media-compat-nodeps android-support-percent android-support-percent-nodeps android-support-print android-support-print-nodeps android-support-slidingpanelayout android-support-slidingpanelayout-nodeps android-support-swiperefreshlayout android-support-swiperefreshlayout-nodeps android-support-transition android-support-transition-nodeps android-support-v13 android-support-v13-nodeps android-support-v14-preference android-support-v14-preference-nodeps android-support-v17-leanback android-support-v17-leanback-nodeps android-support-v4 android-support-v4-nodeps android-support-v7-appcompat android-support-v7-appcompat-nodeps android-support-v7-cardview android-support-v7-cardview-nodeps android-support-v7-gridlayout android-support-v7-gridlayout-nodeps android-support-v7-mediarouter android-support-v7-mediarouter-nodeps android-support-v7-palette android-support-v7-palette-nodeps android-support-v7-preference android-support-v7-preference-nodeps android-support-v7-recyclerview android-support-v7-recyclerview-nodeps android-support-vectordrawable android-support-vectordrawable-nodeps android-support-viewpager android-support-viewpager-nodeps android-versionedparcelable android-versionedparcelable-nodeps;
 
   inherit (callBPPackage "prebuilts/sdk/tools" ./prebuilts_sdk_tools.nix {})
     sdk-core-lambda-stubs;
@@ -8661,11 +13716,11 @@
   inherit (callBPPackage "prebuilts/tools/common/google-api-services-compute" ./prebuilts_tools_common_google-api-services-compute.nix {})
     google-api-services-compute;
 
-  inherit (callBPPackage "prebuilts/tools/common/google-api-services-storage/1.23.0" ./prebuilts_tools_common_google-api-services-storage_1.23.0.nix {})
+  inherit (callBPPackage "prebuilts/tools/common/google-api-services-storage/1.24.1" ./prebuilts_tools_common_google-api-services-storage_1.24.1.nix {})
     google-api-services-storage;
 
   inherit (callBPPackage "prebuilts/tools/common/m2" ./prebuilts_tools_common_m2.nix {})
-    "dagger2-2.19" "dagger2-compiler-2.19" "dagger2-compiler-2.19-import" accessibility-test-framework asm-analysis-prebuilt-host-jar asm-commons-prebuilt-host-jar asm-commons-prebuilt-jar asm-prebuilt-host-jar asm-prebuilt-jar asm-tree-prebuilt-host-jar asm-tree-prebuilt-jar asm-util-prebuilt-host-jar assertj-core-prebuilt-jar byte-buddy-prebuilt-jar car-androidx-room-compiler-tools-common-m2-deps gson-prebuilt-jar guava-listenablefuture-prebuilt-jar guava-prebuilt-host-jar javapoet-prebuilt-jar javawriter jna-prebuilt metalava-tools-common-m2-deps mockito-robolectric-prebuilt mockito2-prebuilt-jar objenesis-prebuilt-jar protobuf-java-host-prebuilt protobuf-java-prebuilt-jar protobuf-java-util-prebuilt-jar squareup-haha-prebuilt trove-prebuilt truth-host-prebuilt truth-prebuilt truth-prebuilt-host-jar truth-prebuilt-jar;
+    "dagger2-2.19" "dagger2-compiler-2.19" "dagger2-compiler-2.19-import" "jsoup-1.6.3" accessibility-test-framework antlr4 asm-analysis-prebuilt-host-jar asm-commons-prebuilt-host-jar asm-commons-prebuilt-jar asm-prebuilt-host-jar asm-prebuilt-jar asm-tree-prebuilt-host-jar asm-tree-prebuilt-jar asm-util-prebuilt-host-jar assertj-core-prebuilt-jar auto-common auto-value-annotations byte-buddy-prebuilt-jar car-androidx-room-compiler-tools-common-m2-deps commons-codec compile-testing-prebuilt diffutils-prebuilt-jar dokka-tools-common-m2-deps gson-prebuilt-jar guava-listenablefuture-prebuilt-jar guava-prebuilt-host-jar javapoet-prebuilt-jar javawriter jetbrains-annotations jna-prebuilt kotlin-metadata kotlinx-coroutines-android kotlinx-coroutines-android-nodeps kotlinx-coroutines-core kotlinx-coroutines-core-nodeps kotlinx-metadata-jvm metalava-tools-common-m2-deps mockito-robolectric-prebuilt mockito2-prebuilt-jar objenesis-prebuilt-jar protobuf-java-host-prebuilt protobuf-java-prebuilt-jar protobuf-java-util-prebuilt-jar protobuf-lite squareup-haha-prebuilt trove-prebuilt truth-host-prebuilt truth-prebuilt truth-prebuilt-host-jar truth-prebuilt-jar xerial-sqlite-jdbc;
 
   inherit (callBPPackage "prebuilts/tools/common/m2/repository/io/grpc/grpc-context" ./prebuilts_tools_common_m2_repository_io_grpc_grpc-context.nix {})
     "grpc-java-context-1.0.1";
@@ -8709,35 +13764,65 @@
   inherit (callBPPackage "prebuilts/tools/common/m2/repository/net/sf/jopt-simple/jopt-simple/4.9" ./prebuilts_tools_common_m2_repository_net_sf_jopt-simple_jopt-simple_4.9.nix {})
     "jopt-simple-4.9";
 
+  inherit (callBPPackage "prebuilts/tools/common/m2" ./prebuilts_tools_common_m2_robolectric.bp.nix {})
+    "robolectric-accessibility-test-framework-2.1" "robolectric-ant-1.8.0" "robolectric-assertj-core-3.8.0" "robolectric-compile-testing-0.15" "robolectric-diffutils-1.3.0" "robolectric-httpclient-4.0.3" "robolectric-httpcore-4.0.1" "robolectric-javax.annotation-api-1.2" "robolectric-maven-ant-tasks-2.1.3" "robolectric-monitor-1.0.2-alpha1" "robolectric-sqlite4java-0.282" "robolectric-xstream-1.4.8" robolectric-sqlite4java-import robolectric-sqlite4java-native;
+
   inherit (callBPPackage "prebuilts/tools/common/netbeans-visual" ./prebuilts_tools_common_netbeans-visual.nix {})
     org-netbeans-api-visual org-openide-util;
 
+  inherit (callBPPackage "prebuilts/tools/linux-x86_64/perfetto" ./prebuilts_tools_linux-x86_64_perfetto.nix {})
+    perfetto_artifacts perfetto_trace_processor_shell_prebuilt;
+
+  inherit (callBPPackage "sdk/annotations" ./sdk_annotations.nix {})
+    annotations;
+
+  inherit (callBPPackage "sdk/dumpeventlog" ./sdk_dumpeventlog.nix {})
+    dumpeventlog;
+
+  inherit (callBPPackage "sdk/eventanalyzer" ./sdk_eventanalyzer.nix {})
+    eventanalyzer;
+
+  inherit (callBPPackage "sdk/hierarchyviewer" ./sdk_hierarchyviewer.nix {})
+    hierarchyviewer;
+
+  inherit (callBPPackage "sdk/hierarchyviewer/etc" ./sdk_hierarchyviewer_etc.nix {})
+    hierarchyviewer1;
+
   inherit (callBPPackage "system/apex/apexd" ./system_apex_apexd.nix {})
-    apex_aidl_interface apex_database_test apex_defaults apex_file_test apex_flags_defaults apex_manifest_test apexd apexservice_test gen_bad_apexes gen_corrupt_apex libapex libapexd libapexd_checkpoint_vold libapexservice libapexservice-deps;
+    ApexTestCases apex_aidl_interface apex_flags_defaults apexd flattened_apex_test gen_bad_apexes gen_corrupt_apex libapex libapex-deps libapexd libapexd-deps libapexd_checkpoint_vold libapexservice libapexservice-deps;
 
   inherit (callBPPackage "system/apex/apexd/apexd_testdata" ./system_apex_apexd_apexd_testdata.nix {})
-    "apex.apexd_test" "apex.apexd_test_different_app" "apex.apexd_test_no_inst_key" "apex.apexd_test_postinstall" "apex.apexd_test_preinstall" "apex.apexd_test_prepostinstall.fail" "apex.apexd_test_v2" "com.android.apex.test_package.key" "com.android.apex.test_package.no_inst_key.key" "com.android.apex.test_package.postinstall.key" "com.android.apex.test_package.preinstall.key" "com.android.apex.test_package.prepostinstall.fail.key" "com.android.apex.test_package_2.key" apex_test_postInstallHook apex_test_preInstallHook apex_test_prePostInstallHookFail;
+    "apex.apexd_test" "apex.apexd_test_different_app" "apex.apexd_test_no_hashtree" "apex.apexd_test_no_hashtree_2" "apex.apexd_test_no_inst_key" "apex.apexd_test_nocode" "apex.apexd_test_postinstall" "apex.apexd_test_preinstall" "apex.apexd_test_prepostinstall.fail" "apex.apexd_test_v2" "apex.apexd_test_v2_legacy" "apex.apexd_test_v2_no_pb" "apex.apexd_test_v3" "apex.corrupted_b146895998" "com.android.apex.test_package.key" "com.android.apex.test_package.no_inst_key.key" "com.android.apex.test_package.postinstall.key" "com.android.apex.test_package.preinstall.key" "com.android.apex.test_package.prepostinstall.fail.key" "com.android.apex.test_package_2.key" another_prebuilt_file apex_test_postInstallHook apex_test_preInstallHook apex_test_prePostInstallHookFail;
 
   inherit (callBPPackage "system/apex/apexd/sysprop" ./system_apex_apexd_sysprop.nix {})
-    "com.android.sysprop.apex" "com.android.sysprop.apex.apis" apex-properties;
+    "com.android.sysprop.apex";
 
   inherit (callBPPackage "system/apex/apexer" ./system_apex_apexer.nix {})
-    "com.android.support.apexer" "com.android.support.apexer.key" apexer;
+    "com.android.support.apexer" "com.android.support.apexer.key" apex_manifest apexer apexer_test conv_apex_manifest;
+
+  inherit (callBPPackage "system/apex/apexer/testdata" ./system_apex_apexer_testdata.nix {})
+    "com.android.example-legacy.apex" "com.android.example-logging_parent.apex" "com.android.example-overridden_package_name.apex" "com.android.example.apex" "com.android.example.apex.certificate" "com.android.example.apex.key";
+
+  inherit (callBPPackage "system/apex/libs/libapexutil" ./system_apex_libs_libapexutil.nix {})
+    libapexutil libapexutil-deps libapexutil_tests;
 
   inherit (callBPPackage "system/apex/proto" ./system_apex_proto.nix {})
-    apex_manifest_proto lib_apex_manifest_proto lib_apex_session_state_proto;
+    apex_build_info_proto apex_manifest_proto apex_manifest_proto_java lib_apex_manifest_proto lib_apex_manifest_proto_lite lib_apex_session_state_proto;
 
   inherit (callBPPackage "system/apex/shim" ./system_apex_shim.nix {})
-    "com.android.apex.cts.shim.v1_prebuilt" "com.android.apex.cts.shim.v2_additional_file_prebuilt" "com.android.apex.cts.shim.v2_additional_folder_prebuilt" "com.android.apex.cts.shim.v2_prebuilt" "com.android.apex.cts.shim.v2_with_post_install_hook_prebuilt" "com.android.apex.cts.shim.v2_with_pre_install_hook_prebuilt" "com.android.apex.cts.shim.v2_wrong_sha_prebuilt";
+    "com.android.apex.cts.shim.v1_prebuilt" "com.android.apex.cts.shim.v2_additional_file_prebuilt" "com.android.apex.cts.shim.v2_additional_folder_prebuilt" "com.android.apex.cts.shim.v2_prebuilt" "com.android.apex.cts.shim.v2_with_post_install_hook_prebuilt" "com.android.apex.cts.shim.v2_with_pre_install_hook_prebuilt" "com.android.apex.cts.shim.v2_wrong_sha_prebuilt" "com.android.apex.cts.shim.v3_prebuilt";
 
   inherit (callBPPackage "system/apex/shim/build" ./system_apex_shim_build.nix {})
-    "com.android.apex.cts.shim.key" "com.android.apex.cts.shim.pem" "com.android.apex.cts.shim.pubkey" "com.android.apex.cts.shim.v1" "com.android.apex.cts.shim.v2" "com.android.apex.cts.shim.v2_additional_file" "com.android.apex.cts.shim.v2_additional_folder" "com.android.apex.cts.shim.v2_with_post_install_hook" "com.android.apex.cts.shim.v2_with_pre_install_hook" "com.android.apex.cts.shim.v2_wrong_sha" "com.android.apex.cts.shim.v3" "com.android.apex.cts.shim_not_pre_installed" "com.android.apex.cts.shim_not_pre_installed.key" "com.android.apex.cts.shim_not_pre_installed.pem" "com.android.apex.cts.shim_not_pre_installed.pubkey" apex_shim_additional_file apex_shim_additional_folder empty_hash generate_empty_hash generate_hash_of_dev_null generate_hash_v1 hash_of_dev_null hash_v1;
+    "com.android.apex.cts.shim.debug.cert" "com.android.apex.cts.shim.key" "com.android.apex.cts.shim.pem" "com.android.apex.cts.shim.pubkey" "com.android.apex.cts.shim.v1" "com.android.apex.cts.shim.v1_with_prebuilts" "com.android.apex.cts.shim.v2" "com.android.apex.cts.shim.v2_additional_file" "com.android.apex.cts.shim.v2_additional_folder" "com.android.apex.cts.shim.v2_apk_in_apex_sdk_target_p" "com.android.apex.cts.shim.v2_different_certificate" "com.android.apex.cts.shim.v2_different_package_name" "com.android.apex.cts.shim.v2_legacy" "com.android.apex.cts.shim.v2_no_hashtree" "com.android.apex.cts.shim.v2_no_pb" "com.android.apex.cts.shim.v2_sdk_target_p" "com.android.apex.cts.shim.v2_signed_bob" "com.android.apex.cts.shim.v2_signed_bob_rot" "com.android.apex.cts.shim.v2_signed_bob_rot_rollback" "com.android.apex.cts.shim.v2_unsigned_apk_container" "com.android.apex.cts.shim.v2_unsigned_payload" "com.android.apex.cts.shim.v2_with_post_install_hook" "com.android.apex.cts.shim.v2_with_pre_install_hook" "com.android.apex.cts.shim.v2_without_apk_in_apex" "com.android.apex.cts.shim.v2_wrong_sha" "com.android.apex.cts.shim.v3" "com.android.apex.cts.shim.v3_signed_bob" "com.android.apex.cts.shim.v3_signed_bob_rot" "com.android.apex.cts.shim_not_pre_installed" "com.android.apex.cts.shim_not_pre_installed.key" "com.android.apex.cts.shim_not_pre_installed.pem" "com.android.apex.cts.shim_not_pre_installed.pubkey" "com.android.apex.rotation.key.bob.pem" "com.android.apex.rotation.key.bob.pk8" "com.android.apex.rotation.key.bob.rot" "com.android.apex.rotation.key.bob.rot.rollback" "com.android.apex.rotation.key.bob.x509.pem" apex_shim_additional_file apex_shim_additional_folder empty_hash generate_empty_hash generate_hash_of_dev_null generate_hash_v1 hash_of_dev_null hash_v1;
 
   inherit (callBPPackage "system/apex/tests" ./system_apex_tests.nix {})
-    "apex.test" "apex.test.certificate" "apex.test.init.rc" "apex.test.key" "apex.test.ld.config.txt" apex_e2e_base_test apex_targetprep_tests apex_test_build_features conscrypt_e2e_tests media_e2e_tests media_swcodec_e2e_tests sample_prebuilt_file timezone_data_e2e_tests;
+    "apex.test" "apex.test.certificate" "apex.test.init.rc" "apex.test.key" "apex.test.ld.config.txt" adbd_e2e_tests apex_e2e_base_test apex_e2e_test_defaults apex_rollback_tests apex_targetprep_tests apexd_host_tests cellbroadcast_e2e_tests conscrypt_e2e_tests extservices_e2e_tests ipsec_e2e_tests media_e2e_tests media_swcodec_e2e_tests mediaprovider_e2e_tests module_test_util module_test_utils_tests neuralnetworks_e2e_tests permission_e2e_tests sample_prebuilt_file sample_prefer32_binary statsd_e2e_tests timezone_data_e2e_tests wifi_e2e_tests;
 
-  inherit (callBPPackage "system/ashmemd" ./system_ashmemd.nix {})
-    ashmemd ashmemd_aidl_interface ashmemd_defaults ashmemd_test libashmemd_client;
+  inherit (callBPPackage "system/apex/tests/sdkextensions" ./system_apex_tests_sdkextensions.nix {})
+    sdkextensions_e2e_test_app sdkextensions_e2e_tests;
+
+  inherit (callBPPackage "system/apex/tools" ./system_apex_tools.nix {})
+    deapexer;
 
   inherit (callBPPackage "system/bpf" ./system_bpf.nix {})
     bpf_defaults;
@@ -8748,6 +13833,9 @@
   inherit (callBPPackage "system/bpf/libbpf_android" ./system_bpf_libbpf_android.nix {})
     libbpf_android libbpf_android_headers libbpf_android_test libbpf_load_test;
 
+  inherit (callBPPackage "system/bpf/progs" ./system_bpf_progs.nix {})
+    bpf_prog_headers;
+
   inherit (callBPPackage "system/bpfprogs" ./system_bpfprogs.nix {})
     "time_in_state.o";
 
@@ -8756,6 +13844,9 @@
 
   inherit (callBPPackage "system/bt" ./system_bt.nix {})
     BluetoothTestConfigTemplate;
+
+  inherit (callBPPackage "system/bt/apex" ./system_bt_apex.nix {})
+    "com.android.bluetooth.updatable" "com.android.bluetooth.updatable.certificate" "com.android.bluetooth.updatable.key";
 
   inherit (callBPPackage "system/bt/audio_a2dp_hw" ./system_bt_audio_a2dp_hw.nix {})
     "audio.a2dp.default" audio_a2dp_hw_defaults libaudio-a2dp-hw-utils net_test_audio_a2dp_hw;
@@ -8773,16 +13864,16 @@
     libbluetooth-binder libbluetooth-binder-aidl;
 
   inherit (callBPPackage "system/bt/bta" ./system_bt_bta.nix {})
-    fluoride_bta_defaults libbt-bta net_test_bta;
+    fluoride_bta_defaults libbt-bta net_test_bta net_test_hf_client_add_record;
 
   inherit (callBPPackage "system/bt/btcore" ./system_bt_btcore.nix {})
     libbtcore net_test_btcore;
 
   inherit (callBPPackage "system/bt/btif" ./system_bt_btif.nix {})
-    libbtif net_test_btif net_test_btif_profile_queue net_test_btif_rc;
+    libbtif net_test_btif net_test_btif_config_cache net_test_btif_hf_client_service net_test_btif_profile_queue net_test_btif_rc;
 
   inherit (callBPPackage "system/bt/build" ./system_bt_build.nix {})
-    clang_coverage_bin clang_file_coverage fluoride_defaults fluoride_types_defaults libchrome_support_defaults soong-fluoride;
+    clang_coverage_bin clang_file_coverage fluoride_defaults fluoride_defaults_fuzzable fluoride_types_defaults fluoride_types_defaults_fuzzable libchrome_support_defaults soong-fluoride;
 
   inherit (callBPPackage "system/bt/common" ./system_bt_common.nix {})
     bluetooth_benchmark_thread_performance bluetooth_benchmark_timer_performance bluetooth_test_common libbt-common net_test_performance;
@@ -8794,16 +13885,34 @@
     libg722codec;
 
   inherit (callBPPackage "system/bt/embdrv/sbc/decoder" ./system_bt_embdrv_sbc_decoder.nix {})
-    libbt-sbc-decoder;
+    libbt-sbc-decoder sbcdecoder_fuzzer;
 
   inherit (callBPPackage "system/bt/embdrv/sbc/encoder" ./system_bt_embdrv_sbc_encoder.nix {})
     libbt-sbc-encoder;
 
   inherit (callBPPackage "system/bt/gd" ./system_bt_gd.nix {})
-    bluetooth_benchmark_gd bluetooth_test_gd gd_clang_coverage_bin gd_clang_file_coverage gd_defaults libbluetooth_gd;
+    BluetoothFacadeAndCertGeneratedStub_py BluetoothFacadeGeneratedStub_cc BluetoothFacadeGeneratedStub_h BluetoothFacadeProto BluetoothGeneratedPackets_h BluetoothGeneratedPackets_python3_cc BluetoothHciClassSources bluetooth_benchmark_gd bluetooth_gd_fuzz_test bluetooth_packet_parser_test bluetooth_packets_python3 bluetooth_py3_native_extension_defaults bluetooth_stack_with_facade bluetooth_test_gd gd_clang_coverage_bin gd_clang_file_coverage gd_defaults libbluetooth_gd;
+
+  inherit (callBPPackage "system/bt/gd/att" ./system_bt_gd_att.nix {})
+    BluetoothAttSources BluetoothAttTestSources;
 
   inherit (callBPPackage "system/bt/gd/common" ./system_bt_gd_common.nix {})
     BluetoothCommonSources BluetoothCommonTestSources;
+
+  inherit (callBPPackage "system/bt/gd/crypto_toolbox" ./system_bt_gd_crypto_toolbox.nix {})
+    BluetoothCryptoToolboxSources BluetoothCryptoToolboxTestSources;
+
+  inherit (callBPPackage "system/bt/gd/hal" ./system_bt_gd_hal.nix {})
+    BluetoothFacade_hci_hal BluetoothHalSources BluetoothHalSources_hci_android_hidl BluetoothHalSources_hci_rootcanal BluetoothHalTestSources_hci_android_hidl BluetoothHalTestSources_hci_rootcanal;
+
+  inherit (callBPPackage "system/bt/gd/hci" ./system_bt_gd_hci.nix {})
+    BluetoothFacade_hci_layer BluetoothHciFuzzTestSources BluetoothHciSources BluetoothHciTestSources;
+
+  inherit (callBPPackage "system/bt/gd/l2cap" ./system_bt_gd_l2cap.nix {})
+    BluetoothFacade_l2cap_layer BluetoothL2capFuzzTestSources BluetoothL2capSources BluetoothL2capTestSources;
+
+  inherit (callBPPackage "system/bt/gd/neighbor" ./system_bt_gd_neighbor.nix {})
+    BluetoothFacade_neighbor BluetoothNeighborSources BluetoothNeighborTestSources;
 
   inherit (callBPPackage "system/bt/gd/os" ./system_bt_gd_os.nix {})
     BluetoothOsBenchmarkSources BluetoothOsSources_linux_generic BluetoothOsTestSources_linux_generic;
@@ -8811,8 +13920,29 @@
   inherit (callBPPackage "system/bt/gd/packet" ./system_bt_gd_packet.nix {})
     BluetoothPacketSources BluetoothPacketTestSources;
 
+  inherit (callBPPackage "system/bt/gd/packet/parser" ./system_bt_gd_packet_parser.nix {})
+    bluetooth_packetgen;
+
+  inherit (callBPPackage "system/bt/gd/packet/parser/test" ./system_bt_gd_packet_parser_test.nix {})
+    BluetoothPacketParserTestPacketPdlGen_h BluetoothPacketParserTestPacketTestSources;
+
+  inherit (callBPPackage "system/bt/gd/security" ./system_bt_gd_security.nix {})
+    BluetoothFacade_security_layer BluetoothSecuritySources BluetoothSecurityTestSources;
+
+  inherit (callBPPackage "system/bt/gd/security/channel" ./system_bt_gd_security_channel.nix {})
+    BluetoothSecurityChannelSources BluetoothSecurityChannelTestSources;
+
+  inherit (callBPPackage "system/bt/gd/security/pairing" ./system_bt_gd_security_pairing.nix {})
+    BluetoothSecurityPairingSources BluetoothSecurityPairingTestSources;
+
+  inherit (callBPPackage "system/bt/gd/shim" ./system_bt_gd_shim.nix {})
+    BluetoothShimSources BluetoothShimTestSources;
+
+  inherit (callBPPackage "system/bt/gd/storage" ./system_bt_gd_storage.nix {})
+    BluetoothStorageSources BluetoothStorageTestSources;
+
   inherit (callBPPackage "system/bt/hci" ./system_bt_hci.nix {})
-    libbt-hci libbt-hci_defaults net_test_hci;
+    libbt-hci libbt-hci_defaults net_test_hci net_test_hci_fragmenter_native net_test_hci_native;
 
   inherit (callBPPackage "system/bt/include" ./system_bt_include.nix {})
     avrcp_headers libbluetooth_headers;
@@ -8821,7 +13951,10 @@
     internal_include_headers;
 
   inherit (callBPPackage "system/bt/main" ./system_bt_main.nix {})
-    libbluetooth libbluetooth-for-tests;
+    LibBluetoothSources libbluetooth libbluetooth-for-tests libbte;
+
+  inherit (callBPPackage "system/bt/main/shim" ./system_bt_main_shim.nix {})
+    LibBluetoothShimSources;
 
   inherit (callBPPackage "system/bt/osi" ./system_bt_osi.nix {})
     fluoride_osi_defaults libosi libosi-AlarmTestHarness libosi-AllocationTestHarness net_test_osi;
@@ -8836,7 +13969,7 @@
     lib-bt-packets-base;
 
   inherit (callBPPackage "system/bt/profile/avrcp" ./system_bt_profile_avrcp.nix {})
-    avrcp-target-service net_test_avrcp;
+    avrcp-target-service avrcp_device_fuzz net_test_avrcp;
 
   inherit (callBPPackage "system/bt/profile/sdp" ./system_bt_profile_sdp.nix {})
     bluetooth_test_sdp sdp_service;
@@ -8851,10 +13984,13 @@
     libbluetooth-binder-common libbluetooth-common;
 
   inherit (callBPPackage "system/bt/stack" ./system_bt_stack.nix {})
-    libbt-stack net_test_btu_message_loop net_test_gatt_conn_multiplexing net_test_stack net_test_stack_ad_parser net_test_stack_multi_adv net_test_stack_rfcomm net_test_stack_smp;
+    libbt-stack net_test_btu_message_loop net_test_gatt_conn_multiplexing net_test_stack net_test_stack_a2dp_native net_test_stack_ad_parser net_test_stack_gatt_native net_test_stack_multi_adv net_test_stack_rfcomm net_test_stack_smp;
+
+  inherit (callBPPackage "system/bt/test/headless" ./system_bt_test_headless.nix {})
+    bt_headless;
 
   inherit (callBPPackage "system/bt/test/rootcanal" ./system_bt_test_rootcanal.nix {})
-    "android.hardware.bluetooth@1.0-impl-sim" "android.hardware.bluetooth@1.0-service.sim";
+    "android.hardware.bluetooth@1.1-impl-sim" "android.hardware.bluetooth@1.1-service.sim";
 
   inherit (callBPPackage "system/bt/test/suite" ./system_bt_test_suite.nix {})
     net_test_bluetooth net_test_rfcomm_suite;
@@ -8869,13 +14005,10 @@
     libbt-utils;
 
   inherit (callBPPackage "system/bt/vendor_libs/linux/interface" ./system_bt_vendor_libs_linux_interface.nix {})
-    "android.hardware.bluetooth@1.0-service.btlinux";
+    "android.hardware.bluetooth@1.1-service.btlinux";
 
   inherit (callBPPackage "system/bt/vendor_libs/test_vendor_lib" ./system_bt_vendor_libs_test_vendor_lib.nix {})
-    libbt-rootcanal root-canal test-vendor_test_host;
-
-  inherit (callBPPackage "system/bt/vendor_libs/test_vendor_lib/packets" ./system_bt_vendor_libs_test_vendor_lib_packets.nix {})
-    libbt-rootcanal-packets rootcanal-packets_test_host;
+    RootCanalGeneratedPackets_h libbt-rootcanal libscriptedbeaconpayload-protos-lite root-canal test-vendor_test_host;
 
   inherit (callBPPackage "system/bt/vendor_libs/test_vendor_lib/types" ./system_bt_vendor_libs_test_vendor_lib_types.nix {})
     libbt-rootcanal-types libbt-rootcanal-types-header rootcanal-test_types;
@@ -8893,16 +14026,34 @@
     cacerts_wfa cacerts_wfa-host;
 
   inherit (callBPPackage "system/chre" ./system_chre.nix {})
-    "android.hardware.contexthub@1.0-impl.generic" audio_stress_test chre_api chre_client chre_flatbuffers chre_test_client;
+    "android.hardware.contexthub@1.0-impl.generic" "android.hardware.contexthub@1.1-service.generic" "android.hardware.contexthub@1.X-shared-impl" audio_stress_test chre_api chre_client chre_flatbuffers chre_power_test_client chre_test_client;
 
-  inherit (callBPPackage "system/chre/apps/chqts/src" ./system_chre_apps_chqts_src.nix {})
+  inherit (callBPPackage "system/chre/apps/test/chqts/src" ./system_chre_apps_test_chqts_src.nix {})
     nanoapp_chqts_shared_tests;
+
+  inherit (callBPPackage "system/chre/apps/test/common/proto" ./system_chre_apps_test_common_proto.nix {})
+    chre_audio_concurrency_test_java_proto chre_settings_test_java_proto chre_test_common_java_proto chrecrossvalidation_sensor_java_proto chrecrossvalidation_wifi_java_proto;
 
   inherit (callBPPackage "system/chre/apps/wifi_offload" ./system_chre_apps_wifi_offload.nix {})
     wifi_offload_types;
 
+  inherit (callBPPackage "system/chre/chpp" ./system_chre_chpp.nix {})
+    chre_chpp_linux chre_chpp_linux_tests;
+
+  inherit (callBPPackage "system/chre/java/test/audio_concurrency" ./system_chre_java_test_audio_concurrency.nix {})
+    context-hub-audio-concurrency-test;
+
+  inherit (callBPPackage "system/chre/java/test/cross_validation" ./system_chre_java_test_cross_validation.nix {})
+    chre-cross-validation;
+
+  inherit (callBPPackage "system/chre/java/test/settings" ./system_chre_java_test_settings.nix {})
+    context-hub-settings-test;
+
+  inherit (callBPPackage "system/chre/java/test/utils" ./system_chre_java_test_utils.nix {})
+    chre-test-utils;
+
   inherit (callBPPackage "system/connectivity/wificond" ./system_connectivity_wificond.nix {})
-    libwificond libwificond_event_loop libwificond_ipc libwificond_nl libwificond_test_utils wificond wificond_defaults wificond_integration_test wificond_unit_test;
+    libwificond libwificond_event_loop libwificond_ipc libwificond_ipc_aidl libwificond_nl libwificond_test_utils wificond wificond_defaults wificond_integration_test wificond_unit_test;
 
   inherit (callBPPackage "system/connectivity/wifilogd" ./system_connectivity_wifilogd.nix {})
     libwifilogd libwifilogd_flags wifilogd_unit_test;
@@ -8911,28 +14062,70 @@
     android_filesystem_config_header;
 
   inherit (callBPPackage "system/core/adb" ./system_core_adb.nix {})
-    abb adb adb_benchmark adb_defaults adb_integration_test_adb adb_integration_test_device adb_test adbd adbd_defaults adbd_test host_adbd_supported libadb_host libadbd libadbd_core libadbd_services;
+    abb adb adb_defaults adb_integration_test_adb adb_integration_test_device adb_test adbd adbd_defaults adbd_system_api adbd_system_api_recovery adbd_test bin2c_fastdeployagent bin2c_fastdeployagentscript fastdeploy_test host_adbd_supported libadb_host libadbd libadbd_binary_dependencies libadbd_core libadbd_services libfastdeploy_host;
+
+  inherit (callBPPackage "system/core/adb/apex" ./system_core_adb_apex.nix {})
+    "com.android.adbd" "com.android.adbd-defaults" "com.android.adbd.certificate" "com.android.adbd.init.rc" "com.android.adbd.key" "test_com.android.adbd";
+
+  inherit (callBPPackage "system/core/adb/crypto" ./system_core_adb_crypto.nix {})
+    libadb_crypto libadb_crypto_defaults libadb_crypto_static;
+
+  inherit (callBPPackage "system/core/adb/crypto/tests" ./system_core_adb_crypto_tests.nix {})
+    adb_crypto_test;
 
   inherit (callBPPackage "system/core/adb/fastdeploy" ./system_core_adb_fastdeploy.nix {})
-    deployagent deploypatchgenerator;
+    FastDeployHostTests FastDeployTests deployagent deployagent_lib;
+
+  inherit (callBPPackage "system/core/adb/libs/adbconnection" ./system_core_adb_libs_adbconnection.nix {})
+    libadbconnection_client libadbconnection_server;
+
+  inherit (callBPPackage "system/core/adb/libs/libadbd_fs" ./system_core_adb_libs_libadbd_fs.nix {})
+    libadbd_fs;
+
+  inherit (callBPPackage "system/core/adb/pairing_auth" ./system_core_adb_pairing_auth.nix {})
+    libadb_pairing_auth libadb_pairing_auth_defaults libadb_pairing_auth_static;
+
+  inherit (callBPPackage "system/core/adb/pairing_auth/tests" ./system_core_adb_pairing_auth_tests.nix {})
+    adb_pairing_auth_test;
+
+  inherit (callBPPackage "system/core/adb/pairing_connection" ./system_core_adb_pairing_connection.nix {})
+    libadb_pairing_connection libadb_pairing_connection_defaults libadb_pairing_connection_static libadb_pairing_server libadb_pairing_server_defaults libadb_pairing_server_static;
+
+  inherit (callBPPackage "system/core/adb/pairing_connection/tests" ./system_core_adb_pairing_connection_tests.nix {})
+    adb_pairing_connection_test;
+
+  inherit (callBPPackage "system/core/adb/proto" ./system_core_adb_proto.nix {})
+    libadb_protos libadb_protos_defaults libadb_protos_static;
+
+  inherit (callBPPackage "system/core/adb/tls" ./system_core_adb_tls.nix {})
+    libadb_tls_connection libadb_tls_connection_defaults libadb_tls_connection_static;
+
+  inherit (callBPPackage "system/core/adb/tls/tests" ./system_core_adb_tls_tests.nix {})
+    adb_tls_connection_test;
+
+  inherit (callBPPackage "system/core/adb/tools" ./system_core_adb_tools.nix {})
+    check_ms_os_desc;
 
   inherit (callBPPackage "system/core/base" ./system_core_base.nix {})
-    libbase libbase_cflags_defaults libbase_defaults libbase_headers libbase_ndk libbase_test;
+    libbase libbase_benchmark libbase_cflags_defaults libbase_defaults libbase_headers libbase_ndk libbase_test;
 
   inherit (callBPPackage "system/core/bootstat" ./system_core_bootstat.nix {})
     bootstat bootstat_defaults bootstat_tests libbootstat libbootstat_debug;
+
+  inherit (callBPPackage "system/core/cli-test" ./system_core_cli-test.nix {})
+    cli-test;
+
+  inherit (callBPPackage "system/core/code_coverage" ./system_core_code_coverage.nix {})
+    "code_coverage.policy" "code_coverage.policy.other";
 
   inherit (callBPPackage "system/core/cpio" ./system_core_cpio.nix {})
     mkbootfs;
 
   inherit (callBPPackage "system/core/debuggerd" ./system_core_debuggerd.nix {})
-    crash_dump debuggerd debuggerd_benchmark debuggerd_defaults debuggerd_test libdebuggerd libdebuggerd_client libdebuggerd_common_headers libdebuggerd_handler libdebuggerd_handler_core libdebuggerd_handler_fallback libtombstoned_client libtombstoned_client_static tombstoned;
+    "crash_dump.policy" "crash_dump.policy_other" crash_dump debuggerd debuggerd_benchmark debuggerd_defaults debuggerd_test libdebuggerd libdebuggerd_client libdebuggerd_common_headers libdebuggerd_handler libdebuggerd_handler_core libdebuggerd_handler_fallback libtombstoned_client libtombstoned_client_static tombstoned;
 
   inherit (callBPPackage "system/core/debuggerd/crasher" ./system_core_debuggerd_crasher.nix {})
     crasher crasher-defaults static_crasher;
-
-  inherit (callBPPackage "system/core/demangle" ./system_core_demangle.nix {})
-    demangle libdemangle libdemangle_defaults libdemangle_test;
 
   inherit (callBPPackage "system/core/deprecated-adf/libadf" ./system_core_deprecated-adf_libadf.nix {})
     libadf;
@@ -8953,37 +14146,46 @@
     fuzzy_fastboot;
 
   inherit (callBPPackage "system/core/fs_mgr" ./system_core_fs_mgr.nix {})
-    fs_mgr_defaults libfs_mgr libfstab remount;
+    clean_scratch_files fs_mgr_defaults libfs_mgr libfs_mgr_binder libfs_mgr_defaults libfstab remount;
 
   inherit (callBPPackage "system/core/fs_mgr/libdm" ./system_core_fs_mgr_libdm.nix {})
-    libdm libdm_test;
+    VtsKernelLibdmTest dm_linear_table_fuzzer libdm libdm_test libdm_test_defaults libdm_test_srcs vts_libdm_test;
 
-  inherit (callBPPackage "system/core/fs_mgr/libfiemap_writer" ./system_core_fs_mgr_libfiemap_writer.nix {})
-    fiemap_writer_test libfiemap_writer;
+  inherit (callBPPackage "system/core/fs_mgr/libfiemap" ./system_core_fs_mgr_libfiemap.nix {})
+    fiemap_image_test fiemap_image_test_presubmit fiemap_writer_test libfiemap_binder_defaults libfiemap_binder_srcs libfiemap_headers libfiemap_passthrough_srcs libfiemap_srcs;
 
   inherit (callBPPackage "system/core/fs_mgr/libfs_avb" ./system_core_fs_mgr_libfs_avb.nix {})
     libfs_avb libfs_avb_device_test libfs_avb_host_test_defaults libfs_avb_internal_test libfs_avb_test libfs_avb_test_util;
 
   inherit (callBPPackage "system/core/fs_mgr/liblp" ./system_core_fs_mgr_liblp.nix {})
-    liblp liblp_test_static;
+    VtsKernelLiblpTest liblp liblp_test liblp_test_defaults liblp_test_srcs vts_core_liblp_test vts_kernel_liblp_test;
+
+  inherit (callBPPackage "system/core/fs_mgr/libsnapshot" ./system_core_fs_mgr_libsnapshot.nix {})
+    VtsLibsnapshotTest libsnapshot libsnapshot_defaults libsnapshot_hal_deps libsnapshot_headers libsnapshot_init libsnapshot_nobinder libsnapshot_sources libsnapshot_test_defaults libsnapshot_test_helpers snapshotctl vts_libsnapshot_test;
+
+  inherit (callBPPackage "system/core/fs_mgr/libstorage_literals" ./system_core_fs_mgr_libstorage_literals.nix {})
+    libstorage_literals_headers;
+
+  inherit (callBPPackage "system/core/fs_mgr/libvbmeta" ./system_core_fs_mgr_libvbmeta.nix {})
+    libvbmeta libvbmeta_test;
 
   inherit (callBPPackage "system/core/fs_mgr/tests" ./system_core_fs_mgr_tests.nix {})
-    "adb-remount-test.sh" adb-remount-sh fs_mgr_unit_test fs_mgr_vendor_overlay_test;
+    "adb-remount-test.sh" CtsFsMgrTestCases adb-remount-sh fs_mgr_vendor_overlay_test;
 
   inherit (callBPPackage "system/core/fs_mgr/tools" ./system_core_fs_mgr_tools.nix {})
     dmctl;
 
   inherit (callBPPackage "system/core/gatekeeperd" ./system_core_gatekeeperd.nix {})
-    gatekeeperd;
-
-  inherit (callBPPackage "system/core/gatekeeperd/tests" ./system_core_gatekeeperd_tests.nix {})
-    gatekeeperd-unit-tests;
+    gatekeeper_aidl gatekeeperd libgatekeeper_aidl;
 
   inherit (callBPPackage "system/core/healthd" ./system_core_healthd.nix {})
-    "android.hardware.health@2.0-service" "android.hardware.health@2.0-service_defaults" healthd libbatterymonitor libhealthd_charger_nops libhealthd_headers;
+    "android.hardware.health@2.0-service" "android.hardware.health@2.0-service_defaults" charger charger_defaults charger_sysprop charger_test healthd libbatterymonitor libhealthd_charger libhealthd_charger_nops libhealthd_draw libhealthd_headers;
 
   inherit (callBPPackage "system/core/init" ./system_core_init.nix {})
-    generated_stub_builtin_function_map host_init_verifier init_benchmarks init_defaults init_second_stage init_tests libinit;
+    CtsInitTestCases generated_stub_builtin_function_map host_init_verifier init init_benchmarks init_defaults init_second_stage libinit libinit_test_utils libinit_test_utils_libraries_defaults;
+
+  inherit (callBPPackage "system/core/init/sysprop" ./system_core_init_sysprop.nix {})
+    "com.android.sysprop.init";
 
   inherit (callBPPackage "system/core/init/test_service" ./system_core_init_test_service.nix {})
     test_service;
@@ -8995,7 +14197,7 @@
     libasyncio libasyncio_defaults;
 
   inherit (callBPPackage "system/core/libbacktrace" ./system_core_libbacktrace.nix {})
-    backtrace_benchmarks backtrace_test libbacktrace libbacktrace_common libbacktrace_headers libbacktrace_test;
+    backtrace_benchmarks backtrace_test libbacktrace libbacktrace_common libbacktrace_defaults libbacktrace_headers libbacktrace_no_dex libbacktrace_test;
 
   inherit (callBPPackage "system/core/libbinderwrapper" ./system_core_libbinderwrapper.nix {})
     libbinderwrapper libbinderwrapper_defaults libbinderwrapper_test_support;
@@ -9007,7 +14209,7 @@
     libcrypto_utils_test;
 
   inherit (callBPPackage "system/core/libcutils" ./system_core_libcutils.nix {})
-    libcutils libcutils_headers libcutils_test libcutils_test_default libcutils_test_static;
+    KernelLibcutilsTest libcutils libcutils_headers libcutils_sockets libcutils_sockets_test libcutils_test libcutils_test_default libcutils_test_static libcutils_test_static_defaults;
 
   inherit (callBPPackage "system/core/libdiskconfig" ./system_core_libdiskconfig.nix {})
     libdiskconfig;
@@ -9015,110 +14217,26 @@
   inherit (callBPPackage "system/core/libgrallocusage" ./system_core_libgrallocusage.nix {})
     libgrallocusage;
 
-  inherit (callBPPackage "system/core/libion" ./system_core_libion.nix {})
-    iontest libion;
-
-  inherit (callBPPackage "system/core/libion/tests" ./system_core_libion_tests.nix {})
-    ion-unit-tests;
-
   inherit (callBPPackage "system/core/libkeyutils" ./system_core_libkeyutils.nix {})
-    libkeyutils libkeyutils-tests mini-keyctl;
+    libkeyutils libkeyutils-tests;
+
+  inherit (callBPPackage "system/core/libkeyutils/mini_keyctl" ./system_core_libkeyutils_mini_keyctl.nix {})
+    libmini_keyctl_static mini-keyctl;
 
   inherit (callBPPackage "system/core/liblog" ./system_core_liblog.nix {})
     liblog liblog_headers;
 
   inherit (callBPPackage "system/core/liblog/tests" ./system_core_liblog_tests.nix {})
-    CtsLiblogTestCases liblog-benchmarks liblog-tests-defaults liblog-unit-tests;
+    CtsLiblogTestCases liblog-benchmarks liblog-host-test liblog-tests-defaults liblog-unit-tests;
 
-  inherit (callBPPackage "system/core/libmeminfo" ./system_core_libmeminfo.nix {})
-    libmeminfo libmeminfo_benchmark libmeminfo_defaults libmeminfo_test;
-
-  inherit (callBPPackage "system/core/libmeminfo/libdmabufinfo" ./system_core_libmeminfo_libdmabufinfo.nix {})
-    dmabufinfo_defaults dmabufinfo_test libdmabufinfo;
-
-  inherit (callBPPackage "system/core/libmeminfo/libdmabufinfo/tools" ./system_core_libmeminfo_libdmabufinfo_tools.nix {})
-    dmabuf_dump;
-
-  inherit (callBPPackage "system/core/libmeminfo/tools" ./system_core_libmeminfo_tools.nix {})
-    librank procmem procrank showmap wsstop;
-
-  inherit (callBPPackage "system/core/libmeminfo/vts" ./system_core_libmeminfo_vts.nix {})
-    vts_meminfo_test;
-
-  inherit (callBPPackage "system/core/libmemtrack" ./system_core_libmemtrack.nix {})
-    libmemtrack memtrack_test;
-
-  inherit (callBPPackage "system/core/libmemunreachable" ./system_core_libmemunreachable.nix {})
-    libmemunreachable libmemunreachable_defaults memunreachable_binder_test memunreachable_test;
-
-  inherit (callBPPackage "system/core/libmetricslogger" ./system_core_libmetricslogger.nix {})
-    libmetricslogger libmetricslogger_debug metricslogger_defaults metricslogger_tests;
-
-  inherit (callBPPackage "system/core/libnativebridge" ./system_core_libnativebridge.nix {})
-    libnativebridge libnativebridge-defaults libnativebridge-headers libnativebridge_lazy;
-
-  inherit (callBPPackage "system/core/libnativebridge/tests" ./system_core_libnativebridge_tests.nix {})
-    libnativebridge-api-tests libnativebridge-dummy libnativebridge-dummy-defaults libnativebridge-lazy-tests libnativebridge-tests libnativebridge-tests-defaults libnativebridge2-dummy libnativebridge3-dummy;
-
-  inherit (callBPPackage "system/core/libnativeloader" ./system_core_libnativeloader.nix {})
-    libnativeloader libnativeloader-defaults libnativeloader-dummy-headers libnativeloader-headers libnativeloader_lazy;
-
-  inherit (callBPPackage "system/core/libnativeloader/test" ./system_core_libnativeloader_test.nix {})
-    "libbar.oem1" "libbar.oem2" "libbar.product1" "libfoo.oem1" "libfoo.oem2" "libfoo.product1" libnativeloader-api-tests;
+  inherit (callBPPackage "system/core/libmodprobe" ./system_core_libmodprobe.nix {})
+    libmodprobe libmodprobe_tests;
 
   inherit (callBPPackage "system/core/libnetutils" ./system_core_libnetutils.nix {})
     dhcpdbg libnetutils;
 
   inherit (callBPPackage "system/core/libpackagelistparser" ./system_core_libpackagelistparser.nix {})
-    libpackagelistparser;
-
-  inherit (callBPPackage "system/core/libpixelflinger" ./system_core_libpixelflinger.nix {})
-    libpixelflinger libpixelflinger-arm libpixelflinger_internal pixelflinger_defaults;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests" ./system_core_libpixelflinger_tests.nix {})
-    pixelflinger-tests;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-arm64" ./system_core_libpixelflinger_tests_arch-arm64.nix {})
-    pixelflinger-tests-arm64;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-arm64/assembler" ./system_core_libpixelflinger_tests_arch-arm64_assembler.nix {})
-    test-pixelflinger-arm64-assembler-test;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-arm64/col32cb16blend" ./system_core_libpixelflinger_tests_arch-arm64_col32cb16blend.nix {})
-    test-pixelflinger-arm64-col32cb16blend;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-arm64/disassembler" ./system_core_libpixelflinger_tests_arch-arm64_disassembler.nix {})
-    test-pixelflinger-arm64-disassembler-test;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-arm64/t32cb16blend" ./system_core_libpixelflinger_tests_arch-arm64_t32cb16blend.nix {})
-    test-pixelflinger-arm64-t32cb16blend;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-mips" ./system_core_libpixelflinger_tests_arch-mips.nix {})
-    pixelflinger-tests-mips;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-mips/col32cb16blend" ./system_core_libpixelflinger_tests_arch-mips_col32cb16blend.nix {})
-    test-pixelflinger-mips-col32cb16blend;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-mips/t32cb16blend" ./system_core_libpixelflinger_tests_arch-mips_t32cb16blend.nix {})
-    test-pixelflinger-mips-t32cb16blend;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-mips64" ./system_core_libpixelflinger_tests_arch-mips64.nix {})
-    pixelflinger-tests-mips64;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-mips64/assembler" ./system_core_libpixelflinger_tests_arch-mips64_assembler.nix {})
-    test-pixelflinger-mips64-assembler-test;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-mips64/col32cb16blend" ./system_core_libpixelflinger_tests_arch-mips64_col32cb16blend.nix {})
-    test-pixelflinger-mips64-col32cb16blend;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/arch-mips64/disassembler" ./system_core_libpixelflinger_tests_arch-mips64_disassembler.nix {})
-    test-pixelflinger-mips64-disassembler-test;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/codegen" ./system_core_libpixelflinger_tests_codegen.nix {})
-    test-opengl-codegen;
-
-  inherit (callBPPackage "system/core/libpixelflinger/tests/gglmul" ./system_core_libpixelflinger_tests_gglmul.nix {})
-    test-pixelflinger-gglmul;
+    libpackagelistparser libpackagelistparser_test;
 
   inherit (callBPPackage "system/core/libprocessgroup" ./system_core_libprocessgroup.nix {})
     libprocessgroup libprocessgroup_headers;
@@ -9130,7 +14248,7 @@
     libcgrouprc_format;
 
   inherit (callBPPackage "system/core/libprocessgroup/profiles" ./system_core_libprocessgroup_profiles.nix {})
-    "cgroups.json" "cgroups.recovery.json" "task_profiles.json" libprocessgroup_proto libprocessgroup_proto_test libprocessgroup_test_defaults vts_processgroup_validate_test;
+    "cgroups.json" "cgroups.recovery.json" "task_profiles.json" VtsProcessgroupValidateTest libprocessgroup_proto libprocessgroup_proto_test libprocessgroup_test_defaults vts_processgroup_validate_test;
 
   inherit (callBPPackage "system/core/libprocessgroup/setup" ./system_core_libprocessgroup_setup.nix {})
     libprocessgroup_setup;
@@ -9142,10 +14260,16 @@
     libqtaguid libqtaguid_headers;
 
   inherit (callBPPackage "system/core/libsparse" ./system_core_libsparse.nix {})
-    "simg_dump.py" append2simg img2simg libsparse simg2img;
+    "simg_dump.py" append2simg img2simg libsparse simg2img sparse_fuzzer;
 
-  inherit (callBPPackage "system/core/libstats" ./system_core_libstats.nix {})
-    libstatssocket;
+  inherit (callBPPackage "system/core/libstats/pull" ./system_core_libstats_pull.nix {})
+    libstatspull libstatspull_defaults libstatspull_private libstatspull_test;
+
+  inherit (callBPPackage "system/core/libstats/push_compat" ./system_core_libstats_push_compat.nix {})
+    libstatspush_compat libstatspush_compat_defaults libstatspush_compat_test;
+
+  inherit (callBPPackage "system/core/libstats/socket" ./system_core_libstats_socket.nix {})
+    libstatssocket libstatssocket_defaults libstatssocket_headers libstatssocket_private libstatssocket_test;
 
   inherit (callBPPackage "system/core/libsuspend" ./system_core_libsuspend.nix {})
     libsuspend;
@@ -9160,13 +14284,13 @@
     libsysutils libsysutils_tests;
 
   inherit (callBPPackage "system/core/libunwindstack" ./system_core_libunwindstack.nix {})
-    gen_gnudebugdata libunwindstack libunwindstack_flags libunwindstack_local libunwindstack_test libunwindstack_tools unwind unwind_benchmarks unwind_for_offline unwind_info unwind_reg_info unwind_symbols;
+    gen_gnudebugdata libunwindstack libunwindstack_defaults libunwindstack_flags libunwindstack_local libunwindstack_no_dex libunwindstack_test libunwindstack_testlib_flags libunwindstack_tools libunwindstack_unit_test unwind unwind_benchmarks unwind_for_offline unwind_info unwind_reg_info unwind_symbols;
 
   inherit (callBPPackage "system/core/libusbhost" ./system_core_libusbhost.nix {})
     libusbhost;
 
   inherit (callBPPackage "system/core/libutils" ./system_core_libutils.nix {})
-    libutils libutils_defaults libutils_headers libutils_singleton_test libutils_test libutils_test_singleton1 libutils_test_singleton2 libutilscallstack;
+    libutils libutils_benchmark libutils_defaults libutils_headers libutils_singleton_test libutils_test libutils_test_singleton1 libutils_test_singleton2 libutilscallstack;
 
   inherit (callBPPackage "system/core/libvndksupport" ./system_core_libvndksupport.nix {})
     libvndksupport;
@@ -9175,22 +14299,13 @@
     libvndksupport-tests;
 
   inherit (callBPPackage "system/core/libziparchive" ./system_core_libziparchive.nix {})
-    libziparchive libziparchive_defaults libziparchive_flags unzip ziparchive-benchmarks ziparchive-tests;
+    libziparchive libziparchive_defaults libziparchive_flags libziparchive_fuzzer ziparchive-benchmarks ziparchive-tests ziptool ziptool-tests;
 
   inherit (callBPPackage "system/core/llkd" ./system_core_llkd.nix {})
     libllkd llkd llkd_headers;
 
   inherit (callBPPackage "system/core/llkd/tests" ./system_core_llkd_tests.nix {})
     llkd_unit_test;
-
-  inherit (callBPPackage "system/core/lmkd" ./system_core_lmkd.nix {})
-    liblmkd_utils libstatslogc lmkd;
-
-  inherit (callBPPackage "system/core/lmkd/libpsi" ./system_core_lmkd_libpsi.nix {})
-    libpsi libpsi_headers;
-
-  inherit (callBPPackage "system/core/lmkd/tests" ./system_core_lmkd_tests.nix {})
-    lmkd_unit_test;
 
   inherit (callBPPackage "system/core/logcat" ./system_core_logcat.nix {})
     "logpersist.start" logcat logcat_defaults logcatd;
@@ -9201,14 +14316,14 @@
   inherit (callBPPackage "system/core/logd" ./system_core_logd.nix {})
     "logtagd.rc" auditctl liblogd logd;
 
+  inherit (callBPPackage "system/core/logd/fuzz" ./system_core_logd_fuzz.nix {})
+    log_buffer_log_fuzzer;
+
   inherit (callBPPackage "system/core/logd/tests" ./system_core_logd_tests.nix {})
     CtsLogdTestCases logd-unit-test-defaults logd-unit-tests;
 
   inherit (callBPPackage "system/core/logwrapper" ./system_core_logwrapper.nix {})
-    android_fork_execvp_ext_benchmark liblogwrap logwrapper logwrapper_common logwrapper_defaults logwrapper_vendor;
-
-  inherit (callBPPackage "system/core/mkbootimg" ./system_core_mkbootimg.nix {})
-    bootimg_headers libmkbootimg_abi_check libmkbootimg_abi_headers mkbootimg mkbootimg_defaults unpack_bootimg;
+    liblogwrap logwrap_fork_execvp_benchmark logwrapper logwrapper_common logwrapper_defaults logwrapper_vendor;
 
   inherit (callBPPackage "system/core/property_service/libpropertyinfoparser" ./system_core_property_service_libpropertyinfoparser.nix {})
     libpropertyinfoparser;
@@ -9225,11 +14340,20 @@
   inherit (callBPPackage "system/core/reboot" ./system_core_reboot.nix {})
     reboot;
 
+  inherit (callBPPackage "system/core/rootdir" ./system_core_rootdir.nix {})
+    "init.rc" "ueventd.rc";
+
+  inherit (callBPPackage "system/core/rootdir/avb" ./system_core_rootdir_avb.nix {})
+    q-gsi_avbpubkey r-gsi_avbpubkey s-gsi_avbpubkey;
+
   inherit (callBPPackage "system/core/run-as" ./system_core_run-as.nix {})
     run-as;
 
   inherit (callBPPackage "system/core/sdcard" ./system_core_sdcard.nix {})
     sdcard;
+
+  inherit (callBPPackage "system/core/set-verity-state" ./system_core_set-verity-state.nix {})
+    set-verity-state;
 
   inherit (callBPPackage "system/core/shell_and_utilities" ./system_core_shell_and_utilities.nix {})
     shell_and_utilities shell_and_utilities_recovery shell_and_utilities_system shell_and_utilities_vendor;
@@ -9238,13 +14362,16 @@
     libstoraged storaged storaged-unit-tests storaged_aidl storaged_aidl_private storaged_defaults;
 
   inherit (callBPPackage "system/core/toolbox" ./system_core_toolbox.nix {})
-    grep grep_common grep_vendor r toolbox toolbox_binary_defaults toolbox_defaults toolbox_input_labels toolbox_vendor;
+    toolbox toolbox_binary_defaults toolbox_defaults toolbox_input_labels toolbox_vendor;
+
+  inherit (callBPPackage "system/core/trusty/confirmationui" ./system_core_trusty_confirmationui.nix {})
+    "android.hardware.confirmationui.not-so-secure-input" "android.hardware.confirmationui@1.0-lib.trusty" "android.hardware.confirmationui@1.0-service.trusty";
 
   inherit (callBPPackage "system/core/trusty/gatekeeper" ./system_core_trusty_gatekeeper.nix {})
-    "gatekeeper.trusty";
+    "android.hardware.gatekeeper@1.0-service.trusty";
 
   inherit (callBPPackage "system/core/trusty/keymaster" ./system_core_trusty_keymaster.nix {})
-    "android.hardware.keymaster@3.0-service.trusty" "keystore.trusty" trusty_keymaster_tipc;
+    "android.hardware.keymaster@3.0-service.trusty" "android.hardware.keymaster@4.0-service.trusty" "keystore.trusty" trusty_keymaster_tipc;
 
   inherit (callBPPackage "system/core/trusty/libtrusty" ./system_core_trusty_libtrusty.nix {})
     libtrusty;
@@ -9263,6 +14390,9 @@
 
   inherit (callBPPackage "system/core/trusty/storage/tests" ./system_core_trusty_storage_tests.nix {})
     secure-storage-unit-test;
+
+  inherit (callBPPackage "system/core/trusty/utils/rpmb_dev" ./system_core_trusty_utils_rpmb_dev.nix {})
+    rpmb_dev;
 
   inherit (callBPPackage "system/core/trusty/utils/trusty-ut-ctrl" ./system_core_trusty_utils_trusty-ut-ctrl.nix {})
     trusty-ut-ctrl;
@@ -9328,13 +14458,16 @@
     latencytop;
 
   inherit (callBPPackage "system/extras/libfec" ./system_extras_libfec.nix {})
-    libfec;
+    libfec libfec_default;
 
   inherit (callBPPackage "system/extras/libfec/test" ./system_extras_libfec_test.nix {})
-    fec_test_defaults fec_test_read fec_test_rs;
+    fec_test_defaults fec_test_read fec_test_rs fec_unittest;
 
   inherit (callBPPackage "system/extras/libfscrypt" ./system_extras_libfscrypt.nix {})
     libfscrypt;
+
+  inherit (callBPPackage "system/extras/libfscrypt/tests" ./system_extras_libfscrypt_tests.nix {})
+    libfscrypt_unit_test;
 
   inherit (callBPPackage "system/extras/libjsonpb/parse" ./system_extras_libjsonpb_parse.nix {})
     libjsonpbparse;
@@ -9342,11 +14475,8 @@
   inherit (callBPPackage "system/extras/libjsonpb/verify" ./system_extras_libjsonpb_verify.nix {})
     libjsonpbverify libjsonpbverify_test;
 
-  inherit (callBPPackage "system/extras/libperfmgr" ./system_extras_libperfmgr.nix {})
-    libperfmgr libperfmgr_defaults libperfmgr_test perfmgr_config_verifier;
-
   inherit (callBPPackage "system/extras/memory_replay" ./system_extras_memory_replay.nix {})
-    memory_replay memory_replay_defaults memory_replay_tests;
+    memory_flag_defaults memory_replay memory_replay_defaults memory_replay_tests trace_benchmark;
 
   inherit (callBPPackage "system/extras/memtrack" ./system_extras_memtrack.nix {})
     memtrack memtrack_defaults memtrack_share;
@@ -9361,25 +14491,10 @@
     dumpcache;
 
   inherit (callBPPackage "system/extras/partition_tools" ./system_extras_partition_tools.nix {})
-    liblpdump lp_defaults lpdump lpdumpd lpflash lpmake lpunpack;
+    liblpdump lp_defaults lpadd lpdump lpdumpd lpflash lpmake lpunpack;
 
   inherit (callBPPackage "system/extras/partition_tools/aidl" ./system_extras_partition_tools_aidl.nix {})
     liblpdump_interface;
-
-  inherit (callBPPackage "system/extras/perfprofd" ./system_extras_perfprofd.nix {})
-    libperfprofd_proto_config libperfprofd_record_proto libperfprofdcore libperfprofdcore_defaults libperfprofdcored perfprofd perfprofd_config_proto perfprofd_debug_defaults perfprofd_defaults perfprofd_record_proto;
-
-  inherit (callBPPackage "system/extras/perfprofd/binder_interface" ./system_extras_perfprofd_binder_interface.nix {})
-    libperfprofd_binder perfprofd_aidl;
-
-  inherit (callBPPackage "system/extras/perfprofd/dropbox" ./system_extras_perfprofd_dropbox.nix {})
-    libperfprofd_dropbox;
-
-  inherit (callBPPackage "system/extras/perfprofd/scripts" ./system_extras_perfprofd_scripts.nix {})
-    perf_config_proto perf_proto_flames perf_proto_json2sqlite perf_proto_stack perfprofd_python_default;
-
-  inherit (callBPPackage "system/extras/perfprofd/tests" ./system_extras_perfprofd_tests.nix {})
-    perfprofd_test perfprofd_test_defaults;
 
   inherit (callBPPackage "system/extras/postinst" ./system_extras_postinst.nix {})
     postinst_example;
@@ -9400,7 +14515,7 @@
     showslab;
 
   inherit (callBPPackage "system/extras/simpleperf" ./system_extras_simpleperf.nix {})
-    libsimpleperf libsimpleperf_cts_test libsimpleperf_dex_read libsimpleperf_dex_read_static_reqs_defaults libsimpleperf_elf_read libsimpleperf_elf_read_static_reqs_defaults libsimpleperf_inplace_sampler libsimpleperf_record libsimpleperf_report libsimpleperf_srcs simpleperf simpleperf_cflags simpleperf_cpu_hotplug_test simpleperf_defaults simpleperf_libs_for_tests simpleperf_ndk simpleperf_record_test simpleperf_shared_libs simpleperf_static_libs simpleperf_test_srcs simpleperf_unit_test;
+    libsimpleperf libsimpleperf_cts_test libsimpleperf_elf_read libsimpleperf_elf_read_static_reqs_defaults libsimpleperf_etm_decoder libsimpleperf_record libsimpleperf_report libsimpleperf_srcs simpleperf simpleperf_cflags simpleperf_cpu_hotplug_test simpleperf_defaults simpleperf_libs_for_tests simpleperf_ndk simpleperf_record_test simpleperf_shared_libs simpleperf_static_libs simpleperf_test_srcs simpleperf_unit_test;
 
   inherit (callBPPackage "system/extras/simpleperf/runtest" ./system_extras_simpleperf_runtest.nix {})
     simpleperf_runtest_comm_change simpleperf_runtest_defaults simpleperf_runtest_function_fork simpleperf_runtest_function_indirect_recursive simpleperf_runtest_function_pthread simpleperf_runtest_function_recursive simpleperf_runtest_one_function simpleperf_runtest_run_and_sleep simpleperf_runtest_two_functions;
@@ -9472,10 +14587,13 @@
     uevents;
 
   inherit (callBPPackage "system/extras/toolchain-extras" ./system_extras_toolchain-extras.nix {})
-    libprofile-defaults libprofile-extras libprofile-extras-test libprofile-extras_ndk;
+    libprofile-clang-defaults libprofile-clang-extras libprofile-clang-extras_ndk libprofile-defaults libprofile-extras libprofile-extras-test libprofile-extras_ndk;
+
+  inherit (callBPPackage "system/extras/vbmeta_tools" ./system_extras_vbmeta_tools.nix {})
+    vbmake;
 
   inherit (callBPPackage "system/extras/verity" ./system_extras_verity.nix {})
-    "build_verity_metadata.py" BootSignature VeritySigner boot_signer build_verity_tree build_verity_tree_test generate_verity_key libverity_tree verity_signer verity_tree_defaults verity_verifier;
+    boot_signer build_verity_metadata build_verity_tree build_verity_tree_test generate_verity_key libverity_tree verity_signer verity_tree_defaults verity_verifier;
 
   inherit (callBPPackage "system/extras/verity/fec" ./system_extras_verity_fec.nix {})
     fec;
@@ -9490,7 +14608,10 @@
     gatekeeper-unit-tests;
 
   inherit (callBPPackage "system/gsid" ./system_gsid.nix {})
-    gsi_aidl_interface gsi_boot_test gsi_tool gsid gsiservice_aidl libgsi libgsi_headers;
+    VtsGsiBootTest gsi_aidl_interface gsi_tool gsid gsiservice_aidl libgsi libgsi_headers libgsid;
+
+  inherit (callBPPackage "system/gsid/tests" ./system_gsid_tests.nix {})
+    DSUEndtoEndTest LockScreenAutomation gsi_boot_defaults gsi_boot_test vts_gsi_boot_test;
 
   inherit (callBPPackage "system/hardware/interfaces" ./system_hardware_interfaces.nix {})
     "android.system";
@@ -9514,7 +14635,7 @@
     "android.system.suspend@1.0";
 
   inherit (callBPPackage "system/hardware/interfaces/suspend/1.0/default" ./system_hardware_interfaces_suspend_1.0_default.nix {})
-    "android.system.suspend@1.0-service" SystemSuspendStatsProto SystemSuspendV1_0UnitTest system_suspend_defaults system_suspend_stats_defaults;
+    "android.system.suspend@1.0-service" SystemSuspendBenchmark SystemSuspendV1_0UnitTest system_suspend_defaults system_suspend_stats_defaults;
 
   inherit (callBPPackage "system/hardware/interfaces/suspend/aidl" ./system_hardware_interfaces_suspend_aidl.nix {})
     suspend_control_aidl_interface;
@@ -9526,16 +14647,28 @@
     libwifikeystorehal;
 
   inherit (callBPPackage "system/hardware/interfaces/wifi/keystore/1.0/vts/functional" ./system_hardware_interfaces_wifi_keystore_1.0_vts_functional.nix {})
-    VtsHalWifiKeystoreV1_0TargetTest;
+    VtsHalWifiKeystoreV1_0Target VtsHalWifiKeystoreV1_0TargetTest;
 
   inherit (callBPPackage "system/hwservicemanager" ./system_hwservicemanager.nix {})
     hwservicemanager hwservicemanager_defaults hwservicemanager_test libhwservicemanager libhwservicemanager_shared_libs libtokenmanager libtokenmanager_shared_libs;
 
+  inherit (callBPPackage "system/incremental_delivery/incfs" ./system_incremental_delivery_incfs.nix {})
+    incfsdump libincfs libincfs-test libincfs_defaults libincfs_headers;
+
+  inherit (callBPPackage "system/incremental_delivery/libdataloader" ./system_incremental_delivery_libdataloader.nix {})
+    libdataloader libdataloader_defaults libdataloader_headers;
+
+  inherit (callBPPackage "system/incremental_delivery/sysprop" ./system_incremental_delivery_sysprop.nix {})
+    "com.android.sysprop.incremental";
+
   inherit (callBPPackage "system/iorap" ./system_iorap.nix {})
-    "iorap.cmd.perfetto" "iorap.inode2filename" iorap-aidl iorap-default-dependencies iorap-default-flags iorapd iorapd-tests libiorap-binder libiorap-inode2filename libiorap-manager libiorap-manager-default-dependencies libiorap-perfetto libiorap-perfetto-default-dependencies libiorap-perfetto-protos;
+    "iorap.cmd.compiler" "iorap.cmd.db" "iorap.cmd.maintenance" "iorap.cmd.perfetto" "iorap.cmd.prefetcher.client" "iorap.inode2filename" "iorap.prefetcherd" "iorap.prefetcherd.policy" iorap-aidl iorap-default-dependencies iorap-default-flags iorapd iorapd-host-tests iorapd-tests libiorap-binder libiorap-compiler libiorap-compiler-default-dependencies libiorap-db libiorap-db-default-dependencies libiorap-inode2filename libiorap-maintenance libiorap-maintenance-default-dependencies libiorap-manager libiorap-manager-default-dependencies libiorap-perfetto libiorap-perfetto-default-dependencies libiorap-perfetto-protos libiorap-prefetcher libiorap-prefetcher-default-dependencies libiorap-serialize libiorap-serialize-default-dependencies;
 
   inherit (callBPPackage "system/keymaster" ./system_keymaster.nix {})
-    libkeymaster3device libkeymaster4 libkeymaster_messages libkeymaster_portable libkeymasterfiles libpuresoftkeymasterdevice libsoftkeymasterdevice;
+    keymaster_defaults libkeymaster3device libkeymaster4 libkeymaster41 libkeymaster_messages libkeymaster_portable libkeymasterfiles libpuresoftkeymasterdevice libsoft_attestation_cert libsoftkeymasterdevice;
+
+  inherit (callBPPackage "system/libartpalette" ./system_libartpalette.nix {})
+    libartpalette-system;
 
   inherit (callBPPackage "system/libfmq" ./system_libfmq.nix {})
     libfmq;
@@ -9544,16 +14677,10 @@
     mq_test mq_test_client;
 
   inherit (callBPPackage "system/libhidl" ./system_libhidl.nix {})
-    libhidl-defaults libhidl_test libhidlbase libhidlbase-combined-impl libhidlbase_pgo libhidltransport;
+    libhidl libhidl-defaults libhidl_gtest_helper libhidl_test libhidlbase libhidlbase-combined-impl libhidlbase_pgo libhidltransport;
 
   inherit (callBPPackage "system/libhidl/adapter" ./system_libhidl_adapter.nix {})
     libhidladapter;
-
-  inherit (callBPPackage "system/libhidl/base" ./system_libhidl_base.nix {})
-    libhidlbase-impl-internal libhidlbase-impl-shared-libs;
-
-  inherit (callBPPackage "system/libhidl/libhidlcache" ./system_libhidl_libhidlcache.nix {})
-    libhidlcache libhidlcache_test;
 
   inherit (callBPPackage "system/libhidl/libhidlmemory" ./system_libhidl_libhidlmemory.nix {})
     libhidlmemory;
@@ -9562,7 +14689,7 @@
     libhwminijail;
 
   inherit (callBPPackage "system/libhidl/transport" ./system_libhidl_transport.nix {})
-    "android.hidl" libhidltransport-impl-internal libhidltransport-impl-shared-libs;
+    "android.hidl";
 
   inherit (callBPPackage "system/libhidl/transport/allocator/1.0" ./system_libhidl_transport_allocator_1.0.nix {})
     "android.hidl.allocator@1.0";
@@ -9613,13 +14740,13 @@
     "android.hidl.token@1.0-utils";
 
   inherit (callBPPackage "system/libhwbinder" ./system_libhwbinder.nix {})
-    hwbinder_benchmark_pgo hwbinder_lto hwbinder_pgo libhwbinder libhwbinder-impl-internal libhwbinder-impl-shared-libs libhwbinder-impl-shared-libs-no-vndk-private libhwbinder_defaults libhwbinder_noltopgo libhwbinder_pgo-impl-internal;
+    hwbinder_benchmark_pgo hwbinder_lto hwbinder_pgo libhwbinder libhwbinder-impl-internal libhwbinder-impl-shared-libs libhwbinder_defaults libhwbinder_pgo-impl-internal;
 
   inherit (callBPPackage "system/libhwbinder/vts/performance" ./system_libhwbinder_vts_performance.nix {})
     hwbinderThroughputTest libbinder_benchmark libhwbinder_benchmark libhwbinder_latency libhwbinder_test_defaults;
 
   inherit (callBPPackage "system/libsysprop/srcs" ./system_libsysprop_srcs.nix {})
-    platform-properties;
+    PlatformProperties;
 
   inherit (callBPPackage "system/libufdt" ./system_libufdt.nix {})
     libufdt;
@@ -9634,19 +14761,22 @@
     extract_dtb fdt_apply_overlay ufdt_apply_overlay ufdt_gen_test_dts ufdt_verify_overlay ufdt_verify_overlay_host;
 
   inherit (callBPPackage "system/libufdt/utils/src" ./system_libufdt_utils_src.nix {})
-    "mkdtboimg.py" mkdtimg;
+    "mkdtboimg.py" mkdtboimg mkdtimg;
 
   inherit (callBPPackage "system/libvintf" ./system_libvintf.nix {})
-    assemble_vintf checkvintf libassemblevintf libvintf libvintf-defaults libvintf_recovery vintf;
+    assemble_vintf checkvintf libassemblevintf libvintf libvintf-defaults libvintf_local_headers vintf;
 
   inherit (callBPPackage "system/libvintf/analyze_matrix" ./system_libvintf_analyze_matrix.nix {})
     analyze_matrix;
 
+  inherit (callBPPackage "system/libvintf/libaidlvintf_test_helper" ./system_libvintf_libaidlvintf_test_helper.nix {})
+    libaidlvintf_gtest_helper test_compile_use_libaidlvintf_gtest_helper_static use_libaidlvintf_gtest_helper_static;
+
   inherit (callBPPackage "system/libvintf/test" ./system_libvintf_test.nix {})
-    libvintf_test vintf_object_recovery_test vintf_object_test;
+    libvintf_test vintf_object_test;
 
   inherit (callBPPackage "system/libvintf/xsd/compatibilityMatrix" ./system_libvintf_xsd_compatibilityMatrix.nix {})
-    compatibility_matrix;
+    compatibility_matrix compatibility_matrix_schema;
 
   inherit (callBPPackage "system/libvintf/xsd/compatibilityMatrix/vts" ./system_libvintf_xsd_compatibilityMatrix_vts.nix {})
     vts_compatibilityMatrix_validate_test;
@@ -9658,13 +14788,13 @@
     vts_halManifest_validate_test;
 
   inherit (callBPPackage "system/linkerconfig" ./system_linkerconfig.nix {})
-    linkerconfig_defaults linkerconfig_headers linkerconfig_modules linkerconfig_modules_unittest;
+    "ld.config.recovery.txt" generate_recovery_linker_config linkerconfig linkerconfig_backward_compatibility_test linkerconfig_contents linkerconfig_contents_fulltest linkerconfig_defaults linkerconfig_generator linkerconfig_generator_unittest linkerconfig_modules linkerconfig_modules_unittest linkerconfig_test_defaults;
 
   inherit (callBPPackage "system/media/alsa_utils" ./system_media_alsa_utils.nix {})
     libalsautils;
 
   inherit (callBPPackage "system/media/audio" ./system_media_audio.nix {})
-    libaudio_system_headers;
+    libaudio_system_audio_base libaudio_system_headers;
 
   inherit (callBPPackage "system/media/audio_effects" ./system_media_audio_effects.nix {})
     libaudioeffects;
@@ -9673,13 +14803,31 @@
     libaudioroute;
 
   inherit (callBPPackage "system/media/audio_utils" ./system_media_audio_utils.nix {})
-    audio_utils_defaults libaudiospdif libaudioutils libaudioutils_fixedfft libfifo libsndfile;
+    audio_utils_defaults libaudiospdif libaudioutils libaudioutils_fixedfft libaudioutils_headers libfifo libsndfile;
+
+  inherit (callBPPackage "system/media/audio_utils/fuzz/ac3framescanner_fuzzer" ./system_media_audio_utils_fuzz_ac3framescanner_fuzzer.nix {})
+    ac3framescanner_fuzzer;
+
+  inherit (callBPPackage "system/media/audio_utils/fuzz/dtsframescanner_fuzzer" ./system_media_audio_utils_fuzz_dtsframescanner_fuzzer.nix {})
+    dtsframescanner_fuzzer;
+
+  inherit (callBPPackage "system/media/audio_utils/fuzz/fdtostring_fuzzer" ./system_media_audio_utils_fuzz_fdtostring_fuzzer.nix {})
+    fdtostring_fuzzer;
+
+  inherit (callBPPackage "system/media/audio_utils/fuzz/format_fuzzer" ./system_media_audio_utils_fuzz_format_fuzzer.nix {})
+    format_fuzzer;
+
+  inherit (callBPPackage "system/media/audio_utils/fuzz/metadata_fuzzer" ./system_media_audio_utils_fuzz_metadata_fuzzer.nix {})
+    metadata_fuzzer;
 
   inherit (callBPPackage "system/media/audio_utils/tests" ./system_media_audio_utils_tests.nix {})
-    channels_tests errorlog_tests fdtostring_tests fifo_multiprocess fifo_tests fifo_threads format_tests limiter_tests logplot_tests power_tests powerlog_tests primitives_benchmark primitives_tests sample_tests simplelog_tests statistics_benchmark statistics_tests string_tests timestampverifier_tests variadic_tests;
+    channels_tests errorlog_tests fdtostring_tests fifo_multiprocess fifo_tests fifo_threads format_tests limiter_tests logplot_tests metadata_tests power_tests powerlog_tests primitives_benchmark primitives_tests sample_tests simplelog_tests spdif_tests statistics_benchmark statistics_tests string_tests timestampverifier_tests variadic_tests;
 
   inherit (callBPPackage "system/media/camera" ./system_media_camera.nix {})
     libcamera_metadata;
+
+  inherit (callBPPackage "system/media/camera/fuzz" ./system_media_camera_fuzz.nix {})
+    libcamera_metadata_fuzzer;
 
   inherit (callBPPackage "system/media/camera/tests" ./system_media_camera_tests.nix {})
     camera_metadata_tests;
@@ -9687,14 +14835,50 @@
   inherit (callBPPackage "system/media/radio" ./system_media_radio.nix {})
     libradio_metadata;
 
-  inherit (callBPPackage "system/netd" ./system_netd.nix {})
-    libnetd_client_headers netd_defaults;
+  inherit (callBPPackage "system/media/tests" ./system_media_tests.nix {})
+    systemaudio_tests;
 
-  inherit (callBPPackage "system/netd/apex" ./system_netd_apex.nix {})
-    "com.android.resolv" "com.android.resolv.certificate" "com.android.resolv.key";
+  inherit (callBPPackage "system/memory/libion" ./system_memory_libion.nix {})
+    iontest libion;
+
+  inherit (callBPPackage "system/memory/libion/tests" ./system_memory_libion_tests.nix {})
+    ion-unit-tests;
+
+  inherit (callBPPackage "system/memory/libmeminfo" ./system_memory_libmeminfo.nix {})
+    libmeminfo libmeminfo_benchmark libmeminfo_defaults libmeminfo_test;
+
+  inherit (callBPPackage "system/memory/libmeminfo/libdmabufinfo" ./system_memory_libmeminfo_libdmabufinfo.nix {})
+    dmabufinfo_defaults dmabufinfo_test libdmabufinfo;
+
+  inherit (callBPPackage "system/memory/libmeminfo/libdmabufinfo/tools" ./system_memory_libmeminfo_libdmabufinfo_tools.nix {})
+    dmabuf_dump;
+
+  inherit (callBPPackage "system/memory/libmeminfo/tools" ./system_memory_libmeminfo_tools.nix {})
+    librank procmem procrank showmap wsstop;
+
+  inherit (callBPPackage "system/memory/libmeminfo/vts" ./system_memory_libmeminfo_vts.nix {})
+    vts_core_meminfo_test vts_meminfo_defaults vts_meminfo_test;
+
+  inherit (callBPPackage "system/memory/libmemtrack" ./system_memory_libmemtrack.nix {})
+    libmemtrack memtrack_test;
+
+  inherit (callBPPackage "system/memory/libmemunreachable" ./system_memory_libmemunreachable.nix {})
+    libmemunreachable libmemunreachable_defaults memunreachable_binder_test memunreachable_test memunreachable_unit_test;
+
+  inherit (callBPPackage "system/memory/lmkd" ./system_memory_lmkd.nix {})
+    "statslog_lmkd.cpp" "statslog_lmkd.h" liblmkd_utils libstatslog_lmkd libstatslogc lmkd stats_defaults;
+
+  inherit (callBPPackage "system/memory/lmkd/libpsi" ./system_memory_lmkd_libpsi.nix {})
+    libpsi libpsi_headers;
+
+  inherit (callBPPackage "system/memory/lmkd/tests" ./system_memory_lmkd_tests.nix {})
+    lmkd_unit_test;
+
+  inherit (callBPPackage "system/netd" ./system_netd.nix {})
+    libnetd_client_headers libnetdbinder_utils_headers netd_defaults;
 
   inherit (callBPPackage "system/netd/bpf_progs" ./system_netd_bpf_progs.nix {})
-    "clatd.o" "netd.o";
+    "clatd.o" "netd.o" "offload.o" netd_bpf_progs_headers;
 
   inherit (callBPPackage "system/netd/client" ./system_netd_client.nix {})
     libnetd_client netdclient_test;
@@ -9708,26 +14892,20 @@
   inherit (callBPPackage "system/netd/netutils_wrappers" ./system_netd_netutils_wrappers.nix {})
     "netutils-wrapper-1.0" netutils_wrapper_test;
 
-  inherit (callBPPackage "system/netd/resolv" ./system_netd_resolv.nix {})
-    "statslog_resolv.cpp" "statslog_resolv.h" dnsresolver_aidl_interface libnetd_resolv libnetd_resolv_headers libnetd_test_metrics_listener libstatslog_resolv resolv_integration_test resolv_unit_test stats_proto;
-
-  inherit (callBPPackage "system/netd/resolv/dns_responder" ./system_netd_resolv_dns_responder.nix {})
-    libnetd_test_dnsresponder;
-
   inherit (callBPPackage "system/netd/server" ./system_netd_server.nix {})
-    libnetd_server ndc netd netd_aidl_interface netd_event_listener_interface netd_integration_test_shared netd_unit_test oemnetd_aidl_interface;
+    libnetd_server ndc netd netd_aidl_interface netd_aidl_interfaces-platform-java netd_event_listener_interface netd_integration_test_shared netd_unit_test oemnetd_aidl_interface;
 
   inherit (callBPPackage "system/netd/tests" ./system_netd_tests.nix {})
-    libnetd_test_tun_interface libnetd_test_unsol_service netd_integration_test;
+    libnetd_test_tun_interface libnetd_test_unsol_service libnetd_test_utils netd_integration_test;
 
   inherit (callBPPackage "system/netd/tests/benchmarks" ./system_netd_tests_benchmarks.nix {})
     bpf_benchmark netd_benchmark;
 
   inherit (callBPPackage "system/nfc/src" ./system_nfc_src.nix {})
-    libnfc-nci;
+    libnfc-nci nfc_ce_fuzzer nfc_fuzzer_defaults nfc_llcp_fuzzer nfc_nci_fuzzer nfc_ndef_fuzzer nfc_rw_fuzzer;
 
   inherit (callBPPackage "system/nfc/utils" ./system_nfc_utils.nix {})
-    libnfcutils nfc_test_utils nfc_utils_defaults;
+    libnfcutils nfc_test_utils nfc_utils_defaults nfc_utils_ringbuffer_fuzzer;
 
   inherit (callBPPackage "system/nvram/client" ./system_nvram_client.nix {})
     nvram-client;
@@ -9739,7 +14917,7 @@
     libnvram-core-tests;
 
   inherit (callBPPackage "system/nvram/hal" ./system_nvram_hal.nix {})
-    "nvram.testing" libnvram-hal;
+    "fake-nvram-seccomp.policy" "nvram.testing" fake-nvram libnvram-hal;
 
   inherit (callBPPackage "system/nvram/hal/tests" ./system_nvram_hal_tests.nix {})
     nvram_hal_test;
@@ -9750,17 +14928,26 @@
   inherit (callBPPackage "system/nvram/messages/tests" ./system_nvram_messages_tests.nix {})
     libnvram-messages-tests;
 
+  inherit (callBPPackage "system/security/fsverity_init" ./system_security_fsverity_init.nix {})
+    fsverity_init;
+
+  inherit (callBPPackage "system/security/identity" ./system_security_identity.nix {})
+    credstore credstore_aidl identity_defaults libcredstore_aidl;
+
   inherit (callBPPackage "system/security/keystore-engine" ./system_security_keystore-engine.nix {})
     libkeystore-engine libkeystore-engine-wifi-hidl;
 
   inherit (callBPPackage "system/security/keystore" ./system_security_keystore.nix {})
-    keystore keystore_aidl keystore_cli keystore_cli_v2 keystore_defaults libkeystore-wifi-hidl libkeystore_aidl libkeystore_binder libkeystore_parcelables libkeystore_test;
+    keystore keystore_aidl keystore_cli keystore_cli_v2 keystore_defaults libkeystore-attestation-application-id libkeystore-wifi-hidl libkeystore_aidl libkeystore_binder libkeystore_parcelables libkeystore_test;
 
   inherit (callBPPackage "system/security/keystore/tests" ./system_security_keystore_tests.nix {})
     confirmationui_invocation_test keystore_unit_tests;
 
   inherit (callBPPackage "system/sepolicy" ./system_sepolicy.nix {})
-    "26.0.board.compat.map" "26.0.board.ignore.map" "26.0.cil" "26.0.ignore.cil" "27.0.board.compat.map" "27.0.board.ignore.map" "27.0.cil" "27.0.ignore.cil" "28.0.board.compat.map" "28.0.board.ignore.map" "28.0.cil" "28.0.ignore.cil" selinux_policy_version;
+    "26.0.board.compat.map" "26.0.board.ignore.map" "26.0.compat.cil" "26.0.ignore.cil" "27.0.board.compat.map" "27.0.board.ignore.map" "27.0.compat.cil" "27.0.ignore.cil" "28.0.board.compat.map" "28.0.board.ignore.map" "28.0.compat.cil" "28.0.ignore.cil" "29.0.board.compat.map" "29.0.board.ignore.map" "29.0.compat.cil" "29.0.ignore.cil" "plat_26.0.cil" "plat_27.0.cil" "plat_28.0.cil" "plat_29.0.cil" "product_26.0.cil" "product_27.0.cil" "product_28.0.cil" "product_29.0.cil" "system_ext_26.0.cil" "system_ext_27.0.cil" "system_ext_28.0.cil" "system_ext_29.0.cil" file_contexts_asan_files file_contexts_files file_contexts_overlayfs_files hwservice_contexts_files odm_file_contexts odm_hwservice_contexts odm_property_contexts plat_file_contexts plat_hwservice_contexts plat_property_contexts plat_service_contexts product_file_contexts product_hwservice_contexts product_property_contexts product_service_contexts property_contexts_files public_property_contexts selinux_policy_version service_contexts_files system_ext_file_contexts system_ext_hwservice_contexts system_ext_property_contexts system_ext_service_contexts vendor_file_contexts vendor_hwservice_contexts vendor_property_contexts vendor_service_contexts;
+
+  inherit (callBPPackage "system/sepolicy/apex" ./system_sepolicy_apex.nix {})
+    "apex.test-file_contexts" "com.android.adbd-file_contexts" "com.android.art.debug-file_contexts" "com.android.art.release-file_contexts" "com.android.bootanimation-file_contexts" "com.android.cellbroadcast-file_contexts" "com.android.conscrypt-file_contexts" "com.android.cronet-file_contexts" "com.android.extservices-file_contexts" "com.android.i18n-file_contexts" "com.android.ipsec-file_contexts" "com.android.media-file_contexts" "com.android.media.swcodec-file_contexts" "com.android.mediaprovider-file_contexts" "com.android.neuralnetworks-file_contexts" "com.android.os.statsd-file_contexts" "com.android.permission-file_contexts" "com.android.resolv-file_contexts" "com.android.runtime-file_contexts" "com.android.sdkext-file_contexts" "com.android.telephony-file_contexts" "com.android.tethering-file_contexts" "com.android.tzdata-file_contexts" "com.android.vndk-file_contexts" "com.android.wifi-file_contexts";
 
   inherit (callBPPackage "system/sepolicy/build" ./system_sepolicy_build.nix {})
     build_sepolicy;
@@ -9769,13 +14956,13 @@
     soong-selinux;
 
   inherit (callBPPackage "system/sepolicy/tests" ./system_sepolicy_tests.nix {})
-    combine_maps libsepolwrap py2_only searchpolicy sepolicy_tests treble_sepolicy_tests;
+    combine_maps fc_sort libsepolwrap py2_only searchpolicy sepolicy_tests treble_sepolicy_tests;
 
   inherit (callBPPackage "system/sepolicy/tools" ./system_sepolicy_tools.nix {})
     "insertkeys.py" checkfc checkseapp sepolicy-check sepolicy_tools_defaults version_policy;
 
-  inherit (callBPPackage "system/sepolicy/tools/fc_sort" ./system_sepolicy_tools_fc_sort.nix {})
-    fc_sort;
+  inherit (callBPPackage "system/sepolicy/tools/sepolicy-analyze" ./system_sepolicy_tools_sepolicy-analyze.nix {})
+    sepolicy-analyze;
 
   inherit (callBPPackage "system/server_configurable_flags/disaster_recovery" ./system_server_configurable_flags_disaster_recovery.nix {})
     flags_health_check;
@@ -9783,11 +14970,35 @@
   inherit (callBPPackage "system/server_configurable_flags/libflags" ./system_server_configurable_flags_libflags.nix {})
     server_configurable_flags server_configurable_flags_test;
 
+  inherit (callBPPackage "system/teeui/libteeui" ./system_teeui_libteeui.nix {})
+    libteeui libteeui_hal_support;
+
+  inherit (callBPPackage "system/teeui/libteeui/example" ./system_teeui_libteeui_example.nix {})
+    libteeui_example_layout;
+
+  inherit (callBPPackage "system/teeui/libteeui/prebuilt/localization" ./system_teeui_libteeui_prebuilt_localization.nix {})
+    ConfirmationUITranslations_test libteeui_localization;
+
+  inherit (callBPPackage "system/teeui/libteeui_jni" ./system_teeui_libteeui_jni.nix {})
+    libteeui_jni;
+
+  inherit (callBPPackage "system/teeui/test" ./system_teeui_test.nix {})
+    libteeui_localization_rendering_test teeui_unit_tests;
+
+  inherit (callBPPackage "system/teeui/tools/framebufferizer" ./system_teeui_tools_framebufferizer.nix {})
+    TeeuiFramebufferizer;
+
   inherit (callBPPackage "system/testing/gtest_extras" ./system_testing_gtest_extras.nix {})
     gtest_isolated_tests libgtest_isolated libgtest_isolated_main;
 
   inherit (callBPPackage "system/timezone/apex" ./system_timezone_apex.nix {})
     "apex.tzdata.key" "com.android.tzdata" "com.android.tzdata-androidManifest" "com.android.tzdata-defaults" "com.android.tzdata.certificate";
+
+  inherit (callBPPackage "system/timezone/apex/tests" ./system_timezone_apex_tests.nix {})
+    MtsTimeZoneDataTestCases;
+
+  inherit (callBPPackage "system/timezone/debug_tools/host" ./system_timezone_debug_tools_host.nix {})
+    timezone_host_debug_tools;
 
   inherit (callBPPackage "system/timezone/distro/core" ./system_timezone_distro_core.nix {})
     time_zone_distro time_zone_distro-tests time_zone_distro_unbundled;
@@ -9798,8 +15009,32 @@
   inherit (callBPPackage "system/timezone/distro/tools" ./system_timezone_distro_tools.nix {})
     create_time_zone_distro time_zone_distro_builder;
 
+  inherit (callBPPackage "system/timezone/input_tools/android/common" ./system_timezone_input_tools_android_common.nix {})
+    tztools_common tztools_common_testing tztools_common_tests;
+
+  inherit (callBPPackage "system/timezone/input_tools/android/telephonylookup_generator" ./system_timezone_input_tools_android_telephonylookup_generator.nix {})
+    telephonylookup_generator telephonylookup_generator_tests telephonylookupprotos;
+
+  inherit (callBPPackage "system/timezone/input_tools/android/tzlookup_generator" ./system_timezone_input_tools_android_tzlookup_generator.nix {})
+    countryzonesprotos tzlookup_generator tzlookup_generator_tests;
+
+  inherit (callBPPackage "system/timezone/input_tools/android/zone_compactor" ./system_timezone_input_tools_android_zone_compactor.nix {})
+    zone_compactor;
+
   inherit (callBPPackage "system/timezone/output_data" ./system_timezone_output_data.nix {})
-    "apex_icu_tzdata.dat" "apex_tzlookup.xml" apex_tz_version apex_tzdata;
+    "apex_icu_tzdata.dat" "apex_telephonylookup.xml" "apex_tzlookup.xml" apex_tz_version apex_tzdata robolectric_tzdata;
+
+  inherit (callBPPackage "system/timezone/output_data/android" ./system_timezone_output_data_android.nix {})
+    "telephonylookup.xml-art-test-tzdata" "tzlookup.xml-art-test-tzdata";
+
+  inherit (callBPPackage "system/timezone/output_data/iana" ./system_timezone_output_data_iana.nix {})
+    tzdata tzdata-art-test-tzdata tzdata_host;
+
+  inherit (callBPPackage "system/timezone/output_data/icu_overlay" ./system_timezone_output_data_icu_overlay.nix {})
+    icu_overlay-art-test-tzdata;
+
+  inherit (callBPPackage "system/timezone/output_data/version" ./system_timezone_output_data_version.nix {})
+    tz_version tz_version-art-test-tzdata tz_version_host;
 
   inherit (callBPPackage "system/timezone/testing" ./system_timezone_testing.nix {})
     tzdata-testing;
@@ -9808,28 +15043,34 @@
     "test1_com.android.tzdata";
 
   inherit (callBPPackage "system/timezone/testing/data/test1/output_data" ./system_timezone_testing_data_test1_output_data.nix {})
-    "apex_icu_tzdata.dat_test1" "apex_tzlookup.xml_test1" apex_tz_version_test1 apex_tzdata_test1;
+    "apex_icu_tzdata.dat_test1" "apex_telephonylookup.xml_test1" "apex_tzlookup.xml_test1" apex_tz_version_test1 apex_tzdata_test1;
+
+  inherit (callBPPackage "system/timezone/testing/data/test3/apex" ./system_timezone_testing_data_test3_apex.nix {})
+    "test3_com.android.tzdata";
+
+  inherit (callBPPackage "system/timezone/testing/data/test3/output_data" ./system_timezone_testing_data_test3_output_data.nix {})
+    "apex_icu_tzdata.dat_test3" "apex_telephonylookup.xml_test3" "apex_tzlookup.xml_test3" apex_tz_version_test3 apex_tzdata_test3;
 
   inherit (callBPPackage "system/timezone/tzdatacheck" ./system_timezone_tzdatacheck.nix {})
     tzdatacheck;
 
-  inherit (callBPPackage "system/timezone/tzlookup_generator" ./system_timezone_tzlookup_generator.nix {})
-    countryzonesprotos tzlookup_generator;
-
-  inherit (callBPPackage "system/timezone/zone_compactor" ./system_timezone_zone_compactor.nix {})
-    zone_compactor;
-
   inherit (callBPPackage "system/tools/aidl" ./system_tools_aidl.nix {})
-    aidl aidl-cpp aidl_defaults aidl_test_client aidl_test_defaults aidl_test_loggable_interface aidl_test_loggable_interface_ndk aidl_test_sentinel_searcher aidl_test_service aidl_test_services aidl_unittests libaidl-common libaidl-integration-test;
+    aidl aidl-cpp aidl_defaults aidl_parser_fuzzer aidl_test_client aidl_test_defaults aidl_test_loggable_interface aidl_test_sentinel_searcher aidl_test_service aidl_test_services aidl_unittests libaidl-common libaidl-integration-test libaidl-integration-test-files;
 
   inherit (callBPPackage "system/tools/aidl/build" ./system_tools_aidl_build.nix {})
-    aidl-cpp-module-defaults aidl-java-module-defaults aidl-soong-rules test-piece-1 test-piece-2 test-piece-3 test-piece-4 test-root-package test-vendor;
+    aidl-cpp-module-defaults aidl-java-module-defaults aidl-soong-rules aidl-test-filegroup aidl_metadata_json test-piece-1 test-piece-2 test-piece-3 test-piece-4 test-root-package test-variants;
+
+  inherit (callBPPackage "system/tools/aidl/metadata" ./system_tools_aidl_metadata.nix {})
+    aidl_metadata_in_cpp aidl_metadata_parser libaidlmetadata;
+
+  inherit (callBPPackage "system/tools/aidl/tests/lazy_test" ./system_tools_aidl_tests_lazy_test.nix {})
+    aidl_lazy_test aidl_lazy_test_server lazy_test_service_aidl;
 
   inherit (callBPPackage "system/tools/hidl" ./system_tools_hidl.nix {})
     hidl-gen hidl-gen-defaults hidl-java-module-defaults hidl-module-defaults libhidl-gen libhidl-gen-ast;
 
   inherit (callBPPackage "system/tools/hidl/build" ./system_tools_hidl_build.nix {})
-    hidl-soong-rules;
+    hidl-soong-rules hidl_metadata_json;
 
   inherit (callBPPackage "system/tools/hidl/c2hal" ./system_tools_hidl_c2hal.nix {})
     c2hal;
@@ -9837,23 +15078,53 @@
   inherit (callBPPackage "system/tools/hidl/c2hal/test" ./system_tools_hidl_c2hal_test.nix {})
     "c2hal_test_genc++" "c2hal_test_genc++_headers" c2hal_test;
 
-  inherit (callBPPackage "system/tools/hidl/docs" ./system_tools_hidl_docs.nix {})
-    hidl-doc;
-
   inherit (callBPPackage "system/tools/hidl/hashing" ./system_tools_hidl_hashing.nix {})
     libhidl-gen-hash;
+
+  inherit (callBPPackage "system/tools/hidl/hidl2aidl" ./system_tools_hidl_hidl2aidl.nix {})
+    hidl2aidl;
+
+  inherit (callBPPackage "system/tools/hidl/hidl2aidl/test" ./system_tools_hidl_hidl2aidl_test.nix {})
+    hidl2aidl_test hidl2aidl_test_comp_cc hidl2aidl_test_gen hidl2aidl_test_gen_aidl;
 
   inherit (callBPPackage "system/tools/hidl/host_utils" ./system_tools_hidl_host_utils.nix {})
     libhidl-gen-host-utils;
 
+  inherit (callBPPackage "system/tools/hidl/lint" ./system_tools_hidl_lint.nix {})
+    hidl-lint libhidl-lint;
+
+  inherit (callBPPackage "system/tools/hidl/lint/test" ./system_tools_hidl_lint_test.nix {})
+    hidl-lint_test;
+
+  inherit (callBPPackage "system/tools/hidl/metadata" ./system_tools_hidl_metadata.nix {})
+    hidl_metadata_in_cpp hidl_metadata_parser libhidlmetadata libhidlmetadata_headers;
+
   inherit (callBPPackage "system/tools/hidl/test" ./system_tools_hidl_test.nix {})
     "hidl.tests";
+
+  inherit (callBPPackage "system/tools/hidl/test/build_variants/1.0" ./system_tools_hidl_test_build_variants_1.0.nix {})
+    "hidl_test_system_ext@1.0";
+
+  inherit (callBPPackage "system/tools/hidl/test/build_variants/2.0" ./system_tools_hidl_test_build_variants_2.0.nix {})
+    "hidl_test_product@2.0";
+
+  inherit (callBPPackage "system/tools/hidl/test/build_variants" ./system_tools_hidl_test_build_variants.nix {})
+    hidl_test_product hidl_test_system_ext;
+
+  inherit (callBPPackage "system/tools/hidl/test/cpp_impl_test" ./system_tools_hidl_test_cpp_impl_test.nix {})
+    hidl_cpp_impl_test hidl_cpp_impl_test_gen-headers hidl_cpp_impl_test_gen-sources;
 
   inherit (callBPPackage "system/tools/hidl/test/error_test" ./system_tools_hidl_test_error_test.nix {})
     hidl_error_test hidl_error_test_gen;
 
   inherit (callBPPackage "system/tools/hidl/test/export_test" ./system_tools_hidl_test_export_test.nix {})
     hidl_export_test hidl_export_test_gen-headers;
+
+  inherit (callBPPackage "system/tools/hidl/test/format_test/1.0" ./system_tools_hidl_test_format_test_1.0.nix {})
+    "hidl_format_test_pkg@1.0";
+
+  inherit (callBPPackage "system/tools/hidl/test/format_test" ./system_tools_hidl_test_format_test.nix {})
+    hidl_format_test hidl_format_test_diff hidl_format_test_pkg;
 
   inherit (callBPPackage "system/tools/hidl/test/hash_test" ./system_tools_hidl_test_hash_test.nix {})
     hidl_hash_test hidl_hash_test_gen;
@@ -9867,20 +15138,23 @@
   inherit (callBPPackage "system/tools/hidl/test/host_utils_test" ./system_tools_hidl_test_host_utils_test.nix {})
     libhidl-gen-host-utils_test;
 
-  inherit (callBPPackage "system/tools/hidl/test/impl_test" ./system_tools_hidl_test_impl_test.nix {})
-    hidl_impl_test hidl_impl_test_gen-headers hidl_impl_test_gen-sources;
+  inherit (callBPPackage "system/tools/hidl/test/java_impl_test" ./system_tools_hidl_test_java_impl_test.nix {})
+    hidl_java_impl_test hidl_java_impl_test_gen;
+
+  inherit (callBPPackage "system/tools/hidl/test/java_partial_test" ./system_tools_hidl_test_java_partial_test.nix {})
+    hidl_partial_java_test hidl_partial_java_test_gen;
 
   inherit (callBPPackage "system/tools/hidl/test/java_test" ./system_tools_hidl_test_java_test.nix {})
     hidl_test_java_java hidl_test_java_native;
 
   inherit (callBPPackage "system/tools/hidl/test/lazy_test" ./system_tools_hidl_test_lazy_test.nix {})
-    hidl_lazy_test;
+    hidl_lazy_test hidl_lazy_test_server;
 
   inherit (callBPPackage "system/tools/hidl/test/system_api_test" ./system_tools_hidl_test_system_api_test.nix {})
     hidl_system_api_test;
 
   inherit (callBPPackage "system/tools/hidl/test/utils_test" ./system_tools_hidl_test_utils_test.nix {})
-    libhidl-gen-utils_test;
+    fqname_fuzzer libhidl-gen-utils_test;
 
   inherit (callBPPackage "system/tools/hidl/test/vendor/1.0" ./system_tools_hidl_test_vendor_1.0.nix {})
     "hidl.tests.vendor@1.0";
@@ -9888,14 +15162,20 @@
   inherit (callBPPackage "system/tools/hidl/test/vendor/1.1" ./system_tools_hidl_test_vendor_1.1.nix {})
     "hidl.tests.vendor@1.1";
 
+  inherit (callBPPackage "system/tools/hidl/test/vendor/android/1.0" ./system_tools_hidl_test_vendor_android_1.0.nix {})
+    "hidl.tests.vendor.android@1.0";
+
   inherit (callBPPackage "system/tools/hidl/test/version_test" ./system_tools_hidl_test_version_test.nix {})
     hidl_hash_version_gen hidl_version_test;
 
   inherit (callBPPackage "system/tools/hidl/utils" ./system_tools_hidl_utils.nix {})
     libhidl-gen-utils;
 
+  inherit (callBPPackage "system/tools/mkbootimg" ./system_tools_mkbootimg.nix {})
+    bootimg_headers libmkbootimg_abi_check libmkbootimg_abi_headers mkbootimg mkbootimg_defaults unpack_bootimg;
+
   inherit (callBPPackage "system/tools/sysprop" ./system_tools_sysprop.nix {})
-    sysprop-defaults sysprop_cpp sysprop_java sysprop_test;
+    sysprop-defaults sysprop-library-stub-defaults sysprop-library-stub-platform sysprop-library-stub-vendor sysprop_api_checker sysprop_api_dump sysprop_cpp sysprop_java sysprop_test;
 
   inherit (callBPPackage "system/tools/xsdc" ./system_tools_xsdc.nix {})
     xsdc;
@@ -9905,6 +15185,12 @@
 
   inherit (callBPPackage "system/tools/xsdc/tests" ./system_tools_xsdc_tests.nix {})
     xsdc-cpp-tests xsdc-java-tests;
+
+  inherit (callBPPackage "system/tools/xsdc/tests/resources/attr_group_simple" ./system_tools_xsdc_tests_resources_attr_group_simple.nix {})
+    xsdc_attr_group_simple_tests;
+
+  inherit (callBPPackage "system/tools/xsdc/tests/resources/group" ./system_tools_xsdc_tests_resources_group.nix {})
+    xsdc_group_tests;
 
   inherit (callBPPackage "system/tools/xsdc/tests/resources/nested_type" ./system_tools_xsdc_tests_resources_nested_type.nix {})
     xsdc_nested_type_tests;
@@ -9925,7 +15211,7 @@
     xsdc_simple_type_tests;
 
   inherit (callBPPackage "system/update_engine" ./system_update_engine.nix {})
-    brillo_update_payload delta_generator libpayload_consumer libpayload_consumer_exports libpayload_generator libpayload_generator_exports libupdate_engine_aidl libupdate_engine_android libupdate_engine_android_exports libupdate_engine_boot_control libupdate_engine_boot_control_exports libupdate_engine_client test_http_server test_subprocess things_update_engine_aidl ue_defaults ue_unittest_delta_generator ue_unittest_disk_imgs ue_unittest_keys update_engine update_engine_client update_engine_sideload update_engine_unittests update_metadata-protos update_metadata-protos_exports;
+    brillo_update_payload delta_generator libpayload_consumer libpayload_consumer_exports libpayload_generator libpayload_generator_exports libupdate_engine_aidl libupdate_engine_android libupdate_engine_android_exports libupdate_engine_boot_control libupdate_engine_boot_control_exports libupdate_engine_client libupdate_engine_client_aidl test_http_server test_subprocess things_update_engine_aidl ue_defaults ue_unittest_delta_generator ue_unittest_disk_imgs ue_unittest_keys update_engine update_engine_client update_engine_sideload update_engine_unittests update_metadata-protos update_metadata-protos_exports;
 
   inherit (callBPPackage "system/vold" ./system_vold.nix {})
     libvold libvold_binder libvold_headers secdiscard vdc vold vold_aidl vold_default_flags vold_default_libs vold_prepare_subdirs wait_for_keymaster;
@@ -9933,11 +15219,26 @@
   inherit (callBPPackage "system/vold/tests" ./system_vold_tests.nix {})
     vold_tests;
 
+  inherit (callBPPackage "test/app_compat/csuite/harness" ./test_app_compat_csuite_harness.nix {})
+    csuite-harness csuite-harness-tests;
+
+  inherit (callBPPackage "test/app_compat/csuite/instrumentation/launch" ./test_app_compat_csuite_instrumentation_launch.nix {})
+    csuite-launch-instrumentation;
+
+  inherit (callBPPackage "test/app_compat/csuite/tools/csuite-tradefed" ./test_app_compat_csuite_tools_csuite-tradefed.nix {})
+    csuite-tradefed csuite-tradefed-tests;
+
   inherit (callBPPackage "test/framework/harnesses" ./test_framework_harnesses.nix {})
     tradefed-cts-prebuilt;
 
   inherit (callBPPackage "test/framework/tools/host_controller" ./test_framework_tools_host_controller.nix {})
     run;
+
+  inherit (callBPPackage "test/mts/tools/mts-tradefed" ./test_mts_tools_mts-tradefed.nix {})
+    mts-tradefed;
+
+  inherit (callBPPackage "test/mts/tools/mts-tradefed/tests" ./test_mts_tools_mts-tradefed_tests.nix {})
+    mts-tradefed-tests;
 
   inherit (callBPPackage "test/suite_harness/build" ./test_suite_harness_build.nix {})
     soong-suite-harness;
@@ -9966,20 +15267,11 @@
   inherit (callBPPackage "test/suite_harness/common/util/tests" ./test_suite_harness_common_util_tests.nix {})
     compatibility-common-util-tests;
 
-  inherit (callBPPackage "test/suite_harness/tools/cts-instant-tradefed" ./test_suite_harness_tools_cts-instant-tradefed.nix {})
-    cts-instant-resources cts-instant-tradefed;
-
-  inherit (callBPPackage "test/suite_harness/tools/cts-instant-tradefed/tests" ./test_suite_harness_tools_cts-instant-tradefed_tests.nix {})
-    cts-instant-tradefed-tests;
-
   inherit (callBPPackage "test/suite_harness/tools/cts-tradefed" ./test_suite_harness_tools_cts-tradefed.nix {})
     cts-tradefed cts-tradefed-harness;
 
   inherit (callBPPackage "test/suite_harness/tools/cts-tradefed/tests" ./test_suite_harness_tools_cts-tradefed_tests.nix {})
     cts-tradefed-tests;
-
-  inherit (callBPPackage "test/suite_harness/tools/dex-tools" ./test_suite_harness_tools_dex-tools.nix {})
-    dex-tools;
 
   inherit (callBPPackage "test/vts-testcase/fuzz/config/audio/V2_0/iface_fuzzer" ./test_vts-testcase_fuzz_config_audio_V2_0_iface_fuzzer.nix {})
     VtsHalAudioV2_0IfaceFuzzer;
@@ -10064,6 +15356,12 @@
 
   inherit (callBPPackage "test/vts-testcase/fuzz/config/drm/V1_1/iface_fuzzer" ./test_vts-testcase_fuzz_config_drm_V1_1_iface_fuzzer.nix {})
     VtsHalDrmV1_1IfaceFuzzer;
+
+  inherit (callBPPackage "test/vts-testcase/fuzz/config/drm/V1_2/iface_fuzzer" ./test_vts-testcase_fuzz_config_drm_V1_2_iface_fuzzer.nix {})
+    VtsHalDrmV1_2IfaceFuzzer;
+
+  inherit (callBPPackage "test/vts-testcase/fuzz/config/drm/V1_3/iface_fuzzer" ./test_vts-testcase_fuzz_config_drm_V1_3_iface_fuzzer.nix {})
+    VtsHalDrmV1_3IfaceFuzzer;
 
   inherit (callBPPackage "test/vts-testcase/fuzz/config/dumpstate/V1_0/iface_fuzzer" ./test_vts-testcase_fuzz_config_dumpstate_V1_0_iface_fuzzer.nix {})
     VtsHalDumpstateV1_0IfaceFuzzer;
@@ -10249,7 +15547,7 @@
     VtsHalWifiSupplicantV1_1IfaceFuzzer;
 
   inherit (callBPPackage "test/vts-testcase/fuzz/iface_fuzzer" ./test_vts-testcase_fuzz_iface_fuzzer.nix {})
-    libvts_proto_fuzzer vts_proto_fuzzer;
+    vts_proto_fuzzer vts_proto_fuzzer_default vts_proto_fuzzer_srcs;
 
   inherit (callBPPackage "test/vts-testcase/fuzz/kernel/syzkaller" ./test_vts-testcase_fuzz_kernel_syzkaller.nix {})
     VtsKernelFuzzTest;
@@ -10269,6 +15567,9 @@
   inherit (callBPPackage "test/vts-testcase/hal/audio/V5_0/target" ./test_vts-testcase_hal_audio_V5_0_target.nix {})
     VtsHalAudioV5_0Target;
 
+  inherit (callBPPackage "test/vts-testcase/hal/audio/V6_0/target" ./test_vts-testcase_hal_audio_V6_0_target.nix {})
+    VtsHalAudioV6_0Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/audio/effect/V2_0/target" ./test_vts-testcase_hal_audio_effect_V2_0_target.nix {})
     VtsHalAudioEffectV2_0Target;
 
@@ -10281,11 +15582,29 @@
   inherit (callBPPackage "test/vts-testcase/hal/audio/effect/V5_0/target" ./test_vts-testcase_hal_audio_effect_V5_0_target.nix {})
     VtsHalAudioEffectV5_0Target;
 
+  inherit (callBPPackage "test/vts-testcase/hal/audio/effect/V6_0/target" ./test_vts-testcase_hal_audio_effect_V6_0_target.nix {})
+    VtsHalAudioEffectV6_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/audio/policy/V1_0/target" ./test_vts-testcase_hal_audio_policy_V1_0_target.nix {})
+    VtsHalAudioPolicyV1_0Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/authsecret/V1_0/target" ./test_vts-testcase_hal_authsecret_V1_0_target.nix {})
     VtsHalAuthSecretV1_0Target;
 
+  inherit (callBPPackage "test/vts-testcase/hal/automotive/can/V1_0/target" ./test_vts-testcase_hal_automotive_can_V1_0_target.nix {})
+    VtsHalCanV1_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/automotive/can/V1_0/target_profiling" ./test_vts-testcase_hal_automotive_can_V1_0_target_profiling.nix {})
+    VtsHalCanV1_0TargetProfiling;
+
+  inherit (callBPPackage "test/vts-testcase/hal/automotive/display/V1_0/target" ./test_vts-testcase_hal_automotive_display_V1_0_target.nix {})
+    VtsHalAutomotiveDisplayV1_0Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/automotive/evs/V1_0/target" ./test_vts-testcase_hal_automotive_evs_V1_0_target.nix {})
     VtsHalEvsV1_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/automotive/evs/V1_1/target" ./test_vts-testcase_hal_automotive_evs_V1_1_target.nix {})
+    VtsHalEvsV1_1Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/automotive/vehicle/V2_0/host" ./test_vts-testcase_hal_automotive_vehicle_V2_0_host.nix {})
     VtsHalAutomotiveVehicleV2_0Host;
@@ -10341,6 +15660,9 @@
   inherit (callBPPackage "test/vts-testcase/hal/broadcastradio/V2_0/target_profiling" ./test_vts-testcase_hal_broadcastradio_V2_0_target_profiling.nix {})
     VtsHalBroadcastradioV2_0TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/bufferhub/V1_0/target" ./test_vts-testcase_hal_bufferhub_V1_0_target.nix {})
+    VtsHalBufferHubV1_0Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/camera/metadata/V3_3/adapter" ./test_vts-testcase_hal_camera_metadata_V3_3_adapter.nix {})
     VtsHalCameraMetadataV3_3Adapter;
 
@@ -10350,11 +15672,17 @@
   inherit (callBPPackage "test/vts-testcase/hal/camera/provider/V2_4/target_profiling" ./test_vts-testcase_hal_camera_provider_V2_4_target_profiling.nix {})
     VtsHalCameraProviderV2_4TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/camera/provider/V2_5/target" ./test_vts-testcase_hal_camera_provider_V2_5_target.nix {})
+    VtsHalCameraProviderV2_5Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/cas/V1_0/target" ./test_vts-testcase_hal_cas_V1_0_target.nix {})
     VtsHalCasV1_0Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/cas/V1_1/target" ./test_vts-testcase_hal_cas_V1_1_target.nix {})
     VtsHalCasV1_1Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/cas/V1_2/target" ./test_vts-testcase_hal_cas_V1_2_target.nix {})
+    VtsHalCasV1_2Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/configstore/V1_0/target" ./test_vts-testcase_hal_configstore_V1_0_target.nix {})
     VtsHalConfigstoreV1_0Target;
@@ -10377,6 +15705,12 @@
   inherit (callBPPackage "test/vts-testcase/hal/contexthub/V1_0/target_replay" ./test_vts-testcase_hal_contexthub_V1_0_target_replay.nix {})
     VtsHalContexthubV1_0TargetReplay;
 
+  inherit (callBPPackage "test/vts-testcase/hal/contexthub/V1_1/target" ./test_vts-testcase_hal_contexthub_V1_1_target.nix {})
+    VtsHalContexthubV1_1Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/contexthub/V1_1/target_profiling" ./test_vts-testcase_hal_contexthub_V1_1_target_profiling.nix {})
+    VtsHalContexthubV1_1TargetProfiling;
+
   inherit (callBPPackage "test/vts-testcase/hal/drm/V1_0/target" ./test_vts-testcase_hal_drm_V1_0_target.nix {})
     VtsHalDrmV1_0Target;
 
@@ -10388,6 +15722,18 @@
 
   inherit (callBPPackage "test/vts-testcase/hal/drm/V1_1/target_profiling" ./test_vts-testcase_hal_drm_V1_1_target_profiling.nix {})
     VtsHalDrmV1_1TargetProfiling;
+
+  inherit (callBPPackage "test/vts-testcase/hal/drm/V1_2/adapter" ./test_vts-testcase_hal_drm_V1_2_adapter.nix {})
+    VtsHalDrmV1_2Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/drm/V1_2/target" ./test_vts-testcase_hal_drm_V1_2_target.nix {})
+    VtsHalDrmV1_2Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/drm/V1_3/adapter" ./test_vts-testcase_hal_drm_V1_3_adapter.nix {})
+    VtsHalDrmV1_3Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/drm/V1_3/target" ./test_vts-testcase_hal_drm_V1_3_target.nix {})
+    VtsHalDrmV1_3Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/dumpstate/V1_0/target" ./test_vts-testcase_hal_dumpstate_V1_0_target.nix {})
     VtsHalDumpstateV1_0Target;
@@ -10416,6 +15762,18 @@
   inherit (callBPPackage "test/vts-testcase/hal/gnss/V1_1/adapter/CtsStatsdHostTestCases" ./test_vts-testcase_hal_gnss_V1_1_adapter_CtsStatsdHostTestCases.nix {})
     VtsHalGnssV1_1AdapterCtsStatsdHostTestCases;
 
+  inherit (callBPPackage "test/vts-testcase/hal/gnss/V1_1/target" ./test_vts-testcase_hal_gnss_V1_1_target.nix {})
+    VtsHalGnssV1_1Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/gnss/V2_0/target" ./test_vts-testcase_hal_gnss_V2_0_target.nix {})
+    VtsHalGnssV2_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/gnss/V2_1/target" ./test_vts-testcase_hal_gnss_V2_1_target.nix {})
+    VtsHalGnssV2_1Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/graphics/common/V1_1/adapter" ./test_vts-testcase_hal_graphics_common_V1_1_adapter.nix {})
+    VtsHalGraphicsCommonV1_1Adapter;
+
   inherit (callBPPackage "test/vts-testcase/hal/graphics/composer/V2_1/target" ./test_vts-testcase_hal_graphics_composer_V2_1_target.nix {})
     VtsHalGraphicsComposerV2_1Target;
 
@@ -10437,8 +15795,26 @@
   inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V2_0/target_profiling" ./test_vts-testcase_hal_graphics_mapper_V2_0_target_profiling.nix {})
     VtsHalGraphicsMapperV2_0TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V2_1/adapter" ./test_vts-testcase_hal_graphics_mapper_V2_1_adapter.nix {})
+    VtsHalGraphicsMapperV2_1Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V2_1/target" ./test_vts-testcase_hal_graphics_mapper_V2_1_target.nix {})
+    VtsHalGraphicsMapperV2_1Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V2_1/target_profiling" ./test_vts-testcase_hal_graphics_mapper_V2_1_target_profiling.nix {})
     VtsHalGraphicsMapperV2_1TargetProfiling;
+
+  inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V3_0/target" ./test_vts-testcase_hal_graphics_mapper_V3_0_target.nix {})
+    VtsHalGraphicsMapperV3_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V3_0/target_profiling" ./test_vts-testcase_hal_graphics_mapper_V3_0_target_profiling.nix {})
+    VtsHalGraphicsMapperV3_0TargetProfiling;
+
+  inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V4_0/target" ./test_vts-testcase_hal_graphics_mapper_V4_0_target.nix {})
+    VtsHalGraphicsMapperV4_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/graphics/mapper/V4_0/target_profiling" ./test_vts-testcase_hal_graphics_mapper_V4_0_target_profiling.nix {})
+    VtsHalGraphicsMapperV4_0TargetProfiling;
 
   inherit (callBPPackage "test/vts-testcase/hal/health/V1_0/target" ./test_vts-testcase_hal_health_V1_0_target.nix {})
     VtsHalHealthV1_0Target;
@@ -10451,6 +15827,9 @@
 
   inherit (callBPPackage "test/vts-testcase/hal/health/storage/V1_0/target" ./test_vts-testcase_hal_health_storage_V1_0_target.nix {})
     VtsHalHealthStorageV1_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/input/classifier/V1_0/target" ./test_vts-testcase_hal_input_classifier_V1_0_target.nix {})
+    VtsHalInputClassifierV1_0Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/ir/V1_0/target" ./test_vts-testcase_hal_ir_V1_0_target.nix {})
     VtsHalIrV1_0Target;
@@ -10476,12 +15855,6 @@
   inherit (callBPPackage "test/vts-testcase/hal/light/V2_0/target_replay" ./test_vts-testcase_hal_light_V2_0_target_replay.nix {})
     VtsHalLightV2_0TargetReplay;
 
-  inherit (callBPPackage "test/vts-testcase/hal/media/c2/V1_0/host" ./test_vts-testcase_hal_media_c2_V1_0_host.nix {})
-    VtsHalMediaC2V1_0Host;
-
-  inherit (callBPPackage "test/vts-testcase/hal/media/omx/V1_0/host" ./test_vts-testcase_hal_media_omx_V1_0_host.nix {})
-    VtsHalMediaOmxV1_0Host;
-
   inherit (callBPPackage "test/vts-testcase/hal/media/omx/V1_0/host_omxstore" ./test_vts-testcase_hal_media_omx_V1_0_host_omxstore.nix {})
     VtsHalMediaOmxStoreV1_0Host;
 
@@ -10506,17 +15879,26 @@
   inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_0/target_profiling" ./test_vts-testcase_hal_neuralnetworks_V1_0_target_profiling.nix {})
     VtsHalNeuralnetworksV1_0TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_1/adapter" ./test_vts-testcase_hal_neuralnetworks_V1_1_adapter.nix {})
+    VtsHalNeuralnetworksV1_1Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_1/target" ./test_vts-testcase_hal_neuralnetworks_V1_1_target.nix {})
+    VtsHalNeuralnetworksV1_1Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_1/target_profiling" ./test_vts-testcase_hal_neuralnetworks_V1_1_target_profiling.nix {})
     VtsHalNeuralnetworksV1_1TargetProfiling;
 
   inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_2/adapter" ./test_vts-testcase_hal_neuralnetworks_V1_2_adapter.nix {})
     VtsHalNeuralnetworksV1_2Adapter;
 
-  inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_2/benchmark" ./test_vts-testcase_hal_neuralnetworks_V1_2_benchmark.nix {})
-    VtsHalNeuralnetworksV1_2Benchmark;
-
   inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_2/target" ./test_vts-testcase_hal_neuralnetworks_V1_2_target.nix {})
     VtsHalNeuralnetworksV1_2Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_3/adapter" ./test_vts-testcase_hal_neuralnetworks_V1_3_adapter.nix {})
+    VtsHalNeuralnetworksV1_3Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/neuralnetworks/V1_3/target" ./test_vts-testcase_hal_neuralnetworks_V1_3_target.nix {})
+    VtsHalNeuralnetworksV1_3Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/nfc/V1_0/host/binderize" ./test_vts-testcase_hal_nfc_V1_0_host_binderize.nix {})
     VtsHalNfcV1_0HostBinderize;
@@ -10547,6 +15929,9 @@
 
   inherit (callBPPackage "test/vts-testcase/hal/nfc/V1_2/target" ./test_vts-testcase_hal_nfc_V1_2_target.nix {})
     VtsHalNfcV1_2Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/occupant_awareness/V1_0/target" ./test_vts-testcase_hal_occupant_awareness_V1_0_target.nix {})
+    VtsHalOccupantAwarenessV1_0Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/oemlock/V1_0/target" ./test_vts-testcase_hal_oemlock_V1_0_target.nix {})
     VtsHalOemLockV1_0Target;
@@ -10608,11 +15993,20 @@
   inherit (callBPPackage "test/vts-testcase/hal/radio/V1_1/target/radio" ./test_vts-testcase_hal_radio_V1_1_target_radio.nix {})
     VtsHalRadioV1_1Target;
 
+  inherit (callBPPackage "test/vts-testcase/hal/radio/V1_2/adapter" ./test_vts-testcase_hal_radio_V1_2_adapter.nix {})
+    VtsHalRadioV1_2Adapter;
+
   inherit (callBPPackage "test/vts-testcase/hal/radio/V1_2/target/radio" ./test_vts-testcase_hal_radio_V1_2_target_radio.nix {})
     VtsHalRadioV1_2Target;
 
+  inherit (callBPPackage "test/vts-testcase/hal/radio/V1_3/target/radio" ./test_vts-testcase_hal_radio_V1_3_target_radio.nix {})
+    VtsHalRadioV1_3Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/radio/V1_4/target/radio" ./test_vts-testcase_hal_radio_V1_4_target_radio.nix {})
     VtsHalRadioV1_4Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/radio/V1_5/target/radio" ./test_vts-testcase_hal_radio_V1_5_target_radio.nix {})
+    VtsHalRadioV1_5Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/renderscript/V1_0/target" ./test_vts-testcase_hal_renderscript_V1_0_target.nix {})
     VtsHalRenderscriptV1_0Target;
@@ -10644,6 +16038,12 @@
   inherit (callBPPackage "test/vts-testcase/hal/sensors/V2_0/target_profiling" ./test_vts-testcase_hal_sensors_V2_0_target_profiling.nix {})
     VtsHalSensorsV2_0TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/sensors/V2_1/target" ./test_vts-testcase_hal_sensors_V2_1_target.nix {})
+    VtsHalSensorsV2_1Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/sensors/V2_1/target_profiling" ./test_vts-testcase_hal_sensors_V2_1_target_profiling.nix {})
+    VtsHalSensorsV2_1TargetProfiling;
+
   inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_0/target" ./test_vts-testcase_hal_soundtrigger_V2_0_target.nix {})
     VtsHalSoundtriggerV2_0Target;
 
@@ -10655,6 +16055,9 @@
 
   inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_1/adapter/CtsWidgetTestCases" ./test_vts-testcase_hal_soundtrigger_V2_1_adapter_CtsWidgetTestCases.nix {})
     VtsHalSoundtriggerV2_1AdapterCtsWidgetTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_1/target" ./test_vts-testcase_hal_soundtrigger_V2_1_target.nix {})
+    VtsHalSoundtriggerV2_1Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_1/target_profiling" ./test_vts-testcase_hal_soundtrigger_V2_1_target_profiling.nix {})
     VtsHalSoundtriggerV2_1TargetProfiling;
@@ -10670,6 +16073,21 @@
 
   inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_2/target_profiling" ./test_vts-testcase_hal_soundtrigger_V2_2_target_profiling.nix {})
     VtsHalSoundtriggerV2_2TargetProfiling;
+
+  inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_3/adapter/CtsStatsdHostTestCases" ./test_vts-testcase_hal_soundtrigger_V2_3_adapter_CtsStatsdHostTestCases.nix {})
+    VtsHalSoundtriggerV2_3AdapterCtsStatsdHostTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_3/adapter/CtsWidgetTestCases" ./test_vts-testcase_hal_soundtrigger_V2_3_adapter_CtsWidgetTestCases.nix {})
+    VtsHalSoundtriggerV2_3AdapterCtsWidgetTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_3/target" ./test_vts-testcase_hal_soundtrigger_V2_3_target.nix {})
+    VtsHalSoundtriggerV2_3Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/soundtrigger/V2_3/target_profiling" ./test_vts-testcase_hal_soundtrigger_V2_3_target_profiling.nix {})
+    VtsHalSoundtriggerV2_3TargetProfiling;
+
+  inherit (callBPPackage "test/vts-testcase/hal/stats/V1_0/target" ./test_vts-testcase_hal_stats_V1_0_target.nix {})
+    VtsHalStatsV1_0Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/tetheroffload/config/V1_0/target" ./test_vts-testcase_hal_tetheroffload_config_V1_0_target.nix {})
     VtsHalTetheroffloadConfigV1_0Target;
@@ -10698,17 +16116,20 @@
   inherit (callBPPackage "test/vts-testcase/hal/thermal/V1_1/target_profiling" ./test_vts-testcase_hal_thermal_V1_1_target_profiling.nix {})
     VtsHalThermalV1_1TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/thermal/V2_0/target" ./test_vts-testcase_hal_thermal_V2_0_target.nix {})
+    VtsHalThermalV2_0Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/treble/framework_vintf" ./test_vts-testcase_hal_treble_framework_vintf.nix {})
     VtsTrebleFrameworkVintfTest;
 
   inherit (callBPPackage "test/vts-testcase/hal/treble/platform_version" ./test_vts-testcase_hal_treble_platform_version.nix {})
-    VtsTreblePlatformVersionTest;
+    VtsTreblePlatformVersionTest vts_treble_platform_version_test;
 
   inherit (callBPPackage "test/vts-testcase/hal/treble/vendor_vintf" ./test_vts-testcase_hal_treble_vendor_vintf.nix {})
     VtsTrebleVendorVintfTest;
 
   inherit (callBPPackage "test/vts-testcase/hal/treble/vintf" ./test_vts-testcase_hal_treble_vintf.nix {})
-    VtsTrebleVintfTestOMr1 vts_treble_vintf_framework_test vts_treble_vintf_test_all vts_treble_vintf_test_defaults vts_treble_vintf_test_o_mr1 vts_treble_vintf_vendor_test;
+    VtsTrebleVintfTestOMr1 vts_treble_vintf_framework_test vts_treble_vintf_test_all vts_treble_vintf_test_defaults vts_treble_vintf_vendor_test;
 
   inherit (callBPPackage "test/vts-testcase/hal/tv/cec/V1_0/host" ./test_vts-testcase_hal_tv_cec_V1_0_host.nix {})
     VtsHalTvCecV1_0Host;
@@ -10728,6 +16149,9 @@
   inherit (callBPPackage "test/vts-testcase/hal/tv/input/V1_0/target_profiling" ./test_vts-testcase_hal_tv_input_V1_0_target_profiling.nix {})
     VtsHalTvInputV1_0TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/tv/tuner/V1_0/target" ./test_vts-testcase_hal_tv_tuner_V1_0_target.nix {})
+    VtsHalTvTunerV1_0Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/usb/V1_0/target" ./test_vts-testcase_hal_usb_V1_0_target.nix {})
     VtsHalUsbV1_0Target;
 
@@ -10744,7 +16168,10 @@
     VtsHalUsbV1_1Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/usb/gadget/V1_0/host" ./test_vts-testcase_hal_usb_gadget_V1_0_host.nix {})
-    VtsHalUsbGadgetV1_0Host;
+    HalUsbGadgetV1_0HostTest VtsHalUsbGadgetV1_0Host;
+
+  inherit (callBPPackage "test/vts-testcase/hal/usb/gadget/V1_1/host" ./test_vts-testcase_hal_usb_gadget_V1_1_host.nix {})
+    VtsHalUsbGadgetV1_1HostTest;
 
   inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_0/host" ./test_vts-testcase_hal_vibrator_V1_0_host.nix {})
     VtsHalVibratorV1_0Host;
@@ -10764,8 +16191,26 @@
   inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_1/adapter" ./test_vts-testcase_hal_vibrator_V1_1_adapter.nix {})
     VtsHalVibratorV1_1Adapter;
 
+  inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_1/adapter/CtsDevicePolicyManagerTestCases" ./test_vts-testcase_hal_vibrator_V1_1_adapter_CtsDevicePolicyManagerTestCases.nix {})
+    VtsHalVibratorV1_1AdapterCtsDevicePolicyManagerTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_1/adapter/CtsMonkeyTestCases" ./test_vts-testcase_hal_vibrator_V1_1_adapter_CtsMonkeyTestCases.nix {})
+    VtsHalVibratorV1_1AdapterCtsMonkeyTestCases;
+
   inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_1/target" ./test_vts-testcase_hal_vibrator_V1_1_target.nix {})
     VtsHalVibratorV1_1Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_2/adapter" ./test_vts-testcase_hal_vibrator_V1_2_adapter.nix {})
+    VtsHalVibratorV1_2Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_2/target" ./test_vts-testcase_hal_vibrator_V1_2_target.nix {})
+    VtsHalVibratorV1_2Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_3/target" ./test_vts-testcase_hal_vibrator_V1_3_target.nix {})
+    VtsHalVibratorV1_3Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/vibrator/V1_4/target" ./test_vts-testcase_hal_vibrator_V1_4_target.nix {})
+    VtsHalVibratorV1_4Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/vr/V1_0/host" ./test_vts-testcase_hal_vr_V1_0_host.nix {})
     VtsHalVrV1_0Host;
@@ -10782,8 +16227,14 @@
   inherit (callBPPackage "test/vts-testcase/hal/weaver/V1_0/target_profiling" ./test_vts-testcase_hal_weaver_V1_0_target_profiling.nix {})
     VtsHalWeaverV1_0TargetProfiling;
 
-  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_0/host" ./test_vts-testcase_hal_wifi_V1_0_host.nix {})
-    VtsHalWifiV1_0Host;
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_0/app/wifi_native_test" ./test_vts-testcase_hal_wifi_V1_0_app_wifi_native_test.nix {})
+    VtsAppWifiNativeTest;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_0/target" ./test_vts-testcase_hal_wifi_V1_0_target.nix {})
+    VtsHalWifiV1_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_0/target/ap" ./test_vts-testcase_hal_wifi_V1_0_target_ap.nix {})
+    VtsHalWifiApV1_0Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_0/target/nan" ./test_vts-testcase_hal_wifi_V1_0_target_nan.nix {})
     VtsHalWifiNanV1_0Target;
@@ -10794,11 +16245,23 @@
   inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_0/target_profiling/nan" ./test_vts-testcase_hal_wifi_V1_0_target_profiling_nan.nix {})
     VtsHalWifiNanV1_0TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_1/adapter" ./test_vts-testcase_hal_wifi_V1_1_adapter.nix {})
+    VtsHalWifiV1_1Adapter;
+
   inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_1/target/base" ./test_vts-testcase_hal_wifi_V1_1_target_base.nix {})
     VtsHalWifiV1_1Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_1/target_profiling/base" ./test_vts-testcase_hal_wifi_V1_1_target_profiling_base.nix {})
     VtsHalWifiV1_1TargetProfiling;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_2/adapter" ./test_vts-testcase_hal_wifi_V1_2_adapter.nix {})
+    VtsHalWifiV1_2Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_2/target" ./test_vts-testcase_hal_wifi_V1_2_target.nix {})
+    VtsHalWifiV1_2Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_2/target/nan" ./test_vts-testcase_hal_wifi_V1_2_target_nan.nix {})
+    VtsHalWifiNanV1_2Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_2/target_profiling" ./test_vts-testcase_hal_wifi_V1_2_target_profiling.nix {})
     VtsHalWifiV1_2TargetProfiling;
@@ -10806,11 +16269,32 @@
   inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_2/target_profiling/nan" ./test_vts-testcase_hal_wifi_V1_2_target_profiling_nan.nix {})
     VtsHalWifiNanV1_2TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_3/target" ./test_vts-testcase_hal_wifi_V1_3_target.nix {})
+    VtsHalWifiV1_3Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/V1_4/target/ap" ./test_vts-testcase_hal_wifi_V1_4_target_ap.nix {})
+    VtsHalWifiApV1_4Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/hostapd/V1_0/target" ./test_vts-testcase_hal_wifi_hostapd_V1_0_target.nix {})
+    VtsHalWifiHostapdV1_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/hostapd/V1_1/target" ./test_vts-testcase_hal_wifi_hostapd_V1_1_target.nix {})
+    VtsHalWifiHostapdV1_1Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/hostapd/V1_2/target" ./test_vts-testcase_hal_wifi_hostapd_V1_2_target.nix {})
+    VtsHalWifiHostapdV1_2Target;
+
   inherit (callBPPackage "test/vts-testcase/hal/wifi/offload/V1_0/target" ./test_vts-testcase_hal_wifi_offload_V1_0_target.nix {})
     VtsHalWifiOffloadV1_0Target;
 
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_0/host" ./test_vts-testcase_hal_wifi_supplicant_V1_0_host.nix {})
+    VtsHalWifiSupplicantV1_0Host;
+
   inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_0/target" ./test_vts-testcase_hal_wifi_supplicant_V1_0_target.nix {})
     VtsHalWifiSupplicantV1_0Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_0/target/p2p" ./test_vts-testcase_hal_wifi_supplicant_V1_0_target_p2p.nix {})
+    VtsHalWifiSupplicantP2pV1_0Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_0/target_profiling" ./test_vts-testcase_hal_wifi_supplicant_V1_0_target_profiling.nix {})
     VtsHalWifiSupplicantV1_0TargetProfiling;
@@ -10818,17 +16302,47 @@
   inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_1/adapter" ./test_vts-testcase_hal_wifi_supplicant_V1_1_adapter.nix {})
     VtsHalWifiSupplicantV1_1Adapter;
 
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_1/adapter/CtsDevicePolicyManagerTestCases" ./test_vts-testcase_hal_wifi_supplicant_V1_1_adapter_CtsDevicePolicyManagerTestCases.nix {})
+    VtsHalWifiSupplicantV1_1AdapterCtsDevicePolicyManagerTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_1/adapter/CtsNetTestCases" ./test_vts-testcase_hal_wifi_supplicant_V1_1_adapter_CtsNetTestCases.nix {})
+    VtsHalWifiSupplicantV1_1AdapterCtsNetTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_1/host" ./test_vts-testcase_hal_wifi_supplicant_V1_1_host.nix {})
+    VtsHalWifiSupplicantV1_1Host;
+
   inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_1/target" ./test_vts-testcase_hal_wifi_supplicant_V1_1_target.nix {})
     VtsHalWifiSupplicantV1_1Target;
 
   inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_1/target_profiling" ./test_vts-testcase_hal_wifi_supplicant_V1_1_target_profiling.nix {})
     VtsHalWifiSupplicantV1_1TargetProfiling;
 
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_2/adapter/CtsDevicePolicyManagerTestCases" ./test_vts-testcase_hal_wifi_supplicant_V1_2_adapter_CtsDevicePolicyManagerTestCases.nix {})
+    VtsHalWifiSupplicantV1_2AdapterCtsDevicePolicyManagerTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_2/adapter/CtsNetTestCases" ./test_vts-testcase_hal_wifi_supplicant_V1_2_adapter_CtsNetTestCases.nix {})
+    VtsHalWifiSupplicantV1_2AdapterCtsNetTestCases;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_2/host" ./test_vts-testcase_hal_wifi_supplicant_V1_2_host.nix {})
+    VtsHalWifiSupplicantV1_2Host;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_2/target/p2p" ./test_vts-testcase_hal_wifi_supplicant_V1_2_target_p2p.nix {})
+    VtsHalWifiSupplicantP2pV1_2Target;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_3/adapter" ./test_vts-testcase_hal_wifi_supplicant_V1_3_adapter.nix {})
+    VtsHalWifiSupplicantV1_3Adapter;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_3/host" ./test_vts-testcase_hal_wifi_supplicant_V1_3_host.nix {})
+    VtsHalWifiSupplicantV1_3Host;
+
+  inherit (callBPPackage "test/vts-testcase/hal/wifi/supplicant/V1_3/target" ./test_vts-testcase_hal_wifi_supplicant_V1_3_target.nix {})
+    VtsHalWifiSupplicantV1_3Target;
+
   inherit (callBPPackage "test/vts-testcase/kernel/api/binder" ./test_vts-testcase_kernel_api_binder.nix {})
     VtsKernelBinderTest;
 
   inherit (callBPPackage "test/vts-testcase/kernel/api/bpf_native_test" ./test_vts-testcase_kernel_api_bpf_native_test.nix {})
-    "kern.o" VtsKernelNetBpfTest vts_test_binary_bpf_module;
+    "kern.o" VtsKernelNetBpfTest binary_bpf_defaults bpf_module_test vts_test_binary_bpf_module;
 
   inherit (callBPPackage "test/vts-testcase/kernel/api/hwbinder" ./test_vts-testcase_kernel_api_hwbinder.nix {})
     VtsKernelHwBinder;
@@ -10846,16 +16360,13 @@
     VtsKernelProcFileApi;
 
   inherit (callBPPackage "test/vts-testcase/kernel/api/qtaguid" ./test_vts-testcase_kernel_api_qtaguid.nix {})
-    VtsKernelQtaguidTest vts_test_binary_qtaguid_module;
-
-  inherit (callBPPackage "test/vts-testcase/kernel/api/rootdir" ./test_vts-testcase_kernel_api_rootdir.nix {})
-    VtsKernelRootDir;
+    VtsKernelQtaguidTest vts_core_test_binary_qtaguid_module vts_test_binary_qtaguid_defaults vts_test_binary_qtaguid_module;
 
   inherit (callBPPackage "test/vts-testcase/kernel/api/selinux" ./test_vts-testcase_kernel_api_selinux.nix {})
     VtsKernelSelinuxFileApi;
 
   inherit (callBPPackage "test/vts-testcase/kernel/api/sysfs" ./test_vts-testcase_kernel_api_sysfs.nix {})
-    VtsKernelApiSysfsTest;
+    KernelApiSysfsTest VtsKernelApiSysfsTest;
 
   inherit (callBPPackage "test/vts-testcase/kernel/api/tun" ./test_vts-testcase_kernel_api_tun.nix {})
     VtsKernelTunTest vts_kernel_tun_test;
@@ -10864,10 +16375,19 @@
     vts_test_binary_bow_module;
 
   inherit (callBPPackage "test/vts-testcase/kernel/checkpoint" ./test_vts-testcase_kernel_checkpoint.nix {})
-    VtsKernelCheckpointTest;
+    VtsKernelCheckpointTest vts_kernel_checkpoint_test;
 
   inherit (callBPPackage "test/vts-testcase/kernel/cpu_profiling" ./test_vts-testcase_kernel_cpu_profiling.nix {})
     CpuProfilingTest;
+
+  inherit (callBPPackage "test/vts-testcase/kernel/dynamic_partitions" ./test_vts-testcase_kernel_dynamic_partitions.nix {})
+    KernelDynamicPartitionsTest;
+
+  inherit (callBPPackage "test/vts-testcase/kernel/encryption" ./test_vts-testcase_kernel_encryption.nix {})
+    VtsKernelEncryptionTest vts_kernel_encryption_test;
+
+  inherit (callBPPackage "test/vts-testcase/kernel/kheaders" ./test_vts-testcase_kernel_kheaders.nix {})
+    VtsKernelKheaders vts_kernel_kheaders;
 
   inherit (callBPPackage "test/vts-testcase/kernel/linux_kselftest/presubmit" ./test_vts-testcase_kernel_linux_kselftest_presubmit.nix {})
     VtsKernelLinuxKselftestPresubmit;
@@ -10878,6 +16398,9 @@
   inherit (callBPPackage "test/vts-testcase/kernel/linux_kselftest/staging" ./test_vts-testcase_kernel_linux_kselftest_staging.nix {})
     VtsKernelLinuxKselftestStaging;
 
+  inherit (callBPPackage "test/vts-testcase/kernel/linux_kselftest/testcases" ./test_vts-testcase_kernel_linux_kselftest_testcases.nix {})
+    vts_linux_kselftest_arm_32 vts_linux_kselftest_arm_64 vts_linux_kselftest_x86_32 vts_linux_kselftest_x86_64;
+
   inherit (callBPPackage "test/vts-testcase/kernel/loop" ./test_vts-testcase_kernel_loop.nix {})
     vts_kernel_loopconfig_test;
 
@@ -10887,11 +16410,20 @@
   inherit (callBPPackage "test/vts-testcase/kernel/ltp/staging" ./test_vts-testcase_kernel_ltp_staging.nix {})
     VtsKernelLtpStaging;
 
+  inherit (callBPPackage "test/vts-testcase/kernel/ltp/testcase" ./test_vts-testcase_kernel_ltp_testcase.nix {})
+    ltp_config_arm ltp_config_arm_64 ltp_config_arm_64_hwasan ltp_config_arm_64_lowmem ltp_config_arm_64_lowmem_hwasan ltp_config_arm_lowmem ltp_config_x86 ltp_config_x86_64 vts_ltp_test_arm vts_ltp_test_arm_64 vts_ltp_test_arm_64_hwasan vts_ltp_test_arm_64_lowmem vts_ltp_test_arm_64_lowmem_hwasan vts_ltp_test_arm_lowmem vts_ltp_test_x86 vts_ltp_test_x86_64;
+
   inherit (callBPPackage "test/vts-testcase/kernel/memory" ./test_vts-testcase_kernel_memory.nix {})
     MemorySystemStressTest;
 
+  inherit (callBPPackage "test/vts-testcase/kernel/sdcardfs" ./test_vts-testcase_kernel_sdcardfs.nix {})
+    SdcardfsTest;
+
   inherit (callBPPackage "test/vts-testcase/kernel/toolchain" ./test_vts-testcase_kernel_toolchain.nix {})
     VtsKernelToolchain vts_kernel_toolchain;
+
+  inherit (callBPPackage "test/vts-testcase/kernel/virtual_ab" ./test_vts-testcase_kernel_virtual_ab.nix {})
+    VtsVirtualAb vts_virtual_ab_test;
 
   inherit (callBPPackage "test/vts-testcase/nbu" ./test_vts-testcase_nbu.nix {})
     VtsNbu;
@@ -10951,7 +16483,7 @@
     HwBinderPassthroughThroughputSystraceTest;
 
   inherit (callBPPackage "test/vts-testcase/security/avb" ./test_vts-testcase_security_avb.nix {})
-    VtsSecurityAvb VtsSecurityAvbTest;
+    VtsSecurityAvb VtsSecurityAvbTest vts_security_avb_defaults vts_security_avb_test;
 
   inherit (callBPPackage "test/vts-testcase/security/poc/config/stable" ./test_vts-testcase_security_poc_config_stable.nix {})
     SecurityPoCKernelTest;
@@ -10963,7 +16495,10 @@
     VtsSecuritySelinuxPolicyHost VtsSecuritySelinuxPolicyHostTest;
 
   inherit (callBPPackage "test/vts-testcase/security/system_property" ./test_vts-testcase_security_system_property.nix {})
-    VtsTrebleSysProp;
+    VtsTrebleSysProp vts_treble_sys_prop_test;
+
+  inherit (callBPPackage "test/vts-testcase/vndk" ./test_vts-testcase_vndk.nix {})
+    vts_vndk_abi_test vts_vndk_default vts_vndk_dependency_test vts_vndk_files_test vts_vndk_utils;
 
   inherit (callBPPackage "test/vts-testcase/vndk/abi" ./test_vts-testcase_vndk_abi.nix {})
     VtsVndkAbi;
@@ -10975,7 +16510,7 @@
     VtsVndkFiles;
 
   inherit (callBPPackage "test/vts-testcase/vndk/golden" ./test_vts-testcase_vndk_golden.nix {})
-    extract_lsdump;
+    extract_lsdump vts_vndk_abi_dump_zip;
 
   inherit (callBPPackage "test/vts-testcase/vndk/hidl/bufferpool/V1_0/target" ./test_vts-testcase_vndk_hidl_bufferpool_V1_0_target.nix {})
     VtsVndkHidlBufferpoolV1_0Target;
@@ -10983,8 +16518,14 @@
   inherit (callBPPackage "test/vts-testcase/vndk/hidl/bufferpool/V2_0/target" ./test_vts-testcase_vndk_hidl_bufferpool_V2_0_target.nix {})
     VtsVndkHidlBufferpoolV2_0Target;
 
-  inherit (callBPPackage "test/vts-testcase/vndk/open_libraries" ./test_vts-testcase_vndk_open_libraries.nix {})
-    VtsVndkOpenLibraries;
+  inherit (callBPPackage "test/vts/agents/apps/vts_agent_app" ./test_vts_agents_apps_vts_agent_app.nix {})
+    VtsAgentApp;
+
+  inherit (callBPPackage "test/vts/agents/apps/vts_agent_app/jni" ./test_vts_agents_apps_vts_agent_app_jni.nix {})
+    libvts_agent_app_jni;
+
+  inherit (callBPPackage "test/vts/agents/hal" ./test_vts_agents_hal.nix {})
+    vts_hal_agent;
 
   inherit (callBPPackage "test/vts/compilation_tools/vtsc" ./test_vts_compilation_tools_vtsc.nix {})
     libvtsc vtsc;
@@ -11013,23 +16554,152 @@
   inherit (callBPPackage "test/vts/drivers/resource" ./test_vts_drivers_resource.nix {})
     libvts_resource-defaults libvts_resource_driver libvts_resource_manager vts_resource_fmq_test vts_resource_hidl_handle_test vts_resource_hidl_memory_test;
 
+  inherit (callBPPackage "test/vts/drivers/shell" ./test_vts_drivers_shell.nix {})
+    vts_shell_driver vts_shell_driver_test;
+
+  inherit (callBPPackage "test/vts/hals/light/bullhead" ./test_vts_hals_light_bullhead.nix {})
+    "lights.vts";
+
+  inherit (callBPPackage "test/vts/harnesses/tradefed" ./test_vts_harnesses_tradefed.nix {})
+    vts10-tradefed-harness;
+
+  inherit (callBPPackage "test/vts/harnesses/tradefed/tests" ./test_vts_harnesses_tradefed_tests.nix {})
+    vts10-tradefed-tests;
+
+  inherit (callBPPackage "test/vts/prebuilts" ./test_vts_prebuilts.nix {})
+    libvtswidevine-arm-prebuilts libvtswidevine-arm64-prebuilts libvtswidevine-x86-prebuilts libvtswidevine-x86_64-prebuilts;
+
   inherit (callBPPackage "test/vts/proto" ./test_vts_proto.nix {})
-    libvts_multidevice_proto libvts_proto_fuzzer_proto;
+    libvts_multidevice_proto libvts_proto_fuzzer_proto libvts_protos_host;
+
+  inherit (callBPPackage "test/vts/runners/target/gtest" ./test_vts_runners_target_gtest.nix {})
+    libVtsGtestMain;
 
   inherit (callBPPackage "test/vts/runners/target/vts_hal_hidl_target" ./test_vts_runners_target_vts_hal_hidl_target.nix {})
-    VtsHalHidlTargetTestBase;
+    VtsHalHidlTargetTestBase VtsHalHidlTestUtils;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/fmq_test" ./test_vts_testcases_codelab_fmq_test.nix {})
+    VtsCodelabFmqTest;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/hello_world" ./test_vts_testcases_codelab_hello_world.nix {})
+    VtsCodelabHelloWorldTest;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/hello_world_multi" ./test_vts_testcases_codelab_hello_world_multi.nix {})
+    VtsCodelabHelloWorldMultiDeviceTest;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/hello_world_staging" ./test_vts_testcases_codelab_hello_world_staging.nix {})
+    VtsCodelabHelloWorldStagingTest;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/hidl_handle_test" ./test_vts_testcases_codelab_hidl_handle_test.nix {})
+    VtsCodelabHidlHandleTest;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/hidl_memory_test" ./test_vts_testcases_codelab_hidl_memory_test.nix {})
+    VtsCodelabHidlMemoryTest;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/host_multi_hal" ./test_vts_testcases_codelab_host_multi_hal.nix {})
+    VtsCodelabHostDrivenMultiHalTest;
+
+  inherit (callBPPackage "test/vts/testcases/codelab/target_binary" ./test_vts_testcases_codelab_target_binary.nix {})
+    VtsCodelabTargetBinary vts_codelab_target_binary;
+
+  inherit (callBPPackage "test/vts/testcases/host/camera_its" ./test_vts_testcases_host_camera_its.nix {})
+    CameraITSTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/fastboot" ./test_vts_testcases_host_fastboot.nix {})
+    VtsFastbootVerification;
+
+  inherit (callBPPackage "test/vts/testcases/host/fastboot_getvar" ./test_vts_testcases_host_fastboot_getvar.nix {})
+    FastbootGetvarUserspaceTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/fastboot_test" ./test_vts_testcases_host_fastboot_test.nix {})
+    FastbootVerifyUserspaceTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/firmware_dtbo_test" ./test_vts_testcases_host_firmware_dtbo_test.nix {})
+    FirmwareDtboVerification;
+
+  inherit (callBPPackage "test/vts/testcases/host/firmware_test" ./test_vts_testcases_host_firmware_test.nix {})
+    FirmwareBootHeaderVerification;
+
+  inherit (callBPPackage "test/vts/testcases/host/fmq_hidl_test" ./test_vts_testcases_host_fmq_hidl_test.nix {})
+    VtsHalTestsMsgqV1_0HostTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/kernel_proc_file_api_test" ./test_vts_testcases_host_kernel_proc_file_api_test.nix {})
+    vts_kernel_proc_file_api_test;
+
+  inherit (callBPPackage "test/vts/testcases/host/reboot/RebootRootRemountTest" ./test_vts_testcases_host_reboot_RebootRootRemountTest.nix {})
+    RebootRootRemountTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/reboot/RebootTest" ./test_vts_testcases_host_reboot_RebootTest.nix {})
+    RebootTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/selinux_test" ./test_vts_testcases_host_selinux_test.nix {})
+    KernelSelinuxFileApiTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/shell" ./test_vts_testcases_host_shell.nix {})
+    SampleShellTest;
+
+  inherit (callBPPackage "test/vts/testcases/host/shell_binary_crash_test" ./test_vts_testcases_host_shell_binary_crash_test.nix {})
+    ShellBinaryCrashTest vts_test_binary_crash_app vts_test_binary_seg_fault;
+
+  inherit (callBPPackage "test/vts/testcases/host/verify_acpio" ./test_vts_testcases_host_verify_acpio.nix {})
+    VtsFirmwareAcpioVerification;
+
+  inherit (callBPPackage "test/vts/testcases/host/verify_boot_header" ./test_vts_testcases_host_verify_boot_header.nix {})
+    VtsFirmwareBootHeaderVerification;
+
+  inherit (callBPPackage "test/vts/testcases/host/verify_dtbo" ./test_vts_testcases_host_verify_dtbo.nix {})
+    VtsFirmwareDtboVerification;
+
+  inherit (callBPPackage "test/vts/testcases/system/device_health" ./test_vts_testcases_system_device_health.nix {})
+    VtsDeviceHealth;
+
+  inherit (callBPPackage "test/vts/testcases/system/libc" ./test_vts_testcases_system_libc.nix {})
+    LibcTest;
+
+  inherit (callBPPackage "test/vts/testcases/target/hal_lights" ./test_vts_testcases_target_hal_lights.nix {})
+    VtsHalLightsTestCases;
+
+  inherit (callBPPackage "test/vts/testcases/target/hal_power" ./test_vts_testcases_target_hal_power.nix {})
+    VtsHalPowerTestCases;
+
+  inherit (callBPPackage "test/vts/testcases/vts_selftest/manual_tests/flaky_hidl_test" ./test_vts_testcases_vts_selftest_manual_tests_flaky_hidl_test.nix {})
+    VtsSelfTestFlakyHidlTest;
 
   inherit (callBPPackage "test/vts/testcases/vts_selftest/manual_tests/flaky_test" ./test_vts_testcases_vts_selftest_manual_tests_flaky_test.nix {})
-    vts_selftest_flaky_test;
+    VtsSelfTestFlakyTest vts_selftest_flaky_test;
+
+  inherit (callBPPackage "test/vts/testcases/vts_selftest/manual_tests/shell_performance" ./test_vts_testcases_vts_selftest_manual_tests_shell_performance.nix {})
+    VtsSelfTestShellPerformance;
 
   inherit (callBPPackage "test/vts/testcases/vts_selftest/manual_tests/zero_testcase_binary_test" ./test_vts_testcases_vts_selftest_manual_tests_zero_testcase_binary_test.nix {})
-    vts_selftest_zero_testcase_binary_test;
+    VtsSelfTestZeroTestCaseBinaryTest vts_selftest_zero_testcase_binary_test;
+
+  inherit (callBPPackage "test/vts/testcases/vts_selftest/test_framework/base_test" ./test_vts_testcases_vts_selftest_test_framework_base_test.nix {})
+    VtsSelfTestBaseTest;
+
+  inherit (callBPPackage "test/vts/testcases/vts_selftest/test_framework/python_virtualenv_preparer_test/part0" ./test_vts_testcases_vts_selftest_test_framework_python_virtualenv_preparer_test_part0.nix {})
+    VtsSelfTestPythonVirtualenvPreparerTestPart0;
+
+  inherit (callBPPackage "test/vts/testcases/vts_selftest/test_framework/python_virtualenv_preparer_test/part1" ./test_vts_testcases_vts_selftest_test_framework_python_virtualenv_preparer_test_part1.nix {})
+    VtsSelfTestPythonVirtualenvPreparerTestPart1;
+
+  inherit (callBPPackage "test/vts/testcases/vts_selftest/test_framework/python_virtualenv_preparer_test/part2" ./test_vts_testcases_vts_selftest_test_framework_python_virtualenv_preparer_test_part2.nix {})
+    VtsSelfTestPythonVirtualenvPreparerTestPart2;
 
   inherit (callBPPackage "test/vts/tools/build" ./test_vts_tools_build.nix {})
     vts_target_tests_defaults;
 
+  inherit (callBPPackage "test/vts/tools/vts-core-tradefed" ./test_vts_tools_vts-core-tradefed.nix {})
+    vts-core-tradefed-harness vts-tradefed;
+
+  inherit (callBPPackage "test/vts/tools/vts-core-tradefed/tests" ./test_vts_tools_vts-core-tradefed_tests.nix {})
+    vts-tradefed-tests;
+
+  inherit (callBPPackage "test/vts/tools/vts-tradefed" ./test_vts_tools_vts-tradefed.nix {})
+    vts10-tradefed;
+
   inherit (callBPPackage "test/vts/tools/vts-tradefed/etc" ./test_vts_tools_vts-tradefed_etc.nix {})
-    vtf vts-tradefed vts-tradefed_win;
+    vtf vts10-tradefed_win;
 
   inherit (callBPPackage "test/vts/utils/native/libcoverage" ./test_vts_utils_native_libcoverage.nix {})
     vts_coverage_configure;
@@ -11044,10 +16714,10 @@
     libvts_traceprocessor trace_processor;
 
   inherit (callBPPackage "test/vts/utils/python" ./test_vts_utils_python.nix {})
-    vts_runner_utils_python;
+    vndk_utils;
 
   inherit (callBPPackage "tools/acloud" ./tools_acloud.nix {})
-    acloud acloud_create acloud_default acloud_delete acloud_internal acloud_list acloud_metrics acloud_proto acloud_public acloud_reconnect acloud_setup acloud_test;
+    acloud acloud_create acloud_default acloud_delete acloud_internal acloud_list acloud_metrics acloud_proto acloud_public acloud_pull acloud_reconnect acloud_setup acloud_test;
 
   inherit (callBPPackage "tools/apifinder" ./tools_apifinder.nix {})
     JavaApiUsedByMainlineModuleTest java_api_finder java_api_used_by_mainline_module java_api_used_by_mainline_module_testdata;
@@ -11065,13 +16735,19 @@
     aidegen_functional_test aidegen_functional_test_default;
 
   inherit (callBPPackage "tools/asuite/atest" ./tools_asuite_atest.nix {})
-    atest-tradefed atest-tradefed-shell;
+    atest atest-tradefed atest-tradefed-shell atest_integration_tests atest_py3_default atest_py3_proto atest_unittests;
+
+  inherit (callBPPackage "tools/carrier_settings" ./tools_carrier_settings.nix {})
+    CarrierConfigConverterV2 GenCarrierList GenDeviceSettings update_apn update_carrier_data;
 
   inherit (callBPPackage "tools/dexter/dexter" ./tools_dexter_dexter.nix {})
     dexter;
 
   inherit (callBPPackage "tools/dexter/slicer" ./tools_dexter_slicer.nix {})
     slicer slicer_defaults slicer_ndk slicer_ndk_no_rtti slicer_no_rtti;
+
+  inherit (callBPPackage "tools/doc_generation" ./tools_doc_generation.nix {})
+    switcher4;
 
   inherit (callBPPackage "tools/external/fat32lib" ./tools_external_fat32lib.nix {})
     fat32lib;
@@ -11082,17 +16758,47 @@
   inherit (callBPPackage "tools/loganalysis" ./tools_loganalysis.nix {})
     loganalysis;
 
+  inherit (callBPPackage "tools/loganalysis/tests" ./tools_loganalysis_tests.nix {})
+    loganalysis-tests;
+
   inherit (callBPPackage "tools/metalava" ./tools_metalava.nix {})
     metalava metalava-manual private-stub-annotations private-stub-annotations-jar stub-annotations;
 
-  inherit (callBPPackage "tools/security/fuzzing/fuzz" ./tools_security_fuzzing_fuzz.nix {})
-    fuzz;
+  inherit (callBPPackage "tools/platform-compat/build" ./tools_platform-compat_build.nix {})
+    global-compat-config process-compat-config process-compat-config-test;
+
+  inherit (callBPPackage "tools/platform-compat/java/android/compat/annotation" ./tools_platform-compat_java_android_compat_annotation.nix {})
+    app-compat-annotations app-compat-annotations-source unsupportedappusage;
+
+  inherit (callBPPackage "tools/platform-compat/java/android/processor/compat" ./tools_platform-compat_java_android_processor_compat.nix {})
+    compat-processor;
+
+  inherit (callBPPackage "tools/platform-compat/java/android/processor/compat/changeid" ./tools_platform-compat_java_android_processor_compat_changeid.nix {})
+    compat-changeid-annotation-processor compat-changeid-annotation-processor-lib;
+
+  inherit (callBPPackage "tools/platform-compat/java/android/processor/compat/unsupportedappusage" ./tools_platform-compat_java_android_processor_compat_unsupportedappusage.nix {})
+    unsupportedappusage-annotation-processor unsupportedappusage-annotation-processor-lib;
+
+  inherit (callBPPackage "tools/platform-compat/javatest/android/processor/compat/changeid" ./tools_platform-compat_javatest_android_processor_compat_changeid.nix {})
+    compat-changeid-annotation-processor-test;
+
+  inherit (callBPPackage "tools/platform-compat/javatest/android/processor/compat/unsupportedappusage" ./tools_platform-compat_javatest_android_processor_compat_unsupportedappusage.nix {})
+    unsupportedappusage-processor-test;
+
+  inherit (callBPPackage "tools/security/fuzzing/example_fuzzer" ./tools_security_fuzzing_example_fuzzer.nix {})
+    example_fuzzer;
+
+  inherit (callBPPackage "tools/security/fuzzing/orphans/libexif" ./tools_security_fuzzing_orphans_libexif.nix {})
+    libexif_fuzzer;
+
+  inherit (callBPPackage "tools/security/fuzzing/system_fuzzers/libcrypto_utils" ./tools_security_fuzzing_system_fuzzers_libcrypto_utils.nix {})
+    libcrypto_utils_fuzzer;
 
   inherit (callBPPackage "tools/security/sanitizer-status" ./tools_security_sanitizer-status.nix {})
     libsanitizer-status sanitizer-status sanitizer-status_defaults soong-sanitizer_status;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/apps/alloc_stress_app" ./tools_test_graphicsbenchmark_apps_alloc_stress_app.nix {})
-    GameQualificationAllocstress libstress;
+    GameCoreAllocStress libstress;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/apps/sample_app" ./tools_test_graphicsbenchmark_apps_sample_app.nix {})
     libgamecore_sample;
@@ -11101,31 +16807,58 @@
     libagq;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/functional_tests/hostside" ./tools_test_graphicsbenchmark_functional_tests_hostside.nix {})
-    GameQualificationHostTestCases;
+    GameCoreHostTestCases;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/functional_tests/java" ./tools_test_graphicsbenchmark_functional_tests_java.nix {})
     libgamecore_java_tests_jni;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/functional_tests/native" ./tools_test_graphicsbenchmark_functional_tests_native.nix {})
-    GameQualificationNativeTestCases;
+    GameCoreNativeTestCases;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/performance_tests/deviceside" ./tools_test_graphicsbenchmark_performance_tests_deviceside.nix {})
-    GameQualificationDevice;
+    GameCoreDevice;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/performance_tests/helper" ./tools_test_graphicsbenchmark_performance_tests_helper.nix {})
-    GameQualificationHelper GameQualificationHelperHost GameQualificationHelperTest;
+    GameCoreHelper GameCoreHelperHost GameCoreHelperTest;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/performance_tests/hostside" ./tools_test_graphicsbenchmark_performance_tests_hostside.nix {})
-    GameQualificationPerformanceTest;
+    GameCorePerformanceTest;
 
   inherit (callBPPackage "tools/test/graphicsbenchmark/performance_tests/hostside/test" ./tools_test_graphicsbenchmark_performance_tests_hostside_test.nix {})
-    GameQualificationPerformanceTestTest;
+    GameCorePerformanceTestTest;
+
+  inherit (callBPPackage "tools/tradefederation/contrib" ./tools_tradefederation_contrib.nix {})
+    tradefed-contrib;
+
+  inherit (callBPPackage "tools/tradefederation/contrib/tests" ./tools_tradefederation_contrib_tests.nix {})
+    tf-contrib-tests;
 
   inherit (callBPPackage "tools/tradefederation/core" ./tools_tradefederation_core.nix {})
-    tradefed tradefed-doc-stubs tradefed-docs tradefed-protos tradefed_defaults tradefed_errorprone_defaults;
+    "atest_tradefed.sh" "run_tf_cmd.sh" "script_help.sh" "tradefed.sh" tradefed tradefed-doc-stubs tradefed-docs tradefed-lib-core tradefed-no-fwk tradefed-protos tradefed-protos-py tradefed_defaults tradefed_errorprone_defaults tradefed_win;
 
   inherit (callBPPackage "tools/tradefederation/core/atest" ./tools_tradefederation_core_atest.nix {})
-    asuite_cc_client asuite_default asuite_metrics asuite_proto asuite_proto_java atest atest_integration_tests atest_lib_default atest_module_info atest_proto atest_py2_default atest_unittests;
+    asuite_cc_client asuite_default asuite_metrics asuite_proto asuite_proto_java asuite_version atest-py2 atest-py2_unittests atest_lib_default atest_module_info atest_proto atest_py2_default;
+
+  inherit (callBPPackage "tools/tradefederation/core/atest/asuite_lib_test" ./tools_tradefederation_core_atest_asuite_lib_test.nix {})
+    asuite_cc_lib_py3_tests asuite_cc_lib_tests asuite_metrics_lib_py3_tests asuite_metrics_lib_tests;
+
+  inherit (callBPPackage "tools/tradefederation/core/clearcut_client" ./tools_tradefederation_core_clearcut_client.nix {})
+    tradefed-clearcut-client;
+
+  inherit (callBPPackage "tools/tradefederation/core/common_util" ./tools_tradefederation_core_common_util.nix {})
+    tradefed-common-util;
+
+  inherit (callBPPackage "tools/tradefederation/core/device_build_interfaces" ./tools_tradefederation_core_device_build_interfaces.nix {})
+    tradefed-device-build-interfaces;
+
+  inherit (callBPPackage "tools/tradefederation/core/invocation_interfaces" ./tools_tradefederation_core_invocation_interfaces.nix {})
+    tradefed-invocation-interfaces;
+
+  inherit (callBPPackage "tools/tradefederation/core/isolation" ./tools_tradefederation_core_isolation.nix {})
+    tradefed-isolation tradefed-isolation-protos;
+
+  inherit (callBPPackage "tools/tradefederation/core/lite" ./tools_tradefederation_core_lite.nix {})
+    tradefed-lite;
 
   inherit (callBPPackage "tools/tradefederation/core/python-lib" ./tools_tradefederation_core_python-lib.nix {})
     tradefed_python_lib;
@@ -11136,6 +16869,30 @@
   inherit (callBPPackage "tools/tradefederation/core/remote" ./tools_tradefederation_core_remote.nix {})
     tf-remote-client;
 
+  inherit (callBPPackage "tools/tradefederation/core/test_framework" ./tools_tradefederation_core_test_framework.nix {})
+    tradefed-test-framework;
+
+  inherit (callBPPackage "tools/tradefederation/core/test_result_interfaces" ./tools_tradefederation_core_test_result_interfaces.nix {})
+    tradefed-result-interfaces;
+
+  inherit (callBPPackage "tools/tradefederation/core/tests" ./tools_tradefederation_core_tests.nix {})
+    tradefed-tests;
+
+  inherit (callBPPackage "tools/tradefederation/core/tests/src/com/android/tradefed/lite" ./tools_tradefederation_core_tests_src_com_android_tradefed_lite.nix {})
+    IsolatedSampleTests;
+
+  inherit (callBPPackage "tools/tradefederation/core/tests/test-apps/NativeTestSampleApp" ./tools_tradefederation_core_tests_test-apps_NativeTestSampleApp.nix {})
+    tfnativetestsamplelib;
+
+  inherit (callBPPackage "tools/tradefederation/core/tests/test-apps/TradeFedNativeTestApp" ./tools_tradefederation_core_tests_test-apps_TradeFedNativeTestApp.nix {})
+    tfnativetests;
+
+  inherit (callBPPackage "tools/tradefederation/core/tests/test-apps/TradeFedTestApp" ./tools_tradefederation_core_tests_test-apps_TradeFedTestApp.nix {})
+    TradeFedTestApp;
+
+  inherit (callBPPackage "tools/tradefederation/core/tests/test-apps/UITestApp" ./tools_tradefederation_core_tests_test-apps_UITestApp.nix {})
+    TradeFedUiTestApp;
+
   inherit (callBPPackage "tools/tradefederation/core/util-apps/ContentProvider/androidTest" ./tools_tradefederation_core_util-apps_ContentProvider_androidTest.nix {})
     TradefedContentProviderTest;
 
@@ -11144,6 +16901,18 @@
 
   inherit (callBPPackage "tools/tradefederation/core/util-apps/ContentProvider/main" ./tools_tradefederation_core_util-apps_ContentProvider_main.nix {})
     TradefedContentProvider;
+
+  inherit (callBPPackage "tools/tradefederation/core/util-apps/DeviceSetupUtil" ./tools_tradefederation_core_util-apps_DeviceSetupUtil.nix {})
+    DeviceSetupUtil;
+
+  inherit (callBPPackage "tools/tradefederation/core/util-apps/WifiUtil" ./tools_tradefederation_core_util-apps_WifiUtil.nix {})
+    WifiUtil;
+
+  inherit (callBPPackage "tools/treble/build" ./tools_treble_build.nix {})
+    treble_build_default treble_build_test;
+
+  inherit (callBPPackage "tools/treble/split" ./tools_treble_split.nix {})
+    treble_manifest_split treble_manifest_split_test treble_split_default;
 
   inherit (callBPPackage "tools/trebuchet" ./tools_trebuchet.nix {})
     AnalyzerKt StartupAnalyzerKt StartupSummarizerKt traceutils traceviewer trebuchet-core trebuchet-core-tests trebuchet-defaults trebuchet-startup-common trebuchet-startup-common-tests;

@@ -1,0 +1,34 @@
+{ cc_library_shared }:
+let
+
+libgfxstats = cc_library_shared {
+    name = "libgfxstats";
+    srcs = [
+        "GpuStats.cpp"
+    ];
+    shared_libs = [
+        "libcutils"
+        "libgraphicsenv"
+        "liblog"
+        "libprotoutil"
+        "libstatslog"
+        "libstatspull"
+        "libstatssocket"
+        "libutils"
+    ];
+    export_include_dirs = ["include"];
+    export_shared_lib_headers = [
+        "libstatspull"
+        "libstatssocket"
+    ];
+    cppflags = [
+        "-Wall"
+        "-Werror"
+        "-Wformat"
+        "-Wthread-safety"
+        "-Wunused"
+        "-Wunreachable-code"
+    ];
+};
+
+in { inherit libgfxstats; }

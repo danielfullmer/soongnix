@@ -18,10 +18,6 @@ let
 BstatsTestApp = android_test_helper_app {
     name = "BstatsTestApp";
 
-    test_suites = [
-        "device-tests"
-    ];
-
     static_libs = ["coretests-aidl"];
 
     srcs = [

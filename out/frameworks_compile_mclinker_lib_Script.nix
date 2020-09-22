@@ -39,6 +39,11 @@ libmcldScript = cc_library_static {
         "WildcardPattern.cpp"
     ];
     include_dirs = ["frameworks/compile/mclinker/include/mcld/Script"];
+    header_libs = ["FlexLexer"];
+    yacc = {
+        gen_location_hh = true;
+        gen_position_hh = true;
+    };
 };
 
 in { inherit libmcldScript; }

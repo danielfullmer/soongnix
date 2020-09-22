@@ -8,6 +8,7 @@ reboot = cc_binary {
     srcs = ["reboot.c"];
     shared_libs = ["libcutils"];
     cflags = ["-Werror"];
+    recovery_available = true;
 };
 
 in { inherit reboot; }

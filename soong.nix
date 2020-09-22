@@ -224,9 +224,13 @@ in {
   "se_cil_compat_map" "se_filegroup"
 
   "generate_mojom_headers" "generate_mojom_pickles" "generate_mojom_srcjar"
-  "generate_mojom_srcs"
+  "generate_mojom_srcs" "generate_mojom_downgraded_files"
 
   "tradefed_binary_host" "fluoride_defaults" "xsd_config" "ca_certificates" "ca_certificates_host"
   "display_go_defaults" "vintf_compatibility_matrix" "kernel_config" "sanitizer_status_library_shared"
   "wayland_protocol_codegen"
+
+  "file_contexts" "service_contexts" "hwservice_contexts" "property_contexts"
+
+  "robolectric_build_props"
 ] (name: unimplementedModule name)

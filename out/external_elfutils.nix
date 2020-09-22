@@ -1,12 +1,13 @@
-{ cc_library_static }:
+{ cc_library_headers }:
 let
 
-libelf_headers = cc_library_static {
-    name = "libelf_headers";
+elfutils_headers = cc_library_headers {
+    name = "elfutils_headers";
     host_supported = true;
     vendor_available = true;
     export_include_dirs = [
         "."
+        "include"
         "lib"
     ];
     target = {
@@ -14,8 +15,9 @@ libelf_headers = cc_library_static {
             export_include_dirs = ["bionic-fixup"];
         };
     };
+    visibility = [":__subpackages__"];
 };
 
 subdirs = ["libelf"];
 
-in { inherit libelf_headers; }
+in { inherit elfutils_headers; }

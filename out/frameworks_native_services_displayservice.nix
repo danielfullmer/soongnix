@@ -30,7 +30,6 @@ libdisplayservicehidl = cc_library_shared {
         "liblog"
         "libgui"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.frameworks.displayservice@1.0"
     ];

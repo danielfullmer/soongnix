@@ -27,8 +27,6 @@ storaged_defaults = cc_defaults {
         "libbinder"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libprotobuf-cpp-lite"
         "libsysutils"

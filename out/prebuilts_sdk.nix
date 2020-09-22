@@ -29,6 +29,7 @@ api-version-xml = filegroup {
         "28/public/api/android.txt"
         "29/public/api/android.txt"
         "3/public/api/android.txt"
+        "30/public/api/android.txt"
         "4/public/api/android.txt"
         "5/public/api/android.txt"
         "6/public/api/android.txt"
@@ -43,6 +44,13 @@ current-support-api = filegroup {
     name = "current-support-api";
     srcs = [
         "current/support-api.txt"
+    ];
+};
+
+current-androidx-api = filegroup {
+    name = "current-androidx-api";
+    srcs = [
+        "current/androidx-api.txt"
     ];
 };
 
@@ -73,6 +81,11 @@ metalava-sdk-android-jars = filegroup {
         "29/public/android.jar"
         "29/system/android.jar"
         "29/test/android.jar"
+        "30/module-lib/android.jar"
+        "30/public/android.jar"
+        "30/system/android.jar"
+        "30/system-server/android.jar"
+        "30/test/android.jar"
         "4/public/android.jar"
         "5/public/android.jar"
         "6/public/android.jar"
@@ -91,32 +104,11 @@ sdk-dir = droiddoc_exported_dir {
     path = ".";
 };
 
-last-released-public-api = genrule {
-    name = "last-released-public-api";
-    srcs = [
-        "28/public/api/android.txt"
-    ];
-    cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -t/ -k3 -n | tail -1) $(genDir)/last-released-api.txt";
-    out = [
-        "last-released-api.txt"
-    ];
-};
-
-last-released-system-api = genrule {
-    name = "last-released-system-api";
-    srcs = [
-        "28/system/api/android.txt"
-    ];
-    cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -t/ -k3 -n | tail -1) $(genDir)/last-released-api.txt";
-    out = [
-        "last-released-api.txt"
-    ];
-};
-
 public-api-incompatibilities-with-last-released = genrule {
     name = "public-api-incompatibilities-with-last-released";
     srcs = [
         "29/public/api/incompatibilities.txt"
+        "30/public/api/incompatibilities.txt"
     ];
     cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -t/ -k3 -n | tail -1) $(genDir)/incompatibilities.txt";
     out = [
@@ -128,10 +120,73 @@ system-api-incompatibilities-with-last-released = genrule {
     name = "system-api-incompatibilities-with-last-released";
     srcs = [
         "29/system/api/incompatibilities.txt"
+        "30/system/api/incompatibilities.txt"
     ];
     cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -t/ -k3 -n | tail -1) $(genDir)/incompatibilities.txt";
     out = [
         "incompatibilities.txt"
+    ];
+};
+
+module-lib-api-incompatibilities-with-last-released = genrule {
+    name = "module-lib-api-incompatibilities-with-last-released";
+    srcs = [
+        "29/module-lib/api/incompatibilities.txt"
+    ];
+    cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -t/ -k3 -n | tail -1) $(genDir)/incompatibilities.txt";
+    out = [
+        "incompatibilities.txt"
+    ];
+};
+
+system-server-api-incompatibilities-with-last-released = genrule {
+    name = "system-server-api-incompatibilities-with-last-released";
+    srcs = [
+        "29/system-server/api/incompatibilities.txt"
+    ];
+    cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -t/ -k3 -n | tail -1) $(genDir)/incompatibilities.txt";
+    out = [
+        "incompatibilities.txt"
+    ];
+};
+
+last-released-public-api-for-metalava-annotations = genrule {
+    name = "last-released-public-api-for-metalava-annotations";
+    srcs = [
+        "1/public/api/android.txt"
+        "10/public/api/android.txt"
+        "11/public/api/android.txt"
+        "12/public/api/android.txt"
+        "13/public/api/android.txt"
+        "14/public/api/android.txt"
+        "15/public/api/android.txt"
+        "16/public/api/android.txt"
+        "17/public/api/android.txt"
+        "18/public/api/android.txt"
+        "19/public/api/android.txt"
+        "2/public/api/android.txt"
+        "20/public/api/android.txt"
+        "21/public/api/android.txt"
+        "22/public/api/android.txt"
+        "23/public/api/android.txt"
+        "24/public/api/android.txt"
+        "25/public/api/android.txt"
+        "26/public/api/android.txt"
+        "27/public/api/android.txt"
+        "28/public/api/android.txt"
+        "29/public/api/android.txt"
+        "3/public/api/android.txt"
+        "30/public/api/android.txt"
+        "4/public/api/android.txt"
+        "5/public/api/android.txt"
+        "6/public/api/android.txt"
+        "7/public/api/android.txt"
+        "8/public/api/android.txt"
+        "9/public/api/android.txt"
+    ];
+    cmd = "cp -f $$(echo $(in) | tr \" \" \"\\n\" | sort -t/ -k3 -n | tail -2 | head -1) $(genDir)/last-released-api-for-metalava-annotations.txt";
+    out = [
+        "last-released-api-for-metalava-annotations.txt"
     ];
 };
 
@@ -167,8 +222,9 @@ sdk = prebuilt_apis {
         "27"
         "28"
         "29"
+        "30"
         "current"
     ];
 };
 
-in { inherit api-version-xml current-support-api last-released-public-api last-released-system-api metalava-sdk-android-jars public-api-incompatibilities-with-last-released sdk sdk-dir system-api-incompatibilities-with-last-released; }
+in { inherit api-version-xml current-androidx-api current-support-api last-released-public-api-for-metalava-annotations metalava-sdk-android-jars module-lib-api-incompatibilities-with-last-released public-api-incompatibilities-with-last-released sdk sdk-dir system-api-incompatibilities-with-last-released system-server-api-incompatibilities-with-last-released; }

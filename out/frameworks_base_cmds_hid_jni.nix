@@ -8,6 +8,7 @@ libhidcommand_jni = cc_library_shared {
 
     shared_libs = [
         "libandroid"
+        "libbase"
         "liblog"
         "libnativehelper"
     ];

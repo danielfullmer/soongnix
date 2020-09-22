@@ -18,12 +18,13 @@ let
 libhidl-gen-host-utils_test = cc_test_host {
     name = "libhidl-gen-host-utils_test";
     defaults = ["hidl-gen-defaults"];
-
-    shared_libs = [
+    static_libs = [
+        "libbase"
         "libhidl-gen-host-utils"
+        "liblog"
     ];
-
     srcs = ["main.cpp"];
+    test_suites = ["device-tests"];
 };
 
 in { inherit libhidl-gen-host-utils_test; }

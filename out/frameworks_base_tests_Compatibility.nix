@@ -25,6 +25,9 @@ AppCompatibilityTest = android_test {
     ];
     platform_apis = true;
     certificate = "platform";
+    test_suites = [
+        "csuite"
+    ];
 };
 
 in { inherit AppCompatibilityTest; }

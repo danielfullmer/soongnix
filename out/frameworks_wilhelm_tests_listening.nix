@@ -12,6 +12,7 @@ slesTest_seekTorture = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -26,6 +27,7 @@ slesTest_playMuteSolo = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 

@@ -28,6 +28,12 @@ vts_kernel_toolchain = cc_test {
     static_libs = [
         "libgmock"
     ];
+    test_suites = [
+        "device-tests"
+        "vts"
+    ];
+    require_root = true;
+    auto_gen_config = true;
 };
 
 VtsKernelToolchain = vts_config {

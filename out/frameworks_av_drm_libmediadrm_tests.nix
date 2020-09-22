@@ -6,8 +6,11 @@ let
 CounterMetric_test = cc_test {
     name = "CounterMetric_test";
     srcs = ["CounterMetric_test.cpp"];
+    header_libs = [
+        "libmedia_headers"
+        "libmediametrics_headers"
+    ];
     shared_libs = ["libmediadrm"];
-    include_dirs = ["frameworks/av/include/media"];
     cflags = [
         "-Werror"
         "-Wall"
@@ -17,6 +20,9 @@ CounterMetric_test = cc_test {
 DrmMetrics_test = cc_test {
     name = "DrmMetrics_test";
     srcs = ["DrmMetrics_test.cpp"];
+    header_libs = [
+        "libmedia_headers"
+    ];
     shared_libs = [
         "android.hardware.drm@1.0"
         "android.hardware.drm@1.1"
@@ -24,6 +30,8 @@ DrmMetrics_test = cc_test {
         "libbinder"
         "libhidlbase"
         "liblog"
+        "libmediadrm"
+        "libmediadrmmetrics_consumer"
         "libmediadrmmetrics_full"
         "libmediametrics"
         "libprotobuf-cpp-full"
@@ -31,7 +39,7 @@ DrmMetrics_test = cc_test {
     ];
     static_libs = ["libgmock"];
     include_dirs = [
-        "frameworks/av/include/media"
+        "frameworks/av/drm/libmediadrm/include"
     ];
     cflags = [
         #  Suppress unused parameter and no error options. These cause problems
@@ -43,12 +51,15 @@ DrmMetrics_test = cc_test {
 EventMetric_test = cc_test {
     name = "EventMetric_test";
     srcs = ["EventMetric_test.cpp"];
+    header_libs = [
+        "libmedia_headers"
+        "libmediametrics_headers"
+    ];
     shared_libs = [
         "liblog"
         "libmediadrm"
         "libutils"
     ];
-    include_dirs = ["frameworks/av/include/media"];
     cflags = [
         "-Werror"
         "-Wall"

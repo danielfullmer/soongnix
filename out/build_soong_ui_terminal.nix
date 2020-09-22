@@ -20,11 +20,15 @@ soong-ui-terminal = bootstrap_go_package {
     pkgPath = "android/soong/ui/terminal";
     deps = ["soong-ui-status"];
     srcs = [
+        "dumb_status.go"
+        "format.go"
+        "smart_status.go"
         "status.go"
-        "writer.go"
+        "stdio.go"
         "util.go"
     ];
     testSrcs = [
+        "status_test.go"
         "util_test.go"
     ];
     darwin = {

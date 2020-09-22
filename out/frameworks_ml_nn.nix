@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_headers }:
+{ cc_defaults }:
 let
 
 /*
@@ -17,14 +17,57 @@ let
  * limitations under the License.
  */
 
+neuralnetworks_float16 = cc_defaults {
+    name = "neuralnetworks_float16";
+    arch = {
+        x86 = {
+            cflags = [
+                "-D_Float16=__fp16"
+                "-Xclang"
+                "-fnative-half-type"
+                "-Xclang"
+                "-fallow-half-arguments-and-returns"
+            ];
+        };
+        x86_64 = {
+            cflags = [
+                "-D_Float16=__fp16"
+                "-Xclang"
+                "-fnative-half-type"
+                "-Xclang"
+                "-fallow-half-arguments-and-returns"
+            ];
+        };
+    };
+};
+
 neuralnetworks_defaults = cc_defaults {
     name = "neuralnetworks_defaults";
+    defaults = ["neuralnetworks_float16"];
     cflags = [
-        "-Wall"
-        "-Wextra"
-        "-Werror"
         "-O3"
+        "-Wall"
+        "-Werror"
+        "-Wextra"
     ];
+    arch = {
+        x86 = {
+            avx2 = {
+                cflags = [
+                    "-mavx2"
+                    "-mfma"
+                ];
+            };
+        };
+        x86_64 = {
+            avx2 = {
+                cflags = [
+                    "-mavx2"
+                    "-mfma"
+                ];
+            };
+        };
+    };
     product_variables = {
         debuggable = { #  eng and userdebug builds
             cflags = ["-DNN_DEBUGGABLE"];
@@ -32,22 +75,4 @@ neuralnetworks_defaults = cc_defaults {
     };
 };
 
-libneuralnetworks_generated_test_harness_headers = cc_library_headers {
-    name = "libneuralnetworks_generated_test_harness_headers";
-    host_supported = false;
-    export_include_dirs = ["tools/test_generator/include"];
-};
-
-libneuralnetworks_generated_tests = cc_library_headers {
-    name = "libneuralnetworks_generated_tests";
-    host_supported = false;
-    export_include_dirs = ["runtime/test/generated"];
-};
-
-libneuralnetworks_generated_test_harness = cc_library_headers {
-    name = "libneuralnetworks_generated_test_harness";
-    host_supported = false;
-    export_include_dirs = ["runtime/test/"];
-};
-
-in { inherit libneuralnetworks_generated_test_harness libneuralnetworks_generated_test_harness_headers libneuralnetworks_generated_tests neuralnetworks_defaults; }
+in { inherit neuralnetworks_defaults neuralnetworks_float16; }

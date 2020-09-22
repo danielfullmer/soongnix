@@ -19,6 +19,7 @@ CalendarProviderTests = android_test {
     platform_apis = true;
     test_suites = ["device-tests"];
     static_libs = [
+        "androidx.test.rules"
         "calendar-common"
         "junit"
     ];

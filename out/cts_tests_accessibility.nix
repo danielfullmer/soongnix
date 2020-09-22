@@ -22,7 +22,12 @@ CtsAccessibilityCommon = java_library_static {
         "compatibility-device-util-axt"
     ];
     srcs = [
+        "common/src/android/accessibility/cts/common/AccessibilityDumpOnFailureRule.java"
+        "common/src/android/accessibility/cts/common/AccessibilityDumper.java"
+        "common/src/android/accessibility/cts/common/AccessibilityShortcutSettingsRule.java"
         "common/src/android/accessibility/cts/common/InstrumentedAccessibilityService.java"
+        "common/src/android/accessibility/cts/common/InstrumentedAccessibilityServiceTestRule.java"
+        "common/src/android/accessibility/cts/common/ServiceControlUtils.java"
         "common/src/android/accessibility/cts/common/ShellCommandBuilder.java"
     ];
 };
@@ -31,19 +36,24 @@ CtsAccessibilityTestCases = android_test {
     name = "CtsAccessibilityTestCases";
     defaults = ["cts_defaults"];
     srcs = [
+        "src/android/view/accessibility/cts/AccessibilityActionTest.java"
+        "src/android/view/accessibility/cts/AccessibilityButtonService.java"
         "src/android/view/accessibility/cts/AccessibilityDelegateTest.java"
         "src/android/view/accessibility/cts/AccessibilityEventTest.java"
+        "src/android/view/accessibility/cts/AccessibilityGestureEventTest.java"
         "src/android/view/accessibility/cts/AccessibilityManagerTest.java"
         "src/android/view/accessibility/cts/AccessibilityNodeInfoTest.java"
         "src/android/view/accessibility/cts/AccessibilityNodeInfo_CollectionInfoTest.java"
+        "src/android/view/accessibility/cts/AccessibilityNodeInfo_CollectionItemInfoTest.java"
         "src/android/view/accessibility/cts/AccessibilityNodeInfo_RangeInfoTest.java"
         "src/android/view/accessibility/cts/AccessibilityNodeProviderTest.java"
         "src/android/view/accessibility/cts/AccessibilityRecordTest.java"
         "src/android/view/accessibility/cts/AccessibilityServiceInfoTest.java"
+        "src/android/view/accessibility/cts/AccessibilityShortcutTargetActivity.java"
+        "src/android/view/accessibility/cts/AccessibilityShortcutTest.java"
         "src/android/view/accessibility/cts/AccessibilityWindowInfoTest.java"
         "src/android/view/accessibility/cts/CaptioningManagerTest.java"
         "src/android/view/accessibility/cts/DummyActivity.java"
-        "src/android/view/accessibility/cts/ServiceControlUtils.java"
         "src/android/view/accessibility/cts/SpeakingAccessibilityService.java"
         "src/android/view/accessibility/cts/SpeakingAndVibratingAccessibilityService.java"
         "src/android/view/accessibility/cts/VibratingAccessibilityService.java"
@@ -57,9 +67,8 @@ CtsAccessibilityTestCases = android_test {
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
-        "cts_instant"
     ];
     sdk_version = "test_current";
 };

@@ -28,9 +28,6 @@ let
         "-Wextra"
         "-Werror"
     ];
-    static_libs = [
-        "VtsHalHidlTargetTestBase"
-    ];
     group_static_libs = true;
 };
 

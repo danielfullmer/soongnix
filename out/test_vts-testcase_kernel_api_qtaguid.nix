@@ -1,4 +1,4 @@
-{ cc_test, vts_config }:
+{ cc_defaults, cc_test, vts_config }:
 let
 
 #
@@ -17,8 +17,8 @@ let
 #  limitations under the License.
 #
 
-vts_test_binary_qtaguid_module = cc_test {
-    name = "vts_test_binary_qtaguid_module";
+vts_test_binary_qtaguid_defaults = cc_defaults {
+    name = "vts_test_binary_qtaguid_defaults";
     srcs = ["SocketTagUserSpace.cpp"];
     shared_libs = [
         "libutils"
@@ -35,8 +35,21 @@ vts_test_binary_qtaguid_module = cc_test {
 
 };
 
+vts_test_binary_qtaguid_module = cc_test {
+    name = "vts_test_binary_qtaguid_module";
+    defaults = ["vts_test_binary_qtaguid_defaults"];
+};
+
+vts_core_test_binary_qtaguid_module = cc_test {
+    name = "vts_core_test_binary_qtaguid_module";
+    defaults = ["vts_test_binary_qtaguid_defaults"];
+    auto_gen_config = true;
+    require_root = true;
+    test_suites = ["vts"];
+};
+
 VtsKernelQtaguidTest = vts_config {
     name = "VtsKernelQtaguidTest";
 };
 
-in { inherit VtsKernelQtaguidTest vts_test_binary_qtaguid_module; }
+in { inherit VtsKernelQtaguidTest vts_core_test_binary_qtaguid_module vts_test_binary_qtaguid_defaults vts_test_binary_qtaguid_module; }

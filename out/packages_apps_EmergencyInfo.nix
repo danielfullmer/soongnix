@@ -22,7 +22,7 @@ EmergencyInfo = android_app {
     optimize = {
         proguard_flags_files = ["proguard.flags"];
     };
-    product_specific = true;
+    system_ext_specific = true;
     required = ["privapp_whitelist_com.android.emergency"];
     privileged = true;
     static_libs = [
@@ -38,6 +38,7 @@ EmergencyInfo-lib = android_library {
     srcs = [
         "src/com/android/emergency/CircleFramedDrawable.java"
         "src/com/android/emergency/EmergencyContactManager.java"
+        "src/com/android/emergency/EmergencyDialerTrampoline.java"
         "src/com/android/emergency/EmergencySearchIndexablesProvider.java"
         "src/com/android/emergency/PreferenceKeys.java"
         "src/com/android/emergency/ReloadablePreferenceInterface.java"

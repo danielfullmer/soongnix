@@ -1,9 +1,10 @@
-{ cc_binary }:
+{ cc_test }:
 let
 
-mpeg2dec = cc_binary {
+mpeg2dec = cc_test {
     name = "mpeg2dec";
-
+    host_supported = true;
+    gtest = false;
     cflags = [
         "-DPROFILE_ENABLE"
         "-DMD5_DISABLE"
@@ -12,12 +13,14 @@ mpeg2dec = cc_binary {
         "-Wall"
         "-Werror"
     ];
-    local_include_dirs = [
-        "decoder/"
-    ];
     srcs = ["decoder/main.c"];
     static_libs = ["libmpeg2dec"];
     shared_libs = ["liblog"];
+    target = {
+        darwin = {
+            enabled = false;
+        };
+    };
 };
 
 in { inherit mpeg2dec; }

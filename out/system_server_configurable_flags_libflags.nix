@@ -14,6 +14,11 @@ server_configurable_flags = cc_library {
         "-Werror"
     ];
     export_include_dirs = ["include"];
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.resolv"
+    ];
+    min_sdk_version = "29";
 };
 
 #  Tests

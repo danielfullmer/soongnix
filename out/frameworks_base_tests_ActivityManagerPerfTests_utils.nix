@@ -23,6 +23,7 @@ ActivityManagerPerfTestsUtils = java_test {
         "src/com/android/frameworks/perftests/am/util/CountDownResultReceiver.java"
         "src/com/android/frameworks/perftests/am/util/Utils.java"
         "src/com/android/frameworks/perftests/am/util/ITimeReceiverCallback.aidl"
+        "src/com/android/frameworks/perftests/am/util/ICommandReceiver.aidl"
     ];
     static_libs = [
         "androidx.test.rules"

@@ -34,6 +34,14 @@ vts_halManifest_validate_test = cc_test {
         "-Wall"
         "-Werror"
     ];
+    data = [
+        ":hal_manifest"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    test_config = "vts_halManifest_validate_test.xml";
 };
 
 in { inherit vts_halManifest_validate_test; }

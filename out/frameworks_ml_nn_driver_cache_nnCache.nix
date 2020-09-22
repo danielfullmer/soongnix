@@ -33,8 +33,8 @@ nnCache_test = cc_test {
     ];
 
     static_libs = [
-        "lib_nnCache"
         "libBlobCache"
+        "lib_nnCache"
     ];
 };
 

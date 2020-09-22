@@ -12,6 +12,10 @@ VtsHalBluetoothAudioV2_0TargetTest = cc_test {
     shared_libs = [
         "libfmq"
     ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalBluetoothAudioV2_0TargetTest; }

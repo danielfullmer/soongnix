@@ -41,6 +41,8 @@ print-test-util-lib = java_library {
         "compatibility-device-util-axt"
         "androidx.test.rules"
         "platformprotosnano"
+        "cts-helpers-interfaces"
+        "cts-helpers-core"
     ];
 
     sdk_version = "test_current";

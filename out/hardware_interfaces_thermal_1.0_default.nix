@@ -30,7 +30,6 @@ let
         "libcutils"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.thermal@1.0"
     ];
 };
@@ -51,7 +50,6 @@ let
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.thermal@1.0"
     ];
 };

@@ -29,10 +29,8 @@ staticLibraries = [
 ];
 
 sharedLibraries = [
-    "libbase"
     "libbinder"
     "libcutils"
-    "libhardware"
     "liblog"
     "libui"
     "libutils"

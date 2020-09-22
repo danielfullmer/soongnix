@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2014 The Android Open Source Project
@@ -16,7 +16,7 @@ let
 #  limitations under the License.
 
 # apks signed by cts-keyset-test-a
-CtsKeySetSigningAUpgradeA = android_test {
+CtsKeySetSigningAUpgradeA = android_test_helper_app {
     name = "CtsKeySetSigningAUpgradeA";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -28,13 +28,13 @@ CtsKeySetSigningAUpgradeA = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
 # apks signed by cts-keyset-test-b
-CtsKeySetSigningBUpgradeA = android_test {
+CtsKeySetSigningBUpgradeA = android_test_helper_app {
     name = "CtsKeySetSigningBUpgradeA";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -46,13 +46,13 @@ CtsKeySetSigningBUpgradeA = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
 # apks signed by cts-keyset-test-ec-a
-CtsKeySetSigningEcAUpgradeA = android_test {
+CtsKeySetSigningEcAUpgradeA = android_test_helper_app {
     name = "CtsKeySetSigningEcAUpgradeA";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -64,13 +64,13 @@ CtsKeySetSigningEcAUpgradeA = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
 # apks signed by cts-keyset-test-a and cts-keyset-test-b
-CtsKeySetSigningAAndBUpgradeA = android_test {
+CtsKeySetSigningAAndBUpgradeA = android_test_helper_app {
     name = "CtsKeySetSigningAAndBUpgradeA";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -83,7 +83,7 @@ CtsKeySetSigningAAndBUpgradeA = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

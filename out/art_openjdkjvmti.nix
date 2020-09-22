@@ -18,9 +18,16 @@ let
 
 libopenjdkjvmti_headers = cc_library_headers {
     name = "libopenjdkjvmti_headers";
+    visibility = ["//visibility:public"];
     host_supported = true;
     export_include_dirs = ["include"];
     sdk_version = "current";
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 libopenjdkjvmti_defaults = cc_defaults {
@@ -28,6 +35,7 @@ libopenjdkjvmti_defaults = cc_defaults {
     defaults = ["art_defaults"];
     host_supported = true;
     srcs = [
+        "alloc_manager.cc"
         "deopt_manager.cc"
         "events.cc"
         "fixed_up_dex_file.cc"
@@ -77,6 +85,10 @@ libopenjdkjvmti = art_cc_library {
         "libdexfile"
         "libartbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libopenjdkjvmtid = art_cc_library {
@@ -91,6 +103,9 @@ libopenjdkjvmtid = art_cc_library {
         "libartd-dexlayout"
         "libdexfiled"
         "libartbased"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

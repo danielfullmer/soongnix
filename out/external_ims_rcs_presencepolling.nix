@@ -52,10 +52,6 @@ presence_polling_defaults = java_defaults {
         "src/com/android/service/ims/presence/PresenceSetting.java"
         "src/com/android/service/ims/presence/SharedPrefUtil.java"
     ];
-    libs = [
-        "ims-common"
-        "telephony-common"
-    ];
     static_libs = ["com.android.ims.rcsmanager"];
     platform_apis = true;
     certificate = "platform";

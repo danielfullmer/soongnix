@@ -9,6 +9,7 @@ libaudioeffect_jni = cc_library_shared {
         "android_media_SourceDefaultEffect.cpp"
         "android_media_StreamDefaultEffect.cpp"
         "android_media_Visualizer.cpp"
+        "Visualizer.cpp"
     ];
 
     shared_libs = [
@@ -17,9 +18,12 @@ libaudioeffect_jni = cc_library_shared {
         "libutils"
         "libandroid_runtime"
         "libnativehelper"
-        "libmedia"
         "libaudioclient"
+        "libaudioutils"
+        "libaudiofoundation"
     ];
+
+    version_script = "exports.lds";
 
     cflags = [
         "-Wall"

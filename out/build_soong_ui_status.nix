@@ -22,14 +22,17 @@ soong-ui-status = bootstrap_go_package {
         "golang-protobuf-proto"
         "soong-ui-logger"
         "soong-ui-status-ninja_frontend"
+        "soong-ui-status-build_error_proto"
     ];
     srcs = [
+        "critical_path.go"
         "kati.go"
         "log.go"
         "ninja.go"
         "status.go"
     ];
     testSrcs = [
+        "critical_path_test.go"
         "kati_test.go"
         "ninja_test.go"
         "status_test.go"
@@ -45,4 +48,13 @@ soong-ui-status-ninja_frontend = bootstrap_go_package {
     ];
 };
 
-in { inherit soong-ui-status soong-ui-status-ninja_frontend; }
+soong-ui-status-build_error_proto = bootstrap_go_package {
+    name = "soong-ui-status-build_error_proto";
+    pkgPath = "android/soong/ui/status/build_error_proto";
+    deps = ["golang-protobuf-proto"];
+    srcs = [
+        "build_error_proto/build_error.pb.go"
+    ];
+};
+
+in { inherit soong-ui-status soong-ui-status-build_error_proto soong-ui-status-ninja_frontend; }

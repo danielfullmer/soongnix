@@ -15,8 +15,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-GameQualificationPerformanceTestTest = java_test_host {
-    name = "GameQualificationPerformanceTestTest";
+GameCorePerformanceTestTest = java_test_host {
+    name = "GameCorePerformanceTestTest";
     srcs = [
         "com/android/game/qualification/metric/BaseGameQualificationMetricCollectorTest.java"
         "com/android/game/qualification/metric/GameQualificationFpsCollectorTest.java"
@@ -27,13 +27,15 @@ GameQualificationPerformanceTestTest = java_test_host {
         "com/android/game/qualification/test/PerformanceTestTest.java"
     ];
     libs = [
-        "GameQualificationPerformanceTest"
-        "GameQualificationHelperHost"
         "junit-host"
         "tradefed"
+    ];
+    static_libs = [
+        "GameCorePerformanceTest"
+        "GameCoreHelperHost"
     ];
     test_suites = ["general-tests"];
     installable = false;
 };
 
-in { inherit GameQualificationPerformanceTestTest; }
+in { inherit GameCorePerformanceTestTest; }

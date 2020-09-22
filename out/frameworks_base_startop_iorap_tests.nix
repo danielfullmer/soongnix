@@ -19,6 +19,7 @@ let
 libiorap-java-test-lib = java_library {
     name = "libiorap-java-test-lib";
     srcs = [
+        "src/com/google/android/startop/iorap/AppLaunchEventTest.kt"
         "src/com/google/android/startop/iorap/IIorapIntegrationTest.kt"
         "src/com/google/android/startop/iorap/ParcelablesTest.kt"
     ];

@@ -22,7 +22,10 @@ VtsHalLightV2_0TargetTest = cc_test {
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalLightV2_0TargetTest.cpp"];
     static_libs = ["android.hardware.light@2.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalLightV2_0TargetTest; }

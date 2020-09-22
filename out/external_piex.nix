@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_shared, cc_library_static }:
+{ cc_defaults, cc_library, cc_library_static }:
 let
 
 piex_default_cflags = cc_defaults {
@@ -58,7 +58,7 @@ libtiff_directory = cc_library_static {
     };
 };
 
-libpiex = cc_library_shared {
+libpiex = cc_library {
     name = "libpiex";
     host_supported = true;
     defaults = ["piex_default_cflags"];

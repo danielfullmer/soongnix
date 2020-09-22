@@ -10,7 +10,6 @@ write_sine = cc_test {
     ];
     shared_libs = ["libaaudio"];
     header_libs = ["libaaudio_example_utils"];
-    pack_relocations = false;
 };
 
 write_sine_callback = cc_test {
@@ -22,7 +21,6 @@ write_sine_callback = cc_test {
     ];
     shared_libs = ["libaaudio"];
     header_libs = ["libaaudio_example_utils"];
-    pack_relocations = false;
 };
 
 in { inherit write_sine write_sine_callback; }

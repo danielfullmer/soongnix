@@ -11,7 +11,7 @@ libstagefright_mediafilter = cc_library_static {
         "MediaFilter.cpp"
         "RSFilter.cpp"
         "SaturationFilter.cpp"
-        "saturationARGB.rs"
+        "saturationARGB.rscript"
         "SimpleFilter.cpp"
         "ZeroFilter.cpp"
     ];
@@ -24,6 +24,10 @@ libstagefright_mediafilter = cc_library_static {
         "-Wno-multichar"
         "-Werror"
         "-Wall"
+    ];
+
+    header_libs = [
+        "libmediadrm_headers"
     ];
 
     shared_libs = [

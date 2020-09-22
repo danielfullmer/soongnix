@@ -6,7 +6,7 @@ let
 Stk = android_app {
     name = "Stk";
     libs = ["telephony-common"];
-    static_libs = ["android-support-v4"];
+    static_libs = ["com.google.android.material_material"];
     srcs = [
         "src/com/android/stk/BootCompletedReceiver.java"
         "src/com/android/stk/StkApp.java"

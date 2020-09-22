@@ -25,6 +25,13 @@ libspeexresampler = cc_library_shared {
         enabled = true;
     };
     double_loadable = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
+
     arch = {
         arm = {
             instruction_set = "arm";

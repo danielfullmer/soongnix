@@ -22,13 +22,6 @@ CtsSMSNotRestrictedWithSharedUid = android_test_helper_app {
     defaults = ["cts_defaults"];
 
     sdk_version = "current";
-
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-        "cts_instant"
-    ];
 };
 
 in { inherit CtsSMSNotRestrictedWithSharedUid; }

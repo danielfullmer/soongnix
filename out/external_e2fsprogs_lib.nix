@@ -9,6 +9,8 @@ let
 libext2-headers = cc_library_headers {
     name = "libext2-headers";
     host_supported = true;
+    vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
     target = {
         windows = {

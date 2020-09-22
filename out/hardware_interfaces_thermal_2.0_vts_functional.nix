@@ -25,6 +25,10 @@ VtsHalThermalV2_0TargetTest = cc_test {
         "android.hardware.thermal@1.0"
         "android.hardware.thermal@2.0"
     ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalThermalV2_0TargetTest; }

@@ -19,12 +19,12 @@ platform-test-options = java_library_static {
     name = "platform-test-options";
     sdk_version = "24";
     srcs = [
-        "src/android/platform/test/options/BooleanOption.java"
-        "src/android/platform/test/options/DoubleOption.java"
-        "src/android/platform/test/options/IntegerOption.java"
-        "src/android/platform/test/options/LongOption.java"
-        "src/android/platform/test/options/StringOption.java"
-        "src/android/platform/test/options/TestOption.java"
+        "src/android/platform/test/option/BooleanOption.java"
+        "src/android/platform/test/option/DoubleOption.java"
+        "src/android/platform/test/option/IntegerOption.java"
+        "src/android/platform/test/option/LongOption.java"
+        "src/android/platform/test/option/StringOption.java"
+        "src/android/platform/test/option/TestOption.java"
     ];
     libs = [
         "androidx.test.runner"

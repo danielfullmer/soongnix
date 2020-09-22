@@ -25,7 +25,10 @@ VtsHalUsbV1_1TargetTest = cc_test {
         "android.hardware.usb@1.0"
         "android.hardware.usb@1.1"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalUsbV1_1TargetTest; }

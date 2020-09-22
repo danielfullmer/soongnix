@@ -5,6 +5,8 @@ libstagefright_foundation_headers = cc_library_headers {
     name = "libstagefright_foundation_headers";
     export_include_dirs = ["include"];
     vendor_available = true;
+    host_supported = true;
+    min_sdk_version = "29";
 };
 
 libstagefright_foundation_defaults = cc_defaults {
@@ -37,10 +39,6 @@ libstagefright_foundation_defaults = cc_defaults {
         "media_plugin_headers"
     ];
 
-    export_shared_lib_headers = [
-        "libbinder"
-    ];
-
     cflags = [
         "-Wno-multichar"
         "-Werror"
@@ -68,6 +66,7 @@ libstagefright_foundation_defaults = cc_defaults {
         "AudioPresentationInfo.cpp"
         "ByteUtils.cpp"
         "ColorUtils.cpp"
+        "FoundationUtils.cpp"
         "MediaBuffer.cpp"
         "MediaBufferBase.cpp"
         "MediaBufferGroup.cpp"
@@ -80,6 +79,17 @@ libstagefright_foundation_defaults = cc_defaults {
         "base64.cpp"
         "hexdump.cpp"
     ];
+
+    target = {
+        vendor = {
+            exclude_shared_libs = [
+                "libbinder"
+            ];
+            cflags = [
+                "-DNO_IMEMORY"
+            ];
+        };
+    };
 
     clang = true;
 
@@ -95,11 +105,13 @@ libstagefright_foundation_defaults = cc_defaults {
 libstagefright_foundation = cc_library {
     name = "libstagefright_foundation";
     defaults = ["libstagefright_foundation_defaults"];
+    min_sdk_version = "29";
 };
 
 libstagefright_foundation_without_imemory = cc_library_static {
     name = "libstagefright_foundation_without_imemory";
     defaults = ["libstagefright_foundation_defaults"];
+    min_sdk_version = "29";
 
     cflags = [
         "-Wno-multichar"

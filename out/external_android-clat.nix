@@ -13,27 +13,23 @@ clatd_defaults = cc_defaults {
         "-Wno-address-of-packed-member"
     ];
 
-    #  For NETID_UNSET and MARK_UNSET.
-    include_dirs = ["bionic/libc/dns/include"];
-
-    #  For NETID_USE_LOCAL_NAMESERVERS.
-    header_libs = ["libnetd_client_headers"];
+    #  For MARK_UNSET.
+    header_libs = [
+        "libnetd_client_headers"
+    ];
 };
 
 #  Code used both by the daemon and by unit tests.
 clatd_common = filegroup {
     name = "clatd_common";
     srcs = [
-        "config.c"
         "clatd.c"
-        "dns64.c"
         "dump.c"
         "getaddr.c"
         "icmp.c"
         "ipv4.c"
         "ipv6.c"
         "logging.c"
-        "mtu.c"
         "netlink_callbacks.c"
         "netlink_msg.c"
         "ring.c"
@@ -97,19 +93,7 @@ clatd_test = cc_test {
         "libnetutils"
     ];
     test_suites = ["device-tests"];
+    require_root = true;
 };
 
-#  Microbenchmark.
-clatd_microbenchmark = cc_test {
-    name = "clatd_microbenchmark";
-    defaults = ["clatd_defaults"];
-    srcs = [
-        "clatd_microbenchmark.c"
-        "tun.c"
-    ];
-    shared_libs = [
-        "libnetutils"
-    ];
-};
-
-in { inherit "clatd.conf" clatd clatd_common clatd_defaults clatd_microbenchmark clatd_test; }
+in { inherit "clatd.conf" clatd clatd_common clatd_defaults clatd_test; }

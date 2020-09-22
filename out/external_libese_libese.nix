@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library }:
+{ cc_defaults, cc_library, cc_library_headers }:
 let
 
 #
@@ -35,13 +35,22 @@ libese-defaults = cc_defaults {
     };
 };
 
+libese-api-headers = cc_library_headers {
+    name = "libese-api-headers";
+    host_supported = true;
+    proprietary = true;
+    export_include_dirs = ["include"];
+    visibility = ["//external/libese:__subpackages__"];
+};
+
 libese-api-defaults = cc_defaults {
     name = "libese-api-defaults";
     defaults = ["libese-defaults"];
 
+    header_libs = ["libese-api-headers"];
+    export_header_lib_headers = ["libese-api-headers"];
+
     #  Ensure that only explicitly exported symbols are visible.
-    local_include_dirs = ["include"];
-    export_include_dirs = ["include"];
     cflags = ["-fvisibility=internal"];
 };
 
@@ -55,15 +64,16 @@ libese = cc_library {
         "ese_sg.c"
     ];
 
-    export_include_dirs = ["include"];
-
     shared_libs = [
         "libese-sysdeps"
         "liblog"
     ];
-    export_shared_lib_headers = ["liblog"];
+    export_shared_lib_headers = [
+        "libese-sysdeps"
+        "liblog"
+    ];
 };
 
 subdirs = ["tests"];
 
-in { inherit libese libese-api-defaults libese-defaults; }
+in { inherit libese libese-api-defaults libese-api-headers libese-defaults; }

@@ -20,6 +20,7 @@ py-uritemplate = python_library {
     srcs = [
         "__init__.py"
         "api.py"
+        "orderedset.py"
         "template.py"
         "variable.py"
     ];

@@ -4,6 +4,7 @@ let
 libavcdec = cc_library_static {
     name = "libavcdec";
     vendor_available = true;
+    host_supported = true;
     shared_libs = [
         "liblog"
         "libcutils"
@@ -246,11 +247,17 @@ libavcdec = cc_library_static {
         #  cfi: true,
         blacklist = "libavc_blacklist.txt";
     };
+    apex_available = [
+        "//apex_available:platform" #  used by libstagefright_soft_avcdec
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 libavcenc = cc_library_static {
     name = "libavcenc";
     vendor_available = true;
+    host_supported = true;
     shared_libs = [
         "liblog"
         "libcutils"
@@ -329,6 +336,7 @@ libavcenc = cc_library_static {
         "encoder/irc_vbr_str_prms.c"
         "encoder/ime.c"
         "encoder/ime_distortion_metrics.c"
+        "encoder/ih264e_sei.c"
     ];
 
     arch = {
@@ -518,6 +526,11 @@ libavcenc = cc_library_static {
         #  cfi: true,
         blacklist = "libavc_blacklist.txt";
     };
+    apex_available = [
+        "//apex_available:platform" # due to libstagefright_soft_avcenc
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 subdirs = ["test"];

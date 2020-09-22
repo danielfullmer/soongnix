@@ -21,11 +21,14 @@ FlickerTests = android_test {
     name = "FlickerTests";
     srcs = [
         "src/com/android/server/wm/flicker/ChangeAppRotationTest.java"
+        "src/com/android/server/wm/flicker/CloseImeAutoOpenWindowToAppTest.java"
+        "src/com/android/server/wm/flicker/CloseImeAutoOpenWindowToHomeTest.java"
         "src/com/android/server/wm/flicker/CloseImeWindowToAppTest.java"
         "src/com/android/server/wm/flicker/CloseImeWindowToHomeTest.java"
         "src/com/android/server/wm/flicker/CommonTransitions.java"
         "src/com/android/server/wm/flicker/DebugTest.java"
         "src/com/android/server/wm/flicker/FlickerTestBase.java"
+        "src/com/android/server/wm/flicker/NonRotationTestBase.java"
         "src/com/android/server/wm/flicker/OpenAppColdTest.java"
         "src/com/android/server/wm/flicker/OpenAppToSplitScreenTest.java"
         "src/com/android/server/wm/flicker/OpenAppWarmTest.java"
@@ -33,7 +36,10 @@ FlickerTests = android_test {
         "src/com/android/server/wm/flicker/ResizeSplitScreenTest.java"
         "src/com/android/server/wm/flicker/SeamlessAppRotationTest.java"
         "src/com/android/server/wm/flicker/SplitScreenToLauncherTest.java"
-        "src/com/android/server/wm/flicker/StandardAppHelper.java"
+        "src/com/android/server/wm/flicker/helpers/FlickerAppHelper.java"
+        "src/com/android/server/wm/flicker/helpers/ImeAppAutoFocusHelper.java"
+        "src/com/android/server/wm/flicker/helpers/ImeAppHelper.java"
+        "src/com/android/server/wm/flicker/helpers/PipAppHelper.java"
     ];
     platform_apis = true;
     certificate = "platform";

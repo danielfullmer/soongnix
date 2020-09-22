@@ -124,28 +124,6 @@ libart-compiler-defaults = art_cc_defaults {
                 "utils/arm64/managed_register_arm64.cc"
             ];
         };
-        mips = {
-            srcs = [
-                "jni/quick/mips/calling_convention_mips.cc"
-                "optimizing/code_generator_mips.cc"
-                "optimizing/code_generator_vector_mips.cc"
-                "optimizing/instruction_simplifier_mips.cc"
-                "optimizing/intrinsics_mips.cc"
-                "optimizing/pc_relative_fixups_mips.cc"
-                "utils/mips/assembler_mips.cc"
-                "utils/mips/managed_register_mips.cc"
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "jni/quick/mips64/calling_convention_mips64.cc"
-                "optimizing/code_generator_mips64.cc"
-                "optimizing/code_generator_vector_mips64.cc"
-                "optimizing/intrinsics_mips64.cc"
-                "utils/mips64/assembler_mips64.cc"
-                "utils/mips64/managed_register_mips64.cc"
-            ];
-        };
         x86 = {
             srcs = [
                 "jni/quick/x86/calling_convention_x86.cc"
@@ -178,9 +156,9 @@ libart-compiler-defaults = art_cc_defaults {
     shared_libs = [
         "libbase"
     ];
-    include_dirs = ["art/disassembler"];
     header_libs = [
         "art_cmdlineparser_headers" #  For compiler_options.
+        "art_disassembler_headers"
         "libnativehelper_header_only"
     ];
 
@@ -205,8 +183,6 @@ art_compiler_operator_srcs = gensrcs {
         "optimizing/optimizing_compiler_stats.h"
 
         "utils/arm/constants_arm.h"
-        "utils/mips/assembler_mips.h"
-        "utils/mips64/assembler_mips64.h"
     ];
     output_extension = "operator_out.cc";
 };
@@ -229,6 +205,10 @@ libart-compiler = art_cc_library {
                 shared_libs = [
                     "libvixl"
                 ];
+                #  Export vixl headers as they are included in this library's exported headers.
+                export_shared_lib_headers = [
+                    "libvixl"
+                ];
             };
         };
         arm64 = {
@@ -242,6 +222,10 @@ libart-compiler = art_cc_library {
                 shared_libs = [
                     "libvixl"
                 ];
+                #  Export vixl headers as they are included in this library's exported headers.
+                export_shared_lib_headers = [
+                    "libvixl"
+                ];
             };
         };
     };
@@ -253,6 +237,11 @@ libart-compiler = art_cc_library {
         "libdexfile"
     ];
     whole_static_libs = ["libelffile"];
+    runtime_libs = [
+        #  `art::HGraphVisualizerDisassembler::HGraphVisualizerDisassembler` may dynamically load
+        #  `libart-disassembler.so`.
+        "libart-disassembler"
+    ];
 
     target = {
         android = {
@@ -261,6 +250,10 @@ libart-compiler = art_cc_library {
             };
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libart-compiler_static_defaults = cc_defaults {
@@ -293,6 +286,10 @@ libartd-compiler = art_cc_library {
                 shared_libs = [
                     "libvixld"
                 ];
+                #  Export vixl headers as they are included in this library's exported headers.
+                export_shared_lib_headers = [
+                    "libvixld"
+                ];
             };
         };
         arm64 = {
@@ -306,6 +303,10 @@ libartd-compiler = art_cc_library {
                 shared_libs = [
                     "libvixld"
                 ];
+                #  Export vixl headers as they are included in this library's exported headers.
+                export_shared_lib_headers = [
+                    "libvixld"
+                ];
             };
         };
     };
@@ -317,6 +318,15 @@ libartd-compiler = art_cc_library {
         "libdexfiled"
     ];
     whole_static_libs = ["libelffiled"];
+    runtime_libs = [
+        #  `art::HGraphVisualizerDisassembler::HGraphVisualizerDisassembler` may dynamically load
+        #  `libartd-disassembler.so`.
+        "libartd-disassembler"
+    ];
+
+    apex_available = [
+        "com.android.art.debug"
+    ];
 };
 
 libartd-compiler_static_defaults = cc_defaults {
@@ -385,12 +395,12 @@ art_compiler_tests = art_cc_test {
         "optimizing/suspend_check_test.cc"
         "utils/atomic_dex_ref_map_test.cc"
         "utils/dedupe_set_test.cc"
-        "utils/intrusive_forward_list_test.cc"
         "utils/swap_space_test.cc"
 
         "jni/jni_cfi_test.cc"
         "optimizing/codegen_test.cc"
         "optimizing/load_store_analysis_test.cc"
+        "optimizing/load_store_elimination_test.cc"
         "optimizing/optimizing_cfi_test.cc"
         "optimizing/scheduler_test.cc"
     ];
@@ -404,15 +414,6 @@ art_compiler_tests = art_cc_test {
         arm64 = {
             srcs = [
                 "utils/arm64/managed_register_arm64_test.cc"
-            ];
-        };
-        mips = {
-            srcs = [
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "utils/mips64/managed_register_mips64_test.cc"
             ];
         };
         x86 = {
@@ -453,10 +454,6 @@ art_compiler_tests = art_cc_test {
         "libnativeloader"
     ];
 
-    include_dirs = [
-        "external/zlib"
-    ];
-
     target = {
         host = {
             shared_libs = [
@@ -476,19 +473,6 @@ art_compiler_host_tests = art_cc_test {
         arm = {
             srcs = [
                 "utils/assembler_thumb_test.cc"
-            ];
-        };
-        mips = {
-            srcs = [
-                "optimizing/emit_swap_mips_test.cc"
-                "utils/mips/assembler_mips_test.cc"
-                "utils/mips/assembler_mips32r5_test.cc"
-                "utils/mips/assembler_mips32r6_test.cc"
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "utils/mips64/assembler_mips64_test.cc"
             ];
         };
         x86 = {

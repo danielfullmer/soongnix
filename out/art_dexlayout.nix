@@ -32,29 +32,20 @@ libart-dexlayout-defaults = art_cc_defaults {
     target = {
         android = {
             shared_libs = [
-                "libartbase"
                 "libartpalette"
-                "libdexfile"
-                "libprofile"
                 "libbase"
             ];
         };
         not_windows = {
             shared_libs = [
-                "libartbase"
                 "libartpalette"
-                "libdexfile"
-                "libprofile"
                 "libbase"
             ];
         };
         windows = {
             cflags = ["-Wno-thread-safety"];
             static_libs = [
-                "libartbase"
                 "libartpalette"
-                "libdexfile"
-                "libprofile"
                 "libbase"
             ];
         };
@@ -81,14 +72,35 @@ libart-dexlayout = art_cc_library {
             lto = {
                 thin = true;
             };
+            shared_libs = [
+                "libartbase"
+                "libdexfile"
+                "libprofile"
+            ];
+        };
+        not_windows = {
+            shared_libs = [
+                "libartbase"
+                "libdexfile"
+                "libprofile"
+            ];
         };
         windows = {
             enabled = true;
             shared = {
                 enabled = false;
             };
+            static_libs = [
+                "libartbase"
+                "libdexfile"
+                "libprofile"
+            ];
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libart-dexlayout_static_defaults = cc_defaults {
@@ -108,10 +120,31 @@ libartd-dexlayout = art_cc_library {
         "libart-dexlayout-defaults"
         "art_debug_defaults"
     ];
-    shared_libs = [
-        "libdexfiled"
-        "libartbased"
-        "libprofiled"
+    target = {
+        android = {
+            shared_libs = [
+                "libartbased"
+                "libdexfiled"
+                "libprofiled"
+            ];
+        };
+        not_windows = {
+            shared_libs = [
+                "libartbased"
+                "libdexfiled"
+                "libprofiled"
+            ];
+        };
+        windows = {
+            static_libs = [
+                "libartbased"
+                "libdexfiled"
+                "libprofiled"
+            ];
+        };
+    };
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 
@@ -144,6 +177,10 @@ dexlayout = art_cc_binary {
         "libprofile"
         "libartbase"
         "libart-dexlayout"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
     ];
 };
 
@@ -183,6 +220,9 @@ dexlayoutd = art_cc_binary {
         "libartbased"
         "libartd-dexlayout"
     ];
+    apex_available = [
+        "com.android.art.debug"
+    ];
 };
 
 art_dexlayout_tests = art_cc_test {
@@ -215,6 +255,10 @@ dexdiag = art_cc_binary {
             ];
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 art_dexdiag_tests = art_cc_test {

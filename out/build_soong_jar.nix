@@ -21,6 +21,9 @@ soong-jar = bootstrap_go_package {
     srcs = [
         "jar.go"
     ];
+    testSrcs = [
+        "jar_test.go"
+    ];
     deps = [
         "android-archive-zip"
     ];

@@ -1,4 +1,4 @@
-{ cc_defaults, cc_test }:
+{ aidl_interface, cc_defaults, cc_test }:
 let
 
 #
@@ -22,73 +22,83 @@ binder_test_defaults = cc_defaults {
     cflags = [
         "-Wall"
         "-Werror"
-        "-Wno-unused-private-field"
-        "-Wno-unused-variable"
     ];
 };
 
 binderDriverInterfaceTest_IPC_32 = cc_test {
     name = "binderDriverInterfaceTest_IPC_32";
-    srcs = ["binderDriverInterfaceTest.cpp"];
     defaults = ["binder_test_defaults"];
+    srcs = ["binderDriverInterfaceTest.cpp"];
     compile_multilib = "32";
+    multilib = {
+        lib32 = {
+            suffix = "";
+        };
+    };
     cflags = ["-DBINDER_IPC_32BIT=1"];
+    test_suites = ["vts"];
 };
 
 binderDriverInterfaceTest = cc_test {
+    name = "binderDriverInterfaceTest";
+    defaults = ["binder_test_defaults"];
     product_variables = {
         binder32bit = {
             cflags = ["-DBINDER_IPC_32BIT=1"];
         };
     };
 
-    name = "binderDriverInterfaceTest";
     srcs = ["binderDriverInterfaceTest.cpp"];
-    defaults = ["binder_test_defaults"];
-};
-
-binderValueTypeTest = cc_test {
-    name = "binderValueTypeTest";
-    srcs = ["binderValueTypeTest.cpp"];
-    defaults = ["binder_test_defaults"];
-    shared_libs = [
-        "libbinder"
-        "libutils"
+    test_suites = [
+        "device-tests"
+        "vts"
     ];
 };
 
 binderLibTest_IPC_32 = cc_test {
     name = "binderLibTest_IPC_32";
-    srcs = ["binderLibTest.cpp"];
     defaults = ["binder_test_defaults"];
+    srcs = ["binderLibTest.cpp"];
     shared_libs = [
         "libbinder"
         "libutils"
     ];
     compile_multilib = "32";
+    multilib = {
+        lib32 = {
+            suffix = "";
+        };
+    };
     cflags = ["-DBINDER_IPC_32BIT=1"];
+    test_suites = ["vts"];
+    require_root = true;
 };
 
 binderLibTest = cc_test {
+    name = "binderLibTest";
+    defaults = ["binder_test_defaults"];
     product_variables = {
         binder32bit = {
             cflags = ["-DBINDER_IPC_32BIT=1"];
         };
     };
 
-    defaults = ["binder_test_defaults"];
-    name = "binderLibTest";
     srcs = ["binderLibTest.cpp"];
     shared_libs = [
         "libbinder"
         "libutils"
     ];
+    test_suites = [
+        "device-tests"
+        "vts"
+    ];
+    require_root = true;
 };
 
 binderThroughputTest = cc_test {
     name = "binderThroughputTest";
-    srcs = ["binderThroughputTest.cpp"];
     defaults = ["binder_test_defaults"];
+    srcs = ["binderThroughputTest.cpp"];
     shared_libs = [
         "libbinder"
         "libutils"
@@ -104,19 +114,20 @@ binderThroughputTest = cc_test {
 
 binderTextOutputTest = cc_test {
     name = "binderTextOutputTest";
-    srcs = ["binderTextOutputTest.cpp"];
     defaults = ["binder_test_defaults"];
+    srcs = ["binderTextOutputTest.cpp"];
     shared_libs = [
         "libbinder"
         "libutils"
         "libbase"
     ];
+    test_suites = ["device-tests"];
 };
 
 schd-dbg = cc_test {
     name = "schd-dbg";
-    srcs = ["schd-dbg.cpp"];
     defaults = ["binder_test_defaults"];
+    srcs = ["schd-dbg.cpp"];
     shared_libs = [
         "libbinder"
         "libutils"
@@ -126,16 +137,11 @@ schd-dbg = cc_test {
 
 binderSafeInterfaceTest = cc_test {
     name = "binderSafeInterfaceTest";
-    srcs = ["binderSafeInterfaceTest.cpp"];
     defaults = ["binder_test_defaults"];
+    srcs = ["binderSafeInterfaceTest.cpp"];
 
     cppflags = [
-        "-Weverything"
-        "-Wno-c++98-compat"
-        "-Wno-c++98-compat-pedantic"
-        "-Wno-global-constructors"
-        "-Wno-padded"
-        "-Wno-weak-vtables"
+        "-Wextra"
     ];
 
     cpp_std = "experimental";
@@ -147,6 +153,41 @@ binderSafeInterfaceTest = cc_test {
         "liblog"
         "libutils"
     ];
+    test_suites = [
+        "device-tests"
+        "vts"
+    ];
+    require_root = true;
 };
 
-in { inherit binderDriverInterfaceTest binderDriverInterfaceTest_IPC_32 binderLibTest binderLibTest_IPC_32 binderSafeInterfaceTest binderTextOutputTest binderThroughputTest binderValueTypeTest binder_test_defaults schd-dbg; }
+binderStabilityTestIface = aidl_interface {
+    name = "binderStabilityTestIface";
+    unstable = true;
+    srcs = [
+        "IBinderStabilityTest.aidl"
+    ];
+};
+
+binderStabilityTest = cc_test {
+    name = "binderStabilityTest";
+    defaults = ["binder_test_defaults"];
+    srcs = [
+        "binderStabilityTest.cpp"
+    ];
+
+    shared_libs = [
+        "libbinder_ndk"
+        "libbinder"
+        "liblog"
+        "libutils"
+    ];
+    static_libs = [
+        "binderStabilityTestIface-cpp"
+        "binderStabilityTestIface-ndk_platform"
+    ];
+
+    test_suites = ["device-tests"];
+    require_root = true;
+};
+
+in { inherit binderDriverInterfaceTest binderDriverInterfaceTest_IPC_32 binderLibTest binderLibTest_IPC_32 binderSafeInterfaceTest binderStabilityTest binderStabilityTestIface binderTextOutputTest binderThroughputTest binder_test_defaults schd-dbg; }

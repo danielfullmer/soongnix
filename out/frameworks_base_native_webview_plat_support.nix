@@ -33,12 +33,14 @@ libwebviewchromium_plat_support = cc_library_shared {
         "graphic_buffer_impl.cpp"
     ];
 
+    header_libs = ["libhwui_internal_headers"];
+
     shared_libs = [
         "libandroidfw"
-        "libandroid_runtime"
         "libcutils"
         "libhwui"
         "liblog"
+        "libnativehelper"
         "libui"
         "libutils"
         "libvulkan"

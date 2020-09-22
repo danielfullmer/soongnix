@@ -21,7 +21,9 @@ let
 libdrmhwc_utils = cc_library_static {
     name = "libdrmhwc_utils";
 
-    srcs = ["worker.cpp"];
+    srcs = ["utils/worker.cpp"];
+
+    include_dirs = ["external/drm_hwcomposer/include"];
 
     cflags = [
         "-Wall"
@@ -48,6 +50,8 @@ libdrmhwc_utils = cc_library_static {
         "libutils"
     ];
 
+    include_dirs = ["external/drm_hwcomposer/include"];
+
     static_libs = ["libdrmhwc_utils"];
 
     cflags = [
@@ -68,22 +72,26 @@ drm_hwcomposer = cc_library_static {
     name = "drm_hwcomposer";
     defaults = ["hwcomposer.drm_defaults"];
     srcs = [
-        "autolock.cpp"
-        "resourcemanager.cpp"
-        "drmdevice.cpp"
-        "drmconnector.cpp"
-        "drmcrtc.cpp"
-        "drmdisplaycomposition.cpp"
-        "drmdisplaycompositor.cpp"
-        "drmencoder.cpp"
-        "drmeventlistener.cpp"
         "drmhwctwo.cpp"
-        "drmmode.cpp"
-        "drmplane.cpp"
-        "drmproperty.cpp"
-        "hwcutils.cpp"
-        "platform.cpp"
-        "vsyncworker.cpp"
+
+        "compositor/drmdisplaycomposition.cpp"
+        "compositor/drmdisplaycompositor.cpp"
+
+        "drm/drmconnector.cpp"
+        "drm/drmcrtc.cpp"
+        "drm/drmdevice.cpp"
+        "drm/drmencoder.cpp"
+        "drm/drmeventlistener.cpp"
+        "drm/drmmode.cpp"
+        "drm/drmplane.cpp"
+        "drm/drmproperty.cpp"
+        "drm/resourcemanager.cpp"
+        "drm/vsyncworker.cpp"
+
+        "platform/platform.cpp"
+
+        "utils/autolock.cpp"
+        "utils/hwcutils.cpp"
     ];
 };
 
@@ -91,7 +99,7 @@ drm_hwcomposer = cc_library_static {
     name = "hwcomposer.drm";
     defaults = ["hwcomposer.drm_defaults"];
     whole_static_libs = ["drm_hwcomposer"];
-    srcs = ["platformdrmgeneric.cpp"];
+    srcs = ["platform/platformdrmgeneric.cpp"];
     cppflags = ["-DUSE_DRM_GENERIC_IMPORTER"];
 };
 
@@ -100,19 +108,37 @@ drm_hwcomposer = cc_library_static {
     defaults = ["hwcomposer.drm_defaults"];
     whole_static_libs = ["drm_hwcomposer"];
     srcs = [
-        "platformdrmgeneric.cpp"
-        "platformminigbm.cpp"
+        "platform/platformdrmgeneric.cpp"
+        "platform/platformminigbm.cpp"
     ];
     include_dirs = ["external/minigbm/cros_gralloc"];
+};
+
+#  Used by hwcomposer.drm_imagination
+drm_hwcomposer_platformimagination = filegroup {
+    name = "drm_hwcomposer_platformimagination";
+    srcs = [
+        "platform/platformdrmgeneric.cpp"
+        "platform/platformimagination.cpp"
+    ];
 };
 
 #  Used by hwcomposer.drm_hikey and hwcomposer.drm_hikey960
 drm_hwcomposer_platformhisi = filegroup {
     name = "drm_hwcomposer_platformhisi";
     srcs = [
-        "platformdrmgeneric.cpp"
-        "platformhisi.cpp"
+        "platform/platformdrmgeneric.cpp"
+        "platform/platformhisi.cpp"
     ];
 };
 
-in { inherit "hwcomposer.drm" "hwcomposer.drm_defaults" "hwcomposer.drm_minigbm" drm_hwcomposer drm_hwcomposer_platformhisi libdrmhwc_utils; }
+#  Used by hwcomposer.drm_meson
+drm_hwcomposer_platformmeson = filegroup {
+    name = "drm_hwcomposer_platformmeson";
+    srcs = [
+        "platform/platformdrmgeneric.cpp"
+        "platform/platformmeson.cpp"
+    ];
+};
+
+in { inherit "hwcomposer.drm" "hwcomposer.drm_defaults" "hwcomposer.drm_minigbm" drm_hwcomposer drm_hwcomposer_platformhisi drm_hwcomposer_platformimagination drm_hwcomposer_platformmeson libdrmhwc_utils; }

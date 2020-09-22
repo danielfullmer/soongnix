@@ -27,7 +27,10 @@ VtsHalGraphicsMapperV2_0TargetTest = cc_test {
         "android.hardware.graphics.mapper@2.0"
         "android.hardware.graphics.mapper@2.0-vts"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalGraphicsMapperV2_0TargetTest; }

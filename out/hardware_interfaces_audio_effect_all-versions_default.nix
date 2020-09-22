@@ -31,7 +31,6 @@ let
         "libfmq"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.audio.common-util"
@@ -56,7 +55,6 @@ let
         "android.hardware.audio.common@2.0-util"
         "android.hardware.audio.effect@2.0"
     ];
-
     cflags = [
         "-DMAJOR_VERSION=2"
         "-DMINOR_VERSION=0"
@@ -72,7 +70,6 @@ let
         "android.hardware.audio.common@4.0-util"
         "android.hardware.audio.effect@4.0"
     ];
-
     cflags = [
         "-DMAJOR_VERSION=4"
         "-DMINOR_VERSION=0"
@@ -88,7 +85,6 @@ let
         "android.hardware.audio.common@5.0-util"
         "android.hardware.audio.effect@5.0"
     ];
-
     cflags = [
         "-DMAJOR_VERSION=5"
         "-DMINOR_VERSION=0"
@@ -96,4 +92,19 @@ let
     ];
 };
 
-in { inherit "android.hardware.audio.effect-impl_default" "android.hardware.audio.effect@2.0-impl" "android.hardware.audio.effect@4.0-impl" "android.hardware.audio.effect@5.0-impl"; }
+"android.hardware.audio.effect@6.0-impl" = cc_library_shared {
+    name = "android.hardware.audio.effect@6.0-impl";
+    defaults = ["android.hardware.audio.effect-impl_default"];
+    shared_libs = [
+        "android.hardware.audio.common@6.0"
+        "android.hardware.audio.common@6.0-util"
+        "android.hardware.audio.effect@6.0"
+    ];
+    cflags = [
+        "-DMAJOR_VERSION=6"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+in { inherit "android.hardware.audio.effect-impl_default" "android.hardware.audio.effect@2.0-impl" "android.hardware.audio.effect@4.0-impl" "android.hardware.audio.effect@5.0-impl" "android.hardware.audio.effect@6.0-impl"; }

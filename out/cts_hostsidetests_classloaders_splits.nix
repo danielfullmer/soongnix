@@ -29,13 +29,18 @@ CtsClassloaderSplitsHostTestCases = java_test_host {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     required = [
         "CtsClassloaderSplitApp"
         "CtsClassloaderSplitAppFeatureA"
         "CtsClassloaderSplitAppFeatureB"
+    ];
+    data = [
+        ":CtsClassloaderSplitApp"
+        ":CtsClassloaderSplitAppFeatureA"
+        ":CtsClassloaderSplitAppFeatureB"
     ];
 };
 

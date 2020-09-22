@@ -20,13 +20,6 @@ let
 CtsStoragePermissionsUserOptInSdk22 = android_test_helper_app {
     name = "CtsStoragePermissionsUserOptInSdk22";
     defaults = ["cts_defaults"];
-
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-        "cts_instant"
-    ];
 };
 
 in { inherit CtsStoragePermissionsUserOptInSdk22; }

@@ -31,7 +31,6 @@ let
         "liblog"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.power@1.0"
     ];
@@ -57,7 +56,6 @@ let
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.power@1.0"
     ];
 

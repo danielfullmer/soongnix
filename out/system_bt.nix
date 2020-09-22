@@ -2,6 +2,7 @@
 let
 
 subdirs = [
+    "apex"
     "binder"
     "build"
     "btif"

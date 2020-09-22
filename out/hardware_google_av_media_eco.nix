@@ -1,15 +1,23 @@
-{ cc_library_shared }:
+{ cc_library_shared, filegroup }:
 let
+
+libmedia_ecoservice_aidl = filegroup {
+    name = "libmedia_ecoservice_aidl";
+    srcs = [
+        "aidl/android/media/eco/IECOService.aidl"
+        "aidl/android/media/eco/IECOSession.aidl"
+        "aidl/android/media/eco/IECOServiceStatsProvider.aidl"
+        "aidl/android/media/eco/IECOServiceInfoListener.aidl"
+    ];
+    path = "aidl";
+};
 
 libmedia_ecoservice = cc_library_shared {
     name = "libmedia_ecoservice";
     vendor_available = true;
 
     srcs = [
-        "aidl/android/media/eco/IECOService.aidl"
-        "aidl/android/media/eco/IECOSession.aidl"
-        "aidl/android/media/eco/IECOServiceStatsProvider.aidl"
-        "aidl/android/media/eco/IECOServiceInfoListener.aidl"
+        ":libmedia_ecoservice_aidl"
         "ECOData.cpp"
         "ECODebug.cpp"
         "ECOService.cpp"
@@ -59,4 +67,4 @@ libmedia_ecoservice = cc_library_shared {
     ldflags = ["-Wl,-Bsymbolic"];
 };
 
-in { inherit libmedia_ecoservice; }
+in { inherit libmedia_ecoservice libmedia_ecoservice_aidl; }

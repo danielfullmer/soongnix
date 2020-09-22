@@ -1,4 +1,4 @@
-{ java_binary, java_binary_host }:
+{ android_test, java_binary, java_library, java_test_host }:
 let
 
 #
@@ -16,39 +16,82 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+deployagent_lib = java_library {
+    name = "deployagent_lib";
+    sdk_version = "24";
+    srcs = [
+        "deployagent/src/com/android/fastdeploy/ApkArchive.java"
+        "deployagent/src/com/android/fastdeploy/DeployAgent.java"
+        "deployagent/src/com/android/fastdeploy/PatchFormatException.java"
+        "deployagent/src/com/android/fastdeploy/PatchUtils.java"
+        "proto/ApkEntry.proto"
+    ];
+    proto = {
+        type = "lite";
+    };
+};
 
 deployagent = java_binary {
     name = "deployagent";
     sdk_version = "24";
-    srcs = [
-        "deployagent/src/com/android/fastdeploy/DeployAgent.java"
-        "deploylib/src/com/android/fastdeploy/PatchFormatException.java"
-        "deploylib/src/com/android/fastdeploy/PatchUtils.java"
-        "proto/ApkEntry.proto"
+    static_libs = [
+        "deployagent_lib"
     ];
-    static_libs = ["apkzlib_zip"];
-    wrapper = "deployagent/deployagent.sh";
-    proto = {
-        type = "lite";
-    };
     dex_preopt = {
         enabled = false;
     };
 };
 
-deploypatchgenerator = java_binary_host {
-    name = "deploypatchgenerator";
+FastDeployTests = android_test {
+    name = "FastDeployTests";
+
+    manifest = "AndroidManifest.xml";
+
     srcs = [
-        "deploypatchgenerator/src/com/android/fastdeploy/DeployPatchGenerator.java"
-        "deploylib/src/com/android/fastdeploy/PatchFormatException.java"
-        "deploylib/src/com/android/fastdeploy/PatchUtils.java"
-        "proto/ApkEntry.proto"
+        "deployagent/test/com/android/fastdeploy/ApkArchiveTest.java"
     ];
-    static_libs = ["apkzlib"];
-    manifest = "deploypatchgenerator/manifest.txt";
-    proto = {
-        type = "full";
+
+    static_libs = [
+        "androidx.test.core"
+        "androidx.test.runner"
+        "androidx.test.rules"
+        "deployagent_lib"
+        "mockito-target-inline-minus-junit4"
+    ];
+
+    libs = [
+        "android.test.runner"
+        "android.test.base"
+        "android.test.mock"
+    ];
+
+    data = [
+        "testdata/sample.apk"
+        "testdata/sample.cd"
+    ];
+
+    optimize = {
+        enabled = false;
     };
 };
 
-in { inherit deployagent deploypatchgenerator; }
+FastDeployHostTests = java_test_host {
+    name = "FastDeployHostTests";
+    srcs = [
+        "deployagent/test/com/android/fastdeploy/FastDeployTest.java"
+    ];
+    data = [
+        "testdata/helloworld5.apk"
+        "testdata/helloworld7.apk"
+    ];
+    libs = [
+        "compatibility-host-util"
+        "cts-tradefed"
+        "tradefed"
+    ];
+    test_suites = [
+        "general-tests"
+    ];
+};
+
+in { inherit FastDeployHostTests FastDeployTests deployagent deployagent_lib; }

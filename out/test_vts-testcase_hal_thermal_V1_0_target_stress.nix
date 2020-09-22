@@ -26,8 +26,6 @@ thermal_hidl_stress_test = cc_test {
         "liblog"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libnativehelper"
         "libutils"
         "android.hardware.thermal@1.0"

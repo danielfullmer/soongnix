@@ -1,4 +1,4 @@
-{ android_app }:
+{ android_app, filegroup }:
 let
 
 #
@@ -20,12 +20,20 @@ let
 PacProcessor = android_app {
     name = "PacProcessor";
     srcs = [
+        "src/com/android/pacprocessor/LibpacInterface.java"
         "src/com/android/pacprocessor/PacNative.java"
         "src/com/android/pacprocessor/PacService.java"
+        "src/com/android/pacprocessor/PacWebView.java"
     ];
     platform_apis = true;
     certificate = "platform";
     jni_libs = ["libjni_pacprocessor"];
 };
 
-in { inherit PacProcessor; }
+PacProcessor-aidl-sources = filegroup {
+    name = "PacProcessor-aidl-sources";
+    srcs = ["src/com/android/net/IProxyService.aidl"];
+    path = "src";
+};
+
+in { inherit PacProcessor PacProcessor-aidl-sources; }

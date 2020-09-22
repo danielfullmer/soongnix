@@ -28,6 +28,7 @@ sync_clock_jni = cc_library_shared {
         "-g"
         "-DUSE_LIBLOG"
         "-Werror"
+        "-Wno-deprecated-declarations"
     ];
 
     shared_libs = [

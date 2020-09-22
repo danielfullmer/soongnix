@@ -39,7 +39,7 @@ cts-dalvik-host-test-runner = java_test_host {
 
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
         "mts"
     ];

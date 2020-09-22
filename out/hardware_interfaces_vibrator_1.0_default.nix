@@ -24,7 +24,6 @@ let
     srcs = ["Vibrator.cpp"];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libhardware"
@@ -42,7 +41,6 @@ let
 
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libhardware"

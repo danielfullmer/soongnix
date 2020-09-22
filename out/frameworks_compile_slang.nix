@@ -75,6 +75,8 @@ slang_headers = cc_library_headers {
     vendor_available = true;
     export_include_dirs = ["."];
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     target = {
         windows = {
             enabled = true;

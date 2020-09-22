@@ -22,12 +22,10 @@ CtsDeviceAdminApp23 = android_test_helper_app {
         "src/com.android.cts.deviceadmin/BaseDeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/ClearDeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/ClearDeviceAdminWithNoProtectionTest.java"
-        "src/com.android.cts.deviceadmin/ClearPasswordTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminPasswordTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminReceiverWithNoProtection.java"
         "src/com.android.cts.deviceadmin/DeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminWithEnterprisePoliciesBlockedTest.java"
-        "src/com.android.cts.deviceadmin/DeviceOwnerPasswordTest.java"
         "src/com.android.cts.deviceadmin/WipeDataTest.java"
     ];
     resource_dirs = ["res"];
@@ -44,7 +42,7 @@ CtsDeviceAdminApp23 = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "api23/AndroidManifest.xml";
@@ -57,12 +55,10 @@ CtsDeviceAdminApp24 = android_test_helper_app {
         "src/com.android.cts.deviceadmin/BaseDeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/ClearDeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/ClearDeviceAdminWithNoProtectionTest.java"
-        "src/com.android.cts.deviceadmin/ClearPasswordTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminPasswordTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminReceiverWithNoProtection.java"
         "src/com.android.cts.deviceadmin/DeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminWithEnterprisePoliciesBlockedTest.java"
-        "src/com.android.cts.deviceadmin/DeviceOwnerPasswordTest.java"
         "src/com.android.cts.deviceadmin/WipeDataTest.java"
     ];
     resource_dirs = ["res"];
@@ -81,7 +77,7 @@ CtsDeviceAdminApp24 = android_test_helper_app {
     test_suites = [
         "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "api24/AndroidManifest.xml";
@@ -94,12 +90,10 @@ CtsDeviceAdminApp29 = android_test_helper_app {
         "src/com.android.cts.deviceadmin/BaseDeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/ClearDeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/ClearDeviceAdminWithNoProtectionTest.java"
-        "src/com.android.cts.deviceadmin/ClearPasswordTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminPasswordTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminReceiverWithNoProtection.java"
         "src/com.android.cts.deviceadmin/DeviceAdminTest.java"
         "src/com.android.cts.deviceadmin/DeviceAdminWithEnterprisePoliciesBlockedTest.java"
-        "src/com.android.cts.deviceadmin/DeviceOwnerPasswordTest.java"
         "src/com.android.cts.deviceadmin/WipeDataTest.java"
     ];
     resource_dirs = ["res"];
@@ -116,7 +110,7 @@ CtsDeviceAdminApp29 = android_test_helper_app {
     test_suites = [
         "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     manifest = "api29/AndroidManifest.xml";

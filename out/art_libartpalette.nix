@@ -1,4 +1,4 @@
-{ art_cc_library, art_cc_test, cc_defaults }:
+{ art_cc_library, art_cc_test, cc_defaults, cc_library_headers }:
 let
 
 #
@@ -24,40 +24,11 @@ libartpalette_defaults = cc_defaults {
     export_include_dirs = ["include"];
 };
 
-#  libartpalette-system is the implementation of the abstraction layer. It is
-#  only available as a shared library on Android.
-libartpalette-system = art_cc_library {
-    name = "libartpalette-system";
-    defaults = ["libartpalette_defaults"];
-    compile_multilib = "both";
-    target = {
-        android = {
-            srcs = ["system/palette_android.cc"];
-            header_libs = ["libbase_headers"];
-            shared_libs = [
-                "libbase"
-                "libcutils"
-                "liblog"
-                "libprocessgroup"
-                "libtombstoned_client"
-            ];
-        };
-        host = {
-            header_libs = ["libbase_headers"];
-            srcs = ["system/palette_fake.cc"];
-            shared_libs = ["libbase"];
-        };
-        darwin = {
-            enabled = false;
-        };
-        windows = {
-            enabled = false;
-        };
-    };
-    static = {
-        enabled = false;
-    };
-    version_script = "libartpalette.map.txt";
+libartpalette-headers = cc_library_headers {
+    name = "libartpalette-headers";
+    export_include_dirs = ["include"];
+    host_supported = true;
+    visibility = ["//system/libartpalette"];
 };
 
 #  libartpalette is the dynamic loader of the platform abstraction
@@ -73,12 +44,7 @@ libartpalette = art_cc_library {
         #  and binds the methods in the libartpalette-system library.
         android = {
             srcs = ["apex/palette.cc"];
-            shared = {
-                shared_libs = ["liblog"];
-            };
-            static = {
-                static_libs = ["liblog"];
-            };
+            shared_libs = ["liblog"];
             version_script = "libartpalette.map.txt";
         };
         linux_bionic = {
@@ -124,6 +90,12 @@ libartpalette = art_cc_library {
             ];
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        #  TODO(b/142944931): remove this
+        "com.android.runtime" #  due to the transitive dependency from linker
+    ];
 };
 
 art_libartpalette_tests = art_cc_test {
@@ -135,4 +107,4 @@ art_libartpalette_tests = art_cc_test {
     test_per_src = true;
 };
 
-in { inherit art_libartpalette_tests libartpalette libartpalette-system libartpalette_defaults; }
+in { inherit art_libartpalette_tests libartpalette libartpalette-headers libartpalette_defaults; }

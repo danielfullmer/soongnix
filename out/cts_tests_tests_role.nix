@@ -22,6 +22,7 @@ CtsRoleTestCases = android_test {
     srcs = [
         "src/android/app/role/cts/RoleManagerTest.java"
         "src/android/app/role/cts/WaitForResultActivity.java"
+        "src/android/app/role/cts/RoleControllerManagerTest.kt"
     ];
 
     static_libs = [
@@ -33,9 +34,14 @@ CtsRoleTestCases = android_test {
 
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
         "mts"
+    ];
+
+    data = [
+        ":CtsRoleTestApp"
+        ":CtsRoleTestApp28"
     ];
 };
 

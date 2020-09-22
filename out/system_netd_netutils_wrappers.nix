@@ -24,6 +24,9 @@ let
         "-Wall"
         "-Wextra"
     ];
+    sanitize = {
+        cfi = true;
+    };
 };
 
 netutils_wrapper_test = cc_test {

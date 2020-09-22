@@ -5,27 +5,15 @@ SettingsLib = android_library {
 
     name = "SettingsLib";
 
-    static_libs = [
-        "androidx.annotation_annotation"
-        "androidx.legacy_legacy-support-v4"
-        "androidx.recyclerview_recyclerview"
-        "androidx.preference_preference"
-        "androidx.appcompat_appcompat"
-        "androidx.lifecycle_lifecycle-runtime"
-        "androidx.mediarouter_mediarouter-nodeps"
+    defaults = [
+        "SettingsLibDependenciesWithoutWifiTracker"
+    ];
 
-        "SettingsLibHelpUtils"
-        "SettingsLibRestrictedLockUtils"
-        "SettingsLibActionBarShadow"
-        "SettingsLibAppPreference"
-        "SettingsLibSearchWidget"
-        "SettingsLibSettingsSpinner"
-        "SettingsLibLayoutPreference"
-        "SettingsLibActionButtonsPreference"
-        "SettingsLibEntityHeaderWidgets"
-        "SettingsLibBarChartPreference"
-        "SettingsLibProgressBar"
-        "SettingsLibAdaptiveIcon"
+    #  TODO(b/149540986): revert this change.
+    static_libs = [
+        #  All other dependent components should be put in
+        #  "SettingsLibDependenciesWithoutWifiTracker".
+        "WifiTrackerLib"
     ];
 
     #  ANDROIDMK TRANSLATION ERROR: unsupported assignment to LOCAL_SHARED_JAVA_LIBRARIES
@@ -144,6 +132,7 @@ SettingsLib = android_library {
         "src/com/android/settingslib/drawer/CategoryKey.java"
         "src/com/android/settingslib/dream/DreamBackend.java"
         "src/com/android/settingslib/fuelgauge/BatterySaverUtils.java"
+        "src/com/android/settingslib/fuelgauge/BatteryStatus.java"
         "src/com/android/settingslib/fuelgauge/PowerWhitelistBackend.java"
         "src/com/android/settingslib/graph/BatteryMeterDrawableBase.java"
         "src/com/android/settingslib/graph/BluetoothDeviceLayerDrawable.java"
@@ -164,7 +153,6 @@ SettingsLib = android_library {
         "src/com/android/settingslib/location/RecentLocationApps.java"
         "src/com/android/settingslib/location/SettingsInjector.java"
         "src/com/android/settingslib/media/BluetoothMediaDevice.java"
-        "src/com/android/settingslib/media/BluetoothMediaManager.java"
         "src/com/android/settingslib/media/ConnectionRecordManager.java"
         "src/com/android/settingslib/media/InfoMediaDevice.java"
         "src/com/android/settingslib/media/InfoMediaManager.java"
@@ -189,6 +177,7 @@ SettingsLib = android_library {
         "src/com/android/settingslib/net/SummaryForAllUidLoader.java"
         "src/com/android/settingslib/net/UidDetail.java"
         "src/com/android/settingslib/net/UidDetailProvider.java"
+        "src/com/android/settingslib/notification/ConversationIconFactory.java"
         "src/com/android/settingslib/notification/EnableZenModeDialog.java"
         "src/com/android/settingslib/notification/ZenDurationDialog.java"
         "src/com/android/settingslib/notification/ZenRadioLayout.java"
@@ -200,6 +189,7 @@ SettingsLib = android_library {
         "src/com/android/settingslib/users/AppRestrictionsHelper.java"
         "src/com/android/settingslib/utils/AsyncLoader.java"
         "src/com/android/settingslib/utils/AsyncLoaderCompat.java"
+        "src/com/android/settingslib/utils/ColorUtil.java"
         "src/com/android/settingslib/utils/IconCache.java"
         "src/com/android/settingslib/utils/PowerUtil.java"
         "src/com/android/settingslib/utils/StringUtil.java"
@@ -210,13 +200,14 @@ SettingsLib = android_library {
         "src/com/android/settingslib/widget/AnimatedImageView.java"
         "src/com/android/settingslib/widget/CandidateInfo.java"
         "src/com/android/settingslib/widget/FooterPreference.java"
-        "src/com/android/settingslib/widget/FooterPreferenceMixin.java"
-        "src/com/android/settingslib/widget/FooterPreferenceMixinCompat.java"
         "src/com/android/settingslib/widget/LinkTextView.java"
+        "src/com/android/settingslib/widget/UpdatableListPreferenceDialogFragment.java"
         "src/com/android/settingslib/wifi/AccessPoint.java"
         "src/com/android/settingslib/wifi/AccessPointPreference.java"
+        "src/com/android/settingslib/wifi/LongPressWifiEntryPreference.java"
         "src/com/android/settingslib/wifi/TestAccessPointBuilder.java"
         "src/com/android/settingslib/wifi/TimestampedScoredNetwork.java"
+        "src/com/android/settingslib/wifi/WifiEntryPreference.java"
         "src/com/android/settingslib/wifi/WifiSavedConfigUtils.java"
         "src/com/android/settingslib/wifi/WifiStatusTracker.java"
         "src/com/android/settingslib/wifi/WifiTracker.java"
@@ -228,6 +219,36 @@ SettingsLib = android_library {
 
     min_sdk_version = "21";
 
+};
+
+SettingsLibDependenciesWithoutWifiTracker = java_defaults {
+    name = "SettingsLibDependenciesWithoutWifiTracker";
+    static_libs = [
+        "androidx.annotation_annotation"
+        "androidx.legacy_legacy-support-v4"
+        "androidx.recyclerview_recyclerview"
+        "androidx.preference_preference"
+        "androidx.appcompat_appcompat"
+        "androidx.lifecycle_lifecycle-runtime"
+        "androidx.mediarouter_mediarouter-nodeps"
+        "iconloader"
+
+        "SettingsLibHelpUtils"
+        "SettingsLibRestrictedLockUtils"
+        "SettingsLibActionBarShadow"
+        "SettingsLibAppPreference"
+        "SettingsLibSearchWidget"
+        "SettingsLibSettingsSpinner"
+        "SettingsLibLayoutPreference"
+        "SettingsLibActionButtonsPreference"
+        "SettingsLibEntityHeaderWidgets"
+        "SettingsLibBarChartPreference"
+        "SettingsLibProgressBar"
+        "SettingsLibAdaptiveIcon"
+        "SettingsLibRadioButtonPreference"
+        "SettingsLibDisplayDensityUtils"
+        "SettingsLibUtils"
+    ];
 };
 
 #  NOTE: Keep this module in sync with ./common.mk
@@ -246,4 +267,4 @@ SettingsLibDefaults = java_defaults {
     ];
 };
 
-in { inherit SettingsLib SettingsLibDefaults; }
+in { inherit SettingsLib SettingsLibDefaults SettingsLibDependenciesWithoutWifiTracker; }

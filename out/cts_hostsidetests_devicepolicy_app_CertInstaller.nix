@@ -23,6 +23,7 @@ CtsCertInstallerApp = android_test_helper_app {
         "src/com/android/cts/certinstaller/CertSelectionDelegateTest.java"
         "src/com/android/cts/certinstaller/DelegatedDeviceIdAttestationTest.java"
         "src/com/android/cts/certinstaller/DirectDelegatedCertInstallerTest.java"
+        "src/com/android/cts/certinstaller/PreSelectedKeyAccessTest.java"
     ];
     libs = [
         "android.test.runner.stubs"
@@ -39,8 +40,9 @@ CtsCertInstallerApp = android_test_helper_app {
     ];
     #  tag this module as a cts test artifact
     test_suites = [
+        "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

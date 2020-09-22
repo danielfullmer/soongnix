@@ -4,6 +4,11 @@ let
 libstagefright_m4vh263enc = cc_library_static {
     name = "libstagefright_m4vh263enc";
     vendor_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 
     srcs = [
         "src/bitstream_io.cpp"
@@ -27,10 +32,6 @@ libstagefright_m4vh263enc = cc_library_static {
 
     cflags = [
         "-DBX_RC"
-        "-DOSCL_IMPORT_REF="
-        "-DOSCL_UNUSED_ARG(x)=(void)(x)"
-        "-DOSCL_EXPORT_REF="
-
         "-Werror"
     ];
 
@@ -59,9 +60,6 @@ libstagefright_soft_mpeg4enc = cc_library_shared {
 
     cflags = [
         "-DBX_RC"
-        "-DOSCL_IMPORT_REF="
-        "-DOSCL_UNUSED_ARG(x)=(void)(x)"
-        "-DOSCL_EXPORT_REF="
     ];
 
     static_libs = ["libstagefright_m4vh263enc"];
@@ -85,8 +83,6 @@ libstagefright_m4vh263enc_test = cc_test {
     local_include_dirs = ["src"];
 
     cflags = [
-        "-DOSCL_EXPORT_REF="
-        "-DOSCL_IMPORT_REF="
         "-DBX_RC"
         "-Wall"
         "-Werror"

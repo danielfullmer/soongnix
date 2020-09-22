@@ -13,6 +13,7 @@ libwebm = cc_library_static {
         #  Enable CFI if this becomes a shared library.
         #  cfi: true,
     };
+    min_sdk_version = "29";
 };
 
 in { inherit libwebm; }

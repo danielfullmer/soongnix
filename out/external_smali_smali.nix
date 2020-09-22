@@ -45,6 +45,7 @@ smali = java_binary_host {
         "src/main/java/org/jf/smali/smaliFlexLexer.java"
         "src/main/java/org/jf/smali/smaliParser.java"
         "src/main/java/org/jf/smali/smaliTreeWalker.java"
+        "src/main/java/org/jf/smali/util/BlankReader.java"
     ];
 
     manifest = "manifest.txt";

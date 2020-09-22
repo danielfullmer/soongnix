@@ -114,7 +114,6 @@ libFraunhoferAAC = cc_library_static {
         "libSBRdec/src/psdec_drm.cpp"
         "libSBRdec/src/psdecrom_drm.cpp"
         "libSBRdec/src/pvc_dec.cpp"
-        "libSBRdec/src/sbr_crc.cpp"
         "libSBRdec/src/sbr_deb.cpp"
         "libSBRdec/src/sbr_dec.cpp"
         "libSBRdec/src/sbr_ram.cpp"
@@ -212,6 +211,13 @@ libFraunhoferAAC = cc_library_static {
         "libSACdec/include"
         "libSACenc/include"
     ];
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.bluetooth.updatable"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 in { inherit libFraunhoferAAC; }

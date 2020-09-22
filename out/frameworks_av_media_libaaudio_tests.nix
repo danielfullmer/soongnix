@@ -14,7 +14,7 @@ test_aaudio_marshalling = cc_test {
     defaults = ["libaaudio_tests_defaults"];
     srcs = ["test_marshalling.cpp"];
     shared_libs = [
-        "libaaudio"
+        "libaaudio_internal"
         "libbinder"
         "libcutils"
         "libutils"
@@ -26,7 +26,7 @@ test_clock_model = cc_test {
     defaults = ["libaaudio_tests_defaults"];
     srcs = ["test_clock_model.cpp"];
     shared_libs = [
-        "libaaudio"
+        "libaaudio_internal"
         "libaudioutils"
         "libcutils"
         "libutils"
@@ -37,7 +37,7 @@ test_block_adapter = cc_test {
     name = "test_block_adapter";
     defaults = ["libaaudio_tests_defaults"];
     srcs = ["test_block_adapter.cpp"];
-    shared_libs = ["libaaudio"];
+    shared_libs = ["libaaudio_internal"];
 };
 
 test_timestamps = cc_test {
@@ -173,7 +173,7 @@ test_atomic_fifo = cc_test {
     name = "test_atomic_fifo";
     defaults = ["libaaudio_tests_defaults"];
     srcs = ["test_atomic_fifo.cpp"];
-    shared_libs = ["libaaudio"];
+    shared_libs = ["libaaudio_internal"];
 };
 
 test_flowgraph = cc_test {
@@ -181,7 +181,7 @@ test_flowgraph = cc_test {
     defaults = ["libaaudio_tests_defaults"];
     srcs = ["test_flowgraph.cpp"];
     shared_libs = [
-        "libaaudio"
+        "libaaudio_internal"
         "libbinder"
         "libcutils"
         "libutils"
@@ -219,4 +219,28 @@ test_full_queue = cc_test {
     shared_libs = ["libaaudio"];
 };
 
-in { inherit libaaudio_tests_defaults test_aaudio_marshalling test_aaudio_monkey test_aaudio_recovery test_atomic_fifo test_attributes test_bad_disconnect test_block_adapter test_clock_model test_flowgraph test_full_queue test_interference test_n_streams test_no_close test_open_params test_return_stop test_session_id test_stop_hang test_timestamps test_various; }
+test_histogram = cc_test {
+    name = "test_histogram";
+    defaults = ["libaaudio_tests_defaults"];
+    srcs = ["test_histogram.cpp"];
+    shared_libs = [
+        "libaudioutils"
+        "libcutils"
+        "libutils"
+    ];
+};
+
+test_steal_exclusive = cc_test {
+    name = "test_steal_exclusive";
+    defaults = ["libaaudio_tests_defaults"];
+    srcs = ["test_steal_exclusive.cpp"];
+    shared_libs = [
+        "libaaudio"
+        "liblog"
+        "libbinder"
+        "libcutils"
+        "libutils"
+    ];
+};
+
+in { inherit libaaudio_tests_defaults test_aaudio_marshalling test_aaudio_monkey test_aaudio_recovery test_atomic_fifo test_attributes test_bad_disconnect test_block_adapter test_clock_model test_flowgraph test_full_queue test_histogram test_interference test_n_streams test_no_close test_open_params test_return_stop test_session_id test_steal_exclusive test_stop_hang test_timestamps test_various; }

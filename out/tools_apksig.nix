@@ -38,6 +38,11 @@ apksig = java_library_host {
         "src/main/java/com/android/apksig/internal/apk/ContentDigestAlgorithm.java"
         "src/main/java/com/android/apksig/internal/apk/SignatureAlgorithm.java"
         "src/main/java/com/android/apksig/internal/apk/SignatureInfo.java"
+        "src/main/java/com/android/apksig/internal/apk/stamp/SourceStampVerifier.java"
+        "src/main/java/com/android/apksig/internal/apk/stamp/V1SourceStampSigner.java"
+        "src/main/java/com/android/apksig/internal/apk/stamp/V1SourceStampVerifier.java"
+        "src/main/java/com/android/apksig/internal/apk/stamp/V2SourceStampSigner.java"
+        "src/main/java/com/android/apksig/internal/apk/stamp/V2SourceStampVerifier.java"
         "src/main/java/com/android/apksig/internal/apk/v1/DigestAlgorithm.java"
         "src/main/java/com/android/apksig/internal/apk/v1/V1SchemeSigner.java"
         "src/main/java/com/android/apksig/internal/apk/v1/V1SchemeVerifier.java"
@@ -46,6 +51,9 @@ apksig = java_library_host {
         "src/main/java/com/android/apksig/internal/apk/v3/V3SchemeSigner.java"
         "src/main/java/com/android/apksig/internal/apk/v3/V3SchemeVerifier.java"
         "src/main/java/com/android/apksig/internal/apk/v3/V3SigningCertificateLineage.java"
+        "src/main/java/com/android/apksig/internal/apk/v4/V4SchemeSigner.java"
+        "src/main/java/com/android/apksig/internal/apk/v4/V4SchemeVerifier.java"
+        "src/main/java/com/android/apksig/internal/apk/v4/V4Signature.java"
         "src/main/java/com/android/apksig/internal/asn1/Asn1BerParser.java"
         "src/main/java/com/android/apksig/internal/asn1/Asn1Class.java"
         "src/main/java/com/android/apksig/internal/asn1/Asn1DecodingException.java"
@@ -65,6 +73,7 @@ apksig = java_library_host {
         "src/main/java/com/android/apksig/internal/jar/ManifestParser.java"
         "src/main/java/com/android/apksig/internal/jar/ManifestWriter.java"
         "src/main/java/com/android/apksig/internal/jar/SignatureFileWriter.java"
+        "src/main/java/com/android/apksig/internal/oid/OidConstants.java"
         "src/main/java/com/android/apksig/internal/pkcs7/AlgorithmIdentifier.java"
         "src/main/java/com/android/apksig/internal/pkcs7/Attribute.java"
         "src/main/java/com/android/apksig/internal/pkcs7/ContentInfo.java"
@@ -83,13 +92,13 @@ apksig = java_library_host {
         "src/main/java/com/android/apksig/internal/util/ByteStreams.java"
         "src/main/java/com/android/apksig/internal/util/ChainedDataSource.java"
         "src/main/java/com/android/apksig/internal/util/DelegatingX509Certificate.java"
+        "src/main/java/com/android/apksig/internal/util/FileChannelDataSource.java"
         "src/main/java/com/android/apksig/internal/util/GuaranteedEncodedFormX509Certificate.java"
         "src/main/java/com/android/apksig/internal/util/InclusiveIntRange.java"
         "src/main/java/com/android/apksig/internal/util/MessageDigestSink.java"
         "src/main/java/com/android/apksig/internal/util/OutputStreamDataSink.java"
         "src/main/java/com/android/apksig/internal/util/Pair.java"
         "src/main/java/com/android/apksig/internal/util/RandomAccessFileDataSink.java"
-        "src/main/java/com/android/apksig/internal/util/RandomAccessFileDataSource.java"
         "src/main/java/com/android/apksig/internal/util/TeeDataSink.java"
         "src/main/java/com/android/apksig/internal/util/VerityTreeBuilder.java"
         "src/main/java/com/android/apksig/internal/util/X509CertificateUtils.java"
@@ -97,6 +106,7 @@ apksig = java_library_host {
         "src/main/java/com/android/apksig/internal/x509/Certificate.java"
         "src/main/java/com/android/apksig/internal/x509/Extension.java"
         "src/main/java/com/android/apksig/internal/x509/Name.java"
+        "src/main/java/com/android/apksig/internal/x509/RSAPublicKey.java"
         "src/main/java/com/android/apksig/internal/x509/RelativeDistinguishedName.java"
         "src/main/java/com/android/apksig/internal/x509/SubjectPublicKeyInfo.java"
         "src/main/java/com/android/apksig/internal/x509/TBSCertificate.java"
@@ -132,7 +142,11 @@ apksigner = java_binary_host {
     java_resource_dirs = ["src/apksigner/java"];
     wrapper = "etc/apksigner";
     manifest = "src/apksigner/apksigner.mf";
-    static_libs = ["apksig"];
+    static_libs = [
+        "apksig"
+        "conscrypt-unbundled"
+    ];
+    required = ["libconscrypt_openjdk_jni"];
 };
 
 in { inherit apksig apksigner; }

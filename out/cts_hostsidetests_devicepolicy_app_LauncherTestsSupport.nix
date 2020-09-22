@@ -28,8 +28,9 @@ CtsLauncherAppsTestsSupport = android_test_helper_app {
     min_sdk_version = "21";
     #  tag this module as a cts test artifact
     test_suites = [
+        "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

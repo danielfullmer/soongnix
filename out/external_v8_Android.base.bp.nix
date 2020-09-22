@@ -43,6 +43,11 @@ libv8base = cc_library_static {
             srcs = ["src/base/platform/platform-macos.cc"];
         };
     };
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 in { inherit libv8base; }

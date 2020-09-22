@@ -401,10 +401,6 @@ libunwind_core_defaults = cc_defaults {
     };
 
     target = {
-        linux_glibc = {
-            #  Remove dependencies on libgcc
-            ldflags = ["-nostdlib"];
-        };
         linux_bionic = {
             enabled = true;
         };
@@ -426,6 +422,7 @@ libunwind_static = cc_library_static {
     name = "libunwind_static";
     defaults = ["libunwind_core_defaults"];
     vendor_available = true;
+    native_bridge_supported = true;
 };
 
 # -----------------------------------------------------------------------
@@ -435,6 +432,7 @@ libunwindbacktrace = cc_library_static {
     name = "libunwindbacktrace";
     defaults = ["libunwind_defaults"];
     vendor_available = true;
+    native_bridge_supported = true;
     sdk_version = "21";
     srcs = [
         "src/unwind/BacktraceWrapper.c"

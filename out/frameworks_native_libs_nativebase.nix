@@ -19,6 +19,8 @@ libnativebase_headers = cc_library_headers {
     name = "libnativebase_headers";
     vendor_available = true;
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
 
     target = {
@@ -29,6 +31,7 @@ libnativebase_headers = cc_library_headers {
             enabled = true;
         };
     };
+    min_sdk_version = "29";
 };
 
 in { inherit libnativebase_headers; }

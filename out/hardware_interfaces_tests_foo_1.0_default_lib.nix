@@ -11,8 +11,6 @@ libfootest = cc_library {
     shared_libs = [
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
     ];
     static_libs = ["android.hardware.tests.foo@1.0"];

@@ -20,16 +20,13 @@ let
     relative_install_path = "hw";
     vendor = true;
     srcs = ["audio_hw.cpp"];
-    include_dirs = [
-        "system/media/audio_utils/include"
-    ];
     shared_libs = [
         "liblog"
         "libcutils"
-        "libutils"
+        "libmedia_helper"
         "libnbaio_mono"
+        "libutils"
     ];
-    static_libs = ["libmedia_helper"];
 
     cflags = ["-Wno-unused-parameter"];
 

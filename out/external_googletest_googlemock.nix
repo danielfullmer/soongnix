@@ -115,6 +115,4 @@ libgmock_main_host = cc_library_host_static {
     whole_static_libs = ["libgmock_main"];
 };
 
-#  Tests are in the Android.mk. Run with external/googletest/run_tests.py.
-
 in { inherit gmock_defaults gmock_flags gmock_ndk libgmock libgmock_host libgmock_main libgmock_main_host libgmock_main_ndk libgmock_ndk; }

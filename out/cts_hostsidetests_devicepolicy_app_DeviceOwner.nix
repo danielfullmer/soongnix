@@ -29,13 +29,12 @@ CtsDeviceOwnerApp = android_test_helper_app {
         "src/com/android/cts/deviceowner/BasicAdminReceiver.java"
         "src/com/android/cts/deviceowner/BluetoothRestrictionTest.java"
         "src/com/android/cts/deviceowner/CreateAndManageUserTest.java"
+        "src/com/android/cts/deviceowner/DefaultSmsApplicationTest.java"
         "src/com/android/cts/deviceowner/DeviceIdentifiersTest.java"
         "src/com/android/cts/deviceowner/DeviceOwnerProvisioningTest.java"
         "src/com/android/cts/deviceowner/DeviceOwnerSetupTest.java"
         "src/com/android/cts/deviceowner/DevicePolicyLoggingTest.java"
         "src/com/android/cts/deviceowner/HardwarePropertiesManagerTest.java"
-        "src/com/android/cts/deviceowner/InstallUpdateTest.java"
-        "src/com/android/cts/deviceowner/LockScreenInfoTest.java"
         "src/com/android/cts/deviceowner/NetworkLoggingTest.java"
         "src/com/android/cts/deviceowner/NotificationListener.java"
         "src/com/android/cts/deviceowner/OverrideApnTest.java"
@@ -43,15 +42,19 @@ CtsDeviceOwnerApp = android_test_helper_app {
         "src/com/android/cts/deviceowner/PreDeviceOwnerTest.java"
         "src/com/android/cts/deviceowner/PrivateDnsPolicyTest.java"
         "src/com/android/cts/deviceowner/RemoteBugreportTest.java"
-        "src/com/android/cts/deviceowner/SecurityLoggingTest.java"
+        "src/com/android/cts/deviceowner/SetLocationEnabledTest.java"
         "src/com/android/cts/deviceowner/SetPolicyActivity.java"
         "src/com/android/cts/deviceowner/SetTimeTest.java"
-        "src/com/android/cts/deviceowner/SystemUpdatePolicyTest.java"
+        "src/com/android/cts/deviceowner/UserControlDisabledPackagesTest.java"
         "src/com/android/cts/deviceowner/UserSessionTest.java"
         "src/com/android/cts/deviceowner/VrTemperatureTest.java"
         "src/com/android/cts/deviceowner/WifiConfigLockdownTest.java"
         "src/com/android/cts/deviceowner/WifiSetHttpProxyTest.java"
-        "src/com/android/cts/deviceowner/WifiTest.java"
+        "src/com/android/cts/deviceowner/proxy/BaseProxyTest.java"
+        "src/com/android/cts/deviceowner/proxy/PacFileServer.java"
+        "src/com/android/cts/deviceowner/proxy/PacProxyTest.java"
+        "src/com/android/cts/deviceowner/proxy/PassthroughTestHelper.java"
+        "src/com/android/cts/deviceowner/proxy/StaticProxyTest.java"
         "src/com/android/cts/deviceowner/ICrossUserService.aidl"
     ];
     aidl = {
@@ -62,13 +65,13 @@ CtsDeviceOwnerApp = android_test_helper_app {
         "junit"
         "android.test.base.stubs"
         "bouncycastle-unbundled"
+        "org.apache.http.legacy"
     ];
     static_libs = [
         "ctstestrunner-axt"
         "compatibility-device-util-axt"
         "androidx.test.rules"
         "cts-security-test-support-library"
-        "testng"
         "truth-prebuilt"
         "androidx.legacy_legacy-support-v4"
     ];
@@ -77,7 +80,7 @@ CtsDeviceOwnerApp = android_test_helper_app {
     test_suites = [
         "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

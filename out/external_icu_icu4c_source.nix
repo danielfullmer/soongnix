@@ -18,11 +18,15 @@ let
 subdirs = [
     "common"
     "i18n"
+    "test"
+    "tools/ctestfw"
+    "tools/toolutil"
 ];
 
 libicuuc_stubdata = cc_library {
     name = "libicuuc_stubdata";
     host_supported = true;
+    native_bridge_supported = true;
     srcs = ["stubdata/stubdata.cpp"];
     header_libs = [
         "libicuuc_headers"
@@ -42,6 +46,11 @@ libicuuc_stubdata = cc_library {
             ];
         };
     };
+
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 in { inherit libicuuc_stubdata; }

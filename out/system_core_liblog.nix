@@ -18,25 +18,17 @@ let
 #
 
 liblog_sources = [
-    "config_read.cpp"
-    "config_write.cpp"
     "log_event_list.cpp"
     "log_event_write.cpp"
-    "logger_lock.cpp"
     "logger_name.cpp"
     "logger_read.cpp"
     "logger_write.cpp"
     "logprint.cpp"
-    "stderr_write.cpp"
-];
-liblog_host_sources = [
-    "fake_log_device.cpp"
-    "fake_writer.cpp"
+    "properties.cpp"
 ];
 liblog_target_sources = [
     "event_tag_map.cpp"
     "log_time.cpp"
-    "properties.cpp"
     "pmsg_reader.cpp"
     "pmsg_writer.cpp"
     "logd_reader.cpp"
@@ -47,7 +39,14 @@ liblog_headers = cc_library_headers {
     name = "liblog_headers";
     host_supported = true;
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "29";
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
     system_shared_libs = [];
     stl = "none";
@@ -69,14 +68,12 @@ liblog_headers = cc_library_headers {
 liblog = cc_library {
     name = "liblog";
     host_supported = true;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     srcs = liblog_sources;
 
     target = {
-        host = {
-            srcs = liblog_host_sources;
-            cflags = ["-DFAKE_LOG_DEVICE=1"];
-        };
         android = {
             version_script = "liblog.map.txt";
             srcs = liblog_target_sources;
@@ -101,16 +98,24 @@ liblog = cc_library {
         };
     };
 
-    header_libs = ["liblog_headers"];
+    header_libs = [
+        "libbase_headers"
+        "liblog_headers"
+    ];
     export_header_lib_headers = ["liblog_headers"];
 
     stubs = {
         symbol_file = "liblog.map.txt";
-        versions = ["10000"];
+        versions = [
+            "29"
+            "30"
+        ];
     };
 
     cflags = [
+        "-Wall"
         "-Werror"
+        "-Wextra"
         #  This is what we want to do:
         #   liblog_cflags := $(shell \
         #    sed -n \
@@ -122,6 +127,14 @@ liblog = cc_library {
     ];
     logtags = ["event.logtags"];
     compile_multilib = "both";
+    apex_available = [
+        "//apex_available:platform"
+        #  liblog is exceptionally available to the runtime APEX
+        #  because the dynamic linker has to use it statically.
+        #  See b/151051671
+        "com.android.runtime"
+        #  DO NOT add more apex names here
+    ];
 };
 
 in { inherit liblog liblog_headers; }

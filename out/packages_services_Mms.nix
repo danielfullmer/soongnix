@@ -22,7 +22,6 @@ MmsService = android_app {
     name = "MmsService";
     platform_apis = true;
     privileged = true;
-    libs = ["telephony-common"];
     srcs = [
         "src/com/android/mms/service/ApnSettings.java"
         "src/com/android/mms/service/DownloadRequest.java"

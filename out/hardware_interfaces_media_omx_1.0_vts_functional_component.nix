@@ -21,7 +21,9 @@ VtsHalMediaOmxV1_0TargetComponentTest = cc_test {
     name = "VtsHalMediaOmxV1_0TargetComponentTest";
     defaults = ["VtsHalMediaOmxV1_0Defaults"];
     srcs = ["VtsHalMediaOmxV1_0TargetComponentTest.cpp"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "vts"
+    ];
 };
 
 in { inherit VtsHalMediaOmxV1_0TargetComponentTest; }

@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,14 +17,14 @@ let
 #  limitations under the License.
 #
 
-CtsOverlayPolicySystem = android_test {
+CtsOverlayPolicySystem = android_test_helper_app {
     name = "CtsOverlayPolicySystem";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
     certificate = ":cts-testkey1";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

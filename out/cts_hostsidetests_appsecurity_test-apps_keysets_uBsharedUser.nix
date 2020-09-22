@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2014 The Android Open Source Project
@@ -16,7 +16,7 @@ let
 #  limitations under the License.
 
 # apks signed cts-keyset-test-a
-CtsKeySetSharedUserSigningAUpgradeB = android_test {
+CtsKeySetSharedUserSigningAUpgradeB = android_test_helper_app {
     name = "CtsKeySetSharedUserSigningAUpgradeB";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -28,13 +28,13 @@ CtsKeySetSharedUserSigningAUpgradeB = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
 # apks signed cts-keyset-test-b
-CtsKeySetSharedUserSigningBUpgradeB = android_test {
+CtsKeySetSharedUserSigningBUpgradeB = android_test_helper_app {
     name = "CtsKeySetSharedUserSigningBUpgradeB";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -46,7 +46,7 @@ CtsKeySetSharedUserSigningBUpgradeB = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

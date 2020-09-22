@@ -1,4 +1,4 @@
-{ cc_test, vts_config }:
+{ cc_defaults, cc_test, vts_config }:
 let
 
 #
@@ -17,8 +17,8 @@ let
 #  limitations under the License.
 #
 
-VtsSecurityAvbTest = cc_test {
-    name = "VtsSecurityAvbTest";
+vts_security_avb_defaults = cc_defaults {
+    name = "vts_security_avb_defaults";
     srcs = ["VtsSecurityAvbTest.cpp"];
     shared_libs = [
         "libbase"
@@ -26,14 +26,34 @@ VtsSecurityAvbTest = cc_test {
     ];
     static_libs = [
         "libavb"
-        "libcrypto"
+        "libcrypto_static"
         "libfs_avb"
         "libfs_mgr"
     ];
+};
+
+vts_security_avb_test = cc_test {
+    name = "vts_security_avb_test";
+    defaults = ["vts_security_avb_defaults"];
+    test_config = "vts_security_avb_test.xml";
+    test_suites = [
+        "device-tests"
+        "vts"
+    ];
+    data = [
+        ":q-gsi_avbpubkey"
+        ":r-gsi_avbpubkey"
+        ":s-gsi_avbpubkey"
+    ];
+};
+
+VtsSecurityAvbTest = cc_test {
+    name = "VtsSecurityAvbTest";
+    defaults = ["vts_security_avb_defaults"];
 };
 
 VtsSecurityAvb = vts_config {
     name = "VtsSecurityAvb";
 };
 
-in { inherit VtsSecurityAvb VtsSecurityAvbTest; }
+in { inherit VtsSecurityAvb VtsSecurityAvbTest vts_security_avb_defaults vts_security_avb_test; }

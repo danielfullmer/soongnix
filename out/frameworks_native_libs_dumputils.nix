@@ -20,9 +20,7 @@ libdumputils = cc_library {
 
     shared_libs = [
         "libbase"
-        "libbinder"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

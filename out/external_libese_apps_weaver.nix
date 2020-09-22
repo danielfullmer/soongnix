@@ -31,6 +31,7 @@ libese-app-weaver = cc_library {
         "libese"
         "libese-sysdeps"
     ];
+    export_include_dirs = ["include"];
 };
 
 libese-app-weaver-test = cc_test {

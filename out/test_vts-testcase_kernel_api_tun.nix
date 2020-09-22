@@ -17,9 +17,7 @@ let
 
 vts_kernel_tun_test = cc_test {
     name = "vts_kernel_tun_test";
-    srcs = [
-        "vts_kernel_tun_test.cpp"
-    ];
+    srcs = ["vts_kernel_tun_test.cpp"];
     cflags = [
         "-Wall"
         "-Werror"
@@ -27,6 +25,9 @@ vts_kernel_tun_test = cc_test {
     shared_libs = [
         "libbase"
     ];
+    test_suites = ["vts"];
+    auto_gen_config = true;
+    require_root = true;
 };
 
 VtsKernelTunTest = vts_config {

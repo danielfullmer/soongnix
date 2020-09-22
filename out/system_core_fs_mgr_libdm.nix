@@ -1,4 +1,4 @@
-{ cc_library_static, cc_test }:
+{ cc_defaults, cc_fuzz, cc_library_static, cc_test, filegroup, vts_config }:
 let
 
 #
@@ -30,8 +30,12 @@ libdm = cc_library_static {
         "dm_target.cpp"
         "dm.cpp"
         "loop_control.cpp"
+        "utility.cpp"
     ];
 
+    static_libs = [
+        "libext2_uuid"
+    ];
     header_libs = [
         "libbase_headers"
         "liblog_headers"
@@ -43,14 +47,8 @@ libdm = cc_library_static {
     };
 };
 
-libdm_test = cc_test {
-    name = "libdm_test";
-    defaults = ["fs_mgr_defaults"];
-    static_libs = [
-        "libdm"
-        "libbase"
-        "liblog"
-    ];
+libdm_test_srcs = filegroup {
+    name = "libdm_test_srcs";
     srcs = [
         "dm_test.cpp"
         "loop_control_test.cpp"
@@ -58,4 +56,54 @@ libdm_test = cc_test {
     ];
 };
 
-in { inherit libdm libdm_test; }
+libdm_test_defaults = cc_defaults {
+    name = "libdm_test_defaults";
+    defaults = ["fs_mgr_defaults"];
+    static_libs = [
+        "libdm"
+        "libext2_uuid"
+        "libfs_mgr"
+    ];
+    shared_libs = [
+        "libbase"
+        "liblog"
+    ];
+    srcs = [":libdm_test_srcs"];
+    auto_gen_config = true;
+    require_root = true;
+};
+
+libdm_test = cc_test {
+    name = "libdm_test";
+    defaults = ["libdm_test_defaults"];
+    test_suites = ["device-tests"];
+};
+
+vts_libdm_test = cc_test {
+    name = "vts_libdm_test";
+    defaults = ["libdm_test_defaults"];
+    test_suites = ["vts"];
+    test_min_api_level = 29;
+};
+
+dm_linear_table_fuzzer = cc_fuzz {
+    name = "dm_linear_table_fuzzer";
+    defaults = ["fs_mgr_defaults"];
+    srcs = [
+        "dm_linear_fuzzer.cpp"
+        "test_util.cpp"
+    ];
+    static_libs = [
+        "libdm"
+        "libbase"
+        "libext2_uuid"
+        "libfs_mgr"
+        "liblog"
+    ];
+};
+
+VtsKernelLibdmTest = vts_config {
+    name = "VtsKernelLibdmTest";
+};
+
+in { inherit VtsKernelLibdmTest dm_linear_table_fuzzer libdm libdm_test libdm_test_defaults libdm_test_srcs vts_libdm_test; }

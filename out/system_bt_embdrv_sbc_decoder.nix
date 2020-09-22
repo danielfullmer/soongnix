@@ -1,4 +1,4 @@
-{ cc_library_static }:
+{ cc_fuzz, cc_library_static }:
 let
 
 #  Bluetooth SBC decoder static library for target
@@ -28,4 +28,18 @@ libbt-sbc-decoder = cc_library_static {
     ];
 };
 
-in { inherit libbt-sbc-decoder; }
+sbcdecoder_fuzzer = cc_fuzz {
+    name = "sbcdecoder_fuzzer";
+    srcs = [
+        "sbcdecoder_fuzzer.c"
+    ];
+    static_libs = [
+        "libbt-sbc-decoder"
+    ];
+    local_include_dirs = [
+        "include"
+    ];
+    host_supported = false;
+};
+
+in { inherit libbt-sbc-decoder sbcdecoder_fuzzer; }

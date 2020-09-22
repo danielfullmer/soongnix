@@ -1,4 +1,4 @@
-{ vts_config }:
+{ java_test_host, vts_config }:
 let
 
 #
@@ -21,4 +21,18 @@ VtsKernelApiSysfsTest = vts_config {
     name = "VtsKernelApiSysfsTest";
 };
 
-in { inherit VtsKernelApiSysfsTest; }
+KernelApiSysfsTest = java_test_host {
+    name = "KernelApiSysfsTest";
+    libs = [
+        "tradefed"
+        "tradefed-common-util"
+        "vts-core-tradefed-harness"
+    ];
+    srcs = ["src/com/android/tests/sysfs/KernelApiSysfsTest.java"];
+    test_suites = [
+        "vts"
+    ];
+    test_config = "KernelApiSysfsTest.xml";
+};
+
+in { inherit KernelApiSysfsTest VtsKernelApiSysfsTest; }

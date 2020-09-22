@@ -22,7 +22,10 @@ VtsHalWifiOffloadV1_0TargetTest = cc_test {
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalWifiOffloadV1_0TargetTest.cpp"];
     static_libs = ["android.hardware.wifi.offload@1.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalWifiOffloadV1_0TargetTest; }

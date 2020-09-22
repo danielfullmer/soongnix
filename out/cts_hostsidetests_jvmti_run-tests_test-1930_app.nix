@@ -19,11 +19,6 @@ CtsJvmtiRunTest1930DeviceApp = android_test_helper_app {
     name = "CtsJvmtiRunTest1930DeviceApp";
     defaults = ["cts-run-jvmti-defaults"];
     manifest = "AndroidManifest.xml";
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
 };
 
 in { inherit CtsJvmtiRunTest1930DeviceApp; }

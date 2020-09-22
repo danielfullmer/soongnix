@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -15,7 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsPkgAccessApp = android_test {
+CtsPkgAccessApp = android_test_helper_app {
     name = "CtsPkgAccessApp";
     defaults = ["cts_defaults"];
     static_libs = [
@@ -26,7 +26,7 @@ CtsPkgAccessApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     sdk_version = "test_current";

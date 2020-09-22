@@ -19,6 +19,7 @@ let
 libopenjdkjvm_defaults = cc_defaults {
     name = "libopenjdkjvm_defaults";
     defaults = ["art_defaults"];
+    visibility = ["//libcore"];
     host_supported = true;
     srcs = ["OpenjdkJvm.cc"];
     shared_libs = [
@@ -36,6 +37,10 @@ libopenjdkjvm = art_cc_library {
         "libart"
         "libartbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libopenjdkjvmd = art_cc_library {
@@ -47,6 +52,9 @@ libopenjdkjvmd = art_cc_library {
     shared_libs = [
         "libartd"
         "libartbased"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

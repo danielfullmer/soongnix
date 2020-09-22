@@ -1,4 +1,4 @@
-{ cc_library_shared }:
+{ cc_library_shared, prebuilt_usr_share }:
 let
 
 #  Copyright (C) 2008 The Android Open Source Project
@@ -142,4 +142,30 @@ libFFTEm = cc_library_shared {
     };
 };
 
-in { inherit libFFTEm; }
+"RFFspeed_501.bmd" = prebuilt_usr_share {
+    name = "RFFspeed_501.bmd";
+
+    # disable build in PDK
+    product_variables = {
+        pdk = {
+            enabled = false;
+        };
+    };
+    src = "Embedded/common/data/APIEm/Modules/RFFspeed_501.bmd";
+    sub_dir = "bmd";
+};
+
+"RFFstd_501.bmd" = prebuilt_usr_share {
+    name = "RFFstd_501.bmd";
+
+    # disable build in PDK
+    product_variables = {
+        pdk = {
+            enabled = false;
+        };
+    };
+    src = "Embedded/common/data/APIEm/Modules/RFFstd_501.bmd";
+    sub_dir = "bmd";
+};
+
+in { inherit "RFFspeed_501.bmd" "RFFstd_501.bmd" libFFTEm; }

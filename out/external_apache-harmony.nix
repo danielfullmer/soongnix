@@ -1,8 +1,29 @@
-{ java_test }:
+{ java_test, package }:
 let
+
+#  Copyright (C) 2011 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
 
 apache-harmony-tests = java_test {
     name = "apache-harmony-tests";
+    visibility = [
+        "//cts/tests/libcore/luni"
+    ];
     hostdex = true;
     srcs = [
         "beans/src/test/java/org/apache/harmony/beans/tests/java/beans/PropertyChangeEventTest.java"
@@ -31,7 +52,6 @@ apache-harmony-tests = java_test {
         "sql/src/test/java/org/apache/harmony/sql/tests/java/sql/DataTruncationTest.java"
         "sql/src/test/java/org/apache/harmony/sql/tests/java/sql/DatabaseMetaDataTest.java"
         "sql/src/test/java/org/apache/harmony/sql/tests/java/sql/DateTest.java"
-        "sql/src/test/java/org/apache/harmony/sql/tests/java/sql/DriverManagerTest.java"
         "sql/src/test/java/org/apache/harmony/sql/tests/java/sql/DriverPropertyInfoTest.java"
         "sql/src/test/java/org/apache/harmony/sql/tests/java/sql/ParameterMetaDataTest.java"
         "sql/src/test/java/org/apache/harmony/sql/tests/java/sql/ResultSetMetaDataTest.java"
@@ -68,70 +88,23 @@ apache-harmony-tests = java_test {
         "sql/src/test/java/org/apache/harmony/sql/tests/javax/sql/Impl_RowSet.java"
         "sql/src/test/java/org/apache/harmony/sql/tests/javax/sql/RowSetEventTest.java"
         "sql/src/test/java/org/apache/harmony/sql/tests/javax/sql/StatementEventTest.java"
-        "support/src/test/java/org/apache/harmony/testframework/CharSinkTester.java"
-        "support/src/test/java/org/apache/harmony/testframework/CharWrapperTester.java"
-        "support/src/test/java/org/apache/harmony/testframework/SinkTester.java"
-        "support/src/test/java/org/apache/harmony/testframework/WrapperTester.java"
-        "support/src/test/java/org/apache/harmony/testframework/serialization/SerializationTest.java"
-        "support/src/test/java/tests/resources/ServiceLoader/AbstractService.java"
-        "support/src/test/java/tests/resources/ServiceLoader/Service.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceDuplicateIn2File.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceFinalClass.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceForAllCommentTest.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceForEmptyTest.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceForIllegalNameTest.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceForWrongNameTest.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceIn2File.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceIn2FileWithEmptyConfig.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceMoreThanOne.java"
-        "support/src/test/java/tests/resources/ServiceLoader/ServiceWithDuplicateSons.java"
         "support/src/test/java/tests/resources/subfolder/tests/resources/hyts_resource_fr_FR.java"
-        "support/src/test/java/tests/support/Streams.java"
-        "support/src/test/java/tests/support/Support_AvailTest.java"
-        "support/src/test/java/tests/support/Support_CollectionTest.java"
-        "support/src/test/java/tests/support/Support_Configuration.java"
-        "support/src/test/java/tests/support/Support_DeleteOnExitTest.java"
         "support/src/test/java/tests/support/Support_DummyPKCS12Keystore.java"
-        "support/src/test/java/tests/support/Support_Exec.java"
-        "support/src/test/java/tests/support/Support_Field.java"
-        "support/src/test/java/tests/support/Support_GetLocal.java"
-        "support/src/test/java/tests/support/Support_GetResource.java"
         "support/src/test/java/tests/support/Support_HttpConnector.java"
         "support/src/test/java/tests/support/Support_HttpServer.java"
         "support/src/test/java/tests/support/Support_HttpServerSocket.java"
         "support/src/test/java/tests/support/Support_HttpSocket.java"
         "support/src/test/java/tests/support/Support_Jetty.java"
-        "support/src/test/java/tests/support/Support_ListTest.java"
-        "support/src/test/java/tests/support/Support_MapTest2.java"
         "support/src/test/java/tests/support/Support_NetworkInterface.java"
         "support/src/test/java/tests/support/Support_PlatformFile.java"
         "support/src/test/java/tests/support/Support_ProcessReadWriteTest.java"
         "support/src/test/java/tests/support/Support_ProviderJCE.java"
         "support/src/test/java/tests/support/Support_ProviderRSA.java"
-        "support/src/test/java/tests/support/Support_ProviderTrust.java"
-        "support/src/test/java/tests/support/Support_Proxy_I1.java"
-        "support/src/test/java/tests/support/Support_Proxy_I2.java"
-        "support/src/test/java/tests/support/Support_Proxy_ParentException.java"
-        "support/src/test/java/tests/support/Support_Proxy_SubException.java"
         "support/src/test/java/tests/support/Support_ServerSocket.java"
-        "support/src/test/java/tests/support/Support_SetTest.java"
         "support/src/test/java/tests/support/Support_Socket.java"
-        "support/src/test/java/tests/support/Support_StringReader.java"
-        "support/src/test/java/tests/support/Support_StringWriter.java"
-        "support/src/test/java/tests/support/Support_TestProvider.java"
-        "support/src/test/java/tests/support/Support_TestResource.java"
-        "support/src/test/java/tests/support/Support_TestResource_en.java"
-        "support/src/test/java/tests/support/Support_TestResource_en_US.java"
-        "support/src/test/java/tests/support/Support_TestResource_fr.java"
-        "support/src/test/java/tests/support/Support_TestResource_fr_FR.java"
-        "support/src/test/java/tests/support/Support_TestResource_fr_FR_VAR.java"
-        "support/src/test/java/tests/support/Support_TimeZone.java"
         "support/src/test/java/tests/support/Support_URLConnector.java"
-        "support/src/test/java/tests/support/Support_UnmodifiableCollectionTest.java"
         "support/src/test/java/tests/support/Support_UnmodifiableMapTest.java"
-        "support/src/test/java/tests/support/resource/Support_Resources.java"
         "support/src/test/java/tests/util/CallVerificationStack.java"
-        "support/src/test/java/tests/util/SerializationTester.java"
 
         "beans/src/test/support/java/org/apache/harmony/beans/tests/support/NonSerializablePropertyChangeListener.java"
         "beans/src/test/support/java/org/apache/harmony/beans/tests/support/SerializableBean.java"
@@ -148,12 +121,8 @@ apache-harmony-tests = java_test {
 
         "luni/src/test/api/common/Proxy2Test.java"
         "luni/src/test/api/common/org/apache/harmony/luni/tests/internal/net/www/protocol/file/FileURLConnectionTest.java"
-        "luni/src/test/api/common/org/apache/harmony/luni/tests/internal/process/SystemProcessTest.java"
         "luni/src/test/api/common/org/apache/harmony/luni/tests/java/net/ExcludedProxyTest.java"
         "luni/src/test/api/common/org/apache/harmony/luni/tests/java/net/URLClassLoaderTest.java"
-        "luni/src/test/api/common/org/apache/harmony/luni/tests/java/net/test_protocol/Handler.java"
-        "luni/src/test/api/common/org/apache/harmony/luni/tests/pkg1/TestClass.java"
-        "luni/src/test/api/common/org/apache/harmony/luni/tests/pkg2/TestClass.java"
         "luni/src/test/api/common/org/apache/harmony/luni/tests/support/A.java"
         "luni/src/test/api/common/org/apache/harmony/luni/tests/support/B.java"
         "luni/src/test/api/common/org/apache/harmony/luni/tests/support/I.java"
@@ -170,14 +139,15 @@ apache-harmony-tests = java_test {
         "sql/src/test/resources"
         "support/src/test/resources"
     ];
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
     libs = [
-        "core-all"
         "junit"
     ];
-    system_modules = "core-all-system-modules";
+    static_libs = [
+        "core-tests-support"
+    ];
     javacflags = ["-Xmaxwarns 9999999"];
-    jarjar_rules = "jarjar-rules.txt";
     #  Pin java_version until jarjar is certified to support later versions. http://b/72703434
     java_version = "1.8";
 
@@ -187,4 +157,4 @@ apache-harmony-tests = java_test {
     };
 };
 
-in { inherit apache-harmony-tests; }
+in { inherit _missingName apache-harmony-tests; }

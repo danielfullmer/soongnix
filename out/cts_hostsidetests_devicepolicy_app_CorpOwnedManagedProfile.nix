@@ -33,6 +33,7 @@ CtsCorpOwnedManagedProfile = android_test_helper_app {
         "src/com/android/cts/comp/ProtectedCrossUserService.java"
         "src/com/android/cts/comp/UnprotectedCrossUserService.java"
         "src/com/android/cts/comp/Utils.java"
+        "src/com/android/cts/comp/WipeDataReceiver.java"
         "src/com/android/cts/comp/provisioning/AffiliationTest.java"
         "src/com/android/cts/comp/provisioning/ManagedProfileProvisioningTest.java"
         "src/com/android/cts/comp/provisioning/UserRestrictionTest.java"
@@ -54,7 +55,7 @@ CtsCorpOwnedManagedProfile = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
@@ -72,6 +73,7 @@ CtsCorpOwnedManagedProfile2 = android_test_helper_app {
         "src/com/android/cts/comp/ProtectedCrossUserService.java"
         "src/com/android/cts/comp/UnprotectedCrossUserService.java"
         "src/com/android/cts/comp/Utils.java"
+        "src/com/android/cts/comp/WipeDataReceiver.java"
         "src/com/android/cts/comp/provisioning/AffiliationTest.java"
         "src/com/android/cts/comp/provisioning/ManagedProfileProvisioningTest.java"
         "src/com/android/cts/comp/provisioning/UserRestrictionTest.java"
@@ -93,7 +95,7 @@ CtsCorpOwnedManagedProfile2 = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     aaptflags = [

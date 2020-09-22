@@ -25,6 +25,10 @@ dexlist = art_cc_binary {
         "libartbase"
         "libbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 dexlists = art_cc_binary {

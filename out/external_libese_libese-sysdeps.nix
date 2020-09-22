@@ -22,9 +22,6 @@ libese-sysdeps = cc_library {
     proprietary = true;
     host_supported = true;
     srcs = [];
-    local_include_dirs = [
-        "include"
-    ];
     cflags = [
         "-std=c99"
         "-Wall"

@@ -35,7 +35,7 @@ header-checker-defaults = cc_defaults {
     cppflags = [
         "-fno-exceptions"
         "-fno-rtti"
-        "-std=c++17"
+        "-std=c++14"
     ];
 
     target = {
@@ -168,6 +168,7 @@ libheader-checker = cc_library_host_static {
         "src/repr/symbol/so_file_parser.cpp"
         "src/repr/symbol/version_script_parser.cpp"
         "src/utils/api_level.cpp"
+        "src/utils/command_line_utils.cpp"
         "src/utils/config_file.cpp"
         "src/utils/collect_exported_headers.cpp"
         "src/utils/string_utils.cpp"
@@ -213,6 +214,7 @@ header-checker-unittests = cc_test_host {
     ];
 
     shared_libs = [
+        "libLLVM_host"
         "libc++_host"
     ];
 

@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test, genrule }:
 let
 
 FrameworksTelephonyTests = android_test {
@@ -6,6 +6,7 @@ FrameworksTelephonyTests = android_test {
 
     srcs = [
         "src/android/telephony/SmsMessageTest.java"
+        "src/android/telephony/ims/ImsCallSessionListenerTests.java"
         "src/android/telephony/ims/ImsCompatTests.java"
         "src/android/telephony/ims/ImsFeatureTest.java"
         "src/android/telephony/ims/ImsMmTelManagerTests.java"
@@ -21,15 +22,19 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/ATResponseParserTest.java"
         "src/com/android/internal/telephony/AdnRecordTest.java"
         "src/com/android/internal/telephony/AppSmsManagerTest.java"
+        "src/com/android/internal/telephony/BarringInfoTest.java"
         "src/com/android/internal/telephony/CallAttributesTest.java"
         "src/com/android/internal/telephony/CallManagerTest.java"
+        "src/com/android/internal/telephony/CallQualityTest.java"
         "src/com/android/internal/telephony/CallStateExceptionTest.java"
         "src/com/android/internal/telephony/CarrierActionAgentTest.java"
         "src/com/android/internal/telephony/CarrierAppUtilsTest.java"
         "src/com/android/internal/telephony/CarrierDisplayNameResolverTest.java"
         "src/com/android/internal/telephony/CarrierKeyDownloadMgrTest.java"
+        "src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java"
         "src/com/android/internal/telephony/CarrierResolverTest.java"
         "src/com/android/internal/telephony/CarrierRestrictionRulesTest.java"
+        "src/com/android/internal/telephony/CarrierServiceBindHelperTest.java"
         "src/com/android/internal/telephony/CarrierServiceStateTrackerTest.java"
         "src/com/android/internal/telephony/CarrierServicesSmsFilterTest.java"
         "src/com/android/internal/telephony/CarrierSignalAgentTest.java"
@@ -49,6 +54,7 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/CellularNetworkValidatorTest.java"
         "src/com/android/internal/telephony/ClientWakelockAccountantTest.java"
         "src/com/android/internal/telephony/ClientWakelockTrackerTest.java"
+        "src/com/android/internal/telephony/ClosedSubscriberGroupInfoTest.java"
         "src/com/android/internal/telephony/ConnectionTest.java"
         "src/com/android/internal/telephony/ContextFixture.java"
         "src/com/android/internal/telephony/DefaultPhoneNotifierTest.java"
@@ -69,15 +75,18 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/IntRangeManagerTest.java"
         "src/com/android/internal/telephony/LocaleTrackerTest.java"
         "src/com/android/internal/telephony/MccTableTest.java"
+        "src/com/android/internal/telephony/MissedIncomingCallSmsFilterTest.java"
+        "src/com/android/internal/telephony/ModelInterpreter.java"
         "src/com/android/internal/telephony/ModemInfoTest.java"
         "src/com/android/internal/telephony/MultiSimSettingControllerTest.java"
         "src/com/android/internal/telephony/NeighboringCellInfoTest.java"
         "src/com/android/internal/telephony/NetworkRegistrationInfoTest.java"
         "src/com/android/internal/telephony/NetworkScanRequestTest.java"
         "src/com/android/internal/telephony/NetworkScanResultTest.java"
+        "src/com/android/internal/telephony/NetworkTypeControllerTest.java"
         "src/com/android/internal/telephony/NitzDataTest.java"
-        "src/com/android/internal/telephony/NitzStateMachineImplTest.java"
         "src/com/android/internal/telephony/PhoneCapabilityTest.java"
+        "src/com/android/internal/telephony/PhoneConfigurationManagerTest.java"
         "src/com/android/internal/telephony/PhoneFactoryTest.java"
         "src/com/android/internal/telephony/PhoneNumberUtilsTest.java"
         "src/com/android/internal/telephony/PhoneNumberWatcherTest.java"
@@ -87,17 +96,23 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/PhoneSwitcherTest.java"
         "src/com/android/internal/telephony/PhysicalChannelConfigTest.java"
         "src/com/android/internal/telephony/PlmnActRecordTest.java"
+        "src/com/android/internal/telephony/ProxyControllerTest.java"
         "src/com/android/internal/telephony/RILTest.java"
+        "src/com/android/internal/telephony/RadioAccessFamilyTest.java"
         "src/com/android/internal/telephony/RadioAccessSpecifierTest.java"
         "src/com/android/internal/telephony/RatRatcheterTest.java"
         "src/com/android/internal/telephony/ServiceStateTest.java"
         "src/com/android/internal/telephony/ServiceStateTrackerTest.java"
         "src/com/android/internal/telephony/SignalStrengthTest.java"
+        "src/com/android/internal/telephony/SignalThresholdInfoTest.java"
         "src/com/android/internal/telephony/SignalToneUtilTest.java"
         "src/com/android/internal/telephony/SimActivationTrackerTest.java"
         "src/com/android/internal/telephony/SimPhoneBookTest.java"
         "src/com/android/internal/telephony/SimSmsTest.java"
         "src/com/android/internal/telephony/SimUtilsTest.java"
+        "src/com/android/internal/telephony/SimulatedCommands.java"
+        "src/com/android/internal/telephony/SimulatedCommandsVerifier.java"
+        "src/com/android/internal/telephony/SimulatedGsmCallState.java"
         "src/com/android/internal/telephony/Sms7BitEncodingTranslatorTest.java"
         "src/com/android/internal/telephony/SmsDispatchersControllerTest.java"
         "src/com/android/internal/telephony/SmsMessageBodyTest.java"
@@ -108,7 +123,6 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/SubscriptionControllerTest.java"
         "src/com/android/internal/telephony/SubscriptionInfoTest.java"
         "src/com/android/internal/telephony/SubscriptionInfoUpdaterTest.java"
-        "src/com/android/internal/telephony/SubscriptionMonitorTest.java"
         "src/com/android/internal/telephony/TelephonyHistogramTest.java"
         "src/com/android/internal/telephony/TelephonyPermissionsTest.java"
         "src/com/android/internal/telephony/TelephonyRegistryTest.java"
@@ -116,7 +130,6 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/TelephonyTestUtils.java"
         "src/com/android/internal/telephony/TestApplication.java"
         "src/com/android/internal/telephony/TestFixture.java"
-        "src/com/android/internal/telephony/TimeZoneLookupHelperTest.java"
         "src/com/android/internal/telephony/VisualVoicemailSmsFilterTest.java"
         "src/com/android/internal/telephony/VisualVoicemailSmsParserTest.java"
         "src/com/android/internal/telephony/VoLteServiceStateTest.java"
@@ -127,6 +140,7 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/cdma/CdmaSmsDispatcherTest.java"
         "src/com/android/internal/telephony/cdma/sms/CdmaSmsAddressTest.java"
         "src/com/android/internal/telephony/cdma/sms/CdmaSmsTest.java"
+        "src/com/android/internal/telephony/dataconnection/ApnConfigTypeRepositoryTest.java"
         "src/com/android/internal/telephony/dataconnection/ApnContextTest.java"
         "src/com/android/internal/telephony/dataconnection/ApnSettingTest.java"
         "src/com/android/internal/telephony/dataconnection/DataCallResponseTest.java"
@@ -136,6 +150,7 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/dataconnection/DataFailCauseTest.java"
         "src/com/android/internal/telephony/dataconnection/DataProfileTest.java"
         "src/com/android/internal/telephony/dataconnection/DcControllerTest.java"
+        "src/com/android/internal/telephony/dataconnection/DcRequestTest.java"
         "src/com/android/internal/telephony/dataconnection/DcTrackerTest.java"
         "src/com/android/internal/telephony/dataconnection/RetryManagerTest.java"
         "src/com/android/internal/telephony/dataconnection/TelephonyNetworkFactoryTest.java"
@@ -145,20 +160,20 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/euicc/EuiccCardControllerTest.java"
         "src/com/android/internal/telephony/euicc/EuiccConnectorTest.java"
         "src/com/android/internal/telephony/euicc/EuiccControllerTest.java"
-        "src/com/android/internal/telephony/gsm/GsmCellBroadcastHandlerTest.java"
         "src/com/android/internal/telephony/gsm/GsmInboundSmsHandlerTest.java"
-        "src/com/android/internal/telephony/gsm/GsmSmsCbTest.java"
         "src/com/android/internal/telephony/gsm/GsmSmsDispatcherTest.java"
         "src/com/android/internal/telephony/gsm/UsimServiceTableTest.java"
         "src/com/android/internal/telephony/ims/FakeProviderWithAsserts.java"
+        "src/com/android/internal/telephony/ims/FeatureConnectionTest.java"
+        "src/com/android/internal/telephony/ims/FeatureConnectorTest.java"
         "src/com/android/internal/telephony/ims/ImsCallProfileTest.java"
         "src/com/android/internal/telephony/ims/ImsManagerTest.java"
         "src/com/android/internal/telephony/ims/ImsResolverTest.java"
         "src/com/android/internal/telephony/ims/ImsServiceControllerTest.java"
         "src/com/android/internal/telephony/ims/ImsTestBase.java"
+        "src/com/android/internal/telephony/ims/ImsUtTest.java"
         "src/com/android/internal/telephony/ims/ImsVideoProviderWrapperTest.java"
         "src/com/android/internal/telephony/ims/MmTelFeatureConnectionTest.java"
-        "src/com/android/internal/telephony/ims/RcsMessageStoreControllerTest.java"
         "src/com/android/internal/telephony/ims/TestImsServiceControllerAdapter.java"
         "src/com/android/internal/telephony/imsphone/ImsCallTest.java"
         "src/com/android/internal/telephony/imsphone/ImsExternalCallTrackerTest.java"
@@ -167,22 +182,30 @@ FrameworksTelephonyTests = android_test {
         "src/com/android/internal/telephony/imsphone/ImsPhoneConnectionTest.java"
         "src/com/android/internal/telephony/imsphone/ImsPhoneFactoryTest.java"
         "src/com/android/internal/telephony/imsphone/ImsPhoneTest.java"
+        "src/com/android/internal/telephony/imsphone/ImsRegistrationCallbackHelperTest.java"
         "src/com/android/internal/telephony/imsphone/ImsRttTextHandlerTest.java"
+        "src/com/android/internal/telephony/metrics/CallQualityMetricsTest.java"
         "src/com/android/internal/telephony/metrics/InProgressCallSessionTest.java"
         "src/com/android/internal/telephony/metrics/InProgressSmsSessionTest.java"
+        "src/com/android/internal/telephony/metrics/MetricsCollectorTest.java"
+        "src/com/android/internal/telephony/metrics/PersistAtomsStorageTest.java"
+        "src/com/android/internal/telephony/metrics/SimSlotStateTest.java"
         "src/com/android/internal/telephony/metrics/TelephonyMetricsTest.java"
-        "src/com/android/internal/telephony/mocks/ConnectivityServiceMock.java"
-        "src/com/android/internal/telephony/mocks/PhoneMock.java"
-        "src/com/android/internal/telephony/mocks/PhoneSwitcherMock.java"
-        "src/com/android/internal/telephony/mocks/SubscriptionControllerMock.java"
-        "src/com/android/internal/telephony/mocks/SubscriptionMonitorMock.java"
-        "src/com/android/internal/telephony/mocks/TelephonyRegistryMock.java"
+        "src/com/android/internal/telephony/metrics/VoiceCallSessionStatsTest.java"
+        "src/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactoryTest.java"
+        "src/com/android/internal/telephony/nitz/NitzStateMachineImplTest.java"
+        "src/com/android/internal/telephony/nitz/NitzStateMachineTestSupport.java"
+        "src/com/android/internal/telephony/nitz/NitzStateMachineTestSupportTest.java"
+        "src/com/android/internal/telephony/nitz/TimeZoneLookupHelperTest.java"
+        "src/com/android/internal/telephony/nitz/TimeZoneSuggesterImplTest.java"
         "src/com/android/internal/telephony/uicc/AnswerToResetTest.java"
         "src/com/android/internal/telephony/uicc/IccCardStatusTest.java"
         "src/com/android/internal/telephony/uicc/IccPhoneBookInterfaceManagerTest.java"
         "src/com/android/internal/telephony/uicc/IccRecordsTest.java"
+        "src/com/android/internal/telephony/uicc/IccUtilsTest.java"
         "src/com/android/internal/telephony/uicc/InstallCarrierAppUtilsTest.java"
         "src/com/android/internal/telephony/uicc/IsimUiccRecordsTest.java"
+        "src/com/android/internal/telephony/uicc/SIMRecordsTest.java"
         "src/com/android/internal/telephony/uicc/UiccCardApplicationTest.java"
         "src/com/android/internal/telephony/uicc/UiccCardTest.java"
         "src/com/android/internal/telephony/uicc/UiccCarrierPrivilegeRulesTest.java"
@@ -206,6 +229,7 @@ FrameworksTelephonyTests = android_test {
         "android.test.mock"
         "android.test.runner"
         "ims-common"
+        "unsupportedappusage"
     ];
 
     static_libs = [
@@ -213,15 +237,33 @@ FrameworksTelephonyTests = android_test {
         "frameworks-base-testutils"
         "guava"
         "mockito-target-minus-junit4"
+        "net-tests-utils"
         "platform-test-annotations"
         "services.core"
         "services.net"
         "telephony-common"
         "truth-prebuilt"
+        "testables"
     ];
 
     platform_apis = true;
-    test_suites = ["device-tests"];
+    jarjar_rules = ":jarjar-rules-telephony-tests";
+
+    test_suites = [
+        "device-tests"
+    ];
 };
 
-in { inherit FrameworksTelephonyTests; }
+jarjar-rules-telephony-tests = genrule {
+    name = "jarjar-rules-telephony-tests";
+    srcs = [
+        #  Order matters: test rules override the base ones
+        "jarjar-rules-tests.txt"
+        ":jarjar-rules-shared"
+    ];
+    out = ["jarjar-rules-telephony-tests-combined.txt"];
+    cmd = "cat $(in) > $(out)";
+    visibility = ["//visibility:private"];
+};
+
+in { inherit FrameworksTelephonyTests jarjar-rules-telephony-tests; }

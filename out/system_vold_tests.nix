@@ -9,11 +9,12 @@ vold_tests = cc_test {
     ];
 
     srcs = [
-        "CryptfsScryptHidlizationEquivalence_test.cpp"
         "Utils_test.cpp"
+        "VoldNativeServiceValidation_test.cpp"
         "cryptfs_test.cpp"
     ];
     static_libs = ["libvold"];
+    shared_libs = ["libbinder"];
 };
 
 in { inherit vold_tests; }

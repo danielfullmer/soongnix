@@ -22,6 +22,11 @@ dt_fd_forward_export = cc_library_headers {
     export_include_dirs = ["."];
     host_supported = true;
     device_supported = true;
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 in { inherit dt_fd_forward_export; }

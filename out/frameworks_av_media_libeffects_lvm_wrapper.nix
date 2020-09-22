@@ -1,9 +1,6 @@
 { cc_library_shared }:
 let
 
-#  The wrapper -DBUILD_FLOAT needs to match
-#  the lvm library -DBUILD_FLOAT.
-
 #  music bundle wrapper
 libbundlewrapper = cc_library_shared {
     name = "libbundlewrapper";
@@ -17,10 +14,8 @@ libbundlewrapper = cc_library_shared {
     vendor = true;
     srcs = ["Bundle/EffectBundle.cpp"];
 
-    cflags = [
+    cppflags = [
         "-fvisibility=hidden"
-        "-DBUILD_FLOAT"
-        "-DHIGHER_FS"
         "-DSUPPORT_MC"
 
         "-Wall"
@@ -59,10 +54,8 @@ libreverbwrapper = cc_library_shared {
     vendor = true;
     srcs = ["Reverb/EffectReverb.cpp"];
 
-    cflags = [
+    cppflags = [
         "-fvisibility=hidden"
-        "-DBUILD_FLOAT"
-        "-DHIGHER_FS"
 
         "-Wall"
         "-Werror"

@@ -1,4 +1,4 @@
-{ art_cc_defaults, art_cc_library, cc_defaults, cc_test_host }:
+{ art_cc_defaults, art_cc_library, cc_defaults, cc_test_host, package }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -54,15 +54,13 @@ let
 #  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 #  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
+
 vixl-common = cc_defaults {
     name = "vixl-common";
     host_supported = true;
-    srcs = [
-        "src/code-buffer-vixl.cc"
-        "src/compiler-intrinsics-vixl.cc"
-        "src/cpu-features.cc"
-        "src/utils-vixl.cc"
-    ];
     clang_cflags = ["-Wimplicit-fallthrough"];
     cflags = [
         "-Wall"
@@ -74,16 +72,23 @@ vixl-common = cc_defaults {
         "-fdiagnostics-show-option"
         "-Wredundant-decls"
         "-Wunreachable-code"
-        "-Wmissing-noreturn"
         "-pedantic"
 
         #  Explicitly enable the write-strings warning. VIXL uses
         #  const correctly when handling string constants.
         "-Wwrite-strings"
 
+        #  Explicitly disable 'missing-return' warnings because a lot of them are false positive.
+        #  VIXL often creates stubs and compile-time configurations with things like
+        #  VIXL_UNIMPLEMENTED(). Properly satisfying -Wmissing-noreturn requires that functions are
+        #  annotated at their _declarations_, which means #ifdefs in header files.
+        #  Conditional compilation in headers can result in incorrect behaviour when
+        #  libvixl.so is built with different flags than the code using it. Disabling this
+        #  warning allows VIXL to simplify the headers, and should make VIXL more robust.
+        "-Wno-missing-noreturn"
+
         "-DVIXL_CODE_BUFFER_MALLOC"
     ];
-    local_include_dirs = ["src"];
     native_coverage = false;
     sanitize = {
         recover = ["shift-exponent"];
@@ -137,9 +142,27 @@ vixl-release = cc_defaults {
     ];
 };
 
+libvixl_visibility = [
+    "//art:__subpackages__"
+];
+
+#  Defaults for the libvixl[d] libraries
+libvixl-defaults = cc_defaults {
+    name = "libvixl-defaults";
+    srcs = [
+        "src/code-buffer-vixl.cc"
+        "src/compiler-intrinsics-vixl.cc"
+        "src/cpu-features.cc"
+        "src/utils-vixl.cc"
+    ];
+    export_include_dirs = ["src"];
+};
+
 libvixl = art_cc_library {
     name = "libvixl";
+    visibility = libvixl_visibility;
     defaults = [
+        "libvixl-defaults"
         "vixl-release"
         "vixl-arm"
         "vixl-arm64"
@@ -153,14 +176,26 @@ libvixl = art_cc_library {
             };
         };
     };
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 libvixld = art_cc_library {
     name = "libvixld";
+    visibility = libvixl_visibility;
     defaults = [
+        "libvixl-defaults"
         "vixl-debug"
         "vixl-arm"
         "vixl-arm64"
+    ];
+
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
     ];
 };
 
@@ -177,7 +212,9 @@ vixl-test-runner = cc_test_host {
         "vixl-arm"
         "vixl-arm64"
     ];
-    local_include_dirs = ["test"];
+    local_include_dirs = [
+        "test"
+    ];
     srcs = [
         "test/test-aborts.cc"
         "test/test-api.cc"
@@ -313,13 +350,20 @@ vixl-test-runner = cc_test_host {
         "test/aarch64/test-abi.cc"
         "test/aarch64/test-api-aarch64.cc"
         "test/aarch64/test-assembler-aarch64.cc"
+        "test/aarch64/test-assembler-fp-aarch64.cc"
+        "test/aarch64/test-assembler-neon-aarch64.cc"
         "test/aarch64/test-cpu-features-aarch64.cc"
         "test/aarch64/test-disasm-aarch64.cc"
+        "test/aarch64/test-disasm-fp-aarch64.cc"
+        "test/aarch64/test-disasm-neon-aarch64.cc"
         "test/aarch64/test-fuzz-aarch64.cc"
         "test/aarch64/test-pointer-auth-aarch64.cc"
         "test/aarch64/test-simulator-aarch64.cc"
         "test/aarch64/test-trace-aarch64.cc"
         "test/aarch64/test-utils-aarch64.cc"
+    ];
+    static_libs = [
+        "libvixld"
     ];
     data = [
         "test/test-trace-reference/log-all"
@@ -352,4 +396,4 @@ vixl-test-runner = cc_test_host {
     };
 };
 
-in { inherit libvixl libvixld vixl-arm vixl-arm64 vixl-common vixl-debug vixl-release vixl-test-runner; }
+in { inherit _missingName libvixl libvixl-defaults libvixld vixl-arm vixl-arm64 vixl-common vixl-debug vixl-release vixl-test-runner; }

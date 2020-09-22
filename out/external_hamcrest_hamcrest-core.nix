@@ -63,6 +63,11 @@ hamcrest = java_library_static {
         "src/main/java/org/hamcrest/internal/SelfDescribingValueIterator.java"
     ];
     sdk_version = "core_current";
+
+    #  Pin to Java language level 8. It is loaded by an OpenJDK 8 runtime from
+    #  prebuilts/studio/jdk in frameworks/layoutlib/bridge/tests/run_tests.sh.
+    #  See b/141970724.
+    java_version = "1.8";
 };
 
 in { inherit hamcrest; }

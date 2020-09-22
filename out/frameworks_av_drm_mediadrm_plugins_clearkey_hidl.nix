@@ -49,12 +49,12 @@ clearkey_service_defaults = cc_defaults {
         "android.hardware.drm@1.0"
         "android.hardware.drm@1.1"
         "android.hardware.drm@1.2"
+        "android.hardware.drm@1.3"
         "libbase"
         "libbinder"
         "libcrypto"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
         "liblog"
         "libprotobuf-cpp-lite"
         "libutils"
@@ -91,6 +91,7 @@ libclearkeydevicefiles-protos = cc_library_static {
     defaults = ["clearkey_service_defaults"];
     srcs = ["service.cpp"];
     init_rc = ["android.hardware.drm@1.2-service.clearkey.rc"];
+    vintf_fragments = ["manifest_android.hardware.drm@1.2-service.clearkey.xml"];
 };
 
 "android.hardware.drm@1.2-service-lazy.clearkey" = cc_binary {
@@ -99,6 +100,24 @@ libclearkeydevicefiles-protos = cc_library_static {
     defaults = ["clearkey_service_defaults"];
     srcs = ["serviceLazy.cpp"];
     init_rc = ["android.hardware.drm@1.2-service-lazy.clearkey.rc"];
+    vintf_fragments = ["manifest_android.hardware.drm@1.2-service.clearkey.xml"];
 };
 
-in { inherit "android.hardware.drm@1.2-service-lazy.clearkey" "android.hardware.drm@1.2-service.clearkey" clearkey_service_defaults libclearkeydevicefiles-protos; }
+"android.hardware.drm@1.3-service.clearkey" = cc_binary {
+    name = "android.hardware.drm@1.3-service.clearkey";
+    defaults = ["clearkey_service_defaults"];
+    srcs = ["service.cpp"];
+    init_rc = ["android.hardware.drm@1.3-service.clearkey.rc"];
+    vintf_fragments = ["manifest_android.hardware.drm@1.3-service.clearkey.xml"];
+};
+
+"android.hardware.drm@1.3-service-lazy.clearkey" = cc_binary {
+    name = "android.hardware.drm@1.3-service-lazy.clearkey";
+    overrides = ["android.hardware.drm@1.3-service.clearkey"];
+    defaults = ["clearkey_service_defaults"];
+    srcs = ["serviceLazy.cpp"];
+    init_rc = ["android.hardware.drm@1.3-service-lazy.clearkey.rc"];
+    vintf_fragments = ["manifest_android.hardware.drm@1.3-service.clearkey.xml"];
+};
+
+in { inherit "android.hardware.drm@1.2-service-lazy.clearkey" "android.hardware.drm@1.2-service.clearkey" "android.hardware.drm@1.3-service-lazy.clearkey" "android.hardware.drm@1.3-service.clearkey" clearkey_service_defaults libclearkeydevicefiles-protos; }

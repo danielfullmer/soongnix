@@ -3,17 +3,16 @@ let
 
 libaudiopolicyenginedefault = cc_library_shared {
     name = "libaudiopolicyenginedefault";
-    export_include_dirs = ["include"];
     srcs = [
         "src/Engine.cpp"
         "src/EngineInstance.cpp"
     ];
     cflags = [
+        "-fvisibility=hidden"
         "-Wall"
         "-Werror"
         "-Wextra"
     ];
-    local_include_dirs = ["include"];
     header_libs = [
         "libbase_headers"
         "libaudiopolicycommon"
@@ -25,6 +24,7 @@ libaudiopolicyenginedefault = cc_library_shared {
         "libaudiopolicyengine_config"
     ];
     shared_libs = [
+        "libaudiofoundation"
         "liblog"
         "libcutils"
         "libutils"

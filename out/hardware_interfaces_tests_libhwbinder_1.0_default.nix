@@ -1,8 +1,8 @@
 { cc_library }:
 let
 
-"android.hardware.tests.libhwbinder@1.0-impl" = cc_library {
-    name = "android.hardware.tests.libhwbinder@1.0-impl";
+"android.hardware.tests.libhwbinder@1.0-impl.test" = cc_library {
+    name = "android.hardware.tests.libhwbinder@1.0-impl.test";
     defaults = ["hidl_defaults"];
     relative_install_path = "hw";
     srcs = [
@@ -12,12 +12,10 @@ let
     shared_libs = [
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];
     static_libs = ["android.hardware.tests.libhwbinder@1.0"];
 };
 
-in { inherit "android.hardware.tests.libhwbinder@1.0-impl"; }
+in { inherit "android.hardware.tests.libhwbinder@1.0-impl.test"; }

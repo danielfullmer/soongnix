@@ -24,7 +24,7 @@ CtsDevicePolicyPrintingApp = android_test_helper_app {
     test_suites = [
         "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

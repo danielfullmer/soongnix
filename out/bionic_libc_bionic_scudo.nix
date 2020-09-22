@@ -60,6 +60,9 @@ libscudo_wrapper = cc_library_shared {
             version_script = "exported64.map";
         };
     };
+
+    #  Like libc, disable native coverage for libscudo_wrapper.
+    native_coverage = false;
 };
 
 in { inherit libscudo_wrapper; }

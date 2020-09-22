@@ -21,6 +21,8 @@ libstagefright_nuplayer = cc_library_static {
     ];
 
     header_libs = [
+        "libmediadrm_headers"
+        "libmediametrics_headers"
         "media_plugin_headers"
     ];
 
@@ -48,11 +50,16 @@ libstagefright_nuplayer = cc_library_static {
 
     shared_libs = [
         "libbinder"
+        "libdatasource"
         "libui"
         "libgui"
         "libmedia"
         "libmediadrm"
         "libpowermanager"
+    ];
+
+    static_libs = [
+        "libplayerservice_datasource"
     ];
 
     name = "libstagefright_nuplayer";

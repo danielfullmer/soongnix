@@ -32,11 +32,15 @@ VtsHalSensorManagerV1_0TargetTest = cc_test {
     ];
     static_libs = [
         "android.hardware.sensors@1.0-convert"
+        "libgmock"
     ];
+    header_libs = ["libhidl_gtest_helper"];
     cflags = [
         "-O0"
         "-g"
     ];
+    require_root = true;
+    test_suites = ["vts"];
 };
 
 in { inherit VtsHalSensorManagerV1_0TargetTest; }

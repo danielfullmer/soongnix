@@ -211,4 +211,14 @@ golang-protobuf-ptypes-wrappers = bootstrap_go_package {
     srcs = ["ptypes/wrappers/wrappers.pb.go"];
 };
 
-in { inherit golang-protobuf-proto golang-protobuf-proto-proto3_proto golang-protobuf-proto-test-proto golang-protobuf-proto_test golang-protobuf-ptypes golang-protobuf-ptypes-any golang-protobuf-ptypes-duration golang-protobuf-ptypes-empty golang-protobuf-ptypes-struct golang-protobuf-ptypes-timestamp golang-protobuf-ptypes-wrappers protoc-gen-go protoc-gen-go_descriptor protoc-gen-go_generator protoc-gen-go_generator_internal_remap protoc-gen-go_grpc protoc-gen-go_plugin; }
+golang-protobuf-jsonpb = bootstrap_go_package {
+    name = "golang-protobuf-jsonpb";
+    pkgPath = "github.com/golang/protobuf/jsonpb";
+    srcs = ["jsonpb/jsonpb.go"];
+    deps = [
+        "golang-protobuf-proto"
+        "golang-protobuf-ptypes-struct"
+    ];
+};
+
+in { inherit golang-protobuf-jsonpb golang-protobuf-proto golang-protobuf-proto-proto3_proto golang-protobuf-proto-test-proto golang-protobuf-proto_test golang-protobuf-ptypes golang-protobuf-ptypes-any golang-protobuf-ptypes-duration golang-protobuf-ptypes-empty golang-protobuf-ptypes-struct golang-protobuf-ptypes-timestamp golang-protobuf-ptypes-wrappers protoc-gen-go protoc-gen-go_descriptor protoc-gen-go_generator protoc-gen-go_generator_internal_remap protoc-gen-go_grpc protoc-gen-go_plugin; }

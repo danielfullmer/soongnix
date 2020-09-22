@@ -49,6 +49,7 @@ acloud = python_binary_host {
         "acloud_reconnect"
         "acloud_internal"
         "acloud_list"
+        "acloud_pull"
         "acloud_metrics"
         "acloud_proto"
         "acloud_public"
@@ -57,6 +58,8 @@ acloud = python_binary_host {
         "py-dateutil"
         "py-google-api-python-client"
         "py-oauth2client"
+        "py-pyopenssl"
+        "py-six"
     ];
     dist = {
         targets = ["droidcore"];
@@ -79,15 +82,20 @@ acloud_test = python_test_host {
         "public/actions/common_operations_test.py"
         "public/actions/create_cuttlefish_action_test.py"
         "public/actions/create_goldfish_action_test.py"
+        "public/actions/remote_instance_cf_device_factory_test.py"
         "internal/lib/adb_tools_test.py"
         "internal/lib/android_build_client_test.py"
         "internal/lib/android_compute_client_test.py"
         "internal/lib/base_cloud_client_test.py"
         "internal/lib/cheeps_compute_client_test.py"
+        "internal/lib/cvd_compute_client_multi_stage_test.py"
         "internal/lib/cvd_compute_client_test.py"
+        "internal/lib/cvd_runtime_config_test.py"
         "internal/lib/gcompute_client_test.py"
         "internal/lib/goldfish_compute_client_test.py"
         "internal/lib/gstorage_client_test.py"
+        "internal/lib/ota_tools_test.py"
+        "internal/lib/ssh_test.py"
         "internal/lib/utils_test.py"
         "metrics/__init__.py"
         "metrics/metrics.py"
@@ -98,6 +106,7 @@ acloud_test = python_test_host {
         "acloud_reconnect"
         "acloud_internal"
         "acloud_list"
+        "acloud_pull"
         "acloud_proto"
         "acloud_public"
         "acloud_setup"
@@ -135,6 +144,8 @@ acloud_public = python_library_host {
         "public/actions/create_cuttlefish_action_test.py"
         "public/actions/create_goldfish_action.py"
         "public/actions/create_goldfish_action_test.py"
+        "public/actions/remote_instance_cf_device_factory.py"
+        "public/actions/remote_instance_cf_device_factory_test.py"
     ];
     exclude_srcs = [
         "public/config_test.py"
@@ -143,6 +154,7 @@ acloud_public = python_library_host {
         "public/actions/common_operations_test.py"
         "public/actions/create_cuttlefish_action_test.py"
         "public/actions/create_goldfish_action_test.py"
+        "public/actions/remote_instance_cf_device_factory_test.py"
         "public/acloud_main.py"
     ];
 };
@@ -166,7 +178,11 @@ acloud_internal = python_library_host {
         "internal/lib/cheeps_compute_client.py"
         "internal/lib/cheeps_compute_client_test.py"
         "internal/lib/cvd_compute_client.py"
+        "internal/lib/cvd_compute_client_multi_stage.py"
+        "internal/lib/cvd_compute_client_multi_stage_test.py"
         "internal/lib/cvd_compute_client_test.py"
+        "internal/lib/cvd_runtime_config.py"
+        "internal/lib/cvd_runtime_config_test.py"
         "internal/lib/driver_test_lib.py"
         "internal/lib/gcompute_client.py"
         "internal/lib/gcompute_client_test.py"
@@ -174,6 +190,10 @@ acloud_internal = python_library_host {
         "internal/lib/goldfish_compute_client_test.py"
         "internal/lib/gstorage_client.py"
         "internal/lib/gstorage_client_test.py"
+        "internal/lib/ota_tools.py"
+        "internal/lib/ota_tools_test.py"
+        "internal/lib/ssh.py"
+        "internal/lib/ssh_test.py"
         "internal/lib/utils.py"
         "internal/lib/utils_test.py"
     ];
@@ -183,10 +203,14 @@ acloud_internal = python_library_host {
         "internal/lib/android_compute_client_test.py"
         "internal/lib/base_cloud_client_test.py"
         "internal/lib/cheeps_compute_client_test.py"
+        "internal/lib/cvd_compute_client_multi_stage_test.py"
         "internal/lib/cvd_compute_client_test.py"
+        "internal/lib/cvd_runtime_config_test.py"
         "internal/lib/gcompute_client_test.py"
         "internal/lib/goldfish_compute_client_test.py"
         "internal/lib/gstorage_client_test.py"
+        "internal/lib/ota_tools_test.py"
+        "internal/lib/ssh_test.py"
         "internal/lib/utils_test.py"
     ];
 };
@@ -238,17 +262,23 @@ acloud_create = python_library_host {
         "create/cheeps_remote_image_remote_instance_test.py"
         "create/create.py"
         "create/create_args.py"
+        "create/create_args_test.py"
         "create/create_common.py"
         "create/create_common_test.py"
+        "create/create_test.py"
         "create/gce_local_image_remote_instance.py"
         "create/gce_remote_image_remote_instance.py"
+        "create/goldfish_local_image_local_instance.py"
+        "create/goldfish_local_image_local_instance_test.py"
         "create/goldfish_remote_image_remote_instance.py"
         "create/local_image_local_instance.py"
         "create/local_image_local_instance_test.py"
+        "create/local_image_remote_host.py"
         "create/local_image_remote_instance.py"
-        "create/local_image_remote_instance_test.py"
         "create/remote_image_local_instance.py"
         "create/remote_image_local_instance_test.py"
+        "create/remote_image_remote_host.py"
+        "create/remote_image_remote_host_test.py"
         "create/remote_image_remote_instance.py"
     ];
 };
@@ -288,6 +318,17 @@ acloud_reconnect = python_library_host {
     ];
 };
 
+acloud_pull = python_library_host {
+    name = "acloud_pull";
+    defaults = ["acloud_default"];
+    srcs = [
+        "pull/__init__.py"
+        "pull/pull.py"
+        "pull/pull_args.py"
+        "pull/pull_test.py"
+    ];
+};
+
 acloud_metrics = python_library_host {
     name = "acloud_metrics";
     defaults = ["acloud_default"];
@@ -301,4 +342,4 @@ acloud_metrics = python_library_host {
     ];
 };
 
-in { inherit acloud acloud_create acloud_default acloud_delete acloud_internal acloud_list acloud_metrics acloud_proto acloud_public acloud_reconnect acloud_setup acloud_test; }
+in { inherit acloud acloud_create acloud_default acloud_delete acloud_internal acloud_list acloud_metrics acloud_proto acloud_public acloud_pull acloud_reconnect acloud_setup acloud_test; }

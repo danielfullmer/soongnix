@@ -34,6 +34,14 @@ vts_mediaProfiles_validate_test = cc_test {
         "-Wall"
         "-Werror"
     ];
+    data = [
+        ":media_profiles"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    test_config = "vts_mediaProfiles_validate_test.xml";
 };
 
 in { inherit vts_mediaProfiles_validate_test; }

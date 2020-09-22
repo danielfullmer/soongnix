@@ -21,6 +21,9 @@ libvts_codecoverage = cc_library_shared {
 
     name = "libvts_codecoverage";
 
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+
     srcs = [
         "GcdaParser.cpp"
         "GcdaFile.cpp"

@@ -25,6 +25,7 @@ VpnDialogs = android_app {
         "src/com/android/vpndialogs/AlwaysOnDisconnectedDialog.java"
         "src/com/android/vpndialogs/ConfirmDialog.java"
         "src/com/android/vpndialogs/ManageDialog.java"
+        "src/com/android/vpndialogs/PlatformVpnConfirmDialog.java"
     ];
     platform_apis = true;
 };

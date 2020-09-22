@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsDocumentClient = android_test {
+CtsDocumentClient = android_test_helper_app {
     name = "CtsDocumentClient";
     defaults = ["cts_support_defaults"];
     sdk_version = "test_current";
@@ -40,7 +40,7 @@ CtsDocumentClient = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
         "mts"
     ];
@@ -51,6 +51,8 @@ CtsDocumentClient = android_test {
     dex_preopt = {
         enabled = false;
     };
+    min_sdk_version = "29";
+    target_sdk_version = "29";
 };
 
 in { inherit CtsDocumentClient; }

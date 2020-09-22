@@ -80,7 +80,6 @@ libext_init = genrule {
         "libxt_length.c"
         "libxt_limit.c"
         "libxt_mac.c"
-        "libxt_mangle.c"
         "libxt_mark.c"
         "libxt_multiport.c"
         "libxt_nfacct.c"
@@ -172,7 +171,6 @@ libext_srcs = gensrcs {
         "libxt_length.c"
         "libxt_limit.c"
         "libxt_mac.c"
-        "libxt_mangle.c"
         "libxt_mark.c"
         "libxt_multiport.c"
         "libxt_nfacct.c"
@@ -305,6 +303,7 @@ libext6_init = genrule {
         "libip6t_ipv6header.c"
         "libip6t_mh.c"
         "libip6t_rt.c"
+        "libip6t_srh.c"
     ];
     out = ["initext.c"];
 };
@@ -335,6 +334,7 @@ libext6_srcs = gensrcs {
         "libip6t_ipv6header.c"
         "libip6t_mh.c"
         "libip6t_rt.c"
+        "libip6t_srh.c"
     ];
 };
 

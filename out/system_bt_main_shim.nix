@@ -1,0 +1,21 @@
+{ filegroup }:
+let
+
+LibBluetoothShimSources = filegroup {
+    name = "LibBluetoothShimSources";
+    srcs = [
+        "btm.cc"
+        "btm_api.cc"
+        "controller.cc"
+        "config.cc"
+        "dumpsys.cc"
+        "entry.cc"
+        "hci_layer.cc"
+        "l2c_api.cc"
+        "l2cap.cc"
+        "shim.cc"
+        "timer.cc"
+    ];
+};
+
+in { inherit LibBluetoothShimSources; }

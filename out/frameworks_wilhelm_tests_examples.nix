@@ -19,6 +19,7 @@ slesTest_recBuffQueue = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -34,6 +35,7 @@ slesTest_playFdPath = cc_binary {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 
 };
@@ -58,6 +60,7 @@ slesTest_feedback = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -74,6 +77,7 @@ slesTest_sawtoothBufferQueue = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -90,6 +94,7 @@ slesTest_eqFdPath = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -106,6 +111,7 @@ slesTest_eqOutputPath = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -122,6 +128,7 @@ slesTest_bassboostPath = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -138,6 +145,7 @@ slesTest_virtualizer = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -154,6 +162,7 @@ slesTest_effectCapabilities = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -170,6 +179,7 @@ slesTest_sendToPresetReverb = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -186,6 +196,7 @@ slesTest_decodeToBuffQueue = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -207,6 +218,7 @@ slesTest_decodeAac = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 

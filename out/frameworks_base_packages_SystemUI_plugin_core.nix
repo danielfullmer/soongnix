@@ -28,6 +28,10 @@ PluginCoreLib = java_library {
         "src/com/android/systemui/plugins/annotations/Requirements.java"
         "src/com/android/systemui/plugins/annotations/Requires.java"
     ];
+
+    #  Enforce that the library is built against java 8 so that there are
+    #  no compatibility issues with launcher
+    java_version = "1.8";
 };
 
 in { inherit PluginCoreLib; }

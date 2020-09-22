@@ -11,9 +11,11 @@ FrameworksUiServicesTests = android_test {
     #  Include test java files
     srcs = [
         "src/com/android/frameworks/tests/uiservices/DummyProvider.java"
+        "src/com/android/internal/logging/InstanceIdSequenceFake.java"
         "src/com/android/server/UiModeManagerServiceTest.java"
         "src/com/android/server/UiServiceTestCase.java"
         "src/com/android/server/notification/AlertRateLimiterTest.java"
+        "src/com/android/server/notification/ArchiveTest.java"
         "src/com/android/server/notification/BadgeExtractorTest.java"
         "src/com/android/server/notification/BubbleExtractorTest.java"
         "src/com/android/server/notification/BuzzBeepBlinkTest.java"
@@ -25,14 +27,19 @@ FrameworksUiServicesTests = android_test {
         "src/com/android/server/notification/NotificationAdjustmentExtractorTest.java"
         "src/com/android/server/notification/NotificationAssistantsTest.java"
         "src/com/android/server/notification/NotificationChannelExtractorTest.java"
-        "src/com/android/server/notification/NotificationChannelTest.java"
+        "src/com/android/server/notification/NotificationChannelLoggerFake.java"
         "src/com/android/server/notification/NotificationComparatorTest.java"
+        "src/com/android/server/notification/NotificationHistoryDatabaseTest.java"
+        "src/com/android/server/notification/NotificationHistoryFilterTest.java"
+        "src/com/android/server/notification/NotificationHistoryManagerTest.java"
+        "src/com/android/server/notification/NotificationHistoryProtoHelperTest.java"
         "src/com/android/server/notification/NotificationIntrusivenessExtractorTest.java"
         "src/com/android/server/notification/NotificationListenerServiceTest.java"
         "src/com/android/server/notification/NotificationManagerServiceTest.java"
+        "src/com/android/server/notification/NotificationRecordLoggerFake.java"
+        "src/com/android/server/notification/NotificationRecordLoggerTest.java"
         "src/com/android/server/notification/NotificationRecordTest.java"
         "src/com/android/server/notification/NotificationShellCmdTest.java"
-        "src/com/android/server/notification/NotificationStatsTest.java"
         "src/com/android/server/notification/NotificationTest.java"
         "src/com/android/server/notification/NotifyingAppTest.java"
         "src/com/android/server/notification/PreferencesHelperTest.java"
@@ -42,8 +49,10 @@ FrameworksUiServicesTests = android_test {
         "src/com/android/server/notification/RoleObserverTest.java"
         "src/com/android/server/notification/ScheduleCalendarTest.java"
         "src/com/android/server/notification/ScheduleConditionProviderTest.java"
+        "src/com/android/server/notification/ShortcutHelperTest.java"
         "src/com/android/server/notification/SnoozeHelperTest.java"
         "src/com/android/server/notification/ValidateNotificationPeopleTest.java"
+        "src/com/android/server/notification/WrappedSysUiStatsEvent.java"
         "src/com/android/server/notification/ZenModeConfigTest.java"
         "src/com/android/server/notification/ZenModeExtractorTest.java"
         "src/com/android/server/notification/ZenModeFilteringTest.java"
@@ -70,6 +79,7 @@ FrameworksUiServicesTests = android_test {
         "mockito-target-inline-minus-junit4"
         "platform-test-annotations"
         "platformprotosnano"
+        "statsdprotolite"
         "hamcrest-library"
         "testables"
         "truth-prebuilt"
@@ -78,6 +88,7 @@ FrameworksUiServicesTests = android_test {
     libs = [
         "android.test.runner"
         "android.test.base"
+        "android.test.mock"
     ];
 
     dxflags = ["--multi-dex"];
@@ -96,7 +107,6 @@ FrameworksUiServicesTests = android_test {
         "libbacktrace"
         "libbase"
         "libbinder"
-        "libbinderthreadstate"
         "libc++"
         "libcutils"
         "liblog"
@@ -105,7 +115,7 @@ FrameworksUiServicesTests = android_test {
         "libui"
         "libunwindstack"
         "libutils"
-        "netd_aidl_interface-V2-cpp"
+        "netd_aidl_interface-cpp"
     ];
 };
 

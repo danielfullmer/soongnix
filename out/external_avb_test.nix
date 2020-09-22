@@ -42,7 +42,6 @@ at_auth_unlock_unittest = python_test_host {
         };
     };
     test_config = "at_auth_unlock_unittest.xml";
-    test_suites = ["general-tests"];
 };
 
 in { inherit at_auth_unlock_unittest; }

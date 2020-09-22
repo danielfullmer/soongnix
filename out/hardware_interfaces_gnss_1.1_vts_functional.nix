@@ -28,12 +28,17 @@ VtsHalGnssV1_1TargetTest = cc_test {
     static_libs = [
         "android.hardware.gnss@1.0"
         "android.hardware.gnss@1.1"
+        "android.hardware.gnss@2.0"
         "android.hardware.gnss@common-vts-lib"
     ];
     shared_libs = [
         "android.hardware.gnss.measurement_corrections@1.0"
+        "android.hardware.gnss.measurement_corrections@1.1"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalGnssV1_1TargetTest; }

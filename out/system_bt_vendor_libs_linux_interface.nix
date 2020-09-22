@@ -16,8 +16,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"android.hardware.bluetooth@1.0-service.btlinux" = cc_binary {
-    name = "android.hardware.bluetooth@1.0-service.btlinux";
+"android.hardware.bluetooth@1.1-service.btlinux" = cc_binary {
+    name = "android.hardware.bluetooth@1.1-service.btlinux";
     proprietary = true;
     relative_install_path = "hw";
     srcs = [
@@ -33,18 +33,17 @@ let
     ];
     header_libs = ["libbluetooth_headers"];
     shared_libs = [
-        "android.hardware.bluetooth@1.0"
+        "android.hardware.bluetooth@1.1"
         "libbase"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
     conlyflags = [
         "-std=c99"
     ];
-    init_rc = ["android.hardware.bluetooth@1.0-service.btlinux.rc"];
+    init_rc = ["android.hardware.bluetooth@1.1-service.btlinux.rc"];
 };
 
-in { inherit "android.hardware.bluetooth@1.0-service.btlinux"; }
+in { inherit "android.hardware.bluetooth@1.1-service.btlinux"; }

@@ -51,15 +51,12 @@ gl_libs_defaults = cc_defaults {
         "libarect"
     ];
     header_libs = [
+        "bionic_libc_platform_headers"
         "gl_headers"
         "libsystem_headers"
-        "libhardware_headers"
         "libnativebase_headers"
     ];
     export_header_lib_headers = ["gl_headers"];
-
-    #  we need to access the private Bionic header <bionic_tls.h>
-    include_dirs = ["bionic/libc/private"];
 };
 
 # ##############################################################################
@@ -82,6 +79,7 @@ egl_libs_defaults = cc_defaults {
         "libgraphicsenv"
         "libnativewindow"
         "libbacktrace"
+        "libbase"
     ];
     target = {
         vendor = {
@@ -132,17 +130,22 @@ libEGL = cc_library_shared {
         "android.hardware.configstore-utils"
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "libnativebridge_lazy"
         "libnativeloader_lazy"
         "libutils"
+        "libSurfaceFlingerProp"
     ];
     static_libs = [
         "libEGL_getProcAddress"
         "libEGL_blobCache"
     ];
-    ldflags = ["-Wl,--exclude-libs=ALL"];
+    ldflags = ["-Wl,--exclude-libs=ALL,--Bsymbolic-functions"];
     export_include_dirs = ["EGL/include"];
+    stubs = {
+        symbol_file = "libEGL.map.txt";
+        versions = ["29"];
+    };
+    header_libs = ["libsurfaceflinger_headers"];
 };
 
 libEGL_test = cc_test {

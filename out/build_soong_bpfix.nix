@@ -22,7 +22,18 @@ let
 bpfix = blueprint_go_binary {
     name = "bpfix";
     srcs = [
-        "cmd/bpfix.go"
+        "cmd/main.go"
+    ];
+    deps = [
+        "bpfix-cmd"
+    ];
+};
+
+bpfix-cmd = bootstrap_go_package {
+    name = "bpfix-cmd";
+    pkgPath = "android/soong/bpfix/cmd_lib";
+    srcs = [
+        "cmd_lib/bpfix.go"
     ];
     deps = [
         "bpfix-lib"
@@ -43,4 +54,4 @@ bpfix-lib = bootstrap_go_package {
     ];
 };
 
-in { inherit bpfix bpfix-lib; }
+in { inherit bpfix bpfix-cmd bpfix-lib; }

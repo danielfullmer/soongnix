@@ -20,6 +20,7 @@ jank-helper-test = java_library {
     defaults = ["tradefed_errorprone_defaults"];
 
     srcs = [
+        "src/com/android/helpers/BinderCollectionHelperTest.java"
         "src/com/android/helpers/JankCollectionHelperTest.java"
         "src/com/android/helpers/SfStatsCollectionHelperTest.java"
     ];

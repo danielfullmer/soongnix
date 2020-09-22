@@ -100,6 +100,9 @@ libartd-simulator-container = art_cc_library {
         "libartbased"
         "libartd"
     ];
+    apex_available = [
+        "com.android.art.debug"
+    ];
 };
 
 in { inherit libart-simulator libart-simulator-container libart_simulator_container_defaults libart_simulator_defaults libart_simulator_headers libartd-simulator libartd-simulator-container; }

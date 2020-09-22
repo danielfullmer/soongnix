@@ -26,7 +26,6 @@ CtsProfileOwnerApp = android_test_helper_app {
         "src/com/android/cts/profileowner/BackupServicePoliciesTest.java"
         "src/com/android/cts/profileowner/BaseProfileOwnerTest.java"
         "src/com/android/cts/profileowner/ManagementTest.java"
-        "src/com/android/cts/profileowner/WifiTest.java"
     ];
     libs = [
         "android.test.runner.stubs"
@@ -41,7 +40,7 @@ CtsProfileOwnerApp = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

@@ -1,0 +1,34 @@
+{ android_test }:
+let
+
+CtsCalendarProviderTestCases = android_test {
+    name = "CtsCalendarProviderTestCases";
+    defaults = ["cts_defaults"];
+
+    test_suites = [
+        "cts"
+        "vts10"
+        "general-tests"
+    ];
+
+    libs = [
+        "android.test.mock"
+        "android.test.base.stubs"
+        "android.test.runner.stubs"
+    ];
+
+    static_libs = [
+        "compatibility-device-util-axt"
+        "ctstestrunner-axt"
+        "junit"
+        "truth-prebuilt"
+        "mockito-target-minus-junit4"
+    ];
+
+    srcs = ["src/android/provider/cts/calendar/CalendarTest.java"];
+
+    sdk_version = "test_current";
+    min_sdk_version = "29";
+};
+
+in { inherit CtsCalendarProviderTestCases; }

@@ -23,7 +23,6 @@ VtsTestabilityCheckerDefaults = cc_defaults {
         "libbase"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libselinux"
         "libtinyxml2"

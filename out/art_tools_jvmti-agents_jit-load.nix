@@ -43,15 +43,6 @@ jitload-defaults = cc_defaults {
     header_libs = [
         "libopenjdkjvmti_headers"
     ];
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
-    symlink_preferred_arch = true;
 };
 
 libjitload = art_cc_library {

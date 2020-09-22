@@ -382,7 +382,7 @@ guice_munge_manifest = genrule {
     name = "guice_munge_manifest";
     out = ["guice_munge.manifest"];
     srcs = ["lib/build/munge.jar"];
-    cmd = "unzip -qc $(in) META-INF/MANIFEST.MF > $(out)";
+    cmd = "unzip -p -q $(in) META-INF/MANIFEST.MF > $(out)";
 };
 
 guice_munge = java_binary_host {

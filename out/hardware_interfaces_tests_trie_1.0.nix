@@ -13,7 +13,7 @@ let
     interfaces = [
         "android.hidl.base@1.0"
     ];
-    gen_java = false;
+    gen_java = true;
 };
 
 in { inherit "android.hardware.tests.trie@1.0"; }

@@ -23,14 +23,12 @@ libservices = cc_library_shared {
         ":IDropBoxManagerService.aidl"
         "src/content/ComponentName.cpp"
         "src/os/DropBoxManager.cpp"
-        "src/os/StatsDimensionsValue.cpp"
-        "src/os/StatsLogEventWrapper.cpp"
     ];
 
     shared_libs = [
         "libbinder"
-        "liblog"
         "libcutils"
+        "liblog"
         "libutils"
     ];
     header_libs = [

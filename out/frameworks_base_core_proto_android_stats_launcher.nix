@@ -29,4 +29,17 @@ launcherprotosnano = java_library {
     ];
 };
 
-in { inherit launcherprotosnano; }
+launcherprotoslite = java_library {
+    name = "launcherprotoslite";
+    proto = {
+        type = "lite";
+        include_dirs = ["external/protobuf/src"];
+    };
+
+    sdk_version = "current";
+    srcs = [
+        "launcher.proto"
+    ];
+};
+
+in { inherit launcherprotoslite launcherprotosnano; }

@@ -16,13 +16,13 @@ libbt-audio-hal-interface = cc_library_static {
     srcs = [
         "a2dp_encoding.cc"
         "client_interface.cc"
+        "codec_status.cc"
         "hearing_aid_software_encoding.cc"
     ];
     shared_libs = [
         "android.hardware.bluetooth.audio@2.0"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
     ];
     static_libs = [
         "libosi"
@@ -40,6 +40,7 @@ bluetooth-test-audio-hal-interface = cc_test {
     defaults = ["fluoride_defaults"];
     include_dirs = [
         "system/bt"
+        "system/bt/stack/include"
     ];
     srcs = [
         "client_interface_unittest.cc"
@@ -49,7 +50,6 @@ bluetooth-test-audio-hal-interface = cc_test {
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

@@ -147,11 +147,11 @@ libelf = cc_library {
         "-Wno-pointer-arith"
     ];
 
-    static_libs = [
-        "libz"
-        "libelf_headers"
-    ];
+    static_libs = ["libz"];
 
+    header_libs = ["elfutils_headers"];
+
+    export_header_lib_headers = ["elfutils_headers"];
     export_include_dirs = ["."];
 
     target = {
@@ -168,6 +168,12 @@ libelf = cc_library {
             };
         };
     };
+
+    visibility = [
+        "//device/google/contexthub/util/nanoapp_postprocess"
+        "//external/igt-gpu-tools"
+        "//external/mesa3d"
+    ];
 };
 
 in { inherit libelf; }

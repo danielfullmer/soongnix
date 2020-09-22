@@ -8,7 +8,6 @@ display_defaults = cc_defaults {
         "-Wconversion"
         "-Wall"
         "-Werror"
-        "-std=c++14"
     ];
     shared_libs = [
         "liblog"
@@ -38,9 +37,22 @@ display_headers = cc_library_headers {
     export_header_lib_headers = ["libhardware_headers"];
 };
 
+display_intf_headers = cc_library_headers {
+    name = "display_intf_headers";
+    vendor_available = true;
+    export_include_dirs = [
+        "include"
+        "libcopybit"
+        "libqdutils"
+        "gralloc"
+    ];
+    header_libs = ["libhardware_headers"];
+    export_header_lib_headers = ["libhardware_headers"];
+};
+
 subdirs = [
     "libqservice"
     "libqdutils"
 ];
 
-in { inherit display_defaults display_headers; }
+in { inherit display_defaults display_headers display_intf_headers; }

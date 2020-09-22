@@ -30,7 +30,6 @@ VtsHalWifiSupplicantV1_1TargetTestUtil = cc_library_static {
         "android.hardware.wifi.supplicant@1.0"
         "android.hardware.wifi.supplicant@1.1"
         "android.hardware.wifi@1.0"
-        "libcrypto"
         "libgmock"
         "libwifi-system"
         "libwifi-system-iface"
@@ -41,7 +40,6 @@ VtsHalWifiSupplicantV1_1TargetTest = cc_test {
     name = "VtsHalWifiSupplicantV1_1TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
-        "VtsHalWifiSupplicantV1_1TargetTest.cpp"
         "supplicant_hidl_test.cpp"
         "supplicant_sta_iface_hidl_test.cpp"
         "supplicant_sta_network_hidl_test.cpp"
@@ -54,12 +52,14 @@ VtsHalWifiSupplicantV1_1TargetTest = cc_test {
         "android.hardware.wifi.supplicant@1.1"
         "android.hardware.wifi@1.0"
         "android.hardware.wifi@1.1"
-        "libcrypto"
         "libgmock"
         "libwifi-system"
         "libwifi-system-iface"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalWifiSupplicantV1_1TargetTest VtsHalWifiSupplicantV1_1TargetTestUtil; }

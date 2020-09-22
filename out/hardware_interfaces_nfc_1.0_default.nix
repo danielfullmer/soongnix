@@ -15,7 +15,6 @@ let
         "libcutils"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.nfc@1.0"
     ];
 };
@@ -36,7 +35,6 @@ let
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.nfc@1.0"
     ];
 

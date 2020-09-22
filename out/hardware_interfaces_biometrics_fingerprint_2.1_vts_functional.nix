@@ -22,7 +22,10 @@ VtsHalBiometricsFingerprintV2_1TargetTest = cc_test {
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalBiometricsFingerprintV2_1TargetTest.cpp"];
     static_libs = ["android.hardware.biometrics.fingerprint@2.1"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalBiometricsFingerprintV2_1TargetTest; }

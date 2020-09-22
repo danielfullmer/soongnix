@@ -1,4 +1,4 @@
-{ droiddoc_exported_dir, droidstubs, filegroup, java_defaults, java_library, java_library_host, java_library_static, java_system_modules, java_test }:
+{ droiddoc_exported_dir, droidstubs, filegroup, genrule, java_defaults, java_library, java_library_host, java_library_static, java_system_modules, java_test, platform_compat_config }:
 let
 
 #  Copyright (C) 2007 The Android Open Source Project
@@ -22,8 +22,8 @@ let
 #  The Android core library provides low-level APIs for use by the rest of the
 #  Android software stack. It is made up of various parts, some of which can be
 #  found in libcore/ and other parts that can be found in various external/
-#  directories. See the "core-system-modules" definition for the parts.
-
+#  directories.
+#
 #  libcore has some sub-directories that follow a common structure:
 #  e.g. dalvik, dom, harmony-tests, json, jsr166-tests, luni, libart, ojluni,
 #  support, xml, xmlpull.
@@ -48,14 +48,59 @@ build = [
 ];
 
 #  The Java files and their associated resources.
-core_resource_dirs = [
-    "luni/src/main/java"
-    "ojluni/src/main/resources/"
+core-luni-resources = filegroup {
+    name = "core-luni-resources";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
+    path = "luni/src/main/java/";
+    srcs = [
+        "luni/src/main/java/java/util/logging/logging.properties"
+        "luni/src/main/java/java/security/security.properties"
+    ];
+};
+
+core-ojluni-resources = filegroup {
+    name = "core-ojluni-resources";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
+    path = "ojluni/src/main/resources/";
+    srcs = [
+        "ojluni/src/main/resources/calendars.properties"
+        "ojluni/src/main/resources/hijrah-config-umalqura.properties"
+        "ojluni/src/main/resources/sun/"
+        "ojluni/src/main/resources/sun/nio/"
+        "ojluni/src/main/resources/sun/util/"
+        "ojluni/src/main/resources/sun/nio/cs/"
+        "ojluni/src/main/resources/sun/nio/cs/standard-charsets"
+        "ojluni/src/main/resources/sun/util/logging/"
+        "ojluni/src/main/resources/sun/util/logging/resources/"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_de.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_es.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_fr.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_it.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_ja.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_ko.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_pt_BR.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_sv.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_zh_CN.properties"
+        "ojluni/src/main/resources/sun/util/logging/resources/logging_zh_TW.properties"
+    ];
+};
+
+core_resources = [
+    ":core-luni-resources"
+    ":core-ojluni-resources"
 ];
 
 #  The source files that go into core-oj.
 core_oj_java_files = filegroup {
     name = "core_oj_java_files";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
     srcs = [":openjdk_java_files"];
 };
 
@@ -69,9 +114,11 @@ core_oj_api_files = filegroup {
 #  The source files that go into core-libart.
 core_libart_java_files = filegroup {
     name = "core_libart_java_files";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
     srcs = [
         ":non_openjdk_java_files"
-        ":android_icu4j_src_files"
     ];
 };
 
@@ -81,36 +128,26 @@ core_libart_api_files = filegroup {
     name = "core_libart_api_files";
     srcs = [
         ":non_openjdk_javadoc_files"
-        ":android_icu4j_src_files"
     ];
 };
 
-#  The set of files for the core library that have been marked up with @hide
-#  for the public SDK APIs. Used from frameworks/base/ to indicate the source
-#  files for inclusion in the public SDK docs.
-core_public_api_files = filegroup {
-    name = "core_public_api_files";
-    srcs = [
-        ":core_oj_api_files"
-        ":core_libart_api_files"
-        ":conscrypt_public_api_files"
-    ];
-};
-
-#  The set of files for the core library that have been marked up with @hide and
-#  API-related annotations. Note that this includes the intra-core and
-#  core-platform APIs as well as the public APIs.
+#  The set of files for the ART module that contribute to one or more API
+#  surfaces. This includes files that are in the public API as well as those
+#  that are not but which have been marked up with @hide plus one or more of
+#  the API defining annotations.
 #
 #  Some source files in :core_oj_api_files and :openjdk_mmodule_extra_files are
 #  annotated by applying annotations to the .annotated.java stubs files in
 #  ojluni/annotated/mmodules and rather than in the original source. See the comments
 #  in openjdk_java_files.bp for more details.
-core_api_files = filegroup {
-    name = "core_api_files";
+art_module_api_files = filegroup {
+    name = "art_module_api_files";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
     srcs = [
         ":apache-xml_api_files"
         ":bouncycastle_java_files"
-        ":conscrypt_java_files"
         ":core_oj_api_files"
         ":core_libart_api_files"
         ":okhttp_api_files"
@@ -137,41 +174,46 @@ libcore_java_defaults = java_defaults {
 #  Build for the target (device).
 #
 
-#  Rule generating resource lib for android_icu4j.
-#  In the downstream branch master-icu-dev, the resource files are generated.
-#  This rule can't be moved external/icu because soong enforces that no_standard_libs:true can only
-#  be used in libcore/ or development/
-android_icu4j_resources_lib = java_library {
-    name = "android_icu4j_resources_lib";
-    java_resources = [":android_icu4j_resources"];
-    no_standard_libs = true;
-    system_modules = "none";
-};
-
 #  A target used to bootstrap compilation for the core library.
+#
 #  See core-all-system-modules for more details.
 core-all = java_library {
     name = "core-all";
     defaults = ["libcore_java_defaults"];
 
     srcs = [
+        #  Use the source code for the I18N module intra core API as using the
+        #  compiled version does not work due to limitations in either soong or the javac
+        #  toolchain. See http://b/142056316 for more details.
+        ":i18n-module-intra-core-api-stubs-source"
         ":core_oj_java_files"
         ":core_libart_java_files"
         ":openjdk_lambda_stub_files"
+        ":openjdk_generated_annotation_stub_files"
+        ":app-compat-annotations-source"
     ];
 
-    no_standard_libs = true;
+    sdk_version = "none";
     system_modules = "none";
+    patch_module = "java.base";
     openjdk9 = {
         srcs = ["luni/src/module/java/module-info.java"];
-        javacflags = ["--patch-module=java.base=."];
     };
 
-    java_resource_dirs = core_resource_dirs;
-    static_libs = ["android_icu4j_resources_lib"];
+    java_resources = core_resources;
     java_version = "1.9";
 
     installable = false;
+
+    plugins = [
+        "compat-changeid-annotation-processor"
+        "unsupportedappusage-annotation-processor"
+    ];
+};
+
+libcore-platform-compat-config = platform_compat_config {
+    name = "libcore-platform-compat-config";
+    src = ":core-all";
 };
 
 #  A system modules definition for use by core library targets only. It only
@@ -181,30 +223,43 @@ core-all = java_library {
 #  etc. This system_modules definition is used to bootstrap compilation for
 #  other parts of the core library like core-oj, core-libart, conscrypt,
 #  bouncycastle, etc.
-#
-#  If you want to compile against the entire core library implementation, for
-#  example to build core library tests, see "core-system-modules" instead.
 core-all-system-modules = java_system_modules {
     name = "core-all-system-modules";
+
+    #  Visibility is deliberately restricted to a small set of build modules that
+    #  the core library team control.
+    visibility = [
+        "//external/apache-harmony:__subpackages__"
+        "//external/apache-xml"
+        "//external/okhttp"
+        "//libcore:__subpackages__"
+    ];
+
     libs = ["core-all"];
 };
 
 #  Contains the parts of core library associated with OpenJDK.
 core-oj = java_library {
     name = "core-oj";
+    visibility = [
+        "//art/build/apex"
+        "//external/wycheproof"
+        "//libcore/benchmarks"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
     defaults = ["libcore_java_defaults"];
     installable = true;
     hostdex = true;
 
     srcs = [":core_oj_java_files"];
-    java_resource_dirs = core_resource_dirs;
+    java_resources = core_resources;
 
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
-    openjdk9 = {
-        javacflags = ["--patch-module=java.base=."];
-    };
+    patch_module = "java.base";
 
     jacoco = {
         exclude_filter = [
@@ -228,24 +283,31 @@ core-oj = java_library {
 };
 
 #  Contains parts of core library not associated with OpenJDK. Contains not
-#  just java.*, javax.* code but also android.icu.*, android.system.* and
-#  various internal libcore.* packages.
+#  just java.*, javax.* code but also android.system.* and various internal
+#  libcore.* packages.
 core-libart = java_library {
     name = "core-libart";
+    visibility = [
+        "//art/build/apex"
+        "//external/robolectric-shadows"
+        "//external/wycheproof"
+        "//libcore/benchmarks"
+        "//frameworks/layoutlib"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
     defaults = ["libcore_java_defaults"];
     installable = true;
     hostdex = true;
 
     srcs = [":core_libart_java_files"];
-    static_libs = ["android_icu4j_resources_lib"];
     java_version = "1.9";
 
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
-    openjdk9 = {
-        javacflags = ["--patch-module=java.base=."];
-    };
+    patch_module = "java.base";
 
     jacoco = {
         exclude_filter = [
@@ -254,35 +316,55 @@ core-libart = java_library {
         ];
     };
 
-    required = [
-        #  Device files put in /system.
-        "tzdata"
-        "tz_version"
-        #  Files used to simulate the /system and runtime APEX dir
-        #  structure on host.
-        "tzdata_host"
-        "tzdata_host_runtime_apex"
-        "tzlookup.xml_host_runtime_apex"
-        "tz_version_host"
-        "tz_version_host_runtime_apex"
-    ];
+    target = {
+        hostdex = {
+            required = [
+                #  Files used to simulate the /system, runtime APEX and tzdata
+                #  APEX dir structure on host.
+                "icu_tzdata.dat_host_tzdata_apex"
+                "tzdata_host"
+                "tzdata_host_tzdata_apex"
+                "tzlookup.xml_host_tzdata_apex"
+                "tz_version_host"
+                "tz_version_host_tzdata_apex"
+            ];
+        };
+    };
 };
 
 #  Provided solely to contribute information about which hidden parts of the
 #  core-oj API are used by apps.
+#
+#  The build system determines that this library provides hiddenapi information
+#  for the core-oj bootjar because its name is of the form <x>-hiddenapi, where
+#  <x> is the name of a boot jar. That triggers the generation of a flags.csv
+#  file which encapsulates information extracted from the UnsupportedAppUsage
+#  annotations in the dex. The information from that file is then encoded into
+#  the core-oj file.
+#
+#  Usually, e.g. for core-libart, the UnsupportedAppUsage annotations are
+#  added to the source that is compiled directly into the bootjar and the build
+#  system extracts the information about UnsupportedAppUsage directly from
+#  there.
+#
+#  This approach of having separate annotated source and a separate build
+#  target was taken for ojluni to avoid having to maintain local patches in the
+#  ojluni source for UnsupportedAppUsage annotations as that would make it more
+#  difficult to pull down changes from upstream.
+#
 core-oj-hiddenapi = java_library {
     name = "core-oj-hiddenapi";
+    #  Do not allow this to be accessed from outside this directory.
+    visibility = ["//visibility:private"];
     defaults = ["libcore_java_defaults"];
     compile_dex = true;
 
     srcs = [":openjdk_hiddenapi_javadoc_files"];
 
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
-    openjdk9 = {
-        javacflags = ["--patch-module=java.base=."];
-    };
+    patch_module = "java.base";
+    plugins = ["unsupportedappusage-annotation-processor"];
 };
 
 #
@@ -296,8 +378,7 @@ core-oj-testdex = java_library {
     name = "core-oj-testdex";
     installable = true;
     static_libs = ["core-oj"];
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
     dxflags = ["--core-library"];
     dex_preopt = {
@@ -311,8 +392,7 @@ core-libart-testdex = java_library {
     name = "core-libart-testdex";
     installable = true;
     static_libs = ["core-libart"];
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
     dxflags = ["--core-library"];
     dex_preopt = {
@@ -326,12 +406,9 @@ core_lambda_stubs_defaults = java_defaults {
     defaults = ["libcore_java_defaults"];
     hostdex = true;
 
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
-    openjdk9 = {
-        javacflags = ["--patch-module=java.base=."];
-    };
+    patch_module = "java.base";
 
     notice = "ojluni/NOTICE";
 
@@ -345,6 +422,7 @@ core_lambda_stubs_defaults = java_defaults {
 #  are also in the public SDK API from API level 26 onwards.
 core-lambda-stubs = java_library {
     name = "core-lambda-stubs";
+    visibility = ["//visibility:public"];
     defaults = ["core_lambda_stubs_defaults"];
     srcs = [
         ":openjdk_lambda_stub_files"
@@ -357,58 +435,103 @@ core-lambda-stubs = java_library {
 #  (since API level 26).
 core-lambda-stubs-for-system-modules = java_library {
     name = "core-lambda-stubs-for-system-modules";
+    visibility = [
+        "//libcore/mmodules/core_platform_api"
+    ];
     defaults = ["core_lambda_stubs_defaults"];
     srcs = [
         ":openjdk_lambda_stub_files"
     ];
+    include_srcs = true;
 };
 
-#  A system modules definition containing the implementations for the various
-#  parts that make up the core library.
-#
-#  This system module is intended for use by tests that may need access to
-#  core library internals. It should not be generally used; most of the
-#  platform build should build against API stubs instead. See
-#  "core-platform-api-stubs-system-modules", which is the default used by the
-#  Android build.
-#
-#  This module also includes lambda stubs for compiling source containing
-#  Java lambdas.
-core-system-modules = java_system_modules {
-    name = "core-system-modules";
-    libs = [
-        "core-oj"
-        "core-libart"
-        "bouncycastle"
-        "conscrypt"
-        "okhttp"
-        "apache-xml"
-        #  This one is not on device but it's needed when javac compiles code
-        #  containing lambdas.
-        "core-lambda-stubs-for-system-modules"
+#  Creates a jar that exists to satisfy javac when compiling source code that
+#  contains @Generated annotations, which are produced by some code generation
+#  tools (notably dagger) but aren't part of the Android API.
+#  See http://b/123891440.
+core-generated-annotation-stubs = java_library {
+    name = "core-generated-annotation-stubs";
+    visibility = [
+        "//libcore/mmodules/core_platform_api"
     ];
+    defaults = ["libcore_java_defaults"];
+    srcs = [
+        ":openjdk_generated_annotation_stub_files"
+    ];
+    hostdex = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
+    patch_module = "java.base";
+    notice = "ojluni/NOTICE";
+    installable = false;
+    include_srcs = true;
 };
 
 #  Builds libcore test rules
 core-test-rules = java_library_static {
     name = "core-test-rules";
+    visibility = [
+        "//art/build/sdk"
+        "//external/conscrypt"
+        "//external/conscrypt/apex/tests"
+        "//frameworks/base/location/tests/locationtests"
+        "//frameworks/base/core/tests/coretests"
+        "//frameworks/base/wifi/tests"
+        "//cts/tests/tests/util"
+    ];
     hostdex = true;
     srcs = [
         "dalvik/test-rules/src/main/java/libcore/dalvik/system/CloseGuardSupport.java"
         "test-rules/src/main/java/libcore/junit/junit3/TestCaseWithRules.java"
+        "test-rules/src/main/java/libcore/junit/util/EnableDeprecatedBouncyCastleAlgorithmsRule.java"
         "test-rules/src/main/java/libcore/junit/util/ResourceLeakageDetector.java"
         "test-rules/src/main/java/libcore/junit/util/SwitchTargetSdkVersionRule.java"
     ];
     static_libs = ["junit"];
 
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
+};
+
+#  Builds platform_compat test rules
+core-compat-test-rules = java_library_static {
+    name = "core-compat-test-rules";
+    visibility = [
+        "//art/build/sdk"
+        "//frameworks/base/tests/PlatformCompatGating/test-rules"
+    ];
+    srcs = [
+        "luni/src/main/java/android/compat/Compatibility.java"
+        "test-rules/src/platform_compat/java/libcore/junit/util/CoreCompatChangeRule.java"
+        "luni/src/main/java/libcore/api/CorePlatformApi.java"
+        "luni/src/main/java/libcore/api/IntraCoreApi.java"
+    ];
+    static_libs = [
+        "junit"
+        "guava"
+    ];
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
+    #  This builds classes that are in the java.base Java module:
+    patch_module = "java.base";
+    hostdex = true;
 };
 
 #  Builds the core-tests-support library used by various tests.
 core-tests-support = java_library_static {
     name = "core-tests-support";
+    visibility = [
+        "//art/build/sdk"
+        "//cts/apps/CtsVerifier"
+        "//cts/tests/tests/keystore"
+        "//cts/tests/tests/net"
+        "//cts/tests/tests/net/api23Test"
+        "//external/apache-harmony"
+        "//frameworks/base/core/tests/coretests"
+        "//libcore/benchmarks"
+        "//packages/apps/KeyChain/tests"
+        "//system/timezone/distro/core"
+    ];
     hostdex = true;
     srcs = [
         "support/src/test/java/libcore/java/io/NullPrintStream.java"
@@ -546,7 +669,7 @@ core-tests-support = java_library_static {
         "support/src/test/java/tests/util/SummaryStatistics.java"
     ];
 
-    no_framework_libs = true;
+    sdk_version = "core_platform";
     libs = ["junit"];
     static_libs = [
         "bouncycastle-unbundled"
@@ -558,6 +681,9 @@ core-tests-support = java_library_static {
 #  Builds the jsr166-tests library.
 jsr166-tests = java_test {
     name = "jsr166-tests";
+    visibility = [
+        "//cts/tests/libcore/jsr166"
+    ];
     srcs = [
         "jsr166-tests/src/test/java/jsr166/AbstractExecutorServiceTest.java"
         "jsr166-tests/src/test/java/jsr166/AbstractQueueTest.java"
@@ -653,47 +779,38 @@ jsr166-tests = java_test {
         "jsr166-tests/src/test/java/jsr166/TreeSubMapTest.java"
         "jsr166-tests/src/test/java/jsr166/TreeSubSetTest.java"
     ];
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
     libs = [
-        "core-all"
         "junit"
     ];
-    system_modules = "core-all-system-modules";
 };
 
-#  Builds a library just containing files from luni/src/test/filesystems
-#  for use in tests.
-filesystemstest = java_library {
-    name = "filesystemstest";
-    compile_dex = true;
+#  A filegroup that provides access to a source file for a toolchain test that
+#  checks Java 9 language features are handled properly by JarJar.
+core-java-9-language-features-source = filegroup {
+    name = "core-java-9-language-features-source";
+    srcs = ["luni/src/main/java/libcore/internal/Java9LanguageFeatures.java"];
+    visibility = ["//libcore/luni/src/test/java9language"];
+};
+
+core-tests-smali-dex = genrule {
+    name = "core-tests-smali-dex";
     srcs = [
-        "luni/src/test/filesystems/src/mypackage/MockFileSystem.java"
-        "luni/src/test/filesystems/src/mypackage/MockFileSystemProvider.java"
-        "luni/src/test/filesystems/src/mypackage/package-info.java"
+        "luni/src/test/java/libcore/java/lang/ThreadTestHelper.smali"
+        "luni/src/test/java/libcore/java/lang/reflect/parameter/MetadataVariations.smali"
     ];
-    java_resource_dirs = ["luni/src/test/filesystems/resources"];
-    no_framework_libs = true;
-    errorprone = {
-        javacflags = ["-Xep:MissingOverride:OFF"];
-    };
-};
-
-#  Builds a library just containing files from luni/src/test/parameter_metadata
-#  for use in tests.
-parameter-metadata-test = java_library {
-    name = "parameter-metadata-test";
-    compile_dex = true;
-    srcs = ["luni/src/test/parameter_metadata/src/libcore/java/lang/reflect/parameter/ParameterMetadataTestClasses.java"];
-    no_framework_libs = true;
-    javacflags = ["-parameters"];
-    errorprone = {
-        javacflags = ["-Xep:MissingOverride:OFF"];
-    };
+    cmd = "$(location smali) ass --api 28 -o $(out) $(in)";
+    out = ["core-tests-smali.dex"];
+    tools = ["smali"];
 };
 
 #  Builds the core-tests library.
 core-tests = java_test {
     name = "core-tests";
+    visibility = [
+        "//cts/tests/libcore/luni"
+    ];
     defaults = ["libcore_java_defaults"];
     hostdex = true;
     srcs = [
@@ -2416,6 +2533,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/lang/package-info.java"
         "luni/src/test/java/libcore/java/lang/annotation/AnnotationTypeMismatchExceptionTest.java"
         "luni/src/test/java/libcore/java/lang/invoke/CallSitesTest.java"
+        "luni/src/test/java/libcore/java/lang/invoke/ExplicitCastArgumentsTest.java"
         "luni/src/test/java/libcore/java/lang/invoke/MethodHandleAccessorsTest.java"
         "luni/src/test/java/libcore/java/lang/invoke/MethodHandleCombinersTest.java"
         "luni/src/test/java/libcore/java/lang/invoke/MethodHandleInfoTest.java"
@@ -2451,6 +2569,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/lang/reflect/annotations/FieldTest.java"
         "luni/src/test/java/libcore/java/lang/reflect/annotations/MethodTest.java"
         "luni/src/test/java/libcore/java/lang/reflect/annotations/PackageTest.java"
+        "luni/src/test/java/libcore/java/lang/reflect/annotations/RetentionPolicyTest.java"
         "luni/src/test/java/libcore/java/lang/reflect/annotations/multipleannotation/MultipleAnnotation.java"
         "luni/src/test/java/libcore/java/lang/reflect/annotations/multipleannotation/package-info.java"
         "luni/src/test/java/libcore/java/lang/reflect/annotations/multipleannotationexplicitsingle/MultipleAnnotationExplicitSingle.java"
@@ -2478,6 +2597,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/math/RunCSVTests.java"
         "luni/src/test/java/libcore/java/math/RunCSVTestsStrict.java"
         "luni/src/test/java/libcore/java/net/AbstractCookiesTest.java"
+        "luni/src/test/java/libcore/java/net/AuditInputStream.java"
         "luni/src/test/java/libcore/java/net/ConcurrentCloseTest.java"
         "luni/src/test/java/libcore/java/net/CookiesMCompatibilityTest.java"
         "luni/src/test/java/libcore/java/net/CookiesTest.java"
@@ -2556,7 +2676,6 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/nio/charset/CharsetEncoderTest.java"
         "luni/src/test/java/libcore/java/nio/charset/CharsetTest.java"
         "luni/src/test/java/libcore/java/nio/charset/Charset_TestGenerator.java"
-        "luni/src/test/java/libcore/java/nio/charset/ModifiedUtf8Test.java"
         "luni/src/test/java/libcore/java/nio/charset/OldCharsetEncoderDecoderBufferTest.java"
         "luni/src/test/java/libcore/java/nio/charset/OldCharset_AbstractTest.java"
         "luni/src/test/java/libcore/java/nio/charset/OldCharset_ISO_8859_10.java"
@@ -2727,6 +2846,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/time/zone/ZoneRulesExceptionTest.java"
         "luni/src/test/java/libcore/java/time/zone/ZoneRulesTest.java"
         "luni/src/test/java/libcore/java/util/AbstractCollectionTest.java"
+        "luni/src/test/java/libcore/java/util/AbstractListTest.java"
         "luni/src/test/java/libcore/java/util/ArrayListTest.java"
         "luni/src/test/java/libcore/java/util/ArraysTest.java"
         "luni/src/test/java/libcore/java/util/Base64Test.java"
@@ -2753,6 +2873,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/util/LibcoreIoDerivedBase64Test.java"
         "luni/src/test/java/libcore/java/util/LinkedHashMapTest.java"
         "luni/src/test/java/libcore/java/util/ListDefaultMethodTester.java"
+        "luni/src/test/java/libcore/java/util/ListOfTest.java"
         "luni/src/test/java/libcore/java/util/ListTest.java"
         "luni/src/test/java/libcore/java/util/LocaleInternalsTest.java"
         "luni/src/test/java/libcore/java/util/LocaleLanguageRangeTest.java"
@@ -2760,6 +2881,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/util/Locales.java"
         "luni/src/test/java/libcore/java/util/LongSummaryStatisticsTest.java"
         "luni/src/test/java/libcore/java/util/MapDefaultMethodTester.java"
+        "luni/src/test/java/libcore/java/util/MapOfTest.java"
         "luni/src/test/java/libcore/java/util/ObjectsTest.java"
         "luni/src/test/java/libcore/java/util/OldAbstractMapTest.java"
         "luni/src/test/java/libcore/java/util/OldAbstractSetTest.java"
@@ -2792,6 +2914,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/util/ServiceLoaderTestInterfaceMissingClass.java"
         "luni/src/test/java/libcore/java/util/ServiceLoaderTestInterfaceParseError.java"
         "luni/src/test/java/libcore/java/util/ServiceLoaderTestInterfaceWrongType.java"
+        "luni/src/test/java/libcore/java/util/SetOfTest.java"
         "luni/src/test/java/libcore/java/util/SimpleTimeZoneTest.java"
         "luni/src/test/java/libcore/java/util/SpliteratorTester.java"
         "luni/src/test/java/libcore/java/util/SpliteratorsTest.java"
@@ -2850,8 +2973,8 @@ core-tests = java_test {
         "luni/src/test/java/libcore/java/util/prefs/PreferencesTest.java"
         "luni/src/test/java/libcore/java/util/regex/OldAndroidRegexTest.java"
         "luni/src/test/java/libcore/java/util/regex/OldMatcherTest.java"
+        "luni/src/test/java/libcore/java/util/stream/StreamTest.java"
         "luni/src/test/java/libcore/java/util/zip/AbstractZipFileTest.java"
-        "luni/src/test/java/libcore/java/util/zip/DeflateRegressionTest.java"
         "luni/src/test/java/libcore/java/util/zip/DeflaterInputStreamTest.java"
         "luni/src/test/java/libcore/java/util/zip/DeflaterOutputStreamTest.java"
         "luni/src/test/java/libcore/java/util/zip/DeflaterTest.java"
@@ -2876,6 +2999,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/javax/crypto/CipherInputStreamTest.java"
         "luni/src/test/java/libcore/javax/crypto/CipherOutputStreamTest.java"
         "luni/src/test/java/libcore/javax/crypto/CipherTest.java"
+        "luni/src/test/java/libcore/javax/crypto/HardwareAesTest.java"
         "luni/src/test/java/libcore/javax/crypto/KeyAgreementTest.java"
         "luni/src/test/java/libcore/javax/crypto/MacTest.java"
         "luni/src/test/java/libcore/javax/crypto/MockCipherSpi.java"
@@ -2900,6 +3024,7 @@ core-tests = java_test {
         "luni/src/test/java/libcore/javax/security/auth/x500/X500PrincipalTest.java"
         "luni/src/test/java/libcore/javax/sql/OldConnectionEventTest.java"
         "luni/src/test/java/libcore/javax/xml/parsers/DocumentBuilderTest.java"
+        "luni/src/test/java/libcore/libcore/content/type/MimeMapTest.java"
         "luni/src/test/java/libcore/libcore/icu/AlphabeticIndexTest.java"
         "luni/src/test/java/libcore/libcore/icu/DateIntervalFormatTest.java"
         "luni/src/test/java/libcore/libcore/icu/ICUCalendarTest.java"
@@ -2910,7 +3035,6 @@ core-tests = java_test {
         "luni/src/test/java/libcore/libcore/icu/RelativeDateTimeFormatterTest.java"
         "luni/src/test/java/libcore/libcore/icu/TimeZoneIntegrationTest.java"
         "luni/src/test/java/libcore/libcore/icu/TransliteratorTest.java"
-        "luni/src/test/java/libcore/libcore/internal/Java9LanguageFeaturesTest.java"
         "luni/src/test/java/libcore/libcore/internal/StringPoolTest.java"
         "luni/src/test/java/libcore/libcore/io/BlockGuardOsTest.java"
         "luni/src/test/java/libcore/libcore/io/ClassPathURLStreamHandlerTest.java"
@@ -2920,20 +3044,22 @@ core-tests = java_test {
         "luni/src/test/java/libcore/libcore/io/MemoryTest.java"
         "luni/src/test/java/libcore/libcore/io/OsTest.java"
         "luni/src/test/java/libcore/libcore/net/InetAddressUtilsTest.java"
-        "luni/src/test/java/libcore/libcore/net/MimeUtilsTest.java"
         "luni/src/test/java/libcore/libcore/net/NetworkSecurityPolicyTest.java"
         "luni/src/test/java/libcore/libcore/net/event/NetworkEventDispatcherTest.java"
-        "luni/src/test/java/libcore/libcore/net/http/ResponseUtilsTest.java"
         "luni/src/test/java/libcore/libcore/reflect/InternalNamesTest.java"
+        "luni/src/test/java/libcore/libcore/reflect/ParameterizedTypeRegressionTest.java"
         "luni/src/test/java/libcore/libcore/timezone/CountryTimeZonesTest.java"
         "luni/src/test/java/libcore/libcore/timezone/CountryZonesFinderTest.java"
+        "luni/src/test/java/libcore/libcore/timezone/TelephonyLookupTest.java"
+        "luni/src/test/java/libcore/libcore/timezone/TelephonyNetworkFinderTest.java"
         "luni/src/test/java/libcore/libcore/timezone/TimeZoneDataFilesTest.java"
         "luni/src/test/java/libcore/libcore/timezone/TimeZoneFinderTest.java"
         "luni/src/test/java/libcore/libcore/timezone/TzDataSetVersionTest.java"
-        "luni/src/test/java/libcore/libcore/timezone/ZoneInfoDBTest.java"
+        "luni/src/test/java/libcore/libcore/timezone/ZoneInfoDbTest.java"
         "luni/src/test/java/libcore/libcore/util/ArrayUtilsTest.java"
         "luni/src/test/java/libcore/libcore/util/BasicLruCacheTest.java"
         "luni/src/test/java/libcore/libcore/util/CollectionUtilsTest.java"
+        "luni/src/test/java/libcore/libcore/util/FP16Test.java"
         "luni/src/test/java/libcore/libcore/util/HexEncodingTest.java"
         "luni/src/test/java/libcore/libcore/util/NativeAllocationRegistryTest.java"
         "luni/src/test/java/libcore/libcore/util/SerializationTester.java"
@@ -3336,12 +3462,152 @@ core-tests = java_test {
         "luni/src/test/java/tests/targets/security/cert/CertPathValidatorTestPKIX.java"
         "luni/src/test/java/tests/targets/security/cert/CertificateFactoryTestX509.java"
         "luni/src/test/java/tests/targets/security/cert/CertificateTest.java"
+        "test-rules/src/test/java/android/compat/testing/DummyApi.java"
+        "test-rules/src/test/java/libcore/junit/util/EnableDeprecatedBouncyCastleAlgorithmsRuleTest.java"
         "test-rules/src/test/java/libcore/junit/util/SwitchTargetSdkVersionRuleTest.java"
+        "test-rules/src/test/java/libcore/junit/util/compat/CoreCompatChangeRuleTest.java"
 
     ];
     exclude_srcs = [
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/CertPathTrustManagerParametersTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/CertificatesToPlayWith.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/HandshakeCompletedEventTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/HostnameVerifierTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/HttpsURLConnectionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyManagerFactory1Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyManagerFactory2Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyManagerFactorySpiTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyStoreBuilderParametersTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLContext1Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLContext2Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLContextSpiTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineResultHandshakeStatusTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineResultStatusTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineResultTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLHandshakeExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLKeyExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLPeerUnverifiedExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLProtocolExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLServerSocketFactoryTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLServerSocketTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionBindingEventTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionBindingListenerTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionContextTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSocketFactoryTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSocketTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/TrustManagerFactory1Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/TrustManagerFactory2Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/TrustManagerFactorySpiTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/X509ExtendedKeyManagerTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/X509KeyManagerTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/X509TrustManagerTest.java"
         "luni/src/test/java/libcore/java/util/zip/Zip64Test.java"
         "luni/src/test/java/libcore/java/util/zip/Zip64FileTest.java"
+        "luni/src/test/java/libcore/javax/crypto/CipherInputStreamTest.java"
+        "luni/src/test/java/libcore/javax/crypto/CipherOutputStreamTest.java"
+        "luni/src/test/java/libcore/javax/crypto/CipherTest.java"
+        "luni/src/test/java/libcore/javax/crypto/HardwareAesTest.java"
+        "luni/src/test/java/libcore/javax/crypto/KeyAgreementTest.java"
+        "luni/src/test/java/libcore/javax/crypto/MacTest.java"
+        "luni/src/test/java/libcore/javax/crypto/MockCipherSpi.java"
+        "luni/src/test/java/libcore/javax/crypto/MockKey.java"
+        "luni/src/test/java/libcore/javax/crypto/MockKey2.java"
+        "luni/src/test/java/libcore/javax/crypto/MockKeyAgreementSpi.java"
+        "luni/src/test/java/libcore/javax/crypto/MockMacSpi.java"
+        "luni/src/test/java/libcore/javax/crypto/SecretKeyFactoryTest.java"
+        "luni/src/test/java/libcore/javax/crypto/spec/AlgorithmParametersTestPBES2.java"
+        "luni/src/test/java/libcore/javax/net/ssl/DefaultHostnameVerifierTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLContextSpi.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLServerSocketFactory.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLSocketFactory.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLSocketProvider.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLEngineTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLParametersTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLServerSocketFactoryTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLServerSocketTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLSocketFactoryTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLSocketTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/BadPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherInputStream1Test.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherInputStreamTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherOutputStream1Test.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherOutputStreamTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/EncryptedPrivateKeyInfoTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ExemptionMechanismExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ExemptionMechanismSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ExemptionMechanismTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/IllegalBlockSizeExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyAgreementSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyAgreementTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyGeneratorSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyGeneratorTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MacSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MacTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MockKeyAgreementSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MockMacSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/NoSuchPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/NullCipherTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SealedObjectTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SecretKeyFactorySpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SecretKeyFactoryTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SecretKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ShortBufferExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherAesTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherAesWrapTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherDESedeTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherDESedeWrapTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherDesTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherPBETest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherPBEThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherRSATest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherRSAThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherSymmetricKeyThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherWrapThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyAgreementFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyAgreementThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyGeneratorFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyGeneratorThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/MacFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/MacThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/SecretKeyFactoryFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/SecretKeyFactoryThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/TestThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/interfaces/DHPrivateKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/interfaces/DHPublicKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/interfaces/PBEKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/BadPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/ExemptionMechanismExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/IllegalBlockSizeExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/NoSuchPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/ShortBufferExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DESKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DESedeKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHGenParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHPrivateKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHPublicKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/GCMParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/IvParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/OAEPParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/PBEKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/PBEParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/PSourceTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/RC2ParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/RC5ParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/SecretKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/EncryptedPrivateKeyInfoData.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyCipher.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyExemptionMechanismSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyKeyAgreementSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyKeyGeneratorSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyMacSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MySecretKeyFactorySpi.java"
     ];
 
     java_resource_dirs = [
@@ -3365,23 +3631,26 @@ core-tests = java_test {
     ];
 
     java_resources = [
+        ":annotations-test"
         ":filesystemstest"
         ":parameter-metadata-test"
+        ":core-tests-smali-dex"
     ];
 
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
     libs = [
-        "core-all"
         "okhttp"
         "bouncycastle"
     ];
-    system_modules = "core-all-system-modules";
 
     static_libs = [
-        "archive-patcher"
+        "core-compat-test-rules"
+        "core-java-9-language-tests"
         "core-test-rules"
         "core-tests-support"
         "junit-params"
+        "libcore-crypto-tests"
         "mockftpserver"
         "mockito-target"
         "mockwebserver"
@@ -3389,7 +3658,7 @@ core-tests = java_test {
         "slf4j-jdk14"
         "sqlite-jdbc"
         "tzdata-testing"
-        "truth-prebuilt"
+        "truth-prebuilt-jar"
     ];
 
     errorprone = {
@@ -3400,6 +3669,173 @@ core-tests = java_test {
     };
 
     test_config = "AndroidTest-core-tests.xml";
+};
+
+libcore-crypto-tests = java_test {
+    name = "libcore-crypto-tests";
+
+    visibility = [
+        "//art/build/sdk"
+        "//external/conscrypt/apex/tests"
+    ];
+    srcs = [
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/CertPathTrustManagerParametersTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/CertificatesToPlayWith.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/HandshakeCompletedEventTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/HostnameVerifierTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/HttpsURLConnectionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyManagerFactory1Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyManagerFactory2Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyManagerFactorySpiTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/KeyStoreBuilderParametersTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLContext1Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLContext2Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLContextSpiTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineResultHandshakeStatusTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineResultStatusTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineResultTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLEngineTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLHandshakeExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLKeyExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLPeerUnverifiedExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLProtocolExceptionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLServerSocketFactoryTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLServerSocketTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionBindingEventTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionBindingListenerTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionContextTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSessionTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSocketFactoryTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/SSLSocketTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/TrustManagerFactory1Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/TrustManagerFactory2Test.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/TrustManagerFactorySpiTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/X509ExtendedKeyManagerTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/X509KeyManagerTest.java"
+        "harmony-tests/src/test/java/org/apache/harmony/tests/javax/net/ssl/X509TrustManagerTest.java"
+        "luni/src/test/java/libcore/javax/crypto/CipherInputStreamTest.java"
+        "luni/src/test/java/libcore/javax/crypto/CipherOutputStreamTest.java"
+        "luni/src/test/java/libcore/javax/crypto/CipherTest.java"
+        "luni/src/test/java/libcore/javax/crypto/HardwareAesTest.java"
+        "luni/src/test/java/libcore/javax/crypto/KeyAgreementTest.java"
+        "luni/src/test/java/libcore/javax/crypto/MacTest.java"
+        "luni/src/test/java/libcore/javax/crypto/MockCipherSpi.java"
+        "luni/src/test/java/libcore/javax/crypto/MockKey.java"
+        "luni/src/test/java/libcore/javax/crypto/MockKey2.java"
+        "luni/src/test/java/libcore/javax/crypto/MockKeyAgreementSpi.java"
+        "luni/src/test/java/libcore/javax/crypto/MockMacSpi.java"
+        "luni/src/test/java/libcore/javax/crypto/SecretKeyFactoryTest.java"
+        "luni/src/test/java/libcore/javax/crypto/spec/AlgorithmParametersTestPBES2.java"
+        "luni/src/test/java/libcore/javax/net/ssl/DefaultHostnameVerifierTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLContextSpi.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLServerSocketFactory.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLSocketFactory.java"
+        "luni/src/test/java/libcore/javax/net/ssl/FakeSSLSocketProvider.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLEngineTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLParametersTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLServerSocketFactoryTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLServerSocketTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLSocketFactoryTest.java"
+        "luni/src/test/java/libcore/javax/net/ssl/SSLSocketTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/BadPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherInputStream1Test.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherInputStreamTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherOutputStream1Test.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherOutputStreamTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/CipherTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/EncryptedPrivateKeyInfoTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ExemptionMechanismExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ExemptionMechanismSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ExemptionMechanismTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/IllegalBlockSizeExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyAgreementSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyAgreementTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyGeneratorSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/KeyGeneratorTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MacSpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MacTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MockKeyAgreementSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/MockMacSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/NoSuchPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/NullCipherTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SealedObjectTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SecretKeyFactorySpiTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SecretKeyFactoryTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SecretKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/ShortBufferExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherAesTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherAesWrapTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherDESedeTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherDESedeWrapTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherDesTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherPBETest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherPBEThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherRSATest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherRSAThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherSymmetricKeyThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/CipherWrapThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyAgreementFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyAgreementThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyGeneratorFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/KeyGeneratorThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/MacFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/MacThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/SecretKeyFactoryFunctionalTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/SecretKeyFactoryThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/func/TestThread.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/interfaces/DHPrivateKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/interfaces/DHPublicKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/interfaces/PBEKeyTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/BadPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/ExemptionMechanismExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/IllegalBlockSizeExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/NoSuchPaddingExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/serialization/ShortBufferExceptionTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DESKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DESedeKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHGenParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHPrivateKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/DHPublicKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/GCMParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/IvParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/OAEPParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/PBEKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/PBEParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/PSourceTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/RC2ParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/RC5ParameterSpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/spec/SecretKeySpecTest.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/EncryptedPrivateKeyInfoData.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyCipher.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyExemptionMechanismSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyKeyAgreementSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyKeyGeneratorSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MyMacSpi.java"
+        "luni/src/test/java/org/apache/harmony/crypto/tests/support/MySecretKeyFactorySpi.java"
+    ];
+    exclude_srcs = [
+        "luni/src/test/java/org/apache/harmony/crypto/tests/javax/crypto/SealedObjectTest.java"
+    ];
+
+    java_resource_dirs = [
+        "luni/src/test/java"
+        "luni/src/test/resources"
+        "support/src/test/java"
+    ];
+
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
+
+    static_libs = [
+        "core-test-rules"
+        "core-tests-support"
+        "junit-params"
+        "mockito-target"
+    ];
 };
 
 #  Builds the core-ojtests library that contains test code from OpenJDK.
@@ -3692,13 +4128,12 @@ core-ojtests = java_test {
         "ojluni/src/test/resources"
     ];
 
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
     libs = [
-        "core-all"
         "okhttp"
         "bouncycastle"
     ];
-    system_modules = "core-all-system-modules";
 
     static_libs = ["testng"];
 
@@ -3708,7 +4143,7 @@ core-ojtests = java_test {
     #  code if it's declared to also be in java.base at
     #  compile time.
     #
-    #  For now, we use --patch-module to put all sources
+    #  For now, we use patch_module to put all sources
     #  and dependencies from this make target into java.base;
     #  other source directories in this make target are in
     #  packages not from java.base; if this becomes a problem
@@ -3723,6 +4158,9 @@ core-ojtests = java_test {
 #  Like core-ojtests but smaller.
 core-ojtests-public = java_test {
     name = "core-ojtests-public";
+    visibility = [
+        "//cts/tests/libcore/ojluni"
+    ];
     defaults = ["libcore_java_defaults"];
     srcs = [
         "ojluni/src/test/java/net/Socket/ShutdownInput.java"
@@ -4059,14 +4497,13 @@ core-ojtests-public = java_test {
         "ojluni/src/test/dist"
     ];
 
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
     libs = [
-        "core-all"
         "bouncycastle"
         "okhttp"
         "testng"
     ];
-    system_modules = "core-all-system-modules";
 };
 
 #  Exports annotated stubs source files in ojluni/annotations/sdk to make them
@@ -4082,10 +4519,14 @@ ojluni-annotated-nullability-stubs = droiddoc_exported_dir {
 };
 
 #  Exports annotated stubs source files in ojluni/annotations/mmodules to make
-#  them available to metalava. Used for core platform API and intra-code API
+#  them available to metalava. Used for core platform API and intra-core API
 #  annotations in OpenJDK source.
 ojluni-annotated-mmodule-stubs = droiddoc_exported_dir {
     name = "ojluni-annotated-mmodule-stubs";
+    visibility = [
+        "//libcore/mmodules/core_platform_api"
+        "//libcore/mmodules/intracoreapi"
+    ];
     path = "ojluni/annotations/mmodule";
 };
 
@@ -4093,24 +4534,163 @@ ojluni-annotated-mmodule-stubs = droiddoc_exported_dir {
 #  source code and so should not cause an error or warning.
 known-oj-tags = filegroup {
     name = "known-oj-tags";
+    visibility = [
+        "//frameworks/base"
+    ];
     srcs = [
         "known_oj_tags.txt"
     ];
 };
 
-#  Generates stubs for the parts of the public SDK API provided by the core
-#  library.
+#  A special set of stubs containing the minimal set of self consistent
+#  classes for which a system module can be created. Every system module must
+#  contain the java.lang classes so the set was constructed by starting with
+#  the java.lang classes and then adding their transitive dependencies without
+#  splitting packages. So, if one class from a package is used then all classes
+#  in that package were added to the set.
 #
-#  Only for use by core.current.stubs target below.
-core-current-stubs-gen = droidstubs {
-    name = "core-current-stubs-gen";
-    srcs = [":core_api_files"];
+#  Needed for java-current-stubs-system-modules.
+java-current-stubs-source = droidstubs {
+    name = "java-current-stubs-source";
+    srcs = [
+        ":core_oj_api_files"
+        ":core_libart_api_files"
+    ];
     java_version = "1.9";
     installable = false;
-    no_framework_libs = true;
-    args = " --exclude-annotations " +
-        "--hide-annotation libcore.api.Hide";
-    merge_inclusion_annotations_dirs = ["ojluni-annotated-mmodule-stubs"];
+    sdk_version = "none";
+    system_modules = "none";
+
+    args = "--stub-packages java.*:javax.*:org.w3c.dom.*:org.xml.sax.*";
+};
+
+"java.current.stubs" = java_library {
+    name = "java.current.stubs";
+    srcs = [":java-current-stubs-source"];
+    errorprone = {
+        javacflags = [
+            "-Xep:MissingOverride:OFF"
+        ];
+    };
+    patch_module = "java.base";
+    sdk_version = "none";
+    system_modules = "none";
+};
+
+#  A special set of system modules needed to build art.module.public.api.stubs
+#  that contain nullability annotations when targeting java language level 1.9
+#  and above.
+java-current-stubs-system-modules = java_system_modules {
+    name = "java-current-stubs-system-modules";
+    libs = [
+        #  Minimal set of classes required for a system module.
+        "java.current.stubs"
+
+        #  The nullability annotations used by the generated stubs.
+        "stub-annotations"
+    ];
+};
+
+#  http://b/129765390 Rewrite links to "platform" or "technotes" folders
+#  which are siblings (and thus outside of) {@docRoot}.
+#
+#  We have to escape \ as \\ and $ as $$ here because they get resolved by
+#  different layers of the build tooling. The arguments are wrapped in '' so
+#  that the shell doesn't add yet another level of escaping.
+rewrite_openjdk_doc_args = "--replace-documentation " +
+    #  packages whose descendants to apply replacement to (all packages from
+    #  libcore/ojluni/src/main/java that contribute to documentation).
+    "com.sun:java:javax:jdk.net:sun " +
+    #  regex of the string to replace
+    "'(<a\\s+href\\s?=[\\*\\s]*\")(?:(?:\\{@docRoot\\}/\\.\\./)|(?:(?:\\.\\./)+))((?:platform|technotes).+)\">' " +
+    #  replacement (with $1, $2 backreferences to the regex groups)
+    "'$$1https://docs.oracle.com/javase/8/docs/$$2\">' ";
+
+#  Generates stubs for the parts of the public SDK API provided by the ART module.
+#
+#  Only for use by art.module.public.api.stubs target below and the building of the
+#  public API.
+art-module-public-api-stubs-source = droidstubs {
+    name = "art-module-public-api-stubs-source";
+    visibility = [
+        "//frameworks/base"
+    ];
+    srcs = [
+        ":core_oj_api_files"
+        ":core_libart_api_files"
+    ];
+    java_version = "1.9";
+    installable = false;
+    sdk_version = "none";
+    system_modules = "java-current-stubs-system-modules";
+    libs = [
+        #  Provide access to I18N constants that are used to initialize
+        #  constants in the public API. i.e. to allow the value of the
+        #  java.text.CollectionElementIterator.NULLORDER to be initialized from
+        #  android.icu.text.CollationElementIterator.NULLORDER.
+        "i18n.module.intra.core.api.stubs"
+    ];
+
+    args = rewrite_openjdk_doc_args;
+
+    create_doc_stubs = true;
+
+    #  Emit nullability annotations from the source to the stub files.
+    annotations_enabled = true;
+
+    merge_annotations_dirs = [
+        "ojluni-annotated-sdk-stubs"
+    ];
+};
+
+#  A stubs target containing the parts of the public SDK API provided by the ART module.
+"art.module.public.api.stubs" = java_library {
+    name = "art.module.public.api.stubs";
+    srcs = [":art-module-public-api-stubs-source"];
+    errorprone = {
+        javacflags = [
+            "-Xep:MissingOverride:OFF"
+        ];
+    };
+    patch_module = "java.base";
+    sdk_version = "none";
+    system_modules = "java-current-stubs-system-modules";
+};
+
+#  Used when compiling higher-level code against art.module.public.api.stubs.
+#
+#  This is only intended for use within core libraries and must not be used
+#  from outside.
+art-module-public-api-stubs-system-modules = java_system_modules {
+    name = "art-module-public-api-stubs-system-modules";
+    visibility = [
+        "//art/build/sdk"
+        "//external/conscrypt"
+        "//external/icu/android_icu4j"
+        "//external/wycheproof"
+    ];
+    libs = [
+        "art.module.public.api.stubs"
+        #  This one is not on device but it's needed when javac compiles code
+        #  containing lambdas.
+        "core-lambda-stubs-for-system-modules"
+        #  This one is not on device but it's needed when javac compiles code
+        #  containing @Generated annotations produced by some code generation
+        #  tools.
+        #  See http://b/123891440.
+        "core-generated-annotation-stubs"
+
+        #  Ensure that core libraries that depend on the public API can access
+        #  the UnsupportedAppUsage, CorePlatformApi and IntraCoreApi
+        #  annotations.
+        "art.module.api.annotations.for.system.modules"
+
+        #  Make nullability annotations available when compiling public stubs.
+        #  They are provided as a separate library because while the
+        #  annotations are not themselves part of the public API provided by
+        #  this module they are used in the stubs.
+        "stub-annotations"
+    ];
 };
 
 #  A stubs target containing the parts of the public SDK API provided by the
@@ -4119,16 +4699,13 @@ core-current-stubs-gen = droidstubs {
 #  Don't use this directly, use "sdk_version: core_current".
 "core.current.stubs" = java_library {
     name = "core.current.stubs";
-    srcs = [":core-current-stubs-gen"];
-    errorprone = {
-        javacflags = [
-            "-Xep:MissingOverride:OFF"
-        ];
-    };
-    openjdk9 = {
-        javacflags = ["--patch-module=java.base=."];
-    };
-    no_standard_libs = true;
+    visibility = ["//visibility:public"];
+    static_libs = [
+        "art.module.public.api.stubs"
+        "conscrypt.module.public.api.stubs"
+        "i18n.module.public.api.stubs"
+    ];
+    sdk_version = "none";
     system_modules = "none";
 
     dist = {
@@ -4139,24 +4716,60 @@ core-current-stubs-gen = droidstubs {
     };
 };
 
+#  Distributed with the SDK for turning into system modules to compile apps
+#  against.
+core-current-stubs-for-system-modules = java_library {
+    name = "core-current-stubs-for-system-modules";
+    visibility = ["//development/sdk"];
+    static_libs = [
+        "core.current.stubs"
+        #  This one is not on device but it's needed when javac compiles code
+        #  containing lambdas.
+        "core-lambda-stubs-for-system-modules"
+        #  This one is not on device but it's needed when javac compiles code
+        #  containing @Generated annotations produced by some code generation
+        #  tools.
+        #  See http://b/123891440.
+        "core-generated-annotation-stubs"
+    ];
+    sdk_version = "none";
+    system_modules = "none";
+    dist = {
+        dest = "core-for-system-modules.jar";
+        targets = [
+            "sdk"
+            "win_sdk"
+        ];
+    };
+};
+
+#  Used when compiling higher-level code against core.current.stubs.
+core-current-stubs-system-modules = java_system_modules {
+    name = "core-current-stubs-system-modules";
+    visibility = ["//visibility:public"];
+    libs = [
+        "core-current-stubs-for-system-modules"
+    ];
+};
+
 #  Target for validating nullability annotations for correctness and
 #  completeness. To check that there are no nullability errors:
-#    make core-current-stubs-nullability-validation
+#    m art-module-public-api-stubs-nullability-validation
 #  To check that there are only the expected nullability warnings:
-#    make core-current-stubs-nullability-validation-check-nullability-warnings
-#  To update the the list of known expected nullability warnings:
-#    make core-current-stubs-nullability-validation-update-nullability-warnings
-core-current-stubs-nullability-validation = droidstubs {
-    name = "core-current-stubs-nullability-validation";
-    srcs = [":core_api_files"];
+#    m art-module-public-api-stubs-nullability-validation-check-nullability-warnings
+#  (If that check fails, it will provide instructions on how to proceed,
+#  including the command to run to update the expected warnings file.)
+art-module-public-api-stubs-nullability-validation = droidstubs {
+    name = "art-module-public-api-stubs-nullability-validation";
+    srcs = [":art_module_api_files"];
     installable = false;
-    no_framework_libs = true;
+    sdk_version = "none";
+    system_modules = "none";
     annotations_enabled = true;
     args = "--hide-annotation libcore.api.Hide " +
         "--validate-nullability-from-merged-stubs ";
     merge_inclusion_annotations_dirs = ["ojluni-annotated-mmodule-stubs"];
     merge_annotations_dirs = [
-        "metalava-manual"
         #  N.B. Stubs in this filegroup will be validated:
         "ojluni-annotated-nullability-stubs"
     ];
@@ -4172,7 +4785,52 @@ core-current-stubs-nullability-validation = droidstubs {
 #  time zone data.
 timezone-host = java_library_host {
     name = "timezone-host";
+    visibility = [
+        "//art/build/sdk"
+        "//system/timezone/distro/core"
+    ];
     srcs = [":timezone_host_files"];
 };
 
-in { inherit "core.current.stubs" android_icu4j_resources_lib core-all core-all-system-modules core-current-stubs-gen core-current-stubs-nullability-validation core-lambda-stubs core-lambda-stubs-for-system-modules core-libart core-libart-testdex core-oj core-oj-hiddenapi core-oj-testdex core-ojtests core-ojtests-public core-system-modules core-test-rules core-tests core-tests-support core_api_files core_lambda_stubs_defaults core_libart_api_files core_libart_java_files core_oj_api_files core_oj_java_files core_public_api_files filesystemstest jsr166-tests known-oj-tags libcore_java_defaults ojluni-annotated-mmodule-stubs ojluni-annotated-nullability-stubs ojluni-annotated-sdk-stubs parameter-metadata-test timezone-host; }
+#  A special set of system modules for building the following library for use
+#  in the art-module-public-api-system-modules.
+api-annotations-system-modules = java_system_modules {
+    name = "api-annotations-system-modules";
+    libs = [
+        "art.module.public.api.stubs"
+    ];
+};
+
+#  A library that contains annotations that define API surfaces (core
+#  platform, intra core and the hidden API) along with some supporting
+#  constants. The annotations are source only and do not introduce any runtime
+#  dependencies. Specially built for use in system modules definitions to
+#  avoid introducing compile time cycles.
+"art.module.api.annotations.for.system.modules" = java_library {
+    name = "art.module.api.annotations.for.system.modules";
+    srcs = [
+        ":api_surface_annotation_files"
+    ];
+
+    installable = false;
+    sdk_version = "none";
+    system_modules = "api-annotations-system-modules";
+    patch_module = "java.base";
+};
+
+#  Create a library containing the api surface annotations, built against
+#  core_current for use by the annotation processor in frameworks/base.
+"art.module.api.annotations" = java_library {
+    name = "art.module.api.annotations";
+    visibility = [
+        "//frameworks/base"
+    ];
+    host_supported = true;
+    srcs = [
+        ":api_surface_annotation_files"
+    ];
+    java_version = "1.9";
+    sdk_version = "core_current";
+};
+
+in { inherit "art.module.api.annotations" "art.module.api.annotations.for.system.modules" "art.module.public.api.stubs" "core.current.stubs" "java.current.stubs" api-annotations-system-modules art-module-public-api-stubs-nullability-validation art-module-public-api-stubs-source art-module-public-api-stubs-system-modules art_module_api_files core-all core-all-system-modules core-compat-test-rules core-current-stubs-for-system-modules core-current-stubs-system-modules core-generated-annotation-stubs core-java-9-language-features-source core-lambda-stubs core-lambda-stubs-for-system-modules core-libart core-libart-testdex core-luni-resources core-oj core-oj-hiddenapi core-oj-testdex core-ojluni-resources core-ojtests core-ojtests-public core-test-rules core-tests core-tests-smali-dex core-tests-support core_lambda_stubs_defaults core_libart_api_files core_libart_java_files core_oj_api_files core_oj_java_files java-current-stubs-source java-current-stubs-system-modules jsr166-tests known-oj-tags libcore-crypto-tests libcore-platform-compat-config libcore_java_defaults ojluni-annotated-mmodule-stubs ojluni-annotated-nullability-stubs ojluni-annotated-sdk-stubs timezone-host; }

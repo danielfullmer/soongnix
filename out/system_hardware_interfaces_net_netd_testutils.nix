@@ -45,7 +45,6 @@ VtsHalNetNetdTestDefaults = cc_defaults {
         "libutils"
     ];
     static_libs = [
-        "VtsHalHidlTargetTestBase"
         "VtsHalNetNetdTestUtils"
     ];
     cflags = [

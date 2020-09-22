@@ -21,6 +21,7 @@ merge_zips = blueprint_go_binary {
         "android-archive-zip"
         "blueprint-pathtools"
         "soong-jar"
+        "soong-zip"
     ];
     srcs = [
         "merge_zips.go"

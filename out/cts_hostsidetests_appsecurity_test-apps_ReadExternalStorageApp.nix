@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2013 The Android Open Source Project
@@ -15,10 +15,10 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsReadExternalStorageApp = android_test {
+CtsReadExternalStorageApp = android_test_helper_app {
     name = "CtsReadExternalStorageApp";
     defaults = ["cts_support_defaults"];
-    sdk_version = "current";
+    sdk_version = "29";
     static_libs = [
         "androidx.test.rules"
         "CtsExternalStorageTestLib"
@@ -35,7 +35,7 @@ CtsReadExternalStorageApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     dex_preopt = {

@@ -22,7 +22,10 @@ VtsHalThermalV1_0TargetTest = cc_test {
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalThermalV1_0TargetTest.cpp"];
     static_libs = ["android.hardware.thermal@1.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalThermalV1_0TargetTest; }

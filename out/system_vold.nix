@@ -31,8 +31,11 @@ vold_default_libs = cc_defaults {
     name = "vold_default_libs";
 
     static_libs = [
+        "libasync_safe"
         "libavb"
         "libbootloader_message"
+        "libdm"
+        "libext2_uuid"
         "libfec"
         "libfec_rs"
         "libfs_avb"
@@ -44,6 +47,7 @@ vold_default_libs = cc_defaults {
     shared_libs = [
         "android.hardware.keymaster@3.0"
         "android.hardware.keymaster@4.0"
+        "android.hardware.keymaster@4.1"
         "android.hardware.boot@1.0"
         "libbase"
         "libbinder"
@@ -53,12 +57,12 @@ vold_default_libs = cc_defaults {
         "libdiskconfig"
         "libext4_utils"
         "libf2fs_sparseblock"
-        "libfscrypt"
         "libhardware"
         "libhardware_legacy"
+        "libincfs"
         "libhidlbase"
-        "libhwbinder"
         "libkeymaster4support"
+        "libkeymaster4_1support"
         "libkeyutils"
         "liblog"
         "liblogwrap"
@@ -81,13 +85,20 @@ libvold_binder = cc_library_static {
     ];
     aidl = {
         local_include_dirs = ["binder"];
-        include_dirs = ["frameworks/native/aidl/binder"];
+        include_dirs = [
+            "frameworks/native/aidl/binder"
+            "frameworks/base/core/java"
+        ];
         export_aidl_headers = true;
     };
+    whole_static_libs = [
+        "libincremental_aidl-cpp"
+    ];
 };
 
 libvold_headers = cc_library_headers {
     name = "libvold_headers";
+    recovery_available = true;
     export_include_dirs = ["."];
 };
 
@@ -104,6 +115,7 @@ libvold = cc_library_static {
         "Benchmark.cpp"
         "CheckEncryption.cpp"
         "Checkpoint.cpp"
+        "CryptoType.cpp"
         "Devmapper.cpp"
         "EncryptInplace.cpp"
         "FileDeviceUtils.cpp"
@@ -122,6 +134,7 @@ libvold = cc_library_static {
         "ScryptParameters.cpp"
         "Utils.cpp"
         "VoldNativeService.cpp"
+        "VoldNativeServiceValidation.cpp"
         "VoldUtil.cpp"
         "VolumeManager.cpp"
         "cryptfs.cpp"
@@ -134,18 +147,17 @@ libvold = cc_library_static {
         "model/ObbVolume.cpp"
         "model/PrivateVolume.cpp"
         "model/PublicVolume.cpp"
-        "model/VolumeBase.cpp"
         "model/StubVolume.cpp"
+        "model/VolumeBase.cpp"
+        "model/VolumeEncryption.cpp"
     ];
     product_variables = {
         arc = {
             exclude_srcs = [
-                "AppFuseUtil.cpp"
                 "model/ObbVolume.cpp"
             ];
             static_libs = [
                 "arc_services_aidl"
-                "libarcappfuse"
                 "libarcobbvolume"
             ];
         };
@@ -158,6 +170,7 @@ libvold = cc_library_static {
     ];
     whole_static_libs = [
         "com.android.sysprop.apex"
+        "libc++fs"
     ];
 };
 
@@ -174,7 +187,6 @@ vold = cc_binary {
         arc = {
             static_libs = [
                 "arc_services_aidl"
-                "libarcappfuse"
                 "libarcobbvolume"
             ];
         };
@@ -192,7 +204,6 @@ vold = cc_binary {
 
     shared_libs = [
         "android.hardware.health.storage@1.0"
-        "libhidltransport"
     ];
 };
 
@@ -227,11 +238,13 @@ wait_for_keymaster = cc_binary {
 
         "android.hardware.keymaster@3.0"
         "android.hardware.keymaster@4.0"
+        "android.hardware.keymaster@4.1"
         "libhardware"
         "libhardware_legacy"
         "libhidlbase"
-        "libhwbinder"
         "libkeymaster4support"
+        "libkeymaster4_1support"
+        "libutils"
     ];
 };
 
@@ -271,10 +284,10 @@ vold_aidl = filegroup {
     srcs = [
         "binder/android/os/IVold.aidl"
         "binder/android/os/IVoldListener.aidl"
+        "binder/android/os/IVoldMountCallback.aidl"
         "binder/android/os/IVoldTaskListener.aidl"
     ];
+    path = "binder";
 };
-
-subdirs = ["tests"];
 
 in { inherit libvold libvold_binder libvold_headers secdiscard vdc vold vold_aidl vold_default_flags vold_default_libs vold_prepare_subdirs wait_for_keymaster; }

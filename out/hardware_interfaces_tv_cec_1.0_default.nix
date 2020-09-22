@@ -10,7 +10,6 @@ let
 
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libbase"
         "libutils"
@@ -37,10 +36,31 @@ let
         "libhardware_legacy"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.tv.cec@1.0"
     ];
 
 };
 
-in { inherit "android.hardware.tv.cec@1.0-impl" "android.hardware.tv.cec@1.0-service"; }
+"android.hardware.tv.cec@1.0-service.mock" = cc_binary {
+    name = "android.hardware.tv.cec@1.0-service.mock";
+    vintf_fragments = ["android.hardware.tv.cec@1.0-service.mock.xml"];
+    relative_install_path = "hw";
+    vendor = true;
+    init_rc = ["android.hardware.tv.cec@1.0-service.mock.rc"];
+    srcs = [
+        "serviceMock.cpp"
+        "HdmiCecMock.cpp"
+    ];
+
+    shared_libs = [
+        "liblog"
+        "libcutils"
+        "libbase"
+        "libutils"
+        "libhardware"
+        "libhidlbase"
+        "android.hardware.tv.cec@1.0"
+    ];
+};
+
+in { inherit "android.hardware.tv.cec@1.0-impl" "android.hardware.tv.cec@1.0-service" "android.hardware.tv.cec@1.0-service.mock"; }

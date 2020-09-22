@@ -35,11 +35,6 @@ libwebp-encode = cc_library_static {
     name = "libwebp-encode";
     host_supported = true;
     srcs = [
-        "src/dsp/alpha_processing.c"
-        "src/dsp/alpha_processing_mips_dsp_r2.c"
-        "src/dsp/alpha_processing_neon.c"
-        "src/dsp/alpha_processing_sse2.c"
-        "src/dsp/alpha_processing_sse41.c"
         "src/dsp/cost.c"
         "src/dsp/cost_mips32.c"
         "src/dsp/cost_mips_dsp_r2.c"
@@ -89,17 +84,9 @@ libwebp-encode = cc_library_static {
         "src/mux/muxedit.c"
         "src/mux/muxinternal.c"
         "src/mux/muxread.c"
-        "src/utils/bit_reader_utils.c"
         "src/utils/bit_writer_utils.c"
-        "src/utils/color_cache_utils.c"
-        "src/utils/filters_utils.c"
         "src/utils/huffman_encode_utils.c"
-        "src/utils/huffman_utils.c"
         "src/utils/quant_levels_utils.c"
-        "src/utils/random_utils.c"
-        "src/utils/rescaler_utils.c"
-        "src/utils/thread_utils.c"
-        "src/utils/utils.c"
     ];
 
     arch = {
@@ -112,6 +99,7 @@ libwebp-encode = cc_library_static {
         "-O2"
         "-DANDROID"
         "-DWEBP_SWAP_16BIT_CSP"
+        "-DWEBP_USE_THREAD"
         "-Wall"
         "-Werror"
     ];
@@ -145,9 +133,11 @@ libwebp-decode = cc_library_static {
         "src/dec/vp8_dec.c"
         "src/dec/vp8l_dec.c"
         "src/dec/webp_dec.c"
+        "src/demux/anim_decode.c"
         "src/demux/demux.c"
         "src/dsp/alpha_processing.c"
         "src/dsp/alpha_processing_mips_dsp_r2.c"
+        "src/dsp/alpha_processing_neon.c"
         "src/dsp/alpha_processing_sse2.c"
         "src/dsp/alpha_processing_sse41.c"
         "src/dsp/cpu.c"
@@ -208,6 +198,7 @@ libwebp-decode = cc_library_static {
         "-O2"
         "-DANDROID"
         "-DWEBP_SWAP_16BIT_CSP"
+        "-DWEBP_USE_THREAD"
         "-Wall"
         "-Werror"
     ];

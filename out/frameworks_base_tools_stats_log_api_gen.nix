@@ -1,4 +1,4 @@
-{ cc_binary_host, cc_library_shared, cc_test_host, genrule }:
+{ cc_binary_host, cc_library, cc_test_host, genrule }:
 let
 
 #
@@ -24,7 +24,11 @@ stats-log-api-gen = cc_binary_host {
     name = "stats-log-api-gen";
     srcs = [
         "Collation.cpp"
+        "java_writer.cpp"
+        "java_writer_q.cpp"
         "main.cpp"
+        "native_writer.cpp"
+        "utils.cpp"
     ];
     cflags = [
         "-Wall"
@@ -98,31 +102,32 @@ stats-log-api-gen-test = cc_test_host {
     ];
 };
 
-libstatslog = cc_library_shared {
+libstatslog = cc_library {
     name = "libstatslog";
     host_supported = true;
-    generated_sources = ["statslog.cpp"];
-    generated_headers = ["statslog.h"];
+    generated_sources = [
+        "statslog.cpp"
+    ];
+    generated_headers = [
+        "statslog.h"
+    ];
     cflags = [
         "-Wall"
         "-Werror"
     ];
-    export_generated_headers = ["statslog.h"];
+    export_generated_headers = [
+        "statslog.h"
+    ];
     shared_libs = [
         "liblog"
         "libcutils"
     ];
-    static_libs = ["libstatssocket"];
     target = {
         android = {
-            shared_libs = [
-                "libutils"
-            ];
+            shared_libs = ["libstatssocket"];
         };
         host = {
-            static_libs = [
-                "libutils"
-            ];
+            static_libs = ["libstatssocket"];
         };
     };
 };

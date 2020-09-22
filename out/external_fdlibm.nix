@@ -131,6 +131,11 @@ libfdlibm = cc_library_static {
         "-Wno-logical-op-parentheses"
         "-Wno-sometimes-uninitialized"
     ];
+
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 in { inherit libfdlibm; }

@@ -28,22 +28,29 @@ let
         "HybridInterface.cpp"
     ];
 
+    header_libs = [
+        "libbinder_headers"
+    ];
+
     shared_libs = [
         "android.hidl.token@1.0"
-        "libbinder"
         "libhidlbase"
         "liblog"
         "libutils"
     ];
 
+    export_header_lib_headers = [
+        "libbinder_headers"
+    ];
+
     export_shared_lib_headers = [
-        "libbinder"
         "libhidlbase"
     ];
 
     export_include_dirs = [
         "include"
     ];
+    min_sdk_version = "29";
 };
 
 in { inherit "android.hidl.token@1.0-utils"; }

@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library, cc_test }:
+{ cc_benchmark, cc_binary, cc_defaults, cc_test }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -22,8 +22,6 @@ system_suspend_defaults = cc_defaults {
         "libbinder"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];
@@ -36,26 +34,6 @@ system_suspend_defaults = cc_defaults {
 
 system_suspend_stats_defaults = cc_defaults {
     name = "system_suspend_stats_defaults";
-    shared_libs = [
-        "libprotobuf-cpp-full"
-    ];
-    static_libs = ["SystemSuspendStatsProto"];
-    cflags = [
-        "-Wall"
-        "-Werror"
-        "-Wno-unused-parameter"
-    ];
-};
-
-SystemSuspendStatsProto = cc_library {
-    name = "SystemSuspendStatsProto";
-    srcs = [
-        "SystemSuspendStats.proto"
-    ];
-    proto = {
-        export_proto_headers = true;
-        type = "full";
-    };
     cflags = [
         "-Wall"
         "-Werror"
@@ -76,11 +54,11 @@ SystemSuspendStatsProto = cc_library {
         "android.system.suspend@1.0"
         "suspend_control_aidl_interface-cpp"
     ];
-    static_libs = ["SystemSuspendStatsProto"];
     srcs = [
         "main.cpp"
         "SuspendControlService.cpp"
         "SystemSuspend.cpp"
+        "WakeLockEntryList.cpp"
     ];
 };
 
@@ -101,8 +79,24 @@ SystemSuspendV1_0UnitTest = cc_test {
         "SuspendControlService.cpp"
         "SystemSuspend.cpp"
         "SystemSuspendUnitTest.cpp"
+        "WakeLockEntryList.cpp"
     ];
     test_suites = ["device-tests"];
+    require_root = true;
 };
 
-in { inherit "android.system.suspend@1.0-service" SystemSuspendStatsProto SystemSuspendV1_0UnitTest system_suspend_defaults system_suspend_stats_defaults; }
+SystemSuspendBenchmark = cc_benchmark {
+    name = "SystemSuspendBenchmark";
+    defaults = [
+        "system_suspend_defaults"
+    ];
+    shared_libs = [
+        "android.system.suspend@1.0"
+        "suspend_control_aidl_interface-cpp"
+    ];
+    srcs = [
+        "SystemSuspendBenchmark.cpp"
+    ];
+};
+
+in { inherit "android.system.suspend@1.0-service" SystemSuspendBenchmark SystemSuspendV1_0UnitTest system_suspend_defaults system_suspend_stats_defaults; }

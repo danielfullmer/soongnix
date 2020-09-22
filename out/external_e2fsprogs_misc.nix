@@ -156,6 +156,16 @@ tune2fs_static = cc_binary {
     static_libs = tune2fs_libs;
 };
 
+tune2fs_ramdisk = cc_binary {
+    name = "tune2fs_ramdisk";
+    stem = "tune2fs";
+    static_executable = true;
+    ramdisk = true;
+    defaults = ["tune2fs-defaults"];
+    system_shared_libs = [];
+    static_libs = tune2fs_libs;
+};
+
 libtune2fs = cc_library_static {
     name = "libtune2fs";
     defaults = ["tune2fs-defaults"];
@@ -189,8 +199,8 @@ badblocks = cc_binary {
 # ########################################################################
 #  Build chattr
 
-chattr = cc_binary {
-    name = "chattr";
+chattr-e2fsprogs = cc_binary {
+    name = "chattr-e2fsprogs";
     host_supported = true;
     defaults = ["e2fsprogs-defaults"];
 
@@ -219,8 +229,8 @@ lsattr_libs = [
     "libext2_e2p"
 ];
 
-lsattr = cc_binary {
-    name = "lsattr";
+lsattr-e2fsprogs = cc_binary {
+    name = "lsattr-e2fsprogs";
     host_supported = true;
     defaults = ["lsattr-defaults"];
 
@@ -323,4 +333,26 @@ filefrag = cc_binary {
     ];
 };
 
-in { inherit badblocks blkid chattr e2image e4crypt filefrag libext2_misc libtune2fs lsattr lsattr-defaults lsattr_static mke2fs tune2fs tune2fs-defaults tune2fs_static; }
+# ##########################################################################
+#  Build e2freefrag
+
+e2freefrag = cc_binary {
+    name = "e2freefrag";
+    host_supported = true;
+    defaults = ["e2fsprogs-defaults"];
+
+    srcs = [
+        "e2freefrag.c"
+    ];
+    header_libs = ["libext2-headers"];
+    shared_libs = [
+        "libext2fs"
+        "libext2_com_err"
+    ];
+    system_shared_libs = [
+        "libc"
+        "libdl"
+    ];
+};
+
+in { inherit badblocks blkid chattr-e2fsprogs e2freefrag e2image e4crypt filefrag libext2_misc libtune2fs lsattr-defaults lsattr-e2fsprogs lsattr_static mke2fs tune2fs tune2fs-defaults tune2fs_ramdisk tune2fs_static; }

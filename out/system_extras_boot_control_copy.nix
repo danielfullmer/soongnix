@@ -23,7 +23,6 @@ let
         "libcutils"
     ];
     static_libs = [
-        "libbootloader_message"
         "libfs_mgr"
     ];
 };

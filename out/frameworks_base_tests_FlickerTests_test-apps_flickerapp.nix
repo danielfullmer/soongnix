@@ -20,6 +20,7 @@ FlickerTestApp = android_test {
     srcs = [
         "src/com/android/server/wm/flicker/testapp/ActivityOptions.java"
         "src/com/android/server/wm/flicker/testapp/ImeActivity.java"
+        "src/com/android/server/wm/flicker/testapp/ImeActivityAutoFocus.java"
         "src/com/android/server/wm/flicker/testapp/PipActivity.java"
         "src/com/android/server/wm/flicker/testapp/SeamlessRotationActivity.java"
         "src/com/android/server/wm/flicker/testapp/SimpleActivity.java"

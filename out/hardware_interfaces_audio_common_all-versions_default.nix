@@ -72,7 +72,6 @@ let
 "android.hardware.audio.common@2.0-util" = cc_library_shared {
     name = "android.hardware.audio.common@2.0-util";
     defaults = ["android.hardware.audio.common-util_default"];
-
     shared_libs = [
         "android.hardware.audio.common@2.0"
     ];
@@ -86,7 +85,6 @@ let
 "android.hardware.audio.common@4.0-util" = cc_library_shared {
     name = "android.hardware.audio.common@4.0-util";
     defaults = ["android.hardware.audio.common-util_default"];
-
     shared_libs = [
         "android.hardware.audio.common@4.0"
     ];
@@ -100,7 +98,6 @@ let
 "android.hardware.audio.common@5.0-util" = cc_library_shared {
     name = "android.hardware.audio.common@5.0-util";
     defaults = ["android.hardware.audio.common-util_default"];
-
     shared_libs = [
         "android.hardware.audio.common@5.0"
     ];
@@ -111,4 +108,17 @@ let
     ];
 };
 
-in { inherit "android.hardware.audio.common-util" "android.hardware.audio.common-util_default" "android.hardware.audio.common@2.0-util" "android.hardware.audio.common@4.0-util" "android.hardware.audio.common@5.0-util"; }
+"android.hardware.audio.common@6.0-util" = cc_library_shared {
+    name = "android.hardware.audio.common@6.0-util";
+    defaults = ["android.hardware.audio.common-util_default"];
+    shared_libs = [
+        "android.hardware.audio.common@6.0"
+    ];
+    cflags = [
+        "-DMAJOR_VERSION=6"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+in { inherit "android.hardware.audio.common-util" "android.hardware.audio.common-util_default" "android.hardware.audio.common@2.0-util" "android.hardware.audio.common@4.0-util" "android.hardware.audio.common@5.0-util" "android.hardware.audio.common@6.0-util"; }

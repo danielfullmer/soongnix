@@ -27,6 +27,11 @@ libfmq = cc_library {
         "libcutils"
         "libutils"
     ];
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+    ];
     export_include_dirs = ["include"];
     local_include_dirs = ["include"];
     srcs = [
@@ -38,10 +43,13 @@ libfmq = cc_library {
         "-Werror"
     ];
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
     };
     double_loadable = true;
+    min_sdk_version = "29";
 };
 
 in { inherit libfmq; }

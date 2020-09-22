@@ -76,6 +76,7 @@ libartbase_defaults = cc_defaults {
         };
         not_windows = {
             srcs = [
+                "base/globals_unix.cc"
                 "base/mem_map_unix.cc"
             ];
             shared_libs = [
@@ -167,12 +168,19 @@ art_libartbase_operator_srcs = gensrcs {
 
 libartbase = art_cc_library {
     name = "libartbase";
-    defaults = ["libartbase_defaults"];
-    #  Leave the symbols in the shared library so that stack unwinders can
-    #  produce meaningful name resolution.
-    strip = {
-        keep_symbols = true;
-    };
+    defaults = [
+        "libartbase_defaults"
+        "libart_nativeunwind_defaults"
+    ];
+    visibility = [
+        #  TODO(b/133140750): Clean this up.
+        "//packages/modules/NetworkStack/tests:__subpackages__"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
+
     shared_libs = [
         "libbase"
         "libziparchive"
@@ -193,6 +201,9 @@ libartbased = art_cc_library {
     defaults = [
         "art_debug_defaults"
         "libartbase_defaults"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
     shared_libs = [
         "libbase"
@@ -224,6 +235,12 @@ libartbase-art-gtest = art_cc_library {
     header_libs = [
         "libnativehelper_header_only"
     ];
+    static = {
+        whole_static_libs = ["libc++fs"];
+    };
+    shared = {
+        static_libs = ["libc++fs"];
+    };
 };
 
 art_libartbase_tests = art_cc_test {
@@ -246,13 +263,13 @@ art_libartbase_tests = art_cc_test {
         "base/hex_dump_test.cc"
         "base/histogram_test.cc"
         "base/indenter_test.cc"
+        "base/intrusive_forward_list_test.cc"
         "base/leb128_test.cc"
         "base/logging_test.cc"
         "base/memfd_test.cc"
         "base/membarrier_test.cc"
         "base/memory_region_test.cc"
         "base/mem_map_test.cc"
-        "base/memory_type_table_test.cc"
         "base/safe_copy_test.cc"
         "base/scoped_flock_test.cc"
         "base/time_utils_test.cc"
@@ -274,6 +291,11 @@ art_libartbase_headers = cc_library_headers {
     export_include_dirs = ["."];
     shared_libs = ["libbase"];
     export_shared_lib_headers = ["libbase"];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 in { inherit art_libartbase_headers art_libartbase_operator_srcs art_libartbase_tests libartbase libartbase-art-gtest libartbase_defaults libartbase_static_base_defaults libartbase_static_defaults libartbased libartbased_static_defaults; }

@@ -20,6 +20,7 @@ media_plugin_headers = cc_library_headers {
         "libutils_headers"
         "libstagefright_foundation_headers"
     ];
+    min_sdk_version = "29";
 };
 
 in { inherit media_plugin_headers; }

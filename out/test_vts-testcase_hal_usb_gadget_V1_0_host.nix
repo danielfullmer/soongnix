@@ -1,4 +1,4 @@
-{ vts_config }:
+{ java_test_host, vts_config }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -20,4 +20,27 @@ VtsHalUsbGadgetV1_0Host = vts_config {
     name = "VtsHalUsbGadgetV1_0Host";
 };
 
-in { inherit VtsHalUsbGadgetV1_0Host; }
+HalUsbGadgetV1_0HostTest = java_test_host {
+    name = "HalUsbGadgetV1_0HostTest";
+    libs = [
+        "tradefed"
+        "tradefed-common-util"
+    ];
+    static_libs = [
+        "jna-prebuilt"
+    ];
+    srcs = [
+        "src/com/android/tests/usbgadget/HalUsbGadgetV1_0HostTest.java"
+        "src/com/android/tests/usbgadget/libusb/ConfigDescriptor.java"
+        "src/com/android/tests/usbgadget/libusb/DeviceDescriptor.java"
+        "src/com/android/tests/usbgadget/libusb/IUsbNative.java"
+        "src/com/android/tests/usbgadget/libusb/Interface.java"
+        "src/com/android/tests/usbgadget/libusb/InterfaceDescriptor.java"
+    ];
+    test_suites = [
+        "vts"
+    ];
+    auto_gen_config = true;
+};
+
+in { inherit HalUsbGadgetV1_0HostTest VtsHalUsbGadgetV1_0Host; }

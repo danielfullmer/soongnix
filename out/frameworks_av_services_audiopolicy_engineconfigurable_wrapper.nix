@@ -14,7 +14,6 @@ libaudiopolicyengineconfigurable_pfwwrapper = cc_library {
         "libbase_headers"
         "libaudiopolicycommon"
     ];
-    static_libs = ["libaudiopolicycomponents"];
     shared_libs = [
         "liblog"
         "libutils"

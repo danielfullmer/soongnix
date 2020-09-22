@@ -26,9 +26,10 @@ telephony-protos = java_library_static {
     };
     srcs = [
         "src/carrierId.proto"
+        "src/persist_atoms.proto"
         "src/telephony.proto"
     ];
-    no_framework_libs = true;
+    sdk_version = "system_current";
     jarjar_rules = "jarjar-rules.txt";
     #  Pin java_version until jarjar is certified to support later versions. http://b/72703434
     java_version = "1.8";

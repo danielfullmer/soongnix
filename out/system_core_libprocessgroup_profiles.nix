@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_static, cc_test, cc_test_host, prebuilt_etc }:
+{ cc_defaults, cc_library_static, cc_test, cc_test_host, prebuilt_etc, vts_config }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -92,22 +92,25 @@ vts_processgroup_validate_test = cc_test {
         "test_vendor.cpp"
     ];
     static_libs = [
+        "libbase"
         "libgmock"
+        "liblog"
+        "libjsoncpp"
         "libjsonpbverify"
         "libjsonpbparse"
         "libprocessgroup_proto"
     ];
     shared_libs = [
-        "libbase"
-        "liblog"
-        "libjsoncpp"
         "libprotobuf-cpp-full"
     ];
-    target = {
-        android = {
-            test_config = "vts_processgroup_validate_test.xml";
-        };
-    };
+    test_suites = [
+        "vts"
+    ];
 };
 
-in { inherit "cgroups.json" "cgroups.recovery.json" "task_profiles.json" libprocessgroup_proto libprocessgroup_proto_test libprocessgroup_test_defaults vts_processgroup_validate_test; }
+VtsProcessgroupValidateTest = vts_config {
+    name = "VtsProcessgroupValidateTest";
+    test_config = "vts_processgroup_validate_test.xml";
+};
+
+in { inherit "cgroups.json" "cgroups.recovery.json" "task_profiles.json" VtsProcessgroupValidateTest libprocessgroup_proto libprocessgroup_proto_test libprocessgroup_test_defaults vts_processgroup_validate_test; }

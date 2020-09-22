@@ -26,7 +26,10 @@ VtsHalPowerV1_2TargetTest = cc_test {
         "android.hardware.power@1.1"
         "android.hardware.power@1.2"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalPowerV1_2TargetTest; }

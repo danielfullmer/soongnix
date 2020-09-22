@@ -34,7 +34,6 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "liblog"
         "libhardware"

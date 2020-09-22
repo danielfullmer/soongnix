@@ -19,19 +19,24 @@ let
 
 libhwbinder_test_defaults = cc_defaults {
     name = "libhwbinder_test_defaults";
+    defaults = ["hwbinder_benchmark_pgo"];
 
     cflags = [
         "-Wall"
         "-Werror"
     ];
     shared_libs = [
-        "libhidlbase_pgo"
+        "libbase"
         "liblog"
         "libutils"
         "libcutils"
+        "libvndksupport"
     ];
 
-    static_libs = ["android.hardware.tests.libhwbinder@1.0"];
+    static_libs = [
+        "android.hardware.tests.libhwbinder@1.0"
+        "libhidlbase_pgo"
+    ];
 
     #  Allow dlsym'ing self for statically linked passthrough implementations
     ldflags = ["-rdynamic"];
@@ -40,8 +45,10 @@ libhwbinder_test_defaults = cc_defaults {
     #  and test portability since this test pairs with specific hal
     #  implementations
     whole_static_libs = [
-        "android.hardware.tests.libhwbinder@1.0-impl"
+        "android.hardware.tests.libhwbinder@1.0-impl.test"
     ];
+
+    require_root = true;
 };
 
 libhwbinder_benchmark = cc_benchmark {
@@ -62,8 +69,11 @@ libbinder_benchmark = cc_benchmark {
     shared_libs = [
         "libbinder"
         "libutils"
+    ];
+    static_libs = [
         "android.hardware.tests.libbinder"
     ];
+    require_root = true;
 };
 
 #  build for throughput benchmark test for hwbinder.

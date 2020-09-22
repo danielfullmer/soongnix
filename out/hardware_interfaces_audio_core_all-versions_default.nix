@@ -21,14 +21,18 @@ let
 
     export_include_dirs = ["include"];
 
+    static_libs = [
+        "libaudiofoundation"
+    ];
+
     shared_libs = [
         "libbase"
         "libcutils"
         "libfmq"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
+        "libmedia_helper"
         "libutils"
         "android.hardware.audio.common-util"
     ];
@@ -40,22 +44,16 @@ let
         "libhardware_headers"
         "libmedia_headers"
     ];
-
-    whole_static_libs = [
-        "libmedia_helper"
-    ];
 };
 
 "android.hardware.audio@2.0-impl" = cc_library_shared {
     name = "android.hardware.audio@2.0-impl";
     defaults = ["android.hardware.audio-impl_default"];
-
     shared_libs = [
         "android.hardware.audio@2.0"
         "android.hardware.audio.common@2.0"
         "android.hardware.audio.common@2.0-util"
     ];
-
     cflags = [
         "-DMAJOR_VERSION=2"
         "-DMINOR_VERSION=0"
@@ -72,7 +70,6 @@ let
         "android.hardware.audio.common@4.0"
         "android.hardware.audio.common@4.0-util"
     ];
-
     cflags = [
         "-DMAJOR_VERSION=4"
         "-DMINOR_VERSION=0"
@@ -83,13 +80,11 @@ let
 "android.hardware.audio@5.0-impl" = cc_library_shared {
     name = "android.hardware.audio@5.0-impl";
     defaults = ["android.hardware.audio-impl_default"];
-
     shared_libs = [
         "android.hardware.audio@5.0"
         "android.hardware.audio.common@5.0"
         "android.hardware.audio.common@5.0-util"
     ];
-
     cflags = [
         "-DMAJOR_VERSION=5"
         "-DMINOR_VERSION=0"
@@ -97,4 +92,19 @@ let
     ];
 };
 
-in { inherit "android.hardware.audio-impl_default" "android.hardware.audio@2.0-impl" "android.hardware.audio@4.0-impl" "android.hardware.audio@5.0-impl"; }
+"android.hardware.audio@6.0-impl" = cc_library_shared {
+    name = "android.hardware.audio@6.0-impl";
+    defaults = ["android.hardware.audio-impl_default"];
+    shared_libs = [
+        "android.hardware.audio@6.0"
+        "android.hardware.audio.common@6.0"
+        "android.hardware.audio.common@6.0-util"
+    ];
+    cflags = [
+        "-DMAJOR_VERSION=6"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+in { inherit "android.hardware.audio-impl_default" "android.hardware.audio@2.0-impl" "android.hardware.audio@4.0-impl" "android.hardware.audio@5.0-impl" "android.hardware.audio@6.0-impl"; }

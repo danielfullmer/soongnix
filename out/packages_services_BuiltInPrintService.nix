@@ -17,15 +17,19 @@ let
 
 BuiltInPrintService = android_app {
     name = "BuiltInPrintService";
+    privileged = true;
     srcs = [
         "src/com/android/bips/BuiltInPrintService.java"
         "src/com/android/bips/DelayedAction.java"
+        "src/com/android/bips/ImagePrintActivity.java"
+        "src/com/android/bips/ImageToPdfTask.java"
         "src/com/android/bips/JobQueue.java"
         "src/com/android/bips/LocalDiscoverySession.java"
         "src/com/android/bips/LocalDiscoverySessionInfo.java"
         "src/com/android/bips/LocalPrintJob.java"
         "src/com/android/bips/LocalPrinter.java"
         "src/com/android/bips/P2pPermissionManager.java"
+        "src/com/android/bips/PdfPrintActivity.java"
         "src/com/android/bips/discovery/ConnectionListener.java"
         "src/com/android/bips/discovery/DelayedDiscovery.java"
         "src/com/android/bips/discovery/DiscoveredPrinter.java"
@@ -64,6 +68,8 @@ BuiltInPrintService = android_app {
         "src/com/android/bips/ui/AddPrintersActivity.java"
         "src/com/android/bips/ui/AddPrintersFragment.java"
         "src/com/android/bips/ui/FindP2pPrintersFragment.java"
+        "src/com/android/bips/ui/MoreOptionsActivity.java"
+        "src/com/android/bips/ui/MoreOptionsFragment.java"
         "src/com/android/bips/ui/PrinterPreference.java"
         "src/com/android/bips/util/BroadcastMonitor.java"
         "src/com/android/bips/util/FileUtils.java"

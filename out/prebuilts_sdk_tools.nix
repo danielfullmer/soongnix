@@ -5,6 +5,11 @@ libLLVM_android = cc_prebuilt_library_shared {
     name = "libLLVM_android";
     vendor_available = true;
     host_supported = true;
+    #  TODO(ccross): this is necessary because the prebuilt module must have
+    #  all the variants that are in the source module.  Ideally Soong's
+    #  arch mutator should handle this.
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     target = {
         linux_glibc_x86_64 = {
             srcs = ["linux/lib64/libLLVM_android.so"];
@@ -24,6 +29,11 @@ libLLVM_android = cc_prebuilt_library_shared {
 libclang_android = cc_prebuilt_library_shared {
     name = "libclang_android";
     host_supported = true;
+    #  TODO(ccross): this is necessary because the prebuilt module must have
+    #  all the variants that are in the source module.  Ideally Soong's
+    #  arch mutator should handle this.
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     target = {
         linux_glibc_x86_64 = {
             srcs = ["linux/lib64/libclang_android.so"];

@@ -1,4 +1,4 @@
-{ cc_binary_host, python_binary_host }:
+{ cc_binary_host, filegroup, python_binary_host }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -63,4 +63,11 @@ mkdtimg = cc_binary_host {
     };
 };
 
-in { inherit "mkdtboimg.py" mkdtimg; }
+# ##################################################
+#  TODO(b/153848038): Remove once we can use python binary as data for java_test_host
+mkdtboimg = filegroup {
+    name = "mkdtboimg";
+    srcs = ["mkdtboimg.py"];
+};
+
+in { inherit "mkdtboimg.py" mkdtboimg mkdtimg; }

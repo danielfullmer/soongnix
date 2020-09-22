@@ -4,6 +4,7 @@ let
 libhevcdec = cc_library_static {
     name = "libhevcdec";
     vendor_available = true;
+    host_supported = true;
 
     cflags = [
         "-D_LIB"
@@ -399,10 +400,17 @@ libhevcdec = cc_library_static {
         #  cfi: true,
         blacklist = "libhevc_blacklist.txt";
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 hevcdec = cc_test {
     name = "hevcdec";
+    host_supported = true;
     cflags = [
         "-DPROFILE_ENABLE"
         "-DARM"
@@ -413,12 +421,17 @@ hevcdec = cc_test {
     ];
     srcs = ["test/decoder/main.c"];
     static_libs = ["libhevcdec"];
+    target = {
+        darwin = {
+            enabled = false;
+        };
+    };
 };
 
 libhevcenc = cc_library_static {
     name = "libhevcenc";
     vendor_available = true;
-
+    host_supported = true;
     cflags = [
         "-DENABLE_MAIN_REXT_PROFILE"
         "-fPIC"
@@ -765,16 +778,19 @@ libhevcenc = cc_library_static {
         misc_undefined = ["bounds"];
         #  Enable CFI if this becomes a shared library.
         #  cfi: true,
-        diag = {
-            integer_overflow = true;
-            misc_undefined = ["bounds"];
-        };
         blacklist = "libhevc_blacklist.txt";
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "29";
 };
 
 hevcenc = cc_test {
     name = "hevcenc";
+    host_supported = true;
     cflags = [
         "-DARM"
         "-fPIC"
@@ -786,10 +802,6 @@ hevcenc = cc_test {
     sanitize = {
         integer_overflow = true;
         misc_undefined = ["bounds"];
-        diag = {
-            integer_overflow = true;
-            misc_undefined = ["bounds"];
-        };
     };
 };
 

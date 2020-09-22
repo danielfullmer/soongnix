@@ -29,6 +29,7 @@ Magick_filters = cc_library_static {
     ];
 
     header_libs = ["Magick_headers"];
+    visibility = ["//vendor:__subpackages__"];
 };
 
 in { inherit Magick_filters; }

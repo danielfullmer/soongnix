@@ -23,13 +23,6 @@ CtsRoleTestApp28 = android_test {
         "src/android/app/role/cts/app28/ChangeDefaultDialerActivity.java"
         "src/android/app/role/cts/app28/ChangeDefaultSmsActivity.java"
     ];
-
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-        "mts"
-    ];
 };
 
 in { inherit CtsRoleTestApp28; }

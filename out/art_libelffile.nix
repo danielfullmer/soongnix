@@ -29,7 +29,6 @@ libelffile-defaults = art_cc_defaults {
         "stream/vector_output_stream.cc"
     ];
     shared_libs = [
-        "libartbase"
         "libbase"
     ];
 };
@@ -40,6 +39,13 @@ libelffile = art_cc_library_static {
         "art_defaults"
         "libelffile-defaults"
     ];
+    shared_libs = [
+        "libartbase"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libelffiled = art_cc_library_static {
@@ -47,6 +53,12 @@ libelffiled = art_cc_library_static {
     defaults = [
         "art_debug_defaults"
         "libelffile-defaults"
+    ];
+    shared_libs = [
+        "libartbased"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

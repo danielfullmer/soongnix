@@ -1,21 +1,11 @@
-{ cc_defaults, cc_library_shared }:
+{ cc_defaults, cc_library_shared, cc_library_static }:
 let
 
 #  Use of this source code is governed by a BSD-style license that can be
 #  found in the LICENSE file.
 
-"gralloc.minigbm_intel_defaults" = cc_defaults {
-    name = "gralloc.minigbm_intel_defaults";
-    cflags = ["-DDRV_I915"];
-};
-
-"gralloc.minigbm_meson_defaults" = cc_defaults {
-    name = "gralloc.minigbm_meson_defaults";
-    cflags = ["-DDRV_MESON"];
-};
-
-"gralloc.minigbm_defaults" = cc_defaults {
-    name = "gralloc.minigbm_defaults";
+minigbm_defaults = cc_defaults {
+    name = "minigbm_defaults";
 
     srcs = [
         "amdgpu.c"
@@ -37,11 +27,6 @@ let
         "vc4.c"
         "vgem.c"
         "virtio_gpu.c"
-
-        "cros_gralloc/cros_gralloc_buffer.cc"
-        "cros_gralloc/cros_gralloc_driver.cc"
-        "cros_gralloc/cros_gralloc_helpers.cc"
-        "cros_gralloc/gralloc0/gralloc0.cc"
     ];
 
     cflags = [
@@ -56,61 +41,50 @@ let
     ];
     cppflags = ["-std=c++14"];
 
-    #  The preferred path for vendor HALs is /vendor/lib/hw
     vendor = true;
-    relative_install_path = "hw";
 
     header_libs = [
         "libhardware_headers"
         "libnativebase_headers"
+        "libnativewindow_headers"
+        "libsystem_headers"
+    ];
+
+    export_header_lib_headers = [
+        "libhardware_headers"
+        "libnativebase_headers"
+        "libnativewindow_headers"
         "libsystem_headers"
     ];
 
     shared_libs = [
         "libcutils"
         "libdrm"
-
         "libnativewindow"
         "libsync"
         "liblog"
     ];
 
     static_libs = ["libarect"];
+
+    export_static_lib_headers = ["libarect"];
 };
 
-"gralloc.minigbm" = cc_library_shared {
-    name = "gralloc.minigbm";
-    defaults = ["gralloc.minigbm_defaults"];
-};
+minigbm_cros_gralloc_defaults = cc_defaults {
+    name = "minigbm_cros_gralloc_defaults";
 
-"gralloc.minigbm_intel" = cc_library_shared {
-    name = "gralloc.minigbm_intel";
-    defaults = [
-        "gralloc.minigbm_defaults"
-        "gralloc.minigbm_intel_defaults"
-    ];
-    enabled = false;
-    arch = {
-        x86 = {
-            enabled = true;
-        };
-        x86_64 = {
-            enabled = true;
-        };
-    };
-};
+    defaults = ["minigbm_defaults"];
 
-"gralloc.minigbm_meson" = cc_library_shared {
-    name = "gralloc.minigbm_meson";
-    defaults = [
-        "gralloc.minigbm_defaults"
-        "gralloc.minigbm_meson_defaults"
+    srcs = [
+        "cros_gralloc/cros_gralloc_buffer.cc"
+        "cros_gralloc/cros_gralloc_helpers.cc"
+        "cros_gralloc/cros_gralloc_driver.cc"
     ];
 };
 
-libminigbm = cc_library_shared {
+libminigbm = cc_library_static {
     name = "libminigbm";
-    defaults = ["gralloc.minigbm_defaults"];
+    defaults = ["minigbm_defaults"];
     shared_libs = ["liblog"];
     static_libs = ["libdrm"];
 
@@ -122,4 +96,42 @@ libminigbm = cc_library_shared {
     export_include_dirs = ["."];
 };
 
-in { inherit "gralloc.minigbm" "gralloc.minigbm_defaults" "gralloc.minigbm_intel" "gralloc.minigbm_intel_defaults" "gralloc.minigbm_meson" "gralloc.minigbm_meson_defaults" libminigbm; }
+libminigbm_cros_gralloc = cc_library_static {
+    name = "libminigbm_cros_gralloc";
+    defaults = ["minigbm_cros_gralloc_defaults"];
+    shared_libs = ["liblog"];
+    static_libs = ["libdrm"];
+
+    export_include_dirs = ["."];
+};
+
+"gralloc.minigbm" = cc_library_shared {
+    name = "gralloc.minigbm";
+    defaults = ["minigbm_cros_gralloc_defaults"];
+    srcs = ["cros_gralloc/gralloc0/gralloc0.cc"];
+};
+
+"gralloc.minigbm_intel" = cc_library_shared {
+    name = "gralloc.minigbm_intel";
+    defaults = ["minigbm_cros_gralloc_defaults"];
+    enabled = false;
+    arch = {
+        x86 = {
+            enabled = true;
+        };
+        x86_64 = {
+            enabled = true;
+        };
+    };
+    cflags = ["-DDRV_I915"];
+    srcs = ["cros_gralloc/gralloc0/gralloc0.cc"];
+};
+
+"gralloc.minigbm_meson" = cc_library_shared {
+    name = "gralloc.minigbm_meson";
+    defaults = ["minigbm_cros_gralloc_defaults"];
+    cflags = ["-DDRV_MESON"];
+    srcs = ["cros_gralloc/gralloc0/gralloc0.cc"];
+};
+
+in { inherit "gralloc.minigbm" "gralloc.minigbm_intel" "gralloc.minigbm_meson" libminigbm libminigbm_cros_gralloc minigbm_cros_gralloc_defaults minigbm_defaults; }

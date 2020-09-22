@@ -51,6 +51,7 @@ libinput = cc_library {
                 "InputTransport.cpp"
                 "InputWindow.cpp"
                 "ISetInputWindowsListener.cpp"
+                "LatencyStatistics.cpp"
                 "VelocityControl.cpp"
                 "VelocityTracker.cpp"
             ];

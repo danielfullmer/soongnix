@@ -21,8 +21,14 @@ VtsHalContexthubV1_0TargetTest = cc_test {
     name = "VtsHalContexthubV1_0TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalContexthubV1_0TargetTest.cpp"];
-    static_libs = ["android.hardware.contexthub@1.0"];
-    test_suites = ["general-tests"];
+    static_libs = [
+        "android.hardware.contexthub@1.0"
+        "VtsHalContexthubUtils"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalContexthubV1_0TargetTest; }

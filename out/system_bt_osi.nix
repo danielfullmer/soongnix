@@ -125,6 +125,7 @@ net_test_osi = cc_test {
         "libbt-protos-lite"
         "libgmock"
         "libosi"
+        "libc++fs"
     ];
     target = {
         linux_glibc = {

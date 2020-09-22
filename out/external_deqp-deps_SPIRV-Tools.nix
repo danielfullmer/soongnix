@@ -1,197 +1,81 @@
-{ cc_library, filegroup, genrule }:
+{ cc_library, genrule }:
 let
 
-"deqp_spirv.debuginfo.grammar.json" = filegroup {
-    name = "deqp_spirv.debuginfo.grammar.json";
-    srcs = ["source/extinst.debuginfo.grammar.json"];
-};
+#  genrules were obtained from the CMake build:
+#  $ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug
+#  $ ninja -v -j 1 >log.log
+#  Find Python invocations.
+#  Use regex replacements to get "cmd:" lines below.
 
-"deqp_gen_spvtools_grammar_tables_1.0" = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_1.0";
-    out = [
-        "core.insts-1.0.inc"
-        "operand.kinds-1.0.inc"
-        "glsl.std.450.insts.inc"
-        "opencl.std.insts.inc"
-    ];
-    srcs = [
-        ":deqp_spirv.core.grammar.json-1.0"
-        ":deqp_spirv.glsl.grammar.json"
-        ":deqp_spirv.opencl.grammar.json"
-        ":deqp_spirv.debuginfo.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --spirv-core-grammar=$(location :deqp_spirv.core.grammar.json-1.0) " +
-        "--extinst-glsl-grammar=$(location :deqp_spirv.glsl.grammar.json) " +
-        "--extinst-opencl-grammar=$(location :deqp_spirv.opencl.grammar.json) " +
-        "--extinst-debuginfo-grammar=$(location :deqp_spirv.debuginfo.grammar.json) " +
-        "--core-insts-output=$(location core.insts-1.0.inc) " +
-        "--glsl-insts-output=$(location glsl.std.450.insts.inc) " +
-        "--opencl-insts-output=$(location opencl.std.insts.inc) " +
-        "--operand-kinds-output=$(location operand.kinds-1.0.inc)";
-};
-
-"deqp_gen_spvtools_grammar_tables_1.1" = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_1.1";
-    out = [
-        "core.insts-1.1.inc"
-        "operand.kinds-1.1.inc"
-    ];
-    srcs = [
-        ":deqp_spirv.core.grammar.json-1.1"
-        ":deqp_spirv.debuginfo.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --spirv-core-grammar=$(location :deqp_spirv.core.grammar.json-1.1) " +
-        "--extinst-debuginfo-grammar=$(location :deqp_spirv.debuginfo.grammar.json) " +
-        "--core-insts-output=$(location core.insts-1.1.inc) " +
-        "--operand-kinds-output=$(location operand.kinds-1.1.inc)";
-};
-
-"deqp_gen_spvtools_grammar_tables_1.2" = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_1.2";
-    out = [
-        "core.insts-1.2.inc"
-        "operand.kinds-1.2.inc"
-    ];
-    srcs = [
-        ":deqp_spirv.core.grammar.json-1.2"
-        ":deqp_spirv.debuginfo.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --spirv-core-grammar=$(location :deqp_spirv.core.grammar.json-1.2) " +
-        "--extinst-debuginfo-grammar=$(location :deqp_spirv.debuginfo.grammar.json) " +
-        "--core-insts-output=$(location core.insts-1.2.inc) " +
-        "--operand-kinds-output=$(location operand.kinds-1.2.inc)";
-};
-
-deqp_gen_spvtools_grammar_tables_unified1 = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_unified1";
+deqp_spvtools_generate_grammar_tables = genrule {
+    name = "deqp_spvtools_generate_grammar_tables";
     out = [
         "core.insts-unified1.inc"
-        "operand.kinds-unified1.inc"
-    ];
-    srcs = [
-        ":deqp_spirv.core.grammar.json-unified1"
-        ":deqp_spirv.debuginfo.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --spirv-core-grammar=$(location :deqp_spirv.core.grammar.json-unified1) " +
-        "--extinst-debuginfo-grammar=$(location :deqp_spirv.debuginfo.grammar.json) " +
-        "--core-insts-output=$(location core.insts-unified1.inc) " +
-        "--operand-kinds-output=$(location operand.kinds-unified1.inc)";
-};
-
-deqp_gen_spvtools_grammar_tables_debuginfo = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_debuginfo";
-    out = [
         "debuginfo.insts.inc"
-    ];
-    srcs = [
-        ":deqp_spirv.debuginfo.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --extinst-vendor-grammar=$(in) " +
-        "--vendor-insts-output=$(out)";
-};
-
-deqp_gen_spvtools_grammar_tables_amd-gcn-shader = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_amd-gcn-shader";
-    out = [
+        "enum_string_mapping.inc"
+        "extension_enum.inc"
+        "glsl.std.450.insts.inc"
+        "opencl.debuginfo.100.insts.inc"
+        "opencl.std.insts.inc"
+        "operand.kinds-unified1.inc"
         "spv-amd-gcn-shader.insts.inc"
-    ];
-    srcs = [
-        "source/extinst.spv-amd-gcn-shader.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --extinst-vendor-grammar=$(in) " +
-        "--vendor-insts-output=$(out)";
-};
-
-deqp_gen_spvtools_grammar_tables_amd-shader-ballot = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_amd-shader-ballot";
-    out = [
         "spv-amd-shader-ballot.insts.inc"
-    ];
-    srcs = [
-        "source/extinst.spv-amd-shader-ballot.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --extinst-vendor-grammar=$(in) " +
-        "--vendor-insts-output=$(out)";
-};
-
-deqp_gen_spvtools_grammar_tables_amd-shader-explicit-vertex-parameter = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_amd-shader-explicit-vertex-parameter";
-    out = [
         "spv-amd-shader-explicit-vertex-parameter.insts.inc"
-    ];
-    srcs = [
-        "source/extinst.spv-amd-shader-explicit-vertex-parameter.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --extinst-vendor-grammar=$(in) " +
-        "--vendor-insts-output=$(out)";
-};
-
-deqp_gen_spvtools_grammar_tables_amd-shader-trinary-minmax = genrule {
-    name = "deqp_gen_spvtools_grammar_tables_amd-shader-trinary-minmax";
-    out = [
         "spv-amd-shader-trinary-minmax.insts.inc"
     ];
     srcs = [
+        ":deqp_spirv_headers_unified1_extinst.glsl.std.450.grammar.json"
+        ":deqp_spirv_headers_unified1_extinst.opencl.std.100.grammar.json"
+        ":deqp_spirv_headers_unified1_spirv.core.grammar.json"
+        "source/extinst.debuginfo.grammar.json"
+        "source/extinst.opencl.debuginfo.100.grammar.json"
+        "source/extinst.spv-amd-gcn-shader.grammar.json"
+        "source/extinst.spv-amd-shader-ballot.grammar.json"
+        "source/extinst.spv-amd-shader-explicit-vertex-parameter.grammar.json"
         "source/extinst.spv-amd-shader-trinary-minmax.grammar.json"
     ];
     tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --extinst-vendor-grammar=$(in) " +
-        "--vendor-insts-output=$(out)";
+    cmd = "$(location) --extinst-vendor-grammar=$(location source/extinst.spv-amd-gcn-shader.grammar.json) --vendor-insts-output=$(location spv-amd-gcn-shader.insts.inc) --vendor-operand-kind-prefix=; " +
+        "$(location) --spirv-core-grammar=$(location :deqp_spirv_headers_unified1_spirv.core.grammar.json) --extinst-debuginfo-grammar=$(location source/extinst.debuginfo.grammar.json) --extinst-cldebuginfo100-grammar=$(location source/extinst.opencl.debuginfo.100.grammar.json) --core-insts-output=$(location core.insts-unified1.inc) --operand-kinds-output=$(location operand.kinds-unified1.inc); " +
+        "$(location) --extinst-vendor-grammar=$(location source/extinst.debuginfo.grammar.json) --vendor-insts-output=$(location debuginfo.insts.inc) --vendor-operand-kind-prefix=; " +
+        "$(location) --extinst-vendor-grammar=$(location source/extinst.spv-amd-shader-ballot.grammar.json) --vendor-insts-output=$(location spv-amd-shader-ballot.insts.inc) --vendor-operand-kind-prefix=; " +
+        "$(location) --extinst-vendor-grammar=$(location source/extinst.spv-amd-shader-explicit-vertex-parameter.grammar.json) --vendor-insts-output=$(location spv-amd-shader-explicit-vertex-parameter.insts.inc) --vendor-operand-kind-prefix=; " +
+        "$(location) --extinst-vendor-grammar=$(location source/extinst.spv-amd-shader-trinary-minmax.grammar.json) --vendor-insts-output=$(location spv-amd-shader-trinary-minmax.insts.inc) --vendor-operand-kind-prefix=; " +
+        "$(location) --extinst-vendor-grammar=$(location source/extinst.opencl.debuginfo.100.grammar.json) --vendor-insts-output=$(location opencl.debuginfo.100.insts.inc) --vendor-operand-kind-prefix=CLDEBUG100_; " +
+        "$(location) --spirv-core-grammar=$(location :deqp_spirv_headers_unified1_spirv.core.grammar.json) --extinst-debuginfo-grammar=$(location source/extinst.debuginfo.grammar.json) --extinst-cldebuginfo100-grammar=$(location source/extinst.opencl.debuginfo.100.grammar.json) --extension-enum-output=$(location extension_enum.inc) --enum-string-mapping-output=$(location enum_string_mapping.inc); " +
+        "$(location) --extinst-opencl-grammar=$(location :deqp_spirv_headers_unified1_extinst.opencl.std.100.grammar.json) --opencl-insts-output=$(location opencl.std.insts.inc); " +
+        "$(location) --extinst-glsl-grammar=$(location :deqp_spirv_headers_unified1_extinst.glsl.std.450.grammar.json) --glsl-insts-output=$(location glsl.std.450.insts.inc); ";
 };
 
-deqp_gen_spvtools_lang_headers = genrule {
-    name = "deqp_gen_spvtools_lang_headers";
+deqp_spvtools_generate_language_headers = genrule {
+    name = "deqp_spvtools_generate_language_headers";
     out = [
         "DebugInfo.h"
+        "OpenCLDebugInfo100.h"
     ];
     srcs = [
-        ":deqp_spirv.debuginfo.grammar.json"
+        "source/extinst.debuginfo.grammar.json"
+        "source/extinst.opencl.debuginfo.100.grammar.json"
     ];
     tool_files = ["utils/generate_language_headers.py"];
-    cmd = "$(location) --extinst-name=DebugInfo " +
-        "--extinst-grammar=$(location :deqp_spirv.debuginfo.grammar.json) " +
-        "--extinst-output-base=$$(dirname $(location DebugInfo.h))/DebugInfo";
+    cmd = "$(location) --extinst-grammar=$(location source/extinst.debuginfo.grammar.json) --extinst-output-path=$(location DebugInfo.h); " +
+        "$(location) --extinst-grammar=$(location source/extinst.opencl.debuginfo.100.grammar.json) --extinst-output-path=$(location OpenCLDebugInfo100.h); ";
 };
 
-deqp_gen_spvtools_enum_string_mapping = genrule {
-    name = "deqp_gen_spvtools_enum_string_mapping";
-    out = [
-        "extension_enum.inc"
-        "enum_string_mapping.inc"
-    ];
-    srcs = [
-        ":deqp_spirv.core.grammar.json-unified1"
-        ":deqp_spirv.debuginfo.grammar.json"
-    ];
-    tool_files = ["utils/generate_grammar_tables.py"];
-    cmd = "$(location) --spirv-core-grammar=$(location :deqp_spirv.core.grammar.json-unified1) " +
-        "--extinst-debuginfo-grammar=$(location :deqp_spirv.debuginfo.grammar.json) " +
-        "--extension-enum-output=$(location extension_enum.inc) " +
-        "--enum-string-mapping-output=$(location enum_string_mapping.inc) ";
-};
-
-deqp_gen_spvtools_generators_inc = genrule {
-    name = "deqp_gen_spvtools_generators_inc";
+deqp_spvtools_generate_registry_tables = genrule {
+    name = "deqp_spvtools_generate_registry_tables";
     out = [
         "generators.inc"
     ];
     srcs = [
-        ":deqp_spirv.registry.xml"
+        ":deqp_spirv_headers_spir-v.xml"
     ];
     tool_files = ["utils/generate_registry_tables.py"];
-    cmd = "$(location) --xml=$(location :deqp_spirv.registry.xml) --generator-output=$(location generators.inc)";
+    cmd = "$(location) --xml=$(location :deqp_spirv_headers_spir-v.xml) --generator-output=$(location generators.inc)";
 };
 
-deqp_gen_spvtools_build_version_inc = genrule { #  FIXME this relies on `git` which is no good on build machines
-    name = "deqp_gen_spvtools_build_version_inc";
+deqp_spvtools_update_build_version = genrule { #  FIXME this relies on `git` which is no good on build machines
+    name = "deqp_spvtools_update_build_version";
     out = ["build-version.inc"];
     srcs = ["CHANGES"];
     tool_files = ["utils/update_build_version.py"];
@@ -210,7 +94,6 @@ deqp_spirv-tools = cc_library {
         "source/enum_string_mapping.cpp"
         "source/ext_inst.cpp"
         "source/extensions.cpp"
-        "source/id_descriptor.cpp"
         "source/libspirv.cpp"
         "source/name_mapper.cpp"
         "source/opcode.cpp"
@@ -220,6 +103,7 @@ deqp_spirv-tools = cc_library {
         "source/print.cpp"
         "source/software_version.cpp"
         "source/spirv_endian.cpp"
+        "source/spirv_fuzzer_options.cpp"
         "source/spirv_optimizer_options.cpp"
         "source/spirv_reducer_options.cpp"
         "source/spirv_target_env.cpp"
@@ -248,7 +132,6 @@ deqp_spirv-tools = cc_library {
         "source/val/validate_composites.cpp"
         "source/val/validate_constants.cpp"
         "source/val/validate_conversion.cpp"
-        "source/val/validate_datarules.cpp"
         "source/val/validate_debug.cpp"
         "source/val/validate_decorations.cpp"
         "source/val/validate_derivatives.cpp"
@@ -264,58 +147,72 @@ deqp_spirv-tools = cc_library {
         "source/val/validate_logicals.cpp"
         "source/val/validate_memory.cpp"
         "source/val/validate_memory_semantics.cpp"
+        "source/val/validate_misc.cpp"
         "source/val/validate_mode_setting.cpp"
         "source/val/validate_non_uniform.cpp"
         "source/val/validate_primitives.cpp"
         "source/val/validate_scopes.cpp"
+        "source/val/validate_small_type_uses.cpp"
         "source/val/validate_type.cpp"
         "source/val/validation_state.cpp"
         "source/opt/aggressive_dead_code_elim_pass.cpp"
+        "source/opt/amd_ext_to_khr.cpp"
         "source/opt/basic_block.cpp"
         "source/opt/block_merge_pass.cpp"
+        "source/opt/block_merge_util.cpp"
         "source/opt/build_module.cpp"
         "source/opt/ccp_pass.cpp"
         "source/opt/cfg.cpp"
         "source/opt/cfg_cleanup_pass.cpp"
+        "source/opt/code_sink.cpp"
         "source/opt/combine_access_chains.cpp"
-        "source/opt/common_uniform_elim_pass.cpp"
         "source/opt/compact_ids_pass.cpp"
         "source/opt/composite.cpp"
         "source/opt/const_folding_rules.cpp"
         "source/opt/constants.cpp"
+        "source/opt/convert_to_half_pass.cpp"
         "source/opt/copy_prop_arrays.cpp"
         "source/opt/dead_branch_elim_pass.cpp"
         "source/opt/dead_insert_elim_pass.cpp"
         "source/opt/dead_variable_elimination.cpp"
+        "source/opt/decompose_initialized_variables_pass.cpp"
         "source/opt/decoration_manager.cpp"
         "source/opt/def_use_manager.cpp"
+        "source/opt/desc_sroa.cpp"
         "source/opt/dominator_analysis.cpp"
         "source/opt/dominator_tree.cpp"
         "source/opt/eliminate_dead_constant_pass.cpp"
         "source/opt/eliminate_dead_functions_pass.cpp"
+        "source/opt/eliminate_dead_functions_util.cpp"
+        "source/opt/eliminate_dead_members_pass.cpp"
         "source/opt/feature_manager.cpp"
+        "source/opt/fix_storage_class.cpp"
         "source/opt/flatten_decoration_pass.cpp"
         "source/opt/fold.cpp"
         "source/opt/fold_spec_constant_op_and_composite_pass.cpp"
         "source/opt/folding_rules.cpp"
         "source/opt/freeze_spec_constant_value_pass.cpp"
         "source/opt/function.cpp"
+        "source/opt/generate_webgpu_initializers_pass.cpp"
+        "source/opt/graphics_robust_access_pass.cpp"
         "source/opt/if_conversion.cpp"
         "source/opt/inline_exhaustive_pass.cpp"
         "source/opt/inline_opaque_pass.cpp"
         "source/opt/inline_pass.cpp"
         "source/opt/inst_bindless_check_pass.cpp"
+        "source/opt/inst_buff_addr_check_pass.cpp"
+        "source/opt/inst_debug_printf_pass.cpp"
         "source/opt/instruction.cpp"
         "source/opt/instruction_list.cpp"
         "source/opt/instrument_pass.cpp"
         "source/opt/ir_context.cpp"
         "source/opt/ir_loader.cpp"
+        "source/opt/legalize_vector_shuffle_pass.cpp"
         "source/opt/licm_pass.cpp"
         "source/opt/local_access_chain_convert_pass.cpp"
         "source/opt/local_redundancy_elimination.cpp"
         "source/opt/local_single_block_elim_pass.cpp"
         "source/opt/local_single_store_elim_pass.cpp"
-        "source/opt/local_ssa_elim_pass.cpp"
         "source/opt/loop_dependence.cpp"
         "source/opt/loop_dependence_helpers.cpp"
         "source/opt/loop_descriptor.cpp"
@@ -339,6 +236,7 @@ deqp_spirv-tools = cc_library {
         "source/opt/reduce_load_size.cpp"
         "source/opt/redundancy_elimination.cpp"
         "source/opt/register_pressure.cpp"
+        "source/opt/relax_float_ops_pass.cpp"
         "source/opt/remove_duplicates_pass.cpp"
         "source/opt/replace_invalid_opc.cpp"
         "source/opt/scalar_analysis.cpp"
@@ -346,8 +244,10 @@ deqp_spirv-tools = cc_library {
         "source/opt/scalar_replacement_pass.cpp"
         "source/opt/set_spec_constant_default_value_pass.cpp"
         "source/opt/simplification_pass.cpp"
+        "source/opt/split_invalid_unreachable_pass.cpp"
         "source/opt/ssa_rewrite_pass.cpp"
         "source/opt/strength_reduction_pass.cpp"
+        "source/opt/strip_atomic_counter_memory_pass.cpp"
         "source/opt/strip_debug_info_pass.cpp"
         "source/opt/strip_reflect_info_pass.cpp"
         "source/opt/struct_cfg_analysis.cpp"
@@ -358,6 +258,7 @@ deqp_spirv-tools = cc_library {
         "source/opt/value_number_table.cpp"
         "source/opt/vector_dce.cpp"
         "source/opt/workaround1209.cpp"
+        "source/opt/wrap_opkill.cpp"
     ];
     local_include_dirs = [
         "source"
@@ -369,19 +270,10 @@ deqp_spirv-tools = cc_library {
         "external/deqp-deps/SPIRV-Headers/include"
     ];
     generated_headers = [
-        "deqp_gen_spvtools_grammar_tables_1.0"
-        "deqp_gen_spvtools_grammar_tables_1.1"
-        "deqp_gen_spvtools_grammar_tables_1.2"
-        "deqp_gen_spvtools_grammar_tables_unified1"
-        "deqp_gen_spvtools_grammar_tables_debuginfo"
-        "deqp_gen_spvtools_grammar_tables_amd-gcn-shader"
-        "deqp_gen_spvtools_grammar_tables_amd-shader-ballot"
-        "deqp_gen_spvtools_grammar_tables_amd-shader-explicit-vertex-parameter"
-        "deqp_gen_spvtools_grammar_tables_amd-shader-trinary-minmax"
-        "deqp_gen_spvtools_enum_string_mapping"
-        "deqp_gen_spvtools_generators_inc"
-        "deqp_gen_spvtools_build_version_inc"
-        "deqp_gen_spvtools_lang_headers"
+        "deqp_spvtools_generate_grammar_tables"
+        "deqp_spvtools_generate_language_headers"
+        "deqp_spvtools_update_build_version"
+        "deqp_spvtools_generate_registry_tables"
     ];
     stl = "libc++_static";
     cppflags = [
@@ -389,4 +281,4 @@ deqp_spirv-tools = cc_library {
     ];
 };
 
-in { inherit "deqp_gen_spvtools_grammar_tables_1.0" "deqp_gen_spvtools_grammar_tables_1.1" "deqp_gen_spvtools_grammar_tables_1.2" "deqp_spirv.debuginfo.grammar.json" deqp_gen_spvtools_build_version_inc deqp_gen_spvtools_enum_string_mapping deqp_gen_spvtools_generators_inc deqp_gen_spvtools_grammar_tables_amd-gcn-shader deqp_gen_spvtools_grammar_tables_amd-shader-ballot deqp_gen_spvtools_grammar_tables_amd-shader-explicit-vertex-parameter deqp_gen_spvtools_grammar_tables_amd-shader-trinary-minmax deqp_gen_spvtools_grammar_tables_debuginfo deqp_gen_spvtools_grammar_tables_unified1 deqp_gen_spvtools_lang_headers deqp_spirv-tools; }
+in { inherit deqp_spirv-tools deqp_spvtools_generate_grammar_tables deqp_spvtools_generate_language_headers deqp_spvtools_generate_registry_tables deqp_spvtools_update_build_version; }

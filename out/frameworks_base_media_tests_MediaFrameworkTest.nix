@@ -4,6 +4,7 @@ let
 mediaframeworktest = android_test {
     name = "mediaframeworktest";
     srcs = [
+        "src/com/android/mediaframeworktest/AudioTestHarnessTemplateRunner.java"
         "src/com/android/mediaframeworktest/Camera2InstrumentationTestRunner.java"
         "src/com/android/mediaframeworktest/Camera2SurfaceViewActivity.java"
         "src/com/android/mediaframeworktest/Camera2SurfaceViewTestCase.java"
@@ -40,6 +41,7 @@ mediaframeworktest = android_test {
         "src/com/android/mediaframeworktest/functional/camera/CameraPairwiseTest.java"
         "src/com/android/mediaframeworktest/functional/mediaplayback/MediaPlayerApiTest.java"
         "src/com/android/mediaframeworktest/functional/mediarecorder/MediaRecorderTest.java"
+        "src/com/android/mediaframeworktest/functional/mediatranscodemanager/MediaTranscodeManagerTest.java"
         "src/com/android/mediaframeworktest/helpers/AssertHelpers.java"
         "src/com/android/mediaframeworktest/helpers/Camera2Focuser.java"
         "src/com/android/mediaframeworktest/helpers/CameraErrorCollector.java"
@@ -64,6 +66,7 @@ mediaframeworktest = android_test {
         "src/com/android/mediaframeworktest/stress/MediaPlayerStreamingStressTest.java"
         "src/com/android/mediaframeworktest/stress/MediaPlayerStressTest.java"
         "src/com/android/mediaframeworktest/stress/MediaRecorderStressTest.java"
+        "src/com/android/mediaframeworktest/template/AudioTestHarnessTemplateAndroidTest.java"
         "src/com/android/mediaframeworktest/unit/ByteArrayHelpers.java"
         "src/com/android/mediaframeworktest/unit/CameraMetadataTest.java"
         "src/com/android/mediaframeworktest/unit/CameraOpenTest.java"
@@ -112,6 +115,7 @@ mediaframeworktest = android_test {
     ];
     static_libs = [
         "mockito-target-minus-junit4"
+        "androidx.test.ext.junit"
         "androidx.test.rules"
         "android-ex-camera2"
     ];

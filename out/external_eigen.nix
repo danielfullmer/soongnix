@@ -17,9 +17,19 @@ let
 
 libeigen = cc_library_headers {
     name = "libeigen";
+
+    #  Although entire directory is exported, only Eigen and unsupported/Eigen
+    #  contain actual exported headers. When capturing header files for
+    #  snapshot, only these two directories will be globbed.
     export_include_dirs = ["."];
+
     vendor_available = true;
     host_supported = true;
+    apex_available = [
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+        "//apex_available:platform"
+    ];
 };
 
 subdirs = ["blas"];

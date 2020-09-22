@@ -12,11 +12,14 @@ libmedia_codecserviceregistrant = cc_library_shared {
         "libmedia_headers"
     ];
 
+    defaults = [
+        "libcodec2-hidl-defaults"
+    ];
     shared_libs = [
-        "android.hardware.media.c2@1.0"
         "libbase"
         "libcodec2_hidl@1.0"
         "libcodec2_vndk"
+        "libhidlbase"
         "libutils"
     ];
 

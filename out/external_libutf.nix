@@ -40,6 +40,11 @@ libutf = cc_library_static {
         };
     };
     sdk_version = "14";
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.extservices"
+    ];
 };
 
 in { inherit libutf; }

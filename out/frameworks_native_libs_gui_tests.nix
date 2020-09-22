@@ -16,6 +16,7 @@ libgui_test = cc_test {
     ];
 
     srcs = [
+        "BLASTBufferQueue_test.cpp"
         "BufferItemConsumer_test.cpp"
         "BufferQueue_test.cpp"
         "CpuConsumer_test.cpp"
@@ -41,6 +42,7 @@ libgui_test = cc_test {
     shared_libs = [
         "android.hardware.configstore@1.0"
         "android.hardware.configstore-utils"
+        "libSurfaceFlingerProp"
         "libbase"
         "liblog"
         "libEGL"
@@ -50,12 +52,13 @@ libgui_test = cc_test {
         "libcutils"
         "libgui"
         "libhidlbase"
-        "libhidltransport"
         "libinput"
         "libui"
         "libutils"
         "libnativewindow"
     ];
+
+    header_libs = ["libsurfaceflinger_headers"];
 };
 
 #  Build a separate binary to $(TARGET_OUT_DATA_NATIVE_TESTS)/$(LOCAL_MODULE)

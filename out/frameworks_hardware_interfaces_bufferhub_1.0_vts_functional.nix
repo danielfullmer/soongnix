@@ -20,7 +20,7 @@ let
 VtsHalBufferHubV1_0TargetTest = cc_test {
     name = "VtsHalBufferHubV1_0TargetTest";
     defaults = [
-        "VtsHalTargetTestDefaults"
+        "Vts10HalTargetTestDefaults"
     ];
     header_libs = [
         #  TODO(b/118893702): remove dependency once ui/BufferHubDefs.h moved
@@ -35,7 +35,6 @@ VtsHalBufferHubV1_0TargetTest = cc_test {
         "android.frameworks.bufferhub@1.0"
         "libcutils"
         "libhidlbase"
-        "libhwbinder"
         "liblog"
         "libui"
         "libutils"

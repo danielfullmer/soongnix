@@ -22,7 +22,11 @@ VtsHalAuthSecretV1_0TargetTest = cc_test {
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = ["VtsHalAuthSecretV1_0TargetTest.cpp"];
     static_libs = ["android.hardware.authsecret@1.0"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    require_root = true;
 };
 
 in { inherit VtsHalAuthSecretV1_0TargetTest; }

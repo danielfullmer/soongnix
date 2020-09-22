@@ -21,6 +21,9 @@ libvts_drivercomm = cc_library_shared {
 
     name = "libvts_drivercomm";
 
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+
     srcs = [
         "VtsDriverCommUtil.cpp"
         "VtsDriverFileUtil.cpp"

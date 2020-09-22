@@ -41,6 +41,10 @@ libcrypto_utils = cc_library {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.adbd"
+    ];
 };
 
 in { inherit libcrypto_utils; }

@@ -30,7 +30,7 @@ CtsRestoreSessionApp = android_test_helper_app {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     sdk_version = "system_current";

@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library, cc_library_host_static, cc_library_static, cc_test_host, genrule, python_binary_host }:
+{ cc_binary, cc_defaults, cc_library, cc_library_headers, cc_library_host_static, cc_library_static, cc_test_host, genrule, python_binary_host, python_library_host, python_test_host }:
 let
 
 #
@@ -33,7 +33,7 @@ avb_defaults = cc_defaults {
         "-Wextra"
         "-Wformat=2"
         "-Wmissing-prototypes"
-        #"-Wno-psabi"
+        "-Wno-psabi"
         "-Wno-unused-parameter"
         "-Wno-format"
         "-ffunction-sections"
@@ -96,6 +96,133 @@ avbtool = python_binary_host {
     };
 };
 
+aftltool_py = genrule {
+    name = "aftltool_py";
+    srcs = ["aftltool"];
+    out = ["aftltool.py"];
+    cmd = "cp $(in) $(out)";
+};
+
+aftl_proto = python_library_host {
+    name = "aftl_proto";
+    srcs = [
+        "proto/__init__.py"
+        "proto/aftl_pb2.py"
+        "proto/aftl_pb2_grpc.py"
+        "proto/api_pb2.py"
+        "proto/api_pb2_grpc.py"
+        "proto/trillian_pb2.py"
+        "proto/trillian_pb2_grpc.py"
+        "proto/aftl_google/__init__.py"
+        "proto/aftl_google/api/__init__.py"
+        "proto/aftl_google/api/annotations_pb2.py"
+        "proto/aftl_google/api/annotations_pb2_grpc.py"
+        "proto/aftl_google/api/http_pb2.py"
+        "proto/aftl_google/api/http_pb2_grpc.py"
+        "proto/aftl_google/rpc/__init__.py"
+        "proto/aftl_google/rpc/status_pb2.py"
+        "proto/aftl_google/rpc/status_pb2_grpc.py"
+        "proto/crypto/__init__.py"
+        "proto/crypto/keyspb/__init__.py"
+        "proto/crypto/keyspb/keyspb_pb2.py"
+        "proto/crypto/keyspb/keyspb_pb2_grpc.py"
+        "proto/crypto/sigpb/__init__.py"
+        "proto/crypto/sigpb/sigpb_pb2.py"
+        "proto/crypto/sigpb/sigpb_pb2_grpc.py"
+    ];
+    version = {
+        py2 = {
+            enabled = true;
+            #  This is needs to be false due to b/146057182#comment5.
+            embedded_launcher = false;
+        };
+        py3 = {
+            enabled = false;
+        };
+    };
+};
+
+aftltool = python_binary_host {
+    name = "aftltool";
+    srcs = [
+        ":aftltool_py"
+        ":avbtool_py"
+    ];
+    libs = [
+        "aftl_proto"
+    ];
+    main = "aftltool.py";
+    required = ["fec"];
+    version = {
+        py2 = {
+            enabled = true;
+            embedded_launcher = false;
+        };
+        py3 = {
+            enabled = false;
+        };
+    };
+};
+
+aftltool_test = python_test_host {
+    name = "aftltool_test";
+    main = "aftltool_test.py";
+    srcs = [
+        ":aftltool_py"
+        ":avbtool_py"
+        "aftltool_test.py"
+    ];
+    libs = [
+        "aftl_proto"
+    ];
+    data = [
+        "test/data/aftl_descriptor.bin"
+        "test/data/aftl_descriptor_multi.bin"
+        "test/data/aftl_key_bytes.bin"
+        "test/data/aftl_log_key_bytes.bin"
+        "test/data/aftl_log_sig.bin"
+        "test/data/aftl_verify_full.img"
+        "test/data/aftl_verify_vbmeta.bin"
+        "test/data/atx_metadata.bin"
+        "test/data/atx_permanent_attributes.bin"
+        "test/data/atx_pik_certificate.bin"
+        "test/data/atx_product_id.bin"
+        "test/data/atx_psk_certificate.bin"
+        "test/data/atx_puk_certificate.bin"
+        "test/data/atx_unlock_challenge.bin"
+        "test/data/atx_unlock_credential.bin"
+        "test/data/find_aftl_descriptor.bin"
+        "test/data/large_blob.bin"
+        "test/data/small_blob.bin"
+        "test/data/test_file.bin"
+        "test/data/test_file.bin.sparse"
+        "test/data/testkey_atx_pik.pem"
+        "test/data/testkey_atx_prk.pem"
+        "test/data/testkey_atx_psk.pem"
+        "test/data/testkey_atx_puk.pem"
+        "test/data/testkey_rsa2048.pem"
+        "test/data/testkey_rsa4096.pem"
+        "test/data/testkey_rsa8192.pem"
+        "test/data/aftltool/aftl_input_vbmeta.img"
+        "test/data/aftltool/aftl_output_vbmeta_with_1_icp.img"
+        "test/data/aftltool/aftl_output_vbmeta_with_2_icp_different_logs.img"
+        "test/data/aftltool/aftl_output_vbmeta_with_2_icp_same_log.img"
+        "test/data/aftltool/aftl_pubkey_1.pub"
+        "test/data/aftltool/aftl_pubkey_2.pub"
+    ];
+    test_suites = ["general-tests"];
+    version = {
+        py2 = {
+            enabled = true;
+            #  This is needs to be false due to b/146057182#comment5.
+            embedded_launcher = false;
+        };
+        py3 = {
+            enabled = false;
+        };
+    };
+};
+
 avbtool_py = genrule {
     name = "avbtool_py";
     srcs = ["avbtool"];
@@ -113,7 +240,10 @@ libavb = cc_library_static {
     ];
     host_supported = true;
     recovery_available = true;
-    export_include_dirs = ["."];
+    header_libs = [
+        "avb_headers"
+    ];
+    export_header_lib_headers = ["avb_headers"];
     target = {
         linux = {
             srcs = ["libavb/avb_sysdeps_posix.c"];
@@ -134,7 +264,10 @@ libavb_user = cc_library_static {
         "avb_sources"
     ];
     recovery_available = true;
-    export_include_dirs = ["."];
+    header_libs = [
+        "avb_headers"
+    ];
+    export_header_lib_headers = ["avb_headers"];
     shared_libs = ["libbase"];
     static_libs = ["libfs_mgr"];
     cflags = [
@@ -163,7 +296,10 @@ avbctl = cc_binary {
 libavb_ab_host = cc_library_host_static {
     name = "libavb_ab_host";
     defaults = ["avb_defaults"];
-    export_include_dirs = ["."];
+    header_libs = [
+        "avb_headers"
+    ];
+    export_header_lib_headers = ["avb_headers"];
     cflags = [
         "-fno-stack-protector"
         "-DAVB_AB_I_UNDERSTAND_LIBAVB_AB_IS_DEPRECATED"
@@ -171,10 +307,31 @@ libavb_ab_host = cc_library_host_static {
     srcs = ["libavb_ab/avb_ab_flow.c"];
 };
 
+libavb_aftl_host = cc_library_host_static {
+    name = "libavb_aftl_host";
+    defaults = [
+        "avb_defaults"
+        "avb_sources"
+    ];
+    header_libs = ["avb_headers"];
+    export_header_lib_headers = ["avb_headers"];
+    cflags = [
+        "-fno-stack-protector"
+    ];
+    srcs = [
+        "libavb_aftl/avb_aftl_util.c"
+        "libavb_aftl/avb_aftl_validate.c"
+        "libavb_aftl/avb_aftl_verify.c"
+    ];
+};
+
 libavb_atx_host = cc_library_host_static {
     name = "libavb_atx_host";
     defaults = ["avb_defaults"];
-    export_include_dirs = ["."];
+    header_libs = [
+        "avb_headers"
+    ];
+    export_header_lib_headers = ["avb_headers"];
     cflags = [
         "-fno-stack-protector"
     ];
@@ -184,14 +341,20 @@ libavb_atx_host = cc_library_host_static {
 libavb_host_sysdeps = cc_library_host_static {
     name = "libavb_host_sysdeps";
     defaults = ["avb_defaults"];
-    export_include_dirs = ["."];
+    header_libs = [
+        "avb_headers"
+    ];
+    export_header_lib_headers = ["avb_headers"];
     srcs = ["libavb/avb_sysdeps_posix.c"];
 };
 
 libavb_things_example = cc_library_host_static {
     name = "libavb_things_example";
     defaults = ["avb_defaults"];
-    export_include_dirs = ["."];
+    header_libs = [
+        "avb_headers"
+    ];
+    export_header_lib_headers = ["avb_headers"];
     srcs = ["examples/things/avb_atx_slot_verify.c"];
 };
 
@@ -207,6 +370,14 @@ libavb_host_unittest = cc_test_host {
         "avbtool"
         "test/avbtool_signing_helper_test.py"
         "test/avbtool_signing_helper_with_files_test.py"
+        "test/data/aftl_descriptor.bin"
+        "test/data/aftl_descriptor_multi.bin"
+        "test/data/aftl_key_bytes.bin"
+        "test/data/aftl_log_key_bytes.bin"
+        "test/data/aftl_log_sig.bin"
+        "test/data/aftl_verify_full.img"
+        "test/data/aftl_verify_vbmeta.bin"
+        "test/data/aftltool/"
         "test/data/atx_metadata.bin"
         "test/data/atx_permanent_attributes.bin"
         "test/data/atx_pik_certificate.bin"
@@ -215,6 +386,7 @@ libavb_host_unittest = cc_test_host {
         "test/data/atx_puk_certificate.bin"
         "test/data/atx_unlock_challenge.bin"
         "test/data/atx_unlock_credential.bin"
+        "test/data/find_aftl_descriptor.bin"
         "test/data/large_blob.bin"
         "test/data/small_blob.bin"
         "test/data/test_file.bin"
@@ -232,6 +404,7 @@ libavb_host_unittest = cc_test_host {
     static_libs = [
         "libavb"
         "libavb_ab_host"
+        "libavb_aftl_host"
         "libavb_atx_host"
         "libavb_things_example"
         "libgmock_host"
@@ -248,6 +421,9 @@ libavb_host_unittest = cc_test_host {
     ];
     srcs = [
         "test/avb_ab_flow_unittest.cc"
+        "test/avb_aftl_util_unittest.cc"
+        "test/avb_aftl_validate_unittest.cc"
+        "test/avb_aftl_verify_unittest.cc"
         "test/avb_atx_validate_unittest.cc"
         "test/avb_atx_slot_verify_unittest.cc"
         "test/avb_slot_verify_unittest.cc"
@@ -287,4 +463,16 @@ libavb_host_user_code_test = cc_library_host_static {
     srcs = ["boot_control/boot_control_avb.c"];
 };
 
-in { inherit "bootctrl.avb" avb_defaults avb_sources avbctl avbtool avbtool_py libavb libavb_ab_host libavb_atx_host libavb_host_sysdeps libavb_host_unittest libavb_host_user_code_test libavb_things_example libavb_user; }
+avb_headers = cc_library_headers {
+    name = "avb_headers";
+    host_supported = true;
+    recovery_available = true;
+    export_include_dirs = ["."];
+    target = {
+        windows = {
+            enabled = true;
+        };
+    };
+};
+
+in { inherit "bootctrl.avb" aftl_proto aftltool aftltool_py aftltool_test avb_defaults avb_headers avb_sources avbctl avbtool avbtool_py libavb libavb_ab_host libavb_aftl_host libavb_atx_host libavb_host_sysdeps libavb_host_unittest libavb_host_user_code_test libavb_things_example libavb_user; }

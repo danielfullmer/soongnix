@@ -32,7 +32,9 @@ let
     export_include_dirs = ["include"];
     shared_libs = [
         "android.hardware.gnss@1.0"
+        "android.hardware.gnss@2.0"
         "android.hardware.gnss.measurement_corrections@1.0"
+        "android.hardware.gnss.measurement_corrections@1.1"
     ];
     static_libs = [
         "libgtest"

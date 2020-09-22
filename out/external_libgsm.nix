@@ -47,6 +47,7 @@ libgsm = cc_library_static {
     ];
 
     export_include_dirs = ["inc"];
+    min_sdk_version = "apex_inherit";
 };
 
 in { inherit libgsm; }

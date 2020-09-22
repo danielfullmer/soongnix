@@ -34,14 +34,8 @@ forceredefine-defaults = cc_defaults {
     ];
     header_libs = [
         "libopenjdkjvmti_headers"
-        #  Annoyingly you aren't allowed to include even header-only non-ndk libs into an ndk build.
-        #  Instead we put the directories this would bring in below in 'include_dirs'
-        #  "libnativehelper_header_only",
-    ];
-    include_dirs = [
-        #  NDK headers aren't available in platform NDK builds.
-        "libnativehelper/include_jni"
-        "libnativehelper/header_only_include"
+        "libnativehelper_header_only"
+        "jni_headers"
     ];
     sdk_version = "current";
     stl = "libc++_static";
@@ -61,15 +55,6 @@ forceredefine-defaults = cc_defaults {
             ];
         };
     };
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
-    symlink_preferred_arch = true;
 };
 
 libforceredefine = art_cc_library {

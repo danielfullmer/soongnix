@@ -1,4 +1,4 @@
-{ cc_benchmark, cc_defaults, cc_library, cc_library_headers, cc_test, cc_test_library }:
+{ cc_benchmark, cc_defaults, cc_library, cc_library_headers, cc_library_static, cc_test, cc_test_library }:
 let
 
 #
@@ -45,19 +45,18 @@ libbacktrace_headers = cc_library_headers {
     name = "libbacktrace_headers";
     vendor_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "apex_inherit";
 };
 
-libbacktrace = cc_library {
-    name = "libbacktrace";
-    vendor_available = false;
-    recovery_available = true;
-    vndk = {
-        enabled = true;
-        support_system_process = true;
-    };
+libbacktrace_defaults = cc_defaults {
+    name = "libbacktrace_defaults";
     defaults = ["libbacktrace_common"];
-    host_supported = true;
 
     cflags = [
         "-Wexit-time-destructors"
@@ -82,7 +81,6 @@ libbacktrace = cc_library {
             shared_libs = [
                 "libbase"
                 "liblog"
-                "libunwindstack"
             ];
 
             static_libs = [
@@ -91,6 +89,35 @@ libbacktrace = cc_library {
         };
         android = {
             static_libs = ["libasync_safe"];
+            static = {
+                whole_static_libs = ["libasync_safe"];
+            };
+        };
+    };
+};
+
+libbacktrace = cc_library {
+    name = "libbacktrace";
+    vendor_available = false;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+    recovery_available = true;
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    vndk = {
+        enabled = true;
+        support_system_process = true;
+    };
+    host_supported = true;
+    defaults = ["libbacktrace_defaults"];
+
+    target = {
+        linux = {
+            shared_libs = [
+                "libunwindstack"
+            ];
         };
         vendor = {
             cflags = ["-DNO_LIBDEXFILE_SUPPORT"];
@@ -98,8 +125,25 @@ libbacktrace = cc_library {
         recovery = {
             cflags = ["-DNO_LIBDEXFILE_SUPPORT"];
         };
+        native_bridge = {
+            cflags = ["-DNO_LIBDEXFILE_SUPPORT"];
+        };
     };
-    whole_static_libs = ["libdemangle"];
+};
+
+#  Static library without DEX support to avoid dependencies on the ART APEX.
+libbacktrace_no_dex = cc_library_static {
+    name = "libbacktrace_no_dex";
+    visibility = ["//system/core/debuggerd"];
+    defaults = ["libbacktrace_defaults"];
+    cflags = ["-DNO_LIBDEXFILE_SUPPORT"];
+    target = {
+        linux = {
+            static_libs = [
+                "libunwindstack_no_dex"
+            ];
+        };
+    };
 };
 
 libbacktrace_test = cc_test_library {
@@ -137,7 +181,6 @@ backtrace_test = cc_test {
     defaults = ["libbacktrace_common"];
     host_supported = true;
     srcs = [
-        "backtrace_offline_test.cpp"
         "backtrace_test.cpp"
     ];
 
@@ -206,4 +249,4 @@ backtrace_benchmarks = cc_benchmark {
     ];
 };
 
-in { inherit backtrace_benchmarks backtrace_test libbacktrace libbacktrace_common libbacktrace_headers libbacktrace_test; }
+in { inherit backtrace_benchmarks backtrace_test libbacktrace libbacktrace_common libbacktrace_defaults libbacktrace_headers libbacktrace_no_dex libbacktrace_test; }

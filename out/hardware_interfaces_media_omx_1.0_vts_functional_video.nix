@@ -19,16 +19,22 @@ let
 
 VtsHalMediaOmxV1_0TargetVideoDecTest = cc_test {
     name = "VtsHalMediaOmxV1_0TargetVideoDecTest";
+    stem = "vts_hal_media_omx_v1_0_video_dec_test";
     defaults = ["VtsHalMediaOmxV1_0Defaults"];
     srcs = [
         "VtsHalMediaOmxV1_0TargetVideoDecTest.cpp"
         "media_video_hidl_test_common.cpp"
     ];
-    test_suites = ["general-tests"];
+    data = [":media_omx_video_res"];
+    test_config = "VtsHalMediaOmxV1_0TargetVideoDecTest.xml";
+    test_suites = [
+        "vts"
+    ];
 };
 
 VtsHalMediaOmxV1_0TargetVideoEncTest = cc_test {
     name = "VtsHalMediaOmxV1_0TargetVideoEncTest";
+    stem = "vts_hal_media_omx_v1_0_video_enc_test";
     defaults = ["VtsHalMediaOmxV1_0Defaults"];
     srcs = [
         "VtsHalMediaOmxV1_0TargetVideoEncTest.cpp"
@@ -37,7 +43,11 @@ VtsHalMediaOmxV1_0TargetVideoEncTest = cc_test {
     static_libs = [
         "libnativewindow"
     ];
-    test_suites = ["general-tests"];
+    data = [":media_omx_video_res"];
+    test_config = "VtsHalMediaOmxV1_0TargetVideoEncTest.xml";
+    test_suites = [
+        "vts"
+    ];
 };
 
 in { inherit VtsHalMediaOmxV1_0TargetVideoDecTest VtsHalMediaOmxV1_0TargetVideoEncTest; }

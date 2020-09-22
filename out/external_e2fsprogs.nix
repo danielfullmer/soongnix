@@ -14,6 +14,13 @@ e2fsprogs-defaults = cc_defaults {
             #  Still has unfixed/unsuppressed warnings.
             cflags = ["-Wno-error"];
         };
+        windows = {
+            cflags = [
+                "-Wno-typedef-redefinition"
+                "-Wno-unused-parameter"
+                "-Wno-unused-variable"
+            ];
+        };
     };
 };
 

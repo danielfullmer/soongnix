@@ -28,6 +28,12 @@ vts_kernel_loopconfig_test = cc_test {
     static_libs = [
         "libgmock"
     ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    require_root = true;
+    auto_gen_config = true;
 };
 
 in { inherit vts_kernel_loopconfig_test; }

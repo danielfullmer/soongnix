@@ -20,6 +20,9 @@ libnativewindow_headers = cc_library_headers {
     name = "libnativewindow_headers";
     export_include_dirs = ["include"];
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
+    min_sdk_version = "29";
 };
 
 #  Android O
@@ -48,7 +51,6 @@ libnativewindow = cc_library {
     ];
 
     shared_libs = [
-        "libhardware"
         "libcutils"
         "liblog"
         "libutils"
@@ -74,6 +76,11 @@ libnativewindow = cc_library {
     export_header_lib_headers = [
         "libnativebase_headers"
     ];
+
+    stubs = {
+        symbol_file = "libnativewindow.map.txt";
+        versions = ["29"];
+    };
 };
 
 subdirs = ["tests"];

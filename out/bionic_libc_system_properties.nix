@@ -4,6 +4,7 @@ let
 libsystemproperties = cc_library_static {
     name = "libsystemproperties";
     defaults = ["libc_defaults"];
+    native_bridge_supported = true;
     srcs = [
         "context_node.cpp"
         "contexts_split.cpp"

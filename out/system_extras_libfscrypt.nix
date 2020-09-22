@@ -8,7 +8,6 @@ libfscrypt = cc_library {
     recovery_available = true;
     srcs = [
         "fscrypt.cpp"
-        "fscrypt_init_extensions.cpp"
     ];
     export_include_dirs = ["include"];
     shared_libs = [

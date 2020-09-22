@@ -22,17 +22,22 @@ VtsHalAudioTargetTest_defaults = cc_defaults {
     defaults = ["VtsHalTargetTestDefaults"];
     static_libs = [
         "android.hardware.audio.common.test.utility"
+        "libaudiofoundation"
         "libaudiopolicycomponents"
         "libmedia_helper"
         "libxml2"
     ];
     shared_libs = [
+        "libbinder"
         "libfmq"
     ];
     header_libs = [
         "android.hardware.audio.common.util@all-versions"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 VtsHalAudioV2_0TargetTest = cc_test {
@@ -50,6 +55,12 @@ VtsHalAudioV2_0TargetTest = cc_test {
         "-DMINOR_VERSION=0"
         "-include common/all-versions/VersionMacro.h"
     ];
+    data = [
+        ":audio_policy_configuration_V2_0"
+    ];
+    #  Use test_config for vts-core suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioV2_0TargetTest.xml";
 };
 
 VtsHalAudioV4_0TargetTest = cc_test {
@@ -67,6 +78,12 @@ VtsHalAudioV4_0TargetTest = cc_test {
         "-DMINOR_VERSION=0"
         "-include common/all-versions/VersionMacro.h"
     ];
+    data = [
+        ":audio_policy_configuration_V4_0"
+    ];
+    #  Use test_config for vts-core suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioV4_0TargetTest.xml";
 };
 
 VtsHalAudioV5_0TargetTest = cc_test {
@@ -84,6 +101,35 @@ VtsHalAudioV5_0TargetTest = cc_test {
         "-DMINOR_VERSION=0"
         "-include common/all-versions/VersionMacro.h"
     ];
+    data = [
+        ":audio_policy_configuration_V5_0"
+    ];
+    #  Use test_config for vts-core suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioV5_0TargetTest.xml";
 };
 
-in { inherit VtsHalAudioTargetTest_defaults VtsHalAudioV2_0TargetTest VtsHalAudioV4_0TargetTest VtsHalAudioV5_0TargetTest; }
+VtsHalAudioV6_0TargetTest = cc_test {
+    name = "VtsHalAudioV6_0TargetTest";
+    defaults = ["VtsHalAudioTargetTest_defaults"];
+    srcs = [
+        "6.0/AudioPrimaryHidlHalTest.cpp"
+    ];
+    static_libs = [
+        "android.hardware.audio@6.0"
+        "android.hardware.audio.common@6.0"
+    ];
+    cflags = [
+        "-DMAJOR_VERSION=6"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+    data = [
+        ":audio_policy_configuration_V6_0"
+    ];
+    #  Use test_config for vts-core suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioV6_0TargetTest.xml";
+};
+
+in { inherit VtsHalAudioTargetTest_defaults VtsHalAudioV2_0TargetTest VtsHalAudioV4_0TargetTest VtsHalAudioV5_0TargetTest VtsHalAudioV6_0TargetTest; }

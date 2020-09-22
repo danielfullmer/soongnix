@@ -30,6 +30,8 @@ libprocinfo = cc_library {
     name = "libprocinfo";
     defaults = ["libprocinfo_defaults"];
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     recovery_available = true;
     vndk = {
         enabled = true;
@@ -37,6 +39,7 @@ libprocinfo = cc_library {
     host_supported = true;
     srcs = [
         "process.cpp"
+        "process_map.cpp"
     ];
 
     local_include_dirs = ["include"];
@@ -53,6 +56,12 @@ libprocinfo = cc_library {
             enabled = false;
         };
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 #  Tests
@@ -61,6 +70,7 @@ libprocinfo_test = cc_test {
     name = "libprocinfo_test";
     defaults = ["libprocinfo_defaults"];
     host_supported = true;
+    isolated = true;
     srcs = [
         "process_test.cpp"
         "process_map_test.cpp"

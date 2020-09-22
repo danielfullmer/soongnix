@@ -46,19 +46,15 @@ dt_fd_forward-defaults = cc_defaults {
         "dt_fd_forward_export"
         "art_libartbase_headers" #  For strlcpy emulation.
     ];
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
 };
 
 libdt_fd_forward = art_cc_library {
     name = "libdt_fd_forward";
     defaults = ["dt_fd_forward-defaults"];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libdt_fd_forwardd = art_cc_library {

@@ -1,4 +1,4 @@
-{ cc_binary, cc_binary_host, cc_defaults, cc_library_shared, cc_library_static, cc_prebuilt_binary, filegroup, prebuilt_etc_host, python_binary_host, python_library_host }:
+{ cc_binary, cc_binary_host, cc_defaults, cc_library, cc_library_static, cc_prebuilt_binary, filegroup, prebuilt_etc_host, python_binary_host, python_library_host, sh_binary }:
 let
 
 #  Copyright (c) 2016, Intel Corporation
@@ -60,16 +60,17 @@ libpfw_utility = cc_library_static {
     ];
 };
 
-libremote-processor-defaults = cc_defaults {
-    name = "libremote-processor-defaults";
+libremote-processor = cc_library {
+    name = "libremote-processor";
     defaults = ["pfw_defaults"];
-
-    cflags = ["-Wno-implicit-fallthrough"];
     export_include_dirs = [
         "upstream/remote-processor"
         "support/android/remote-processor"
     ];
-
+    local_include_dirs = [
+        "asio/include"
+        "support/android/asio"
+    ];
     srcs = [
         "upstream/remote-processor/RequestMessage.cpp"
         "upstream/remote-processor/Message.cpp"
@@ -77,22 +78,15 @@ libremote-processor-defaults = cc_defaults {
         "upstream/remote-processor/RemoteProcessorServer.cpp"
         "upstream/remote-processor/BackgroundRemoteProcessorServer.cpp"
     ];
+    cflags = [
+        "-Wno-unused-local-typedef"
+        "-Wno-implicit-fallthrough"
+    ];
     static_libs = ["libpfw_utility"];
 };
 
-libremote-processor = cc_library_shared {
-    name = "libremote-processor";
-    defaults = ["libremote-processor-defaults"];
-
-    local_include_dirs = [
-        "asio/include"
-        "support/android/asio"
-    ];
-    cflags = ["-Wno-unused-local-typedef"];
-};
-
-libparameter-defaults = cc_defaults {
-    name = "libparameter-defaults";
+libparameter = cc_library {
+    name = "libparameter";
     defaults = ["pfw_defaults"];
     vendor_available = true;
 
@@ -110,6 +104,7 @@ libparameter-defaults = cc_defaults {
     ];
     shared_libs = [
         "libxml2"
+        "libremote-processor"
     ];
     static_libs = [
         "libpfw_utility"
@@ -199,14 +194,6 @@ libparameter-defaults = cc_defaults {
     ];
 };
 
-libparameter = cc_library_shared {
-    name = "libparameter";
-    defaults = ["libparameter-defaults"];
-    shared_libs = [
-        "libremote-processor"
-    ];
-};
-
 #  Userdebug only, should not be used in a user build device image.
 test-platform = cc_binary {
     name = "test-platform";
@@ -243,8 +230,25 @@ domainGeneratorConnector = cc_binary_host {
 };
 
 #  Resources are not compiled so the prebuild mechanism is used to export them.
-#  Schemas are only used by host, in order to validate xml files
 # ////////////////////////////////////////////////
+
+parameter_frameworks_configuration_schemas = filegroup {
+    name = "parameter_frameworks_configuration_schemas";
+    srcs = [
+        "upstream/schemas/ParameterFrameworkConfiguration.xsd"
+        "upstream/schemas/ConfigurableDomain.xsd"
+        "upstream/schemas/ConfigurableDomains.xsd"
+        "upstream/schemas/SystemClass.xsd"
+        "upstream/schemas/ParameterSettings.xsd"
+        "upstream/schemas/FileIncluder.xsd"
+        "upstream/schemas/Subsystem.xsd"
+        "upstream/schemas/ComponentLibrary.xsd"
+        "upstream/schemas/ComponentTypeSet.xsd"
+        "upstream/schemas/W3cXmlAttributes.xsd"
+        "upstream/schemas/Parameter.xsd"
+    ];
+    path = "upstream/";
+};
 
 "ParameterFrameworkConfiguration.xsd" = prebuilt_etc_host {
     name = "ParameterFrameworkConfiguration.xsd";
@@ -352,10 +356,10 @@ domainGeneratorConnector = cc_binary_host {
     srcs = [":EddParser.py-srcs"];
     version = {
         py2 = {
-            enabled = true;
+            enabled = false;
         };
         py3 = {
-            enabled = false;
+            enabled = true;
         };
     };
 };
@@ -374,10 +378,10 @@ domainGeneratorConnector = cc_binary_host {
     srcs = [":PfwBaseTranslator.py-srcs"];
     version = {
         py2 = {
-            enabled = true;
+            enabled = false;
         };
         py3 = {
-            enabled = false;
+            enabled = true;
         };
     };
 };
@@ -400,21 +404,20 @@ domainGeneratorConnector = cc_binary_host {
     ];
     version = {
         py2 = {
-            enabled = true;
+            enabled = false;
         };
         py3 = {
-            enabled = false;
+            enabled = true;
         };
     };
 };
 
-"updateRoutageDomains.sh" = cc_prebuilt_binary {
+"updateRoutageDomains.sh" = sh_binary {
     name = "updateRoutageDomains.sh";
-    defaults = ["pfw_defaults"];
     owner = "intel";
 
     host_supported = true;
-    srcs = ["upstream/tools/xmlGenerator/updateRoutageDomains.sh"];
+    src = "upstream/tools/xmlGenerator/updateRoutageDomains.sh";
 };
 
 "hostConfig.py-srcs" = filegroup {
@@ -431,10 +434,10 @@ domainGeneratorConnector = cc_binary_host {
     srcs = [":hostConfig.py-srcs"];
     version = {
         py2 = {
-            enabled = true;
+            enabled = false;
         };
         py3 = {
-            enabled = false;
+            enabled = true;
         };
     };
 };
@@ -453,10 +456,10 @@ domainGeneratorConnector = cc_binary_host {
     ];
     version = {
         py2 = {
-            enabled = true;
+            enabled = false;
         };
         py3 = {
-            enabled = false;
+            enabled = true;
         };
     };
     required = [
@@ -498,4 +501,4 @@ remote-process = cc_binary {
     shared_libs = ["libremote-processor"];
 };
 
-in { inherit "ComponentLibrary.xsd" "ComponentTypeSet.xsd" "ConfigurableDomain.xsd" "ConfigurableDomains.xsd" "EddParser.py" "EddParser.py-srcs" "FileIncluder.xsd" "PFWScriptGenerator.py" "PFWScriptGenerator.py-srcs" "Parameter.xsd" "ParameterFrameworkConfiguration.xsd" "ParameterSettings.xsd" "PfwBaseTranslator.py" "PfwBaseTranslator.py-srcs" "Subsystem.xsd" "SystemClass.xsd" "W3cXmlAttributes.xsd" "domainGenerator.py" "domainGenerator.sh" "hostConfig.py" "hostConfig.py-srcs" "lightRoutingUpdate.sh" "updateRoutageDomains.sh" domainGeneratorConnector libparameter libparameter-defaults libpfw_utility libremote-processor libremote-processor-defaults pfw_defaults remote-process test-platform; }
+in { inherit "ComponentLibrary.xsd" "ComponentTypeSet.xsd" "ConfigurableDomain.xsd" "ConfigurableDomains.xsd" "EddParser.py" "EddParser.py-srcs" "FileIncluder.xsd" "PFWScriptGenerator.py" "PFWScriptGenerator.py-srcs" "Parameter.xsd" "ParameterFrameworkConfiguration.xsd" "ParameterSettings.xsd" "PfwBaseTranslator.py" "PfwBaseTranslator.py-srcs" "Subsystem.xsd" "SystemClass.xsd" "W3cXmlAttributes.xsd" "domainGenerator.py" "domainGenerator.sh" "hostConfig.py" "hostConfig.py-srcs" "lightRoutingUpdate.sh" "updateRoutageDomains.sh" domainGeneratorConnector libparameter libpfw_utility libremote-processor parameter_frameworks_configuration_schemas pfw_defaults remote-process test-platform; }

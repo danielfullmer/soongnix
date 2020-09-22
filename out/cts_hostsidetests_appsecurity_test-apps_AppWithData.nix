@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2009 The Android Open Source Project
@@ -15,7 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsAppWithData = android_test {
+CtsAppWithData = android_test_helper_app {
     name = "CtsAppWithData";
     defaults = ["cts_support_defaults"];
     srcs = [
@@ -28,7 +28,7 @@ CtsAppWithData = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     certificate = ":cts-testkey1";

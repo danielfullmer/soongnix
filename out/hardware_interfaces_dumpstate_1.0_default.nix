@@ -1,8 +1,8 @@
 { cc_binary }:
 let
 
-"android.hardware.dumpstate@1.0-service" = cc_binary {
-    name = "android.hardware.dumpstate@1.0-service";
+"android.hardware.dumpstate@1.0-service.example" = cc_binary {
+    name = "android.hardware.dumpstate@1.0-service.example";
     init_rc = ["android.hardware.dumpstate@1.0-service.rc"];
     relative_install_path = "hw";
     vendor = true;
@@ -21,11 +21,10 @@ let
         "libcutils"
         "libdumpstateutil"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
 
 };
 
-in { inherit "android.hardware.dumpstate@1.0-service"; }
+in { inherit "android.hardware.dumpstate@1.0-service.example"; }

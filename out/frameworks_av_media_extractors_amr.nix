@@ -1,42 +1,15 @@
-{ cc_library_shared }:
+{ cc_library }:
 let
 
-libamrextractor = cc_library_shared {
+libamrextractor = cc_library {
+    name = "libamrextractor";
+    defaults = ["extractor-defaults"];
 
     srcs = ["AMRExtractor.cpp"];
-
-    include_dirs = [
-        "frameworks/av/media/libstagefright/include"
-    ];
-
-    shared_libs = [
-        "liblog"
-        "libmediandk"
-    ];
 
     static_libs = [
         "libstagefright_foundation"
     ];
-
-    name = "libamrextractor";
-    relative_install_path = "extractors";
-
-    compile_multilib = "first";
-
-    cflags = [
-        "-Werror"
-        "-Wall"
-        "-fvisibility=hidden"
-    ];
-    version_script = "exports.lds";
-
-    sanitize = {
-        cfi = true;
-        misc_undefined = [
-            "unsigned-integer-overflow"
-            "signed-integer-overflow"
-        ];
-    };
 
 };
 

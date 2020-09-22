@@ -1,4 +1,4 @@
-{ java_import, java_import_host }:
+{ java_defaults, java_import, java_import_host }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -67,4 +67,47 @@ let
     jars = ["asm-util-6.0.jar"];
 };
 
-in { inherit "asm-5.2" "asm-6.0" "asm-analysis-5.2" "asm-analysis-6.0" "asm-commons-5.2" "asm-commons-6.0" "asm-tree-5.2" "asm-tree-6.0" "asm-util-6.0"; }
+"asm-7.0-defaults" = java_defaults {
+    name = "asm-7.0-defaults";
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+};
+
+"asm-7.0" = java_import {
+    name = "asm-7.0";
+    host_supported = true;
+    jars = ["asm-7.0.jar"];
+    defaults = ["asm-7.0-defaults"];
+};
+
+"asm-analysis-7.0" = java_import {
+    name = "asm-analysis-7.0";
+    host_supported = true;
+    jars = ["asm-analysis-7.0.jar"];
+    defaults = ["asm-7.0-defaults"];
+};
+
+"asm-commons-7.0" = java_import {
+    name = "asm-commons-7.0";
+    host_supported = true;
+    jars = ["asm-commons-7.0.jar"];
+    defaults = ["asm-7.0-defaults"];
+};
+
+"asm-tree-7.0" = java_import {
+    name = "asm-tree-7.0";
+    host_supported = true;
+    jars = ["asm-tree-7.0.jar"];
+    defaults = ["asm-7.0-defaults"];
+};
+
+"asm-util-7.0" = java_import {
+    name = "asm-util-7.0";
+    host_supported = true;
+    jars = ["asm-util-7.0.jar"];
+    defaults = ["asm-7.0-defaults"];
+};
+
+in { inherit "asm-5.2" "asm-6.0" "asm-7.0" "asm-7.0-defaults" "asm-analysis-5.2" "asm-analysis-6.0" "asm-analysis-7.0" "asm-commons-5.2" "asm-commons-6.0" "asm-commons-7.0" "asm-tree-5.2" "asm-tree-6.0" "asm-tree-7.0" "asm-util-6.0" "asm-util-7.0"; }

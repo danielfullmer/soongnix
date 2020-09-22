@@ -31,7 +31,6 @@ let
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.power.stats@1.0"

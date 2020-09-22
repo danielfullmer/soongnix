@@ -31,7 +31,6 @@ let
         "libcutils"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.contexthub@1.0"
     ];
 };
@@ -53,7 +52,6 @@ let
         "libdl"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.contexthub@1.0"

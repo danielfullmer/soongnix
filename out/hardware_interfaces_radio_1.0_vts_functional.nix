@@ -38,7 +38,11 @@ VtsHalRadioV1_0TargetTest = cc_test {
     static_libs = [
         "android.hardware.radio@1.0"
     ];
-    test_suites = ["general-tests"];
+    test_config = "vts_hal_radio_target_test.xml";
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 VtsHalSapV1_0TargetTest = cc_test {
@@ -54,7 +58,11 @@ VtsHalSapV1_0TargetTest = cc_test {
     static_libs = [
         "android.hardware.radio@1.0"
     ];
-    test_suites = ["general-tests"];
+    test_config = "vts_hal_sap_target_test.xml";
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 RadioVtsTestUtilBase = cc_library_static {

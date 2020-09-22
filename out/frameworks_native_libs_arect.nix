@@ -1,4 +1,4 @@
-{ cc_library_static }:
+{ cc_library_headers, cc_library_static }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -15,16 +15,24 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+libarect_headers = cc_library_headers {
+    name = "libarect_headers";
+    export_include_dirs = ["include"];
+};
+
 libarect = cc_library_static {
     name = "libarect";
     host_supported = true;
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
     target = {
         windows = {
             enabled = true;
         };
     };
+    min_sdk_version = "29";
 };
 
-in { inherit libarect; }
+in { inherit libarect libarect_headers; }

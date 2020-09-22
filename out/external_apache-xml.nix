@@ -1,4 +1,4 @@
-{ filegroup, java_library }:
+{ filegroup, java_library, package }:
 let
 
 #
@@ -17,16 +17,29 @@ let
 #  limitations under the License.
 #
 
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
+
 #  The set of files that contribute to APIs.
 #  Generally, apache-xml source files are not marked with @hide so we add them
 #  one-by-one after having done so.
 apache-xml_api_files = filegroup {
     name = "apache-xml_api_files";
+    visibility = ["//libcore"];
     srcs = [];
 };
 
 apache-xml = java_library {
     name = "apache-xml";
+    visibility = [
+        "//art/build/apex"
+        "//libcore"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
     srcs = [
         "src/main/java/org/apache/xalan/Version.java"
         "src/main/java/org/apache/xalan/extensions/ExpressionContext.java"
@@ -514,8 +527,7 @@ apache-xml = java_library {
         javacflags = ["-Xep:MissingOverride:OFF"];
     };
 
-    no_standard_libs = true;
-    libs = ["core-all"];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
 };
 
@@ -524,6 +536,9 @@ apache-xml = java_library {
 #  not be stripped. See b/24535627.
 apache-xml-testdex = java_library {
     name = "apache-xml-testdex";
+    visibility = [
+        "//art:__subpackages__"
+    ];
     static_libs = ["apache-xml"];
 
     installable = true;
@@ -531,7 +546,7 @@ apache-xml-testdex = java_library {
         enabled = false;
     };
 
-    no_framework_libs = true;
+    sdk_version = "core_platform";
 };
 
-in { inherit apache-xml apache-xml-testdex apache-xml_api_files; }
+in { inherit _missingName apache-xml apache-xml-testdex apache-xml_api_files; }

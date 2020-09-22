@@ -1,0 +1,23 @@
+{ bootstrap_go_package }:
+let
+
+soong-genrule = bootstrap_go_package {
+    name = "soong-genrule";
+    pkgPath = "android/soong/genrule";
+    deps = [
+        "blueprint"
+        "blueprint-pathtools"
+        "soong"
+        "soong-android"
+        "soong-shared"
+    ];
+    srcs = [
+        "genrule.go"
+    ];
+    testSrcs = [
+        "genrule_test.go"
+    ];
+    pluginFor = ["soong_build"];
+};
+
+in { inherit soong-genrule; }

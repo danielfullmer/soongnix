@@ -29,10 +29,13 @@ VtsHalKeymasterV3_0TargetTest = cc_test {
     ];
     static_libs = [
         "android.hardware.keymaster@3.0"
-        "libcrypto"
+        "libcrypto_static"
         "libsoftkeymasterdevice"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalKeymasterV3_0TargetTest; }

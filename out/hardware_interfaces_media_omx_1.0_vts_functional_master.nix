@@ -21,7 +21,10 @@ VtsHalMediaOmxV1_0TargetMasterTest = cc_test {
     name = "VtsHalMediaOmxV1_0TargetMasterTest";
     defaults = ["VtsHalMediaOmxV1_0Defaults"];
     srcs = ["VtsHalMediaOmxV1_0TargetMasterTest.cpp"];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalMediaOmxV1_0TargetMasterTest; }

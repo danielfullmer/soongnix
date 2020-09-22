@@ -38,9 +38,6 @@ TfliteGeneratedNnapiTest = cc_test {
     shared_libs = [
         "liblog"
     ];
-    test_suites = [
-        "general-tests"
-    ];
 };
 
 in { inherit TfliteGeneratedNnapiTest; }

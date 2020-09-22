@@ -18,7 +18,6 @@ let
 SystemUpdaterSample = android_app {
     name = "SystemUpdaterSample";
     sdk_version = "system_current";
-    privileged = true;
 
     srcs = [
         "src/com/example/android/systemupdatersample/PayloadSpec.java"

@@ -25,11 +25,19 @@ NeuralNetworksSampleDriver_defaults = cc_defaults {
     srcs = [
         "SampleDriver.cpp"
         "SampleDriverFull.cpp"
+        "SampleDriverPartial.cpp"
+        "SampleDriverUtils.cpp"
     ];
     header_libs = [
         "libneuralnetworks_headers"
     ];
     shared_libs = [
+        "android.hardware.neuralnetworks@1.0"
+        "android.hardware.neuralnetworks@1.1"
+        "android.hardware.neuralnetworks@1.2"
+        "android.hardware.neuralnetworks@1.3"
+        "android.hidl.allocator@1.0"
+        "android.hidl.memory@1.0"
         "libbase"
         "libcutils"
         "libdl"
@@ -37,17 +45,11 @@ NeuralNetworksSampleDriver_defaults = cc_defaults {
         "libhardware"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
-        "libnativewindow"
-        "libtextclassifier_hash"
         "liblog"
-        "libui"
+        "libnativewindow"
+        "libsync"
+        "libtextclassifier_hash"
         "libutils"
-        "android.hardware.neuralnetworks@1.0"
-        "android.hardware.neuralnetworks@1.1"
-        "android.hardware.neuralnetworks@1.2"
-        "android.hidl.allocator@1.0"
-        "android.hidl.memory@1.0"
     ];
     static_libs = [
         "libneuralnetworks_common"
@@ -61,44 +63,44 @@ NeuralNetworksSampleDriver_server_defaults = cc_defaults {
     proprietary = true;
 };
 
-"android.hardware.neuralnetworks@1.2-service-sample-all" = cc_binary {
-    name = "android.hardware.neuralnetworks@1.2-service-sample-all";
+"android.hardware.neuralnetworks@1.3-service-sample-all" = cc_binary {
+    name = "android.hardware.neuralnetworks@1.3-service-sample-all";
     srcs = ["SampleDriverAll.cpp"];
     defaults = ["NeuralNetworksSampleDriver_server_defaults"];
-    init_rc = ["config/android.hardware.neuralnetworks@1.2-service-sample-all.rc"];
-    vintf_fragments = ["config/android.hardware.neuralnetworks@1.2-service-sample-all.xml"];
+    init_rc = ["config/android.hardware.neuralnetworks@1.3-service-sample-all.rc"];
+    vintf_fragments = ["config/android.hardware.neuralnetworks@1.3-service-sample-all.xml"];
 };
 
-"android.hardware.neuralnetworks@1.2-service-sample-float-fast" = cc_binary {
-    name = "android.hardware.neuralnetworks@1.2-service-sample-float-fast";
+"android.hardware.neuralnetworks@1.3-service-sample-float-fast" = cc_binary {
+    name = "android.hardware.neuralnetworks@1.3-service-sample-float-fast";
     srcs = ["SampleDriverFloatFast.cpp"];
     defaults = ["NeuralNetworksSampleDriver_server_defaults"];
-    init_rc = ["config/android.hardware.neuralnetworks@1.2-service-sample-float-fast.rc"];
-    vintf_fragments = ["config/android.hardware.neuralnetworks@1.2-service-sample-float-fast.xml"];
+    init_rc = ["config/android.hardware.neuralnetworks@1.3-service-sample-float-fast.rc"];
+    vintf_fragments = ["config/android.hardware.neuralnetworks@1.3-service-sample-float-fast.xml"];
 };
 
-"android.hardware.neuralnetworks@1.2-service-sample-float-slow" = cc_binary {
-    name = "android.hardware.neuralnetworks@1.2-service-sample-float-slow";
+"android.hardware.neuralnetworks@1.3-service-sample-float-slow" = cc_binary {
+    name = "android.hardware.neuralnetworks@1.3-service-sample-float-slow";
     srcs = ["SampleDriverFloatSlow.cpp"];
     defaults = ["NeuralNetworksSampleDriver_server_defaults"];
-    init_rc = ["config/android.hardware.neuralnetworks@1.2-service-sample-float-slow.rc"];
-    vintf_fragments = ["config/android.hardware.neuralnetworks@1.2-service-sample-float-slow.xml"];
+    init_rc = ["config/android.hardware.neuralnetworks@1.3-service-sample-float-slow.rc"];
+    vintf_fragments = ["config/android.hardware.neuralnetworks@1.3-service-sample-float-slow.xml"];
 };
 
-"android.hardware.neuralnetworks@1.2-service-sample-quant" = cc_binary {
-    name = "android.hardware.neuralnetworks@1.2-service-sample-quant";
+"android.hardware.neuralnetworks@1.3-service-sample-quant" = cc_binary {
+    name = "android.hardware.neuralnetworks@1.3-service-sample-quant";
     srcs = ["SampleDriverQuant.cpp"];
     defaults = ["NeuralNetworksSampleDriver_server_defaults"];
-    init_rc = ["config/android.hardware.neuralnetworks@1.2-service-sample-quant.rc"];
-    vintf_fragments = ["config/android.hardware.neuralnetworks@1.2-service-sample-quant.xml"];
+    init_rc = ["config/android.hardware.neuralnetworks@1.3-service-sample-quant.rc"];
+    vintf_fragments = ["config/android.hardware.neuralnetworks@1.3-service-sample-quant.xml"];
 };
 
-"android.hardware.neuralnetworks@1.2-service-sample-minimal" = cc_binary {
-    name = "android.hardware.neuralnetworks@1.2-service-sample-minimal";
+"android.hardware.neuralnetworks@1.3-service-sample-minimal" = cc_binary {
+    name = "android.hardware.neuralnetworks@1.3-service-sample-minimal";
     srcs = ["SampleDriverMinimal.cpp"];
     defaults = ["NeuralNetworksSampleDriver_server_defaults"];
-    init_rc = ["config/android.hardware.neuralnetworks@1.2-service-sample-minimal.rc"];
-    vintf_fragments = ["config/android.hardware.neuralnetworks@1.2-service-sample-minimal.xml"];
+    init_rc = ["config/android.hardware.neuralnetworks@1.3-service-sample-minimal.rc"];
+    vintf_fragments = ["config/android.hardware.neuralnetworks@1.3-service-sample-minimal.xml"];
 };
 
 libSampleDriver = cc_library_static {
@@ -107,4 +109,4 @@ libSampleDriver = cc_library_static {
     export_include_dirs = ["."];
 };
 
-in { inherit "android.hardware.neuralnetworks@1.2-service-sample-all" "android.hardware.neuralnetworks@1.2-service-sample-float-fast" "android.hardware.neuralnetworks@1.2-service-sample-float-slow" "android.hardware.neuralnetworks@1.2-service-sample-minimal" "android.hardware.neuralnetworks@1.2-service-sample-quant" NeuralNetworksSampleDriver_defaults NeuralNetworksSampleDriver_server_defaults libSampleDriver; }
+in { inherit "android.hardware.neuralnetworks@1.3-service-sample-all" "android.hardware.neuralnetworks@1.3-service-sample-float-fast" "android.hardware.neuralnetworks@1.3-service-sample-float-slow" "android.hardware.neuralnetworks@1.3-service-sample-minimal" "android.hardware.neuralnetworks@1.3-service-sample-quant" NeuralNetworksSampleDriver_defaults NeuralNetworksSampleDriver_server_defaults libSampleDriver; }

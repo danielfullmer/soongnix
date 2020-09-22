@@ -31,6 +31,14 @@ apex_tz_version_test1 = prebuilt_etc {
     installable = false;
 };
 
+"apex_telephonylookup.xml_test1" = prebuilt_etc {
+    name = "apex_telephonylookup.xml_test1";
+    src = "android/telephonylookup.xml";
+    filename = "telephonylookup.xml";
+    sub_dir = "tz";
+    installable = false;
+};
+
 apex_tzdata_test1 = prebuilt_etc {
     name = "apex_tzdata_test1";
     src = "iana/tzdata";
@@ -49,4 +57,4 @@ apex_tzdata_test1 = prebuilt_etc {
     installable = false;
 };
 
-in { inherit "apex_icu_tzdata.dat_test1" "apex_tzlookup.xml_test1" apex_tz_version_test1 apex_tzdata_test1; }
+in { inherit "apex_icu_tzdata.dat_test1" "apex_telephonylookup.xml_test1" "apex_tzlookup.xml_test1" apex_tz_version_test1 apex_tzdata_test1; }

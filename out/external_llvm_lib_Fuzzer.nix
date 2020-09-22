@@ -46,7 +46,7 @@ libLLVMFuzzerNoMain = cc_library_static {
     exclude_srcs = ["FuzzerMain.cpp"];
     sanitize = {
         address = false;
-        coverage = false;
+        fuzzer = false;
     };
 };
 
@@ -65,7 +65,7 @@ libLLVMFuzzer = cc_library_static {
     whole_static_libs = ["libLLVMFuzzerNoMain"];
     sanitize = {
         address = false;
-        coverage = false;
+        fuzzer = false;
     };
 };
 

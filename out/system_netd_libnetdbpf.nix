@@ -29,10 +29,12 @@ libnetdbpf = cc_library {
         "libbpf_android"
         "liblog"
         "libnetdutils"
-        "libutils"
     ];
     export_include_dirs = ["include"];
     defaults = ["netd_defaults"];
+    sanitize = {
+        cfi = true;
+    };
 };
 
 libnetdbpf_test = cc_test {

@@ -26,7 +26,10 @@ VtsHalSoundtriggerV2_2TargetTest = cc_test {
         "android.hardware.soundtrigger@2.1"
         "android.hardware.soundtrigger@2.2"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalSoundtriggerV2_2TargetTest; }

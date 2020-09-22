@@ -55,9 +55,15 @@ librenderengine_gl_sources = filegroup {
         "gl/GLExtensions.cpp"
         "gl/GLFramebuffer.cpp"
         "gl/GLImage.cpp"
+        "gl/GLShadowTexture.cpp"
+        "gl/GLShadowVertexGenerator.cpp"
+        "gl/GLSkiaShadowPort.cpp"
+        "gl/GLVertexBuffer.cpp"
         "gl/ImageManager.cpp"
         "gl/Program.cpp"
         "gl/ProgramCache.cpp"
+        "gl/filters/BlurFilter.cpp"
+        "gl/filters/GenericProgram.cpp"
     ];
 };
 
@@ -73,9 +79,6 @@ librenderengine = cc_library_static {
     cflags = [
         "-fvisibility=hidden"
         "-Werror=format"
-    ];
-    cppflags = [
-        "-fwhole-program-vtables" #  requires ThinLTO
     ];
     srcs = [
         ":librenderengine_sources"

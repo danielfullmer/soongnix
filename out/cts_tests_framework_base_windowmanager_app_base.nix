@@ -1,4 +1,4 @@
-{ filegroup }:
+{ filegroup, java_test_helper_library }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -20,4 +20,22 @@ cts-wm-components-base = filegroup {
     srcs = ["src/android/server/wm/component/ComponentsBase.java"];
 };
 
-in { inherit cts-wm-components-base; }
+cts-wm-app-base = java_test_helper_library {
+    name = "cts-wm-app-base";
+
+    srcs = [
+        "src/android/server/wm/app/AbstractLifecycleLogActivity.java"
+        "src/android/server/wm/app/LaunchingActivity.java"
+        "src/android/server/wm/app/TestActivity.java"
+        "src/android/server/wm/component/ComponentsBase.java"
+        ":cts-wm-app-util"
+    ];
+
+    static_libs = [
+        "androidx.annotation_annotation"
+    ];
+
+    sdk_version = "test_current";
+};
+
+in { inherit cts-wm-app-base cts-wm-components-base; }

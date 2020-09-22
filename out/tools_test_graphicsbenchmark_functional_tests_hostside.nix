@@ -15,17 +15,19 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-GameQualificationHostTestCases = java_test_host {
-    name = "GameQualificationHostTestCases";
+GameCoreHostTestCases = java_test_host {
+    name = "GameCoreHostTestCases";
     srcs = [
         "src/com/android/game/qualification/test/DeviceConfigurationTest.java"
         "src/com/android/game/qualification/test/FunctionalTestSuite.java"
         "src/com/android/game/qualification/test/MemoryTests.java"
+        "src/com/android/game/qualification/test/TestUtils.java"
         "src/com/android/game/qualification/test/VkJsonTests.java"
     ];
 
     libs = [
         "tradefed"
+        "GameCoreHelperHost"
     ];
     static_libs = [
         "truth-prebuilt-host-jar"
@@ -35,4 +37,4 @@ GameQualificationHostTestCases = java_test_host {
     ];
 };
 
-in { inherit GameQualificationHostTestCases; }
+in { inherit GameCoreHostTestCases; }

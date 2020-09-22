@@ -10,8 +10,8 @@ let
         enabled = true;
     };
     srcs = [
-        "IVibrator.hal"
         "types.hal"
+        "IVibrator.hal"
     ];
     interfaces = [
         "android.hardware.vibrator@1.0"

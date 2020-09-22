@@ -1,4 +1,4 @@
-{ android_test, android_test_helper_app, filegroup }:
+{ android_test, filegroup }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -18,25 +18,20 @@ let
 CtsAtomicInstallTestCases = android_test {
     name = "CtsAtomicInstallTestCases";
 
-    srcs = [
-        "src/com/android/tests/atomicinstall/AtomicInstallTest.java"
-        "src/com/android/tests/atomicinstall/LocalIntentSender.java"
-    ];
+    srcs = ["src/com/android/tests/atomicinstall/AtomicInstallTest.java"];
 
     java_resources = [
-        ":AtomicInstallTestAppAv1"
-        ":AtomicInstallTestAppAv2"
-        ":AtomicInstallTestAppBv1"
         ":AtomicInstallCorrupt"
     ];
     static_libs = [
         "androidx.test.runner"
         "truth-prebuilt"
+        "cts-install-lib"
     ];
     sdk_version = "test_current";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
         "mts"
     ];
@@ -48,28 +43,4 @@ AtomicInstallCorrupt = filegroup {
     path = "testdata/apk/prebuilt";
 };
 
-AtomicInstallTestAppAv1 = android_test_helper_app {
-    name = "AtomicInstallTestAppAv1";
-
-    srcs = ["testdata/apk/src/com/android/tests/atomicinstall/testapp/MainActivity.java"];
-
-    manifest = "testdata/apk/Av1.xml";
-};
-
-AtomicInstallTestAppAv2 = android_test_helper_app {
-    name = "AtomicInstallTestAppAv2";
-
-    srcs = ["testdata/apk/src/com/android/tests/atomicinstall/testapp/MainActivity.java"];
-
-    manifest = "testdata/apk/Av2.xml";
-};
-
-AtomicInstallTestAppBv1 = android_test_helper_app {
-    name = "AtomicInstallTestAppBv1";
-
-    srcs = ["testdata/apk/src/com/android/tests/atomicinstall/testapp/MainActivity.java"];
-
-    manifest = "testdata/apk/Bv1.xml";
-};
-
-in { inherit AtomicInstallCorrupt AtomicInstallTestAppAv1 AtomicInstallTestAppAv2 AtomicInstallTestAppBv1 CtsAtomicInstallTestCases; }
+in { inherit AtomicInstallCorrupt CtsAtomicInstallTestCases; }

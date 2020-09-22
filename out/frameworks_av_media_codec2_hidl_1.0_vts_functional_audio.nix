@@ -19,20 +19,24 @@ let
 
 VtsHalMediaC2V1_0TargetAudioDecTest = cc_test {
     name = "VtsHalMediaC2V1_0TargetAudioDecTest";
+    stem = "vts_media_c2_v1_0_audio_dec_test";
     defaults = ["VtsHalMediaC2V1_0Defaults"];
     srcs = [
         "VtsHalMediaC2V1_0TargetAudioDecTest.cpp"
-        # "media_audio_hidl_test_common.cpp"
     ];
+    data = [":media_c2_v1_audio_decode_res"];
+    test_config = "VtsHalMediaC2V1_0TargetAudioDecTest.xml";
 };
 
 VtsHalMediaC2V1_0TargetAudioEncTest = cc_test {
     name = "VtsHalMediaC2V1_0TargetAudioEncTest";
+    stem = "vts_media_c2_v1_0_audio_enc_test";
     defaults = ["VtsHalMediaC2V1_0Defaults"];
     srcs = [
         "VtsHalMediaC2V1_0TargetAudioEncTest.cpp"
-        # "media_audio_hidl_test_common.cpp"
     ];
+    data = [":media_c2_v1_audio_encode_res"];
+    test_config = "VtsHalMediaC2V1_0TargetAudioEncTest.xml";
 };
 
 in { inherit VtsHalMediaC2V1_0TargetAudioDecTest VtsHalMediaC2V1_0TargetAudioEncTest; }

@@ -26,7 +26,7 @@ VtsHalMediaOmxV1_0CommonUtil = cc_library_static {
     export_include_dirs = ["."];
 
     static_libs = [
-        "VtsHalHidlTargetTestBase"
+        "libgtest"
         "libhidlmemory"
         "android.hidl.allocator@1.0"
         "android.hidl.memory@1.0"
@@ -77,6 +77,7 @@ VtsHalMediaOmxV1_0Defaults = cc_defaults {
     #  TODO(b/64437680): Assume these libs are always available on the device.
     shared_libs = [
         "libstagefright_foundation"
+        "libstagefright_omx_utils"
     ];
 };
 

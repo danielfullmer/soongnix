@@ -21,9 +21,10 @@ libc_common_src_files = [
     "stdio/vfscanf.cpp"
     "stdio/vfwscanf.c"
     "stdlib/exit.c"
-    "bionic/ndk_cruft.cpp"
 ];
 
+#  off64_t/time64_t support on LP32.
+#  ========================================================
 libc_common_src_files_32 = [
     "bionic/legacy_32_bit_support.cpp"
     "bionic/time64.c"
@@ -39,7 +40,6 @@ libc_common_flags = [
     "-Wno-deprecated-declarations"
     "-Wno-gcc-compat"
     "-Wframe-larger-than=2048"
-    "-Wimplicit-fallthrough"
 
     #  Try to catch typical 32-bit assumptions that break with 64-bit pointers.
     "-Werror=pointer-to-int-cast"
@@ -50,6 +50,9 @@ libc_common_flags = [
     #  Clang's exit-time destructor registration hides __dso_handle, but
     #  __dso_handle needs to have default visibility on ARM32. See b/73485611.
     "-Wexit-time-destructors"
+
+    #  GWP-ASan requires platform TLS.
+    "-fno-emulated-tls"
 ];
 
 #  Define some common cflags
@@ -63,37 +66,91 @@ libc_defaults = cc_defaults {
     cppflags = [];
     include_dirs = [
         "bionic/libc/async_safe/include"
-        "external/jemalloc_new/include"
     ];
+
+    header_libs = ["gwp_asan_headers"];
 
     stl = "none";
     system_shared_libs = [];
     sanitize = {
         address = false;
         integer_overflow = false;
+        #  TODO(b/132640749): Fix broken fuzzer support.
+        fuzzer = false;
     };
     native_coverage = false;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
 
     #  lld complains about duplicate symbols in libcrt and libgcc. Suppress the
     #  warning since this is intended right now.
     ldflags = ["-Wl,-z,muldefs"];
+
+    product_variables = {
+        experimental_mte = {
+            cflags = ["-DANDROID_EXPERIMENTAL_MTE"];
+        };
+    };
+};
+
+libc_scudo_product_variables = {
+    malloc_not_svelte = {
+        cflags = ["-DUSE_SCUDO"];
+        whole_static_libs = ["libscudo"];
+        exclude_static_libs = [
+            "libjemalloc5"
+            "libc_jemalloc_wrapper"
+        ];
+    };
+};
+
+#  Defaults for native allocator libs/includes to make it
+#  easier to change.
+#  To disable scudo for the non-svelte config remove the line:
+#      product_variables: libc_scudo_product_variables,
+#  in the cc_defaults below.
+#  ========================================================
+libc_native_allocator_defaults = cc_defaults {
+    name = "libc_native_allocator_defaults";
+
+    whole_static_libs = [
+        "libjemalloc5"
+        "libc_jemalloc_wrapper"
+    ];
+    header_libs = ["gwp_asan_headers"];
+    product_variables = libc_scudo_product_variables;
+};
+
+#  Functions not implemented by jemalloc directly, or that need to
+#  be modified for Android.
+libc_jemalloc_wrapper = cc_library_static {
+    name = "libc_jemalloc_wrapper";
+    defaults = ["libc_defaults"];
+    srcs = ["bionic/jemalloc_wrapper.cpp"];
+    cflags = ["-fvisibility=hidden"];
+
+    #  Used to pull in the jemalloc include directory so that if the
+    #  library is removed, the include directory is also removed.
+    static_libs = ["libjemalloc5"];
 };
 
 #  ========================================================
-#  libc_stack_protector.a - stack protector code
+#  libc_bootstrap.a - -fno-stack-protector and -ffreestanding
 #  ========================================================
 #
-#  Code that implements the stack protector (or that runs
-#  before TLS has been set up) needs to be compiled with
-#  -fno-stack-protector, since it accesses the stack canary
-#  TLS slot.
+#  Code that implements the stack protector (or that runs before TLS has been set up) needs to be
+#  compiled with -fno-stack-protector, since it accesses the stack canary TLS slot. In the linker,
+#  some of this code runs before ifunc resolvers have made string.h functions work, so compile with
+#  -ffreestanding.
 
-libc_stack_protector = cc_library_static {
+libc_bootstrap = cc_library_static {
 
     srcs = [
         "bionic/__libc_init_main_thread.cpp"
         "bionic/__stack_chk_fail.cpp"
+        "bionic/bionic_call_ifunc_resolver.cpp"
+        "bionic/getauxval.cpp"
     ];
     arch = {
         arm64 = {
@@ -111,20 +168,28 @@ libc_stack_protector = cc_library_static {
     };
 
     defaults = ["libc_defaults"];
-    cflags = ["-fno-stack-protector"];
-    name = "libc_stack_protector";
+    cflags = [
+        "-fno-stack-protector"
+        "-ffreestanding"
+    ];
+    name = "libc_bootstrap";
 };
 
-#  libc_init_static.cpp also needs to be built without stack protector,
-#  because it's responsible for setting up TLS for static executables.
-#  This isn't the case for dynamic executables because the dynamic linker
-#  has already set up the main thread's TLS.
+#  libc_init_static.cpp and libc_init_dynamic.cpp need to be built without stack protector.
+#  libc_init_static.cpp sets up TLS for static executables, and libc_init_dynamic.cpp initializes
+#  the stack protector global variable.
 
 libc_init_static = cc_library_static {
     name = "libc_init_static";
     defaults = ["libc_defaults"];
     srcs = ["bionic/libc_init_static.cpp"];
-    cflags = ["-fno-stack-protector"];
+    cflags = [
+        "-fno-stack-protector"
+
+        #  Compile libc_init_static.cpp with -ffreestanding, because some of its code is called
+        #  from the linker before ifunc resolvers have made string.h functions available.
+        "-ffreestanding"
+    ];
 };
 
 libc_init_dynamic = cc_library_static {
@@ -242,8 +307,6 @@ libc_freebsd = cc_library_static {
     defaults = ["libc_defaults"];
     srcs = [
         "upstream-freebsd/lib/libc/gen/ldexp.c"
-        "upstream-freebsd/lib/libc/gen/sleep.c"
-        "upstream-freebsd/lib/libc/gen/usleep.c"
         "upstream-freebsd/lib/libc/stdlib/getopt_long.c"
         "upstream-freebsd/lib/libc/stdlib/hcreate.c"
         "upstream-freebsd/lib/libc/stdlib/hcreate_r.c"
@@ -294,6 +357,7 @@ libc_freebsd = cc_library_static {
                 "upstream-freebsd/lib/libc/string/wcscat.c"
                 "upstream-freebsd/lib/libc/string/wcscpy.c"
                 "upstream-freebsd/lib/libc/string/wmemcmp.c"
+                "upstream-freebsd/lib/libc/string/wmemset.c"
             ];
         };
     };
@@ -315,7 +379,6 @@ libc_freebsd_large_stack = cc_library_static {
     defaults = ["libc_defaults"];
     srcs = [
         "upstream-freebsd/lib/libc/gen/glob.c"
-        "upstream-freebsd/lib/libc/stdlib/realpath.c"
     ];
 
     cflags = [
@@ -408,10 +471,7 @@ libc_openbsd_ndk = cc_library_static {
         "upstream-openbsd/lib/libc/gen/fnmatch.c"
         "upstream-openbsd/lib/libc/gen/ftok.c"
         "upstream-openbsd/lib/libc/gen/getprogname.c"
-        "upstream-openbsd/lib/libc/gen/isctype.c"
         "upstream-openbsd/lib/libc/gen/setprogname.c"
-        "upstream-openbsd/lib/libc/gen/tolower_.c"
-        "upstream-openbsd/lib/libc/gen/toupper_.c"
         "upstream-openbsd/lib/libc/gen/verr.c"
         "upstream-openbsd/lib/libc/gen/verrx.c"
         "upstream-openbsd/lib/libc/gen/vwarn.c"
@@ -499,7 +559,6 @@ libc_openbsd_ndk = cc_library_static {
         "upstream-openbsd/lib/libc/string/strpbrk.c"
         "upstream-openbsd/lib/libc/string/strsep.c"
         "upstream-openbsd/lib/libc/string/strspn.c"
-        "upstream-openbsd/lib/libc/string/strstr.c"
         "upstream-openbsd/lib/libc/string/strtok.c"
         "upstream-openbsd/lib/libc/string/strxfrm.c"
         "upstream-openbsd/lib/libc/string/wcslcpy.c"
@@ -527,6 +586,7 @@ libc_openbsd_large_stack = cc_library_static {
     srcs = [
         "stdio/vfprintf.cpp"
         "stdio/vfwprintf.cpp"
+        "upstream-openbsd/lib/libc/string/strstr.c"
     ];
     cflags = [
         "-include openbsd-compat.h"
@@ -581,20 +641,6 @@ libc_openbsd = cc_library_static {
             exclude_srcs = [
                 "upstream-openbsd/lib/libc/string/memchr.c"
                 "upstream-openbsd/lib/libc/string/stpcpy.c"
-                "upstream-openbsd/lib/libc/string/strcpy.c"
-                "upstream-openbsd/lib/libc/string/strncmp.c"
-            ];
-        };
-        mips = {
-            exclude_srcs = [
-                "upstream-openbsd/lib/libc/string/memchr.c"
-                "upstream-openbsd/lib/libc/string/strcpy.c"
-                "upstream-openbsd/lib/libc/string/strncmp.c"
-            ];
-        };
-        mips64 = {
-            exclude_srcs = [
-                "upstream-openbsd/lib/libc/string/memchr.c"
                 "upstream-openbsd/lib/libc/string/strcpy.c"
                 "upstream-openbsd/lib/libc/string/strncmp.c"
             ];
@@ -753,12 +799,6 @@ libc_fortify = cc_library_static {
 libc_bionic = cc_library_static {
     defaults = ["libc_defaults"];
     srcs = [
-        #  The data that backs getauxval is initialized in the libc init
-        #  functions which are invoked by the linker. If this file is included
-        #  in libc_ndk.a, only one of the copies of the global data will be
-        #  initialized, resulting in nullptr dereferences.
-        "bionic/getauxval.cpp"
-
         #  These require getauxval, which isn't available on older platforms.
         "bionic/sysconf.cpp"
         "bionic/vdso.cpp"
@@ -775,6 +815,7 @@ libc_bionic = cc_library_static {
 
     arch = {
         arm = {
+            asflags = libc_common_flags ++ ["-mno-restrict-it"];
             srcs = [
                 "arch-arm/generic/bionic/memcmp.S"
                 "arch-arm/generic/bionic/memmove.S"
@@ -813,13 +854,11 @@ libc_bionic = cc_library_static {
                 "arch-arm/cortex-a9/bionic/memset.S"
                 "arch-arm/cortex-a9/bionic/stpcpy.S"
                 "arch-arm/cortex-a9/bionic/strcat.S"
-                "arch-arm/cortex-a9/bionic/strcmp.S"
                 "arch-arm/cortex-a9/bionic/strcpy.S"
                 "arch-arm/cortex-a9/bionic/strlen.S"
 
                 "arch-arm/krait/bionic/memcpy.S"
                 "arch-arm/krait/bionic/memset.S"
-                "arch-arm/krait/bionic/strcmp.S"
 
                 "arch-arm/cortex-a53/bionic/memcpy.S"
 
@@ -830,19 +869,27 @@ libc_bionic = cc_library_static {
         };
         arm64 = {
             srcs = [
-                "arch-arm64/generic/bionic/memchr.S"
                 "arch-arm64/generic/bionic/memcmp.S"
                 "arch-arm64/generic/bionic/memcpy.S"
                 "arch-arm64/generic/bionic/memmove.S"
                 "arch-arm64/generic/bionic/memset.S"
                 "arch-arm64/generic/bionic/stpcpy.S"
-                "arch-arm64/generic/bionic/strchr.S"
-                "arch-arm64/generic/bionic/strcmp.S"
                 "arch-arm64/generic/bionic/strcpy.S"
-                "arch-arm64/generic/bionic/strlen.S"
-                "arch-arm64/generic/bionic/strncmp.S"
-                "arch-arm64/generic/bionic/strnlen.S"
                 "arch-arm64/generic/bionic/wmemmove.S"
+
+                "arch-arm64/default/bionic/memchr.S"
+                "arch-arm64/default/bionic/strchr.S"
+                "arch-arm64/default/bionic/strcmp.S"
+                "arch-arm64/default/bionic/strlen.S"
+                "arch-arm64/default/bionic/strncmp.S"
+                "arch-arm64/default/bionic/strnlen.S"
+
+                "arch-arm64/mte/bionic/memchr.c"
+                "arch-arm64/mte/bionic/strchr.cpp"
+                "arch-arm64/mte/bionic/strcmp.c"
+                "arch-arm64/mte/bionic/strlen.c"
+                "arch-arm64/mte/bionic/strncmp.c"
+                "arch-arm64/mte/bionic/strnlen.c"
 
                 "arch-arm64/bionic/__bionic_clone.S"
                 "arch-arm64/bionic/_exit_with_stack_teardown.S"
@@ -852,60 +899,6 @@ libc_bionic = cc_library_static {
             ];
             exclude_srcs = [
                 "bionic/__memcpy_chk.cpp"
-                "bionic/strchr.cpp"
-                "bionic/strnlen.c"
-            ];
-        };
-
-        mips = {
-            srcs = [
-                "arch-mips/string/memcmp.c"
-                "arch-mips/string/memcpy.c"
-                "arch-mips/string/memset.S"
-                "arch-mips/string/strcmp.S"
-                "arch-mips/string/strncmp.S"
-                "arch-mips/string/strlen.c"
-                "arch-mips/string/strnlen.c"
-                "arch-mips/string/strchr.c"
-                "arch-mips/string/strcpy.c"
-                "arch-mips/string/memchr.c"
-                "arch-mips/string/memmove.c"
-
-                "arch-mips/bionic/__bionic_clone.S"
-                "arch-mips/bionic/cacheflush.cpp"
-                "arch-mips/bionic/_exit_with_stack_teardown.S"
-                "arch-mips/bionic/libcrt_compat.c"
-                "arch-mips/bionic/setjmp.S"
-                "arch-mips/bionic/syscall.S"
-                "arch-mips/bionic/vfork.S"
-            ];
-            exclude_srcs = [
-                "bionic/strchr.cpp"
-                "bionic/strnlen.c"
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "arch-mips/string/memcmp.c"
-                "arch-mips/string/memcpy.c"
-                "arch-mips/string/memset.S"
-                "arch-mips/string/strcmp.S"
-                "arch-mips/string/strncmp.S"
-                "arch-mips/string/strlen.c"
-                "arch-mips/string/strnlen.c"
-                "arch-mips/string/strchr.c"
-                "arch-mips/string/strcpy.c"
-                "arch-mips/string/memchr.c"
-                "arch-mips/string/memmove.c"
-
-                "arch-mips64/bionic/__bionic_clone.S"
-                "arch-mips64/bionic/_exit_with_stack_teardown.S"
-                "arch-mips64/bionic/setjmp.S"
-                "arch-mips64/bionic/syscall.S"
-                "arch-mips64/bionic/vfork.S"
-                "arch-mips64/bionic/stat.cpp"
-            ];
-            exclude_srcs = [
                 "bionic/strchr.cpp"
                 "bionic/strnlen.c"
             ];
@@ -924,6 +917,7 @@ libc_bionic = cc_library_static {
                 "arch-x86/generic/string/wcscat.c"
                 "arch-x86/generic/string/wcscpy.c"
                 "arch-x86/generic/string/wmemcmp.c"
+                "arch-x86/generic/string/wmemset.c"
 
                 "arch-x86/atom/string/sse2-memchr-atom.S"
                 "arch-x86/atom/string/sse2-memrchr-atom.S"
@@ -972,6 +966,9 @@ libc_bionic = cc_library_static {
                 "arch-x86/atom/string/ssse3-strcpy-atom.S"
                 "arch-x86/atom/string/ssse3-strncpy-atom.S"
                 "arch-x86/atom/string/ssse3-wmemcmp-atom.S"
+
+                #  avx2 functions
+                "arch-x86/kabylake/string/avx2-wmemset-kbl.S"
             ];
 
             exclude_srcs = [
@@ -994,6 +991,7 @@ libc_bionic = cc_library_static {
                 "arch-x86_64/string/sse4-memcmp-slm.S"
                 "arch-x86_64/string/ssse3-strcmp-slm.S"
                 "arch-x86_64/string/ssse3-strncmp-slm.S"
+                "arch-x86_64/string/avx2-wmemset-kbl.S"
 
                 "arch-x86_64/bionic/__bionic_clone.S"
                 "arch-x86_64/bionic/_exit_with_stack_teardown.S"
@@ -1035,7 +1033,6 @@ libc_bionic_ndk = cc_library_static {
         "bionic/__libc_current_sigrtmin.cpp"
         "bionic/abort.cpp"
         "bionic/accept.cpp"
-        "bionic/accept4.cpp"
         "bionic/access.cpp"
         "bionic/arpa_inet.cpp"
         "bionic/assert.cpp"
@@ -1056,19 +1053,19 @@ libc_bionic_ndk = cc_library_static {
         "bionic/clock_getcpuclockid.cpp"
         "bionic/clock_nanosleep.cpp"
         "bionic/clone.cpp"
-        "bionic/connect.cpp"
         "bionic/ctype.cpp"
         "bionic/dirent.cpp"
-        "bionic/dup2.cpp"
+        "bionic/dup.cpp"
         "bionic/environ.cpp"
         "bionic/error.cpp"
-        "bionic/eventfd_read.cpp"
-        "bionic/eventfd_write.cpp"
+        "bionic/eventfd.cpp"
         "bionic/exec.cpp"
         "bionic/faccessat.cpp"
         "bionic/fchmod.cpp"
         "bionic/fchmodat.cpp"
+        "bionic/fcntl.cpp"
         "bionic/fdsan.cpp"
+        "bionic/fdtrack.cpp"
         "bionic/ffs.cpp"
         "bionic/fgetxattr.cpp"
         "bionic/flistxattr.cpp"
@@ -1134,8 +1131,10 @@ libc_bionic_ndk = cc_library_static {
         "bionic/raise.cpp"
         "bionic/rand.cpp"
         "bionic/readlink.cpp"
+        "bionic/realpath.cpp"
         "bionic/reboot.cpp"
         "bionic/recv.cpp"
+        "bionic/recvmsg.cpp"
         "bionic/rename.cpp"
         "bionic/rmdir.cpp"
         "bionic/scandir.cpp"
@@ -1149,10 +1148,10 @@ libc_bionic_ndk = cc_library_static {
         "bionic/sigaction.cpp"
         "bionic/signal.cpp"
         "bionic/sigprocmask.cpp"
-        "bionic/socket.cpp"
+        "bionic/sleep.cpp"
+        "bionic/socketpair.cpp"
         "bionic/spawn.cpp"
         "bionic/stat.cpp"
-        "bionic/statvfs.cpp"
         "bionic/stdlib_l.cpp"
         "bionic/strchrnul.cpp"
         "bionic/strerror.cpp"
@@ -1169,6 +1168,8 @@ libc_bionic_ndk = cc_library_static {
         "bionic/sys_sem.cpp"
         "bionic/sys_shm.cpp"
         "bionic/sys_signalfd.cpp"
+        "bionic/sys_statfs.cpp"
+        "bionic/sys_statvfs.cpp"
         "bionic/sys_time.cpp"
         "bionic/sysinfo.cpp"
         "bionic/syslog.cpp"
@@ -1178,10 +1179,12 @@ libc_bionic_ndk = cc_library_static {
         "bionic/tdestroy.cpp"
         "bionic/termios.cpp"
         "bionic/thread_private.cpp"
+        "bionic/threads.cpp"
         "bionic/timespec_get.cpp"
         "bionic/tmpfile.cpp"
         "bionic/umount.cpp"
         "bionic/unlink.cpp"
+        "bionic/usleep.cpp"
         "bionic/wait.cpp"
         "bionic/wchar.cpp"
         "bionic/wchar_l.cpp"
@@ -1217,7 +1220,7 @@ libc_bionic_ndk = cc_library_static {
 #  ========================================================
 #  libc_pthread.a - pthreads parts that previously lived in
 #  libc_bionic.a. Relocated to their own library because
-#  they can't be included in libc_ndk.a (as they layout of
+#  they can't be included in libc_ndk.a (as the layout of
 #  pthread_t has changed over the years and has ABI
 #  compatibility issues).
 #  ========================================================
@@ -1253,12 +1256,14 @@ libc_pthread = cc_library_static {
         #  The following implementations depend on pthread data or implementation,
         #  so we can't include them in libc_ndk.a.
         "bionic/__cxa_thread_atexit_impl.cpp"
-        "stdlib/atexit.c"
+        "bionic/android_unsafe_frame_pointer_chase.cpp"
+        "bionic/atexit.cpp"
         "bionic/fork.cpp"
     ];
 
     cppflags = ["-Wold-style-cast"];
     include_dirs = ["bionic/libstdc++/include"];
+    header_libs = ["bionic_libc_platform_headers"];
     name = "libc_pthread";
 };
 
@@ -1266,27 +1271,53 @@ libc_pthread = cc_library_static {
 #  libc_syscalls.a
 #  ========================================================
 
+"syscalls-arm.S" = genrule {
+    name = "syscalls-arm.S";
+    out = ["syscalls-arm.S"];
+    srcs = ["SYSCALLS.TXT"];
+    tool_files = [":bionic-gensyscalls"];
+    cmd = "$(location :bionic-gensyscalls) arm $(in) > $(out)";
+};
+
+"syscalls-arm64.S" = genrule {
+    name = "syscalls-arm64.S";
+    out = ["syscalls-arm64.S"];
+    srcs = ["SYSCALLS.TXT"];
+    tool_files = [":bionic-gensyscalls"];
+    cmd = "$(location :bionic-gensyscalls) arm64 $(in) > $(out)";
+};
+
+"syscalls-x86.S" = genrule {
+    name = "syscalls-x86.S";
+    out = ["syscalls-x86.S"];
+    srcs = ["SYSCALLS.TXT"];
+    tool_files = [":bionic-gensyscalls"];
+    cmd = "$(location :bionic-gensyscalls) x86 $(in) > $(out)";
+};
+
+"syscalls-x86_64.S" = genrule {
+    name = "syscalls-x86_64.S";
+    out = ["syscalls-x86_64.S"];
+    srcs = ["SYSCALLS.TXT"];
+    tool_files = [":bionic-gensyscalls"];
+    cmd = "$(location :bionic-gensyscalls) x86_64 $(in) > $(out)";
+};
+
 libc_syscalls = cc_library_static {
     defaults = ["libc_defaults"];
     srcs = ["bionic/__set_errno.cpp"];
     arch = {
         arm = {
-            srcs = ["arch-arm/syscalls/**/*.S"];
+            srcs = [":syscalls-arm.S"];
         };
         arm64 = {
-            srcs = ["arch-arm64/syscalls/**/*.S"];
-        };
-        mips = {
-            srcs = ["arch-mips/syscalls/**/*.S"];
-        };
-        mips64 = {
-            srcs = ["arch-mips64/syscalls/**/*.S"];
+            srcs = [":syscalls-arm64.S"];
         };
         x86 = {
-            srcs = ["arch-x86/syscalls/**/*.S"];
+            srcs = [":syscalls-x86.S"];
         };
         x86_64 = {
-            srcs = ["arch-x86_64/syscalls/**/*.S"];
+            srcs = [":syscalls-x86_64.S"];
         };
     };
     name = "libc_syscalls";
@@ -1324,8 +1355,14 @@ libc_aeabi = cc_library_static {
 
 libc_ndk = cc_library_static {
     name = "libc_ndk";
-    defaults = ["libc_defaults"];
+    defaults = [
+        "libc_defaults"
+        "libc_native_allocator_defaults"
+    ];
+    ramdisk_available = false;
     srcs = libc_common_src_files ++ [
+        "bionic/gwp_asan_wrappers.cpp"
+        "bionic/heap_tagging.cpp"
         "bionic/malloc_common.cpp"
         "bionic/malloc_limit.cpp"
     ];
@@ -1352,20 +1389,19 @@ libc_ndk = cc_library_static {
     ];
 
     whole_static_libs = [
+        "gwp_asan"
         "libc_bionic_ndk"
+        "libc_bootstrap"
         "libc_fortify"
         "libc_freebsd"
         "libc_freebsd_large_stack"
         "libc_gdtoa"
-        "libc_malloc"
         "libc_netbsd"
         "libc_openbsd_large_stack"
         "libc_openbsd_ndk"
-        "libc_stack_protector"
         "libc_syscalls"
         "libc_tzcode"
         "libm"
-        "libjemalloc5"
         "libstdc++"
     ];
 };
@@ -1386,17 +1422,16 @@ libc_nopthread = cc_library_static {
     whole_static_libs = [
         "libc_bionic"
         "libc_bionic_ndk"
+        "libc_bootstrap"
         "libc_dns"
         "libc_fortify"
         "libc_freebsd"
         "libc_freebsd_large_stack"
         "libc_gdtoa"
-        "libc_malloc"
         "libc_netbsd"
         "libc_openbsd"
         "libc_openbsd_large_stack"
         "libc_openbsd_ndk"
-        "libc_stack_protector"
         "libc_syscalls"
         "libc_tzcode"
         "libstdc++"
@@ -1424,11 +1459,11 @@ libc_common = cc_library_static {
 };
 
 #  ========================================================
-#  libc_common_static.a For static binaries.
+#  libc_static_dispatch.a
 #  ========================================================
-libc_common_static = cc_library_static {
+libc_static_dispatch = cc_library_static {
     defaults = ["libc_defaults"];
-    name = "libc_common_static";
+    name = "libc_static_dispatch";
 
     arch = {
         x86 = {
@@ -1437,21 +1472,21 @@ libc_common_static = cc_library_static {
         arm = {
             srcs = ["arch-arm/static_function_dispatch.S"];
         };
+        arm64 = {
+            srcs = ["arch-arm64/static_function_dispatch.S"];
+        };
     };
-
-    whole_static_libs = [
-        "libc_common"
-    ];
 };
 
 #  ========================================================
-#  libc_common_shared.a For shared libraries.
+#  libc_dynamic_dispatch.a
 #  ========================================================
-libc_common_shared = cc_library_static {
+libc_dynamic_dispatch = cc_library_static {
     defaults = ["libc_defaults"];
-    name = "libc_common_shared";
+    name = "libc_dynamic_dispatch";
 
     cflags = [
+        "-ffreestanding"
         "-fno-stack-protector"
         "-fno-jump-tables"
     ];
@@ -1462,51 +1497,71 @@ libc_common_shared = cc_library_static {
         arm = {
             srcs = ["arch-arm/dynamic_function_dispatch.cpp"];
         };
+        arm64 = {
+            srcs = ["arch-arm64/dynamic_function_dispatch.cpp"];
+        };
     };
+};
+
+#  ========================================================
+#  libc_common_static.a For static binaries.
+#  ========================================================
+libc_common_static = cc_library_static {
+    defaults = ["libc_defaults"];
+    name = "libc_common_static";
 
     whole_static_libs = [
         "libc_common"
+        "libc_static_dispatch"
     ];
+};
+
+#  ========================================================
+#  libc_common_shared.a For shared libraries.
+#  ========================================================
+libc_common_shared = cc_library_static {
+    defaults = ["libc_defaults"];
+    name = "libc_common_shared";
+
+    whole_static_libs = [
+        "libc_common"
+        "libc_dynamic_dispatch"
+    ];
+};
+
+#  Versions of dl_iterate_phdr and similar APIs used to lookup unwinding information in a static
+#  executable.
+libc_unwind_static = cc_library_static {
+    name = "libc_unwind_static";
+    defaults = ["libc_defaults"];
+    cflags = ["-DLIBC_STATIC"];
+
+    srcs = ["bionic/dl_iterate_phdr_static.cpp"];
+    arch = {
+        #  arm32-specific dl_unwind_find_exidx and __gnu_Unwind_Find_exidx APIs
+        arm = {
+            srcs = ["arch-arm/bionic/exidx_static.c"];
+        };
+    };
 };
 
 #  ========================================================
 #  libc_nomalloc.a
 #  ========================================================
 #
-#  This is a version of the static C library that does not
-#  include malloc. It's useful in situations when the user wants
-#  to provide their own malloc implementation, or wants to
-#  explicitly disallow the use of malloc, such as in the
-#  dynamic linker.
+#  This is a version of the static C library used by the dynamic linker that exclude malloc. It also
+#  excludes functions selected using ifunc's (e.g. for string.h). Link in either
+#  libc_static_dispatch or libc_dynamic_dispatch to provide those functions.
 
 libc_nomalloc = cc_library_static {
     name = "libc_nomalloc";
-
     defaults = ["libc_defaults"];
-
-    arch = {
-        arm = {
-            srcs = ["arch-arm/bionic/exidx_static.c"];
-        };
-    };
-
-    cflags = ["-DLIBC_STATIC"];
 
     whole_static_libs = [
-        "libc_common_static"
+        "libc_common"
         "libc_init_static"
+        "libc_unwind_static"
     ];
-};
-
-#  ========================================================
-#  libc_malloc.a: the _prefixed_ malloc functions (like dlcalloc).
-#  ========================================================
-libc_malloc = cc_library_static {
-    defaults = ["libc_defaults"];
-    srcs = ["bionic/jemalloc_wrapper.cpp"];
-    cflags = ["-fvisibility=hidden"];
-
-    name = "libc_malloc";
 };
 
 libc_sources_shared = filegroup {
@@ -1514,11 +1569,16 @@ libc_sources_shared = filegroup {
     srcs = [
         "arch-common/bionic/crtbegin_so.c"
         "arch-common/bionic/crtbrand.S"
+        "bionic/gwp_asan_wrappers.cpp"
+        "bionic/heap_tagging.cpp"
         "bionic/icu.cpp"
         "bionic/malloc_common.cpp"
         "bionic/malloc_common_dynamic.cpp"
+        "bionic/android_profiling_dynamic.cpp"
         "bionic/malloc_heapprofd.cpp"
         "bionic/malloc_limit.cpp"
+        "bionic/ndk_cruft.cpp"
+        "bionic/ndk_cruft_data.cpp"
         "bionic/NetdClient.cpp"
         "arch-common/bionic/crtend_so.S"
     ];
@@ -1527,7 +1587,8 @@ libc_sources_shared = filegroup {
 libc_sources_static = filegroup {
     name = "libc_sources_static";
     srcs = [
-        "bionic/dl_iterate_phdr_static.cpp"
+        "bionic/gwp_asan_wrappers.cpp"
+        "bionic/heap_tagging.cpp"
         "bionic/malloc_common.cpp"
         "bionic/malloc_limit.cpp"
     ];
@@ -1541,16 +1602,14 @@ libc_sources_shared_arm = filegroup {
     ];
 };
 
-libc_sources_static_arm = filegroup {
-    name = "libc_sources_static_arm";
-    srcs = ["arch-arm/bionic/exidx_static.c"];
-};
-
 #  ========================================================
 #  libc.a + libc.so
 #  ========================================================
 libc = cc_library {
-    defaults = ["libc_defaults"];
+    defaults = [
+        "libc_defaults"
+        "libc_native_allocator_defaults"
+    ];
     name = "libc";
     static_ndk_lib = true;
     export_include_dirs = ["include"];
@@ -1563,25 +1622,25 @@ libc = cc_library {
         srcs = [":libc_sources_static"];
         cflags = ["-DLIBC_STATIC"];
         whole_static_libs = [
+            "gwp_asan"
             "libc_init_static"
             "libc_common_static"
+            "libc_unwind_static"
         ];
     };
     shared = {
         srcs = [":libc_sources_shared"];
         whole_static_libs = [
+            "gwp_asan"
             "libc_init_dynamic"
             "libc_common_shared"
         ];
     };
 
-    required = ["tzdata"];
-
-    #  Leave the symbols in the shared library so that stack unwinders can produce
-    #  meaningful name resolution.
-    strip = {
-        keep_symbols = true;
-    };
+    required = [
+        "tzdata"
+        "tz_version" #  Version metadata for tzdata to help debugging.
+    ];
 
     #  Do not pack libc.so relocations; see http://b/20645321 for details.
     pack_relocations = false;
@@ -1601,9 +1660,6 @@ libc = cc_library {
     static_libs = [
         "libdl_android"
     ];
-    whole_static_libs = [
-        "libjemalloc5"
-    ];
 
     nocrt = true;
 
@@ -1620,12 +1676,27 @@ libc = cc_library {
                 #  special for arm
                 cflags = ["-DCRT_LEGACY_WORKAROUND"];
             };
-            static = {
-                srcs = [":libc_sources_static_arm"];
+
+            #  Arm 32 bit does not produce complete exidx unwind information
+            #  so keep the .debug_frame which is relatively small and does
+            #  include needed unwind information.
+            #  See b/132992102 for details.
+            strip = {
+                keep_symbols_and_debug_frame = true;
             };
+
+            whole_static_libs = ["libunwind_llvm"];
         };
         arm64 = {
             version_script = ":libc.arm64.map";
+
+            #  Leave the symbols in the shared library so that stack unwinders can produce
+            #  meaningful name resolution.
+            strip = {
+                keep_symbols = true;
+            };
+
+            whole_static_libs = ["libgcc_stripped"];
         };
         x86 = {
             #  TODO: This is to work around b/24465209. Remove after root cause is fixed.
@@ -1633,18 +1704,45 @@ libc = cc_library {
             ldflags = ["-Wl,--hash-style=both"];
 
             version_script = ":libc.x86.map";
+
+            #  Leave the symbols in the shared library so that stack unwinders can produce
+            #  meaningful name resolution.
+            strip = {
+                keep_symbols = true;
+            };
+
+            whole_static_libs = ["libgcc_stripped"];
         };
         x86_64 = {
             version_script = ":libc.x86_64.map";
+
+            #  Leave the symbols in the shared library so that stack unwinders can produce
+            #  meaningful name resolution.
+            strip = {
+                keep_symbols = true;
+            };
+
+            whole_static_libs = ["libgcc_stripped"];
         };
     };
 
     stubs = {
         symbol_file = "libc.map.txt";
-        versions = ["10000"];
+        versions = [
+            "29"
+            "R"
+            "10000"
+        ];
     };
 
-    symbol_ordering_file = "symbol_ordering";
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.runtime"
+    ];
+
+    #  Sorting bss symbols by size usually results in less dirty pages at run
+    #  time, because small symbols are grouped together.
+    sort_bss_symbols_by_size = true;
 };
 
 "libc.arm.map" = genrule {
@@ -1679,18 +1777,75 @@ libc = cc_library {
     cmd = "$(location :bionic-generate-version-script) x86_64 $(in) $(out)";
 };
 
+#  Headers that only other parts of the platform can include.
+bionic_libc_platform_headers = cc_library_headers {
+    name = "bionic_libc_platform_headers";
+    visibility = [
+        "//art:__subpackages__"
+        "//bionic:__subpackages__"
+        "//frameworks:__subpackages__"
+        "//device/generic/goldfish-opengl:__subpackages__"
+        "//external/gwp_asan:__subpackages__"
+        "//external/perfetto:__subpackages__"
+        "//external/scudo:__subpackages__"
+        "//system/core/debuggerd:__subpackages__"
+        "//system/memory/libmemunreachable:__subpackages__"
+    ];
+    host_supported = true;
+    vendor_available = true;
+    ramdisk_available = true;
+    recovery_available = true;
+    native_bridge_supported = true;
+    export_include_dirs = [
+        "platform"
+    ];
+    system_shared_libs = [];
+    stl = "none";
+    sdk_version = "current";
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.runtime"
+        "com.android.art.release" #  from libdexfile_external
+        "com.android.art.debug" #  from libdexfile_external
+    ];
+};
+
 #  libc_headers for libasync_safe and libpropertyinfoparser
 libc_headers = cc_library_headers {
     name = "libc_headers";
 
     host_supported = true;
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    #  used by most APEXes indirectly via libunwind_llvm
+    min_sdk_version = "apex_inherit";
+    visibility = [
+        ":__subpackages__" #  visible to bionic
+        #  ... and only to these places (b/152668052)
+        "//external/gwp_asan"
+        "//external/libunwind_llvm"
+        "//system/core/property_service/libpropertyinfoparser"
+        "//system/extras/toolchain-extras"
+    ];
 
     no_libcrt = true;
-    no_libgcc = true;
     stl = "none";
     system_shared_libs = [];
+
+    #  The build system generally requires that any dependencies of a target
+    #  with an sdk_version must have a lower sdk_version. By setting sdk_version
+    #  to 1 we let targets with an sdk_version that need to depend on the libc
+    #  headers but cannot depend on libc itself due to circular dependencies
+    #  (such as libunwind_llvm) depend on the headers. Setting sdk_version to 1
+    #  is correct because the headers can support any sdk_version.
+    sdk_version = "1";
 
     export_include_dirs = [
         "include"
@@ -1707,16 +1862,6 @@ libc_headers = cc_library_headers {
         arm64 = {
             export_include_dirs = [
                 "kernel/uapi/asm-arm64"
-            ];
-        };
-        mips = {
-            export_include_dirs = [
-                "kernel/uapi/asm-mips"
-            ];
-        };
-        mips64 = {
-            export_include_dirs = [
-                "kernel/uapi/asm-mips"
             ];
         };
         x86 = {
@@ -1817,13 +1962,23 @@ crt_defaults = cc_defaults {
     name = "crt_defaults";
     defaults = ["linux_bionic_supported"];
     vendor_available = true;
+    ramdisk_available = true;
     recovery_available = true;
-
+    native_bridge_supported = true;
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    #  crt* objects are used by most cc_binary/cc_library in "anyapex"
+    min_sdk_version = "apex_inherit";
     cflags = [
         "-Wno-gcc-compat"
         "-Wall"
         "-Werror"
     ];
+    sanitize = {
+        never = true;
+    };
 };
 
 crt_so_defaults = cc_defaults {
@@ -1831,12 +1986,6 @@ crt_so_defaults = cc_defaults {
     defaults = ["crt_defaults"];
 
     arch = {
-        mips = {
-            cflags = ["-fPIC"];
-        };
-        mips64 = {
-            cflags = ["-fPIC"];
-        };
         x86 = {
             cflags = ["-fPIC"];
         };
@@ -1891,26 +2040,6 @@ crtbegin_static1 = cc_object {
     name = "crtbegin_static1";
     local_include_dirs = ["include"];
     srcs = ["arch-common/bionic/crtbegin.c"];
-
-    arch = {
-        mips = {
-            srcs = [
-                "arch-mips/bionic/crtbegin.c"
-            ];
-            exclude_srcs = [
-                "arch-common/bionic/crtbegin.c"
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "arch-mips64/bionic/crtbegin.c"
-            ];
-            exclude_srcs = [
-                "arch-common/bionic/crtbegin.c"
-            ];
-        };
-    };
-
     defaults = ["crt_defaults"];
 };
 
@@ -1928,25 +2057,6 @@ crtbegin_dynamic1 = cc_object {
     name = "crtbegin_dynamic1";
     local_include_dirs = ["include"];
     srcs = ["arch-common/bionic/crtbegin.c"];
-
-    arch = {
-        mips = {
-            srcs = [
-                "arch-mips/bionic/crtbegin.c"
-            ];
-            exclude_srcs = [
-                "arch-common/bionic/crtbegin.c"
-            ];
-        };
-        mips64 = {
-            srcs = [
-                "arch-mips64/bionic/crtbegin.c"
-            ];
-            exclude_srcs = [
-                "arch-common/bionic/crtbegin.c"
-            ];
-        };
-    };
     defaults = ["crt_defaults"];
 };
 
@@ -1981,10 +2091,6 @@ crtend_android = cc_object {
 #  ========================================================
 #  NDK headers.
 #  ========================================================
-
-#  Not actually used in the NDK, but needed to build AOSP for mips.
-
-#  Not actually used in the NDK, but needed to build AOSP for mips64.
 
 #  Export these headers for toolbox to process
 kernel_input_headers = filegroup {
@@ -2051,32 +2157,7 @@ libseccomp_gen_syscall_nrs_x86_64 = cc_object {
     ];
 };
 
-libseccomp_gen_syscall_nrs_mips = cc_object {
-    name = "libseccomp_gen_syscall_nrs_mips";
-    defaults = ["libseccomp_gen_syscall_nrs_defaults"];
-    cflags = [
-        "-D_MIPS_SIM=_MIPS_SIM_ABI32"
-    ];
-    local_include_dirs = [
-        "kernel/uapi/asm-mips"
-        "kernel/uapi"
-    ];
-};
-
-libseccomp_gen_syscall_nrs_mips64 = cc_object {
-    name = "libseccomp_gen_syscall_nrs_mips64";
-    defaults = ["libseccomp_gen_syscall_nrs_defaults"];
-    cflags = [
-        "-D_MIPS_SIM=_MIPS_SIM_ABI64"
-    ];
-    local_include_dirs = [
-        "kernel/uapi/asm-mips"
-        "kernel/uapi"
-    ];
-};
-
-#  Generate the C++ policy sources for app, system, and global seccomp-bpf
-#  filters.
+#  Generate the C++ policy sources for app and system seccomp-bpf filters.
 genseccomp = python_binary_host {
     name = "genseccomp";
     main = "tools/genseccomp.py";
@@ -2198,54 +2279,6 @@ genseccomp = python_binary_host {
         "kernel/uapi/asm-generic/types.h"
         "kernel/uapi/asm-generic/ucontext.h"
         "kernel/uapi/asm-generic/unistd.h"
-        "kernel/uapi/asm-mips/asm/auxvec.h"
-        "kernel/uapi/asm-mips/asm/bitfield.h"
-        "kernel/uapi/asm-mips/asm/bitsperlong.h"
-        "kernel/uapi/asm-mips/asm/bpf_perf_event.h"
-        "kernel/uapi/asm-mips/asm/break.h"
-        "kernel/uapi/asm-mips/asm/byteorder.h"
-        "kernel/uapi/asm-mips/asm/cachectl.h"
-        "kernel/uapi/asm-mips/asm/errno.h"
-        "kernel/uapi/asm-mips/asm/fcntl.h"
-        "kernel/uapi/asm-mips/asm/hwcap.h"
-        "kernel/uapi/asm-mips/asm/inst.h"
-        "kernel/uapi/asm-mips/asm/ioctl.h"
-        "kernel/uapi/asm-mips/asm/ioctls.h"
-        "kernel/uapi/asm-mips/asm/ipcbuf.h"
-        "kernel/uapi/asm-mips/asm/kvm.h"
-        "kernel/uapi/asm-mips/asm/kvm_para.h"
-        "kernel/uapi/asm-mips/asm/mman.h"
-        "kernel/uapi/asm-mips/asm/msgbuf.h"
-        "kernel/uapi/asm-mips/asm/param.h"
-        "kernel/uapi/asm-mips/asm/poll.h"
-        "kernel/uapi/asm-mips/asm/posix_types.h"
-        "kernel/uapi/asm-mips/asm/ptrace.h"
-        "kernel/uapi/asm-mips/asm/reg.h"
-        "kernel/uapi/asm-mips/asm/resource.h"
-        "kernel/uapi/asm-mips/asm/sembuf.h"
-        "kernel/uapi/asm-mips/asm/setup.h"
-        "kernel/uapi/asm-mips/asm/sgidefs.h"
-        "kernel/uapi/asm-mips/asm/shmbuf.h"
-        "kernel/uapi/asm-mips/asm/sigcontext.h"
-        "kernel/uapi/asm-mips/asm/siginfo.h"
-        "kernel/uapi/asm-mips/asm/signal.h"
-        "kernel/uapi/asm-mips/asm/socket.h"
-        "kernel/uapi/asm-mips/asm/sockios.h"
-        "kernel/uapi/asm-mips/asm/stat.h"
-        "kernel/uapi/asm-mips/asm/statfs.h"
-        "kernel/uapi/asm-mips/asm/swab.h"
-        "kernel/uapi/asm-mips/asm/sysmips.h"
-        "kernel/uapi/asm-mips/asm/termbits.h"
-        "kernel/uapi/asm-mips/asm/termios.h"
-        "kernel/uapi/asm-mips/asm/types.h"
-        "kernel/uapi/asm-mips/asm/ucontext.h"
-        "kernel/uapi/asm-mips/asm/unistd.h"
-        "kernel/uapi/asm-mips/asm/unistd_n32.h"
-        "kernel/uapi/asm-mips/asm/unistd_n64.h"
-        "kernel/uapi/asm-mips/asm/unistd_nr_n32.h"
-        "kernel/uapi/asm-mips/asm/unistd_nr_n64.h"
-        "kernel/uapi/asm-mips/asm/unistd_nr_o32.h"
-        "kernel/uapi/asm-mips/asm/unistd_o32.h"
         "kernel/uapi/asm-x86/asm/a.out.h"
         "kernel/uapi/asm-x86/asm/auxvec.h"
         "kernel/uapi/asm-x86/asm/bitsperlong.h"
@@ -2318,10 +2351,12 @@ genseccomp = python_binary_host {
         "kernel/uapi/drm/exynos_drm.h"
         "kernel/uapi/drm/i810_drm.h"
         "kernel/uapi/drm/i915_drm.h"
+        "kernel/uapi/drm/lima_drm.h"
         "kernel/uapi/drm/mga_drm.h"
         "kernel/uapi/drm/msm_drm.h"
         "kernel/uapi/drm/nouveau_drm.h"
         "kernel/uapi/drm/omap_drm.h"
+        "kernel/uapi/drm/panfrost_drm.h"
         "kernel/uapi/drm/qxl_drm.h"
         "kernel/uapi/drm/r128_drm.h"
         "kernel/uapi/drm/radeon_drm.h"
@@ -2347,6 +2382,7 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/arm_sdei.h"
         "kernel/uapi/linux/ashmem.h"
         "kernel/uapi/linux/aspeed-lpc-ctrl.h"
+        "kernel/uapi/linux/aspeed-p2a-ctrl.h"
         "kernel/uapi/linux/atalk.h"
         "kernel/uapi/linux/atm.h"
         "kernel/uapi/linux/atm_eni.h"
@@ -2406,7 +2442,6 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/cm4000_cs.h"
         "kernel/uapi/linux/cn_proc.h"
         "kernel/uapi/linux/coda.h"
-        "kernel/uapi/linux/coda_psdev.h"
         "kernel/uapi/linux/coff.h"
         "kernel/uapi/linux/connector.h"
         "kernel/uapi/linux/const.h"
@@ -2453,13 +2488,14 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/filter.h"
         "kernel/uapi/linux/firewire-cdev.h"
         "kernel/uapi/linux/firewire-constants.h"
-        "kernel/uapi/linux/flat.h"
         "kernel/uapi/linux/fou.h"
         "kernel/uapi/linux/fpga-dfl.h"
         "kernel/uapi/linux/fs.h"
+        "kernel/uapi/linux/fscrypt.h"
         "kernel/uapi/linux/fsi.h"
         "kernel/uapi/linux/fsl_hypervisor.h"
         "kernel/uapi/linux/fsmap.h"
+        "kernel/uapi/linux/fsverity.h"
         "kernel/uapi/linux/fuse.h"
         "kernel/uapi/linux/futex.h"
         "kernel/uapi/linux/gameport.h"
@@ -2530,7 +2566,9 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/inotify.h"
         "kernel/uapi/linux/input-event-codes.h"
         "kernel/uapi/linux/input.h"
+        "kernel/uapi/linux/io_uring.h"
         "kernel/uapi/linux/ioctl.h"
+        "kernel/uapi/linux/iommu.h"
         "kernel/uapi/linux/ip.h"
         "kernel/uapi/linux/ip6_tunnel.h"
         "kernel/uapi/linux/ip_vs.h"
@@ -2543,11 +2581,8 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/ipv6_route.h"
         "kernel/uapi/linux/ipx.h"
         "kernel/uapi/linux/irqnr.h"
-        "kernel/uapi/linux/isdn.h"
-        "kernel/uapi/linux/isdn_divertif.h"
-        "kernel/uapi/linux/isdn_ppp.h"
-        "kernel/uapi/linux/isdnif.h"
         "kernel/uapi/linux/iso_fs.h"
+        "kernel/uapi/linux/isst_if.h"
         "kernel/uapi/linux/ivtv.h"
         "kernel/uapi/linux/ivtvfb.h"
         "kernel/uapi/linux/jffs2.h"
@@ -2625,6 +2660,7 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/netlink.h"
         "kernel/uapi/linux/netlink_diag.h"
         "kernel/uapi/linux/netrom.h"
+        "kernel/uapi/linux/nexthop.h"
         "kernel/uapi/linux/nfc.h"
         "kernel/uapi/linux/nfs.h"
         "kernel/uapi/linux/nfs2.h"
@@ -2756,6 +2792,7 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/termios.h"
         "kernel/uapi/linux/thermal.h"
         "kernel/uapi/linux/time.h"
+        "kernel/uapi/linux/time_types.h"
         "kernel/uapi/linux/timerfd.h"
         "kernel/uapi/linux/times.h"
         "kernel/uapi/linux/timex.h"
@@ -2809,12 +2846,15 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/virtio_config.h"
         "kernel/uapi/linux/virtio_console.h"
         "kernel/uapi/linux/virtio_crypto.h"
+        "kernel/uapi/linux/virtio_fs.h"
         "kernel/uapi/linux/virtio_gpu.h"
         "kernel/uapi/linux/virtio_ids.h"
         "kernel/uapi/linux/virtio_input.h"
+        "kernel/uapi/linux/virtio_iommu.h"
         "kernel/uapi/linux/virtio_mmio.h"
         "kernel/uapi/linux/virtio_net.h"
         "kernel/uapi/linux/virtio_pci.h"
+        "kernel/uapi/linux/virtio_pmem.h"
         "kernel/uapi/linux/virtio_ring.h"
         "kernel/uapi/linux/virtio_rng.h"
         "kernel/uapi/linux/virtio_scsi.h"
@@ -2828,13 +2868,13 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/vt.h"
         "kernel/uapi/linux/vtpm_proxy.h"
         "kernel/uapi/linux/wait.h"
-        "kernel/uapi/linux/wanrouter.h"
         "kernel/uapi/linux/watchdog.h"
         "kernel/uapi/linux/wimax.h"
         "kernel/uapi/linux/wireless.h"
         "kernel/uapi/linux/wmi.h"
         "kernel/uapi/linux/x25.h"
         "kernel/uapi/linux/xattr.h"
+        "kernel/uapi/linux/xdp_diag.h"
         "kernel/uapi/linux/xfrm.h"
         "kernel/uapi/linux/xilinx-v4l2-controls.h"
         "kernel/uapi/linux/zorro.h"
@@ -2848,6 +2888,7 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/can/bcm.h"
         "kernel/uapi/linux/can/error.h"
         "kernel/uapi/linux/can/gw.h"
+        "kernel/uapi/linux/can/j1939.h"
         "kernel/uapi/linux/can/netlink.h"
         "kernel/uapi/linux/can/raw.h"
         "kernel/uapi/linux/can/vxcan.h"
@@ -2875,6 +2916,7 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/netfilter/nf_conntrack_tuple_common.h"
         "kernel/uapi/linux/netfilter/nf_log.h"
         "kernel/uapi/linux/netfilter/nf_nat.h"
+        "kernel/uapi/linux/netfilter/nf_synproxy.h"
         "kernel/uapi/linux/netfilter/nf_tables.h"
         "kernel/uapi/linux/netfilter/nf_tables_compat.h"
         "kernel/uapi/linux/netfilter/nfnetlink.h"
@@ -3014,11 +3056,14 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/tc_act/tc_bpf.h"
         "kernel/uapi/linux/tc_act/tc_connmark.h"
         "kernel/uapi/linux/tc_act/tc_csum.h"
+        "kernel/uapi/linux/tc_act/tc_ct.h"
+        "kernel/uapi/linux/tc_act/tc_ctinfo.h"
         "kernel/uapi/linux/tc_act/tc_defact.h"
         "kernel/uapi/linux/tc_act/tc_gact.h"
         "kernel/uapi/linux/tc_act/tc_ife.h"
         "kernel/uapi/linux/tc_act/tc_ipt.h"
         "kernel/uapi/linux/tc_act/tc_mirred.h"
+        "kernel/uapi/linux/tc_act/tc_mpls.h"
         "kernel/uapi/linux/tc_act/tc_nat.h"
         "kernel/uapi/linux/tc_act/tc_pedit.h"
         "kernel/uapi/linux/tc_act/tc_sample.h"
@@ -3037,6 +3082,7 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/usb/ch11.h"
         "kernel/uapi/linux/usb/ch9.h"
         "kernel/uapi/linux/usb/charger.h"
+        "kernel/uapi/linux/usb/f_accessory.h"
         "kernel/uapi/linux/usb/functionfs.h"
         "kernel/uapi/linux/usb/g_printer.h"
         "kernel/uapi/linux/usb/g_uvc.h"
@@ -3046,18 +3092,20 @@ genseccomp = python_binary_host {
         "kernel/uapi/linux/usb/video.h"
         "kernel/uapi/linux/wimax/i2400m.h"
         "kernel/uapi/misc/cxl.h"
+        "kernel/uapi/misc/fastrpc.h"
+        "kernel/uapi/misc/habanalabs.h"
         "kernel/uapi/misc/ocxl.h"
+        "kernel/uapi/misc/xilinx_sdfec.h"
         "kernel/uapi/mtd/inftl-user.h"
         "kernel/uapi/mtd/mtd-abi.h"
         "kernel/uapi/mtd/mtd-user.h"
         "kernel/uapi/mtd/nftl-user.h"
         "kernel/uapi/mtd/ubi-user.h"
         "kernel/uapi/rdma/bnxt_re-abi.h"
-        "kernel/uapi/rdma/cxgb3-abi.h"
         "kernel/uapi/rdma/cxgb4-abi.h"
+        "kernel/uapi/rdma/efa-abi.h"
         "kernel/uapi/rdma/hns-abi.h"
         "kernel/uapi/rdma/i40iw-abi.h"
-        "kernel/uapi/rdma/ib_user_cm.h"
         "kernel/uapi/rdma/ib_user_ioctl_cmds.h"
         "kernel/uapi/rdma/ib_user_ioctl_verbs.h"
         "kernel/uapi/rdma/ib_user_mad.h"
@@ -3068,7 +3116,6 @@ genseccomp = python_binary_host {
         "kernel/uapi/rdma/mlx5_user_ioctl_cmds.h"
         "kernel/uapi/rdma/mlx5_user_ioctl_verbs.h"
         "kernel/uapi/rdma/mthca-abi.h"
-        "kernel/uapi/rdma/nes-abi.h"
         "kernel/uapi/rdma/ocrdma-abi.h"
         "kernel/uapi/rdma/qedr-abi.h"
         "kernel/uapi/rdma/rdma_netlink.h"
@@ -3076,6 +3123,8 @@ genseccomp = python_binary_host {
         "kernel/uapi/rdma/rdma_user_ioctl.h"
         "kernel/uapi/rdma/rdma_user_ioctl_cmds.h"
         "kernel/uapi/rdma/rdma_user_rxe.h"
+        "kernel/uapi/rdma/rvt-abi.h"
+        "kernel/uapi/rdma/siw-abi.h"
         "kernel/uapi/rdma/vmw_pvrdma-abi.h"
         "kernel/uapi/rdma/hfi/hfi1_ioctl.h"
         "kernel/uapi/rdma/hfi/hfi1_user.h"
@@ -3104,6 +3153,10 @@ genseccomp = python_binary_host {
         "kernel/uapi/sound/snd_sst_tokens.h"
         "kernel/uapi/sound/tlv.h"
         "kernel/uapi/sound/usb_stream.h"
+        "kernel/uapi/sound/sof/abi.h"
+        "kernel/uapi/sound/sof/fw.h"
+        "kernel/uapi/sound/sof/header.h"
+        "kernel/uapi/sound/sof/tokens.h"
         "kernel/uapi/video/edid.h"
         "kernel/uapi/video/sisfb.h"
         "kernel/uapi/video/uvesafb.h"
@@ -3245,54 +3298,6 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/asm-generic/types.h"
         "kernel/uapi/asm-generic/ucontext.h"
         "kernel/uapi/asm-generic/unistd.h"
-        "kernel/uapi/asm-mips/asm/auxvec.h"
-        "kernel/uapi/asm-mips/asm/bitfield.h"
-        "kernel/uapi/asm-mips/asm/bitsperlong.h"
-        "kernel/uapi/asm-mips/asm/bpf_perf_event.h"
-        "kernel/uapi/asm-mips/asm/break.h"
-        "kernel/uapi/asm-mips/asm/byteorder.h"
-        "kernel/uapi/asm-mips/asm/cachectl.h"
-        "kernel/uapi/asm-mips/asm/errno.h"
-        "kernel/uapi/asm-mips/asm/fcntl.h"
-        "kernel/uapi/asm-mips/asm/hwcap.h"
-        "kernel/uapi/asm-mips/asm/inst.h"
-        "kernel/uapi/asm-mips/asm/ioctl.h"
-        "kernel/uapi/asm-mips/asm/ioctls.h"
-        "kernel/uapi/asm-mips/asm/ipcbuf.h"
-        "kernel/uapi/asm-mips/asm/kvm.h"
-        "kernel/uapi/asm-mips/asm/kvm_para.h"
-        "kernel/uapi/asm-mips/asm/mman.h"
-        "kernel/uapi/asm-mips/asm/msgbuf.h"
-        "kernel/uapi/asm-mips/asm/param.h"
-        "kernel/uapi/asm-mips/asm/poll.h"
-        "kernel/uapi/asm-mips/asm/posix_types.h"
-        "kernel/uapi/asm-mips/asm/ptrace.h"
-        "kernel/uapi/asm-mips/asm/reg.h"
-        "kernel/uapi/asm-mips/asm/resource.h"
-        "kernel/uapi/asm-mips/asm/sembuf.h"
-        "kernel/uapi/asm-mips/asm/setup.h"
-        "kernel/uapi/asm-mips/asm/sgidefs.h"
-        "kernel/uapi/asm-mips/asm/shmbuf.h"
-        "kernel/uapi/asm-mips/asm/sigcontext.h"
-        "kernel/uapi/asm-mips/asm/siginfo.h"
-        "kernel/uapi/asm-mips/asm/signal.h"
-        "kernel/uapi/asm-mips/asm/socket.h"
-        "kernel/uapi/asm-mips/asm/sockios.h"
-        "kernel/uapi/asm-mips/asm/stat.h"
-        "kernel/uapi/asm-mips/asm/statfs.h"
-        "kernel/uapi/asm-mips/asm/swab.h"
-        "kernel/uapi/asm-mips/asm/sysmips.h"
-        "kernel/uapi/asm-mips/asm/termbits.h"
-        "kernel/uapi/asm-mips/asm/termios.h"
-        "kernel/uapi/asm-mips/asm/types.h"
-        "kernel/uapi/asm-mips/asm/ucontext.h"
-        "kernel/uapi/asm-mips/asm/unistd.h"
-        "kernel/uapi/asm-mips/asm/unistd_n32.h"
-        "kernel/uapi/asm-mips/asm/unistd_n64.h"
-        "kernel/uapi/asm-mips/asm/unistd_nr_n32.h"
-        "kernel/uapi/asm-mips/asm/unistd_nr_n64.h"
-        "kernel/uapi/asm-mips/asm/unistd_nr_o32.h"
-        "kernel/uapi/asm-mips/asm/unistd_o32.h"
         "kernel/uapi/asm-x86/asm/a.out.h"
         "kernel/uapi/asm-x86/asm/auxvec.h"
         "kernel/uapi/asm-x86/asm/bitsperlong.h"
@@ -3365,10 +3370,12 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/drm/exynos_drm.h"
         "kernel/uapi/drm/i810_drm.h"
         "kernel/uapi/drm/i915_drm.h"
+        "kernel/uapi/drm/lima_drm.h"
         "kernel/uapi/drm/mga_drm.h"
         "kernel/uapi/drm/msm_drm.h"
         "kernel/uapi/drm/nouveau_drm.h"
         "kernel/uapi/drm/omap_drm.h"
+        "kernel/uapi/drm/panfrost_drm.h"
         "kernel/uapi/drm/qxl_drm.h"
         "kernel/uapi/drm/r128_drm.h"
         "kernel/uapi/drm/radeon_drm.h"
@@ -3394,6 +3401,7 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/arm_sdei.h"
         "kernel/uapi/linux/ashmem.h"
         "kernel/uapi/linux/aspeed-lpc-ctrl.h"
+        "kernel/uapi/linux/aspeed-p2a-ctrl.h"
         "kernel/uapi/linux/atalk.h"
         "kernel/uapi/linux/atm.h"
         "kernel/uapi/linux/atm_eni.h"
@@ -3453,7 +3461,6 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/cm4000_cs.h"
         "kernel/uapi/linux/cn_proc.h"
         "kernel/uapi/linux/coda.h"
-        "kernel/uapi/linux/coda_psdev.h"
         "kernel/uapi/linux/coff.h"
         "kernel/uapi/linux/connector.h"
         "kernel/uapi/linux/const.h"
@@ -3500,13 +3507,14 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/filter.h"
         "kernel/uapi/linux/firewire-cdev.h"
         "kernel/uapi/linux/firewire-constants.h"
-        "kernel/uapi/linux/flat.h"
         "kernel/uapi/linux/fou.h"
         "kernel/uapi/linux/fpga-dfl.h"
         "kernel/uapi/linux/fs.h"
+        "kernel/uapi/linux/fscrypt.h"
         "kernel/uapi/linux/fsi.h"
         "kernel/uapi/linux/fsl_hypervisor.h"
         "kernel/uapi/linux/fsmap.h"
+        "kernel/uapi/linux/fsverity.h"
         "kernel/uapi/linux/fuse.h"
         "kernel/uapi/linux/futex.h"
         "kernel/uapi/linux/gameport.h"
@@ -3577,7 +3585,9 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/inotify.h"
         "kernel/uapi/linux/input-event-codes.h"
         "kernel/uapi/linux/input.h"
+        "kernel/uapi/linux/io_uring.h"
         "kernel/uapi/linux/ioctl.h"
+        "kernel/uapi/linux/iommu.h"
         "kernel/uapi/linux/ip.h"
         "kernel/uapi/linux/ip6_tunnel.h"
         "kernel/uapi/linux/ip_vs.h"
@@ -3590,11 +3600,8 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/ipv6_route.h"
         "kernel/uapi/linux/ipx.h"
         "kernel/uapi/linux/irqnr.h"
-        "kernel/uapi/linux/isdn.h"
-        "kernel/uapi/linux/isdn_divertif.h"
-        "kernel/uapi/linux/isdn_ppp.h"
-        "kernel/uapi/linux/isdnif.h"
         "kernel/uapi/linux/iso_fs.h"
+        "kernel/uapi/linux/isst_if.h"
         "kernel/uapi/linux/ivtv.h"
         "kernel/uapi/linux/ivtvfb.h"
         "kernel/uapi/linux/jffs2.h"
@@ -3672,6 +3679,7 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/netlink.h"
         "kernel/uapi/linux/netlink_diag.h"
         "kernel/uapi/linux/netrom.h"
+        "kernel/uapi/linux/nexthop.h"
         "kernel/uapi/linux/nfc.h"
         "kernel/uapi/linux/nfs.h"
         "kernel/uapi/linux/nfs2.h"
@@ -3803,6 +3811,7 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/termios.h"
         "kernel/uapi/linux/thermal.h"
         "kernel/uapi/linux/time.h"
+        "kernel/uapi/linux/time_types.h"
         "kernel/uapi/linux/timerfd.h"
         "kernel/uapi/linux/times.h"
         "kernel/uapi/linux/timex.h"
@@ -3856,12 +3865,15 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/virtio_config.h"
         "kernel/uapi/linux/virtio_console.h"
         "kernel/uapi/linux/virtio_crypto.h"
+        "kernel/uapi/linux/virtio_fs.h"
         "kernel/uapi/linux/virtio_gpu.h"
         "kernel/uapi/linux/virtio_ids.h"
         "kernel/uapi/linux/virtio_input.h"
+        "kernel/uapi/linux/virtio_iommu.h"
         "kernel/uapi/linux/virtio_mmio.h"
         "kernel/uapi/linux/virtio_net.h"
         "kernel/uapi/linux/virtio_pci.h"
+        "kernel/uapi/linux/virtio_pmem.h"
         "kernel/uapi/linux/virtio_ring.h"
         "kernel/uapi/linux/virtio_rng.h"
         "kernel/uapi/linux/virtio_scsi.h"
@@ -3875,13 +3887,13 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/vt.h"
         "kernel/uapi/linux/vtpm_proxy.h"
         "kernel/uapi/linux/wait.h"
-        "kernel/uapi/linux/wanrouter.h"
         "kernel/uapi/linux/watchdog.h"
         "kernel/uapi/linux/wimax.h"
         "kernel/uapi/linux/wireless.h"
         "kernel/uapi/linux/wmi.h"
         "kernel/uapi/linux/x25.h"
         "kernel/uapi/linux/xattr.h"
+        "kernel/uapi/linux/xdp_diag.h"
         "kernel/uapi/linux/xfrm.h"
         "kernel/uapi/linux/xilinx-v4l2-controls.h"
         "kernel/uapi/linux/zorro.h"
@@ -3895,6 +3907,7 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/can/bcm.h"
         "kernel/uapi/linux/can/error.h"
         "kernel/uapi/linux/can/gw.h"
+        "kernel/uapi/linux/can/j1939.h"
         "kernel/uapi/linux/can/netlink.h"
         "kernel/uapi/linux/can/raw.h"
         "kernel/uapi/linux/can/vxcan.h"
@@ -3922,6 +3935,7 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/netfilter/nf_conntrack_tuple_common.h"
         "kernel/uapi/linux/netfilter/nf_log.h"
         "kernel/uapi/linux/netfilter/nf_nat.h"
+        "kernel/uapi/linux/netfilter/nf_synproxy.h"
         "kernel/uapi/linux/netfilter/nf_tables.h"
         "kernel/uapi/linux/netfilter/nf_tables_compat.h"
         "kernel/uapi/linux/netfilter/nfnetlink.h"
@@ -4061,11 +4075,14 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/tc_act/tc_bpf.h"
         "kernel/uapi/linux/tc_act/tc_connmark.h"
         "kernel/uapi/linux/tc_act/tc_csum.h"
+        "kernel/uapi/linux/tc_act/tc_ct.h"
+        "kernel/uapi/linux/tc_act/tc_ctinfo.h"
         "kernel/uapi/linux/tc_act/tc_defact.h"
         "kernel/uapi/linux/tc_act/tc_gact.h"
         "kernel/uapi/linux/tc_act/tc_ife.h"
         "kernel/uapi/linux/tc_act/tc_ipt.h"
         "kernel/uapi/linux/tc_act/tc_mirred.h"
+        "kernel/uapi/linux/tc_act/tc_mpls.h"
         "kernel/uapi/linux/tc_act/tc_nat.h"
         "kernel/uapi/linux/tc_act/tc_pedit.h"
         "kernel/uapi/linux/tc_act/tc_sample.h"
@@ -4084,6 +4101,7 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/usb/ch11.h"
         "kernel/uapi/linux/usb/ch9.h"
         "kernel/uapi/linux/usb/charger.h"
+        "kernel/uapi/linux/usb/f_accessory.h"
         "kernel/uapi/linux/usb/functionfs.h"
         "kernel/uapi/linux/usb/g_printer.h"
         "kernel/uapi/linux/usb/g_uvc.h"
@@ -4093,18 +4111,20 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/linux/usb/video.h"
         "kernel/uapi/linux/wimax/i2400m.h"
         "kernel/uapi/misc/cxl.h"
+        "kernel/uapi/misc/fastrpc.h"
+        "kernel/uapi/misc/habanalabs.h"
         "kernel/uapi/misc/ocxl.h"
+        "kernel/uapi/misc/xilinx_sdfec.h"
         "kernel/uapi/mtd/inftl-user.h"
         "kernel/uapi/mtd/mtd-abi.h"
         "kernel/uapi/mtd/mtd-user.h"
         "kernel/uapi/mtd/nftl-user.h"
         "kernel/uapi/mtd/ubi-user.h"
         "kernel/uapi/rdma/bnxt_re-abi.h"
-        "kernel/uapi/rdma/cxgb3-abi.h"
         "kernel/uapi/rdma/cxgb4-abi.h"
+        "kernel/uapi/rdma/efa-abi.h"
         "kernel/uapi/rdma/hns-abi.h"
         "kernel/uapi/rdma/i40iw-abi.h"
-        "kernel/uapi/rdma/ib_user_cm.h"
         "kernel/uapi/rdma/ib_user_ioctl_cmds.h"
         "kernel/uapi/rdma/ib_user_ioctl_verbs.h"
         "kernel/uapi/rdma/ib_user_mad.h"
@@ -4115,7 +4135,6 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/rdma/mlx5_user_ioctl_cmds.h"
         "kernel/uapi/rdma/mlx5_user_ioctl_verbs.h"
         "kernel/uapi/rdma/mthca-abi.h"
-        "kernel/uapi/rdma/nes-abi.h"
         "kernel/uapi/rdma/ocrdma-abi.h"
         "kernel/uapi/rdma/qedr-abi.h"
         "kernel/uapi/rdma/rdma_netlink.h"
@@ -4123,6 +4142,8 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/rdma/rdma_user_ioctl.h"
         "kernel/uapi/rdma/rdma_user_ioctl_cmds.h"
         "kernel/uapi/rdma/rdma_user_rxe.h"
+        "kernel/uapi/rdma/rvt-abi.h"
+        "kernel/uapi/rdma/siw-abi.h"
         "kernel/uapi/rdma/vmw_pvrdma-abi.h"
         "kernel/uapi/rdma/hfi/hfi1_ioctl.h"
         "kernel/uapi/rdma/hfi/hfi1_user.h"
@@ -4151,6 +4172,10 @@ genfunctosyscallnrs = python_binary_host {
         "kernel/uapi/sound/snd_sst_tokens.h"
         "kernel/uapi/sound/tlv.h"
         "kernel/uapi/sound/usb_stream.h"
+        "kernel/uapi/sound/sof/abi.h"
+        "kernel/uapi/sound/sof/fw.h"
+        "kernel/uapi/sound/sof/header.h"
+        "kernel/uapi/sound/sof/tokens.h"
         "kernel/uapi/video/edid.h"
         "kernel/uapi/video/sisfb.h"
         "kernel/uapi/video/uvesafb.h"
@@ -4181,8 +4206,6 @@ func_to_syscall_nrs = cc_genrule {
         "SYSCALLS.TXT"
         ":libseccomp_gen_syscall_nrs_arm"
         ":libseccomp_gen_syscall_nrs_arm64"
-        ":libseccomp_gen_syscall_nrs_mips"
-        ":libseccomp_gen_syscall_nrs_mips64"
         ":libseccomp_gen_syscall_nrs_x86"
         ":libseccomp_gen_syscall_nrs_x86_64"
     ];
@@ -4212,11 +4235,10 @@ libseccomp_policy_app_zygote_sources = cc_genrule {
         "SECCOMP_WHITELIST_COMMON.TXT"
         "SECCOMP_WHITELIST_APP.TXT"
         "SECCOMP_BLACKLIST_COMMON.TXT"
+        "SECCOMP_PRIORITY.TXT"
         ":generate_app_zygote_blacklist"
         ":libseccomp_gen_syscall_nrs_arm"
         ":libseccomp_gen_syscall_nrs_arm64"
-        ":libseccomp_gen_syscall_nrs_mips"
-        ":libseccomp_gen_syscall_nrs_mips64"
         ":libseccomp_gen_syscall_nrs_x86"
         ":libseccomp_gen_syscall_nrs_x86_64"
     ];
@@ -4224,8 +4246,6 @@ libseccomp_policy_app_zygote_sources = cc_genrule {
     out = [
         "arm64_app_zygote_policy.cpp"
         "arm_app_zygote_policy.cpp"
-        "mips64_app_zygote_policy.cpp"
-        "mips_app_zygote_policy.cpp"
         "x86_64_app_zygote_policy.cpp"
         "x86_app_zygote_policy.cpp"
     ];
@@ -4244,10 +4264,9 @@ libseccomp_policy_app_sources = cc_genrule {
         "SECCOMP_WHITELIST_APP.TXT"
         "SECCOMP_BLACKLIST_COMMON.TXT"
         "SECCOMP_BLACKLIST_APP.TXT"
+        "SECCOMP_PRIORITY.TXT"
         ":libseccomp_gen_syscall_nrs_arm"
         ":libseccomp_gen_syscall_nrs_arm64"
-        ":libseccomp_gen_syscall_nrs_mips"
-        ":libseccomp_gen_syscall_nrs_mips64"
         ":libseccomp_gen_syscall_nrs_x86"
         ":libseccomp_gen_syscall_nrs_x86_64"
     ];
@@ -4255,8 +4274,6 @@ libseccomp_policy_app_sources = cc_genrule {
     out = [
         "arm64_app_policy.cpp"
         "arm_app_policy.cpp"
-        "mips64_app_policy.cpp"
-        "mips_app_policy.cpp"
         "x86_64_app_policy.cpp"
         "x86_app_policy.cpp"
     ];
@@ -4274,10 +4291,9 @@ libseccomp_policy_system_sources = cc_genrule {
         "SECCOMP_WHITELIST_COMMON.TXT"
         "SECCOMP_WHITELIST_SYSTEM.TXT"
         "SECCOMP_BLACKLIST_COMMON.TXT"
+        "SECCOMP_PRIORITY.TXT"
         ":libseccomp_gen_syscall_nrs_arm"
         ":libseccomp_gen_syscall_nrs_arm64"
-        ":libseccomp_gen_syscall_nrs_mips"
-        ":libseccomp_gen_syscall_nrs_mips64"
         ":libseccomp_gen_syscall_nrs_x86"
         ":libseccomp_gen_syscall_nrs_x86_64"
     ];
@@ -4285,42 +4301,8 @@ libseccomp_policy_system_sources = cc_genrule {
     out = [
         "arm64_system_policy.cpp"
         "arm_system_policy.cpp"
-        "mips64_system_policy.cpp"
-        "mips_system_policy.cpp"
         "x86_64_system_policy.cpp"
         "x86_system_policy.cpp"
-    ];
-};
-
-libseccomp_policy_global_sources = cc_genrule {
-    name = "libseccomp_policy_global_sources";
-    recovery_available = true;
-    cmd = "$(location genseccomp) --out-dir=$(genDir) --name-modifier=global $(in)";
-
-    tools = ["genseccomp"];
-
-    srcs = [
-        "SYSCALLS.TXT"
-        "SECCOMP_WHITELIST_COMMON.TXT"
-        "SECCOMP_WHITELIST_SYSTEM.TXT"
-        "SECCOMP_WHITELIST_APP.TXT"
-        "SECCOMP_WHITELIST_GLOBAL.TXT"
-        "SECCOMP_BLACKLIST_COMMON.TXT"
-        ":libseccomp_gen_syscall_nrs_arm"
-        ":libseccomp_gen_syscall_nrs_arm64"
-        ":libseccomp_gen_syscall_nrs_mips"
-        ":libseccomp_gen_syscall_nrs_mips64"
-        ":libseccomp_gen_syscall_nrs_x86"
-        ":libseccomp_gen_syscall_nrs_x86_64"
-    ];
-
-    out = [
-        "arm64_global_policy.cpp"
-        "arm_global_policy.cpp"
-        "mips64_global_policy.cpp"
-        "mips_global_policy.cpp"
-        "x86_64_global_policy.cpp"
-        "x86_global_policy.cpp"
     ];
 };
 
@@ -4331,7 +4313,6 @@ libseccomp_policy = cc_library {
     generated_sources = [
         "libseccomp_policy_app_sources"
         "libseccomp_policy_app_zygote_sources"
-        "libseccomp_policy_global_sources"
         "libseccomp_policy_system_sources"
     ];
 
@@ -4354,10 +4335,11 @@ libseccomp_policy = cc_library {
 
 #  This is a temporary library that will use scudo as the native memory
 #  allocator. To use it, add it as the first shared library.
-libc_scudo = cc_library_shared {
-    name = "libc_scudo";
-    vendor_available = true;
+libc_scudo_wrapper_defaults = cc_defaults {
+    name = "libc_scudo_wrapper_defaults";
     srcs = [
+        "bionic/gwp_asan_wrappers.cpp"
+        "bionic/heap_tagging.cpp"
         "bionic/malloc_common.cpp"
         "bionic/malloc_common_dynamic.cpp"
         "bionic/malloc_heapprofd.cpp"
@@ -4365,32 +4347,37 @@ libc_scudo = cc_library_shared {
         "bionic/scudo_wrapper.cpp"
         "bionic/__set_errno.cpp"
     ];
-    cflags = ["-DUSE_SCUDO"];
-    stl = "none";
-    system_shared_libs = [];
-
-    header_libs = ["libc_headers"];
-
-    static_libs = ["libasync_safe"];
-
-    allow_undefined_symbols = true;
+    cflags = [
+        "-DUSE_SCUDO"
+        "-fno-emulated-tls" #  Required for GWP-ASan.
+    ];
     shared_libs = ["libscudo_wrapper"];
+
+    header_libs = [
+        "libc_headers"
+        "gwp_asan_headers"
+    ];
+
+    static_libs = [
+        "libasync_safe"
+        "gwp_asan"
+    ];
 
     arch = {
         arm = {
-            srcs = ["arch-arm/syscalls/__rt_sigprocmask.S"];
+            srcs = [":syscalls-arm.S"];
         };
         arm64 = {
-            srcs = ["arch-arm64/syscalls/__rt_sigprocmask.S"];
+            srcs = [":syscalls-arm64.S"];
         };
         x86 = {
             srcs = [
                 "arch-x86/bionic/__libc_init_sysinfo.cpp"
-                "arch-x86/syscalls/__rt_sigprocmask.S"
+                ":syscalls-x86.S"
             ];
         };
         x86_64 = {
-            srcs = ["arch-x86_64/syscalls/__rt_sigprocmask.S"];
+            srcs = [":syscalls-x86_64.S"];
         };
     };
 
@@ -4399,8 +4386,24 @@ libc_scudo = cc_library_shared {
     ldflags = ["-Wl,-z,global"];
 };
 
+libc_scudo = cc_library_shared {
+    name = "libc_scudo";
+    vendor_available = true;
+    stl = "none";
+    system_shared_libs = [];
+
+    allow_undefined_symbols = true;
+    #  Like libc, disable native coverage for libc_scudo.
+    native_coverage = false;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.media.swcodec"
+    ];
+    min_sdk_version = "apex_inherit";
+};
+
 subdirs = [
     "bionic/scudo"
 ];
 
-in { inherit "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_bionic libc_bionic_ndk libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_malloc libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_sources_shared libc_sources_shared_arm libc_sources_static libc_sources_static_arm libc_stack_protector libc_syscalls libc_tzcode libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_mips libseccomp_gen_syscall_nrs_mips64 libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_global_sources libseccomp_policy_system_sources; }
+in { inherit "libc.arm.map" "libc.arm64.map" "libc.x86.map" "libc.x86_64.map" "libstdc++" "libstdc++.arm.map" "libstdc++.arm64.map" "libstdc++.x86.map" "libstdc++.x86_64.map" "syscalls-arm.S" "syscalls-arm64.S" "syscalls-x86.S" "syscalls-x86_64.S" bionic_libc_platform_headers crt_defaults crt_so_defaults crtbegin_dynamic crtbegin_dynamic1 crtbegin_so crtbegin_so1 crtbegin_static crtbegin_static1 crtbrand crtend_android crtend_so func_to_syscall_nrs generate_app_zygote_blacklist generated_android_ids genfunctosyscallnrs genseccomp kernel_input_headers libc libc_aeabi libc_bionic libc_bionic_ndk libc_bootstrap libc_common libc_common_shared libc_common_static libc_defaults libc_dns libc_dynamic_dispatch libc_fortify libc_freebsd libc_freebsd_large_stack libc_gdtoa libc_headers libc_init_dynamic libc_init_static libc_jemalloc_wrapper libc_native_allocator_defaults libc_ndk libc_netbsd libc_nomalloc libc_nopthread libc_openbsd libc_openbsd_large_stack libc_openbsd_ndk libc_pthread libc_scudo libc_scudo_wrapper_defaults libc_sources_shared libc_sources_shared_arm libc_sources_static libc_static_dispatch libc_syscalls libc_tzcode libc_unwind_static libseccomp_gen_syscall_nrs_arm libseccomp_gen_syscall_nrs_arm64 libseccomp_gen_syscall_nrs_defaults libseccomp_gen_syscall_nrs_x86 libseccomp_gen_syscall_nrs_x86_64 libseccomp_policy libseccomp_policy_app_sources libseccomp_policy_app_zygote_sources libseccomp_policy_system_sources; }

@@ -17,12 +17,11 @@ let
 #  limitations under the License.
 #
 
-VtsHalHidlTargetTestBase = cc_library_static {
-    name = "VtsHalHidlTargetTestBase";
+VtsHalHidlTestUtils = cc_library_static {
+    name = "VtsHalHidlTestUtils";
     srcs = [
-        "VtsHalHidlTargetTestBase.cpp"
         "VtsHalHidlTargetCallbackBase.cpp"
-        "VtsHalHidlTargetTestEnvBase.cpp"
+        "VtsCoreUtil.cpp"
     ];
 
     cflags = [
@@ -48,4 +47,38 @@ VtsHalHidlTargetTestBase = cc_library_static {
     ];
 };
 
-in { inherit VtsHalHidlTargetTestBase; }
+#  TODO: Delete this library after all tests using VtsHalHidlTargetTestBase
+#  are converted or obsoleted.
+VtsHalHidlTargetTestBase = cc_library_static {
+    name = "VtsHalHidlTargetTestBase";
+    srcs = [
+        "VtsHalHidlTargetTestBase.cpp"
+        "VtsHalHidlTargetCallbackBase.cpp"
+        "VtsHalHidlTargetTestEnvBase.cpp"
+        "VtsCoreUtil.cpp"
+    ];
+
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+
+    shared_libs = [
+        "libhidl-gen-utils"
+        "libhidlbase"
+        "liblog"
+        "libcutils"
+    ];
+
+    static_libs = [
+        "libgtest"
+        "libutils"
+    ];
+    export_include_dirs = ["."];
+    export_static_lib_headers = [
+        "libgtest"
+        "libutils"
+    ];
+};
+
+in { inherit VtsHalHidlTargetTestBase VtsHalHidlTestUtils; }

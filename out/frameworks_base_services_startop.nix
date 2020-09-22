@@ -19,6 +19,7 @@ let
 
 "services.startop" = java_library_static {
     name = "services.startop";
+    defaults = ["services_defaults"];
 
     static_libs = [
         #  frameworks/base/startop/iorap

@@ -22,6 +22,7 @@ FrameworksMockingCoreTests = android_test {
 
     srcs = [
         "src/android/app/activity/ActivityThreadClientTest.java"
+        "src/android/util/TimingsTraceLogTest.java"
     ];
 
     static_libs = [

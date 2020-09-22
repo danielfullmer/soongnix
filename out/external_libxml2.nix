@@ -109,10 +109,6 @@ libxml2-defaults = cc_defaults {
             "-DSTATIC_LIBXML=1"
         ];
     };
-    shared = {
-        shared_libs = ["libandroidicu"];
-        export_shared_lib_headers = ["libandroidicu"];
-    };
 };
 
 libxml2 = cc_library {
@@ -124,11 +120,22 @@ libxml2 = cc_library {
     };
     host_supported = true;
     target = {
-        vendor = {
-            exclude_shared_libs = ["libandroidicu"];
+        android = {
+            shared_libs = ["libandroidicu"];
+            export_shared_lib_headers = ["libandroidicu"];
         };
         host = {
-            shared_libs = ["libandroidicu"];
+            shared_libs = [
+                "libicui18n"
+                "libicuuc"
+            ];
+            export_shared_lib_headers = [
+                "libicui18n"
+                "libicuuc"
+            ];
+        };
+        vendor = {
+            exclude_shared_libs = ["libandroidicu"];
         };
     };
 };

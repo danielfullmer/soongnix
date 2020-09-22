@@ -1,4 +1,4 @@
-{ filegroup, java_test }:
+{ droidstubs, filegroup, java_library, java_library_static, java_test, package }:
 let
 
 #
@@ -17,14 +17,29 @@ let
 #  limitations under the License.
 #
 
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
+
 # ==========================================================
 #  build repackaged ICU for target
 #
 #  This is done in the libcore/JavaLibraries.mk file as there are circular
 #  dependencies between ICU and libcore
 # ==========================================================
-android_icu4j_src_files = filegroup {
-    name = "android_icu4j_src_files";
+android_icu4j_public_api_files = filegroup {
+    name = "android_icu4j_public_api_files";
+    visibility = [
+        "//frameworks/base"
+    ];
+    srcs = [
+        ":android_icu4j_repackaged_src_files"
+    ];
+    path = "src/main/java";
+};
+
+android_icu4j_repackaged_src_files = filegroup {
+    name = "android_icu4j_repackaged_src_files";
     srcs = [
         "src/main/java/android/icu/impl/Assert.java"
         "src/main/java/android/icu/impl/BMPSet.java"
@@ -47,6 +62,9 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/impl/DayPeriodRules.java"
         "src/main/java/android/icu/impl/DontCareFieldPosition.java"
         "src/main/java/android/icu/impl/EraRules.java"
+        "src/main/java/android/icu/impl/FormattedStringBuilder.java"
+        "src/main/java/android/icu/impl/FormattedValueFieldPositionIteratorImpl.java"
+        "src/main/java/android/icu/impl/FormattedValueStringBuilderImpl.java"
         "src/main/java/android/icu/impl/Grego.java"
         "src/main/java/android/icu/impl/ICUBinary.java"
         "src/main/java/android/icu/impl/ICUCache.java"
@@ -221,7 +239,9 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/impl/locale/Extension.java"
         "src/main/java/android/icu/impl/locale/InternalLocaleBuilder.java"
         "src/main/java/android/icu/impl/locale/KeyTypeData.java"
+        "src/main/java/android/icu/impl/locale/LSR.java"
         "src/main/java/android/icu/impl/locale/LanguageTag.java"
+        "src/main/java/android/icu/impl/locale/LocaleDistance.java"
         "src/main/java/android/icu/impl/locale/LocaleExtensions.java"
         "src/main/java/android/icu/impl/locale/LocaleObjectCache.java"
         "src/main/java/android/icu/impl/locale/LocaleSyntaxException.java"
@@ -231,8 +251,6 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/impl/locale/UnicodeLocaleExtension.java"
         "src/main/java/android/icu/impl/locale/XCldrStub.java"
         "src/main/java/android/icu/impl/locale/XLikelySubtags.java"
-        "src/main/java/android/icu/impl/locale/XLocaleDistance.java"
-        "src/main/java/android/icu/impl/locale/XLocaleMatcher.java"
         "src/main/java/android/icu/impl/number/AdoptingModifierStore.java"
         "src/main/java/android/icu/impl/number/AffixPatternProvider.java"
         "src/main/java/android/icu/impl/number/AffixUtils.java"
@@ -258,7 +276,6 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/impl/number/MultiplierFormatHandler.java"
         "src/main/java/android/icu/impl/number/MultiplierProducer.java"
         "src/main/java/android/icu/impl/number/MutablePatternModifier.java"
-        "src/main/java/android/icu/impl/number/NumberStringBuilder.java"
         "src/main/java/android/icu/impl/number/Padder.java"
         "src/main/java/android/icu/impl/number/PatternStringParser.java"
         "src/main/java/android/icu/impl/number/PatternStringUtils.java"
@@ -311,11 +328,9 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/math/MathContext.java"
         "src/main/java/android/icu/number/CompactNotation.java"
         "src/main/java/android/icu/number/CurrencyPrecision.java"
-        "src/main/java/android/icu/number/CurrencyRounder.java"
         "src/main/java/android/icu/number/FormattedNumber.java"
         "src/main/java/android/icu/number/FormattedNumberRange.java"
         "src/main/java/android/icu/number/FractionPrecision.java"
-        "src/main/java/android/icu/number/FractionRounder.java"
         "src/main/java/android/icu/number/IntegerWidth.java"
         "src/main/java/android/icu/number/LocalizedNumberFormatter.java"
         "src/main/java/android/icu/number/LocalizedNumberRangeFormatter.java"
@@ -329,7 +344,6 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/number/NumberRangeFormatterSettings.java"
         "src/main/java/android/icu/number/NumberSkeletonImpl.java"
         "src/main/java/android/icu/number/Precision.java"
-        "src/main/java/android/icu/number/Rounder.java"
         "src/main/java/android/icu/number/Scale.java"
         "src/main/java/android/icu/number/ScientificNotation.java"
         "src/main/java/android/icu/number/SimpleNotation.java"
@@ -373,6 +387,7 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/text/CompactDecimalFormat.java"
         "src/main/java/android/icu/text/ComposedCharIter.java"
         "src/main/java/android/icu/text/CompoundTransliterator.java"
+        "src/main/java/android/icu/text/ConstrainedFieldPosition.java"
         "src/main/java/android/icu/text/CurrencyDisplayNames.java"
         "src/main/java/android/icu/text/CurrencyFormat.java"
         "src/main/java/android/icu/text/CurrencyMetaInfo.java"
@@ -384,17 +399,16 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/text/DateTimePatternGenerator.java"
         "src/main/java/android/icu/text/DecimalFormat.java"
         "src/main/java/android/icu/text/DecimalFormatSymbols.java"
-        "src/main/java/android/icu/text/DecimalFormat_ICU58_Android.java"
         "src/main/java/android/icu/text/DictionaryBreakEngine.java"
         "src/main/java/android/icu/text/DictionaryData.java"
         "src/main/java/android/icu/text/DictionaryMatcher.java"
-        "src/main/java/android/icu/text/DigitList_Android.java"
         "src/main/java/android/icu/text/DisplayContext.java"
         "src/main/java/android/icu/text/DurationFormat.java"
         "src/main/java/android/icu/text/Edits.java"
         "src/main/java/android/icu/text/EscapeTransliterator.java"
         "src/main/java/android/icu/text/FilteredBreakIteratorBuilder.java"
         "src/main/java/android/icu/text/FilteredNormalizer2.java"
+        "src/main/java/android/icu/text/FormattedValue.java"
         "src/main/java/android/icu/text/FunctionReplacer.java"
         "src/main/java/android/icu/text/IDNA.java"
         "src/main/java/android/icu/text/KhmerBreakEngine.java"
@@ -568,286 +582,269 @@ android_icu4j_src_files = filegroup {
         "src/main/java/android/icu/util/ValueIterator.java"
         "src/main/java/android/icu/util/VersionInfo.java"
     ];
+    path = "src/main/java";
 };
 
-android_icu4j_resources = filegroup {
-    name = "android_icu4j_resources";
+#  The files contains Android-specific codes to expose intra-core APIs
+#  from ICU4J/ICU4C to libcore. The package is com.android.icu.* and should not
+#  expose any public APIs.
+libcore_icu_bridge_src_files = filegroup {
+    name = "libcore_icu_bridge_src_files";
     srcs = [
-        "resources/android/"
-        "resources/android/icu/"
-        "resources/android/icu/ICUConfig.properties"
-        "resources/android/icu/impl/"
-        "resources/android/icu/impl/duration/"
-        "resources/android/icu/impl/duration/impl/"
-        "resources/android/icu/impl/duration/impl/data/"
-        "resources/android/icu/impl/duration/impl/data/index.txt"
-        "resources/android/icu/impl/duration/impl/data/pfd_ar_EG.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_ar_EG.xml.escaped"
-        "resources/android/icu/impl/duration/impl/data/pfd_en.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_es.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_fr.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_he_IL.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_hi.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_it.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_ja.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_ko.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_ru.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_th.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_zh_Hans.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_zh_Hans_SG.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_zh_Hant.xml"
-        "resources/android/icu/impl/duration/impl/data/pfd_zh_Hant_HK.xml"
+        "libcore_bridge/src/java/com/android/icu/charset/CharsetDecoderICU.java"
+        "libcore_bridge/src/java/com/android/icu/charset/CharsetEncoderICU.java"
+        "libcore_bridge/src/java/com/android/icu/charset/CharsetICU.java"
+        "libcore_bridge/src/java/com/android/icu/charset/NativeConverter.java"
+        "libcore_bridge/src/java/com/android/icu/util/CaseMapperNative.java"
+        "libcore_bridge/src/java/com/android/icu/util/Icu4cMetadata.java"
+        "libcore_bridge/src/java/com/android/icu/util/LocaleNative.java"
+        "libcore_bridge/src/java/com/android/icu/util/regex/MatcherNative.java"
+        "libcore_bridge/src/java/com/android/icu/util/regex/PatternNative.java"
     ];
-    path = "resources";
+    path = "libcore_bridge/src/java";
 };
 
-android_icu4j_src_files_for_docs = filegroup {
-    name = "android_icu4j_src_files_for_docs";
-    srcs = [
-        "src/main/java/android/icu/lang/CharSequences.java"
-        "src/main/java/android/icu/lang/CharacterProperties.java"
-        "src/main/java/android/icu/lang/UCharacter.java"
-        "src/main/java/android/icu/lang/UCharacterCategory.java"
-        "src/main/java/android/icu/lang/UCharacterDirection.java"
-        "src/main/java/android/icu/lang/UCharacterEnums.java"
-        "src/main/java/android/icu/lang/UCharacterNameIterator.java"
-        "src/main/java/android/icu/lang/UProperty.java"
-        "src/main/java/android/icu/lang/UScript.java"
-        "src/main/java/android/icu/lang/UScriptRun.java"
-        "src/main/java/android/icu/math/BigDecimal.java"
-        "src/main/java/android/icu/math/MathContext.java"
-        "src/main/java/android/icu/text/AlphabeticIndex.java"
-        "src/main/java/android/icu/text/AnyTransliterator.java"
-        "src/main/java/android/icu/text/ArabicShaping.java"
-        "src/main/java/android/icu/text/ArabicShapingException.java"
-        "src/main/java/android/icu/text/Bidi.java"
-        "src/main/java/android/icu/text/BidiClassifier.java"
-        "src/main/java/android/icu/text/BidiLine.java"
-        "src/main/java/android/icu/text/BidiRun.java"
-        "src/main/java/android/icu/text/BidiTransform.java"
-        "src/main/java/android/icu/text/BidiWriter.java"
-        "src/main/java/android/icu/text/BreakIterator.java"
-        "src/main/java/android/icu/text/BreakIteratorFactory.java"
-        "src/main/java/android/icu/text/BreakTransliterator.java"
-        "src/main/java/android/icu/text/BurmeseBreakEngine.java"
-        "src/main/java/android/icu/text/BytesDictionaryMatcher.java"
-        "src/main/java/android/icu/text/CanonicalIterator.java"
-        "src/main/java/android/icu/text/CaseFoldTransliterator.java"
-        "src/main/java/android/icu/text/CaseMap.java"
-        "src/main/java/android/icu/text/CharsDictionaryMatcher.java"
-        "src/main/java/android/icu/text/CharsetDetector.java"
-        "src/main/java/android/icu/text/CharsetMatch.java"
-        "src/main/java/android/icu/text/CharsetRecog_2022.java"
-        "src/main/java/android/icu/text/CharsetRecog_UTF8.java"
-        "src/main/java/android/icu/text/CharsetRecog_Unicode.java"
-        "src/main/java/android/icu/text/CharsetRecog_mbcs.java"
-        "src/main/java/android/icu/text/CharsetRecog_sbcs.java"
-        "src/main/java/android/icu/text/CharsetRecognizer.java"
-        "src/main/java/android/icu/text/ChineseDateFormat.java"
-        "src/main/java/android/icu/text/ChineseDateFormatSymbols.java"
-        "src/main/java/android/icu/text/CjkBreakEngine.java"
-        "src/main/java/android/icu/text/CollationElementIterator.java"
-        "src/main/java/android/icu/text/CollationKey.java"
-        "src/main/java/android/icu/text/Collator.java"
-        "src/main/java/android/icu/text/CollatorServiceShim.java"
-        "src/main/java/android/icu/text/CompactDecimalFormat.java"
-        "src/main/java/android/icu/text/ComposedCharIter.java"
-        "src/main/java/android/icu/text/CompoundTransliterator.java"
-        "src/main/java/android/icu/text/CurrencyDisplayNames.java"
-        "src/main/java/android/icu/text/CurrencyFormat.java"
-        "src/main/java/android/icu/text/CurrencyMetaInfo.java"
-        "src/main/java/android/icu/text/CurrencyPluralInfo.java"
-        "src/main/java/android/icu/text/DateFormat.java"
-        "src/main/java/android/icu/text/DateFormatSymbols.java"
-        "src/main/java/android/icu/text/DateIntervalFormat.java"
-        "src/main/java/android/icu/text/DateIntervalInfo.java"
-        "src/main/java/android/icu/text/DateTimePatternGenerator.java"
-        "src/main/java/android/icu/text/DecimalFormat.java"
-        "src/main/java/android/icu/text/DecimalFormatSymbols.java"
-        "src/main/java/android/icu/text/DecimalFormat_ICU58_Android.java"
-        "src/main/java/android/icu/text/DictionaryBreakEngine.java"
-        "src/main/java/android/icu/text/DictionaryData.java"
-        "src/main/java/android/icu/text/DictionaryMatcher.java"
-        "src/main/java/android/icu/text/DigitList_Android.java"
-        "src/main/java/android/icu/text/DisplayContext.java"
-        "src/main/java/android/icu/text/DurationFormat.java"
-        "src/main/java/android/icu/text/Edits.java"
-        "src/main/java/android/icu/text/EscapeTransliterator.java"
-        "src/main/java/android/icu/text/FilteredBreakIteratorBuilder.java"
-        "src/main/java/android/icu/text/FilteredNormalizer2.java"
-        "src/main/java/android/icu/text/FunctionReplacer.java"
-        "src/main/java/android/icu/text/IDNA.java"
-        "src/main/java/android/icu/text/KhmerBreakEngine.java"
-        "src/main/java/android/icu/text/LanguageBreakEngine.java"
-        "src/main/java/android/icu/text/LaoBreakEngine.java"
-        "src/main/java/android/icu/text/ListFormatter.java"
-        "src/main/java/android/icu/text/LocaleDisplayNames.java"
-        "src/main/java/android/icu/text/LowercaseTransliterator.java"
-        "src/main/java/android/icu/text/MeasureFormat.java"
-        "src/main/java/android/icu/text/MessageFormat.java"
-        "src/main/java/android/icu/text/MessagePattern.java"
-        "src/main/java/android/icu/text/MessagePatternUtil.java"
-        "src/main/java/android/icu/text/NFRule.java"
-        "src/main/java/android/icu/text/NFRuleSet.java"
-        "src/main/java/android/icu/text/NFSubstitution.java"
-        "src/main/java/android/icu/text/NameUnicodeTransliterator.java"
-        "src/main/java/android/icu/text/NormalizationTransliterator.java"
-        "src/main/java/android/icu/text/Normalizer.java"
-        "src/main/java/android/icu/text/Normalizer2.java"
-        "src/main/java/android/icu/text/NullTransliterator.java"
-        "src/main/java/android/icu/text/NumberFormat.java"
-        "src/main/java/android/icu/text/NumberFormatServiceShim.java"
-        "src/main/java/android/icu/text/NumberingSystem.java"
-        "src/main/java/android/icu/text/PluralFormat.java"
-        "src/main/java/android/icu/text/PluralRanges.java"
-        "src/main/java/android/icu/text/PluralRules.java"
-        "src/main/java/android/icu/text/PluralRulesSerialProxy.java"
-        "src/main/java/android/icu/text/PluralSamples.java"
-        "src/main/java/android/icu/text/Quantifier.java"
-        "src/main/java/android/icu/text/QuantityFormatter.java"
-        "src/main/java/android/icu/text/RBBINode.java"
-        "src/main/java/android/icu/text/RBBIRuleBuilder.java"
-        "src/main/java/android/icu/text/RBBIRuleParseTable.java"
-        "src/main/java/android/icu/text/RBBIRuleScanner.java"
-        "src/main/java/android/icu/text/RBBISetBuilder.java"
-        "src/main/java/android/icu/text/RBBISymbolTable.java"
-        "src/main/java/android/icu/text/RBBITableBuilder.java"
-        "src/main/java/android/icu/text/RBNFChinesePostProcessor.java"
-        "src/main/java/android/icu/text/RBNFPostProcessor.java"
-        "src/main/java/android/icu/text/RawCollationKey.java"
-        "src/main/java/android/icu/text/RbnfLenientScanner.java"
-        "src/main/java/android/icu/text/RbnfLenientScannerProvider.java"
-        "src/main/java/android/icu/text/RelativeDateTimeFormatter.java"
-        "src/main/java/android/icu/text/RemoveTransliterator.java"
-        "src/main/java/android/icu/text/Replaceable.java"
-        "src/main/java/android/icu/text/ReplaceableContextIterator.java"
-        "src/main/java/android/icu/text/ReplaceableString.java"
-        "src/main/java/android/icu/text/RuleBasedBreakIterator.java"
-        "src/main/java/android/icu/text/RuleBasedCollator.java"
-        "src/main/java/android/icu/text/RuleBasedNumberFormat.java"
-        "src/main/java/android/icu/text/RuleBasedTransliterator.java"
-        "src/main/java/android/icu/text/SCSU.java"
-        "src/main/java/android/icu/text/ScientificNumberFormatter.java"
-        "src/main/java/android/icu/text/SearchIterator.java"
-        "src/main/java/android/icu/text/SelectFormat.java"
-        "src/main/java/android/icu/text/SimpleDateFormat.java"
-        "src/main/java/android/icu/text/SimpleFormatter.java"
-        "src/main/java/android/icu/text/SourceTargetUtility.java"
-        "src/main/java/android/icu/text/SpoofChecker.java"
-        "src/main/java/android/icu/text/StringCharacterIterator.java"
-        "src/main/java/android/icu/text/StringMatcher.java"
-        "src/main/java/android/icu/text/StringPrep.java"
-        "src/main/java/android/icu/text/StringPrepParseException.java"
-        "src/main/java/android/icu/text/StringReplacer.java"
-        "src/main/java/android/icu/text/StringSearch.java"
-        "src/main/java/android/icu/text/StringTransform.java"
-        "src/main/java/android/icu/text/SymbolTable.java"
-        "src/main/java/android/icu/text/ThaiBreakEngine.java"
-        "src/main/java/android/icu/text/TimeUnitFormat.java"
-        "src/main/java/android/icu/text/TimeZoneFormat.java"
-        "src/main/java/android/icu/text/TimeZoneNames.java"
-        "src/main/java/android/icu/text/TitlecaseTransliterator.java"
-        "src/main/java/android/icu/text/Transform.java"
-        "src/main/java/android/icu/text/TransliterationRule.java"
-        "src/main/java/android/icu/text/TransliterationRuleSet.java"
-        "src/main/java/android/icu/text/Transliterator.java"
-        "src/main/java/android/icu/text/TransliteratorIDParser.java"
-        "src/main/java/android/icu/text/TransliteratorParser.java"
-        "src/main/java/android/icu/text/TransliteratorRegistry.java"
-        "src/main/java/android/icu/text/UCharacterIterator.java"
-        "src/main/java/android/icu/text/UFieldPosition.java"
-        "src/main/java/android/icu/text/UFormat.java"
-        "src/main/java/android/icu/text/UForwardCharacterIterator.java"
-        "src/main/java/android/icu/text/UTF16.java"
-        "src/main/java/android/icu/text/UnescapeTransliterator.java"
-        "src/main/java/android/icu/text/UnhandledBreakEngine.java"
-        "src/main/java/android/icu/text/UnicodeCompressor.java"
-        "src/main/java/android/icu/text/UnicodeDecompressor.java"
-        "src/main/java/android/icu/text/UnicodeFilter.java"
-        "src/main/java/android/icu/text/UnicodeMatcher.java"
-        "src/main/java/android/icu/text/UnicodeNameTransliterator.java"
-        "src/main/java/android/icu/text/UnicodeReplacer.java"
-        "src/main/java/android/icu/text/UnicodeSet.java"
-        "src/main/java/android/icu/text/UnicodeSetIterator.java"
-        "src/main/java/android/icu/text/UnicodeSetSpanner.java"
-        "src/main/java/android/icu/text/UppercaseTransliterator.java"
-        "src/main/java/android/icu/util/AnnualTimeZoneRule.java"
-        "src/main/java/android/icu/util/BasicTimeZone.java"
-        "src/main/java/android/icu/util/BuddhistCalendar.java"
-        "src/main/java/android/icu/util/ByteArrayWrapper.java"
-        "src/main/java/android/icu/util/BytesTrie.java"
-        "src/main/java/android/icu/util/BytesTrieBuilder.java"
-        "src/main/java/android/icu/util/CECalendar.java"
-        "src/main/java/android/icu/util/Calendar.java"
-        "src/main/java/android/icu/util/CaseInsensitiveString.java"
-        "src/main/java/android/icu/util/CharsTrie.java"
-        "src/main/java/android/icu/util/CharsTrieBuilder.java"
-        "src/main/java/android/icu/util/ChineseCalendar.java"
-        "src/main/java/android/icu/util/CodePointMap.java"
-        "src/main/java/android/icu/util/CodePointTrie.java"
-        "src/main/java/android/icu/util/CompactByteArray.java"
-        "src/main/java/android/icu/util/CompactCharArray.java"
-        "src/main/java/android/icu/util/CopticCalendar.java"
-        "src/main/java/android/icu/util/Currency.java"
-        "src/main/java/android/icu/util/CurrencyAmount.java"
-        "src/main/java/android/icu/util/CurrencyServiceShim.java"
-        "src/main/java/android/icu/util/DangiCalendar.java"
-        "src/main/java/android/icu/util/DateInterval.java"
-        "src/main/java/android/icu/util/DateRule.java"
-        "src/main/java/android/icu/util/DateTimeRule.java"
-        "src/main/java/android/icu/util/EasterHoliday.java"
-        "src/main/java/android/icu/util/EthiopicCalendar.java"
-        "src/main/java/android/icu/util/Freezable.java"
-        "src/main/java/android/icu/util/GenderInfo.java"
-        "src/main/java/android/icu/util/GlobalizationPreferences.java"
-        "src/main/java/android/icu/util/GregorianCalendar.java"
-        "src/main/java/android/icu/util/HebrewCalendar.java"
-        "src/main/java/android/icu/util/HebrewHoliday.java"
-        "src/main/java/android/icu/util/Holiday.java"
-        "src/main/java/android/icu/util/ICUCloneNotSupportedException.java"
-        "src/main/java/android/icu/util/ICUException.java"
-        "src/main/java/android/icu/util/ICUUncheckedIOException.java"
-        "src/main/java/android/icu/util/IllformedLocaleException.java"
-        "src/main/java/android/icu/util/IndianCalendar.java"
-        "src/main/java/android/icu/util/InitialTimeZoneRule.java"
-        "src/main/java/android/icu/util/IslamicCalendar.java"
-        "src/main/java/android/icu/util/JapaneseCalendar.java"
-        "src/main/java/android/icu/util/LocaleData.java"
-        "src/main/java/android/icu/util/LocaleMatcher.java"
-        "src/main/java/android/icu/util/LocalePriorityList.java"
-        "src/main/java/android/icu/util/Measure.java"
-        "src/main/java/android/icu/util/MeasureUnit.java"
-        "src/main/java/android/icu/util/MutableCodePointTrie.java"
-        "src/main/java/android/icu/util/NoUnit.java"
-        "src/main/java/android/icu/util/Output.java"
-        "src/main/java/android/icu/util/OutputInt.java"
-        "src/main/java/android/icu/util/PersianCalendar.java"
-        "src/main/java/android/icu/util/RangeDateRule.java"
-        "src/main/java/android/icu/util/RangeValueIterator.java"
-        "src/main/java/android/icu/util/Region.java"
-        "src/main/java/android/icu/util/RuleBasedTimeZone.java"
-        "src/main/java/android/icu/util/STZInfo.java"
-        "src/main/java/android/icu/util/SimpleDateRule.java"
-        "src/main/java/android/icu/util/SimpleHoliday.java"
-        "src/main/java/android/icu/util/SimpleTimeZone.java"
-        "src/main/java/android/icu/util/StringTokenizer.java"
-        "src/main/java/android/icu/util/StringTrieBuilder.java"
-        "src/main/java/android/icu/util/TaiwanCalendar.java"
-        "src/main/java/android/icu/util/TimeArrayTimeZoneRule.java"
-        "src/main/java/android/icu/util/TimeUnit.java"
-        "src/main/java/android/icu/util/TimeUnitAmount.java"
-        "src/main/java/android/icu/util/TimeZone.java"
-        "src/main/java/android/icu/util/TimeZoneRule.java"
-        "src/main/java/android/icu/util/TimeZoneTransition.java"
-        "src/main/java/android/icu/util/ULocale.java"
-        "src/main/java/android/icu/util/UResourceBundle.java"
-        "src/main/java/android/icu/util/UResourceBundleIterator.java"
-        "src/main/java/android/icu/util/UResourceTypeMismatchException.java"
-        "src/main/java/android/icu/util/UniversalTimeScale.java"
-        "src/main/java/android/icu/util/VTimeZone.java"
-        "src/main/java/android/icu/util/ValueIterator.java"
-        "src/main/java/android/icu/util/VersionInfo.java"
+#  Rule generating resource lib for android_icu4j.
+#  In the downstream branch master-icu-dev, the resource files are generated.
+android_icu4j_resources_lib = java_library {
+    name = "android_icu4j_resources_lib";
+    visibility = [
+        "//libcore"
     ];
+    java_resource_dirs = ["resources"];
+    sdk_version = "none";
+    system_modules = "none";
+};
+
+#  Same as android_icu4j_resources_lib but compiling against core_current sdk
+#  in order to avoid using non-public API from core-libart and core-oj
+#  because core-icu4j will be in a different i18n APEX module.
+
+android_icu4j_resources_lib_sdk_core_current = java_library {
+    name = "android_icu4j_resources_lib_sdk_core_current";
+    visibility = [
+        "//libcore"
+    ];
+    java_resource_dirs = ["resources"];
+    sdk_version = "core_current";
+};
+
+#  core-repackaged-icu4j contains only the repackaged ICU4J that does not
+#  use any internal or android specific code. If it ever did then it could depend on
+#  art-module-intra-core-api-stubs-system-modules (a superset) instead.
+#  It is important that core-icu4j is restricted to only use stable APIs from the ART module
+#  since it is in a different APEX module that can be updated independently.
+core-repackaged-icu4j = java_library_static {
+    name = "core-repackaged-icu4j";
+    installable = false;
+    srcs = [":android_icu4j_repackaged_src_files"];
+    libs = ["unsupportedappusage"];
+    #  The resource files are generated in the downstream branch master-icu-dev.
+    java_resource_dirs = ["resources"];
+
+    sdk_version = "none";
+    system_modules = "art-module-public-api-stubs-system-modules";
+
+    dxflags = ["--core-library"];
+    errorprone = {
+        javacflags = [
+            "-Xep:MissingOverride:OFF" #  Ignore missing @Override.
+            "-Xep:ConstantOverflow:WARN" #  Known constant overflow in SplittableRandom
+        ];
+    };
+
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
+};
+
+#  A separated core library that contains ICU4J because ICU4J will be in a different APEX module,
+#  not in ART module.
+core-icu4j = java_library {
+    name = "core-icu4j";
+    visibility = [
+        "//art/build/apex"
+        "//external/robolectric-shadows"
+        "//frameworks/layoutlib"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
+    installable = true;
+    hostdex = true;
+
+    srcs = [":libcore_icu_bridge_src_files"];
+    static_libs = ["core-repackaged-icu4j"];
+
+    #  It is important that core-icu4j is restricted to only use stable APIs from the ART module
+    #  since it is in a different APEX module that can be updated independently.
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
+
+    dxflags = ["--core-library"];
+};
+
+#
+#  Guaranteed unstripped versions of core-icu4j.
+#
+#  The build system may or may not strip the core-icu4j. jar,
+#  but this will not be stripped. See b/24535627.
+#
+core-icu4j-testdex = java_library {
+    name = "core-icu4j-testdex";
+    installable = true;
+    static_libs = ["core-icu4j"];
+    sdk_version = "none";
+    system_modules = "art-module-public-api-stubs-system-modules";
+    dxflags = ["--core-library"];
+    dex_preopt = {
+        enabled = false;
+    };
+};
+
+#  Generates stubs for the parts of the public SDK API provided by the i18n module.
+#
+#  Only for use by i18n.module.public.api.stubs target below.
+i18n-module-public-api-stubs-gen = droidstubs {
+    name = "i18n-module-public-api-stubs-gen";
+    srcs = [
+        ":android_icu4j_public_api_files"
+    ];
+    java_version = "1.9";
+    installable = false;
+    sdk_version = "none";
+    system_modules = "art-module-public-api-stubs-system-modules";
+};
+
+#  A stubs target containing the parts of the public SDK API provided by the i18n module.
+"i18n.module.public.api.stubs" = java_library {
+    name = "i18n.module.public.api.stubs";
+    visibility = [
+        "//libcore"
+    ];
+    srcs = [":i18n-module-public-api-stubs-gen"];
+    errorprone = {
+        javacflags = [
+            "-Xep:MissingOverride:OFF"
+        ];
+    };
+    sdk_version = "none";
+    system_modules = "art-module-public-api-stubs-system-modules";
+};
+
+#  Generates stub source files for the intra-core API of the I18N module.
+#  i.e. every class/member that is either in the public API or annotated with
+#  @IntraCoreApi.
+#
+#  The API specification .txt files managed by this only contain the additional
+#  classes/members that are in the intra-core API but which are not the public
+#  API.
+i18n-module-intra-core-api-stubs-source = droidstubs {
+    name = "i18n-module-intra-core-api-stubs-source";
+    visibility = [
+        #  Needed to build core-all as using the compiled library, i.e.
+        #  i18n.module.intra.core.api.stubs does not work due to limitations
+        #  in javac.
+        "//libcore:__subpackages__"
+    ];
+    srcs = [
+        ":android_icu4j_repackaged_src_files"
+        ":libcore_icu_bridge_src_files"
+    ];
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
+
+    installable = false;
+    args = "--hide-annotation libcore.api.Hide " +
+        "--show-single-annotation libcore.api.IntraCoreApi " +
+        "--skip-annotation-instance-methods=false ";
+
+    api_filename = "api.txt";
+    removed_api_filename = "removed.txt";
+    previous_api = "previous.txt";
+    check_api = {
+        current = {
+            api_file = "api/intra/current-api.txt";
+            removed_api_file = "api/intra/current-removed.txt";
+        };
+        last_released = {
+            api_file = "api/intra/last-api.txt";
+            removed_api_file = "api/intra/last-removed.txt";
+        };
+    };
+};
+
+#  A library containing the intra-core API stubs of the I18N module.
+#
+#  Intra-core APIs are only intended for the use of other core library modules.
+"i18n.module.intra.core.api.stubs" = java_library {
+    name = "i18n.module.intra.core.api.stubs";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
+    srcs = [
+        ":i18n-module-intra-core-api-stubs-source"
+    ];
+
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
+};
+
+#  Generates stub source files for the core platform API of the I18N module.
+#  i.e. every class/member that is either in the public API or annotated with
+#  @CorePlatformApi.
+#
+#  The API specification .txt files managed by this only contain the additional
+#  classes/members that are in the intra-core API but which are not in the public
+#  API.
+i18n-module-platform-api-stubs-source = droidstubs {
+    name = "i18n-module-platform-api-stubs-source";
+    srcs = [
+        ":android_icu4j_repackaged_src_files"
+        ":libcore_icu_bridge_src_files"
+    ];
+    sdk_version = "none";
+    system_modules = "art-module-platform-api-stubs-system-modules";
+
+    installable = false;
+    args = "--hide-annotation libcore.api.Hide " +
+        "--show-single-annotation libcore.api.CorePlatformApi " +
+        "--skip-annotation-instance-methods=false ";
+
+    api_filename = "api.txt";
+    removed_api_filename = "removed.txt";
+    previous_api = "previous.txt";
+
+    check_api = {
+        current = {
+            api_file = "api/platform/current-api.txt";
+            removed_api_file = "api/platform/current-removed.txt";
+        };
+        last_released = {
+            api_file = "api/platform/last-api.txt";
+            removed_api_file = "api/platform/last-removed.txt";
+        };
+    };
+};
+
+#  A library containing the core platform API stubs of the I18N module.
+#
+#  Core platform APIs are only intended for use of other parts of the platform, not the
+#  core library modules.
+"i18n.module.platform.api.stubs" = java_library {
+    name = "i18n.module.platform.api.stubs";
+    visibility = [
+        "//libcore:__subpackages__"
+    ];
+    srcs = [
+        ":i18n-module-platform-api-stubs-source"
+    ];
+    hostdex = true;
+
+    sdk_version = "none";
+    system_modules = "art-module-platform-api-stubs-system-modules";
 };
 
 # ==========================================================
@@ -859,6 +856,9 @@ android_icu4j_src_files_for_docs = filegroup {
 # ==========================================================
 android-icu4j-tests = java_test {
     name = "android-icu4j-tests";
+    visibility = [
+        "//cts/tests/tests/icu"
+    ];
 
     srcs = [
         "src/main/tests/android/icu/dev/data/TestDataElements_testtypes.java"
@@ -980,6 +980,8 @@ android-icu4j-tests = java_test {
         "src/main/tests/android/icu/dev/test/format/DateFormatTest.java"
         "src/main/tests/android/icu/dev/test/format/DateIntervalFormatTest.java"
         "src/main/tests/android/icu/dev/test/format/DateTimeGeneratorTest.java"
+        "src/main/tests/android/icu/dev/test/format/FormattedStringBuilderTest.java"
+        "src/main/tests/android/icu/dev/test/format/FormattedValueTest.java"
         "src/main/tests/android/icu/dev/test/format/GlobalizationPreferencesTest.java"
         "src/main/tests/android/icu/dev/test/format/IntlTestDateFormat.java"
         "src/main/tests/android/icu/dev/test/format/IntlTestDateFormatAPI.java"
@@ -998,6 +1000,7 @@ android-icu4j-tests = java_test {
         "src/main/tests/android/icu/dev/test/format/MessagePatternUtilTest.java"
         "src/main/tests/android/icu/dev/test/format/MessageRegressionTest.java"
         "src/main/tests/android/icu/dev/test/format/NumberFormatDataDrivenTest.java"
+        "src/main/tests/android/icu/dev/test/format/NumberFormatJavaCompatilityTest.java"
         "src/main/tests/android/icu/dev/test/format/NumberFormatRegistrationTest.java"
         "src/main/tests/android/icu/dev/test/format/NumberFormatRegressionTest.java"
         "src/main/tests/android/icu/dev/test/format/NumberFormatRoundTripTest.java"
@@ -1061,9 +1064,9 @@ android-icu4j-tests = java_test {
         "src/main/tests/android/icu/dev/test/number/MutablePatternModifierTest.java"
         "src/main/tests/android/icu/dev/test/number/NumberFormatterApiTest.java"
         "src/main/tests/android/icu/dev/test/number/NumberParserTest.java"
+        "src/main/tests/android/icu/dev/test/number/NumberPermutationTest.java"
         "src/main/tests/android/icu/dev/test/number/NumberRangeFormatterTest.java"
         "src/main/tests/android/icu/dev/test/number/NumberSkeletonTest.java"
-        "src/main/tests/android/icu/dev/test/number/NumberStringBuilderTest.java"
         "src/main/tests/android/icu/dev/test/number/PatternStringTest.java"
         "src/main/tests/android/icu/dev/test/number/PropertiesTest.java"
         "src/main/tests/android/icu/dev/test/rbbi/AbstractBreakIteratorTests.java"
@@ -1081,6 +1084,7 @@ android-icu4j-tests = java_test {
         "src/main/tests/android/icu/dev/test/serializable/CoverageTest.java"
         "src/main/tests/android/icu/dev/test/serializable/ExceptionHandler.java"
         "src/main/tests/android/icu/dev/test/serializable/FormatHandler.java"
+        "src/main/tests/android/icu/dev/test/serializable/SerializableChecker.java"
         "src/main/tests/android/icu/dev/test/serializable/SerializableTestUtility.java"
         "src/main/tests/android/icu/dev/test/serializable/SerializableWriter.java"
         "src/main/tests/android/icu/dev/test/shaping/ArabicShapingRegTest.java"
@@ -1149,7 +1153,7 @@ android-icu4j-tests = java_test {
         "src/main/tests/android/icu/dev/test/util/LocaleAliasTest.java"
         "src/main/tests/android/icu/dev/test/util/LocaleBuilderTest.java"
         "src/main/tests/android/icu/dev/test/util/LocaleDataTest.java"
-        "src/main/tests/android/icu/dev/test/util/LocaleMatcherShim.java"
+        "src/main/tests/android/icu/dev/test/util/LocaleDistanceTest.java"
         "src/main/tests/android/icu/dev/test/util/LocaleMatcherTest.java"
         "src/main/tests/android/icu/dev/test/util/LocalePriorityListTest.java"
         "src/main/tests/android/icu/dev/test/util/RegionTest.java"
@@ -1167,18 +1171,21 @@ android-icu4j-tests = java_test {
         "src/main/tests/android/icu/dev/test/util/ULocaleTest.java"
         "src/main/tests/android/icu/dev/test/util/UtilityTest.java"
         "src/main/tests/android/icu/dev/test/util/VersionInfoTest.java"
-        "src/main/tests/android/icu/dev/test/util/XLocaleDistanceTest.java"
-        "src/main/tests/android/icu/dev/test/util/XLocaleMatcherTest.java"
+        "src/main/tests/android/icu/dev/tool/locale/LikelySubtagsBuilder.java"
+        "src/main/tests/android/icu/dev/tool/locale/LocaleDistanceBuilder.java"
         "src/main/tests/android/icu/dev/util/CollectionUtilities.java"
         "src/main/tests/android/icu/dev/util/ElapsedTimer.java"
         "src/main/tests/android/icu/dev/util/ImmutableEntry.java"
         "src/main/tests/android/icu/dev/util/Timer.java"
         "src/main/tests/android/icu/dev/util/UnicodeMap.java"
         "src/main/tests/android/icu/dev/util/UnicodeMapIterator.java"
-        "testing/src/android/icu/extratest/AndroidICUVersionTest.java"
+        "testing/src/android/icu/extratest/AndroidIcuVersionTest.java"
         "testing/src/android/icu/extratest/AndroidTransliteratorAvailableIdsTest.java"
         "testing/src/android/icu/extratest/AndroidTransliteratorParameterizedTest.java"
+        "testing/src/android/icu/extratest/number/FormattedNumberRangeTest.java"
+        "testing/src/android/icu/extratest/number/FormattedNumberTest.java"
         "testing/src/android/icu/extratest/util/JapaneseCalendarTest.java"
+        "testing/src/android/icu/extratest/util/ULocaleTest.java"
         "testing/src/android/icu/testsharding/HiMemTestShard.java"
         "testing/src/android/icu/testsharding/MainTestShard.java"
     ];
@@ -1186,17 +1193,17 @@ android-icu4j-tests = java_test {
         "src/main/tests"
         "testing/src"
     ];
+    libs = [
+        "core-icu4j"
+    ];
     static_libs = [
         "junit"
         "junit-params"
     ];
 
     patch_module = "java.base";
-    no_standard_libs = true;
-    libs = [
-        "core-all"
-    ];
-    system_modules = "core-all-system-modules";
+    sdk_version = "none";
+    system_modules = "art-module-intra-core-api-stubs-system-modules";
 };
 
-in { inherit android-icu4j-tests android_icu4j_resources android_icu4j_src_files android_icu4j_src_files_for_docs; }
+in { inherit "i18n.module.intra.core.api.stubs" "i18n.module.platform.api.stubs" "i18n.module.public.api.stubs" _missingName android-icu4j-tests android_icu4j_public_api_files android_icu4j_repackaged_src_files android_icu4j_resources_lib android_icu4j_resources_lib_sdk_core_current core-icu4j core-icu4j-testdex core-repackaged-icu4j i18n-module-intra-core-api-stubs-source i18n-module-platform-api-stubs-source i18n-module-public-api-stubs-gen libcore_icu_bridge_src_files; }

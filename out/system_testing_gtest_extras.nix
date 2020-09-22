@@ -1,4 +1,4 @@
-{ cc_library, cc_test }:
+{ cc_library_static, cc_test }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,7 +15,7 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libgtest_isolated = cc_library {
+libgtest_isolated = cc_library_static {
     name = "libgtest_isolated";
     host_supported = true;
     cflags = [
@@ -33,17 +33,22 @@ libgtest_isolated = cc_library {
         "Test.cpp"
     ];
 
-    #  NOTE: libbase and liblog are re-exported by including them below.
-    #  When Soong supports transitive static dependency includes, these
-    #  libraries can be removed.
+    #  NOTE: libbase is re-exported by including them below.
+    #  When Soong supports transitive static dependency includes, this
+    #  library can be removed.
     whole_static_libs = [
         "libbase"
         "libgtest"
+    ];
+
+    #  Add liblog as a shared library so that gtests can override liblog
+    #  functions without getting duplicate symbols.
+    shared_libs = [
         "liblog"
     ];
 };
 
-libgtest_isolated_main = cc_library {
+libgtest_isolated_main = cc_library_static {
     name = "libgtest_isolated_main";
     host_supported = true;
     cflags = [
@@ -56,6 +61,12 @@ libgtest_isolated_main = cc_library {
 
     whole_static_libs = [
         "libgtest_isolated"
+    ];
+
+    #  Add liblog as a shared library so that gtests can override liblog
+    #  functions without getting duplicate symbols.
+    shared_libs = [
+        "liblog"
     ];
 };
 
@@ -71,8 +82,16 @@ gtest_isolated_tests = cc_test {
         "-Werror"
     ];
 
-    shared_libs = ["libbase"];
+    shared_libs = [
+        "libbase"
+        "liblog"
+    ];
+    static_libs = [
+        "libgmock"
+    ];
     whole_static_libs = ["libgtest_isolated_main"];
+
+    test_suites = ["device-tests"];
 };
 
 in { inherit gtest_isolated_tests libgtest_isolated libgtest_isolated_main; }

@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library_static, filegroup }:
+{ cc_binary, cc_defaults, cc_library_static, filegroup, prebuilt_etc }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -61,13 +61,16 @@ librecovery_defaults = cc_defaults {
     ];
 
     shared_libs = [
-        "android.hardware.health@2.0"
+        "android.hardware.boot@1.0"
+        "android.hardware.boot@1.1"
         "libbase"
         "libbootloader_message"
         "libcrypto"
         "libcutils"
         "libfs_mgr"
+        "liblp"
         "liblog"
+        "libprotobuf-cpp-lite"
         "libziparchive"
     ];
 
@@ -76,11 +79,9 @@ librecovery_defaults = cc_defaults {
         "libinstall"
         "librecovery_fastboot"
         "libminui"
+        "librecovery_utils"
         "libotautil"
-
-        #  external dependencies
-        "libhealthhalutils"
-        "libfstab"
+        "libsnapshot_nobinder"
     ];
 };
 
@@ -93,14 +94,20 @@ librecovery = cc_library_static {
     ];
 
     srcs = [
-        "fsck_unshare_blocks.cpp"
         "recovery.cpp"
     ];
 
     shared_libs = [
-        "libfusesideload"
         "librecovery_ui"
     ];
+};
+
+"init_recovery.rc" = prebuilt_etc {
+    name = "init_recovery.rc";
+    filename = "init.rc";
+    src = "etc/init.rc";
+    sub_dir = "init/hw";
+    recovery = true;
 };
 
 recovery = cc_binary {
@@ -110,6 +117,7 @@ recovery = cc_binary {
     defaults = [
         "libinstall_defaults"
         "librecovery_defaults"
+        "librecovery_utils_defaults"
     ];
 
     srcs = [
@@ -127,11 +135,13 @@ recovery = cc_binary {
 
     required = [
         "e2fsdroid.recovery"
+        "init_recovery.rc"
         "librecovery_ui_ext"
         "minadbd"
         "mke2fs.conf.recovery"
         "mke2fs.recovery"
         "recovery_deps"
+        "ueventd.rc.recovery"
     ];
 };
 
@@ -150,12 +160,10 @@ recovery-persist = cc_binary {
     shared_libs = [
         "libbase"
         "liblog"
-        "libmetricslogger"
     ];
 
     static_libs = [
-        "libotautil"
-        "libfstab"
+        "librecovery_utils"
     ];
 
     init_rc = [
@@ -181,8 +189,7 @@ recovery-refresh = cc_binary {
     ];
 
     static_libs = [
-        "libotautil"
-        "libfstab"
+        "librecovery_utils"
     ];
 
     init_rc = [
@@ -222,4 +229,4 @@ res-testdata = filegroup {
     ];
 };
 
-in { inherit librecovery librecovery_defaults librecovery_fastboot recovery recovery-persist recovery-refresh recovery_defaults res-testdata; }
+in { inherit "init_recovery.rc" librecovery librecovery_defaults librecovery_fastboot recovery recovery-persist recovery-refresh recovery_defaults res-testdata; }

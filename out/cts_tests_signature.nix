@@ -18,6 +18,9 @@ let
 #  Compat.
 signature-hostside = java_library_host {
     name = "signature-hostside";
+    visibility = [
+        "//cts/tests/signature/tests"
+    ];
     static_libs = ["signature-common-javalib"];
 };
 

@@ -21,24 +21,15 @@ vogarexpect = java_library {
     name = "vogarexpect";
     host_supported = true;
     srcs = [
-        "src/vogar/AnnotatedOutcome.java"
-        "src/vogar/Expectation.java"
-        "src/vogar/ExpectationStore.java"
-        "src/vogar/ModeId.java"
-        "src/vogar/Outcome.java"
-        "src/vogar/Result.java"
-        "src/vogar/ResultValue.java"
-        "src/vogar/commands/Command.java"
-        "src/vogar/commands/CommandFailedException.java"
-        "src/vogar/commands/Mkdir.java"
-        "src/vogar/commands/Rm.java"
-        "src/vogar/util/IoUtils.java"
-        "src/vogar/util/Log.java"
-        "src/vogar/util/LogOutput.java"
-        "src/vogar/util/MarkResetConsole.java"
-        "src/vogar/util/Strings.java"
-        "src/vogar/util/Threads.java"
-        "src/vogar/util/TimeUtilities.java"
+        "src/vogar/expect/Expectation.java"
+        "src/vogar/expect/ExpectationStore.java"
+        "src/vogar/expect/ModeId.java"
+        "src/vogar/expect/Outcome.java"
+        "src/vogar/expect/Result.java"
+        "src/vogar/expect/ResultValue.java"
+        "src/vogar/expect/util/Log.java"
+        "src/vogar/expect/util/LogOutput.java"
+        "src/vogar/expect/util/Strings.java"
     ];
 
     sdk_version = "current";
@@ -58,24 +49,15 @@ vogarexpectlib = java_library_host {
 vogarexpect-no-deps = java_library_host {
     name = "vogarexpect-no-deps";
     srcs = [
-        "src/vogar/AnnotatedOutcome.java"
-        "src/vogar/Expectation.java"
-        "src/vogar/ExpectationStore.java"
-        "src/vogar/ModeId.java"
-        "src/vogar/Outcome.java"
-        "src/vogar/Result.java"
-        "src/vogar/ResultValue.java"
-        "src/vogar/commands/Command.java"
-        "src/vogar/commands/CommandFailedException.java"
-        "src/vogar/commands/Mkdir.java"
-        "src/vogar/commands/Rm.java"
-        "src/vogar/util/IoUtils.java"
-        "src/vogar/util/Log.java"
-        "src/vogar/util/LogOutput.java"
-        "src/vogar/util/MarkResetConsole.java"
-        "src/vogar/util/Strings.java"
-        "src/vogar/util/Threads.java"
-        "src/vogar/util/TimeUtilities.java"
+        "src/vogar/expect/Expectation.java"
+        "src/vogar/expect/ExpectationStore.java"
+        "src/vogar/expect/ModeId.java"
+        "src/vogar/expect/Outcome.java"
+        "src/vogar/expect/Result.java"
+        "src/vogar/expect/ResultValue.java"
+        "src/vogar/expect/util/Log.java"
+        "src/vogar/expect/util/LogOutput.java"
+        "src/vogar/expect/util/Strings.java"
     ];
 
     libs = [

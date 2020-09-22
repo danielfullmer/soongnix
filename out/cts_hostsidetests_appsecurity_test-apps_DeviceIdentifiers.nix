@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsAccessDeviceIdentifiers = android_test {
+CtsAccessDeviceIdentifiers = android_test_helper_app {
     name = "CtsAccessDeviceIdentifiers";
     defaults = ["cts_support_defaults"];
     static_libs = [
@@ -28,7 +28,7 @@ CtsAccessDeviceIdentifiers = android_test {
     srcs = ["src/android/appsecurity/cts/deviceids/DeviceIdentifierAppOpTest.java"];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     optimize = {

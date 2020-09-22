@@ -32,7 +32,6 @@ libstagefright_mpeg2support = cc_library_static {
 
     shared_libs = [
         "libcrypto"
-        "libmedia"
         "libhidlmemory"
         "android.hardware.cas.native@1.0"
         "android.hidl.memory@1.0"
@@ -40,12 +39,18 @@ libstagefright_mpeg2support = cc_library_static {
     ];
 
     header_libs = [
+        "libmedia_headers"
+        "libaudioclient_headers"
         "media_ndk_headers"
     ];
+
+    export_include_dirs = ["."];
 
     whole_static_libs = [
         "libstagefright_metadatautils"
     ];
+
+    min_sdk_version = "29";
 };
 
 in { inherit libstagefright_mpeg2support; }

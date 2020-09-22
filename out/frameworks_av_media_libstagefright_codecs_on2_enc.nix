@@ -24,6 +24,7 @@ libstagefright_soft_vpxenc = cc_library_shared {
     };
 
     shared_libs = ["libvpx"];
+    header_libs = ["libbase_headers"];
 };
 
 in { inherit libstagefright_soft_vpxenc; }

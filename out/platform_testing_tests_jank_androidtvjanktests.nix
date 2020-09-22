@@ -23,13 +23,13 @@ AndroidTVJankTests = android_test {
     ];
 
     static_libs = [
-        "ub-janktesthelper"
+        "androidx.test.janktesthelper"
         "ub-uiautomator"
         "timeresult-helper-lib"
         "dpad-util"
     ];
 
-    sdk_version = "21";
+    sdk_version = "23";
 
     test_suites = ["device-tests"];
 };

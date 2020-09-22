@@ -11,20 +11,27 @@ libnbaio_mono_defaults = cc_defaults {
     header_libs = [
         "libaudioclient_headers"
         "libaudio_system_headers"
-        "libmedia_headers"
     ];
     export_header_lib_headers = [
         "libaudioclient_headers"
-        "libmedia_headers"
     ];
 
     shared_libs = [
         "libaudioutils"
+        "libcutils"
         "liblog"
         "libutils"
     ];
+    export_shared_lib_headers = [
+        "libaudioutils"
+    ];
 
     export_include_dirs = ["include_mono"];
+
+    cflags = [
+        "-Werror"
+        "-Wall"
+    ];
 };
 
 #  libnbaio_mono is the part of libnbaio that is available for vendors to use. Vendor modules can't
@@ -55,20 +62,7 @@ libnbaio = cc_library_shared {
     #  ],
     #  static_libs: ["libsndfile"],
 
-    shared_libs = [
-        "libaudioutils"
-        "libbinder"
-        "libcutils"
-        "liblog"
-        "libutils"
-    ];
-
-    cflags = [
-        "-Werror"
-        "-Wall"
-    ];
-
-    include_dirs = ["system/media/audio_utils/include"];
+    header_libs = ["libaudiohal_headers"];
 
     export_include_dirs = ["include"];
 };

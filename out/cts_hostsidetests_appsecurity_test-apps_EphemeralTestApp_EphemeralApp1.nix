@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsEphemeralTestsEphemeralApp1 = android_test {
+CtsEphemeralTestsEphemeralApp1 = android_test_helper_app {
     name = "CtsEphemeralTestsEphemeralApp1";
     defaults = ["cts_support_defaults"];
     libs = [
@@ -29,11 +29,12 @@ CtsEphemeralTestsEphemeralApp1 = android_test {
         "androidx.test.rules"
         "ctsdeviceutillegacy-axt"
         "ctstestrunner-axt"
+        "testng"
     ];
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     srcs = [
@@ -46,6 +47,7 @@ CtsEphemeralTestsEphemeralApp1 = android_test {
         "src/com/android/cts/ephemeralapp1/EphemeralService.java"
         "src/com/android/cts/ephemeralapp1/SearchSuggestionProvider.java"
         "src/com/android/cts/ephemeralapp1/SomeService.java"
+        "src/com/android/cts/ephemeralapp1/StartForResultActivity.java"
         "src/com/android/cts/ephemeralapp1/WebViewTest.java"
         "src/com/android/cts/ephemeralapp1/WebViewTestActivity.java"
     ];

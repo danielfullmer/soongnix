@@ -42,6 +42,13 @@ byte-buddy-prebuilt-jar = java_import {
     sdk_version = "current";
 };
 
+diffutils-prebuilt-jar = java_import {
+    name = "diffutils-prebuilt-jar";
+    jars = ["repository/com/googlecode/java-diff-utils/diffutils/1.3.0/diffutils-1.3.0.jar"];
+    sdk_version = "current";
+    host_supported = true;
+};
+
 gson-prebuilt-jar = java_import {
     name = "gson-prebuilt-jar";
     jars = ["repository/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar"];
@@ -74,7 +81,7 @@ squareup-haha-prebuilt = java_import {
 
 truth-prebuilt-jar = java_import {
     name = "truth-prebuilt-jar";
-    jars = ["repository/com/google/truth/truth/0.28/truth-0.28.jar"];
+    jars = ["repository/com/google/truth/truth/0.42/truth-0.42.jar"];
     sdk_version = "current";
     host_supported = true;
 };
@@ -145,6 +152,11 @@ jna-prebuilt = java_import_host {
     jars = ["repository/net/java/dev/jna/jna/3.4.0/jna-3.4.0.jar"];
 };
 
+compile-testing-prebuilt = java_import_host {
+    name = "compile-testing-prebuilt";
+    jars = ["repository/com/google/testing/compile/compile-testing/0.15/compile-testing-0.15.jar"];
+};
+
 #  Compatibility wrappers. TODO: Remove.
 
 truth-prebuilt-host-jar = java_library_host {
@@ -168,6 +180,7 @@ truth-prebuilt = java_library_static {
     name = "truth-prebuilt";
     static_libs = [
         "truth-prebuilt-jar"
+        "diffutils-prebuilt-jar"
         "guava"
     ];
     host_supported = true;
@@ -189,14 +202,34 @@ protobuf-java-host-prebuilt = java_library_host {
     ];
 };
 
-metalava-tools-common-m2-deps = java_import_host {
+metalava-tools-common-m2-deps = java_import {
     name = "metalava-tools-common-m2-deps";
+    host_supported = true;
     jars = [
         "repository/org/ow2/asm/asm/6.1.1/asm-6.1.1.jar"
         "repository/org/ow2/asm/asm-tree/6.1.1/asm-tree-6.1.1.jar"
         "repository/com/google/guava/guava/23.0/guava-23.0.jar"
         "repository/org/jetbrains/trove4j/trove4j/20160824/trove4j-20160824.jar"
         "repository/javax/xml/bind/jaxb-api/2.2.12-b140109.1041/jaxb-api-2.2.12-b140109.1041.jar"
+    ];
+};
+
+dokka-tools-common-m2-deps = java_import {
+    name = "dokka-tools-common-m2-deps";
+    host_supported = true;
+    jars = [
+        "repository/com/intellij/core-analysis/intellij-core-analysis.jar"
+        "repository/org/jetbrains/kotlin/kotlin-compiler/1.3.20/kotlin-compiler-1.3.20-dev-564.jar"
+        "repository/com/squareup/okhttp4/okhttp/4.0.0/okhttp-4.0.0-RC1.jar"
+        "repository/com/sampullara/cli/1.1.2/cli-parser-1.1.2.jar"
+        "repository/ru/yole/jkid/jkid-8fc7f12e1a.jar"
+        "repository/com/google/inject/guice/3.0/guice-3.0.jar"
+        "repository/org/jetbrains/kotlin/kotlin-ide-common/1.3.20/kotlin-ide-common.jar"
+        "repository/org/jetbrains/markdown/0.1.25/markdown-0.1.25.jar"
+        "repository/org/jsoup/jsoup/1.8.3/jsoup-1.8.3.jar"
+        "repository/kotlinx/html/jvm/0.6.8/kotlinx-html-jvm-0.6.8-google.jar"
+        "repository/org/jetbrains/kotlin/kotlin-script-runtime/1.3.20/kotlin-script-runtime-1.3.20-dev-564.jar"
+        "repository/org/jetbrains/kotlin/kotlin-reflect/1.3.20/kotlin-reflect-1.3.20-dev-564.jar"
     ];
 };
 
@@ -243,6 +276,83 @@ javawriter = java_import {
     generates_api = true;
 };
 
+kotlin-metadata = java_import {
+    name = "kotlin-metadata";
+    jars = ["repository/me/eugeniomarletti/kotlin-metadata/1.2.1/kotlin-metadata-1.2.1.jar"];
+    host_supported = true;
+};
+
+kotlinx-metadata-jvm = java_import {
+    name = "kotlinx-metadata-jvm";
+    jars = ["repository/org/jetbrains/kotlinx/kotlinx-metadata-jvm/0.1.0/kotlinx-metadata-jvm-0.1.0.jar"];
+    host_supported = true;
+};
+
+auto-common = java_import {
+    name = "auto-common";
+    jars = ["repository/com/google/auto/auto-common/0.10/auto-common-0.10.jar"];
+    host_supported = true;
+};
+
+antlr4 = java_import {
+    name = "antlr4";
+    jars = ["repository/org/antlr/antlr4/4.7.2/antlr4-4.7.2.jar"];
+    host_supported = true;
+};
+
+auto-value-annotations = java_import {
+    name = "auto-value-annotations";
+    jars = ["repository/com/google/auto/value/auto-value-annotations/1.6.2/auto-value-annotations-1.6.2.jar"];
+    host_supported = true;
+};
+
+commons-codec = java_import {
+    name = "commons-codec";
+    jars = ["repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar"];
+    host_supported = true;
+};
+
+xerial-sqlite-jdbc = java_import {
+    name = "xerial-sqlite-jdbc";
+    jars = ["repository/org/xerial/sqlite-jdbc/3.28.0/sqlite-jdbc-3.28.0.jar"];
+    host_supported = true;
+};
+
+jetbrains-annotations = java_import {
+    name = "jetbrains-annotations";
+    jars = ["repository/org/jetbrains/annotations/13.0/annotations-13.0.jar"];
+    host_supported = true;
+};
+
+kotlinx-coroutines-core-nodeps = java_import {
+    name = "kotlinx-coroutines-core-nodeps";
+    jars = ["repository/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.3.0/kotlinx-coroutines-core-1.3.0.jar"];
+};
+
+kotlinx-coroutines-core = java_library_static {
+    name = "kotlinx-coroutines-core";
+    static_libs = [
+        "kotlinx-coroutines-core-nodeps"
+        "kotlin-stdlib"
+    ];
+    sdk_version = "current";
+};
+
+kotlinx-coroutines-android-nodeps = java_import {
+    name = "kotlinx-coroutines-android-nodeps";
+    jars = ["repository/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.3.0/kotlinx-coroutines-android-1.3.0.jar"];
+};
+
+kotlinx-coroutines-android = java_library_static {
+    name = "kotlinx-coroutines-android";
+    static_libs = [
+        "kotlin-stdlib"
+        "kotlinx-coroutines-core"
+        "kotlinx-coroutines-android-nodeps"
+    ];
+    sdk_version = "current";
+};
+
 car-androidx-room-compiler-tools-common-m2-deps = java_import_host {
     name = "car-androidx-room-compiler-tools-common-m2-deps";
     jars = [
@@ -254,7 +364,6 @@ car-androidx-room-compiler-tools-common-m2-deps = java_import_host {
         "repository/org/jetbrains/annotations/13.0/annotations-13.0.jar"
         "repository/me/eugeniomarletti/kotlin-metadata/1.2.1/kotlin-metadata-1.2.1.jar"
         "repository/org/xerial/sqlite-jdbc/3.20.1/sqlite-jdbc-3.20.1.jar"
-        "repository/com/google/guava/guava/21.0/guava-21.0.jar"
     ];
     #  Exclude signature files that cause the combined jar to be rejected.
     exclude_files = [
@@ -263,4 +372,16 @@ car-androidx-room-compiler-tools-common-m2-deps = java_import_host {
     ];
 };
 
-in { inherit "dagger2-2.19" "dagger2-compiler-2.19" "dagger2-compiler-2.19-import" accessibility-test-framework asm-analysis-prebuilt-host-jar asm-commons-prebuilt-host-jar asm-commons-prebuilt-jar asm-prebuilt-host-jar asm-prebuilt-jar asm-tree-prebuilt-host-jar asm-tree-prebuilt-jar asm-util-prebuilt-host-jar assertj-core-prebuilt-jar byte-buddy-prebuilt-jar car-androidx-room-compiler-tools-common-m2-deps gson-prebuilt-jar guava-listenablefuture-prebuilt-jar guava-prebuilt-host-jar javapoet-prebuilt-jar javawriter jna-prebuilt metalava-tools-common-m2-deps mockito-robolectric-prebuilt mockito2-prebuilt-jar objenesis-prebuilt-jar protobuf-java-host-prebuilt protobuf-java-prebuilt-jar protobuf-java-util-prebuilt-jar squareup-haha-prebuilt trove-prebuilt truth-host-prebuilt truth-prebuilt truth-prebuilt-host-jar truth-prebuilt-jar; }
+build = ["robolectric.bp"];
+
+protobuf-lite = java_import_host {
+    name = "protobuf-lite";
+    jars = ["repository/com/google/protobuf/protobuf-lite/3.0.1/protobuf-lite-3.0.1.jar"];
+};
+
+"jsoup-1.6.3" = java_import_host {
+    name = "jsoup-1.6.3";
+    jars = ["repository/org/jsoup/jsoup/1.6.3/jsoup-1.6.3.jar"];
+};
+
+in { inherit "dagger2-2.19" "dagger2-compiler-2.19" "dagger2-compiler-2.19-import" "jsoup-1.6.3" accessibility-test-framework antlr4 asm-analysis-prebuilt-host-jar asm-commons-prebuilt-host-jar asm-commons-prebuilt-jar asm-prebuilt-host-jar asm-prebuilt-jar asm-tree-prebuilt-host-jar asm-tree-prebuilt-jar asm-util-prebuilt-host-jar assertj-core-prebuilt-jar auto-common auto-value-annotations byte-buddy-prebuilt-jar car-androidx-room-compiler-tools-common-m2-deps commons-codec compile-testing-prebuilt diffutils-prebuilt-jar dokka-tools-common-m2-deps gson-prebuilt-jar guava-listenablefuture-prebuilt-jar guava-prebuilt-host-jar javapoet-prebuilt-jar javawriter jetbrains-annotations jna-prebuilt kotlin-metadata kotlinx-coroutines-android kotlinx-coroutines-android-nodeps kotlinx-coroutines-core kotlinx-coroutines-core-nodeps kotlinx-metadata-jvm metalava-tools-common-m2-deps mockito-robolectric-prebuilt mockito2-prebuilt-jar objenesis-prebuilt-jar protobuf-java-host-prebuilt protobuf-java-prebuilt-jar protobuf-java-util-prebuilt-jar protobuf-lite squareup-haha-prebuilt trove-prebuilt truth-host-prebuilt truth-prebuilt truth-prebuilt-host-jar truth-prebuilt-jar xerial-sqlite-jdbc; }

@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_static, cc_test }:
+{ aidl_interface, cc_defaults, cc_library_static, cc_test }:
 let
 
 /*
@@ -47,10 +47,10 @@ test_libbinder_ndk_test_defaults = cc_defaults {
         "libandroid_runtime_lazy"
         "libbase"
         "libbinder"
+        "libbinder_ndk"
         "libutils"
     ];
     static_libs = [
-        "libbinder_ndk"
         "test_libbinder_ndk_library"
     ];
 };
@@ -58,17 +58,57 @@ test_libbinder_ndk_test_defaults = cc_defaults {
 #  This test is a unit test of the low-level API that is presented here,
 #  specifically the parts which are outside of the NDK. Actual users should
 #  also instead use AIDL to generate these stubs. See android.binder.cts.
-libbinder_ndk_test_client = cc_test {
-    name = "libbinder_ndk_test_client";
+libbinder_ndk_unit_test = cc_test {
+    name = "libbinder_ndk_unit_test";
     defaults = ["test_libbinder_ndk_test_defaults"];
-    srcs = ["main_client.cpp"];
+    srcs = ["libbinder_ndk_unit_test.cpp"];
+    static_libs = [
+        "IBinderNdkUnitTest-cpp"
+        "IBinderNdkUnitTest-ndk_platform"
+    ];
+    test_suites = ["general-tests"];
+    require_root = true;
+
+    #  force since binderVendorDoubleLoadTest has its own
+    auto_gen_config = true;
 };
 
-libbinder_ndk_test_server = cc_test {
-    name = "libbinder_ndk_test_server";
-    defaults = ["test_libbinder_ndk_test_defaults"];
-    srcs = ["main_server.cpp"];
-    gtest = false;
+binderVendorDoubleLoadTest = cc_test {
+    name = "binderVendorDoubleLoadTest";
+    vendor = true;
+    srcs = [
+        "binderVendorDoubleLoadTest.cpp"
+    ];
+    static_libs = [
+        "IBinderVendorDoubleLoadTest-cpp"
+        "IBinderVendorDoubleLoadTest-ndk_platform"
+        "libbinder_aidl_test_stub-ndk_platform"
+    ];
+    shared_libs = [
+        "libbase"
+        "libbinder"
+        "libbinder_ndk"
+        "libutils"
+    ];
+    test_suites = ["general-tests"];
 };
 
-in { inherit libbinder_ndk_test_client libbinder_ndk_test_server test_libbinder_ndk_defaults test_libbinder_ndk_library test_libbinder_ndk_test_defaults; }
+IBinderVendorDoubleLoadTest = aidl_interface {
+    name = "IBinderVendorDoubleLoadTest";
+    unstable = true;
+    vendor = true;
+    srcs = [
+        "IBinderVendorDoubleLoadTest.aidl"
+    ];
+};
+
+IBinderNdkUnitTest = aidl_interface {
+    name = "IBinderNdkUnitTest";
+    unstable = true;
+    srcs = [
+        "IBinderNdkUnitTest.aidl"
+        "IEmpty.aidl"
+    ];
+};
+
+in { inherit IBinderNdkUnitTest IBinderVendorDoubleLoadTest binderVendorDoubleLoadTest libbinder_ndk_unit_test test_libbinder_ndk_defaults test_libbinder_ndk_library test_libbinder_ndk_test_defaults; }

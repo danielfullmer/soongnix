@@ -1,5 +1,13 @@
-{ android_app }:
+{ android_app, genrule }:
 let
+
+statslog-Nfc-java-gen = genrule {
+    name = "statslog-Nfc-java-gen";
+    tools = ["stats-log-api-gen"];
+    cmd = "$(location stats-log-api-gen) --java $(out) --module nfc --javaPackage com.android.nfc" +
+        " --javaClass NfcStatsLog";
+    out = ["com/android/nfc/NfcStatsLog.java"];
+};
 
 #  NCI Configuration
 NfcNci = android_app {
@@ -14,6 +22,7 @@ NfcNci = android_app {
         "src/com/android/nfc/LlcpPacket.java"
         "src/com/android/nfc/NfcApplication.java"
         "src/com/android/nfc/NfcBackupAgent.java"
+        "src/com/android/nfc/NfcBlockedNotification.java"
         "src/com/android/nfc/NfcBootCompletedReceiver.java"
         "src/com/android/nfc/NfcDiscoveryParameters.java"
         "src/com/android/nfc/NfcDispatcher.java"
@@ -73,14 +82,15 @@ NfcNci = android_app {
         "nci/src/com/android/nfc/dhimpl/NativeNfcManager.java"
         "nci/src/com/android/nfc/dhimpl/NativeNfcTag.java"
         "nci/src/com/android/nfc/dhimpl/NativeP2pDevice.java"
+        ":statslog-Nfc-java-gen"
     ];
     platform_apis = true;
     certificate = "platform";
     jni_libs = ["libnfc_nci_jni"];
-    static_libs = ["androidx.legacy_legacy-support-v4"];
+    static_libs = ["androidx.appcompat_appcompat"];
     optimize = {
         enabled = false;
     };
 };
 
-in { inherit NfcNci; }
+in { inherit NfcNci statslog-Nfc-java-gen; }

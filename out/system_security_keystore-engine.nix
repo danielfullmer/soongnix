@@ -66,7 +66,6 @@ libkeystore-engine-wifi-hidl = cc_library_shared {
         "libcrypto"
         "liblog"
         "libhidlbase"
-        "libhidltransport"
         "libcutils"
         "libutils"
     ];

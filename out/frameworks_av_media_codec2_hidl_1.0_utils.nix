@@ -9,7 +9,7 @@ let
     defaults = ["hidl_defaults"];
 
     srcs = [
-        "ClientBlockHelper.cpp"
+        "OutputBufferQueue.cpp"
         "types.cpp"
     ];
 
@@ -50,6 +50,7 @@ let
 "libcodec2_hidl@1.0" = cc_library {
     name = "libcodec2_hidl@1.0";
     vendor_available = true;
+    min_sdk_version = "29";
 
     defaults = ["hidl_defaults"];
 
@@ -65,6 +66,7 @@ let
     ];
 
     header_libs = [
+        "libbinder_headers"
         "libsystem_headers"
         "libcodec2_internal" #  private
     ];
@@ -82,14 +84,23 @@ let
         "libcodec2_vndk"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libstagefright_bufferpool@2.0.1"
-        "libstagefright_bufferqueue_helper"
+        "libstagefright_bufferqueue_helper_novndk"
         "libui"
         "libutils"
     ];
+
+    target = {
+        vendor = {
+            exclude_shared_libs = [
+                "libstagefright_bufferqueue_helper_novndk"
+            ];
+            shared_libs = [
+                "libstagefright_bufferqueue_helper"
+            ];
+        };
+    };
 
     export_include_dirs = [
         "include"
@@ -106,8 +117,8 @@ let
 };
 
 #  public dependency for Codec 2.0 HAL service implementations
-libcodec2-hidl-defaults = cc_defaults {
-    name = "libcodec2-hidl-defaults";
+"libcodec2-hidl-defaults@1.0" = cc_defaults {
+    name = "libcodec2-hidl-defaults@1.0";
     defaults = ["libcodec2-impl-defaults"];
 
     shared_libs = [
@@ -117,8 +128,8 @@ libcodec2-hidl-defaults = cc_defaults {
 };
 
 #  public dependency for Codec 2.0 HAL client
-libcodec2-hidl-client-defaults = cc_defaults {
-    name = "libcodec2-hidl-client-defaults";
+"libcodec2-hidl-client-defaults@1.0" = cc_defaults {
+    name = "libcodec2-hidl-client-defaults@1.0";
     defaults = ["libcodec2-impl-defaults"];
 
     shared_libs = [
@@ -127,4 +138,4 @@ libcodec2-hidl-client-defaults = cc_defaults {
     ];
 };
 
-in { inherit "libcodec2_hidl@1.0" "libcodec2_hidl_client@1.0" libcodec2-hidl-client-defaults libcodec2-hidl-defaults; }
+in { inherit "libcodec2-hidl-client-defaults@1.0" "libcodec2-hidl-defaults@1.0" "libcodec2_hidl@1.0" "libcodec2_hidl_client@1.0"; }

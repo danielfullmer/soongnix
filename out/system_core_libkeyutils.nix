@@ -1,4 +1,4 @@
-{ cc_binary, cc_library, cc_test }:
+{ cc_library, cc_test }:
 let
 
 libkeyutils = cc_library {
@@ -20,23 +20,4 @@ libkeyutils-tests = cc_test {
     test_suites = ["device-tests"];
 };
 
-mini-keyctl = cc_binary {
-    name = "mini-keyctl";
-    srcs = [
-        "mini_keyctl.cpp"
-        "mini_keyctl_utils.cpp"
-    ];
-    shared_libs = [
-        "libbase"
-        "libkeyutils"
-        "liblog"
-    ];
-    cflags = [
-        "-Werror"
-        "-Wall"
-        "-Wextra"
-        "-fexceptions"
-    ];
-};
-
-in { inherit libkeyutils libkeyutils-tests mini-keyctl; }
+in { inherit libkeyutils libkeyutils-tests; }

@@ -17,6 +17,7 @@ let
 
 "com.android.media-defaults" = apex_defaults {
     name = "com.android.media-defaults";
+    updatable = true;
     java_libs = ["updatable-media"];
     multilib = {
         first = {
@@ -38,12 +39,23 @@ let
     };
     prebuilts = [
         "mediaextractor.policy"
+        "code_coverage.policy"
+        "crash_dump.policy"
     ];
     key = "com.android.media.key";
     certificate = ":com.android.media.certificate";
 
     #  Use a custom AndroidManifest.xml used for API targeting.
     androidManifest = ":com.android.media-androidManifest";
+
+    #  IMPORTANT: For the APEX to be installed on Android 10 (API 29),
+    #  min_sdk_version should be 29. This enables the build system to make
+    #  sure the package compatible to Android 10 in two ways:
+    #  - build the APEX package compatible to Android 10
+    #    so that the package can be installed.
+    #  - build artifacts (lib/javalib/bin) against Android 10 SDK
+    #    so that the artifacts can run.
+    min_sdk_version = "29";
 };
 
 "com.android.media" = apex {
@@ -64,6 +76,7 @@ let
 
 "com.android.media.swcodec-defaults" = apex_defaults {
     name = "com.android.media.swcodec-defaults";
+    updatable = true;
     binaries = [
         "mediaswcodec"
     ];
@@ -71,6 +84,8 @@ let
         "com.android.media.swcodec-mediaswcodec.rc"
         "com.android.media.swcodec-ld.config.txt"
         "mediaswcodec.policy"
+        "code_coverage.policy"
+        "crash_dump.policy"
         "mediaswcodec.xml"
     ];
     use_vendor = true;
@@ -79,6 +94,15 @@ let
 
     #  Use a custom AndroidManifest.xml used for API targeting.
     androidManifest = ":com.android.media.swcodec-androidManifest";
+
+    #  IMPORTANT: For the APEX to be installed on Android 10 (API 29),
+    #  min_sdk_version should be 29. This enables the build system to make
+    #  sure the package compatible to Android 10 in two ways:
+    #  - build the APEX package compatible to Android 10
+    #    so that the package can be installed.
+    #  - build artifacts (lib/javalib/bin) against Android 10 SDK
+    #    so that the artifacts can run.
+    min_sdk_version = "29";
 };
 
 "com.android.media.swcodec-mediaswcodec.rc" = prebuilt_etc {

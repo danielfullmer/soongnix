@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_host_static, cc_library_shared, cc_library_static, cc_test, filegroup, generate_mojom_headers, generate_mojom_pickles, generate_mojom_srcjar, generate_mojom_srcs, genrule, gensrcs, java_library, python_binary_host, python_defaults }:
+{ cc_defaults, cc_library, cc_library_host_static, cc_library_shared, cc_library_static, cc_test, filegroup, generate_mojom_downgraded_files, generate_mojom_headers, generate_mojom_pickles, generate_mojom_srcjar, generate_mojom_srcs, genrule, gensrcs, java_library, python_binary_host, python_defaults }:
 let
 
 #  Copyright (C) 2015 The Android Open Source Project
@@ -226,6 +226,7 @@ libchrome-include-sources = filegroup {
         "base/metrics/dummy_histogram.h"
         "base/metrics/field_trial.h"
         "base/metrics/field_trial_param_associator.h"
+        "base/metrics/field_trial_params.h"
         "base/metrics/histogram.h"
         "base/metrics/histogram_base.h"
         "base/metrics/histogram_delta_serialization.h"
@@ -341,12 +342,21 @@ libchrome-include-sources = filegroup {
         "base/task/sequence_manager/test/test_task_queue.h"
         "base/task/sequence_manager/test/test_task_time_observer.h"
         "base/task_scheduler/can_schedule_sequence_observer.h"
+        "base/task_scheduler/delayed_task_manager.h"
         "base/task_scheduler/environment_config.h"
         "base/task_scheduler/lazy_task_runner.h"
         "base/task_scheduler/post_task.h"
+        "base/task_scheduler/priority_queue.h"
         "base/task_scheduler/scheduler_lock.h"
         "base/task_scheduler/scheduler_lock_impl.h"
+        "base/task_scheduler/scheduler_single_thread_task_runner_manager.h"
+        "base/task_scheduler/scheduler_worker.h"
         "base/task_scheduler/scheduler_worker_observer.h"
+        "base/task_scheduler/scheduler_worker_params.h"
+        "base/task_scheduler/scheduler_worker_pool.h"
+        "base/task_scheduler/scheduler_worker_pool_impl.h"
+        "base/task_scheduler/scheduler_worker_pool_params.h"
+        "base/task_scheduler/scheduler_worker_stack.h"
         "base/task_scheduler/scoped_set_task_priority_for_current_thread.h"
         "base/task_scheduler/sequence.h"
         "base/task_scheduler/sequence_sort_key.h"
@@ -354,6 +364,9 @@ libchrome-include-sources = filegroup {
         "base/task_scheduler/single_thread_task_runner_thread_mode.h"
         "base/task_scheduler/task.h"
         "base/task_scheduler/task_scheduler.h"
+        "base/task_scheduler/task_scheduler_impl.h"
+        "base/task_scheduler/task_tracker.h"
+        "base/task_scheduler/task_tracker_posix.h"
         "base/task_scheduler/task_traits.h"
         "base/task_scheduler/task_traits_details.h"
         "base/task_scheduler/test_utils.h"
@@ -361,7 +374,6 @@ libchrome-include-sources = filegroup {
         "base/test/bind_test_util.h"
         "base/test/copy_only_int.h"
         "base/test/fontconfig_util_linux.h"
-        "base/test/fuzzed_data_provider.h"
         "base/test/gtest_util.h"
         "base/test/mock_entropy_provider.h"
         "base/test/move_only_int.h"
@@ -424,6 +436,14 @@ libchrome-include-sources = filegroup {
         "base/trace_event/common/trace_event_common.h"
         "build/build_config.h"
         "build/buildflag.h"
+        "components/json_schema/json_schema_constants.h"
+        "components/json_schema/json_schema_validator.h"
+        "components/policy/policy_export.h"
+        "components/policy/core/common/policy_load_status.h"
+        "components/policy/core/common/policy_types.h"
+        "components/policy/core/common/registry_dict.h"
+        "components/policy/core/common/schema.h"
+        "components/policy/core/common/schema_internal.h"
         "components/timers/alarm_timer_chromeos.h"
         "device/bluetooth/bluetooth_advertisement.h"
         "device/bluetooth/bluetooth_common.h"
@@ -438,6 +458,7 @@ libchrome-include-sources = filegroup {
         "third_party/ashmem/ashmem.h"
         "third_party/modp_b64/modp_b64.h"
         "third_party/protobuf/src/google/protobuf/message_lite.h"
+        "third_party/re2/src/re2/re2.h"
         "ui/gfx/gfx_export.h"
         "ui/gfx/geometry/insets.h"
         "ui/gfx/geometry/insets_f.h"
@@ -627,11 +648,6 @@ libchrome-test-defaults = cc_defaults {
     cflags = [
         "-Wno-unused-function"
         "-Wno-unused-variable"
-    ];
-
-    clang_cflags = [
-        #  Temporarily suppress the warnings http://b/38232827
-        "-Wno-error=unused-lambda-capture"
     ];
 };
 
@@ -1650,6 +1666,7 @@ libmojo_mojo_sources = filegroup {
         "base/timer/hi_res_timer_manager_unittest.cc"
         "base/timer/mock_timer_unittest.cc"
         "base/timer/timer_unittest.cc"
+        "components/policy/core/common/registry_dict_unittest.cc"
         "crypto/hmac_unittest.cc"
         "crypto/nss_key_util_unittest.cc"
         "crypto/nss_util_unittest.cc"
@@ -2033,6 +2050,7 @@ mojom_bindings_generator = python_binary_host {
         "mojo/public/tools/bindings/generate_type_mappings.py"
         "mojo/public/tools/bindings/mojom_bindings_generator.py"
         "mojo/public/tools/bindings/mojom_bindings_generator_unittest.py"
+        "mojo/public/tools/bindings/mojom_types_downgrader.py"
         "mojo/public/tools/bindings/generators/__init__.py"
         "mojo/public/tools/bindings/generators/mojom_cpp_generator.py"
         "mojo/public/tools/bindings/generators/mojom_java_generator.py"
@@ -2234,14 +2252,28 @@ libmojo_common_custom_types__type_mappings = genrule {
     out = ["common_custom_types__type_mappings"];
 };
 
+mojom_types_downgrader = python_binary_host {
+    name = "mojom_types_downgrader";
+    main = "mojo/public/tools/bindings/mojom_types_downgrader.py";
+    srcs = [
+        "mojo/public/tools/bindings/mojom_types_downgrader.py"
+    ];
+    defaults = ["libmojo_scripts"];
+};
+
+libmojo_mojom_downgraded_files = generate_mojom_downgraded_files {
+    name = "libmojo_mojom_downgraded_files";
+    srcs = [":libmojo_mojom_files"];
+};
+
 libmojo_mojom_pickles = generate_mojom_pickles {
     name = "libmojo_mojom_pickles";
-    srcs = [":libmojo_mojom_files"];
+    srcs = [":libmojo_mojom_downgraded_files"];
 };
 
 libmojo_mojom_headers = generate_mojom_headers {
     name = "libmojo_mojom_headers";
-    srcs = [":libmojo_mojom_files"];
+    srcs = [":libmojo_mojom_downgraded_files"];
     pickles = [":libmojo_mojom_pickles"];
     templates = ":libmojo_mojom_templates";
     flags = "--disallow_native_types";
@@ -2250,7 +2282,7 @@ libmojo_mojom_headers = generate_mojom_headers {
 
 libmojo_mojom_srcs = generate_mojom_srcs {
     name = "libmojo_mojom_srcs";
-    srcs = [":libmojo_mojom_files"];
+    srcs = [":libmojo_mojom_downgraded_files"];
     pickles = [":libmojo_mojom_pickles"];
     templates = ":libmojo_mojom_templates";
     flags = "--disallow_native_types";
@@ -2387,7 +2419,7 @@ libmojo = cc_library_shared {
 
 libmojo_mojom_java_srcs = generate_mojom_srcjar {
     name = "libmojo_mojom_java_srcs";
-    srcs = [":libmojo_mojom_files"];
+    srcs = [":libmojo_mojom_downgraded_files"];
     pickles = [":libmojo_mojom_pickles"];
     srcjar = "libmojo_mojom.srcjar";
     templates = ":libmojo_mojom_templates";
@@ -2482,4 +2514,4 @@ libmojo_mojom_java_srcs = generate_mojom_srcjar {
     ];
 };
 
-in { inherit "android.mojo" jni_generator jni_registration_generator libchrome libchrome-crypto libchrome-crypto-include libchrome-defaults libchrome-include libchrome-include-sources libchrome-test-defaults libchrome_test libchrome_test_helpers libchrome_test_helpers-host libmojo libmojo_common_custom_types__type_mappings libmojo_jni_headers libmojo_jni_registration_headers libmojo_mojo_sources libmojo_mojom_files libmojo_mojom_headers libmojo_mojom_java_srcs libmojo_mojom_pickles libmojo_mojom_srcs libmojo_mojom_templates libmojo_scripts mojom_bindings_generator mojom_generate_type_mappings; }
+in { inherit "android.mojo" jni_generator jni_registration_generator libchrome libchrome-crypto libchrome-crypto-include libchrome-defaults libchrome-include libchrome-include-sources libchrome-test-defaults libchrome_test libchrome_test_helpers libchrome_test_helpers-host libmojo libmojo_common_custom_types__type_mappings libmojo_jni_headers libmojo_jni_registration_headers libmojo_mojo_sources libmojo_mojom_downgraded_files libmojo_mojom_files libmojo_mojom_headers libmojo_mojom_java_srcs libmojo_mojom_pickles libmojo_mojom_srcs libmojo_mojom_templates libmojo_scripts mojom_bindings_generator mojom_generate_type_mappings mojom_types_downgrader; }

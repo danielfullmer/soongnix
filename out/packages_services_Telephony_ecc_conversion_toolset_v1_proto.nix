@@ -25,7 +25,7 @@ ecc-protos-lite = java_library_static {
         ];
     };
     srcs = ["protobuf_ecc_data.proto"];
-    no_framework_libs = true;
+    sdk_version = "system_current";
     jarjar_rules = "jarjar-rules.txt";
     java_version = "1.8";
 };

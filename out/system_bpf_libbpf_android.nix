@@ -50,13 +50,13 @@ libbpf_android = cc_library {
         "libutils"
         "libprocessgroup"
         "liblog"
-        "libnetdutils"
         "libbpf"
     ];
     header_libs = [
         "libbpf_android_headers"
     ];
     export_header_lib_headers = ["libbpf_android_headers"];
+    export_shared_lib_headers = ["libbpf"];
     local_include_dirs = ["include"];
 
     defaults = ["bpf_defaults"];
@@ -83,9 +83,10 @@ libbpf_android_test = cc_test {
         "libbpf_android"
         "libbase"
         "liblog"
-        "libnetdutils"
         "libutils"
     ];
+    require_root = true;
+    test_suites = ["general-tests"];
 };
 
 libbpf_load_test = cc_test {
@@ -105,13 +106,13 @@ libbpf_load_test = cc_test {
         "libbpf"
         "libbase"
         "liblog"
-        "libnetdutils"
         "libutils"
     ];
 
     required = [
         "bpf_load_tp_prog.o"
     ];
+    require_root = true;
 };
 
 in { inherit libbpf_android libbpf_android_headers libbpf_android_test libbpf_load_test; }

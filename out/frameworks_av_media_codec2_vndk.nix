@@ -10,6 +10,8 @@ libcodec2_internal = cc_library_headers {
 
     #  TODO: Remove this when this module is moved back to frameworks/av.
     vendor_available = true;
+
+    min_sdk_version = "29";
 };
 
 #  !!!DO NOT DEPEND ON THIS SHARED LIBRARY DIRECTLY!!!
@@ -17,8 +19,12 @@ libcodec2_internal = cc_library_headers {
 libcodec2_vndk = cc_library_shared {
     name = "libcodec2_vndk";
     vendor_available = true;
+    min_sdk_version = "29";
+    #  TODO: b/147147883
+    double_loadable = true;
 
     srcs = [
+        "C2AllocatorBlob.cpp"
         "C2AllocatorIon.cpp"
         "C2AllocatorGralloc.cpp"
         "C2Buffer.cpp"
@@ -52,14 +58,10 @@ libcodec2_vndk = cc_library_shared {
     ];
 
     shared_libs = [
-        "android.hardware.graphics.allocator@2.0"
-        "android.hardware.graphics.allocator@3.0"
         "android.hardware.graphics.bufferqueue@2.0"
-        "android.hardware.graphics.mapper@2.0"
-        "android.hardware.graphics.mapper@3.0"
+        "android.hardware.graphics.common@1.2"
         "android.hardware.media.bufferpool@2.0"
         "libbase"
-        "libbinder"
         "libcutils"
         "libdl"
         "libhardware"
@@ -91,6 +93,8 @@ libcodec2-impl-defaults = cc_defaults {
         "libcodec2_vndk"
         "libutils"
     ];
+
+    min_sdk_version = "29";
 };
 
 #  public dependency for implementing Codec 2 framework utilities
@@ -98,6 +102,10 @@ libcodec2-impl-defaults = cc_defaults {
 libcodec2-internal-defaults = cc_defaults {
     name = "libcodec2-internal-defaults";
     defaults = ["libcodec2-impl-defaults"];
+
+    header_libs = [
+        "libcodec2_internal"
+    ];
 
     shared_libs = [
         "libcutils" #  for properties

@@ -24,7 +24,10 @@ VtsHalIrV1_0TargetTest = cc_test {
     static_libs = [
         "android.hardware.ir@1.0"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalIrV1_0TargetTest; }

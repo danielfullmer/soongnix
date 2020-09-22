@@ -23,7 +23,10 @@ VtsHalTetheroffloadControlV1_0TargetTest = cc_test {
         "android.hardware.tetheroffload.config@1.0"
         "android.hardware.tetheroffload.control@1.0"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalTetheroffloadControlV1_0TargetTest; }

@@ -67,6 +67,7 @@ libgtest = cc_library_static {
     ];
     host_supported = true;
     vendor_available = true;
+    native_bridge_supported = true;
     srcs = ["src/gtest-all.cc"];
     rtti = true;
 };
@@ -79,6 +80,7 @@ libgtest_main = cc_library_static {
     ];
     host_supported = true;
     vendor_available = true;
+    native_bridge_supported = true;
     srcs = ["src/gtest_main.cc"];
 };
 
@@ -95,16 +97,22 @@ libgtest_main_host = cc_library_host_static {
     defaults = ["libgtest_host_defaults"];
 };
 
-libgtest_prod = cc_library {
+libgtest_prod = cc_library { #  TODO: make this a cc_library_headers module
     name = "libgtest_prod";
     defaults = [
         "libgtest_defaults"
         "libgtest_host_defaults"
     ];
     host_supported = true;
+    native_bridge_supported = true;
     recovery_available = true;
     vendor_available = true;
     export_include_dirs = ["include"];
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+    min_sdk_version = "apex_inherit";
 };
 
 #  Tests are in the Android.mk. Run with external/googletest/run_tests.py.

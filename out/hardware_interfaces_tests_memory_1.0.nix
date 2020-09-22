@@ -14,7 +14,7 @@ let
         "android.hidl.memory.block@1.0"
         "android.hidl.memory.token@1.0"
     ];
-    gen_java = false;
+    gen_java = true;
 };
 
 in { inherit "android.hardware.tests.memory@1.0"; }

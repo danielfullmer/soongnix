@@ -1,4 +1,4 @@
-{ android_test, cc_binary_host, cc_defaults, cc_library, cc_library_host_shared, cc_library_shared, cc_library_static, filegroup, java_defaults, java_library, java_library_host, java_library_static, java_test, python_library }:
+{ android_test, cc_binary_host, cc_defaults, cc_library, cc_library_host_static, cc_library_static, cc_test, filegroup, java_defaults, java_library, java_library_host, java_library_static, java_test, python_library }:
 let
 
 #  Copyright (C) 2009 The Android Open Source Project
@@ -17,14 +17,6 @@ let
 #
 #
 
-IGNORED_WARNINGS = [
-    "-Wno-sign-compare"
-    "-Wno-unused-parameter"
-    "-Wno-sign-promo"
-    "-Wno-error=return-type"
-    "-Wno-error=enum-compare-switch"
-];
-
 protobuf-cflags-defaults = cc_defaults {
     name = "protobuf-cflags-defaults";
     clang_cflags = [
@@ -33,22 +25,16 @@ protobuf-cflags-defaults = cc_defaults {
     ];
     cflags = [
         "-Wall"
-        "-Wno-error=format"
-        "-Wno-error=format-extra-args"
-        "-Wno-error=ignored-qualifiers"
-        "-Wno-error=sign-promo"
+        "-Werror"
         "-Wno-unused-function"
+        "-Wno-sign-compare"
+        "-Wno-unused-parameter"
+        "-Wno-sign-promo"
     ];
+
     target = {
         windows = {
-            cflags = ["-Wno-error"];
-        };
-        #  cannot suppress gcc warning on redefined macros
-        not_windows = {
-            cflags = ["-Werror"];
-        };
-        android = {
-            cflags = ["-Werror"];
+            cflags = ["-Wno-macro-redefined"];
         };
     };
 };
@@ -57,12 +43,25 @@ libprotobuf-cpp-lite-defaults = cc_defaults {
     name = "libprotobuf-cpp-lite-defaults";
     defaults = ["protobuf-cflags-defaults"];
     srcs = [
-        "src/google/protobuf/stubs/atomicops_internals_x86_gcc.cc"
-        "src/google/protobuf/stubs/atomicops_internals_x86_msvc.cc"
+        "src/google/protobuf/any_lite.cc"
+        "src/google/protobuf/arena.cc"
+        "src/google/protobuf/extension_set.cc"
+        "src/google/protobuf/generated_enum_util.cc"
+        "src/google/protobuf/generated_message_table_driven_lite.cc"
+        "src/google/protobuf/generated_message_util.cc"
+        "src/google/protobuf/implicit_weak_message.cc"
+        "src/google/protobuf/io/coded_stream.cc"
+        "src/google/protobuf/io/io_win32.cc"
+        "src/google/protobuf/io/strtod.cc"
+        "src/google/protobuf/io/zero_copy_stream.cc"
+        "src/google/protobuf/io/zero_copy_stream_impl.cc"
+        "src/google/protobuf/io/zero_copy_stream_impl_lite.cc"
+        "src/google/protobuf/message_lite.cc"
+        "src/google/protobuf/parse_context.cc"
+        "src/google/protobuf/repeated_field.cc"
         "src/google/protobuf/stubs/bytestream.cc"
         "src/google/protobuf/stubs/common.cc"
         "src/google/protobuf/stubs/int128.cc"
-        "src/google/protobuf/stubs/once.cc"
         "src/google/protobuf/stubs/status.cc"
         "src/google/protobuf/stubs/statusor.cc"
         "src/google/protobuf/stubs/stringpiece.cc"
@@ -70,17 +69,7 @@ libprotobuf-cpp-lite-defaults = cc_defaults {
         "src/google/protobuf/stubs/structurally_valid.cc"
         "src/google/protobuf/stubs/strutil.cc"
         "src/google/protobuf/stubs/time.cc"
-        "src/google/protobuf/arena.cc"
-        "src/google/protobuf/arenastring.cc"
-        "src/google/protobuf/extension_set.cc"
-        "src/google/protobuf/generated_message_util.cc"
-        "src/google/protobuf/message_lite.cc"
-        "src/google/protobuf/repeated_field.cc"
         "src/google/protobuf/wire_format_lite.cc"
-        "src/google/protobuf/io/coded_stream.cc"
-        "src/google/protobuf/io/zero_copy_stream.cc"
-        "src/google/protobuf/io/zero_copy_stream_impl.cc"
-        "src/google/protobuf/io/zero_copy_stream_impl_lite.cc"
     ];
 
     local_include_dirs = [
@@ -89,7 +78,15 @@ libprotobuf-cpp-lite-defaults = cc_defaults {
     ];
     export_include_dirs = ["src"];
 
-    cflags = IGNORED_WARNINGS;
+    target = {
+        android = {
+            shared_libs = ["liblog"];
+        };
+        vendor = {
+            #  This suffix must be updated when a new version is imported.
+            suffix = "-3.9.1";
+        };
+    };
 };
 
 #  C++ lite library for the NDK.
@@ -97,8 +94,6 @@ libprotobuf-cpp-lite-defaults = cc_defaults {
 libprotobuf-cpp-lite-ndk = cc_library_static {
     name = "libprotobuf-cpp-lite-ndk";
     defaults = ["libprotobuf-cpp-lite-defaults"];
-
-    cflags = ["-DGOOGLE_PROTOBUF_NO_RTTI"];
 
     sdk_version = "9";
 
@@ -112,19 +107,19 @@ libprotobuf-cpp-lite = cc_library {
     host_supported = true;
     recovery_available = true;
     vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
     double_loadable = true;
     defaults = ["libprotobuf-cpp-lite-defaults"];
-
-    cflags = ["-DGOOGLE_PROTOBUF_NO_RTTI"];
 
     target = {
         windows = {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "29";
 };
 
 #  C++ lite library for the platform and host.
@@ -133,18 +128,6 @@ libprotobuf-cpp-lite_static = cc_library_static {
     name = "libprotobuf-cpp-lite_static";
     host_supported = true;
     defaults = ["libprotobuf-cpp-lite-defaults"];
-    cflags = ["-DGOOGLE_PROTOBUF_NO_RTTI"];
-};
-
-#  C++ lite library + rtti (libc++ flavored for the platform and host)
-#  =======================================================
-libprotobuf-cpp-lite-rtti = cc_library_shared {
-    name = "libprotobuf-cpp-lite-rtti";
-    host_supported = true;
-    vendor_available = true;
-    defaults = ["libprotobuf-cpp-lite-defaults"];
-
-    rtti = true;
 };
 
 #  C++ full library
@@ -154,38 +137,37 @@ libprotobuf-cpp-full-defaults = cc_defaults {
     defaults = ["libprotobuf-cpp-lite-defaults"];
 
     srcs = [
+        "src/google/protobuf/any.cc"
         "src/google/protobuf/any.pb.cc"
         "src/google/protobuf/api.pb.cc"
-        "src/google/protobuf/stubs/mathlimits.cc"
-        "src/google/protobuf/any.cc"
+        "src/google/protobuf/compiler/importer.cc"
+        "src/google/protobuf/compiler/parser.cc"
         "src/google/protobuf/descriptor.cc"
-        "src/google/protobuf/descriptor_database.cc"
         "src/google/protobuf/descriptor.pb.cc"
+        "src/google/protobuf/descriptor_database.cc"
         "src/google/protobuf/duration.pb.cc"
         "src/google/protobuf/dynamic_message.cc"
         "src/google/protobuf/empty.pb.cc"
         "src/google/protobuf/extension_set_heavy.cc"
         "src/google/protobuf/field_mask.pb.cc"
         "src/google/protobuf/generated_message_reflection.cc"
+        "src/google/protobuf/generated_message_table_driven.cc"
+        "src/google/protobuf/io/gzip_stream.cc"
+        "src/google/protobuf/io/printer.cc"
+        "src/google/protobuf/io/tokenizer.cc"
         "src/google/protobuf/map_field.cc"
         "src/google/protobuf/message.cc"
         "src/google/protobuf/reflection_ops.cc"
         "src/google/protobuf/service.cc"
         "src/google/protobuf/source_context.pb.cc"
         "src/google/protobuf/struct.pb.cc"
+        "src/google/protobuf/stubs/mathlimits.cc"
         "src/google/protobuf/stubs/substitute.cc"
         "src/google/protobuf/text_format.cc"
         "src/google/protobuf/timestamp.pb.cc"
         "src/google/protobuf/type.pb.cc"
         "src/google/protobuf/unknown_field_set.cc"
-        "src/google/protobuf/wire_format.cc"
-        "src/google/protobuf/wrappers.pb.cc"
-        "src/google/protobuf/io/gzip_stream.cc"
-        "src/google/protobuf/io/printer.cc"
-        "src/google/protobuf/io/strtod.cc"
-        "src/google/protobuf/io/tokenizer.cc"
-        "src/google/protobuf/compiler/importer.cc"
-        "src/google/protobuf/compiler/parser.cc"
+        "src/google/protobuf/util/delimited_message_util.cc"
         "src/google/protobuf/util/field_comparator.cc"
         "src/google/protobuf/util/field_mask_util.cc"
         "src/google/protobuf/util/internal/datapiece.cc"
@@ -196,9 +178,9 @@ libprotobuf-cpp-full-defaults = cc_defaults {
         "src/google/protobuf/util/internal/json_objectwriter.cc"
         "src/google/protobuf/util/internal/json_stream_parser.cc"
         "src/google/protobuf/util/internal/object_writer.cc"
+        "src/google/protobuf/util/internal/proto_writer.cc"
         "src/google/protobuf/util/internal/protostream_objectsource.cc"
         "src/google/protobuf/util/internal/protostream_objectwriter.cc"
-        "src/google/protobuf/util/internal/proto_writer.cc"
         "src/google/protobuf/util/internal/type_info.cc"
         "src/google/protobuf/util/internal/type_info_test_helper.cc"
         "src/google/protobuf/util/internal/utility.cc"
@@ -206,6 +188,8 @@ libprotobuf-cpp-full-defaults = cc_defaults {
         "src/google/protobuf/util/message_differencer.cc"
         "src/google/protobuf/util/time_util.cc"
         "src/google/protobuf/util/type_resolver_util.cc"
+        "src/google/protobuf/wire_format.cc"
+        "src/google/protobuf/wrappers.pb.cc"
     ];
 
     cflags = ["-DHAVE_ZLIB=1"];
@@ -218,8 +202,6 @@ libprotobuf-cpp-full-ndk = cc_library_static {
     name = "libprotobuf-cpp-full-ndk";
     defaults = ["libprotobuf-cpp-full-defaults"];
 
-    cflags = ["-DGOOGLE_PROTOBUF_NO_RTTI"];
-
     sdk_version = "9";
 
     stl = "c++_static";
@@ -227,42 +209,31 @@ libprotobuf-cpp-full-ndk = cc_library_static {
 
 #  C++ full library for the platform and host
 #  =======================================================
-libprotobuf-cpp-full = cc_library_shared {
+libprotobuf-cpp-full = cc_library {
     name = "libprotobuf-cpp-full";
     defaults = ["libprotobuf-cpp-full-defaults"];
     host_supported = true;
     vendor_available = true;
-    vndk = {
-        enabled = true;
-    };
-
-    cflags = ["-DGOOGLE_PROTOBUF_NO_RTTI"];
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     target = {
         android = {
-            shared_libs = ["liblog"];
+            static = {
+                enabled = false;
+            };
         };
-    };
-};
-
-#  C++ full library + rtti for the platform and host
-#  =======================================================
-libprotobuf-cpp-full-rtti = cc_library_shared {
-    name = "libprotobuf-cpp-full-rtti";
-    defaults = ["libprotobuf-cpp-full-defaults"];
-    vendor_available = true;
-
-    rtti = true;
-    target = {
-        android = {
-            shared_libs = ["liblog"];
+        windows = {
+            enabled = true;
         };
     };
 };
 
 #  Compiler library for the host
 #  =======================================================
-libprotoc = cc_library_host_shared {
+libprotoc = cc_library {
     name = "libprotoc";
+    host_supported = true;
+    device_supported = false;
     defaults = ["libprotobuf-cpp-full-defaults"];
 
     srcs = [
@@ -279,7 +250,43 @@ libprotoc = cc_library_host_shared {
         "config"
     ];
 
+    target = {
+        windows = {
+            enabled = true;
+            #  defined by the global cflags, but redefined by protobuf
+            cflags = ["-UWIN32_LEAN_AND_MEAN"];
+        };
+    };
+
     rtti = true;
+};
+
+libprotoc-kythe = cc_library_host_static {
+    name = "libprotoc-kythe";
+    defaults = ["protobuf-cflags-defaults"];
+    srcs = [
+        "src/google/protobuf/compiler/code_generator.cc"
+        "src/google/protobuf/compiler/cpp/cpp_helpers.cc"
+        "src/google/protobuf/compiler/cpp/cpp_enum.cc"
+        "src/google/protobuf/compiler/cpp/cpp_enum_field.cc"
+        "src/google/protobuf/compiler/cpp/cpp_extension.cc"
+        "src/google/protobuf/compiler/cpp/cpp_field.cc"
+        "src/google/protobuf/compiler/cpp/cpp_file.cc"
+        "src/google/protobuf/compiler/cpp/cpp_generator.cc"
+        "src/google/protobuf/compiler/cpp/cpp_map_field.cc"
+        "src/google/protobuf/compiler/cpp/cpp_message.cc"
+        "src/google/protobuf/compiler/cpp/cpp_message_field.cc"
+        "src/google/protobuf/compiler/cpp/cpp_padding_optimizer.cc"
+        "src/google/protobuf/compiler/cpp/cpp_primitive_field.cc"
+        "src/google/protobuf/compiler/cpp/cpp_service.cc"
+        "src/google/protobuf/compiler/cpp/cpp_string_field.cc"
+        "src/google/protobuf/compiler/plugin.cc"
+        "src/google/protobuf/compiler/plugin.pb.cc"
+    ];
+    local_include_dirs = [
+        "src"
+    ];
+    visibility = ["//external/kythe"];
 };
 
 #  Android Protocol buffer compiler, aprotoc (host executable)
@@ -293,6 +300,8 @@ aprotoc = cc_binary_host {
     target = {
         windows = {
             enabled = true;
+            #  defined by the global cflags, but redefined by protobuf
+            cflags = ["-UWIN32_LEAN_AND_MEAN"];
         };
     };
 
@@ -301,27 +310,7 @@ aprotoc = cc_binary_host {
     stl = "libc++_static";
 
     srcs = [
-        "src/google/protobuf/any.cc"
-        "src/google/protobuf/arena.cc"
-        "src/google/protobuf/arenastring.cc"
-        "src/google/protobuf/descriptor.cc"
-        "src/google/protobuf/descriptor.pb.cc"
-        "src/google/protobuf/descriptor_database.cc"
-        "src/google/protobuf/dynamic_message.cc"
-        "src/google/protobuf/extension_set.cc"
-        "src/google/protobuf/extension_set_heavy.cc"
-        "src/google/protobuf/generated_message_reflection.cc"
-        "src/google/protobuf/generated_message_util.cc"
-        "src/google/protobuf/map_field.cc"
-        "src/google/protobuf/message.cc"
-        "src/google/protobuf/message_lite.cc"
-        "src/google/protobuf/reflection_ops.cc"
-        "src/google/protobuf/repeated_field.cc"
-        "src/google/protobuf/service.cc"
-        "src/google/protobuf/text_format.cc"
-        "src/google/protobuf/unknown_field_set.cc"
-        "src/google/protobuf/wire_format.cc"
-        "src/google/protobuf/wire_format_lite.cc"
+        "src/google/protobuf/compiler/main.cc"
         "src/google/protobuf/compiler/code_generator.cc"
         "src/google/protobuf/compiler/command_line_interface.cc"
         "src/google/protobuf/compiler/cpp/cpp_enum.cc"
@@ -334,6 +323,7 @@ aprotoc = cc_binary_host {
         "src/google/protobuf/compiler/cpp/cpp_map_field.cc"
         "src/google/protobuf/compiler/cpp/cpp_message.cc"
         "src/google/protobuf/compiler/cpp/cpp_message_field.cc"
+        "src/google/protobuf/compiler/cpp/cpp_padding_optimizer.cc"
         "src/google/protobuf/compiler/cpp/cpp_primitive_field.cc"
         "src/google/protobuf/compiler/cpp/cpp_service.cc"
         "src/google/protobuf/compiler/cpp/cpp_string_field.cc"
@@ -353,7 +343,6 @@ aprotoc = cc_binary_host {
         "src/google/protobuf/compiler/csharp/csharp_repeated_primitive_field.cc"
         "src/google/protobuf/compiler/csharp/csharp_source_generator_base.cc"
         "src/google/protobuf/compiler/csharp/csharp_wrapper_field.cc"
-        "src/google/protobuf/compiler/importer.cc"
         "src/google/protobuf/compiler/java/java_context.cc"
         "src/google/protobuf/compiler/java/java_doc_comment.cc"
         "src/google/protobuf/compiler/java/java_enum.cc"
@@ -367,13 +356,11 @@ aprotoc = cc_binary_host {
         "src/google/protobuf/compiler/java/java_generator.cc"
         "src/google/protobuf/compiler/java/java_generator_factory.cc"
         "src/google/protobuf/compiler/java/java_helpers.cc"
-        "src/google/protobuf/compiler/java/java_lazy_message_field.cc"
-        "src/google/protobuf/compiler/java/java_lazy_message_field_lite.cc"
         "src/google/protobuf/compiler/java/java_map_field.cc"
         "src/google/protobuf/compiler/java/java_map_field_lite.cc"
+        "src/google/protobuf/compiler/java/java_message.cc"
         "src/google/protobuf/compiler/java/java_message_builder.cc"
         "src/google/protobuf/compiler/java/java_message_builder_lite.cc"
-        "src/google/protobuf/compiler/java/java_message.cc"
         "src/google/protobuf/compiler/java/java_message_field.cc"
         "src/google/protobuf/compiler/java/java_message_field_lite.cc"
         "src/google/protobuf/compiler/java/java_message_lite.cc"
@@ -384,28 +371,8 @@ aprotoc = cc_binary_host {
         "src/google/protobuf/compiler/java/java_shared_code_generator.cc"
         "src/google/protobuf/compiler/java/java_string_field.cc"
         "src/google/protobuf/compiler/java/java_string_field_lite.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_enum.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_enum_field.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_field.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_file.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_generator.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_helpers.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_message.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_message_field.cc"
-        "src/google/protobuf/compiler/javamicro/javamicro_primitive_field.cc"
-        "src/google/protobuf/compiler/javanano/javanano_enum.cc"
-        "src/google/protobuf/compiler/javanano/javanano_enum_field.cc"
-        "src/google/protobuf/compiler/javanano/javanano_extension.cc"
-        "src/google/protobuf/compiler/javanano/javanano_field.cc"
-        "src/google/protobuf/compiler/javanano/javanano_file.cc"
-        "src/google/protobuf/compiler/javanano/javanano_generator.cc"
-        "src/google/protobuf/compiler/javanano/javanano_helpers.cc"
-        "src/google/protobuf/compiler/javanano/javanano_map_field.cc"
-        "src/google/protobuf/compiler/javanano/javanano_message.cc"
-        "src/google/protobuf/compiler/javanano/javanano_message_field.cc"
-        "src/google/protobuf/compiler/javanano/javanano_primitive_field.cc"
         "src/google/protobuf/compiler/js/js_generator.cc"
-        "src/google/protobuf/compiler/main.cc"
+        "src/google/protobuf/compiler/js/well_known_types_embed.cc"
         "src/google/protobuf/compiler/objectivec/objectivec_enum.cc"
         "src/google/protobuf/compiler/objectivec/objectivec_enum_field.cc"
         "src/google/protobuf/compiler/objectivec/objectivec_extension.cc"
@@ -418,32 +385,13 @@ aprotoc = cc_binary_host {
         "src/google/protobuf/compiler/objectivec/objectivec_message_field.cc"
         "src/google/protobuf/compiler/objectivec/objectivec_oneof.cc"
         "src/google/protobuf/compiler/objectivec/objectivec_primitive_field.cc"
-        "src/google/protobuf/compiler/parser.cc"
+        "src/google/protobuf/compiler/php/php_generator.cc"
         "src/google/protobuf/compiler/plugin.cc"
         "src/google/protobuf/compiler/plugin.pb.cc"
         "src/google/protobuf/compiler/python/python_generator.cc"
         "src/google/protobuf/compiler/ruby/ruby_generator.cc"
         "src/google/protobuf/compiler/subprocess.cc"
         "src/google/protobuf/compiler/zip_writer.cc"
-        "src/google/protobuf/io/coded_stream.cc"
-        "src/google/protobuf/io/gzip_stream.cc"
-        "src/google/protobuf/io/printer.cc"
-        "src/google/protobuf/io/strtod.cc"
-        "src/google/protobuf/io/tokenizer.cc"
-        "src/google/protobuf/io/zero_copy_stream.cc"
-        "src/google/protobuf/io/zero_copy_stream_impl.cc"
-        "src/google/protobuf/io/zero_copy_stream_impl_lite.cc"
-        "src/google/protobuf/stubs/atomicops_internals_x86_gcc.cc"
-        "src/google/protobuf/stubs/atomicops_internals_x86_msvc.cc"
-        "src/google/protobuf/stubs/common.cc"
-        "src/google/protobuf/stubs/int128.cc"
-        "src/google/protobuf/stubs/once.cc"
-        "src/google/protobuf/stubs/status.cc"
-        "src/google/protobuf/stubs/stringpiece.cc"
-        "src/google/protobuf/stubs/structurally_valid.cc"
-        "src/google/protobuf/stubs/strutil.cc"
-        "src/google/protobuf/stubs/substitute.cc"
-        "src/google/protobuf/stubs/stringprintf.cc"
     ];
 
     local_include_dirs = [
@@ -451,12 +399,30 @@ aprotoc = cc_binary_host {
         "src"
     ];
 
-    static_libs = ["libz"];
+    static_libs = [
+        "libprotoc"
+        "libz"
+    ];
 
-    cflags = IGNORED_WARNINGS ++ [
+    cflags = [
         "-DHAVE_ZLIB=1"
     ];
 
+    rtti = true;
+};
+
+libprotobuf_vendor_suffix_test = cc_test {
+    name = "libprotobuf_vendor_suffix_test";
+    vendor = true;
+    srcs = ["vendor_suffix_test.cpp"];
+    shared_libs = [
+        "libprotobuf-cpp-lite"
+        "libprotobuf-cpp-full"
+    ];
+    static_libs = ["libbase"];
+    stl = "libc++";
+    test_suites = ["general-tests"];
+    test_config = "vendor_suffix_test.config";
 };
 
 libprotobuf_errorprone_defaults = java_defaults {
@@ -498,6 +464,12 @@ libprotobuf-java-nano = java_library_static {
     };
 
     java_version = "1.7";
+
+    apex_available = [
+        "//apex_available:platform"
+        #  TODO(b/151068271) switch this to //apex_available:anyapex
+        "com.android.wifi"
+    ];
 };
 
 #  Java nano library (compatibility for old host-side users)
@@ -526,6 +498,12 @@ libprotobuf-java-micro = java_library_static {
         "javamicro/src/main/java/com/google/protobuf/micro/MessageMicro.java"
         "javamicro/src/main/java/com/google/protobuf/micro/WireFormatMicro.java"
     ];
+
+    apex_available = [
+        "//apex_available:platform"
+        #  TODO(b/151068271) switch this to //apex_available:anyapex
+        "com.android.bluetooth.updatable"
+    ];
 };
 
 #  Java micro library (compatibility for old host-side users)
@@ -546,42 +524,89 @@ libprotobuf-java-lite = java_library_static {
         "java/core/src/main/java/com/google/protobuf/AbstractMessageLite.java"
         "java/core/src/main/java/com/google/protobuf/AbstractParser.java"
         "java/core/src/main/java/com/google/protobuf/AbstractProtobufList.java"
+        "java/core/src/main/java/com/google/protobuf/AllocatedBuffer.java"
+        "java/core/src/main/java/com/google/protobuf/Android.java"
+        "java/core/src/main/java/com/google/protobuf/ArrayDecoders.java"
+        "java/core/src/main/java/com/google/protobuf/BinaryReader.java"
+        "java/core/src/main/java/com/google/protobuf/BinaryWriter.java"
+        "java/core/src/main/java/com/google/protobuf/BooleanArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/BufferAllocator.java"
+        "java/core/src/main/java/com/google/protobuf/ByteBufferWriter.java"
         "java/core/src/main/java/com/google/protobuf/ByteOutput.java"
         "java/core/src/main/java/com/google/protobuf/ByteString.java"
-        "java/core/src/main/java/com/google/protobuf/BooleanArrayList.java"
         "java/core/src/main/java/com/google/protobuf/CodedInputStream.java"
+        "java/core/src/main/java/com/google/protobuf/CodedInputStreamReader.java"
         "java/core/src/main/java/com/google/protobuf/CodedOutputStream.java"
+        "java/core/src/main/java/com/google/protobuf/CodedOutputStreamWriter.java"
         "java/core/src/main/java/com/google/protobuf/DoubleArrayList.java"
         "java/core/src/main/java/com/google/protobuf/ExperimentalApi.java"
         "java/core/src/main/java/com/google/protobuf/ExtensionLite.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionRegistryFactory.java"
         "java/core/src/main/java/com/google/protobuf/ExtensionRegistryLite.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionSchema.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionSchemaLite.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionSchemas.java"
+        "java/core/src/main/java/com/google/protobuf/FieldInfo.java"
         "java/core/src/main/java/com/google/protobuf/FieldSet.java"
+        "java/core/src/main/java/com/google/protobuf/FieldType.java"
         "java/core/src/main/java/com/google/protobuf/FloatArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/GeneratedMessageInfoFactory.java"
         "java/core/src/main/java/com/google/protobuf/GeneratedMessageLite.java"
         "java/core/src/main/java/com/google/protobuf/IntArrayList.java"
         "java/core/src/main/java/com/google/protobuf/Internal.java"
         "java/core/src/main/java/com/google/protobuf/InvalidProtocolBufferException.java"
+        "java/core/src/main/java/com/google/protobuf/IterableByteBufferInputStream.java"
+        "java/core/src/main/java/com/google/protobuf/JavaType.java"
         "java/core/src/main/java/com/google/protobuf/LazyField.java"
         "java/core/src/main/java/com/google/protobuf/LazyFieldLite.java"
         "java/core/src/main/java/com/google/protobuf/LazyStringArrayList.java"
         "java/core/src/main/java/com/google/protobuf/LazyStringList.java"
+        "java/core/src/main/java/com/google/protobuf/ListFieldSchema.java"
         "java/core/src/main/java/com/google/protobuf/LongArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/ManifestSchemaFactory.java"
+        "java/core/src/main/java/com/google/protobuf/MapEntryLite.java"
         "java/core/src/main/java/com/google/protobuf/MapFieldLite.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldSchema.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldSchemaLite.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldSchemas.java"
+        "java/core/src/main/java/com/google/protobuf/MessageInfo.java"
+        "java/core/src/main/java/com/google/protobuf/MessageInfoFactory.java"
         "java/core/src/main/java/com/google/protobuf/MessageLite.java"
-        "java/core/src/main/java/com/google/protobuf/MessageLiteToString.java"
         "java/core/src/main/java/com/google/protobuf/MessageLiteOrBuilder.java"
+        "java/core/src/main/java/com/google/protobuf/MessageLiteToString.java"
+        "java/core/src/main/java/com/google/protobuf/MessageSchema.java"
+        "java/core/src/main/java/com/google/protobuf/MessageSetSchema.java"
         "java/core/src/main/java/com/google/protobuf/MutabilityOracle.java"
+        "java/core/src/main/java/com/google/protobuf/NewInstanceSchema.java"
+        "java/core/src/main/java/com/google/protobuf/NewInstanceSchemaLite.java"
+        "java/core/src/main/java/com/google/protobuf/NewInstanceSchemas.java"
+        "java/core/src/main/java/com/google/protobuf/NioByteString.java"
+        "java/core/src/main/java/com/google/protobuf/OneofInfo.java"
         "java/core/src/main/java/com/google/protobuf/Parser.java"
+        "java/core/src/main/java/com/google/protobuf/PrimitiveNonBoxingCollection.java"
+        "java/core/src/main/java/com/google/protobuf/ProtoSyntax.java"
+        "java/core/src/main/java/com/google/protobuf/Protobuf.java"
         "java/core/src/main/java/com/google/protobuf/ProtobufArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/ProtobufLists.java"
         "java/core/src/main/java/com/google/protobuf/ProtocolStringList.java"
+        "java/core/src/main/java/com/google/protobuf/RawMessageInfo.java"
+        "java/core/src/main/java/com/google/protobuf/Reader.java"
         "java/core/src/main/java/com/google/protobuf/RopeByteString.java"
+        "java/core/src/main/java/com/google/protobuf/Schema.java"
+        "java/core/src/main/java/com/google/protobuf/SchemaFactory.java"
+        "java/core/src/main/java/com/google/protobuf/SchemaUtil.java"
         "java/core/src/main/java/com/google/protobuf/SmallSortedMap.java"
+        "java/core/src/main/java/com/google/protobuf/StructuralMessageInfo.java"
         "java/core/src/main/java/com/google/protobuf/TextFormatEscaper.java"
         "java/core/src/main/java/com/google/protobuf/UninitializedMessageException.java"
+        "java/core/src/main/java/com/google/protobuf/UnknownFieldSchema.java"
         "java/core/src/main/java/com/google/protobuf/UnknownFieldSetLite.java"
+        "java/core/src/main/java/com/google/protobuf/UnknownFieldSetLiteSchema.java"
         "java/core/src/main/java/com/google/protobuf/UnmodifiableLazyStringList.java"
+        "java/core/src/main/java/com/google/protobuf/UnsafeUtil.java"
         "java/core/src/main/java/com/google/protobuf/Utf8.java"
         "java/core/src/main/java/com/google/protobuf/WireFormat.java"
+        "java/core/src/main/java/com/google/protobuf/Writer.java"
     ];
 
     target = {
@@ -591,6 +616,15 @@ libprotobuf-java-lite = java_library_static {
     };
 
     java_version = "1.7";
+
+    apex_available = [
+        "//apex_available:platform"
+        #  TODO(b/151068271) switch below to //apex_available:anyapex
+        "com.android.permission"
+        "com.android.bluetooth.updatable"
+        "com.android.tethering"
+        "com.android.wifi"
+    ];
 };
 
 #  Java lite library (compatibility for old host-side users)
@@ -611,75 +645,129 @@ libprotobuf-java-full = java_library_host {
         "java/core/src/main/java/com/google/protobuf/AbstractMessageLite.java"
         "java/core/src/main/java/com/google/protobuf/AbstractParser.java"
         "java/core/src/main/java/com/google/protobuf/AbstractProtobufList.java"
+        "java/core/src/main/java/com/google/protobuf/AllocatedBuffer.java"
+        "java/core/src/main/java/com/google/protobuf/Android.java"
+        "java/core/src/main/java/com/google/protobuf/ArrayDecoders.java"
+        "java/core/src/main/java/com/google/protobuf/BinaryReader.java"
+        "java/core/src/main/java/com/google/protobuf/BinaryWriter.java"
         "java/core/src/main/java/com/google/protobuf/BlockingRpcChannel.java"
         "java/core/src/main/java/com/google/protobuf/BlockingService.java"
         "java/core/src/main/java/com/google/protobuf/BooleanArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/BufferAllocator.java"
         "java/core/src/main/java/com/google/protobuf/ByteBufferWriter.java"
         "java/core/src/main/java/com/google/protobuf/ByteOutput.java"
         "java/core/src/main/java/com/google/protobuf/ByteString.java"
         "java/core/src/main/java/com/google/protobuf/CodedInputStream.java"
+        "java/core/src/main/java/com/google/protobuf/CodedInputStreamReader.java"
         "java/core/src/main/java/com/google/protobuf/CodedOutputStream.java"
+        "java/core/src/main/java/com/google/protobuf/CodedOutputStreamWriter.java"
+        "java/core/src/main/java/com/google/protobuf/DescriptorMessageInfoFactory.java"
         "java/core/src/main/java/com/google/protobuf/Descriptors.java"
+        "java/core/src/main/java/com/google/protobuf/DiscardUnknownFieldsParser.java"
         "java/core/src/main/java/com/google/protobuf/DoubleArrayList.java"
         "java/core/src/main/java/com/google/protobuf/DynamicMessage.java"
         "java/core/src/main/java/com/google/protobuf/ExperimentalApi.java"
         "java/core/src/main/java/com/google/protobuf/Extension.java"
         "java/core/src/main/java/com/google/protobuf/ExtensionLite.java"
         "java/core/src/main/java/com/google/protobuf/ExtensionRegistry.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionRegistryFactory.java"
         "java/core/src/main/java/com/google/protobuf/ExtensionRegistryLite.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionSchema.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionSchemaFull.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionSchemaLite.java"
+        "java/core/src/main/java/com/google/protobuf/ExtensionSchemas.java"
+        "java/core/src/main/java/com/google/protobuf/FieldInfo.java"
         "java/core/src/main/java/com/google/protobuf/FieldSet.java"
+        "java/core/src/main/java/com/google/protobuf/FieldType.java"
         "java/core/src/main/java/com/google/protobuf/FloatArrayList.java"
         "java/core/src/main/java/com/google/protobuf/GeneratedMessage.java"
+        "java/core/src/main/java/com/google/protobuf/GeneratedMessageInfoFactory.java"
         "java/core/src/main/java/com/google/protobuf/GeneratedMessageLite.java"
+        "java/core/src/main/java/com/google/protobuf/GeneratedMessageV3.java"
         "java/core/src/main/java/com/google/protobuf/IntArrayList.java"
         "java/core/src/main/java/com/google/protobuf/Internal.java"
         "java/core/src/main/java/com/google/protobuf/InvalidProtocolBufferException.java"
+        "java/core/src/main/java/com/google/protobuf/IterableByteBufferInputStream.java"
+        "java/core/src/main/java/com/google/protobuf/JavaType.java"
         "java/core/src/main/java/com/google/protobuf/LazyField.java"
         "java/core/src/main/java/com/google/protobuf/LazyFieldLite.java"
         "java/core/src/main/java/com/google/protobuf/LazyStringArrayList.java"
         "java/core/src/main/java/com/google/protobuf/LazyStringList.java"
+        "java/core/src/main/java/com/google/protobuf/ListFieldSchema.java"
         "java/core/src/main/java/com/google/protobuf/LongArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/ManifestSchemaFactory.java"
         "java/core/src/main/java/com/google/protobuf/MapEntry.java"
         "java/core/src/main/java/com/google/protobuf/MapEntryLite.java"
         "java/core/src/main/java/com/google/protobuf/MapField.java"
         "java/core/src/main/java/com/google/protobuf/MapFieldLite.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldSchema.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldSchemaFull.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldSchemaLite.java"
+        "java/core/src/main/java/com/google/protobuf/MapFieldSchemas.java"
         "java/core/src/main/java/com/google/protobuf/Message.java"
+        "java/core/src/main/java/com/google/protobuf/MessageInfo.java"
+        "java/core/src/main/java/com/google/protobuf/MessageInfoFactory.java"
         "java/core/src/main/java/com/google/protobuf/MessageLite.java"
         "java/core/src/main/java/com/google/protobuf/MessageLiteOrBuilder.java"
         "java/core/src/main/java/com/google/protobuf/MessageLiteToString.java"
         "java/core/src/main/java/com/google/protobuf/MessageOrBuilder.java"
         "java/core/src/main/java/com/google/protobuf/MessageReflection.java"
+        "java/core/src/main/java/com/google/protobuf/MessageSchema.java"
+        "java/core/src/main/java/com/google/protobuf/MessageSetSchema.java"
         "java/core/src/main/java/com/google/protobuf/MutabilityOracle.java"
+        "java/core/src/main/java/com/google/protobuf/NewInstanceSchema.java"
+        "java/core/src/main/java/com/google/protobuf/NewInstanceSchemaFull.java"
+        "java/core/src/main/java/com/google/protobuf/NewInstanceSchemaLite.java"
+        "java/core/src/main/java/com/google/protobuf/NewInstanceSchemas.java"
         "java/core/src/main/java/com/google/protobuf/NioByteString.java"
+        "java/core/src/main/java/com/google/protobuf/OneofInfo.java"
         "java/core/src/main/java/com/google/protobuf/Parser.java"
+        "java/core/src/main/java/com/google/protobuf/PrimitiveNonBoxingCollection.java"
+        "java/core/src/main/java/com/google/protobuf/ProtoSyntax.java"
+        "java/core/src/main/java/com/google/protobuf/Protobuf.java"
         "java/core/src/main/java/com/google/protobuf/ProtobufArrayList.java"
+        "java/core/src/main/java/com/google/protobuf/ProtobufLists.java"
         "java/core/src/main/java/com/google/protobuf/ProtocolMessageEnum.java"
         "java/core/src/main/java/com/google/protobuf/ProtocolStringList.java"
+        "java/core/src/main/java/com/google/protobuf/RawMessageInfo.java"
+        "java/core/src/main/java/com/google/protobuf/Reader.java"
         "java/core/src/main/java/com/google/protobuf/RepeatedFieldBuilder.java"
+        "java/core/src/main/java/com/google/protobuf/RepeatedFieldBuilderV3.java"
         "java/core/src/main/java/com/google/protobuf/RopeByteString.java"
         "java/core/src/main/java/com/google/protobuf/RpcCallback.java"
         "java/core/src/main/java/com/google/protobuf/RpcChannel.java"
         "java/core/src/main/java/com/google/protobuf/RpcController.java"
         "java/core/src/main/java/com/google/protobuf/RpcUtil.java"
+        "java/core/src/main/java/com/google/protobuf/Schema.java"
+        "java/core/src/main/java/com/google/protobuf/SchemaFactory.java"
+        "java/core/src/main/java/com/google/protobuf/SchemaUtil.java"
         "java/core/src/main/java/com/google/protobuf/Service.java"
         "java/core/src/main/java/com/google/protobuf/ServiceException.java"
         "java/core/src/main/java/com/google/protobuf/SingleFieldBuilder.java"
+        "java/core/src/main/java/com/google/protobuf/SingleFieldBuilderV3.java"
         "java/core/src/main/java/com/google/protobuf/SmallSortedMap.java"
+        "java/core/src/main/java/com/google/protobuf/StructuralMessageInfo.java"
         "java/core/src/main/java/com/google/protobuf/TextFormat.java"
         "java/core/src/main/java/com/google/protobuf/TextFormatEscaper.java"
         "java/core/src/main/java/com/google/protobuf/TextFormatParseInfoTree.java"
         "java/core/src/main/java/com/google/protobuf/TextFormatParseLocation.java"
         "java/core/src/main/java/com/google/protobuf/UninitializedMessageException.java"
+        "java/core/src/main/java/com/google/protobuf/UnknownFieldSchema.java"
         "java/core/src/main/java/com/google/protobuf/UnknownFieldSet.java"
         "java/core/src/main/java/com/google/protobuf/UnknownFieldSetLite.java"
+        "java/core/src/main/java/com/google/protobuf/UnknownFieldSetLiteSchema.java"
+        "java/core/src/main/java/com/google/protobuf/UnknownFieldSetSchema.java"
         "java/core/src/main/java/com/google/protobuf/UnmodifiableLazyStringList.java"
         "java/core/src/main/java/com/google/protobuf/UnsafeByteOperations.java"
+        "java/core/src/main/java/com/google/protobuf/UnsafeUtil.java"
         "java/core/src/main/java/com/google/protobuf/Utf8.java"
         "java/core/src/main/java/com/google/protobuf/WireFormat.java"
+        "java/core/src/main/java/com/google/protobuf/Writer.java"
         ":libprotobuf-internal-protos"
     ];
 
     proto = {
+        type = "full";
         local_include_dirs = [
             "src"
         ];
@@ -687,6 +775,27 @@ libprotobuf-java-full = java_library_host {
     };
 
     java_version = "1.7";
+};
+
+libprotobuf-java-util-full = java_library_host {
+    name = "libprotobuf-java-util-full";
+    defaults = ["libprotobuf_errorprone_defaults"];
+    srcs = [
+        "java/util/src/main/java/com/google/protobuf/util/Durations.java"
+        "java/util/src/main/java/com/google/protobuf/util/FieldMaskTree.java"
+        "java/util/src/main/java/com/google/protobuf/util/FieldMaskUtil.java"
+        "java/util/src/main/java/com/google/protobuf/util/JsonFormat.java"
+        "java/util/src/main/java/com/google/protobuf/util/Structs.java"
+        "java/util/src/main/java/com/google/protobuf/util/TimeUtil.java"
+        "java/util/src/main/java/com/google/protobuf/util/Timestamps.java"
+        "java/util/src/main/java/com/google/protobuf/util/Values.java"
+    ];
+    static_libs = [
+        "error_prone_annotations"
+        "gson-prebuilt-jar"
+        "guava-21.0"
+        "libprotobuf-java-full"
+    ];
 };
 
 #  Java full library (compatibility for old host-side users)
@@ -751,6 +860,7 @@ libprotobuf-internal-python-srcs = filegroup {
         "python/google/protobuf/symbol_database.py"
         "python/google/protobuf/text_encoding.py"
         "python/google/protobuf/text_format.py"
+        "python/google/protobuf/compiler/__init__.py"
         "python/google/protobuf/internal/__init__.py"
         "python/google/protobuf/internal/_parameterized.py"
         "python/google/protobuf/internal/api_implementation.py"
@@ -761,8 +871,10 @@ libprotobuf-internal-python-srcs = filegroup {
         "python/google/protobuf/internal/descriptor_test.py"
         "python/google/protobuf/internal/encoder.py"
         "python/google/protobuf/internal/enum_type_wrapper.py"
+        "python/google/protobuf/internal/extension_dict.py"
         "python/google/protobuf/internal/generator_test.py"
         "python/google/protobuf/internal/json_format_test.py"
+        "python/google/protobuf/internal/keywords_test.py"
         "python/google/protobuf/internal/message_factory_test.py"
         "python/google/protobuf/internal/message_listener.py"
         "python/google/protobuf/internal/message_test.py"
@@ -772,6 +884,7 @@ libprotobuf-internal-python-srcs = filegroup {
         "python/google/protobuf/internal/service_reflection_test.py"
         "python/google/protobuf/internal/symbol_database_test.py"
         "python/google/protobuf/internal/test_util.py"
+        "python/google/protobuf/internal/testing_refleaks.py"
         "python/google/protobuf/internal/text_encoding_test.py"
         "python/google/protobuf/internal/text_format_test.py"
         "python/google/protobuf/internal/type_checkers.py"
@@ -783,6 +896,7 @@ libprotobuf-internal-python-srcs = filegroup {
         "python/google/protobuf/internal/import_test_package/__init__.py"
         "python/google/protobuf/pyext/__init__.py"
         "python/google/protobuf/pyext/cpp_message.py"
+        "python/google/protobuf/util/__init__.py"
     ];
     path = "python";
 };
@@ -882,4 +996,56 @@ NanoAndroidTest = android_test {
     };
 };
 
-in { inherit "libcore_private.stubs" NanoAndroidTest android-nano-test-parcelable android-nano-test-parcelable-extendable aprotoc aprotoc-test-nano-params host-libprotobuf-java-full host-libprotobuf-java-lite host-libprotobuf-java-micro host-libprotobuf-java-nano libprotobuf-cpp-full libprotobuf-cpp-full-defaults libprotobuf-cpp-full-ndk libprotobuf-cpp-full-rtti libprotobuf-cpp-lite libprotobuf-cpp-lite-defaults libprotobuf-cpp-lite-ndk libprotobuf-cpp-lite-rtti libprotobuf-cpp-lite_static libprotobuf-internal-protos libprotobuf-internal-python-srcs libprotobuf-java-full libprotobuf-java-lite libprotobuf-java-micro libprotobuf-java-nano libprotobuf-python libprotobuf_errorprone_defaults libprotoc protobuf-cflags-defaults; }
+#  Java micro generator plugin
+#  =======================================================
+protoc-gen-javamicro = cc_binary_host {
+    name = "protoc-gen-javamicro";
+    defaults = ["protobuf-cflags-defaults"];
+    srcs = [
+        "src/google/protobuf/compiler/javamicro/javamicro_enum.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_enum_field.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_field.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_file.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_generator.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_helpers.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_main.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_message.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_message_field.cc"
+        "src/google/protobuf/compiler/javamicro/javamicro_primitive_field.cc"
+    ];
+    local_include_dirs = ["src"];
+    static_libs = [
+        "libprotoc"
+        "libz"
+    ];
+    stl = "libc++_static";
+};
+
+#  Java nano generator plugin
+#  =======================================================
+protoc-gen-javanano = cc_binary_host {
+    name = "protoc-gen-javanano";
+    defaults = ["protobuf-cflags-defaults"];
+    srcs = [
+        "src/google/protobuf/compiler/javanano/javanano_enum.cc"
+        "src/google/protobuf/compiler/javanano/javanano_enum_field.cc"
+        "src/google/protobuf/compiler/javanano/javanano_extension.cc"
+        "src/google/protobuf/compiler/javanano/javanano_field.cc"
+        "src/google/protobuf/compiler/javanano/javanano_file.cc"
+        "src/google/protobuf/compiler/javanano/javanano_generator.cc"
+        "src/google/protobuf/compiler/javanano/javanano_helpers.cc"
+        "src/google/protobuf/compiler/javanano/javanano_main.cc"
+        "src/google/protobuf/compiler/javanano/javanano_map_field.cc"
+        "src/google/protobuf/compiler/javanano/javanano_message.cc"
+        "src/google/protobuf/compiler/javanano/javanano_message_field.cc"
+        "src/google/protobuf/compiler/javanano/javanano_primitive_field.cc"
+    ];
+    local_include_dirs = ["src"];
+    static_libs = [
+        "libprotoc"
+        "libz"
+    ];
+    stl = "libc++_static";
+};
+
+in { inherit "libcore_private.stubs" NanoAndroidTest android-nano-test-parcelable android-nano-test-parcelable-extendable aprotoc aprotoc-test-nano-params host-libprotobuf-java-full host-libprotobuf-java-lite host-libprotobuf-java-micro host-libprotobuf-java-nano libprotobuf-cpp-full libprotobuf-cpp-full-defaults libprotobuf-cpp-full-ndk libprotobuf-cpp-lite libprotobuf-cpp-lite-defaults libprotobuf-cpp-lite-ndk libprotobuf-cpp-lite_static libprotobuf-internal-protos libprotobuf-internal-python-srcs libprotobuf-java-full libprotobuf-java-lite libprotobuf-java-micro libprotobuf-java-nano libprotobuf-java-util-full libprotobuf-python libprotobuf_errorprone_defaults libprotobuf_vendor_suffix_test libprotoc libprotoc-kythe protobuf-cflags-defaults protoc-gen-javamicro protoc-gen-javanano; }

@@ -16,6 +16,9 @@ libeffectsconfig = cc_library {
     shared_libs = [
         "liblog"
         "libtinyxml2"
+        "libutils"
+        "libmedia_helper"
+        "libcutils"
     ];
 
     header_libs = ["libaudio_system_headers"];

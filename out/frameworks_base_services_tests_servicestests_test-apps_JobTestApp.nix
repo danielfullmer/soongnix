@@ -20,8 +20,6 @@ JobTestApp = android_test_helper_app {
 
     sdk_version = "current";
 
-    test_suites = ["device-tests"];
-
     srcs = [
         "src/com/android/servicestests/apps/jobtestapp/TestJobActivity.java"
         "src/com/android/servicestests/apps/jobtestapp/TestJobService.java"

@@ -1,4 +1,4 @@
-{ cc_library_static, cc_test }:
+{ cc_library_static, cc_test, sh_test }:
 let
 
 #
@@ -23,9 +23,6 @@ libltp_controllers = cc_library_static {
         "include"
         "include/old"
     ];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-    ];
     srcs = [
         "testcases/kernel/controllers/libcontrollers/libcontrollers.c"
     ];
@@ -37,9 +34,6 @@ libltp_cpu_set = cc_library_static {
     local_include_dirs = [
         "include"
         "include/old"
-    ];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
     ];
     srcs = [
         "testcases/kernel/controllers/cpuset/cpuset_lib/cpuinfo.c"
@@ -58,9 +52,6 @@ libltp_hugetlb = cc_library_static {
         "testcases/kernel/include"
         "testcases/kernel/mem/include"
     ];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-    ];
     srcs = [
         "testcases/kernel/mem/hugetlb/lib/hugetlb.c"
     ];
@@ -72,9 +63,6 @@ libltp_ipc = cc_library_static {
     local_include_dirs = [
         "include"
         "include/old"
-    ];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
     ];
     srcs = [
         "testcases/kernel/syscalls/ipc/lib/libipc.c"
@@ -92,7 +80,6 @@ libltp_kerntest = cc_library_static {
     ];
     cflags = [
         "-DNUMA_VERSION1_COMPATIBILITY"
-        "-D_FORTIFY_SOURCE=2"
     ];
     srcs = [
         "testcases/kernel/lib/ksm_helper.c"
@@ -110,7 +97,6 @@ libltp_ltp = cc_library_static {
     ];
     cflags = [
         "-DLTPLIB"
-        "-D_FORTIFY_SOURCE=2"
     ];
     srcs = [
         "lib/cloner.c"
@@ -124,10 +110,14 @@ libltp_ltp = cc_library_static {
         "lib/safe_stdio.c"
         "lib/self_exec.c"
         "lib/tlibio.c"
+        "lib/tst_af_alg.c"
         "lib/tst_ansi_color.c"
+        "lib/tst_buffers.c"
+        "lib/tst_capability.c"
         "lib/tst_checkpoint.c"
         "lib/tst_checksum.c"
         "lib/tst_clocks.c"
+        "lib/tst_coredump.c"
         "lib/tst_cpu.c"
         "lib/tst_crypto.c"
         "lib/tst_device.c"
@@ -136,13 +126,15 @@ libltp_ltp = cc_library_static {
         "lib/tst_fill_fs.c"
         "lib/tst_fs_has_free.c"
         "lib/tst_fs_link_count.c"
+        "lib/tst_fs_setup.c"
         "lib/tst_fs_type.c"
         "lib/tst_get_bad_addr.c"
+        "lib/tst_ioctl.c"
+        "lib/tst_kconfig.c"
         "lib/tst_kernel.c"
         "lib/tst_kvercmp.c"
         "lib/tst_mkfs.c"
         "lib/tst_module.c"
-        "lib/tst_net.c"
         "lib/tst_parse_opts.c"
         "lib/tst_path_has_mnt_flags.c"
         "lib/tst_pid.c"
@@ -163,6 +155,31 @@ libltp_ltp = cc_library_static {
         "lib/tst_timer_test.c"
         "lib/tst_tmpdir.c"
         "lib/tst_virt.c"
+        "lib/tst_wallclock.c"
+    ];
+};
+
+libltp_ltpnuma = cc_library_static {
+    name = "libltp_ltpnuma";
+    defaults = ["ltp_defaults"];
+    local_include_dirs = [
+        "include"
+        "include/old"
+    ];
+    srcs = [
+        "libs/libltpnuma/tst_numa.c"
+    ];
+};
+
+libltp_ltpuinput = cc_library_static {
+    name = "libltp_ltpuinput";
+    defaults = ["ltp_defaults"];
+    local_include_dirs = [
+        "include"
+        "include/old"
+    ];
+    srcs = [
+        "libs/libltpuinput/tst_uinput.c"
     ];
 };
 
@@ -175,9 +192,6 @@ libltp_mem = cc_library_static {
         "testcases/kernel/include"
         "testcases/kernel/mem/include"
     ];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-    ];
     srcs = [
         "testcases/kernel/mem/lib/mem.c"
     ];
@@ -188,7 +202,6 @@ ltp_abort01 = cc_test {
     stem = "abort01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/abort/abort01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -198,7 +211,6 @@ ltp_abs01 = cc_test {
     stem = "abs01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/abs/abs01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -208,7 +220,15 @@ ltp_accept01 = cc_test {
     stem = "accept01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/accept/accept01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_accept02 = cc_test {
+    name = "ltp_accept02";
+    stem = "accept02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/accept/accept02.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -218,7 +238,6 @@ ltp_accept4_01 = cc_test {
     stem = "accept4_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/accept4/accept4_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -228,7 +247,6 @@ ltp_access01 = cc_test {
     stem = "access01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/access/access01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -238,7 +256,6 @@ ltp_access02 = cc_test {
     stem = "access02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/access/access02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -248,7 +265,6 @@ ltp_access03 = cc_test {
     stem = "access03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/access/access03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -258,7 +274,6 @@ ltp_access04 = cc_test {
     stem = "access04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/access/access04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -268,7 +283,24 @@ ltp_acct01 = cc_test {
     stem = "acct01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/acct/acct01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_acct02 = cc_test {
+    name = "ltp_acct02";
+    stem = "acct02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/acct/acct02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_acct02_helper = cc_test {
+    name = "ltp_acct02_helper";
+    stem = "acct02_helper";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/acct/acct02_helper.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -278,7 +310,6 @@ ltp_acl1 = cc_test {
     stem = "acl1";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/nfsv4/acl/acl1.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -287,7 +318,6 @@ ltp_add_key01 = cc_test {
     stem = "add_key01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/add_key/add_key01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -297,7 +327,6 @@ ltp_add_key02 = cc_test {
     stem = "add_key02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/add_key/add_key02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -307,7 +336,6 @@ ltp_add_key03 = cc_test {
     stem = "add_key03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/add_key/add_key03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -317,7 +345,6 @@ ltp_add_key04 = cc_test {
     stem = "add_key04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/add_key/add_key04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -327,7 +354,6 @@ ltp_adjtimex01 = cc_test {
     stem = "adjtimex01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/adjtimex/adjtimex01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -337,7 +363,56 @@ ltp_adjtimex02 = cc_test {
     stem = "adjtimex02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/adjtimex/adjtimex02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_af_alg01 = cc_test {
+    name = "ltp_af_alg01";
+    stem = "af_alg01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/crypto/af_alg01.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_af_alg03 = cc_test {
+    name = "ltp_af_alg03";
+    stem = "af_alg03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/crypto/af_alg03.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_af_alg04 = cc_test {
+    name = "ltp_af_alg04";
+    stem = "af_alg04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/crypto/af_alg04.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_af_alg05 = cc_test {
+    name = "ltp_af_alg05";
+    stem = "af_alg05";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/crypto/af_alg05.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_af_alg06 = cc_test {
+    name = "ltp_af_alg06";
+    stem = "af_alg06";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/crypto/af_alg06.c"];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -347,10 +422,7 @@ ltp_aio-stress = cc_test {
     stem = "aio-stress";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/aio-stress.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -360,10 +432,7 @@ ltp_aio01 = cc_test {
     stem = "aio01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/aio/aio01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -373,10 +442,7 @@ ltp_aio02 = cc_test {
     stem = "aio02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/aio/aio02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -386,10 +452,7 @@ ltp_aiocp = cc_test {
     stem = "aiocp";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/aiocp.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -399,10 +462,7 @@ ltp_aiodio_append = cc_test {
     stem = "aiodio_append";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/aiodio_append.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -412,10 +472,7 @@ ltp_aiodio_sparse = cc_test {
     stem = "aiodio_sparse";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/aiodio_sparse.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -425,7 +482,6 @@ ltp_alarm02 = cc_test {
     stem = "alarm02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/alarm/alarm02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -435,7 +491,6 @@ ltp_alarm03 = cc_test {
     stem = "alarm03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/alarm/alarm03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -445,7 +500,6 @@ ltp_alarm05 = cc_test {
     stem = "alarm05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/alarm/alarm05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -455,7 +509,6 @@ ltp_alarm06 = cc_test {
     stem = "alarm06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/alarm/alarm06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -465,7 +518,6 @@ ltp_alarm07 = cc_test {
     stem = "alarm07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/alarm/alarm07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -475,10 +527,7 @@ ltp_asapi_01 = cc_test {
     stem = "asapi_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/lib6/asapi_01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -488,10 +537,7 @@ ltp_asapi_02 = cc_test {
     stem = "asapi_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/lib6/asapi_02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -501,20 +547,7 @@ ltp_asapi_03 = cc_test {
     stem = "asapi_03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/lib6/asapi_03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_asyncio02 = cc_test {
-    name = "ltp_asyncio02";
-    stem = "asyncio02";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/asyncio/asyncio02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -524,7 +557,6 @@ ltp_atof01 = cc_test {
     stem = "atof01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/atof/atof01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -534,17 +566,6 @@ ltp_autogroup01 = cc_test {
     stem = "autogroup01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/autogroup/autogroup01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_bdflush01 = cc_test {
-    name = "ltp_bdflush01";
-    stem = "bdflush01";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/bdflush/bdflush01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -554,7 +575,6 @@ ltp_bind01 = cc_test {
     stem = "bind01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/bind/bind01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -564,7 +584,6 @@ ltp_bind02 = cc_test {
     stem = "bind02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/bind/bind02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -574,7 +593,6 @@ ltp_bind03 = cc_test {
     stem = "bind03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/bind/bind03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -584,7 +602,46 @@ ltp_block_dev = cc_test {
     stem = "block_dev";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/block/block_dev_user/block_dev.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_bpf_map01 = cc_test {
+    name = "ltp_bpf_map01";
+    stem = "bpf_map01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/bpf/bpf_map01.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_bpf_prog01 = cc_test {
+    name = "ltp_bpf_prog01";
+    stem = "bpf_prog01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/bpf/bpf_prog01.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_bpf_prog02 = cc_test {
+    name = "ltp_bpf_prog02";
+    stem = "bpf_prog02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/bpf/bpf_prog02.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_bpf_prog03 = cc_test {
+    name = "ltp_bpf_prog03";
+    stem = "bpf_prog03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/bpf/bpf_prog03.c"];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -594,7 +651,6 @@ ltp_brk01 = cc_test {
     stem = "brk01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/brk/brk01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -604,7 +660,6 @@ ltp_cacheflush01 = cc_test {
     stem = "cacheflush01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/cacheflush/cacheflush01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -615,7 +670,6 @@ ltp_can_filter = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/can/filter-tests/can_filter.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-DETH_P_CAN=0x000C"
         "-DPF_CAN=29"
         "-DAF_CAN=PF_CAN"
@@ -630,7 +684,6 @@ ltp_can_rcv_own_msgs = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/can/filter-tests/can_rcv_own_msgs.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-DETH_P_CAN=0x000C"
         "-DPF_CAN=29"
         "-DAF_CAN=PF_CAN"
@@ -644,7 +697,6 @@ ltp_cap_bounds_r = cc_test {
     stem = "cap_bounds_r";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/cap_bound/cap_bounds_r.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -654,7 +706,6 @@ ltp_cap_bounds_rw = cc_test {
     stem = "cap_bounds_rw";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/cap_bound/cap_bounds_rw.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -664,7 +715,6 @@ ltp_cap_bset_inh_bounds = cc_test {
     stem = "cap_bset_inh_bounds";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/cap_bound/cap_bset_inh_bounds.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -674,7 +724,6 @@ ltp_capget01 = cc_test {
     stem = "capget01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/capget/capget01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -684,7 +733,6 @@ ltp_capget02 = cc_test {
     stem = "capget02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/capget/capget02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -694,7 +742,6 @@ ltp_capset01 = cc_test {
     stem = "capset01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/capset/capset01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -704,7 +751,24 @@ ltp_capset02 = cc_test {
     stem = "capset02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/capset/capset02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_capset03 = cc_test {
+    name = "ltp_capset03";
+    stem = "capset03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/capset/capset03.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_capset04 = cc_test {
+    name = "ltp_capset04";
+    stem = "capset04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/capset/capset04.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -714,7 +778,6 @@ ltp_cgroup_fj_proc = cc_test {
     stem = "cgroup_fj_proc";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cgroup_fj/cgroup_fj_proc.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -727,7 +790,6 @@ ltp_cgroup_regression_6_2 = cc_test {
     stem = "cgroup_regression_6_2";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cgroup/cgroup_regression_6_2.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -740,7 +802,6 @@ ltp_cgroup_regression_fork_processes = cc_test {
     stem = "cgroup_regression_fork_processes";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cgroup/cgroup_regression_fork_processes.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -753,7 +814,6 @@ ltp_cgroup_regression_getdelays = cc_test {
     stem = "cgroup_regression_getdelays";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cgroup/cgroup_regression_getdelays.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -766,7 +826,6 @@ ltp_cgroup_xattr = cc_test {
     stem = "cgroup_xattr";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cgroup_xattr/cgroup_xattr.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -776,7 +835,6 @@ ltp_chdir01 = cc_test {
     stem = "chdir01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chdir/chdir01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -786,7 +844,6 @@ ltp_chdir02 = cc_test {
     stem = "chdir02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chdir/chdir02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -796,7 +853,6 @@ ltp_chdir03 = cc_test {
     stem = "chdir03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chdir/chdir03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -806,7 +862,6 @@ ltp_chdir04 = cc_test {
     stem = "chdir04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chdir/chdir04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -816,7 +871,6 @@ ltp_check_keepcaps = cc_test {
     stem = "check_keepcaps";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/securebits/check_keepcaps.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -826,7 +880,6 @@ ltp_check_pe = cc_test {
     stem = "check_pe";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/cap_bound/check_pe.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -836,10 +889,7 @@ ltp_check_simple_capset = cc_test {
     stem = "check_simple_capset";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/filecaps/check_simple_capset.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -849,7 +899,6 @@ ltp_chmod01 = cc_test {
     stem = "chmod01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chmod/chmod01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -859,7 +908,6 @@ ltp_chmod02 = cc_test {
     stem = "chmod02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chmod/chmod02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -869,7 +917,6 @@ ltp_chmod03 = cc_test {
     stem = "chmod03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chmod/chmod03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -879,7 +926,6 @@ ltp_chmod04 = cc_test {
     stem = "chmod04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chmod/chmod04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -889,7 +935,6 @@ ltp_chmod05 = cc_test {
     stem = "chmod05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chmod/chmod05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -899,7 +944,6 @@ ltp_chmod07 = cc_test {
     stem = "chmod07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chmod/chmod07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -909,7 +953,6 @@ ltp_chown01 = cc_test {
     stem = "chown01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -923,10 +966,7 @@ ltp_chown01_16 = cc_test {
     stem = "chown01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -940,7 +980,6 @@ ltp_chown02 = cc_test {
     stem = "chown02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -954,10 +993,7 @@ ltp_chown02_16 = cc_test {
     stem = "chown02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -971,7 +1007,6 @@ ltp_chown03 = cc_test {
     stem = "chown03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -985,10 +1020,7 @@ ltp_chown03_16 = cc_test {
     stem = "chown03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -1002,7 +1034,6 @@ ltp_chown05 = cc_test {
     stem = "chown05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -1016,10 +1047,7 @@ ltp_chown05_16 = cc_test {
     stem = "chown05_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chown/chown05.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -1033,7 +1061,6 @@ ltp_chroot01 = cc_test {
     stem = "chroot01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chroot/chroot01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1043,7 +1070,6 @@ ltp_chroot02 = cc_test {
     stem = "chroot02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chroot/chroot02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1053,7 +1079,6 @@ ltp_chroot03 = cc_test {
     stem = "chroot03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chroot/chroot03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1063,7 +1088,24 @@ ltp_chroot04 = cc_test {
     stem = "chroot04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/chroot/chroot04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_clock_adjtime01 = cc_test {
+    name = "ltp_clock_adjtime01";
+    stem = "clock_adjtime01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/clock_adjtime/clock_adjtime01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_clock_adjtime02 = cc_test {
+    name = "ltp_clock_adjtime02";
+    stem = "clock_adjtime02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/clock_adjtime/clock_adjtime02.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1073,7 +1115,6 @@ ltp_clock_getres01 = cc_test {
     stem = "clock_getres01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clock_getres/clock_getres01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -1081,35 +1122,21 @@ ltp_clock_getres01 = cc_test {
     static_libs = ["libltp_ltp"];
 };
 
+ltp_clock_gettime01 = cc_test {
+    name = "ltp_clock_gettime01";
+    stem = "clock_gettime01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/clock_gettime/clock_gettime01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
 ltp_clock_gettime02 = cc_test {
     name = "ltp_clock_gettime02";
     stem = "clock_gettime02";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/clock_gettime/clock_gettime02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_clock_gettime03 = cc_test {
-    name = "ltp_clock_gettime03";
-    stem = "clock_gettime03";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/clock_gettime/clock_gettime03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
+    srcs = ["testcases/kernel/syscalls/clock_gettime/clock_gettime02.c"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
@@ -1118,7 +1145,6 @@ ltp_clock_nanosleep01 = cc_test {
     stem = "clock_nanosleep01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clock_nanosleep/clock_nanosleep01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1128,7 +1154,6 @@ ltp_clock_nanosleep02 = cc_test {
     stem = "clock_nanosleep02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clock_nanosleep/clock_nanosleep02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1138,7 +1163,15 @@ ltp_clock_nanosleep2_01 = cc_test {
     stem = "clock_nanosleep2_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clock_nanosleep2/clock_nanosleep2_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_clock_settime01 = cc_test {
+    name = "ltp_clock_settime01";
+    stem = "clock_settime01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/clock_settime/clock_settime01.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1147,31 +1180,8 @@ ltp_clock_settime02 = cc_test {
     name = "ltp_clock_settime02";
     stem = "clock_settime02";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/clock_settime/clock_settime02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_clock_settime03 = cc_test {
-    name = "ltp_clock_settime03";
-    stem = "clock_settime03";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/clock_settime/clock_settime03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
+    srcs = ["testcases/kernel/syscalls/clock_settime/clock_settime02.c"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
@@ -1180,7 +1190,6 @@ ltp_clone01 = cc_test {
     stem = "clone01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1190,7 +1199,6 @@ ltp_clone02 = cc_test {
     stem = "clone02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1200,7 +1208,6 @@ ltp_clone03 = cc_test {
     stem = "clone03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1210,7 +1217,6 @@ ltp_clone04 = cc_test {
     stem = "clone04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1220,7 +1226,6 @@ ltp_clone05 = cc_test {
     stem = "clone05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1230,7 +1235,6 @@ ltp_clone06 = cc_test {
     stem = "clone06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1240,7 +1244,6 @@ ltp_clone07 = cc_test {
     stem = "clone07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1250,7 +1253,6 @@ ltp_clone08 = cc_test {
     stem = "clone08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1260,7 +1262,6 @@ ltp_clone09 = cc_test {
     stem = "clone09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/clone/clone09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1270,7 +1271,6 @@ ltp_close01 = cc_test {
     stem = "close01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/close/close01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1280,7 +1280,6 @@ ltp_close02 = cc_test {
     stem = "close02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/close/close02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1290,7 +1289,6 @@ ltp_close08 = cc_test {
     stem = "close08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/close/close08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1300,7 +1298,6 @@ ltp_connect01 = cc_test {
     stem = "connect01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/connect/connect01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1310,7 +1307,24 @@ ltp_copy_file_range01 = cc_test {
     stem = "copy_file_range01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/copy_file_range/copy_file_range01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_copy_file_range02 = cc_test {
+    name = "ltp_copy_file_range02";
+    stem = "copy_file_range02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/copy_file_range/copy_file_range02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_copy_file_range03 = cc_test {
+    name = "ltp_copy_file_range03";
+    stem = "copy_file_range03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/copy_file_range/copy_file_range03.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1320,7 +1334,6 @@ ltp_cpuacct_task = cc_test {
     stem = "cpuacct_task";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuacct/cpuacct_task.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1333,7 +1346,6 @@ ltp_cpuctl_def_task01 = cc_test {
     stem = "cpuctl_def_task01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_def_task01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1349,7 +1361,6 @@ ltp_cpuctl_def_task02 = cc_test {
     stem = "cpuctl_def_task02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_def_task02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1365,7 +1376,6 @@ ltp_cpuctl_def_task03 = cc_test {
     stem = "cpuctl_def_task03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_def_task03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1381,7 +1391,6 @@ ltp_cpuctl_def_task04 = cc_test {
     stem = "cpuctl_def_task04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_def_task04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1397,7 +1406,6 @@ ltp_cpuctl_fj_cpu-hog = cc_test {
     stem = "cpuctl_fj_cpu-hog";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl_fj/cpuctl_fj_cpu-hog.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1410,7 +1418,6 @@ ltp_cpuctl_fj_simple_echo = cc_test {
     stem = "cpuctl_fj_simple_echo";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl_fj/cpuctl_fj_simple_echo.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1423,7 +1430,6 @@ ltp_cpuctl_latency_check_task = cc_test {
     stem = "cpuctl_latency_check_task";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_latency_check_task.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1439,7 +1445,6 @@ ltp_cpuctl_latency_test = cc_test {
     stem = "cpuctl_latency_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_latency_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1455,7 +1460,6 @@ ltp_cpuctl_test01 = cc_test {
     stem = "cpuctl_test01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_test01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1471,7 +1475,6 @@ ltp_cpuctl_test02 = cc_test {
     stem = "cpuctl_test02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_test02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1487,7 +1490,6 @@ ltp_cpuctl_test03 = cc_test {
     stem = "cpuctl_test03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_test03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1503,7 +1505,6 @@ ltp_cpuctl_test04 = cc_test {
     stem = "cpuctl_test04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuctl/cpuctl_test04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -1519,7 +1520,6 @@ ltp_cpufreq_boost = cc_test {
     stem = "cpufreq_boost";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/cpufreq/cpufreq_boost.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1529,7 +1529,6 @@ ltp_cpuset01 = cc_test {
     stem = "cpuset01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/cpuset/cpuset01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -1547,7 +1546,6 @@ ltp_cpuset_cpu_hog = cc_test {
     stem = "cpuset_cpu_hog";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuset/cpuset_load_balance_test/cpuset_cpu_hog.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = [
         "libltp_cpu_set"
@@ -1561,7 +1559,6 @@ ltp_cpuset_list_compute = cc_test {
     stem = "cpuset_list_compute";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuset/cpuset_hotplug_test/cpuset_list_compute.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = [
         "libltp_cpu_set"
@@ -1575,7 +1572,6 @@ ltp_cpuset_mem_hog = cc_test {
     stem = "cpuset_mem_hog";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuset/cpuset_memory_spread_test/cpuset_mem_hog.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = [
         "libltp_cpu_set"
@@ -1589,7 +1585,6 @@ ltp_cpuset_memory_pressure = cc_test {
     stem = "cpuset_memory_pressure";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuset/cpuset_memory_pressure_test/cpuset_memory_pressure.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = [
         "libltp_cpu_set"
@@ -1603,7 +1598,6 @@ ltp_cpuset_sched_domains_check = cc_test {
     stem = "cpuset_sched_domains_check";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuset/cpuset_load_balance_test/cpuset_sched_domains_check.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = [
         "libltp_cpu_set"
@@ -1617,7 +1611,6 @@ ltp_cpuset_syscall_test = cc_test {
     stem = "cpuset_syscall_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/cpuset/cpuset_syscall_test/cpuset_syscall_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = [
         "libltp_cpu_set"
@@ -1631,7 +1624,6 @@ ltp_crash01 = cc_test {
     stem = "crash01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/crash/crash01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1641,7 +1633,6 @@ ltp_crash02 = cc_test {
     stem = "crash02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/crash/crash02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1651,7 +1642,6 @@ ltp_creat01 = cc_test {
     stem = "creat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/creat/creat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1661,7 +1651,6 @@ ltp_creat03 = cc_test {
     stem = "creat03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/creat/creat03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1671,7 +1660,6 @@ ltp_creat04 = cc_test {
     stem = "creat04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/creat/creat04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1681,7 +1669,6 @@ ltp_creat05 = cc_test {
     stem = "creat05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/creat/creat05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1691,7 +1678,6 @@ ltp_creat07 = cc_test {
     stem = "creat07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/creat/creat07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1701,7 +1687,6 @@ ltp_creat07_child = cc_test {
     stem = "creat07_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/creat/creat07_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1711,7 +1696,6 @@ ltp_creat08 = cc_test {
     stem = "creat08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/creat/creat08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1724,7 +1708,6 @@ ltp_create-files = cc_test {
         "testcases/kernel/fs/fs-bench/create-files.c"
         "testcases/kernel/fs/fs-bench/boxmuler.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -1736,29 +1719,8 @@ ltp_create_datafile = cc_test {
     cflags = [
         "-D_FILE_OFFSET_BITS=64"
         "-D_LARGEFILE_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
     ];
     local_include_dirs = ["include/old"];
-};
-
-ltp_create_long_dirs = cc_test {
-    name = "ltp_create_long_dirs";
-    stem = "create_long_dirs";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/fs/ext4-new-features/ext4-subdir-limit/create_long_dirs.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_create_short_dirs = cc_test {
-    name = "ltp_create_short_dirs";
-    stem = "create_short_dirs";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/fs/ext4-new-features/ext4-subdir-limit/create_short_dirs.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
 };
 
 ltp_crypto_user01 = cc_test {
@@ -1766,10 +1728,17 @@ ltp_crypto_user01 = cc_test {
     stem = "crypto_user01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/crypto/crypto_user01.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_crypto_user02 = cc_test {
+    name = "ltp_crypto_user02";
+    stem = "crypto_user02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/crypto/crypto_user02.c"];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1779,10 +1748,7 @@ ltp_cve-2014-0196 = cc_test {
     stem = "cve-2014-0196";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2014-0196.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1792,10 +1758,7 @@ ltp_cve-2015-3290 = cc_test {
     stem = "cve-2015-3290";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2015-3290.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1805,10 +1768,7 @@ ltp_cve-2016-10044 = cc_test {
     stem = "cve-2016-10044";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2016-10044.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1818,10 +1778,7 @@ ltp_cve-2016-7042 = cc_test {
     stem = "cve-2016-7042";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2016-7042.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1831,10 +1788,7 @@ ltp_cve-2016-7117 = cc_test {
     stem = "cve-2016-7117";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2016-7117.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1844,10 +1798,7 @@ ltp_cve-2017-16939 = cc_test {
     stem = "cve-2017-16939";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2017-16939.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1857,10 +1808,7 @@ ltp_cve-2017-17052 = cc_test {
     stem = "cve-2017-17052";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2017-17052.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1870,10 +1818,7 @@ ltp_cve-2017-17053 = cc_test {
     stem = "cve-2017-17053";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2017-17053.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1883,10 +1828,7 @@ ltp_cve-2017-2618 = cc_test {
     stem = "cve-2017-2618";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2017-2618.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1896,10 +1838,7 @@ ltp_cve-2017-2671 = cc_test {
     stem = "cve-2017-2671";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/cve-2017-2671.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1909,7 +1848,6 @@ ltp_data_space = cc_test {
     stem = "data_space";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/vmtests/data_space.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1919,7 +1857,6 @@ ltp_delete_module01 = cc_test {
     stem = "delete_module01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/delete_module/delete_module01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1929,7 +1866,6 @@ ltp_delete_module02 = cc_test {
     stem = "delete_module02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/delete_module/delete_module02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1939,7 +1875,6 @@ ltp_delete_module03 = cc_test {
     stem = "delete_module03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/delete_module/delete_module03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1949,10 +1884,7 @@ ltp_dio_append = cc_test {
     stem = "dio_append";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/dio_append.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1962,10 +1894,7 @@ ltp_dio_sparse = cc_test {
     stem = "dio_sparse";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/dio_sparse.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1975,10 +1904,7 @@ ltp_dio_truncate = cc_test {
     stem = "dio_truncate";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/dio_truncate.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -1992,7 +1918,6 @@ ltp_diotest1 = cc_test {
         "testcases/kernel/io/direct_io/diotest_routines.c"
     ];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_GNU_SOURCE"
         "-DSHARED_OFILE"
     ];
@@ -2009,7 +1934,6 @@ ltp_diotest2 = cc_test {
         "testcases/kernel/io/direct_io/diotest2.c"
     ];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_GNU_SOURCE"
         "-DSHARED_OFILE"
     ];
@@ -2026,7 +1950,6 @@ ltp_diotest3 = cc_test {
         "testcases/kernel/io/direct_io/diotest_routines.c"
     ];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_GNU_SOURCE"
         "-DSHARED_OFILE"
     ];
@@ -2043,7 +1966,6 @@ ltp_diotest5 = cc_test {
         "testcases/kernel/io/direct_io/diotest5.c"
     ];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_GNU_SOURCE"
         "-DSHARED_OFILE"
     ];
@@ -2060,7 +1982,6 @@ ltp_diotest6 = cc_test {
         "testcases/kernel/io/direct_io/diotest_routines.c"
     ];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_GNU_SOURCE"
         "-DSHARED_OFILE"
     ];
@@ -2073,10 +1994,7 @@ ltp_dirty = cc_test {
     stem = "dirty";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/dirty.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2086,7 +2004,6 @@ ltp_dirtyc0w = cc_test {
     stem = "dirtyc0w";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/dirtyc0w/dirtyc0w.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2096,7 +2013,6 @@ ltp_dirtyc0w_child = cc_test {
     stem = "dirtyc0w_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/dirtyc0w/dirtyc0w_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2121,12 +2037,11 @@ ltp_disktest = cc_test {
         "testcases/kernel/io/disktest/signals.c"
     ];
     cflags = [
-        "-D_THREAD_SAFE"
+        "-DLINUX"
         "-D_FILE_OFFSET_BITS=64"
         "-D_LARGEFILE64_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
         "-D_GNU_SOURCE"
-        "-DLINUX"
+        "-D_THREAD_SAFE"
         "-D_LARGE_FILES"
     ];
     local_include_dirs = ["include/old"];
@@ -2141,7 +2056,6 @@ ltp_dma_thread_diotest = cc_test {
         "testcases/kernel/io/direct_io/dma_thread_diotest.c"
     ];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_GNU_SOURCE"
         "-DSHARED_OFILE"
     ];
@@ -2154,7 +2068,6 @@ ltp_dup01 = cc_test {
     stem = "dup01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup/dup01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2164,7 +2077,6 @@ ltp_dup02 = cc_test {
     stem = "dup02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup/dup02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2174,7 +2086,6 @@ ltp_dup03 = cc_test {
     stem = "dup03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup/dup03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2184,7 +2095,6 @@ ltp_dup04 = cc_test {
     stem = "dup04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup/dup04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2194,7 +2104,6 @@ ltp_dup05 = cc_test {
     stem = "dup05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup/dup05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2204,7 +2113,6 @@ ltp_dup06 = cc_test {
     stem = "dup06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup/dup06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2214,7 +2122,6 @@ ltp_dup07 = cc_test {
     stem = "dup07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup/dup07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2224,7 +2131,6 @@ ltp_dup201 = cc_test {
     stem = "dup201";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup2/dup201.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2234,7 +2140,6 @@ ltp_dup202 = cc_test {
     stem = "dup202";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup2/dup202.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2244,7 +2149,6 @@ ltp_dup203 = cc_test {
     stem = "dup203";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup2/dup203.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2254,7 +2158,6 @@ ltp_dup204 = cc_test {
     stem = "dup204";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup2/dup204.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2264,7 +2167,6 @@ ltp_dup205 = cc_test {
     stem = "dup205";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup2/dup205.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2274,7 +2176,6 @@ ltp_dup3_01 = cc_test {
     stem = "dup3_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup3/dup3_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2284,7 +2185,6 @@ ltp_dup3_02 = cc_test {
     stem = "dup3_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/dup3/dup3_02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2298,7 +2198,6 @@ ltp_eas_big_to_small = cc_test {
         "testcases/kernel/sched/eas/eas_big_to_small.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2312,7 +2211,6 @@ ltp_eas_one_big_task = cc_test {
         "testcases/kernel/sched/eas/eas_one_big_task.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2326,7 +2224,6 @@ ltp_eas_one_small_task = cc_test {
         "testcases/kernel/sched/eas/eas_one_small_task.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2340,7 +2237,6 @@ ltp_eas_small_big_toggle = cc_test {
         "testcases/kernel/sched/eas/eas_small_big_toggle.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2354,7 +2250,6 @@ ltp_eas_small_to_big = cc_test {
         "testcases/kernel/sched/eas/util.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2368,7 +2263,6 @@ ltp_eas_two_big_three_small = cc_test {
         "testcases/kernel/sched/eas/eas_two_big_three_small.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2378,7 +2272,6 @@ ltp_endian_switch01 = cc_test {
     stem = "endian_switch01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/switch/endian_switch01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2388,7 +2281,6 @@ ltp_epoll-ltp = cc_test {
     stem = "epoll-ltp";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll/epoll-ltp.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2398,7 +2290,6 @@ ltp_epoll_create1_01 = cc_test {
     stem = "epoll_create1_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll_create1/epoll_create1_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2408,7 +2299,6 @@ ltp_epoll_ctl01 = cc_test {
     stem = "epoll_ctl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll_ctl/epoll_ctl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2418,7 +2308,6 @@ ltp_epoll_ctl02 = cc_test {
     stem = "epoll_ctl02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll_ctl/epoll_ctl02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2428,7 +2317,6 @@ ltp_epoll_pwait01 = cc_test {
     stem = "epoll_pwait01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll_pwait/epoll_pwait01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2438,7 +2326,6 @@ ltp_epoll_wait01 = cc_test {
     stem = "epoll_wait01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll_wait/epoll_wait01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2448,7 +2335,6 @@ ltp_epoll_wait02 = cc_test {
     stem = "epoll_wait02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll_wait/epoll_wait02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2458,7 +2344,6 @@ ltp_epoll_wait03 = cc_test {
     stem = "epoll_wait03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/epoll_wait/epoll_wait03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2468,7 +2353,6 @@ ltp_event_generator = cc_test {
     stem = "event_generator";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/connectors/pec/event_generator.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2478,7 +2362,6 @@ ltp_eventfd01 = cc_test {
     stem = "eventfd01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/eventfd/eventfd01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2488,7 +2371,6 @@ ltp_eventfd2_01 = cc_test {
     stem = "eventfd2_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/eventfd2/eventfd2_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2498,7 +2380,6 @@ ltp_eventfd2_02 = cc_test {
     stem = "eventfd2_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/eventfd2/eventfd2_02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2508,7 +2389,6 @@ ltp_eventfd2_03 = cc_test {
     stem = "eventfd2_03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/eventfd2/eventfd2_03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2518,7 +2398,6 @@ ltp_exec_with_inh = cc_test {
     stem = "exec_with_inh";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/cap_bound/exec_with_inh.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2528,7 +2407,6 @@ ltp_exec_without_inh = cc_test {
     stem = "exec_without_inh";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/cap_bound/exec_without_inh.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2538,7 +2416,6 @@ ltp_execl01 = cc_test {
     stem = "execl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execl/execl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2548,7 +2425,6 @@ ltp_execl01_child = cc_test {
     stem = "execl01_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execl/execl01_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2558,7 +2434,6 @@ ltp_execle01 = cc_test {
     stem = "execle01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execle/execle01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2568,7 +2443,6 @@ ltp_execle01_child = cc_test {
     stem = "execle01_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execle/execle01_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2578,7 +2452,6 @@ ltp_execlp01 = cc_test {
     stem = "execlp01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execlp/execlp01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2588,7 +2461,6 @@ ltp_execlp01_child = cc_test {
     stem = "execlp01_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execlp/execlp01_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2598,7 +2470,6 @@ ltp_execv01 = cc_test {
     stem = "execv01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execv/execv01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2608,7 +2479,6 @@ ltp_execv01_child = cc_test {
     stem = "execv01_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execv/execv01_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2618,7 +2488,6 @@ ltp_execve01 = cc_test {
     stem = "execve01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execve/execve01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2628,7 +2497,6 @@ ltp_execve01_child = cc_test {
     stem = "execve01_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execve/execve01_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2638,7 +2506,6 @@ ltp_execve02 = cc_test {
     stem = "execve02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execve/execve02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2648,7 +2515,6 @@ ltp_execve03 = cc_test {
     stem = "execve03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execve/execve03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2658,7 +2524,6 @@ ltp_execve04 = cc_test {
     stem = "execve04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execve/execve04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2668,7 +2533,6 @@ ltp_execve05 = cc_test {
     stem = "execve05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execve/execve05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2678,7 +2542,6 @@ ltp_execve_child = cc_test {
     stem = "execve_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execve/execve_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2688,7 +2551,6 @@ ltp_execveat01 = cc_test {
     stem = "execveat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execveat/execveat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2698,7 +2560,6 @@ ltp_execveat02 = cc_test {
     stem = "execveat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execveat/execveat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2708,7 +2569,6 @@ ltp_execveat03 = cc_test {
     stem = "execveat03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execveat/execveat03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2718,7 +2578,6 @@ ltp_execveat_child = cc_test {
     stem = "execveat_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execveat/execveat_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2728,7 +2587,6 @@ ltp_execveat_errno = cc_test {
     stem = "execveat_errno";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execveat/execveat_errno.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2738,7 +2596,6 @@ ltp_execvp01 = cc_test {
     stem = "execvp01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execvp/execvp01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2748,7 +2605,6 @@ ltp_execvp01_child = cc_test {
     stem = "execvp01_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/execvp/execvp01_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2758,7 +2614,6 @@ ltp_exit01 = cc_test {
     stem = "exit01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/exit/exit01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2768,7 +2623,6 @@ ltp_exit02 = cc_test {
     stem = "exit02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/exit/exit02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2778,27 +2632,6 @@ ltp_exit_group01 = cc_test {
     stem = "exit_group01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/exit_group/exit_group01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_ext4_file_time = cc_test {
-    name = "ltp_ext4_file_time";
-    stem = "ext4_file_time";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/fs/ext4-new-features/ext4-nsec-timestamps/ext4_file_time.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_ext4_test_inode_version = cc_test {
-    name = "ltp_ext4_test_inode_version";
-    stem = "ext4_test_inode_version";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/fs/ext4-new-features/ext4-inode-version/ext4_test_inode_version.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2808,7 +2641,6 @@ ltp_f1 = cc_test {
     stem = "f1";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/commands/nm/datafiles/f1.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -2817,7 +2649,6 @@ ltp_f2 = cc_test {
     stem = "f2";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/commands/nm/datafiles/f2.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -2826,7 +2657,6 @@ ltp_f3 = cc_test {
     stem = "f3";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/commands/nm/datafiles/f3.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -2835,7 +2665,6 @@ ltp_faccessat01 = cc_test {
     stem = "faccessat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/faccessat/faccessat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2845,7 +2674,6 @@ ltp_fallocate01 = cc_test {
     stem = "fallocate01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fallocate/fallocate01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2855,7 +2683,6 @@ ltp_fallocate02 = cc_test {
     stem = "fallocate02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fallocate/fallocate02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2865,7 +2692,6 @@ ltp_fallocate03 = cc_test {
     stem = "fallocate03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fallocate/fallocate03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2875,7 +2701,6 @@ ltp_fallocate04 = cc_test {
     stem = "fallocate04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fallocate/fallocate04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2885,7 +2710,6 @@ ltp_fallocate05 = cc_test {
     stem = "fallocate05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fallocate/fallocate05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2895,7 +2719,6 @@ ltp_fanotify01 = cc_test {
     stem = "fanotify01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2905,7 +2728,6 @@ ltp_fanotify02 = cc_test {
     stem = "fanotify02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2915,7 +2737,6 @@ ltp_fanotify03 = cc_test {
     stem = "fanotify03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2925,7 +2746,6 @@ ltp_fanotify04 = cc_test {
     stem = "fanotify04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2935,7 +2755,6 @@ ltp_fanotify05 = cc_test {
     stem = "fanotify05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2945,7 +2764,6 @@ ltp_fanotify06 = cc_test {
     stem = "fanotify06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2955,7 +2773,6 @@ ltp_fanotify07 = cc_test {
     stem = "fanotify07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2965,7 +2782,6 @@ ltp_fanotify08 = cc_test {
     stem = "fanotify08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2975,7 +2791,6 @@ ltp_fanotify09 = cc_test {
     stem = "fanotify09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2985,7 +2800,6 @@ ltp_fanotify10 = cc_test {
     stem = "fanotify10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -2995,7 +2809,51 @@ ltp_fanotify11 = cc_test {
     stem = "fanotify11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fanotify/fanotify11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_fanotify12 = cc_test {
+    name = "ltp_fanotify12";
+    stem = "fanotify12";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/fanotify/fanotify12.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_fanotify13 = cc_test {
+    name = "ltp_fanotify13";
+    stem = "fanotify13";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/fanotify/fanotify13.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_fanotify14 = cc_test {
+    name = "ltp_fanotify14";
+    stem = "fanotify14";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/fanotify/fanotify14.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_fanotify15 = cc_test {
+    name = "ltp_fanotify15";
+    stem = "fanotify15";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/fanotify/fanotify15.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_fanotify_child = cc_test {
+    name = "ltp_fanotify_child";
+    stem = "fanotify_child";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/fanotify/fanotify_child.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3005,10 +2863,7 @@ ltp_fanout01 = cc_test {
     stem = "fanout01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/packet/fanout01.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3018,7 +2873,6 @@ ltp_fchdir01 = cc_test {
     stem = "fchdir01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchdir/fchdir01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3028,7 +2882,6 @@ ltp_fchdir02 = cc_test {
     stem = "fchdir02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchdir/fchdir02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3038,7 +2891,6 @@ ltp_fchdir03 = cc_test {
     stem = "fchdir03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchdir/fchdir03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3048,7 +2900,6 @@ ltp_fchmod01 = cc_test {
     stem = "fchmod01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchmod/fchmod01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3058,7 +2909,6 @@ ltp_fchmod02 = cc_test {
     stem = "fchmod02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchmod/fchmod02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3068,7 +2918,6 @@ ltp_fchmod03 = cc_test {
     stem = "fchmod03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchmod/fchmod03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3078,7 +2927,6 @@ ltp_fchmod04 = cc_test {
     stem = "fchmod04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchmod/fchmod04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3088,7 +2936,6 @@ ltp_fchmod05 = cc_test {
     stem = "fchmod05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchmod/fchmod05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3098,7 +2945,6 @@ ltp_fchmod06 = cc_test {
     stem = "fchmod06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchmod/fchmod06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3108,7 +2954,6 @@ ltp_fchmodat01 = cc_test {
     stem = "fchmodat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchmodat/fchmodat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3118,7 +2963,6 @@ ltp_fchown01 = cc_test {
     stem = "fchown01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3132,10 +2976,7 @@ ltp_fchown01_16 = cc_test {
     stem = "fchown01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3149,7 +2990,6 @@ ltp_fchown02 = cc_test {
     stem = "fchown02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3163,10 +3003,7 @@ ltp_fchown02_16 = cc_test {
     stem = "fchown02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3180,7 +3017,6 @@ ltp_fchown03 = cc_test {
     stem = "fchown03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3194,10 +3030,7 @@ ltp_fchown03_16 = cc_test {
     stem = "fchown03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3211,7 +3044,6 @@ ltp_fchown04 = cc_test {
     stem = "fchown04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3225,10 +3057,7 @@ ltp_fchown04_16 = cc_test {
     stem = "fchown04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3242,7 +3071,6 @@ ltp_fchown05 = cc_test {
     stem = "fchown05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3256,10 +3084,7 @@ ltp_fchown05_16 = cc_test {
     stem = "fchown05_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchown/fchown05.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/fchown"
@@ -3273,7 +3098,6 @@ ltp_fchownat01 = cc_test {
     stem = "fchownat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchownat/fchownat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3283,7 +3107,6 @@ ltp_fchownat02 = cc_test {
     stem = "fchownat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fchownat/fchownat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -3293,10 +3116,7 @@ ltp_fcntl01 = cc_test {
     stem = "fcntl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3311,7 +3131,6 @@ ltp_fcntl01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3329,10 +3148,7 @@ ltp_fcntl02 = cc_test {
     stem = "fcntl02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3347,7 +3163,6 @@ ltp_fcntl02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3365,10 +3180,7 @@ ltp_fcntl03 = cc_test {
     stem = "fcntl03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3383,7 +3195,6 @@ ltp_fcntl03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3401,10 +3212,7 @@ ltp_fcntl04 = cc_test {
     stem = "fcntl04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl04.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3419,7 +3227,6 @@ ltp_fcntl04_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl04.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3437,10 +3244,7 @@ ltp_fcntl05 = cc_test {
     stem = "fcntl05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl05.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3455,7 +3259,6 @@ ltp_fcntl05_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl05.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3473,10 +3276,7 @@ ltp_fcntl06 = cc_test {
     stem = "fcntl06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl06.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3491,7 +3291,6 @@ ltp_fcntl06_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl06.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3509,10 +3308,7 @@ ltp_fcntl07 = cc_test {
     stem = "fcntl07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl07.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3527,7 +3323,6 @@ ltp_fcntl07_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl07.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3545,10 +3340,7 @@ ltp_fcntl08 = cc_test {
     stem = "fcntl08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl08.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3563,7 +3355,6 @@ ltp_fcntl08_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl08.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3581,10 +3372,7 @@ ltp_fcntl09 = cc_test {
     stem = "fcntl09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl09.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3599,7 +3387,6 @@ ltp_fcntl09_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl09.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3617,10 +3404,7 @@ ltp_fcntl10 = cc_test {
     stem = "fcntl10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl10.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3635,7 +3419,6 @@ ltp_fcntl10_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl10.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3653,10 +3436,7 @@ ltp_fcntl11 = cc_test {
     stem = "fcntl11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl11.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3671,7 +3451,6 @@ ltp_fcntl11_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl11.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3689,10 +3468,7 @@ ltp_fcntl12 = cc_test {
     stem = "fcntl12";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl12.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3707,7 +3483,6 @@ ltp_fcntl12_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl12.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3725,10 +3500,7 @@ ltp_fcntl13 = cc_test {
     stem = "fcntl13";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl13.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3743,7 +3515,6 @@ ltp_fcntl13_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl13.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3761,10 +3532,7 @@ ltp_fcntl14 = cc_test {
     stem = "fcntl14";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl14.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3779,7 +3547,6 @@ ltp_fcntl14_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl14.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3797,10 +3564,7 @@ ltp_fcntl15 = cc_test {
     stem = "fcntl15";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl15.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3815,7 +3579,6 @@ ltp_fcntl15_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl15.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3833,10 +3596,7 @@ ltp_fcntl16 = cc_test {
     stem = "fcntl16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl16.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3851,7 +3611,6 @@ ltp_fcntl16_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl16.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3869,10 +3628,7 @@ ltp_fcntl17 = cc_test {
     stem = "fcntl17";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl17.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3887,7 +3643,6 @@ ltp_fcntl17_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl17.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3905,10 +3660,7 @@ ltp_fcntl18 = cc_test {
     stem = "fcntl18";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl18.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3923,7 +3675,6 @@ ltp_fcntl18_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl18.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3941,10 +3692,7 @@ ltp_fcntl19 = cc_test {
     stem = "fcntl19";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl19.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3959,7 +3707,6 @@ ltp_fcntl19_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl19.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -3977,10 +3724,7 @@ ltp_fcntl20 = cc_test {
     stem = "fcntl20";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl20.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -3995,7 +3739,6 @@ ltp_fcntl20_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl20.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4013,10 +3756,7 @@ ltp_fcntl21 = cc_test {
     stem = "fcntl21";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl21.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4031,7 +3771,6 @@ ltp_fcntl21_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl21.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4049,10 +3788,7 @@ ltp_fcntl22 = cc_test {
     stem = "fcntl22";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl22.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4067,7 +3803,6 @@ ltp_fcntl22_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl22.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4085,10 +3820,7 @@ ltp_fcntl23 = cc_test {
     stem = "fcntl23";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl23.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4103,7 +3835,6 @@ ltp_fcntl23_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl23.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4121,10 +3852,7 @@ ltp_fcntl24 = cc_test {
     stem = "fcntl24";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl24.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4139,7 +3867,6 @@ ltp_fcntl24_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl24.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4157,10 +3884,7 @@ ltp_fcntl25 = cc_test {
     stem = "fcntl25";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl25.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4175,7 +3899,6 @@ ltp_fcntl25_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl25.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4193,10 +3916,7 @@ ltp_fcntl26 = cc_test {
     stem = "fcntl26";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl26.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4211,7 +3931,6 @@ ltp_fcntl26_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl26.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4229,10 +3948,7 @@ ltp_fcntl27 = cc_test {
     stem = "fcntl27";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl27.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4247,7 +3963,6 @@ ltp_fcntl27_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl27.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4265,10 +3980,7 @@ ltp_fcntl28 = cc_test {
     stem = "fcntl28";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl28.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4283,7 +3995,6 @@ ltp_fcntl28_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl28.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4301,10 +4012,7 @@ ltp_fcntl29 = cc_test {
     stem = "fcntl29";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl29.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4319,7 +4027,6 @@ ltp_fcntl29_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl29.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4337,10 +4044,7 @@ ltp_fcntl30 = cc_test {
     stem = "fcntl30";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl30.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4355,7 +4059,6 @@ ltp_fcntl30_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl30.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4373,10 +4076,7 @@ ltp_fcntl31 = cc_test {
     stem = "fcntl31";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl31.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4391,7 +4091,6 @@ ltp_fcntl31_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl31.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4409,10 +4108,7 @@ ltp_fcntl32 = cc_test {
     stem = "fcntl32";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl32.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4427,7 +4123,6 @@ ltp_fcntl32_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl32.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4445,10 +4140,7 @@ ltp_fcntl33 = cc_test {
     stem = "fcntl33";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl33.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4463,7 +4155,6 @@ ltp_fcntl33_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl33.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4481,10 +4172,7 @@ ltp_fcntl34 = cc_test {
     stem = "fcntl34";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl34.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4499,7 +4187,6 @@ ltp_fcntl34_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl34.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4517,10 +4204,7 @@ ltp_fcntl35 = cc_test {
     stem = "fcntl35";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl35.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4535,7 +4219,6 @@ ltp_fcntl35_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl35.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4553,10 +4236,7 @@ ltp_fcntl36 = cc_test {
     stem = "fcntl36";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl36.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fcntl"
         "testcases/kernel/syscalls/utils"
@@ -4571,7 +4251,6 @@ ltp_fcntl36_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fcntl/fcntl36.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
         "-D_GNU_SOURCE"
@@ -4589,7 +4268,6 @@ ltp_fdatasync01 = cc_test {
     stem = "fdatasync01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fdatasync/fdatasync01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4599,7 +4277,15 @@ ltp_fdatasync02 = cc_test {
     stem = "fdatasync02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fdatasync/fdatasync02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_fdatasync03 = cc_test {
+    name = "ltp_fdatasync03";
+    stem = "fdatasync03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/fdatasync/fdatasync03.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4609,7 +4295,6 @@ ltp_fgetxattr01 = cc_test {
     stem = "fgetxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fgetxattr/fgetxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4619,7 +4304,6 @@ ltp_fgetxattr02 = cc_test {
     stem = "fgetxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fgetxattr/fgetxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4629,7 +4313,6 @@ ltp_fgetxattr03 = cc_test {
     stem = "fgetxattr03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fgetxattr/fgetxattr03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4639,7 +4322,6 @@ ltp_flistxattr01 = cc_test {
     stem = "flistxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flistxattr/flistxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4649,7 +4331,6 @@ ltp_flistxattr02 = cc_test {
     stem = "flistxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flistxattr/flistxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4659,7 +4340,6 @@ ltp_flistxattr03 = cc_test {
     stem = "flistxattr03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flistxattr/flistxattr03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4669,7 +4349,6 @@ ltp_float_bessel = cc_test {
     stem = "float_bessel";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/float_bessel.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4679,7 +4358,6 @@ ltp_float_exp_log = cc_test {
     stem = "float_exp_log";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/float_exp_log.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4689,7 +4367,6 @@ ltp_float_iperb = cc_test {
     stem = "float_iperb";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/float_iperb.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4699,7 +4376,6 @@ ltp_float_power = cc_test {
     stem = "float_power";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/float_power.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4709,7 +4385,6 @@ ltp_float_trigo = cc_test {
     stem = "float_trigo";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/float_trigo.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4719,7 +4394,6 @@ ltp_flock01 = cc_test {
     stem = "flock01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flock/flock01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4729,7 +4403,6 @@ ltp_flock02 = cc_test {
     stem = "flock02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flock/flock02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4739,7 +4412,6 @@ ltp_flock03 = cc_test {
     stem = "flock03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flock/flock03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4749,7 +4421,6 @@ ltp_flock04 = cc_test {
     stem = "flock04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flock/flock04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4759,7 +4430,6 @@ ltp_flock06 = cc_test {
     stem = "flock06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/flock/flock06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4769,7 +4439,6 @@ ltp_fork01 = cc_test {
     stem = "fork01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4779,7 +4448,6 @@ ltp_fork02 = cc_test {
     stem = "fork02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4789,7 +4457,6 @@ ltp_fork03 = cc_test {
     stem = "fork03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4799,7 +4466,6 @@ ltp_fork04 = cc_test {
     stem = "fork04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4809,7 +4475,6 @@ ltp_fork05 = cc_test {
     stem = "fork05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4819,7 +4484,6 @@ ltp_fork06 = cc_test {
     stem = "fork06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4829,7 +4493,6 @@ ltp_fork07 = cc_test {
     stem = "fork07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4839,7 +4502,6 @@ ltp_fork08 = cc_test {
     stem = "fork08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4849,7 +4511,6 @@ ltp_fork09 = cc_test {
     stem = "fork09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4859,7 +4520,6 @@ ltp_fork10 = cc_test {
     stem = "fork10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4869,7 +4529,6 @@ ltp_fork11 = cc_test {
     stem = "fork11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4879,7 +4538,6 @@ ltp_fork12 = cc_test {
     stem = "fork12";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork12.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4889,7 +4547,6 @@ ltp_fork13 = cc_test {
     stem = "fork13";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork13.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4899,7 +4556,6 @@ ltp_fork14 = cc_test {
     stem = "fork14";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fork/fork14.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4909,7 +4565,6 @@ ltp_fork_exec_loop = cc_test {
     stem = "fork_exec_loop";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/freezer/fork_exec_loop.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4919,7 +4574,6 @@ ltp_fpathconf01 = cc_test {
     stem = "fpathconf01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fpathconf/fpathconf01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4929,7 +4583,6 @@ ltp_fptest01 = cc_test {
     stem = "fptest01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/fptests/fptest01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4939,7 +4592,6 @@ ltp_fptest02 = cc_test {
     stem = "fptest02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/fptests/fptest02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4952,7 +4604,6 @@ ltp_frag = cc_test {
     cflags = [
         "-D_FILE_OFFSET_BITS=64"
         "-D_LARGEFILE_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
     ];
     local_include_dirs = ["include/old"];
 };
@@ -4962,7 +4613,6 @@ ltp_fremovexattr01 = cc_test {
     stem = "fremovexattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fremovexattr/fremovexattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4972,7 +4622,6 @@ ltp_fremovexattr02 = cc_test {
     stem = "fremovexattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fremovexattr/fremovexattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4982,7 +4631,6 @@ ltp_fs_fill = cc_test {
     stem = "fs_fill";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/fs_fill/fs_fill.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -4992,7 +4640,6 @@ ltp_fs_perms = cc_test {
     stem = "fs_perms";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/fs_perms/fs_perms.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5002,7 +4649,6 @@ ltp_fsetxattr01 = cc_test {
     stem = "fsetxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fsetxattr/fsetxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5012,40 +4658,7 @@ ltp_fsetxattr02 = cc_test {
     stem = "fsetxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fsetxattr/fsetxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_fstat01 = cc_test {
-    name = "ltp_fstat01";
-    stem = "fstat01";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/fstat/fstat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/fstat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_fstat01_64 = cc_test {
-    name = "ltp_fstat01_64";
-    stem = "fstat01_64";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/fstat/fstat01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_FILE_OFFSET_BITS=64"
-        "-DTST_USE_NEWER64_SYSCALL=1"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/fstat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
     static_libs = ["libltp_ltp"];
 };
 
@@ -5054,7 +4667,6 @@ ltp_fstat02 = cc_test {
     stem = "fstat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstat/fstat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fstat"
         "testcases/kernel/syscalls/utils"
@@ -5069,7 +4681,6 @@ ltp_fstat02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstat/fstat02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -5086,7 +4697,6 @@ ltp_fstat03 = cc_test {
     stem = "fstat03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstat/fstat03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fstat"
         "testcases/kernel/syscalls/utils"
@@ -5101,39 +4711,6 @@ ltp_fstat03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstat/fstat03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_FILE_OFFSET_BITS=64"
-        "-DTST_USE_NEWER64_SYSCALL=1"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/fstat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_fstat05 = cc_test {
-    name = "ltp_fstat05";
-    stem = "fstat05";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/fstat/fstat05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/fstat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_fstat05_64 = cc_test {
-    name = "ltp_fstat05_64";
-    stem = "fstat05_64";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/fstat/fstat05.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -5150,7 +4727,6 @@ ltp_fstatat01 = cc_test {
     stem = "fstatat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstatat/fstatat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5160,7 +4736,6 @@ ltp_fstatfs01 = cc_test {
     stem = "fstatfs01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstatfs/fstatfs01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fstatfs"
         "testcases/kernel/syscalls/utils"
@@ -5175,7 +4750,6 @@ ltp_fstatfs01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstatfs/fstatfs01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -5192,7 +4766,6 @@ ltp_fstatfs02 = cc_test {
     stem = "fstatfs02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstatfs/fstatfs02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fstatfs"
         "testcases/kernel/syscalls/utils"
@@ -5207,7 +4780,6 @@ ltp_fstatfs02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fstatfs/fstatfs02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -5225,7 +4797,6 @@ ltp_fsx-linux = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/fsx-linux/fsx-linux.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-DNO_XFS"
         "-D_LARGEFILE64_SOURCE"
         "-D_GNU_SOURCE"
@@ -5241,7 +4812,6 @@ ltp_fsync01 = cc_test {
     stem = "fsync01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fsync/fsync01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5251,7 +4821,6 @@ ltp_fsync02 = cc_test {
     stem = "fsync02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fsync/fsync02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5261,7 +4830,15 @@ ltp_fsync03 = cc_test {
     stem = "fsync03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fsync/fsync03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_fsync04 = cc_test {
+    name = "ltp_fsync04";
+    stem = "fsync04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/fsync/fsync04.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5274,7 +4851,6 @@ ltp_ftest01 = cc_test {
         "testcases/kernel/fs/ftest/libftest.c"
         "testcases/kernel/fs/ftest/ftest01.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5287,7 +4863,6 @@ ltp_ftest02 = cc_test {
         "testcases/kernel/fs/ftest/ftest02.c"
         "testcases/kernel/fs/ftest/libftest.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5300,7 +4875,6 @@ ltp_ftest03 = cc_test {
         "testcases/kernel/fs/ftest/libftest.c"
         "testcases/kernel/fs/ftest/ftest03.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5313,7 +4887,6 @@ ltp_ftest04 = cc_test {
         "testcases/kernel/fs/ftest/libftest.c"
         "testcases/kernel/fs/ftest/ftest04.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5326,7 +4899,6 @@ ltp_ftest05 = cc_test {
         "testcases/kernel/fs/ftest/libftest.c"
         "testcases/kernel/fs/ftest/ftest05.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5339,7 +4911,6 @@ ltp_ftest06 = cc_test {
         "testcases/kernel/fs/ftest/libftest.c"
         "testcases/kernel/fs/ftest/ftest06.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5352,7 +4923,6 @@ ltp_ftest07 = cc_test {
         "testcases/kernel/fs/ftest/ftest07.c"
         "testcases/kernel/fs/ftest/libftest.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5365,7 +4935,6 @@ ltp_ftest08 = cc_test {
         "testcases/kernel/fs/ftest/libftest.c"
         "testcases/kernel/fs/ftest/ftest08.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5375,7 +4944,6 @@ ltp_ftruncate01 = cc_test {
     stem = "ftruncate01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ftruncate"
         "testcases/kernel/syscalls/utils"
@@ -5390,39 +4958,6 @@ ltp_ftruncate01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_FILE_OFFSET_BITS=64"
-        "-DTST_USE_NEWER64_SYSCALL=1"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/utils"
-        "testcases/kernel/syscalls/ftruncate"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_ftruncate02 = cc_test {
-    name = "ltp_ftruncate02";
-    stem = "ftruncate02";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/ftruncate"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_ftruncate02_64 = cc_test {
-    name = "ltp_ftruncate02_64";
-    stem = "ftruncate02_64";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -5439,7 +4974,6 @@ ltp_ftruncate03 = cc_test {
     stem = "ftruncate03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ftruncate"
         "testcases/kernel/syscalls/utils"
@@ -5454,7 +4988,6 @@ ltp_ftruncate03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -5471,7 +5004,6 @@ ltp_ftruncate04 = cc_test {
     stem = "ftruncate04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ftruncate"
         "testcases/kernel/syscalls/utils"
@@ -5486,7 +5018,6 @@ ltp_ftruncate04_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ftruncate/ftruncate04.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -5498,12 +5029,29 @@ ltp_ftruncate04_64 = cc_test {
     static_libs = ["libltp_ltp"];
 };
 
+ltp_futex_cmp_requeue01 = cc_test {
+    name = "ltp_futex_cmp_requeue01";
+    stem = "futex_cmp_requeue01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/futex/futex_cmp_requeue01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_futex_cmp_requeue02 = cc_test {
+    name = "ltp_futex_cmp_requeue02";
+    stem = "futex_cmp_requeue02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/futex/futex_cmp_requeue02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
 ltp_futex_wait01 = cc_test {
     name = "ltp_futex_wait01";
     stem = "futex_wait01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wait01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5513,7 +5061,6 @@ ltp_futex_wait03 = cc_test {
     stem = "futex_wait03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wait03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5523,7 +5070,6 @@ ltp_futex_wait04 = cc_test {
     stem = "futex_wait04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wait04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5533,7 +5079,6 @@ ltp_futex_wait05 = cc_test {
     stem = "futex_wait05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wait05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5543,7 +5088,6 @@ ltp_futex_wait_bitset01 = cc_test {
     stem = "futex_wait_bitset01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wait_bitset01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5553,7 +5097,6 @@ ltp_futex_wait_bitset02 = cc_test {
     stem = "futex_wait_bitset02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wait_bitset02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5563,7 +5106,6 @@ ltp_futex_wake01 = cc_test {
     stem = "futex_wake01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wake01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5573,7 +5115,6 @@ ltp_futex_wake02 = cc_test {
     stem = "futex_wake02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wake02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5583,7 +5124,6 @@ ltp_futex_wake04 = cc_test {
     stem = "futex_wake04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futex/futex_wake04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5593,7 +5133,6 @@ ltp_futimesat01 = cc_test {
     stem = "futimesat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/futimesat/futimesat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5603,7 +5142,6 @@ ltp_fw_load = cc_test {
     stem = "fw_load";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/firmware/fw_load_user/fw_load.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5613,7 +5151,6 @@ ltp_genacos = cc_test {
     stem = "genacos";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/genacos.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5622,7 +5159,6 @@ ltp_genasin = cc_test {
     stem = "genasin";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/genasin.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5631,7 +5167,6 @@ ltp_genatan = cc_test {
     stem = "genatan";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/genatan.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5640,7 +5175,6 @@ ltp_genatan2 = cc_test {
     stem = "genatan2";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/genatan2.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5649,7 +5183,6 @@ ltp_genbessel = cc_test {
     stem = "genbessel";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/bessel/genbessel.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5658,7 +5191,6 @@ ltp_genceil = cc_test {
     stem = "genceil";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/power/genceil.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5667,7 +5199,6 @@ ltp_gencos = cc_test {
     stem = "gencos";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/gencos.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5676,7 +5207,6 @@ ltp_gencosh = cc_test {
     stem = "gencosh";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/iperb/gencosh.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5685,7 +5215,6 @@ ltp_genexp = cc_test {
     stem = "genexp";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genexp.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5694,7 +5223,6 @@ ltp_genexp_log = cc_test {
     stem = "genexp_log";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genexp_log.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5703,7 +5231,6 @@ ltp_genfabs = cc_test {
     stem = "genfabs";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/power/genfabs.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5712,7 +5239,6 @@ ltp_genfloor = cc_test {
     stem = "genfloor";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/power/genfloor.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5721,7 +5247,6 @@ ltp_genfmod = cc_test {
     stem = "genfmod";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/power/genfmod.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5730,7 +5255,6 @@ ltp_genfrexp = cc_test {
     stem = "genfrexp";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genfrexp.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5739,7 +5263,6 @@ ltp_genhypot = cc_test {
     stem = "genhypot";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genhypot.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5748,7 +5271,6 @@ ltp_geniperb = cc_test {
     stem = "geniperb";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/iperb/geniperb.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5757,7 +5279,6 @@ ltp_genj0 = cc_test {
     stem = "genj0";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/bessel/genj0.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5766,7 +5287,6 @@ ltp_genj1 = cc_test {
     stem = "genj1";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/bessel/genj1.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5775,7 +5295,6 @@ ltp_genldexp = cc_test {
     stem = "genldexp";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genldexp.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5784,7 +5303,6 @@ ltp_genlgamma = cc_test {
     stem = "genlgamma";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/bessel/genlgamma.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5793,7 +5311,6 @@ ltp_genlog = cc_test {
     stem = "genlog";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genlog.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5802,7 +5319,6 @@ ltp_genlog10 = cc_test {
     stem = "genlog10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genlog10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5811,7 +5327,6 @@ ltp_genmodf = cc_test {
     stem = "genmodf";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/exp_log/genmodf.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5820,7 +5335,6 @@ ltp_genpow = cc_test {
     stem = "genpow";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/power/genpow.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5829,7 +5343,6 @@ ltp_genpower = cc_test {
     stem = "genpower";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/power/genpower.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5838,7 +5351,6 @@ ltp_gensin = cc_test {
     stem = "gensin";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/gensin.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5847,7 +5359,6 @@ ltp_gensinh = cc_test {
     stem = "gensinh";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/iperb/gensinh.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5856,7 +5367,6 @@ ltp_gensqrt = cc_test {
     stem = "gensqrt";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/power/gensqrt.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5865,7 +5375,6 @@ ltp_gentan = cc_test {
     stem = "gentan";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/gentan.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5874,7 +5383,6 @@ ltp_gentanh = cc_test {
     stem = "gentanh";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/iperb/gentanh.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5883,7 +5391,6 @@ ltp_gentrigo = cc_test {
     stem = "gentrigo";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/trigo/gentrigo.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5892,7 +5399,6 @@ ltp_geny0 = cc_test {
     stem = "geny0";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/bessel/geny0.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5901,7 +5407,6 @@ ltp_geny1 = cc_test {
     stem = "geny1";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/float/bessel/geny1.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -5910,7 +5415,6 @@ ltp_get_mempolicy01 = cc_test {
     stem = "get_mempolicy01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/get_mempolicy/get_mempolicy01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/include"
@@ -5927,7 +5431,6 @@ ltp_get_robust_list01 = cc_test {
     stem = "get_robust_list01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/get_robust_list/get_robust_list01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5937,10 +5440,7 @@ ltp_getaddrinfo_01 = cc_test {
     stem = "getaddrinfo_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/lib6/getaddrinfo_01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5950,7 +5450,6 @@ ltp_getcpu01 = cc_test {
     stem = "getcpu01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getcpu/getcpu01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5960,7 +5459,6 @@ ltp_getcwd01 = cc_test {
     stem = "getcwd01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getcwd/getcwd01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5970,10 +5468,7 @@ ltp_getcwd02 = cc_test {
     stem = "getcwd02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getcwd/getcwd02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-U_FORTIFY_SOURCE"
-    ];
+    cflags = ["-U_FORTIFY_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5983,7 +5478,6 @@ ltp_getcwd03 = cc_test {
     stem = "getcwd03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getcwd/getcwd03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -5993,7 +5487,6 @@ ltp_getcwd04 = cc_test {
     stem = "getcwd04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getcwd/getcwd04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6003,7 +5496,6 @@ ltp_getdents01 = cc_test {
     stem = "getdents01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getdents/getdents01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6013,7 +5505,6 @@ ltp_getdents02 = cc_test {
     stem = "getdents02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getdents/getdents02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6023,7 +5514,6 @@ ltp_getdomainname01 = cc_test {
     stem = "getdomainname01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getdomainname/getdomainname01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6033,7 +5523,6 @@ ltp_getdtablesize01 = cc_test {
     stem = "getdtablesize01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getdtablesize/getdtablesize01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6043,7 +5532,6 @@ ltp_getegid01 = cc_test {
     stem = "getegid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getegid/getegid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getegid"
         "testcases/kernel/syscalls/utils"
@@ -6057,10 +5545,7 @@ ltp_getegid01_16 = cc_test {
     stem = "getegid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getegid/getegid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getegid"
         "testcases/kernel/syscalls/utils"
@@ -6074,7 +5559,6 @@ ltp_getegid02 = cc_test {
     stem = "getegid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getegid/getegid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getegid"
         "testcases/kernel/syscalls/utils"
@@ -6088,10 +5572,7 @@ ltp_getegid02_16 = cc_test {
     stem = "getegid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getegid/getegid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getegid"
         "testcases/kernel/syscalls/utils"
@@ -6105,7 +5586,6 @@ ltp_geteuid01 = cc_test {
     stem = "geteuid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/geteuid/geteuid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6119,10 +5599,7 @@ ltp_geteuid01_16 = cc_test {
     stem = "geteuid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/geteuid/geteuid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6136,7 +5613,6 @@ ltp_geteuid02 = cc_test {
     stem = "geteuid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/geteuid/geteuid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6150,10 +5626,7 @@ ltp_geteuid02_16 = cc_test {
     stem = "geteuid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/geteuid/geteuid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6167,7 +5640,6 @@ ltp_getgid01 = cc_test {
     stem = "getgid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgid/getgid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getgid"
         "testcases/kernel/syscalls/utils"
@@ -6181,10 +5653,7 @@ ltp_getgid01_16 = cc_test {
     stem = "getgid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgid/getgid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getgid"
         "testcases/kernel/syscalls/utils"
@@ -6198,7 +5667,6 @@ ltp_getgid03 = cc_test {
     stem = "getgid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgid/getgid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getgid"
         "testcases/kernel/syscalls/utils"
@@ -6212,10 +5680,7 @@ ltp_getgid03_16 = cc_test {
     stem = "getgid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgid/getgid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getgid"
         "testcases/kernel/syscalls/utils"
@@ -6229,7 +5694,6 @@ ltp_getgroups01 = cc_test {
     stem = "getgroups01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgroups/getgroups01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/getgroups"
@@ -6243,10 +5707,7 @@ ltp_getgroups01_16 = cc_test {
     stem = "getgroups01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgroups/getgroups01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/getgroups"
@@ -6260,7 +5721,6 @@ ltp_getgroups03 = cc_test {
     stem = "getgroups03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgroups/getgroups03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/getgroups"
@@ -6274,10 +5734,7 @@ ltp_getgroups03_16 = cc_test {
     stem = "getgroups03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getgroups/getgroups03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/getgroups"
@@ -6291,7 +5748,6 @@ ltp_gethostbyname_r01 = cc_test {
     stem = "gethostbyname_r01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/gethostbyname_r/gethostbyname_r01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6301,7 +5757,6 @@ ltp_gethostname01 = cc_test {
     stem = "gethostname01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/gethostname/gethostname01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6311,7 +5766,6 @@ ltp_getitimer01 = cc_test {
     stem = "getitimer01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getitimer/getitimer01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6321,7 +5775,6 @@ ltp_getitimer02 = cc_test {
     stem = "getitimer02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getitimer/getitimer02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6331,7 +5784,6 @@ ltp_getitimer03 = cc_test {
     stem = "getitimer03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getitimer/getitimer03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6341,7 +5793,6 @@ ltp_getpagesize01 = cc_test {
     stem = "getpagesize01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpagesize/getpagesize01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6351,7 +5802,6 @@ ltp_getpeername01 = cc_test {
     stem = "getpeername01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpeername/getpeername01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6361,7 +5811,6 @@ ltp_getpgid01 = cc_test {
     stem = "getpgid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpgid/getpgid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6371,7 +5820,6 @@ ltp_getpgid02 = cc_test {
     stem = "getpgid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpgid/getpgid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6381,7 +5829,6 @@ ltp_getpgrp01 = cc_test {
     stem = "getpgrp01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpgrp/getpgrp01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6391,7 +5838,6 @@ ltp_getpid01 = cc_test {
     stem = "getpid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpid/getpid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6401,7 +5847,6 @@ ltp_getpid02 = cc_test {
     stem = "getpid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpid/getpid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6411,7 +5856,6 @@ ltp_getppid01 = cc_test {
     stem = "getppid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getppid/getppid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6421,7 +5865,6 @@ ltp_getppid02 = cc_test {
     stem = "getppid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getppid/getppid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6431,7 +5874,6 @@ ltp_getpriority01 = cc_test {
     stem = "getpriority01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpriority/getpriority01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6441,7 +5883,6 @@ ltp_getpriority02 = cc_test {
     stem = "getpriority02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getpriority/getpriority02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6451,7 +5892,6 @@ ltp_getrandom01 = cc_test {
     stem = "getrandom01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrandom/getrandom01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6461,7 +5901,6 @@ ltp_getrandom02 = cc_test {
     stem = "getrandom02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrandom/getrandom02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6471,7 +5910,6 @@ ltp_getrandom03 = cc_test {
     stem = "getrandom03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrandom/getrandom03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6481,7 +5919,6 @@ ltp_getrandom04 = cc_test {
     stem = "getrandom04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrandom/getrandom04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6491,7 +5928,6 @@ ltp_getresgid01 = cc_test {
     stem = "getresgid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresgid/getresgid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6505,10 +5941,7 @@ ltp_getresgid01_16 = cc_test {
     stem = "getresgid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresgid/getresgid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6522,7 +5955,6 @@ ltp_getresgid02 = cc_test {
     stem = "getresgid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresgid/getresgid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6536,10 +5968,7 @@ ltp_getresgid02_16 = cc_test {
     stem = "getresgid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresgid/getresgid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6553,7 +5982,6 @@ ltp_getresgid03 = cc_test {
     stem = "getresgid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresgid/getresgid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6567,10 +5995,7 @@ ltp_getresgid03_16 = cc_test {
     stem = "getresgid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresgid/getresgid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6584,7 +6009,6 @@ ltp_getresuid01 = cc_test {
     stem = "getresuid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresuid/getresuid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getresuid"
         "testcases/kernel/syscalls/utils"
@@ -6598,10 +6022,7 @@ ltp_getresuid01_16 = cc_test {
     stem = "getresuid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresuid/getresuid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getresuid"
         "testcases/kernel/syscalls/utils"
@@ -6615,7 +6036,6 @@ ltp_getresuid02 = cc_test {
     stem = "getresuid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresuid/getresuid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getresuid"
         "testcases/kernel/syscalls/utils"
@@ -6629,10 +6049,7 @@ ltp_getresuid02_16 = cc_test {
     stem = "getresuid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresuid/getresuid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getresuid"
         "testcases/kernel/syscalls/utils"
@@ -6646,7 +6063,6 @@ ltp_getresuid03 = cc_test {
     stem = "getresuid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresuid/getresuid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getresuid"
         "testcases/kernel/syscalls/utils"
@@ -6660,10 +6076,7 @@ ltp_getresuid03_16 = cc_test {
     stem = "getresuid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getresuid/getresuid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/getresuid"
         "testcases/kernel/syscalls/utils"
@@ -6677,7 +6090,6 @@ ltp_getrlimit01 = cc_test {
     stem = "getrlimit01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrlimit/getrlimit01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6687,7 +6099,6 @@ ltp_getrlimit02 = cc_test {
     stem = "getrlimit02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrlimit/getrlimit02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6697,10 +6108,7 @@ ltp_getrlimit03 = cc_test {
     stem = "getrlimit03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrlimit/getrlimit03.c"];
-    cflags = [
-        "-D_LARGEFILE64_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_LARGEFILE64_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6710,7 +6118,6 @@ ltp_getrusage01 = cc_test {
     stem = "getrusage01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrusage/getrusage01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6720,7 +6127,6 @@ ltp_getrusage02 = cc_test {
     stem = "getrusage02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrusage/getrusage02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6730,7 +6136,6 @@ ltp_getrusage03_child = cc_test {
     stem = "getrusage03_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrusage/getrusage03_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6740,7 +6145,6 @@ ltp_getrusage04 = cc_test {
     stem = "getrusage04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getrusage/getrusage04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6750,7 +6154,6 @@ ltp_getsid01 = cc_test {
     stem = "getsid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getsid/getsid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6760,7 +6163,6 @@ ltp_getsid02 = cc_test {
     stem = "getsid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getsid/getsid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6770,7 +6172,6 @@ ltp_getsockname01 = cc_test {
     stem = "getsockname01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getsockname/getsockname01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6780,7 +6181,6 @@ ltp_getsockopt01 = cc_test {
     stem = "getsockopt01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getsockopt/getsockopt01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6790,7 +6190,6 @@ ltp_getsockopt02 = cc_test {
     stem = "getsockopt02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getsockopt/getsockopt02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6800,7 +6199,6 @@ ltp_gettid01 = cc_test {
     stem = "gettid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/gettid/gettid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6810,7 +6208,6 @@ ltp_gettimeofday01 = cc_test {
     stem = "gettimeofday01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/gettimeofday/gettimeofday01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6820,7 +6217,6 @@ ltp_gettimeofday02 = cc_test {
     stem = "gettimeofday02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/gettimeofday/gettimeofday02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6830,7 +6226,6 @@ ltp_getuid01 = cc_test {
     stem = "getuid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getuid/getuid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6844,10 +6239,7 @@ ltp_getuid01_16 = cc_test {
     stem = "getuid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getuid/getuid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6861,7 +6253,6 @@ ltp_getuid03 = cc_test {
     stem = "getuid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getuid/getuid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6875,10 +6266,7 @@ ltp_getuid03_16 = cc_test {
     stem = "getuid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getuid/getuid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -6892,7 +6280,6 @@ ltp_getxattr01 = cc_test {
     stem = "getxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getxattr/getxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6902,7 +6289,6 @@ ltp_getxattr02 = cc_test {
     stem = "getxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getxattr/getxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6912,7 +6298,6 @@ ltp_getxattr03 = cc_test {
     stem = "getxattr03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getxattr/getxattr03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6922,7 +6307,6 @@ ltp_getxattr04 = cc_test {
     stem = "getxattr04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getxattr/getxattr04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6932,7 +6316,6 @@ ltp_getxattr05 = cc_test {
     stem = "getxattr05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/getxattr/getxattr05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6942,7 +6325,6 @@ ltp_hackbench = cc_test {
     stem = "hackbench";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/cfs-scheduler/hackbench.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -6951,10 +6333,7 @@ ltp_hangup01 = cc_test {
     stem = "hangup01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/pty/hangup01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6967,7 +6346,6 @@ ltp_ht_affinity = cc_test {
         "testcases/kernel/sched/hyperthreading/ht_affinity/ht_affinity.c"
         "testcases/kernel/sched/hyperthreading/ht_affinity/ht_utils.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6980,7 +6358,6 @@ ltp_ht_enabled = cc_test {
         "testcases/kernel/sched/hyperthreading/ht_enabled/ht_enabled.c"
         "testcases/kernel/sched/hyperthreading/ht_enabled/ht_utils.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -6990,7 +6367,6 @@ ltp_hugemmap01 = cc_test {
     stem = "hugemmap01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/hugetlb/hugemmap/hugemmap01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/mem/hugetlb/lib"
@@ -7010,7 +6386,6 @@ ltp_hugemmap02 = cc_test {
     stem = "hugemmap02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/hugetlb/hugemmap/hugemmap02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/mem/hugetlb/lib"
@@ -7030,7 +6405,6 @@ ltp_hugemmap04 = cc_test {
     stem = "hugemmap04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/hugetlb/hugemmap/hugemmap04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/mem/hugetlb/lib"
@@ -7050,7 +6424,6 @@ ltp_hugemmap06 = cc_test {
     stem = "hugemmap06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/hugetlb/hugemmap/hugemmap06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/mem/hugetlb/lib"
@@ -7070,7 +6443,6 @@ ltp_ima_boot_aggregate = cc_test {
     stem = "ima_boot_aggregate";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/integrity/ima/src/ima_boot_aggregate.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
     shared_libs = [
@@ -7084,7 +6456,6 @@ ltp_ima_mmap = cc_test {
     stem = "ima_mmap";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/integrity/ima/src/ima_mmap.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7094,7 +6465,6 @@ ltp_in = cc_test {
     stem = "in";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/commands/file/datafiles/in.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -7103,10 +6473,7 @@ ltp_in6_02 = cc_test {
     stem = "in6_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/lib6/in6_02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7116,10 +6483,7 @@ ltp_inh_capped = cc_test {
     stem = "inh_capped";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/filecaps/inh_capped.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7129,10 +6493,7 @@ ltp_inode01 = cc_test {
     stem = "inode01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/inode/inode01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DLINUX"
-    ];
+    cflags = ["-DLINUX"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7142,10 +6503,7 @@ ltp_inode02 = cc_test {
     stem = "inode02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/inode/inode02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DLINUX"
-    ];
+    cflags = ["-DLINUX"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7155,7 +6513,6 @@ ltp_inotify01 = cc_test {
     stem = "inotify01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7165,7 +6522,6 @@ ltp_inotify02 = cc_test {
     stem = "inotify02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7175,7 +6531,6 @@ ltp_inotify03 = cc_test {
     stem = "inotify03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7185,7 +6540,6 @@ ltp_inotify04 = cc_test {
     stem = "inotify04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7195,7 +6549,6 @@ ltp_inotify05 = cc_test {
     stem = "inotify05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7205,7 +6558,6 @@ ltp_inotify06 = cc_test {
     stem = "inotify06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7215,7 +6567,6 @@ ltp_inotify07 = cc_test {
     stem = "inotify07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7225,7 +6576,6 @@ ltp_inotify08 = cc_test {
     stem = "inotify08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7235,7 +6585,6 @@ ltp_inotify09 = cc_test {
     stem = "inotify09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify/inotify09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7245,7 +6594,6 @@ ltp_inotify_init1_01 = cc_test {
     stem = "inotify_init1_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify_init/inotify_init1_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7255,7 +6603,6 @@ ltp_inotify_init1_02 = cc_test {
     stem = "inotify_init1_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/inotify_init/inotify_init1_02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7268,7 +6615,6 @@ ltp_input01 = cc_test {
         "testcases/kernel/input/input_helper.c"
         "testcases/kernel/input/input01.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7281,7 +6627,6 @@ ltp_input02 = cc_test {
         "testcases/kernel/input/input_helper.c"
         "testcases/kernel/input/input02.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7294,7 +6639,6 @@ ltp_input04 = cc_test {
         "testcases/kernel/input/input04.c"
         "testcases/kernel/input/input_helper.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7307,7 +6651,6 @@ ltp_input05 = cc_test {
         "testcases/kernel/input/input_helper.c"
         "testcases/kernel/input/input05.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7320,7 +6663,6 @@ ltp_input06 = cc_test {
         "testcases/kernel/input/input_helper.c"
         "testcases/kernel/input/input06.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7330,7 +6672,6 @@ ltp_io_cancel01 = cc_test {
     stem = "io_cancel01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/io_cancel/io_cancel01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7340,7 +6681,6 @@ ltp_io_destroy01 = cc_test {
     stem = "io_destroy01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/io_destroy/io_destroy01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7350,7 +6690,6 @@ ltp_io_getevents01 = cc_test {
     stem = "io_getevents01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/io_getevents/io_getevents01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7360,7 +6699,6 @@ ltp_io_setup01 = cc_test {
     stem = "io_setup01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/io_setup/io_setup01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7370,7 +6708,6 @@ ltp_io_submit01 = cc_test {
     stem = "io_submit01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/io_submit/io_submit01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7380,7 +6717,6 @@ ltp_iobw = cc_test {
     stem = "iobw";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/io-throttle/iobw.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -7396,7 +6732,6 @@ ltp_ioctl01 = cc_test {
     stem = "ioctl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioctl/ioctl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7406,7 +6741,6 @@ ltp_ioctl03 = cc_test {
     stem = "ioctl03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioctl/ioctl03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7416,7 +6750,6 @@ ltp_ioctl04 = cc_test {
     stem = "ioctl04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioctl/ioctl04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7426,7 +6759,6 @@ ltp_ioctl05 = cc_test {
     stem = "ioctl05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioctl/ioctl05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7436,7 +6768,6 @@ ltp_ioctl06 = cc_test {
     stem = "ioctl06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioctl/ioctl06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7446,7 +6777,78 @@ ltp_ioctl07 = cc_test {
     stem = "ioctl07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioctl/ioctl07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl08 = cc_test {
+    name = "ltp_ioctl08";
+    stem = "ioctl08";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl08.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl_ns01 = cc_test {
+    name = "ltp_ioctl_ns01";
+    stem = "ioctl_ns01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl_ns01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl_ns02 = cc_test {
+    name = "ltp_ioctl_ns02";
+    stem = "ioctl_ns02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl_ns02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl_ns03 = cc_test {
+    name = "ltp_ioctl_ns03";
+    stem = "ioctl_ns03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl_ns03.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl_ns04 = cc_test {
+    name = "ltp_ioctl_ns04";
+    stem = "ioctl_ns04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl_ns04.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl_ns05 = cc_test {
+    name = "ltp_ioctl_ns05";
+    stem = "ioctl_ns05";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl_ns05.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl_ns06 = cc_test {
+    name = "ltp_ioctl_ns06";
+    stem = "ioctl_ns06";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl_ns06.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioctl_ns07 = cc_test {
+    name = "ltp_ioctl_ns07";
+    stem = "ioctl_ns07";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioctl/ioctl_ns07.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7468,10 +6870,7 @@ ltp_iogen = cc_test {
         "testcases/kernel/fs/doio/string_to_tokens.c"
         "testcases/kernel/fs/doio/bytes_by_prefix.c"
     ];
-    cflags = [
-        "-D_LARGEFILE64_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_LARGEFILE64_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/fs/doio/include"
         "include/old"
@@ -7484,7 +6883,6 @@ ltp_ioperm01 = cc_test {
     stem = "ioperm01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioperm/ioperm01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7494,7 +6892,6 @@ ltp_ioperm02 = cc_test {
     stem = "ioperm02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ioperm/ioperm02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7504,7 +6901,6 @@ ltp_iopl01 = cc_test {
     stem = "iopl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/iopl/iopl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7514,7 +6910,42 @@ ltp_iopl02 = cc_test {
     stem = "iopl02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/iopl/iopl02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioprio_get01 = cc_test {
+    name = "ltp_ioprio_get01";
+    stem = "ioprio_get01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioprio/ioprio_get01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioprio_set01 = cc_test {
+    name = "ltp_ioprio_set01";
+    stem = "ioprio_set01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioprio/ioprio_set01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioprio_set02 = cc_test {
+    name = "ltp_ioprio_set02";
+    stem = "ioprio_set02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioprio/ioprio_set02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_ioprio_set03 = cc_test {
+    name = "ltp_ioprio_set03";
+    stem = "ioprio_set03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/ioprio/ioprio_set03.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7524,7 +6955,6 @@ ltp_kcmp01 = cc_test {
     stem = "kcmp01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kcmp/kcmp01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7534,7 +6964,6 @@ ltp_kcmp02 = cc_test {
     stem = "kcmp02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kcmp/kcmp02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7544,7 +6973,6 @@ ltp_kcmp03 = cc_test {
     stem = "kcmp03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kcmp/kcmp03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7554,7 +6982,6 @@ ltp_keyctl01 = cc_test {
     stem = "keyctl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7564,7 +6991,6 @@ ltp_keyctl02 = cc_test {
     stem = "keyctl02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7574,7 +7000,6 @@ ltp_keyctl03 = cc_test {
     stem = "keyctl03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7584,7 +7009,6 @@ ltp_keyctl04 = cc_test {
     stem = "keyctl04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7594,7 +7018,6 @@ ltp_keyctl05 = cc_test {
     stem = "keyctl05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7604,7 +7027,6 @@ ltp_keyctl06 = cc_test {
     stem = "keyctl06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7614,7 +7036,6 @@ ltp_keyctl07 = cc_test {
     stem = "keyctl07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7624,7 +7045,6 @@ ltp_keyctl08 = cc_test {
     stem = "keyctl08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/keyctl/keyctl08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7634,7 +7054,6 @@ ltp_kill01 = cc_test {
     stem = "kill01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7650,7 +7069,6 @@ ltp_kill02 = cc_test {
     stem = "kill02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7666,7 +7084,6 @@ ltp_kill03 = cc_test {
     stem = "kill03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7682,7 +7099,6 @@ ltp_kill04 = cc_test {
     stem = "kill04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7698,7 +7114,6 @@ ltp_kill06 = cc_test {
     stem = "kill06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7714,7 +7129,6 @@ ltp_kill08 = cc_test {
     stem = "kill08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7730,7 +7144,6 @@ ltp_kill09 = cc_test {
     stem = "kill09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7746,7 +7159,6 @@ ltp_kill10 = cc_test {
     stem = "kill10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7762,7 +7174,6 @@ ltp_kill11 = cc_test {
     stem = "kill11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7778,7 +7189,6 @@ ltp_kill12 = cc_test {
     stem = "kill12";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/kill/kill12.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -7794,7 +7204,6 @@ ltp_kmsg01 = cc_test {
     stem = "kmsg01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/logging/kmsg/kmsg01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -7804,7 +7213,6 @@ ltp_ksm01 = cc_test {
     stem = "ksm01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/ksm/ksm01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -7822,7 +7230,6 @@ ltp_ksm02 = cc_test {
     stem = "ksm02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/ksm/ksm02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -7840,7 +7247,6 @@ ltp_ksm03 = cc_test {
     stem = "ksm03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/ksm/ksm03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -7858,7 +7264,6 @@ ltp_ksm04 = cc_test {
     stem = "ksm04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/ksm/ksm04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -7876,7 +7281,6 @@ ltp_ksm05 = cc_test {
     stem = "ksm05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/ksm/ksm05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -7894,7 +7298,6 @@ ltp_ksm06 = cc_test {
     stem = "ksm06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/ksm/ksm06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -7912,7 +7315,6 @@ ltp_lchown01 = cc_test {
     stem = "lchown01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lchown/lchown01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lchown"
         "testcases/kernel/syscalls/utils"
@@ -7926,10 +7328,7 @@ ltp_lchown01_16 = cc_test {
     stem = "lchown01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lchown/lchown01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lchown"
         "testcases/kernel/syscalls/utils"
@@ -7943,7 +7342,6 @@ ltp_lchown02 = cc_test {
     stem = "lchown02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lchown/lchown02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lchown"
         "testcases/kernel/syscalls/utils"
@@ -7957,10 +7355,7 @@ ltp_lchown02_16 = cc_test {
     stem = "lchown02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lchown/lchown02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lchown"
         "testcases/kernel/syscalls/utils"
@@ -7974,7 +7369,6 @@ ltp_lchown03 = cc_test {
     stem = "lchown03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lchown/lchown03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lchown"
         "testcases/kernel/syscalls/utils"
@@ -7988,15 +7382,21 @@ ltp_lchown03_16 = cc_test {
     stem = "lchown03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lchown/lchown03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lchown"
         "testcases/kernel/syscalls/utils"
         "include/old"
     ];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_leapsec01 = cc_test {
+    name = "ltp_leapsec01";
+    stem = "leapsec01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/clock_gettime/leapsec01.c"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
@@ -8006,7 +7406,6 @@ ltp_lftest = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/lftest/lftest.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-D_LARGEFILE_SOURCE"
     ];
@@ -8019,7 +7418,6 @@ ltp_lgetxattr01 = cc_test {
     stem = "lgetxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lgetxattr/lgetxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8029,7 +7427,6 @@ ltp_lgetxattr02 = cc_test {
     stem = "lgetxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lgetxattr/lgetxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8039,7 +7436,6 @@ ltp_link02 = cc_test {
     stem = "link02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/link/link02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8049,7 +7445,6 @@ ltp_link03 = cc_test {
     stem = "link03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/link/link03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8059,7 +7454,6 @@ ltp_link04 = cc_test {
     stem = "link04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/link/link04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8069,7 +7463,6 @@ ltp_link05 = cc_test {
     stem = "link05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/link/link05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8079,7 +7472,6 @@ ltp_link06 = cc_test {
     stem = "link06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/link/link06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8089,7 +7481,6 @@ ltp_link07 = cc_test {
     stem = "link07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/link/link07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8099,7 +7490,6 @@ ltp_link08 = cc_test {
     stem = "link08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/link/link08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8109,10 +7499,6 @@ ltp_linkat01 = cc_test {
     stem = "linkat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/linkat/linkat01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-Wno-error"
-    ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8122,10 +7508,6 @@ ltp_linkat02 = cc_test {
     stem = "linkat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/linkat/linkat02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-Wno-error"
-    ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8135,7 +7517,6 @@ ltp_listen01 = cc_test {
     stem = "listen01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/listen/listen01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8145,7 +7526,6 @@ ltp_listxattr01 = cc_test {
     stem = "listxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/listxattr/listxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8155,7 +7535,6 @@ ltp_listxattr02 = cc_test {
     stem = "listxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/listxattr/listxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8165,7 +7544,6 @@ ltp_listxattr03 = cc_test {
     stem = "listxattr03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/listxattr/listxattr03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8175,7 +7553,6 @@ ltp_llistxattr01 = cc_test {
     stem = "llistxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/llistxattr/llistxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8185,7 +7562,6 @@ ltp_llistxattr02 = cc_test {
     stem = "llistxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/llistxattr/llistxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8195,7 +7571,6 @@ ltp_llistxattr03 = cc_test {
     stem = "llistxattr03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/llistxattr/llistxattr03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8205,7 +7580,6 @@ ltp_llseek01 = cc_test {
     stem = "llseek01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/llseek/llseek01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8215,7 +7589,6 @@ ltp_llseek02 = cc_test {
     stem = "llseek02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/llseek/llseek02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8225,7 +7598,6 @@ ltp_llseek03 = cc_test {
     stem = "llseek03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/llseek/llseek03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8238,7 +7610,6 @@ ltp_locktests = cc_test {
         "testcases/network/nfsv4/locks/locktests.c"
         "testcases/network/nfsv4/locks/netsync.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8248,7 +7619,6 @@ ltp_lremovexattr01 = cc_test {
     stem = "lremovexattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lremovexattr/lremovexattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8258,7 +7628,6 @@ ltp_lseek01 = cc_test {
     stem = "lseek01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lseek/lseek01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8268,7 +7637,6 @@ ltp_lseek02 = cc_test {
     stem = "lseek02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lseek/lseek02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8278,7 +7646,6 @@ ltp_lseek07 = cc_test {
     stem = "lseek07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lseek/lseek07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8288,7 +7655,6 @@ ltp_lseek11 = cc_test {
     stem = "lseek11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lseek/lseek11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8298,7 +7664,6 @@ ltp_lstat01 = cc_test {
     stem = "lstat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lstat/lstat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lstat"
         "testcases/kernel/syscalls/utils"
@@ -8313,7 +7678,6 @@ ltp_lstat01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lstat/lstat01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -8330,7 +7694,6 @@ ltp_lstat02 = cc_test {
     stem = "lstat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lstat/lstat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/lstat"
         "testcases/kernel/syscalls/utils"
@@ -8345,39 +7708,6 @@ ltp_lstat02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/lstat/lstat02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_FILE_OFFSET_BITS=64"
-        "-DTST_USE_NEWER64_SYSCALL=1"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/lstat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_lstat03 = cc_test {
-    name = "ltp_lstat03";
-    stem = "lstat03";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/lstat/lstat03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/lstat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_lstat03_64 = cc_test {
-    name = "ltp_lstat03_64";
-    stem = "lstat03_64";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/lstat/lstat03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -8394,10 +7724,7 @@ ltp_ltp-diorh = cc_test {
     stem = "ltp-diorh";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/ltp-diorh.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8407,7 +7734,6 @@ ltp_ltpClient = cc_test {
     stem = "ltpClient";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/sockets/ltpClient.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -8416,7 +7742,6 @@ ltp_ltpServer = cc_test {
     stem = "ltpServer";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/sockets/ltpServer.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -8425,7 +7750,6 @@ ltp_ltp_acpi = cc_test {
     stem = "ltp_acpi";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/acpi/ltp_acpi.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8435,7 +7759,6 @@ ltp_madvise01 = cc_test {
     stem = "madvise01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8445,7 +7768,6 @@ ltp_madvise02 = cc_test {
     stem = "madvise02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8455,7 +7777,6 @@ ltp_madvise05 = cc_test {
     stem = "madvise05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8465,7 +7786,6 @@ ltp_madvise06 = cc_test {
     stem = "madvise06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8475,7 +7795,6 @@ ltp_madvise07 = cc_test {
     stem = "madvise07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8485,7 +7804,6 @@ ltp_madvise08 = cc_test {
     stem = "madvise08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8495,7 +7813,6 @@ ltp_madvise09 = cc_test {
     stem = "madvise09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8505,7 +7822,6 @@ ltp_madvise10 = cc_test {
     stem = "madvise10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/madvise/madvise10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8515,7 +7831,6 @@ ltp_max_map_count = cc_test {
     stem = "max_map_count";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/tunable/max_map_count.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -8533,7 +7848,6 @@ ltp_mbind01 = cc_test {
     stem = "mbind01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mbind/mbind01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/include"
@@ -8542,6 +7856,58 @@ ltp_mbind01 = cc_test {
     static_libs = [
         "libltp_kerntest"
         "libltp_ltp"
+        "libltp_ltpnuma"
+    ];
+};
+
+ltp_mbind02 = cc_test {
+    name = "ltp_mbind02";
+    stem = "mbind02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/mbind/mbind02.c"];
+    local_include_dirs = [
+        "testcases/kernel/syscalls/utils"
+        "testcases/kernel/include"
+        "include/old"
+    ];
+    static_libs = [
+        "libltp_kerntest"
+        "libltp_ltp"
+        "libltp_ltpnuma"
+    ];
+};
+
+ltp_mbind03 = cc_test {
+    name = "ltp_mbind03";
+    stem = "mbind03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/mbind/mbind03.c"];
+    local_include_dirs = [
+        "testcases/kernel/syscalls/utils"
+        "testcases/kernel/include"
+        "include/old"
+    ];
+    static_libs = [
+        "libltp_kerntest"
+        "libltp_ltp"
+        "libltp_ltpnuma"
+    ];
+};
+
+ltp_mbind04 = cc_test {
+    name = "ltp_mbind04";
+    stem = "mbind04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/mbind/mbind04.c"];
+    local_include_dirs = [
+        "testcases/kernel/syscalls/utils"
+        "testcases/kernel/include"
+        "include/old"
+    ];
+    static_libs = [
+        "libltp_kerntest"
+        "libltp_ltp"
+        "libltp_ltpnuma"
     ];
 };
 
@@ -8550,7 +7916,6 @@ ltp_mc_member_test = cc_test {
     stem = "mc_member_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/multicast/mc_member/mc_member_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -8559,7 +7924,6 @@ ltp_mc_recv = cc_test {
     stem = "mc_recv";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/multicast/mc_commo/mc_recv.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -8568,7 +7932,6 @@ ltp_mc_send = cc_test {
     stem = "mc_send";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/multicast/mc_commo/mc_send.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -8577,7 +7940,6 @@ ltp_mc_verify_opts = cc_test {
     stem = "mc_verify_opts";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/multicast/mc_opts/mc_verify_opts.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -8586,7 +7948,6 @@ ltp_mc_verify_opts_error = cc_test {
     stem = "mc_verify_opts_error";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/multicast/mc_opts/mc_verify_opts_error.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -8595,10 +7956,7 @@ ltp_meltdown = cc_test {
     stem = "meltdown";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/cve/meltdown.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/realtime/include"
         "include/old"
@@ -8611,7 +7969,6 @@ ltp_mem01 = cc_test {
     stem = "mem01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mem/mem01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8621,7 +7978,6 @@ ltp_mem02 = cc_test {
     stem = "mem02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mem/mem02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8631,7 +7987,6 @@ ltp_mem03 = cc_test {
     stem = "mem03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/memmap/mem03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8641,7 +7996,6 @@ ltp_mem_process = cc_test {
     stem = "mem_process";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/memcg/control/mem_process.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -8654,7 +8008,6 @@ ltp_membarrier01 = cc_test {
     stem = "membarrier01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/membarrier/membarrier01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8664,7 +8017,6 @@ ltp_memcg_process_stress = cc_test {
     stem = "memcg_process_stress";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/memcg/stress/memcg_process_stress.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -8677,7 +8029,6 @@ ltp_memcg_test_1 = cc_test {
     stem = "memcg_test_1";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/memcg/regression/memcg_test_1.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -8690,7 +8041,6 @@ ltp_memcg_test_2 = cc_test {
     stem = "memcg_test_2";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/memcg/regression/memcg_test_2.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -8703,7 +8053,6 @@ ltp_memcg_test_3 = cc_test {
     stem = "memcg_test_3";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/memcg/regression/memcg_test_3.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -8716,7 +8065,6 @@ ltp_memcg_test_4 = cc_test {
     stem = "memcg_test_4";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/memcg/regression/memcg_test_4.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -8729,7 +8077,6 @@ ltp_memcmp01 = cc_test {
     stem = "memcmp01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/memcmp/memcmp01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8739,7 +8086,6 @@ ltp_memcpy01 = cc_test {
     stem = "memcpy01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/memcpy/memcpy01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8749,7 +8095,6 @@ ltp_memctl_test01 = cc_test {
     stem = "memctl_test01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/memctl/memctl_test01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -8768,7 +8113,6 @@ ltp_memfd_create01 = cc_test {
         "testcases/kernel/syscalls/memfd_create/memfd_create_common.c"
         "testcases/kernel/syscalls/memfd_create/memfd_create01.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8781,7 +8125,6 @@ ltp_memfd_create02 = cc_test {
         "testcases/kernel/syscalls/memfd_create/memfd_create_common.c"
         "testcases/kernel/syscalls/memfd_create/memfd_create02.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8794,7 +8137,6 @@ ltp_memfd_create03 = cc_test {
         "testcases/kernel/syscalls/memfd_create/memfd_create03.c"
         "testcases/kernel/syscalls/memfd_create/memfd_create_common.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8807,7 +8149,6 @@ ltp_memfd_create04 = cc_test {
         "testcases/kernel/syscalls/memfd_create/memfd_create_common.c"
         "testcases/kernel/syscalls/memfd_create/memfd_create04.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8817,7 +8158,6 @@ ltp_memset01 = cc_test {
     stem = "memset01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/memset/memset01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8831,10 +8171,7 @@ ltp_memtoy = cc_test {
         "testcases/kernel/hotplug/memory_hotplug/memtoy.c"
         "testcases/kernel/hotplug/memory_hotplug/segment.c"
     ];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = [
         "testcases/kernel/hotplug/memory_hotplug"
         "include/old"
@@ -8849,7 +8186,6 @@ ltp_migrate_pages01 = cc_test {
         "testcases/kernel/syscalls/migrate_pages/migrate_pages01.c"
         "testcases/kernel/syscalls/migrate_pages/migrate_pages_common.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -8869,7 +8205,6 @@ ltp_migrate_pages02 = cc_test {
         "testcases/kernel/syscalls/migrate_pages/migrate_pages02.c"
         "testcases/kernel/syscalls/migrate_pages/migrate_pages_common.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -8889,7 +8224,6 @@ ltp_migrate_pages03 = cc_test {
         "testcases/kernel/syscalls/migrate_pages/migrate_pages03.c"
         "testcases/kernel/syscalls/migrate_pages/migrate_pages_common.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -8906,7 +8240,6 @@ ltp_mincore01 = cc_test {
     stem = "mincore01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mincore/mincore01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8916,7 +8249,6 @@ ltp_mincore02 = cc_test {
     stem = "mincore02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mincore/mincore02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8926,7 +8258,6 @@ ltp_mkdir02 = cc_test {
     stem = "mkdir02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mkdir/mkdir02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8936,7 +8267,6 @@ ltp_mkdir03 = cc_test {
     stem = "mkdir03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mkdir/mkdir03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8946,7 +8276,6 @@ ltp_mkdir04 = cc_test {
     stem = "mkdir04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mkdir/mkdir04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8956,7 +8285,6 @@ ltp_mkdir05 = cc_test {
     stem = "mkdir05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mkdir/mkdir05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8966,7 +8294,6 @@ ltp_mkdir09 = cc_test {
     stem = "mkdir09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mkdir/mkdir09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8976,7 +8303,6 @@ ltp_mkdirat01 = cc_test {
     stem = "mkdirat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mkdirat/mkdirat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8986,7 +8312,6 @@ ltp_mkdirat02 = cc_test {
     stem = "mkdirat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mkdirat/mkdirat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -8996,7 +8321,6 @@ ltp_mknod01 = cc_test {
     stem = "mknod01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9006,7 +8330,6 @@ ltp_mknod02 = cc_test {
     stem = "mknod02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9016,7 +8339,6 @@ ltp_mknod03 = cc_test {
     stem = "mknod03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9026,7 +8348,6 @@ ltp_mknod04 = cc_test {
     stem = "mknod04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9036,7 +8357,6 @@ ltp_mknod05 = cc_test {
     stem = "mknod05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9046,7 +8366,6 @@ ltp_mknod06 = cc_test {
     stem = "mknod06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9056,7 +8375,6 @@ ltp_mknod07 = cc_test {
     stem = "mknod07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9066,7 +8384,6 @@ ltp_mknod08 = cc_test {
     stem = "mknod08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9076,7 +8393,6 @@ ltp_mknod09 = cc_test {
     stem = "mknod09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknod/mknod09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9086,7 +8402,6 @@ ltp_mknodat01 = cc_test {
     stem = "mknodat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknodat/mknodat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9096,7 +8411,6 @@ ltp_mknodat02 = cc_test {
     stem = "mknodat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mknodat/mknodat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9106,7 +8420,6 @@ ltp_mlock01 = cc_test {
     stem = "mlock01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlock/mlock01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9116,7 +8429,6 @@ ltp_mlock02 = cc_test {
     stem = "mlock02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlock/mlock02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9126,7 +8438,6 @@ ltp_mlock03 = cc_test {
     stem = "mlock03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlock/mlock03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9136,7 +8447,6 @@ ltp_mlock04 = cc_test {
     stem = "mlock04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlock/mlock04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9146,7 +8456,6 @@ ltp_mlock201 = cc_test {
     stem = "mlock201";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlock2/mlock201.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9156,7 +8465,6 @@ ltp_mlock202 = cc_test {
     stem = "mlock202";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlock2/mlock202.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9166,7 +8474,6 @@ ltp_mlock203 = cc_test {
     stem = "mlock203";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlock2/mlock203.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9176,7 +8483,6 @@ ltp_mlockall01 = cc_test {
     stem = "mlockall01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlockall/mlockall01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9186,7 +8492,6 @@ ltp_mlockall02 = cc_test {
     stem = "mlockall02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlockall/mlockall02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9196,7 +8501,6 @@ ltp_mlockall03 = cc_test {
     stem = "mlockall03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mlockall/mlockall03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9206,7 +8510,6 @@ ltp_mmap-corruption01 = cc_test {
     stem = "mmap-corruption01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmap-corruption01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9216,7 +8519,6 @@ ltp_mmap001 = cc_test {
     stem = "mmap001";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap001.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9226,7 +8528,6 @@ ltp_mmap01 = cc_test {
     stem = "mmap01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9236,7 +8537,6 @@ ltp_mmap02 = cc_test {
     stem = "mmap02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9246,7 +8546,6 @@ ltp_mmap03 = cc_test {
     stem = "mmap03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9256,7 +8555,6 @@ ltp_mmap04 = cc_test {
     stem = "mmap04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9266,7 +8564,6 @@ ltp_mmap05 = cc_test {
     stem = "mmap05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9276,7 +8573,6 @@ ltp_mmap06 = cc_test {
     stem = "mmap06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9286,7 +8582,6 @@ ltp_mmap07 = cc_test {
     stem = "mmap07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9296,7 +8591,6 @@ ltp_mmap08 = cc_test {
     stem = "mmap08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9306,7 +8600,6 @@ ltp_mmap09 = cc_test {
     stem = "mmap09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9316,7 +8609,6 @@ ltp_mmap1 = cc_test {
     stem = "mmap1";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mtest06/mmap1.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9326,7 +8618,6 @@ ltp_mmap10 = cc_test {
     stem = "mmap10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9336,7 +8627,6 @@ ltp_mmap11 = cc_test {
     stem = "mmap11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9346,7 +8636,6 @@ ltp_mmap12 = cc_test {
     stem = "mmap12";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap12.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9356,7 +8645,6 @@ ltp_mmap13 = cc_test {
     stem = "mmap13";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap13.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9366,7 +8654,6 @@ ltp_mmap14 = cc_test {
     stem = "mmap14";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap14.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9376,7 +8663,6 @@ ltp_mmap15 = cc_test {
     stem = "mmap15";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap15.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9386,7 +8672,6 @@ ltp_mmap16 = cc_test {
     stem = "mmap16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mmap/mmap16.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9396,7 +8681,6 @@ ltp_mmap2 = cc_test {
     stem = "mmap2";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mtest06/mmap2.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9406,7 +8690,6 @@ ltp_mmap3 = cc_test {
     stem = "mmap3";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mtest06/mmap3.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9416,7 +8699,6 @@ ltp_mmapstress01 = cc_test {
     stem = "mmapstress01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9426,7 +8708,6 @@ ltp_mmapstress02 = cc_test {
     stem = "mmapstress02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9436,7 +8717,6 @@ ltp_mmapstress03 = cc_test {
     stem = "mmapstress03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9446,7 +8726,6 @@ ltp_mmapstress04 = cc_test {
     stem = "mmapstress04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9456,7 +8735,6 @@ ltp_mmapstress05 = cc_test {
     stem = "mmapstress05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9466,7 +8744,6 @@ ltp_mmapstress06 = cc_test {
     stem = "mmapstress06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9476,7 +8753,6 @@ ltp_mmapstress07 = cc_test {
     stem = "mmapstress07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9486,7 +8762,6 @@ ltp_mmapstress08 = cc_test {
     stem = "mmapstress08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9496,7 +8771,6 @@ ltp_mmapstress09 = cc_test {
     stem = "mmapstress09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9506,7 +8780,6 @@ ltp_mmapstress10 = cc_test {
     stem = "mmapstress10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mmapstress/mmapstress10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9516,7 +8789,6 @@ ltp_mmstress = cc_test {
     stem = "mmstress";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mtest05/mmstress.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9526,7 +8798,6 @@ ltp_mmstress_dummy = cc_test {
     stem = "mmstress_dummy";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mtest05/mmstress_dummy.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9536,7 +8807,6 @@ ltp_modify_ldt01 = cc_test {
     stem = "modify_ldt01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/modify_ldt/modify_ldt01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9546,7 +8816,6 @@ ltp_modify_ldt02 = cc_test {
     stem = "modify_ldt02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/modify_ldt/modify_ldt02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9556,7 +8825,6 @@ ltp_modify_ldt03 = cc_test {
     stem = "modify_ldt03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/modify_ldt/modify_ldt03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9566,10 +8834,7 @@ ltp_mount01 = cc_test {
     stem = "mount01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mount/mount01.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9579,10 +8844,7 @@ ltp_mount02 = cc_test {
     stem = "mount02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mount/mount02.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9592,10 +8854,7 @@ ltp_mount03 = cc_test {
     stem = "mount03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mount/mount03.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9605,10 +8864,7 @@ ltp_mount03_setuid_test = cc_test {
     stem = "mount03_setuid_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mount/mount03_setuid_test.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9618,10 +8874,7 @@ ltp_mount04 = cc_test {
     stem = "mount04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mount/mount04.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9631,10 +8884,7 @@ ltp_mount05 = cc_test {
     stem = "mount05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mount/mount05.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9644,10 +8894,7 @@ ltp_mount06 = cc_test {
     stem = "mount06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mount/mount06.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9660,7 +8907,6 @@ ltp_move_pages01 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages01.c"
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9680,7 +8926,6 @@ ltp_move_pages02 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
         "testcases/kernel/syscalls/move_pages/move_pages02.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9700,7 +8945,6 @@ ltp_move_pages03 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages03.c"
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9720,7 +8964,6 @@ ltp_move_pages04 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages04.c"
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9740,7 +8983,6 @@ ltp_move_pages05 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
         "testcases/kernel/syscalls/move_pages/move_pages05.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9760,7 +9002,6 @@ ltp_move_pages06 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages06.c"
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9780,27 +9021,6 @@ ltp_move_pages07 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
         "testcases/kernel/syscalls/move_pages/move_pages07.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = [
-        "testcases/kernel/include"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = [
-        "libltp_kerntest"
-        "libltp_ltp"
-    ];
-};
-
-ltp_move_pages08 = cc_test {
-    name = "ltp_move_pages08";
-    stem = "move_pages08";
-    defaults = ["ltp_test_defaults"];
-    srcs = [
-        "testcases/kernel/syscalls/move_pages/move_pages_support.c"
-        "testcases/kernel/syscalls/move_pages/move_pages08.c"
-    ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9820,7 +9040,6 @@ ltp_move_pages09 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages09.c"
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9840,7 +9059,6 @@ ltp_move_pages10 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages10.c"
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9860,7 +9078,6 @@ ltp_move_pages11 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
         "testcases/kernel/syscalls/move_pages/move_pages11.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9880,7 +9097,6 @@ ltp_move_pages12 = cc_test {
         "testcases/kernel/syscalls/move_pages/move_pages12.c"
         "testcases/kernel/syscalls/move_pages/move_pages_support.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/include"
         "testcases/kernel/syscalls/utils"
@@ -9897,7 +9113,6 @@ ltp_mprotect01 = cc_test {
     stem = "mprotect01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mprotect/mprotect01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9907,7 +9122,6 @@ ltp_mprotect02 = cc_test {
     stem = "mprotect02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mprotect/mprotect02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9917,7 +9131,6 @@ ltp_mprotect03 = cc_test {
     stem = "mprotect03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mprotect/mprotect03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9927,7 +9140,6 @@ ltp_mprotect04 = cc_test {
     stem = "mprotect04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mprotect/mprotect04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -9937,7 +9149,6 @@ ltp_mremap01 = cc_test {
     stem = "mremap01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mremap/mremap01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -9953,7 +9164,6 @@ ltp_mremap02 = cc_test {
     stem = "mremap02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mremap/mremap02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -9969,7 +9179,6 @@ ltp_mremap03 = cc_test {
     stem = "mremap03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mremap/mremap03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -9985,7 +9194,6 @@ ltp_mremap05 = cc_test {
     stem = "mremap05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/mremap/mremap05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -10001,7 +9209,6 @@ ltp_msync01 = cc_test {
     stem = "msync01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/msync/msync01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10011,7 +9218,6 @@ ltp_msync02 = cc_test {
     stem = "msync02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/msync/msync02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10021,7 +9227,6 @@ ltp_msync03 = cc_test {
     stem = "msync03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/msync/msync03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10031,7 +9236,6 @@ ltp_msync04 = cc_test {
     stem = "msync04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/msync/msync04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10041,7 +9245,6 @@ ltp_mtest01 = cc_test {
     stem = "mtest01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/mtest01/mtest01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10051,7 +9254,6 @@ ltp_munlock01 = cc_test {
     stem = "munlock01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/munlock/munlock01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10061,7 +9263,6 @@ ltp_munlock02 = cc_test {
     stem = "munlock02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/munlock/munlock02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10071,7 +9272,6 @@ ltp_munlockall01 = cc_test {
     stem = "munlockall01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/munlockall/munlockall01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10081,7 +9281,6 @@ ltp_munmap01 = cc_test {
     stem = "munmap01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/munmap/munmap01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10091,7 +9290,6 @@ ltp_munmap02 = cc_test {
     stem = "munmap02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/munmap/munmap02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10101,7 +9299,6 @@ ltp_munmap03 = cc_test {
     stem = "munmap03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/munmap/munmap03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10111,7 +9308,6 @@ ltp_nanosleep01 = cc_test {
     stem = "nanosleep01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/nanosleep/nanosleep01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10121,17 +9317,6 @@ ltp_nanosleep02 = cc_test {
     stem = "nanosleep02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/nanosleep/nanosleep02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_nanosleep03 = cc_test {
-    name = "ltp_nanosleep03";
-    stem = "nanosleep03";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/nanosleep/nanosleep03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10141,7 +9326,6 @@ ltp_nanosleep04 = cc_test {
     stem = "nanosleep04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/nanosleep/nanosleep04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10151,7 +9335,6 @@ ltp_netstress = cc_test {
     stem = "netstress";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/netstress/netstress.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10161,7 +9344,6 @@ ltp_newns = cc_test {
     stem = "newns";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/newns.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10171,7 +9353,6 @@ ltp_newuname01 = cc_test {
     stem = "newuname01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/newuname/newuname01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10181,7 +9362,6 @@ ltp_nextafter01 = cc_test {
     stem = "nextafter01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/misc/math/nextafter/nextafter01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10191,7 +9371,6 @@ ltp_nfs01_open_files = cc_test {
     stem = "nfs01_open_files";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/nfs/nfs_stress/nfs01_open_files.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10202,7 +9381,6 @@ ltp_nfs04_create_file = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/nfs/nfs_stress/nfs04_create_file.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-D_LARGEFILE_SOURCE"
     ];
@@ -10215,7 +9393,6 @@ ltp_nfs05_make_tree = cc_test {
     stem = "nfs05_make_tree";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/nfs/nfs_stress/nfs05_make_tree.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10228,7 +9405,6 @@ ltp_nfs_flock = cc_test {
         "testcases/network/nfs/nfslock01/nfs_flock_func.c"
         "testcases/network/nfs/nfslock01/nfs_flock.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10240,7 +9416,6 @@ ltp_nfs_flock_dgen = cc_test {
         "testcases/network/nfs/nfslock01/nfs_flock_func.c"
         "testcases/network/nfs/nfslock01/nfs_flock_dgen.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10257,7 +9432,6 @@ ltp_nftw01 = cc_test {
     ];
     cflags = [
         "-D_LARGEFILE_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
         "-D_XOPEN_SOURCE_EXTENDED"
         "-D_XOPEN_SOURCE=500"
     ];
@@ -10278,7 +9452,6 @@ ltp_nftw6401 = cc_test {
     ];
     cflags = [
         "-D_LARGEFILE64_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
         "-D_XOPEN_SOURCE_EXTENDED"
         "-D_XOPEN_SOURCE=500"
     ];
@@ -10291,7 +9464,6 @@ ltp_nice01 = cc_test {
     stem = "nice01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/nice/nice01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10301,7 +9473,6 @@ ltp_nice02 = cc_test {
     stem = "nice02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/nice/nice02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10311,7 +9482,6 @@ ltp_nice03 = cc_test {
     stem = "nice03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/nice/nice03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10321,7 +9491,6 @@ ltp_nice04 = cc_test {
     stem = "nice04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/nice/nice04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10331,10 +9500,7 @@ ltp_nptl01 = cc_test {
     stem = "nptl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/nptl/nptl01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DUSING_NPTL"
-    ];
+    cflags = ["-DUSING_NPTL"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10347,7 +9513,6 @@ ltp_ns-icmp_redirector = cc_test {
         "testcases/network/stress/ns-tools/ns-icmp_redirector.c"
         "testcases/network/stress/ns-tools/ns-common.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10359,7 +9524,6 @@ ltp_ns-icmpv4_sender = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-icmpv4_sender.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10371,7 +9535,6 @@ ltp_ns-icmpv6_sender = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-icmpv6_sender.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10383,7 +9546,6 @@ ltp_ns-igmp_querier = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-igmp_querier.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10395,7 +9557,6 @@ ltp_ns-mcast_join = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-mcast_join.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10407,7 +9568,6 @@ ltp_ns-mcast_receiver = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-mcast_receiver.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10419,7 +9579,6 @@ ltp_ns-tcpclient = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-tcpclient.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10431,7 +9590,6 @@ ltp_ns-tcpserver = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-tcpserver.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10443,7 +9601,6 @@ ltp_ns-udpclient = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-udpclient.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10455,7 +9612,6 @@ ltp_ns-udpsender = cc_test {
         "testcases/network/stress/ns-tools/ns-udpsender.c"
         "testcases/network/stress/ns-tools/ns-common.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10467,7 +9623,6 @@ ltp_ns-udpserver = cc_test {
         "testcases/network/stress/ns-tools/ns-common.c"
         "testcases/network/stress/ns-tools/ns-udpserver.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -10476,7 +9631,6 @@ ltp_nsclone = cc_test {
     stem = "nsclone";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/fs_bind/bin/nsclone.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10486,7 +9640,6 @@ ltp_oom01 = cc_test {
     stem = "oom01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/oom/oom01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -10504,7 +9657,6 @@ ltp_oom02 = cc_test {
     stem = "oom02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/oom/oom02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -10522,7 +9674,6 @@ ltp_oom03 = cc_test {
     stem = "oom03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/oom/oom03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -10540,7 +9691,6 @@ ltp_oom04 = cc_test {
     stem = "oom04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/oom/oom04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -10558,7 +9708,6 @@ ltp_oom05 = cc_test {
     stem = "oom05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/oom/oom05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -10576,7 +9725,6 @@ ltp_open01 = cc_test {
     stem = "open01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10586,7 +9734,6 @@ ltp_open02 = cc_test {
     stem = "open02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10596,7 +9743,6 @@ ltp_open03 = cc_test {
     stem = "open03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10606,7 +9752,6 @@ ltp_open04 = cc_test {
     stem = "open04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10616,7 +9761,6 @@ ltp_open05 = cc_test {
     stem = "open05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10626,7 +9770,6 @@ ltp_open06 = cc_test {
     stem = "open06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10636,7 +9779,6 @@ ltp_open07 = cc_test {
     stem = "open07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10646,7 +9788,6 @@ ltp_open08 = cc_test {
     stem = "open08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10656,7 +9797,6 @@ ltp_open09 = cc_test {
     stem = "open09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10666,7 +9806,6 @@ ltp_open10 = cc_test {
     stem = "open10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10676,7 +9815,6 @@ ltp_open11 = cc_test {
     stem = "open11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10686,7 +9824,6 @@ ltp_open12_child = cc_test {
     stem = "open12_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open12_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10696,7 +9833,6 @@ ltp_open13 = cc_test {
     stem = "open13";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open13.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10706,7 +9842,6 @@ ltp_open14 = cc_test {
     stem = "open14";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/open/open14.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10716,7 +9851,6 @@ ltp_openat01 = cc_test {
     stem = "openat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/openat/openat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10726,7 +9860,6 @@ ltp_openat02_child = cc_test {
     stem = "openat02_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/openat/openat02_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10736,7 +9869,6 @@ ltp_openat03 = cc_test {
     stem = "openat03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/openat/openat03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10746,7 +9878,6 @@ ltp_openfile = cc_test {
     stem = "openfile";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/openfile/openfile.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10756,7 +9887,6 @@ ltp_overcommit_memory = cc_test {
     stem = "overcommit_memory";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/tunable/overcommit_memory.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -10774,10 +9904,7 @@ ltp_page01 = cc_test {
     stem = "page01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/page/page01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DLINUX"
-    ];
+    cflags = ["-DLINUX"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10787,10 +9914,7 @@ ltp_page02 = cc_test {
     stem = "page02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/page/page02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DLINUX"
-    ];
+    cflags = ["-DLINUX"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10800,7 +9924,6 @@ ltp_pathconf01 = cc_test {
     stem = "pathconf01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pathconf/pathconf01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10810,7 +9933,6 @@ ltp_pause01 = cc_test {
     stem = "pause01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pause/pause01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10820,7 +9942,6 @@ ltp_pause02 = cc_test {
     stem = "pause02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pause/pause02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10830,7 +9951,6 @@ ltp_pause03 = cc_test {
     stem = "pause03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pause/pause03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10840,10 +9960,7 @@ ltp_pcrypt_aead01 = cc_test {
     stem = "pcrypt_aead01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/crypto/pcrypt_aead01.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10853,7 +9970,6 @@ ltp_pec_listener = cc_test {
     stem = "pec_listener";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/connectors/pec/pec_listener.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10863,7 +9979,6 @@ ltp_perf_event_open01 = cc_test {
     stem = "perf_event_open01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/perf_event_open/perf_event_open01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10873,7 +9988,6 @@ ltp_perf_event_open02 = cc_test {
     stem = "perf_event_open02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/perf_event_open/perf_event_open02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10883,7 +9997,6 @@ ltp_personality01 = cc_test {
     stem = "personality01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/personality/personality01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10893,7 +10006,33 @@ ltp_personality02 = cc_test {
     stem = "personality02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/personality/personality02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_pidfd_send_signal01 = cc_test {
+    name = "ltp_pidfd_send_signal01";
+    stem = "pidfd_send_signal01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/pidfd_send_signal/pidfd_send_signal01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_pidfd_send_signal02 = cc_test {
+    name = "ltp_pidfd_send_signal02";
+    stem = "pidfd_send_signal02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/pidfd_send_signal/pidfd_send_signal02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_pidfd_send_signal03 = cc_test {
+    name = "ltp_pidfd_send_signal03";
+    stem = "pidfd_send_signal03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/pidfd_send_signal/pidfd_send_signal03.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10903,7 +10042,6 @@ ltp_pids_task1 = cc_test {
     stem = "pids_task1";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/pids/pids_task1.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -10916,7 +10054,6 @@ ltp_pids_task2 = cc_test {
     stem = "pids_task2";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/pids/pids_task2.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/controllers/libcontrollers"
         "include/old"
@@ -10929,7 +10066,6 @@ ltp_pipe01 = cc_test {
     stem = "pipe01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10939,7 +10075,6 @@ ltp_pipe02 = cc_test {
     stem = "pipe02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10949,7 +10084,6 @@ ltp_pipe03 = cc_test {
     stem = "pipe03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10959,7 +10093,6 @@ ltp_pipe04 = cc_test {
     stem = "pipe04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10969,7 +10102,6 @@ ltp_pipe05 = cc_test {
     stem = "pipe05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10979,7 +10111,6 @@ ltp_pipe06 = cc_test {
     stem = "pipe06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10989,7 +10120,6 @@ ltp_pipe07 = cc_test {
     stem = "pipe07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -10999,7 +10129,6 @@ ltp_pipe08 = cc_test {
     stem = "pipe08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11009,7 +10138,6 @@ ltp_pipe09 = cc_test {
     stem = "pipe09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11019,7 +10147,6 @@ ltp_pipe10 = cc_test {
     stem = "pipe10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11029,7 +10156,6 @@ ltp_pipe11 = cc_test {
     stem = "pipe11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe/pipe11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11039,7 +10165,6 @@ ltp_pipe2_01 = cc_test {
     stem = "pipe2_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe2/pipe2_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11049,7 +10174,6 @@ ltp_pipe2_02 = cc_test {
     stem = "pipe2_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pipe2/pipe2_02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11059,7 +10183,15 @@ ltp_pivot_root01 = cc_test {
     stem = "pivot_root01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pivot_root/pivot_root01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_pkey01 = cc_test {
+    name = "ltp_pkey01";
+    stem = "pkey01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/pkeys/pkey01.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11069,7 +10201,6 @@ ltp_pm_get_sched_values = cc_test {
     stem = "pm_get_sched_values";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/power_management/pm_get_sched_values.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11079,7 +10210,6 @@ ltp_poll01 = cc_test {
     stem = "poll01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/poll/poll01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11089,7 +10219,6 @@ ltp_poll02 = cc_test {
     stem = "poll02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/poll/poll02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11099,7 +10228,6 @@ ltp_posix_fadvise01 = cc_test {
     stem = "posix_fadvise01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fadvise"
         "testcases/kernel/syscalls/utils"
@@ -11114,7 +10242,6 @@ ltp_posix_fadvise01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11131,7 +10258,6 @@ ltp_posix_fadvise02 = cc_test {
     stem = "posix_fadvise02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fadvise"
         "testcases/kernel/syscalls/utils"
@@ -11146,7 +10272,6 @@ ltp_posix_fadvise02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11163,7 +10288,6 @@ ltp_posix_fadvise03 = cc_test {
     stem = "posix_fadvise03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fadvise"
         "testcases/kernel/syscalls/utils"
@@ -11178,7 +10302,6 @@ ltp_posix_fadvise03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11195,7 +10318,6 @@ ltp_posix_fadvise04 = cc_test {
     stem = "posix_fadvise04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/fadvise"
         "testcases/kernel/syscalls/utils"
@@ -11210,7 +10332,6 @@ ltp_posix_fadvise04_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/fadvise/posix_fadvise04.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11227,7 +10348,6 @@ ltp_ppoll01 = cc_test {
     stem = "ppoll01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ppoll/ppoll01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11237,7 +10357,6 @@ ltp_prctl01 = cc_test {
     stem = "prctl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/prctl/prctl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11247,7 +10366,6 @@ ltp_prctl02 = cc_test {
     stem = "prctl02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/prctl/prctl02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11257,7 +10375,69 @@ ltp_prctl03 = cc_test {
     stem = "prctl03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/prctl/prctl03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_prctl04 = cc_test {
+    name = "ltp_prctl04";
+    stem = "prctl04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/prctl/prctl04.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_prctl05 = cc_test {
+    name = "ltp_prctl05";
+    stem = "prctl05";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/prctl/prctl05.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_prctl06 = cc_test {
+    name = "ltp_prctl06";
+    stem = "prctl06";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/prctl/prctl06.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_prctl06_execve = cc_test {
+    name = "ltp_prctl06_execve";
+    stem = "prctl06_execve";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/prctl/prctl06_execve.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_prctl07 = cc_test {
+    name = "ltp_prctl07";
+    stem = "prctl07";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/prctl/prctl07.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_prctl08 = cc_test {
+    name = "ltp_prctl08";
+    stem = "prctl08";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/prctl/prctl08.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_prctl09 = cc_test {
+    name = "ltp_prctl09";
+    stem = "prctl09";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/prctl/prctl09.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11267,7 +10447,6 @@ ltp_pread01 = cc_test {
     stem = "pread01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pread/pread01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pread"
         "testcases/kernel/syscalls/utils"
@@ -11282,7 +10461,6 @@ ltp_pread01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pread/pread01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11299,7 +10477,6 @@ ltp_pread02 = cc_test {
     stem = "pread02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pread/pread02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pread"
         "testcases/kernel/syscalls/utils"
@@ -11314,7 +10491,6 @@ ltp_pread02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pread/pread02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11331,7 +10507,6 @@ ltp_pread03 = cc_test {
     stem = "pread03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pread/pread03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pread"
         "testcases/kernel/syscalls/utils"
@@ -11346,7 +10521,6 @@ ltp_pread03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pread/pread03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11363,7 +10537,6 @@ ltp_preadv01 = cc_test {
     stem = "preadv01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv/preadv01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/preadv"
         "testcases/kernel/syscalls/utils"
@@ -11378,7 +10551,6 @@ ltp_preadv01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv/preadv01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11395,7 +10567,6 @@ ltp_preadv02 = cc_test {
     stem = "preadv02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv/preadv02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/preadv"
         "testcases/kernel/syscalls/utils"
@@ -11410,7 +10581,6 @@ ltp_preadv02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv/preadv02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11427,7 +10597,6 @@ ltp_preadv03 = cc_test {
     stem = "preadv03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv/preadv03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/preadv"
         "testcases/kernel/syscalls/utils"
@@ -11442,7 +10611,6 @@ ltp_preadv03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv/preadv03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11459,7 +10627,6 @@ ltp_preadv201 = cc_test {
     stem = "preadv201";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv2/preadv201.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/preadv2"
         "testcases/kernel/syscalls/utils"
@@ -11474,7 +10641,6 @@ ltp_preadv201_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv2/preadv201.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11491,7 +10657,6 @@ ltp_preadv202 = cc_test {
     stem = "preadv202";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv2/preadv202.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/preadv2"
         "testcases/kernel/syscalls/utils"
@@ -11506,7 +10671,36 @@ ltp_preadv202_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/preadv2/preadv202.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_FILE_OFFSET_BITS=64"
+        "-DTST_USE_NEWER64_SYSCALL=1"
+    ];
+    local_include_dirs = [
+        "testcases/kernel/syscalls/utils"
+        "include/old"
+        "testcases/kernel/syscalls/preadv2"
+    ];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_preadv203 = cc_test {
+    name = "ltp_preadv203";
+    stem = "preadv203";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/preadv2/preadv203.c"];
+    local_include_dirs = [
+        "testcases/kernel/syscalls/preadv2"
+        "testcases/kernel/syscalls/utils"
+        "include/old"
+    ];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_preadv203_64 = cc_test {
+    name = "ltp_preadv203_64";
+    stem = "preadv203_64";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/preadv2/preadv203.c"];
+    cflags = [
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11523,10 +10717,7 @@ ltp_print_caps = cc_test {
     stem = "print_caps";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/filecaps/print_caps.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11536,7 +10727,6 @@ ltp_proc01 = cc_test {
     stem = "proc01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/proc/proc01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11546,7 +10736,6 @@ ltp_process_vm01 = cc_test {
     stem = "process_vm01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/cma/process_vm01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11556,7 +10745,6 @@ ltp_process_vm_readv02 = cc_test {
     stem = "process_vm_readv02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/cma/process_vm_readv02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11566,7 +10754,6 @@ ltp_process_vm_readv03 = cc_test {
     stem = "process_vm_readv03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/cma/process_vm_readv03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11576,7 +10763,6 @@ ltp_process_vm_writev02 = cc_test {
     stem = "process_vm_writev02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/cma/process_vm_writev02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11586,7 +10772,6 @@ ltp_pselect01 = cc_test {
     stem = "pselect01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pselect/pselect01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pselect"
         "testcases/kernel/syscalls/utils"
@@ -11601,7 +10786,6 @@ ltp_pselect01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pselect/pselect01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11618,7 +10802,6 @@ ltp_pselect02 = cc_test {
     stem = "pselect02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pselect/pselect02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pselect"
         "testcases/kernel/syscalls/utils"
@@ -11633,7 +10816,6 @@ ltp_pselect02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pselect/pselect02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11650,7 +10832,6 @@ ltp_pselect03 = cc_test {
     stem = "pselect03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pselect/pselect03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pselect"
         "testcases/kernel/syscalls/utils"
@@ -11665,7 +10846,6 @@ ltp_pselect03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pselect/pselect03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -11682,7 +10862,6 @@ ltp_pt_test = cc_test {
     stem = "pt_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/tracing/pt_test/pt_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11692,10 +10871,7 @@ ltp_ptem01 = cc_test {
     stem = "ptem01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/pty/ptem01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11705,7 +10881,6 @@ ltp_pth_str01 = cc_test {
     stem = "pth_str01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/pthreads/pth_str01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11715,7 +10890,6 @@ ltp_pth_str02 = cc_test {
     stem = "pth_str02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/pthreads/pth_str02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11725,7 +10899,6 @@ ltp_pth_str03 = cc_test {
     stem = "pth_str03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/pthreads/pth_str03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11739,10 +10912,7 @@ ltp_pthcli = cc_test {
         "testcases/kernel/sched/clisrv/readline.c"
         "testcases/kernel/sched/clisrv/pthcli.c"
     ];
-    cflags = [
-        "-D_LINUX"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_LINUX"];
     local_include_dirs = ["include/old"];
 };
 
@@ -11755,10 +10925,7 @@ ltp_pthserv = cc_test {
         "testcases/kernel/sched/clisrv/readline.c"
         "testcases/kernel/sched/clisrv/pthserv.c"
     ];
-    cflags = [
-        "-D_LINUX"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_LINUX"];
     local_include_dirs = ["include/old"];
 };
 
@@ -11767,7 +10934,6 @@ ltp_ptrace01 = cc_test {
     stem = "ptrace01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ptrace/ptrace01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11777,7 +10943,6 @@ ltp_ptrace02 = cc_test {
     stem = "ptrace02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ptrace/ptrace02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11787,7 +10952,6 @@ ltp_ptrace03 = cc_test {
     stem = "ptrace03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ptrace/ptrace03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11797,7 +10961,6 @@ ltp_ptrace04 = cc_test {
     stem = "ptrace04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ptrace/ptrace04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11807,7 +10970,6 @@ ltp_ptrace05 = cc_test {
     stem = "ptrace05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ptrace/ptrace05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11817,7 +10979,6 @@ ltp_ptrace07 = cc_test {
     stem = "ptrace07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ptrace/ptrace07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11827,10 +10988,7 @@ ltp_pty01 = cc_test {
     stem = "pty01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/pty/pty01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11840,10 +10998,7 @@ ltp_pty02 = cc_test {
     stem = "pty02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/pty/pty02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -11853,10 +11008,6 @@ ltp_pwrite01 = cc_test {
     stem = "pwrite01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-Wno-error"
-    ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
         "testcases/kernel/syscalls/utils"
@@ -11871,10 +11022,8 @@ ltp_pwrite01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-Wno-error"
     ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
@@ -11889,10 +11038,6 @@ ltp_pwrite02 = cc_test {
     stem = "pwrite02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-Wno-error"
-    ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
         "testcases/kernel/syscalls/utils"
@@ -11907,10 +11052,8 @@ ltp_pwrite02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-Wno-error"
     ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
@@ -11925,10 +11068,6 @@ ltp_pwrite03 = cc_test {
     stem = "pwrite03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-Wno-error"
-    ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
         "testcases/kernel/syscalls/utils"
@@ -11943,10 +11082,8 @@ ltp_pwrite03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-Wno-error"
     ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
@@ -11961,10 +11098,6 @@ ltp_pwrite04 = cc_test {
     stem = "pwrite04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite04.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-Wno-error"
-    ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
         "testcases/kernel/syscalls/utils"
@@ -11979,10 +11112,8 @@ ltp_pwrite04_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwrite/pwrite04.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-Wno-error"
     ];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwrite"
@@ -11997,7 +11128,6 @@ ltp_pwritev01 = cc_test {
     stem = "pwritev01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev/pwritev01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwritev"
         "testcases/kernel/syscalls/utils"
@@ -12012,7 +11142,6 @@ ltp_pwritev01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev/pwritev01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -12029,7 +11158,6 @@ ltp_pwritev02 = cc_test {
     stem = "pwritev02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev/pwritev02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwritev"
         "testcases/kernel/syscalls/utils"
@@ -12044,7 +11172,6 @@ ltp_pwritev02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev/pwritev02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -12061,7 +11188,6 @@ ltp_pwritev03 = cc_test {
     stem = "pwritev03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev/pwritev03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwritev"
         "testcases/kernel/syscalls/utils"
@@ -12076,7 +11202,6 @@ ltp_pwritev03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev/pwritev03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -12093,7 +11218,6 @@ ltp_pwritev201 = cc_test {
     stem = "pwritev201";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev2/pwritev201.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwritev2"
         "testcases/kernel/syscalls/utils"
@@ -12108,7 +11232,6 @@ ltp_pwritev201_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev2/pwritev201.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -12125,7 +11248,6 @@ ltp_pwritev202 = cc_test {
     stem = "pwritev202";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev2/pwritev202.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/pwritev2"
         "testcases/kernel/syscalls/utils"
@@ -12140,7 +11262,6 @@ ltp_pwritev202_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/pwritev2/pwritev202.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -12157,7 +11278,6 @@ ltp_quotactl01 = cc_test {
     stem = "quotactl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/quotactl/quotactl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12167,7 +11287,6 @@ ltp_quotactl02 = cc_test {
     stem = "quotactl02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/quotactl/quotactl02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12177,7 +11296,33 @@ ltp_quotactl03 = cc_test {
     stem = "quotactl03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/quotactl/quotactl03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_quotactl04 = cc_test {
+    name = "ltp_quotactl04";
+    stem = "quotactl04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/quotactl/quotactl04.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_quotactl05 = cc_test {
+    name = "ltp_quotactl05";
+    stem = "quotactl05";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/quotactl/quotactl05.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_quotactl06 = cc_test {
+    name = "ltp_quotactl06";
+    stem = "quotactl06";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/quotactl/quotactl06.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12187,7 +11332,6 @@ ltp_random-access = cc_test {
     stem = "random-access";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/fs-bench/random-access.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -12199,7 +11343,6 @@ ltp_random-access-del-create = cc_test {
         "testcases/kernel/fs/fs-bench/boxmuler.c"
         "testcases/kernel/fs/fs-bench/random-access-del-create.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
 };
 
@@ -12208,7 +11351,6 @@ ltp_read01 = cc_test {
     stem = "read01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/read/read01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12218,7 +11360,6 @@ ltp_read02 = cc_test {
     stem = "read02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/read/read02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12228,7 +11369,6 @@ ltp_read03 = cc_test {
     stem = "read03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/read/read03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12238,7 +11378,6 @@ ltp_read04 = cc_test {
     stem = "read04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/read/read04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12248,10 +11387,7 @@ ltp_read_all = cc_test {
     stem = "read_all";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/read_all/read_all.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12261,10 +11397,7 @@ ltp_read_checkzero = cc_test {
     stem = "read_checkzero";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/ltp-aiodio/read_checkzero.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DAIO"
-    ];
+    cflags = ["-DAIO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12274,7 +11407,6 @@ ltp_readahead01 = cc_test {
     stem = "readahead01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readahead/readahead01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12284,7 +11416,6 @@ ltp_readahead02 = cc_test {
     stem = "readahead02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readahead/readahead02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12294,17 +11425,6 @@ ltp_readdir01 = cc_test {
     stem = "readdir01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readdir/readdir01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_readdir02 = cc_test {
-    name = "ltp_readdir02";
-    stem = "readdir02";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/readdir/readdir02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12314,7 +11434,6 @@ ltp_readdir21 = cc_test {
     stem = "readdir21";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readdir/readdir21.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12324,7 +11443,6 @@ ltp_readlink01 = cc_test {
     stem = "readlink01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readlink/readlink01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12334,7 +11452,6 @@ ltp_readlink03 = cc_test {
     stem = "readlink03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readlink/readlink03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12344,7 +11461,6 @@ ltp_readlinkat01 = cc_test {
     stem = "readlinkat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readlinkat/readlinkat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12354,7 +11470,6 @@ ltp_readlinkat02 = cc_test {
     stem = "readlinkat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readlinkat/readlinkat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12364,7 +11479,6 @@ ltp_readv01 = cc_test {
     stem = "readv01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readv/readv01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12374,7 +11488,6 @@ ltp_readv02 = cc_test {
     stem = "readv02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readv/readv02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12384,7 +11497,6 @@ ltp_readv03 = cc_test {
     stem = "readv03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/readv/readv03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12394,7 +11506,6 @@ ltp_realpath01 = cc_test {
     stem = "realpath01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/realpath/realpath01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12404,7 +11515,6 @@ ltp_reboot01 = cc_test {
     stem = "reboot01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/reboot/reboot01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12414,7 +11524,6 @@ ltp_reboot02 = cc_test {
     stem = "reboot02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/reboot/reboot02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12424,7 +11533,6 @@ ltp_recv01 = cc_test {
     stem = "recv01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/recv/recv01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12434,7 +11542,6 @@ ltp_recvfrom01 = cc_test {
     stem = "recvfrom01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/recvfrom/recvfrom01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12444,7 +11551,6 @@ ltp_recvmsg01 = cc_test {
     stem = "recvmsg01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/recvmsg/recvmsg01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -12457,7 +11563,6 @@ ltp_recvmsg02 = cc_test {
     stem = "recvmsg02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/recvmsg/recvmsg02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -12470,7 +11575,6 @@ ltp_recvmsg03 = cc_test {
     stem = "recvmsg03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/recvmsg/recvmsg03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -12483,7 +11587,6 @@ ltp_remap_file_pages02 = cc_test {
     stem = "remap_file_pages02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/remap_file_pages/remap_file_pages02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12493,7 +11596,6 @@ ltp_removexattr01 = cc_test {
     stem = "removexattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/removexattr/removexattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12503,7 +11605,6 @@ ltp_removexattr02 = cc_test {
     stem = "removexattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/removexattr/removexattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12513,7 +11614,6 @@ ltp_rename01 = cc_test {
     stem = "rename01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12523,7 +11623,6 @@ ltp_rename02 = cc_test {
     stem = "rename02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12533,7 +11632,6 @@ ltp_rename03 = cc_test {
     stem = "rename03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12543,7 +11641,6 @@ ltp_rename04 = cc_test {
     stem = "rename04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12553,7 +11650,6 @@ ltp_rename05 = cc_test {
     stem = "rename05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12563,7 +11659,6 @@ ltp_rename06 = cc_test {
     stem = "rename06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12573,7 +11668,6 @@ ltp_rename07 = cc_test {
     stem = "rename07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12583,7 +11677,6 @@ ltp_rename08 = cc_test {
     stem = "rename08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12593,7 +11686,6 @@ ltp_rename09 = cc_test {
     stem = "rename09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12603,7 +11695,6 @@ ltp_rename10 = cc_test {
     stem = "rename10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12613,7 +11704,6 @@ ltp_rename11 = cc_test {
     stem = "rename11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12623,7 +11713,6 @@ ltp_rename12 = cc_test {
     stem = "rename12";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename12.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12633,7 +11722,6 @@ ltp_rename13 = cc_test {
     stem = "rename13";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename13.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12643,7 +11731,6 @@ ltp_rename14 = cc_test {
     stem = "rename14";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rename/rename14.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12653,7 +11740,6 @@ ltp_renameat01 = cc_test {
     stem = "renameat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/renameat/renameat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12663,7 +11749,6 @@ ltp_renameat201 = cc_test {
     stem = "renameat201";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/renameat2/renameat201.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12673,7 +11758,6 @@ ltp_renameat202 = cc_test {
     stem = "renameat202";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/renameat2/renameat202.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12683,7 +11767,6 @@ ltp_request_key01 = cc_test {
     stem = "request_key01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/request_key/request_key01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12693,7 +11776,6 @@ ltp_request_key02 = cc_test {
     stem = "request_key02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/request_key/request_key02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12703,7 +11785,6 @@ ltp_request_key03 = cc_test {
     stem = "request_key03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/request_key/request_key03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12713,7 +11794,6 @@ ltp_request_key04 = cc_test {
     stem = "request_key04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/request_key/request_key04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12723,7 +11803,6 @@ ltp_request_key05 = cc_test {
     stem = "request_key05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/request_key/request_key05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12733,7 +11812,6 @@ ltp_rmdir01 = cc_test {
     stem = "rmdir01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rmdir/rmdir01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12743,7 +11821,6 @@ ltp_rmdir02 = cc_test {
     stem = "rmdir02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rmdir/rmdir02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12753,7 +11830,6 @@ ltp_rmdir03 = cc_test {
     stem = "rmdir03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rmdir/rmdir03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12763,7 +11839,6 @@ ltp_rt_sigaction01 = cc_test {
     stem = "rt_sigaction01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_sigaction/rt_sigaction01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12773,7 +11848,6 @@ ltp_rt_sigaction02 = cc_test {
     stem = "rt_sigaction02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_sigaction/rt_sigaction02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12783,7 +11857,6 @@ ltp_rt_sigaction03 = cc_test {
     stem = "rt_sigaction03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_sigaction/rt_sigaction03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12793,10 +11866,7 @@ ltp_rt_sigpending02 = cc_test {
     stem = "rt_sigpending02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigpending/sigpending02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DTEST_RT_SIGPENDING"
-    ];
+    cflags = ["-DTEST_RT_SIGPENDING"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12806,7 +11876,6 @@ ltp_rt_sigprocmask01 = cc_test {
     stem = "rt_sigprocmask01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_sigprocmask/rt_sigprocmask01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12816,7 +11885,6 @@ ltp_rt_sigprocmask02 = cc_test {
     stem = "rt_sigprocmask02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_sigprocmask/rt_sigprocmask02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12826,7 +11894,6 @@ ltp_rt_sigqueueinfo01 = cc_test {
     stem = "rt_sigqueueinfo01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_sigqueueinfo/rt_sigqueueinfo01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12836,7 +11903,6 @@ ltp_rt_sigsuspend01 = cc_test {
     stem = "rt_sigsuspend01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_sigsuspend/rt_sigsuspend01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12846,10 +11912,7 @@ ltp_rt_sigtimedwait01 = cc_test {
     stem = "rt_sigtimedwait01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigwaitinfo/sigwaitinfo01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DTEST_RT_SIGTIMEDWAIT"
-    ];
+    cflags = ["-DTEST_RT_SIGTIMEDWAIT"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12859,7 +11922,6 @@ ltp_rt_tgsigqueueinfo01 = cc_test {
     stem = "rt_tgsigqueueinfo01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/rt_tgsigqueueinfo/rt_tgsigqueueinfo01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12869,7 +11931,6 @@ ltp_rtc01 = cc_test {
     stem = "rtc01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/rtc/rtc01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12879,7 +11940,6 @@ ltp_sbrk01 = cc_test {
     stem = "sbrk01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sbrk/sbrk01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12889,7 +11949,6 @@ ltp_sbrk02 = cc_test {
     stem = "sbrk02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sbrk/sbrk02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12899,7 +11958,6 @@ ltp_sbrk03 = cc_test {
     stem = "sbrk03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sbrk/sbrk03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12913,7 +11971,6 @@ ltp_sched_boost = cc_test {
         "testcases/kernel/sched/eas/sched_boost.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12927,7 +11984,6 @@ ltp_sched_cfs_prio = cc_test {
         "testcases/kernel/sched/eas/sched_cfs_prio.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12941,7 +11997,6 @@ ltp_sched_dl_runtime = cc_test {
         "testcases/kernel/sched/eas/sched_dl_runtime.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12954,7 +12009,6 @@ ltp_sched_driver = cc_test {
         "testcases/kernel/sched/sched_stress/sched_driver.c"
         "testcases/kernel/sched/sched_stress/sched.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12964,7 +12018,6 @@ ltp_sched_get_priority_max01 = cc_test {
     stem = "sched_get_priority_max01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_get_priority_max/sched_get_priority_max01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12974,7 +12027,6 @@ ltp_sched_get_priority_max02 = cc_test {
     stem = "sched_get_priority_max02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_get_priority_max/sched_get_priority_max02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12984,7 +12036,6 @@ ltp_sched_get_priority_min01 = cc_test {
     stem = "sched_get_priority_min01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_get_priority_min/sched_get_priority_min01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -12994,7 +12045,6 @@ ltp_sched_get_priority_min02 = cc_test {
     stem = "sched_get_priority_min02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_get_priority_min/sched_get_priority_min02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13004,7 +12054,6 @@ ltp_sched_getaffinity01 = cc_test {
     stem = "sched_getaffinity01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getaffinity/sched_getaffinity01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13014,7 +12063,6 @@ ltp_sched_getattr01 = cc_test {
     stem = "sched_getattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getattr/sched_getattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13024,7 +12072,6 @@ ltp_sched_getattr02 = cc_test {
     stem = "sched_getattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getattr/sched_getattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13034,7 +12081,6 @@ ltp_sched_getparam01 = cc_test {
     stem = "sched_getparam01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getparam/sched_getparam01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13044,7 +12090,6 @@ ltp_sched_getparam02 = cc_test {
     stem = "sched_getparam02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getparam/sched_getparam02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13054,7 +12099,6 @@ ltp_sched_getparam03 = cc_test {
     stem = "sched_getparam03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getparam/sched_getparam03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13064,7 +12108,6 @@ ltp_sched_getscheduler01 = cc_test {
     stem = "sched_getscheduler01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getscheduler/sched_getscheduler01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13074,7 +12117,6 @@ ltp_sched_getscheduler02 = cc_test {
     stem = "sched_getscheduler02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_getscheduler/sched_getscheduler02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13088,7 +12130,6 @@ ltp_sched_latency_dl = cc_test {
         "testcases/kernel/sched/eas/sched_latency_dl.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13102,7 +12143,6 @@ ltp_sched_latency_rt = cc_test {
         "testcases/kernel/sched/eas/sched_latency_rt.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13116,7 +12156,6 @@ ltp_sched_prio_3_fifo = cc_test {
         "testcases/kernel/sched/eas/trace_parse.c"
         "testcases/kernel/sched/eas/sched_prio_3_fifo.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13130,7 +12169,6 @@ ltp_sched_prio_3_rr = cc_test {
         "testcases/kernel/sched/eas/trace_parse.c"
         "testcases/kernel/sched/eas/sched_prio_3_rr.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13140,7 +12178,6 @@ ltp_sched_rr_get_interval01 = cc_test {
     stem = "sched_rr_get_interval01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_rr_get_interval/sched_rr_get_interval01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13150,7 +12187,6 @@ ltp_sched_rr_get_interval02 = cc_test {
     stem = "sched_rr_get_interval02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_rr_get_interval/sched_rr_get_interval02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13160,7 +12196,6 @@ ltp_sched_rr_get_interval03 = cc_test {
     stem = "sched_rr_get_interval03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_rr_get_interval/sched_rr_get_interval03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13170,7 +12205,6 @@ ltp_sched_setaffinity01 = cc_test {
     stem = "sched_setaffinity01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setaffinity/sched_setaffinity01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13180,7 +12214,6 @@ ltp_sched_setattr01 = cc_test {
     stem = "sched_setattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setattr/sched_setattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13190,7 +12223,6 @@ ltp_sched_setparam01 = cc_test {
     stem = "sched_setparam01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setparam/sched_setparam01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13200,7 +12232,6 @@ ltp_sched_setparam02 = cc_test {
     stem = "sched_setparam02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setparam/sched_setparam02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13210,7 +12241,6 @@ ltp_sched_setparam03 = cc_test {
     stem = "sched_setparam03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setparam/sched_setparam03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13220,7 +12250,6 @@ ltp_sched_setparam04 = cc_test {
     stem = "sched_setparam04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setparam/sched_setparam04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13230,7 +12259,6 @@ ltp_sched_setparam05 = cc_test {
     stem = "sched_setparam05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setparam/sched_setparam05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13240,7 +12268,6 @@ ltp_sched_setscheduler01 = cc_test {
     stem = "sched_setscheduler01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setscheduler/sched_setscheduler01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13250,7 +12277,6 @@ ltp_sched_setscheduler02 = cc_test {
     stem = "sched_setscheduler02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setscheduler/sched_setscheduler02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13260,7 +12286,6 @@ ltp_sched_setscheduler03 = cc_test {
     stem = "sched_setscheduler03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_setscheduler/sched_setscheduler03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13273,7 +12298,6 @@ ltp_sched_tc0 = cc_test {
         "testcases/kernel/sched/sched_stress/sched.c"
         "testcases/kernel/sched/sched_stress/sched_tc0.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13286,7 +12310,6 @@ ltp_sched_tc1 = cc_test {
         "testcases/kernel/sched/sched_stress/sched.c"
         "testcases/kernel/sched/sched_stress/sched_tc1.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13299,7 +12322,6 @@ ltp_sched_tc2 = cc_test {
         "testcases/kernel/sched/sched_stress/sched.c"
         "testcases/kernel/sched/sched_stress/sched_tc2.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13312,7 +12334,6 @@ ltp_sched_tc3 = cc_test {
         "testcases/kernel/sched/sched_stress/sched_tc3.c"
         "testcases/kernel/sched/sched_stress/sched.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13325,7 +12346,6 @@ ltp_sched_tc4 = cc_test {
         "testcases/kernel/sched/sched_stress/sched_tc4.c"
         "testcases/kernel/sched/sched_stress/sched.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13338,7 +12358,6 @@ ltp_sched_tc5 = cc_test {
         "testcases/kernel/sched/sched_stress/sched.c"
         "testcases/kernel/sched/sched_stress/sched_tc5.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13351,7 +12370,6 @@ ltp_sched_tc6 = cc_test {
         "testcases/kernel/sched/sched_stress/sched_tc6.c"
         "testcases/kernel/sched/sched_stress/sched.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13361,7 +12379,6 @@ ltp_sched_yield01 = cc_test {
     stem = "sched_yield01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sched_yield/sched_yield01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13371,7 +12388,6 @@ ltp_sctp_big_chunk = cc_test {
     stem = "sctp_big_chunk";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/sctp/sctp_big_chunk.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13381,49 +12397,6 @@ ltp_select01 = cc_test {
     stem = "select01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/select/select01.c"];
-    cflags = [
-        "-DSYSCALL_SELECT_LIBC"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select01_SYS__newselect = cc_test {
-    name = "ltp_select01_SYS__newselect";
-    stem = "select01_SYS__newselect";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT__NEWSELECT"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select01_SYS_pselect6 = cc_test {
-    name = "ltp_select01_SYS_pselect6";
-    stem = "select01_SYS_pselect6";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_PSELECT6"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select01_SYS_select = cc_test {
-    name = "ltp_select01_SYS_select";
-    stem = "select01_SYS_select";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_SELECT"
-    ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13433,49 +12406,6 @@ ltp_select02 = cc_test {
     stem = "select02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/select/select02.c"];
-    cflags = [
-        "-DSYSCALL_SELECT_LIBC"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select02_SYS__newselect = cc_test {
-    name = "ltp_select02_SYS__newselect";
-    stem = "select02_SYS__newselect";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT__NEWSELECT"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select02_SYS_pselect6 = cc_test {
-    name = "ltp_select02_SYS_pselect6";
-    stem = "select02_SYS_pselect6";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_PSELECT6"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select02_SYS_select = cc_test {
-    name = "ltp_select02_SYS_select";
-    stem = "select02_SYS_select";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_SELECT"
-    ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13485,49 +12415,6 @@ ltp_select03 = cc_test {
     stem = "select03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/select/select03.c"];
-    cflags = [
-        "-DSYSCALL_SELECT_LIBC"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select03_SYS__newselect = cc_test {
-    name = "ltp_select03_SYS__newselect";
-    stem = "select03_SYS__newselect";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT__NEWSELECT"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select03_SYS_pselect6 = cc_test {
-    name = "ltp_select03_SYS_pselect6";
-    stem = "select03_SYS_pselect6";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_PSELECT6"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select03_SYS_select = cc_test {
-    name = "ltp_select03_SYS_select";
-    stem = "select03_SYS_select";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_SELECT"
-    ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13537,49 +12424,6 @@ ltp_select04 = cc_test {
     stem = "select04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/select/select04.c"];
-    cflags = [
-        "-DSYSCALL_SELECT_LIBC"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select04_SYS__newselect = cc_test {
-    name = "ltp_select04_SYS__newselect";
-    stem = "select04_SYS__newselect";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select04.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT__NEWSELECT"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select04_SYS_pselect6 = cc_test {
-    name = "ltp_select04_SYS_pselect6";
-    stem = "select04_SYS_pselect6";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select04.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_PSELECT6"
-    ];
-    local_include_dirs = ["include/old"];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_select04_SYS_select = cc_test {
-    name = "ltp_select04_SYS_select";
-    stem = "select04_SYS_select";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/select/select04.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DSYSCALL_SELECT_SELECT"
-    ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13589,7 +12433,6 @@ ltp_send01 = cc_test {
     stem = "send01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/send/send01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13599,7 +12442,6 @@ ltp_sendfile02 = cc_test {
     stem = "sendfile02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13614,10 +12456,9 @@ ltp_sendfile02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13633,7 +12474,6 @@ ltp_sendfile03 = cc_test {
     stem = "sendfile03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13648,10 +12488,9 @@ ltp_sendfile03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13667,7 +12506,6 @@ ltp_sendfile04 = cc_test {
     stem = "sendfile04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13682,10 +12520,9 @@ ltp_sendfile04_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile04.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13701,7 +12538,6 @@ ltp_sendfile05 = cc_test {
     stem = "sendfile05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13716,10 +12552,9 @@ ltp_sendfile05_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile05.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13735,7 +12570,6 @@ ltp_sendfile06 = cc_test {
     stem = "sendfile06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13750,10 +12584,9 @@ ltp_sendfile06_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile06.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13769,7 +12602,6 @@ ltp_sendfile07 = cc_test {
     stem = "sendfile07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13784,10 +12616,9 @@ ltp_sendfile07_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile07.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13803,7 +12634,6 @@ ltp_sendfile08 = cc_test {
     stem = "sendfile08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13818,10 +12648,9 @@ ltp_sendfile08_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile08.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13837,7 +12666,6 @@ ltp_sendfile09 = cc_test {
     stem = "sendfile09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/sendfile"
         "testcases/kernel/syscalls/utils"
@@ -13852,10 +12680,9 @@ ltp_sendfile09_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendfile/sendfile09.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
+        "-D_GNU_SOURCE"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
-        "-D_GNU_SOURCE"
         "-DOFF_T=off64_t"
     ];
     local_include_dirs = [
@@ -13871,7 +12698,6 @@ ltp_sendmmsg01 = cc_test {
     stem = "sendmmsg01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendmmsg/sendmmsg01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13881,7 +12707,6 @@ ltp_sendmsg01 = cc_test {
     stem = "sendmsg01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendmsg/sendmsg01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -13894,7 +12719,6 @@ ltp_sendto01 = cc_test {
     stem = "sendto01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendto/sendto01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13904,9 +12728,56 @@ ltp_sendto02 = cc_test {
     stem = "sendto02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sendto/sendto02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
+};
+
+ltp_set_mempolicy01 = cc_test {
+    name = "ltp_set_mempolicy01";
+    stem = "set_mempolicy01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/set_mempolicy/set_mempolicy01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = [
+        "libltp_ltp"
+        "libltp_ltpnuma"
+    ];
+};
+
+ltp_set_mempolicy02 = cc_test {
+    name = "ltp_set_mempolicy02";
+    stem = "set_mempolicy02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/set_mempolicy/set_mempolicy02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = [
+        "libltp_ltp"
+        "libltp_ltpnuma"
+    ];
+};
+
+ltp_set_mempolicy03 = cc_test {
+    name = "ltp_set_mempolicy03";
+    stem = "set_mempolicy03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/set_mempolicy/set_mempolicy03.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = [
+        "libltp_ltp"
+        "libltp_ltpnuma"
+    ];
+};
+
+ltp_set_mempolicy04 = cc_test {
+    name = "ltp_set_mempolicy04";
+    stem = "set_mempolicy04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/set_mempolicy/set_mempolicy04.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = [
+        "libltp_ltp"
+        "libltp_ltpnuma"
+    ];
 };
 
 ltp_set_robust_list01 = cc_test {
@@ -13914,7 +12785,6 @@ ltp_set_robust_list01 = cc_test {
     stem = "set_robust_list01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/set_robust_list/set_robust_list01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13924,7 +12794,6 @@ ltp_set_thread_area01 = cc_test {
     stem = "set_thread_area01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/set_thread_area/set_thread_area01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13934,7 +12803,6 @@ ltp_set_tid_address01 = cc_test {
     stem = "set_tid_address01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/set_tid_address/set_tid_address01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13944,7 +12812,6 @@ ltp_setdomainname01 = cc_test {
     stem = "setdomainname01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setdomainname/setdomainname01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13954,7 +12821,6 @@ ltp_setdomainname02 = cc_test {
     stem = "setdomainname02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setdomainname/setdomainname02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13964,7 +12830,6 @@ ltp_setdomainname03 = cc_test {
     stem = "setdomainname03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setdomainname/setdomainname03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13974,7 +12839,6 @@ ltp_setegid01 = cc_test {
     stem = "setegid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setegid/setegid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13984,7 +12848,6 @@ ltp_setegid02 = cc_test {
     stem = "setegid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setegid/setegid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -13994,7 +12857,6 @@ ltp_setfsgid01 = cc_test {
     stem = "setfsgid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsgid/setfsgid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setfsgid"
@@ -14008,10 +12870,7 @@ ltp_setfsgid01_16 = cc_test {
     stem = "setfsgid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsgid/setfsgid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setfsgid"
@@ -14025,7 +12884,6 @@ ltp_setfsgid02 = cc_test {
     stem = "setfsgid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsgid/setfsgid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setfsgid"
@@ -14039,10 +12897,7 @@ ltp_setfsgid02_16 = cc_test {
     stem = "setfsgid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsgid/setfsgid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setfsgid"
@@ -14056,7 +12911,6 @@ ltp_setfsgid03 = cc_test {
     stem = "setfsgid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsgid/setfsgid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setfsgid"
@@ -14070,10 +12924,7 @@ ltp_setfsgid03_16 = cc_test {
     stem = "setfsgid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsgid/setfsgid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setfsgid"
@@ -14087,7 +12938,6 @@ ltp_setfsuid01 = cc_test {
     stem = "setfsuid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14101,10 +12951,7 @@ ltp_setfsuid01_16 = cc_test {
     stem = "setfsuid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14118,7 +12965,6 @@ ltp_setfsuid02 = cc_test {
     stem = "setfsuid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14132,10 +12978,7 @@ ltp_setfsuid02_16 = cc_test {
     stem = "setfsuid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14149,7 +12992,6 @@ ltp_setfsuid03 = cc_test {
     stem = "setfsuid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14163,10 +13005,7 @@ ltp_setfsuid03_16 = cc_test {
     stem = "setfsuid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14180,7 +13019,6 @@ ltp_setfsuid04 = cc_test {
     stem = "setfsuid04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14194,10 +13032,7 @@ ltp_setfsuid04_16 = cc_test {
     stem = "setfsuid04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setfsuid/setfsuid04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setfsuid"
         "testcases/kernel/syscalls/utils"
@@ -14211,7 +13046,6 @@ ltp_setgid01 = cc_test {
     stem = "setgid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgid/setgid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setgid"
@@ -14225,10 +13059,7 @@ ltp_setgid01_16 = cc_test {
     stem = "setgid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgid/setgid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setgid"
@@ -14242,7 +13073,6 @@ ltp_setgid02 = cc_test {
     stem = "setgid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgid/setgid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setgid"
@@ -14256,10 +13086,7 @@ ltp_setgid02_16 = cc_test {
     stem = "setgid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgid/setgid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setgid"
@@ -14273,7 +13100,6 @@ ltp_setgid03 = cc_test {
     stem = "setgid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgid/setgid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setgid"
@@ -14287,10 +13113,7 @@ ltp_setgid03_16 = cc_test {
     stem = "setgid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgid/setgid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setgid"
@@ -14304,7 +13127,6 @@ ltp_setgroups01 = cc_test {
     stem = "setgroups01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14318,10 +13140,7 @@ ltp_setgroups01_16 = cc_test {
     stem = "setgroups01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14335,7 +13154,6 @@ ltp_setgroups02 = cc_test {
     stem = "setgroups02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14349,10 +13167,7 @@ ltp_setgroups02_16 = cc_test {
     stem = "setgroups02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14366,7 +13181,6 @@ ltp_setgroups03 = cc_test {
     stem = "setgroups03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14380,10 +13194,7 @@ ltp_setgroups03_16 = cc_test {
     stem = "setgroups03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14397,7 +13208,6 @@ ltp_setgroups04 = cc_test {
     stem = "setgroups04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14411,10 +13221,7 @@ ltp_setgroups04_16 = cc_test {
     stem = "setgroups04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setgroups/setgroups04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setgroups"
         "testcases/kernel/syscalls/utils"
@@ -14427,8 +13234,8 @@ ltp_sethostname01 = cc_test {
     name = "ltp_sethostname01";
     stem = "sethostname01";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/sethostname/sethostname01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    srcs = ["testcases/kernel/syscalls/setdomainname/setdomainname01.c"];
+    cflags = ["-DTEST_SETHOSTNAME"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14437,8 +13244,8 @@ ltp_sethostname02 = cc_test {
     name = "ltp_sethostname02";
     stem = "sethostname02";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/sethostname/sethostname02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    srcs = ["testcases/kernel/syscalls/setdomainname/setdomainname02.c"];
+    cflags = ["-DTEST_SETHOSTNAME"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14447,8 +13254,8 @@ ltp_sethostname03 = cc_test {
     name = "ltp_sethostname03";
     stem = "sethostname03";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/sethostname/sethostname03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    srcs = ["testcases/kernel/syscalls/setdomainname/setdomainname03.c"];
+    cflags = ["-DTEST_SETHOSTNAME"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14458,7 +13265,6 @@ ltp_setitimer01 = cc_test {
     stem = "setitimer01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setitimer/setitimer01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14468,7 +13274,6 @@ ltp_setitimer02 = cc_test {
     stem = "setitimer02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setitimer/setitimer02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14478,7 +13283,6 @@ ltp_setitimer03 = cc_test {
     stem = "setitimer03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setitimer/setitimer03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14488,10 +13292,7 @@ ltp_setns01 = cc_test {
     stem = "setns01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setns/setns01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-Wno-unused-function"
-    ];
+    cflags = ["-Wno-unused-function"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14501,7 +13302,6 @@ ltp_setpgid01 = cc_test {
     stem = "setpgid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpgid/setpgid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14511,7 +13311,6 @@ ltp_setpgid02 = cc_test {
     stem = "setpgid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpgid/setpgid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14521,7 +13320,6 @@ ltp_setpgid03 = cc_test {
     stem = "setpgid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpgid/setpgid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14531,7 +13329,6 @@ ltp_setpgid03_child = cc_test {
     stem = "setpgid03_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpgid/setpgid03_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14541,7 +13338,6 @@ ltp_setpgrp01 = cc_test {
     stem = "setpgrp01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpgrp/setpgrp01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14551,7 +13347,6 @@ ltp_setpgrp02 = cc_test {
     stem = "setpgrp02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpgrp/setpgrp02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14561,7 +13356,6 @@ ltp_setpriority01 = cc_test {
     stem = "setpriority01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpriority/setpriority01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14571,7 +13365,6 @@ ltp_setpriority02 = cc_test {
     stem = "setpriority02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setpriority/setpriority02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -14581,7 +13374,6 @@ ltp_setregid01 = cc_test {
     stem = "setregid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14595,10 +13387,7 @@ ltp_setregid01_16 = cc_test {
     stem = "setregid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14612,7 +13401,6 @@ ltp_setregid02 = cc_test {
     stem = "setregid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14626,10 +13414,7 @@ ltp_setregid02_16 = cc_test {
     stem = "setregid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14643,7 +13428,6 @@ ltp_setregid03 = cc_test {
     stem = "setregid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14657,10 +13441,7 @@ ltp_setregid03_16 = cc_test {
     stem = "setregid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14674,7 +13455,6 @@ ltp_setregid04 = cc_test {
     stem = "setregid04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14688,10 +13468,7 @@ ltp_setregid04_16 = cc_test {
     stem = "setregid04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setregid/setregid04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "include/old"
@@ -14705,7 +13482,6 @@ ltp_setresgid01 = cc_test {
     stem = "setresgid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14719,10 +13495,7 @@ ltp_setresgid01_16 = cc_test {
     stem = "setresgid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14736,7 +13509,6 @@ ltp_setresgid02 = cc_test {
     stem = "setresgid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14750,10 +13522,7 @@ ltp_setresgid02_16 = cc_test {
     stem = "setresgid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14767,7 +13536,6 @@ ltp_setresgid03 = cc_test {
     stem = "setresgid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14781,10 +13549,7 @@ ltp_setresgid03_16 = cc_test {
     stem = "setresgid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14798,7 +13563,6 @@ ltp_setresgid04 = cc_test {
     stem = "setresgid04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14812,10 +13576,7 @@ ltp_setresgid04_16 = cc_test {
     stem = "setresgid04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresgid/setresgid04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setresgid"
         "testcases/kernel/syscalls/utils"
@@ -14829,7 +13590,6 @@ ltp_setresuid01 = cc_test {
     stem = "setresuid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14843,10 +13603,7 @@ ltp_setresuid01_16 = cc_test {
     stem = "setresuid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14860,7 +13617,6 @@ ltp_setresuid02 = cc_test {
     stem = "setresuid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14874,10 +13630,7 @@ ltp_setresuid02_16 = cc_test {
     stem = "setresuid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14891,7 +13644,6 @@ ltp_setresuid03 = cc_test {
     stem = "setresuid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14905,10 +13657,7 @@ ltp_setresuid03_16 = cc_test {
     stem = "setresuid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14922,7 +13671,6 @@ ltp_setresuid04 = cc_test {
     stem = "setresuid04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14936,10 +13684,7 @@ ltp_setresuid04_16 = cc_test {
     stem = "setresuid04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14953,7 +13698,6 @@ ltp_setresuid05 = cc_test {
     stem = "setresuid05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14967,10 +13711,7 @@ ltp_setresuid05_16 = cc_test {
     stem = "setresuid05_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setresuid/setresuid05.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setresuid"
@@ -14984,7 +13725,6 @@ ltp_setreuid01 = cc_test {
     stem = "setreuid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -14998,10 +13738,7 @@ ltp_setreuid01_16 = cc_test {
     stem = "setreuid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15015,7 +13752,6 @@ ltp_setreuid02 = cc_test {
     stem = "setreuid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15029,10 +13765,7 @@ ltp_setreuid02_16 = cc_test {
     stem = "setreuid02_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid02.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15046,7 +13779,6 @@ ltp_setreuid03 = cc_test {
     stem = "setreuid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15060,10 +13792,7 @@ ltp_setreuid03_16 = cc_test {
     stem = "setreuid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15077,7 +13806,6 @@ ltp_setreuid04 = cc_test {
     stem = "setreuid04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15091,10 +13819,7 @@ ltp_setreuid04_16 = cc_test {
     stem = "setreuid04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15108,7 +13833,6 @@ ltp_setreuid05 = cc_test {
     stem = "setreuid05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15122,10 +13846,7 @@ ltp_setreuid05_16 = cc_test {
     stem = "setreuid05_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid05.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15139,7 +13860,6 @@ ltp_setreuid06 = cc_test {
     stem = "setreuid06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15153,10 +13873,7 @@ ltp_setreuid06_16 = cc_test {
     stem = "setreuid06_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid06.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15170,7 +13887,6 @@ ltp_setreuid07 = cc_test {
     stem = "setreuid07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15184,10 +13900,7 @@ ltp_setreuid07_16 = cc_test {
     stem = "setreuid07_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setreuid/setreuid07.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/setreuid"
         "testcases/kernel/syscalls/utils"
@@ -15201,7 +13914,6 @@ ltp_setrlimit01 = cc_test {
     stem = "setrlimit01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setrlimit/setrlimit01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15211,7 +13923,6 @@ ltp_setrlimit02 = cc_test {
     stem = "setrlimit02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setrlimit/setrlimit02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15221,7 +13932,6 @@ ltp_setrlimit03 = cc_test {
     stem = "setrlimit03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setrlimit/setrlimit03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15231,7 +13941,6 @@ ltp_setrlimit04 = cc_test {
     stem = "setrlimit04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setrlimit/setrlimit04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15241,7 +13950,15 @@ ltp_setrlimit05 = cc_test {
     stem = "setrlimit05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setrlimit/setrlimit05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_setrlimit06 = cc_test {
+    name = "ltp_setrlimit06";
+    stem = "setrlimit06";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/setrlimit/setrlimit06.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15251,7 +13968,6 @@ ltp_setsid01 = cc_test {
     stem = "setsid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setsid/setsid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15261,7 +13977,6 @@ ltp_setsockopt01 = cc_test {
     stem = "setsockopt01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setsockopt/setsockopt01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15271,7 +13986,6 @@ ltp_setsockopt02 = cc_test {
     stem = "setsockopt02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setsockopt/setsockopt02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15281,7 +13995,15 @@ ltp_setsockopt03 = cc_test {
     stem = "setsockopt03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setsockopt/setsockopt03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_setsockopt04 = cc_test {
+    name = "ltp_setsockopt04";
+    stem = "setsockopt04";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/setsockopt/setsockopt04.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15291,7 +14013,6 @@ ltp_settimeofday01 = cc_test {
     stem = "settimeofday01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/settimeofday/settimeofday01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15301,7 +14022,6 @@ ltp_settimeofday02 = cc_test {
     stem = "settimeofday02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/settimeofday/settimeofday02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15311,7 +14031,6 @@ ltp_setuid01 = cc_test {
     stem = "setuid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setuid/setuid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setuid"
@@ -15325,10 +14044,7 @@ ltp_setuid01_16 = cc_test {
     stem = "setuid01_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setuid/setuid01.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setuid"
@@ -15342,7 +14058,6 @@ ltp_setuid03 = cc_test {
     stem = "setuid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setuid/setuid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setuid"
@@ -15356,10 +14071,7 @@ ltp_setuid03_16 = cc_test {
     stem = "setuid03_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setuid/setuid03.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setuid"
@@ -15373,7 +14085,6 @@ ltp_setuid04 = cc_test {
     stem = "setuid04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setuid/setuid04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setuid"
@@ -15387,10 +14098,7 @@ ltp_setuid04_16 = cc_test {
     stem = "setuid04_16";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setuid/setuid04.c"];
-    cflags = [
-        "-DTST_USE_COMPAT16_SYSCALL=1"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-DTST_USE_COMPAT16_SYSCALL=1"];
     local_include_dirs = [
         "testcases/kernel/syscalls/utils"
         "testcases/kernel/syscalls/setuid"
@@ -15404,7 +14112,6 @@ ltp_setxattr01 = cc_test {
     stem = "setxattr01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setxattr/setxattr01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15414,7 +14121,6 @@ ltp_setxattr02 = cc_test {
     stem = "setxattr02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setxattr/setxattr02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15424,7 +14130,6 @@ ltp_setxattr03 = cc_test {
     stem = "setxattr03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/setxattr/setxattr03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15434,7 +14139,6 @@ ltp_sgetmask01 = cc_test {
     stem = "sgetmask01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sgetmask/sgetmask01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15444,7 +14148,6 @@ ltp_shmctl05 = cc_test {
     stem = "shmctl05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ipc/shmctl/shmctl05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/ipc/lib"
         "include/old"
@@ -15463,7 +14166,6 @@ ltp_sigaction01 = cc_test {
     cflags = [
         "-DGLIBC_SIGACTION_BUG=1"
         "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
     ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
@@ -15477,7 +14179,6 @@ ltp_sigaction02 = cc_test {
     cflags = [
         "-DGLIBC_SIGACTION_BUG=1"
         "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
     ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
@@ -15488,7 +14189,6 @@ ltp_sigaltstack01 = cc_test {
     stem = "sigaltstack01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigaltstack/sigaltstack01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15498,7 +14198,6 @@ ltp_sigaltstack02 = cc_test {
     stem = "sigaltstack02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigaltstack/sigaltstack02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15508,7 +14207,6 @@ ltp_sighold02 = cc_test {
     stem = "sighold02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sighold/sighold02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15518,7 +14216,6 @@ ltp_signal01 = cc_test {
     stem = "signal01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signal/signal01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15528,7 +14225,6 @@ ltp_signal02 = cc_test {
     stem = "signal02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signal/signal02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15538,7 +14234,6 @@ ltp_signal03 = cc_test {
     stem = "signal03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signal/signal03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15548,7 +14243,6 @@ ltp_signal04 = cc_test {
     stem = "signal04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signal/signal04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15558,7 +14252,6 @@ ltp_signal05 = cc_test {
     stem = "signal05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signal/signal05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15568,7 +14261,6 @@ ltp_signal06 = cc_test {
     stem = "signal06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signal/signal06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15578,7 +14270,6 @@ ltp_signalfd01 = cc_test {
     stem = "signalfd01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signalfd/signalfd01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15588,7 +14279,6 @@ ltp_signalfd4_01 = cc_test {
     stem = "signalfd4_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signalfd4/signalfd4_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15598,7 +14288,6 @@ ltp_signalfd4_02 = cc_test {
     stem = "signalfd4_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/signalfd4/signalfd4_02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15608,10 +14297,7 @@ ltp_sigpending02 = cc_test {
     stem = "sigpending02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigpending/sigpending02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DTEST_SIGPENDING"
-    ];
+    cflags = ["-DTEST_SIGPENDING"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15621,7 +14307,6 @@ ltp_sigprocmask01 = cc_test {
     stem = "sigprocmask01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigprocmask/sigprocmask01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15631,7 +14316,6 @@ ltp_sigrelse01 = cc_test {
     stem = "sigrelse01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigrelse/sigrelse01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15641,7 +14325,6 @@ ltp_sigsuspend01 = cc_test {
     stem = "sigsuspend01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigsuspend/sigsuspend01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15651,10 +14334,7 @@ ltp_sigtimedwait01 = cc_test {
     stem = "sigtimedwait01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigwaitinfo/sigwaitinfo01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DTEST_SIGTIMEDWAIT"
-    ];
+    cflags = ["-DTEST_SIGTIMEDWAIT"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15664,10 +14344,7 @@ ltp_sigwait01 = cc_test {
     stem = "sigwait01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigwaitinfo/sigwaitinfo01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DTEST_SIGWAIT"
-    ];
+    cflags = ["-DTEST_SIGWAIT"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15677,10 +14354,7 @@ ltp_sigwaitinfo01 = cc_test {
     stem = "sigwaitinfo01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sigwaitinfo/sigwaitinfo01.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DTEST_SIGWAITINFO"
-    ];
+    cflags = ["-DTEST_SIGWAITINFO"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15690,7 +14364,6 @@ ltp_smack_notroot = cc_test {
     stem = "smack_notroot";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/smack/smack_notroot.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15700,7 +14373,6 @@ ltp_smack_set_socket_labels = cc_test {
     stem = "smack_set_socket_labels";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/smack/smack_set_socket_labels.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15710,7 +14382,16 @@ ltp_smount = cc_test {
     stem = "smount";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/fs_bind/bin/smount.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_snd_timer01 = cc_test {
+    name = "ltp_snd_timer01";
+    stem = "snd_timer01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/sound/snd_timer01.c"];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15720,7 +14401,6 @@ ltp_socket01 = cc_test {
     stem = "socket01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socket/socket01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15730,7 +14410,6 @@ ltp_socket02 = cc_test {
     stem = "socket02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socket/socket02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15740,7 +14419,6 @@ ltp_socketcall01 = cc_test {
     stem = "socketcall01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socketcall/socketcall01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15750,7 +14428,6 @@ ltp_socketcall02 = cc_test {
     stem = "socketcall02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socketcall/socketcall02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15760,7 +14437,6 @@ ltp_socketcall03 = cc_test {
     stem = "socketcall03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socketcall/socketcall03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15770,7 +14446,6 @@ ltp_socketcall04 = cc_test {
     stem = "socketcall04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socketcall/socketcall04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15780,7 +14455,6 @@ ltp_socketpair01 = cc_test {
     stem = "socketpair01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socketpair/socketpair01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15790,7 +14464,6 @@ ltp_socketpair02 = cc_test {
     stem = "socketpair02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/socketpair/socketpair02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15800,7 +14473,6 @@ ltp_sockioctl01 = cc_test {
     stem = "sockioctl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sockioctl/sockioctl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15810,7 +14482,6 @@ ltp_splice01 = cc_test {
     stem = "splice01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/splice/splice01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15820,7 +14491,6 @@ ltp_splice02 = cc_test {
     stem = "splice02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/splice/splice02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15830,7 +14500,6 @@ ltp_splice03 = cc_test {
     stem = "splice03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/splice/splice03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15840,7 +14509,6 @@ ltp_splice04 = cc_test {
     stem = "splice04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/splice/splice04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15850,7 +14518,6 @@ ltp_splice05 = cc_test {
     stem = "splice05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/splice/splice05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15860,7 +14527,6 @@ ltp_ssetmask01 = cc_test {
     stem = "ssetmask01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ssetmask/ssetmask01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15872,7 +14538,6 @@ ltp_stack_clash = cc_test {
     srcs = ["testcases/cve/stack_clash.c"];
     cflags = [
         "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
         "-Wno-infinite-recursion"
     ];
     local_include_dirs = ["include/old"];
@@ -15884,7 +14549,6 @@ ltp_stack_space = cc_test {
     stem = "stack_space";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/vmtests/stack_space.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -15894,7 +14558,6 @@ ltp_stat01 = cc_test {
     stem = "stat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/stat/stat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/stat"
         "testcases/kernel/syscalls/utils"
@@ -15909,7 +14572,6 @@ ltp_stat01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/stat/stat01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -15926,7 +14588,6 @@ ltp_stat02 = cc_test {
     stem = "stat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/stat/stat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/stat"
         "testcases/kernel/syscalls/utils"
@@ -15941,7 +14602,6 @@ ltp_stat02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/stat/stat02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -15958,7 +14618,6 @@ ltp_stat03 = cc_test {
     stem = "stat03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/stat/stat03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/stat"
         "testcases/kernel/syscalls/utils"
@@ -15973,71 +14632,6 @@ ltp_stat03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/stat/stat03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_FILE_OFFSET_BITS=64"
-        "-DTST_USE_NEWER64_SYSCALL=1"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/utils"
-        "testcases/kernel/syscalls/stat"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_stat05 = cc_test {
-    name = "ltp_stat05";
-    stem = "stat05";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/stat/stat05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/stat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_stat05_64 = cc_test {
-    name = "ltp_stat05_64";
-    stem = "stat05_64";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/stat/stat05.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_FILE_OFFSET_BITS=64"
-        "-DTST_USE_NEWER64_SYSCALL=1"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/utils"
-        "testcases/kernel/syscalls/stat"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_stat06 = cc_test {
-    name = "ltp_stat06";
-    stem = "stat06";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/stat/stat06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = [
-        "testcases/kernel/syscalls/stat"
-        "testcases/kernel/syscalls/utils"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_stat06_64 = cc_test {
-    name = "ltp_stat06_64";
-    stem = "stat06_64";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/stat/stat06.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -16054,7 +14648,6 @@ ltp_statfs01 = cc_test {
     stem = "statfs01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statfs/statfs01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/statfs"
         "testcases/kernel/syscalls/utils"
@@ -16069,7 +14662,6 @@ ltp_statfs01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statfs/statfs01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -16086,7 +14678,6 @@ ltp_statfs02 = cc_test {
     stem = "statfs02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statfs/statfs02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/statfs"
         "testcases/kernel/syscalls/utils"
@@ -16101,7 +14692,6 @@ ltp_statfs02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statfs/statfs02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -16118,7 +14708,6 @@ ltp_statfs03 = cc_test {
     stem = "statfs03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statfs/statfs03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/statfs"
         "testcases/kernel/syscalls/utils"
@@ -16133,7 +14722,6 @@ ltp_statfs03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statfs/statfs03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -16150,7 +14738,6 @@ ltp_statvfs01 = cc_test {
     stem = "statvfs01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statvfs/statvfs01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16160,7 +14747,6 @@ ltp_statvfs02 = cc_test {
     stem = "statvfs02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statvfs/statvfs02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16170,7 +14756,6 @@ ltp_statx01 = cc_test {
     stem = "statx01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statx/statx01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16180,7 +14765,6 @@ ltp_statx02 = cc_test {
     stem = "statx02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statx/statx02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16190,7 +14774,6 @@ ltp_statx03 = cc_test {
     stem = "statx03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statx/statx03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16200,7 +14783,6 @@ ltp_statx04 = cc_test {
     stem = "statx04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statx/statx04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16210,7 +14792,15 @@ ltp_statx06 = cc_test {
     stem = "statx06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/statx/statx06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_statx07 = cc_test {
+    name = "ltp_statx07";
+    stem = "statx07";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/statx/statx07.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16220,7 +14810,6 @@ ltp_stream01 = cc_test {
     stem = "stream01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/stream/stream01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16230,7 +14819,6 @@ ltp_stream02 = cc_test {
     stem = "stream02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/stream/stream02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16240,7 +14828,6 @@ ltp_stream03 = cc_test {
     stem = "stream03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/stream/stream03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16250,7 +14837,6 @@ ltp_stream04 = cc_test {
     stem = "stream04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/stream/stream04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16260,7 +14846,6 @@ ltp_stream05 = cc_test {
     stem = "stream05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/fs/stream/stream05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16270,7 +14855,6 @@ ltp_stress_cd = cc_test {
     stem = "stress_cd";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/io/stress_cd/stress_cd.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16280,7 +14864,6 @@ ltp_string01 = cc_test {
     stem = "string01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/string/string01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16294,7 +14877,6 @@ ltp_sugov_latency = cc_test {
         "testcases/kernel/sched/eas/sugov_latency.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16308,7 +14890,6 @@ ltp_sugov_stale_util = cc_test {
         "testcases/kernel/sched/eas/sugov_stale_util.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16322,7 +14903,6 @@ ltp_sugov_wakeups = cc_test {
         "testcases/kernel/sched/eas/sugov_wakeups.c"
         "testcases/kernel/sched/eas/trace_parse.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16332,10 +14912,7 @@ ltp_support_numa = cc_test {
     stem = "support_numa";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/numa/support_numa.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16344,9 +14921,14 @@ ltp_swapoff01 = cc_test {
     name = "ltp_swapoff01";
     stem = "swapoff01";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/swapoff/swapoff01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
+    srcs = [
+        "testcases/kernel/syscalls/swapon/libswapon.c"
+        "testcases/kernel/syscalls/swapoff/swapoff01.c"
+    ];
+    local_include_dirs = [
+        "include/old"
+        "testcases/kernel/syscalls/swapon"
+    ];
     static_libs = ["libltp_ltp"];
 };
 
@@ -16354,9 +14936,14 @@ ltp_swapoff02 = cc_test {
     name = "ltp_swapoff02";
     stem = "swapoff02";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/syscalls/swapoff/swapoff02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
+    srcs = [
+        "testcases/kernel/syscalls/swapoff/swapoff02.c"
+        "testcases/kernel/syscalls/swapon/libswapon.c"
+    ];
+    local_include_dirs = [
+        "include/old"
+        "testcases/kernel/syscalls/swapon"
+    ];
     static_libs = ["libltp_ltp"];
 };
 
@@ -16368,8 +14955,10 @@ ltp_swapon01 = cc_test {
         "testcases/kernel/syscalls/swapon/swapon01.c"
         "testcases/kernel/syscalls/swapon/libswapon.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
+    local_include_dirs = [
+        "include/old"
+        "testcases/kernel/syscalls/swapon"
+    ];
     static_libs = ["libltp_ltp"];
 };
 
@@ -16381,8 +14970,10 @@ ltp_swapon02 = cc_test {
         "testcases/kernel/syscalls/swapon/libswapon.c"
         "testcases/kernel/syscalls/swapon/swapon02.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
+    local_include_dirs = [
+        "include/old"
+        "testcases/kernel/syscalls/swapon"
+    ];
     static_libs = ["libltp_ltp"];
 };
 
@@ -16394,8 +14985,10 @@ ltp_swapon03 = cc_test {
         "testcases/kernel/syscalls/swapon/swapon03.c"
         "testcases/kernel/syscalls/swapon/libswapon.c"
     ];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
-    local_include_dirs = ["include/old"];
+    local_include_dirs = [
+        "include/old"
+        "testcases/kernel/syscalls/swapon"
+    ];
     static_libs = ["libltp_ltp"];
 };
 
@@ -16404,7 +14997,6 @@ ltp_swapping01 = cc_test {
     stem = "swapping01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/swapping/swapping01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -16422,7 +15014,6 @@ ltp_symlink01 = cc_test {
     stem = "symlink01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/symlink/symlink01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16432,7 +15023,6 @@ ltp_symlink02 = cc_test {
     stem = "symlink02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/symlink/symlink02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16442,7 +15032,6 @@ ltp_symlink03 = cc_test {
     stem = "symlink03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/symlink/symlink03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16452,7 +15041,6 @@ ltp_symlink04 = cc_test {
     stem = "symlink04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/symlink/symlink04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16462,7 +15050,6 @@ ltp_symlink05 = cc_test {
     stem = "symlink05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/symlink/symlink05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16472,7 +15059,6 @@ ltp_symlinkat01 = cc_test {
     stem = "symlinkat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/symlinkat/symlinkat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16482,7 +15068,6 @@ ltp_sync01 = cc_test {
     stem = "sync01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sync/sync01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16492,7 +15077,15 @@ ltp_sync02 = cc_test {
     stem = "sync02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sync/sync02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_sync03 = cc_test {
+    name = "ltp_sync03";
+    stem = "sync03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/sync/sync03.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16502,7 +15095,15 @@ ltp_sync_file_range01 = cc_test {
     stem = "sync_file_range01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sync_file_range/sync_file_range01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_sync_file_range02 = cc_test {
+    name = "ltp_sync_file_range02";
+    stem = "sync_file_range02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/sync_file_range/sync_file_range02.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16512,7 +15113,6 @@ ltp_syncfs01 = cc_test {
     stem = "syncfs01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/syncfs/syncfs01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16522,7 +15122,6 @@ ltp_syscall01 = cc_test {
     stem = "syscall01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/syscall/syscall01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16532,7 +15131,6 @@ ltp_sysconf01 = cc_test {
     stem = "sysconf01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysconf/sysconf01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16542,7 +15140,6 @@ ltp_sysctl01 = cc_test {
     stem = "sysctl01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysctl/sysctl01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16552,7 +15149,6 @@ ltp_sysctl03 = cc_test {
     stem = "sysctl03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysctl/sysctl03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16562,7 +15158,6 @@ ltp_sysctl04 = cc_test {
     stem = "sysctl04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysctl/sysctl04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16572,7 +15167,6 @@ ltp_sysfs01 = cc_test {
     stem = "sysfs01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysfs/sysfs01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16582,7 +15176,6 @@ ltp_sysfs02 = cc_test {
     stem = "sysfs02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysfs/sysfs02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16592,7 +15185,6 @@ ltp_sysfs03 = cc_test {
     stem = "sysfs03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysfs/sysfs03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16602,7 +15194,6 @@ ltp_sysfs04 = cc_test {
     stem = "sysfs04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysfs/sysfs04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16612,7 +15203,6 @@ ltp_sysfs05 = cc_test {
     stem = "sysfs05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysfs/sysfs05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16622,7 +15212,6 @@ ltp_sysfs06 = cc_test {
     stem = "sysfs06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysfs/sysfs06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16632,7 +15221,6 @@ ltp_sysinfo01 = cc_test {
     stem = "sysinfo01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysinfo/sysinfo01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16642,7 +15230,6 @@ ltp_sysinfo02 = cc_test {
     stem = "sysinfo02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/sysinfo/sysinfo02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16652,7 +15239,6 @@ ltp_syslog11 = cc_test {
     stem = "syslog11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/syslog/syslog11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16662,7 +15248,6 @@ ltp_syslog12 = cc_test {
     stem = "syslog12";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/syslog/syslog12.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16672,7 +15257,6 @@ ltp_syslogtst = cc_test {
     stem = "syslogtst";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/syslog/syslogtst.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16682,7 +15266,6 @@ ltp_tbio = cc_test {
     stem = "tbio";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/tbio/tbio_user/tbio.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16692,7 +15275,6 @@ ltp_tee01 = cc_test {
     stem = "tee01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/tee/tee01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16702,7 +15284,6 @@ ltp_tee02 = cc_test {
     stem = "tee02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/tee/tee02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16712,7 +15293,6 @@ ltp_test01 = cc_test {
     stem = "test01";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16722,7 +15302,6 @@ ltp_test02 = cc_test {
     stem = "test02";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16732,7 +15311,6 @@ ltp_test03 = cc_test {
     stem = "test03";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16742,7 +15320,6 @@ ltp_test04 = cc_test {
     stem = "test04";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16752,7 +15329,6 @@ ltp_test05 = cc_test {
     stem = "test05";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16762,7 +15338,6 @@ ltp_test06 = cc_test {
     stem = "test06";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16772,7 +15347,6 @@ ltp_test07 = cc_test {
     stem = "test07";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16782,7 +15356,6 @@ ltp_test08 = cc_test {
     stem = "test08";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16792,7 +15365,6 @@ ltp_test09 = cc_test {
     stem = "test09";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16802,7 +15374,6 @@ ltp_test10 = cc_test {
     stem = "test10";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16812,7 +15383,6 @@ ltp_test11 = cc_test {
     stem = "test11";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16822,7 +15392,6 @@ ltp_test12 = cc_test {
     stem = "test12";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test12.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16832,7 +15401,6 @@ ltp_test13 = cc_test {
     stem = "test13";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test13.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16842,7 +15410,6 @@ ltp_test14 = cc_test {
     stem = "test14";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test14.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16852,7 +15419,6 @@ ltp_test15 = cc_test {
     stem = "test15";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test15.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16862,7 +15428,6 @@ ltp_test16 = cc_test {
     stem = "test16";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test16.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16872,7 +15437,6 @@ ltp_test17 = cc_test {
     stem = "test17";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test17.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16882,7 +15446,6 @@ ltp_test18 = cc_test {
     stem = "test18";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test18.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16892,7 +15455,6 @@ ltp_test19 = cc_test {
     stem = "test19";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test19.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16902,7 +15464,6 @@ ltp_test_exec = cc_test {
     stem = "test_exec";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test_exec.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16912,9 +15473,6522 @@ ltp_test_exec_child = cc_test {
     stem = "test_exec_child";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/test_exec_child.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
+};
+
+ltp_test_guarded_buf = cc_test {
+    name = "ltp_test_guarded_buf";
+    stem = "test_guarded_buf";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["lib/newlib_tests/test_guarded_buf.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_test_kconfig = cc_test {
+    name = "ltp_test_kconfig";
+    stem = "test_kconfig";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["lib/newlib_tests/test_kconfig.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_testcases_bin_add_ipv6addr = sh_test {
+    name = "ltp_testcases_bin_add_ipv6addr";
+    src = "testcases/network/stress/ns-tools/add_ipv6addr";
+    sub_dir = "ltp/testcases/bin";
+    filename = "add_ipv6addr";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ar01.sh" = sh_test {
+    name = "ltp_testcases_bin_ar01.sh";
+    src = "testcases/commands/ar/ar01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ar01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_arping01.sh" = sh_test {
+    name = "ltp_testcases_bin_arping01.sh";
+    src = "testcases/network/tcp_cmds/arping/arping01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "arping01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ask_password.sh" = sh_test {
+    name = "ltp_testcases_bin_ask_password.sh";
+    src = "testcases/kernel/security/mmc_security/ask_password.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ask_password.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_assign_password.sh" = sh_test {
+    name = "ltp_testcases_bin_assign_password.sh";
+    src = "testcases/kernel/security/mmc_security/assign_password.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "assign_password.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_bbr01.sh" = sh_test {
+    name = "ltp_testcases_bin_bbr01.sh";
+    src = "testcases/network/tcp_cc/bbr01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "bbr01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_bbr02.sh" = sh_test {
+    name = "ltp_testcases_bin_bbr02.sh";
+    src = "testcases/network/tcp_cc/bbr02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "bbr02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_bind_noport01.sh" = sh_test {
+    name = "ltp_testcases_bin_bind_noport01.sh";
+    src = "testcases/network/sockets/bind_noport01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "bind_noport01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_binfmt_misc01.sh" = sh_test {
+    name = "ltp_testcases_bin_binfmt_misc01.sh";
+    src = "testcases/kernel/fs/binfmt_misc/binfmt_misc01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "binfmt_misc01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_binfmt_misc02.sh" = sh_test {
+    name = "ltp_testcases_bin_binfmt_misc02.sh";
+    src = "testcases/kernel/fs/binfmt_misc/binfmt_misc02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "binfmt_misc02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_binfmt_misc_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_binfmt_misc_lib.sh";
+    src = "testcases/kernel/fs/binfmt_misc/binfmt_misc_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "binfmt_misc_lib.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-checksum = sh_test {
+    name = "ltp_testcases_bin_broken_ip-checksum";
+    src = "testcases/network/stress/broken_ip/broken_ip-checksum";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-checksum";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-dstaddr = sh_test {
+    name = "ltp_testcases_bin_broken_ip-dstaddr";
+    src = "testcases/network/stress/broken_ip/broken_ip-dstaddr";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-dstaddr";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-fragment = sh_test {
+    name = "ltp_testcases_bin_broken_ip-fragment";
+    src = "testcases/network/stress/broken_ip/broken_ip-fragment";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-fragment";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-ihl = sh_test {
+    name = "ltp_testcases_bin_broken_ip-ihl";
+    src = "testcases/network/stress/broken_ip/broken_ip-ihl";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-ihl";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-nexthdr = sh_test {
+    name = "ltp_testcases_bin_broken_ip-nexthdr";
+    src = "testcases/network/stress/broken_ip/broken_ip-nexthdr";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-nexthdr";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-plen = sh_test {
+    name = "ltp_testcases_bin_broken_ip-plen";
+    src = "testcases/network/stress/broken_ip/broken_ip-plen";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-plen";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-protcol = sh_test {
+    name = "ltp_testcases_bin_broken_ip-protcol";
+    src = "testcases/network/stress/broken_ip/broken_ip-protcol";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-protcol";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-totlen = sh_test {
+    name = "ltp_testcases_bin_broken_ip-totlen";
+    src = "testcases/network/stress/broken_ip/broken_ip-totlen";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-totlen";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_broken_ip-version = sh_test {
+    name = "ltp_testcases_bin_broken_ip-version";
+    src = "testcases/network/stress/broken_ip/broken_ip-version";
+    sub_dir = "ltp/testcases/bin";
+    filename = "broken_ip-version";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_busy_poll01.sh" = sh_test {
+    name = "ltp_testcases_bin_busy_poll01.sh";
+    src = "testcases/network/busy_poll/busy_poll01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "busy_poll01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_busy_poll02.sh" = sh_test {
+    name = "ltp_testcases_bin_busy_poll02.sh";
+    src = "testcases/network/busy_poll/busy_poll02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "busy_poll02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_busy_poll03.sh" = sh_test {
+    name = "ltp_testcases_bin_busy_poll03.sh";
+    src = "testcases/network/busy_poll/busy_poll03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "busy_poll03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_busy_poll_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_busy_poll_lib.sh";
+    src = "testcases/network/busy_poll/busy_poll_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "busy_poll_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_can_run_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_can_run_tests.sh";
+    src = "testcases/network/can/filter-tests/can_run_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "can_run_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_fj_common.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_fj_common.sh";
+    src = "testcases/kernel/controllers/cgroup_fj/cgroup_fj_common.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_fj_common.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_fj_function.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_fj_function.sh";
+    src = "testcases/kernel/controllers/cgroup_fj/cgroup_fj_function.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_fj_function.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_fj_stress.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_fj_stress.sh";
+    src = "testcases/kernel/controllers/cgroup_fj/cgroup_fj_stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_fj_stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_lib.sh";
+    src = "testcases/kernel/controllers/cgroup_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_3_1.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_3_1.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_3_1.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_3_1.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_3_2.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_3_2.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_3_2.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_3_2.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_5_1.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_5_1.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_5_1.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_5_1.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_5_2.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_5_2.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_5_2.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_5_2.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_6_1.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_6_1.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_6_1.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_6_1.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_9_1.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_9_1.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_9_1.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_9_1.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_9_2.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_9_2.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_9_2.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_9_2.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cgroup_regression_test.sh" = sh_test {
+    name = "ltp_testcases_bin_cgroup_regression_test.sh";
+    src = "testcases/kernel/controllers/cgroup/cgroup_regression_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cgroup_regression_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_change_password.sh" = sh_test {
+    name = "ltp_testcases_bin_change_password.sh";
+    src = "testcases/kernel/security/mmc_security/change_password.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "change_password.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_check_envval = sh_test {
+    name = "ltp_testcases_bin_check_envval";
+    src = "testcases/network/stress/ns-tools/check_envval";
+    sub_dir = "ltp/testcases/bin";
+    filename = "check_envval";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_check_icmpv4_connectivity = sh_test {
+    name = "ltp_testcases_bin_check_icmpv4_connectivity";
+    src = "testcases/network/stress/ns-tools/check_icmpv4_connectivity";
+    sub_dir = "ltp/testcases/bin";
+    filename = "check_icmpv4_connectivity";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_check_icmpv6_connectivity = sh_test {
+    name = "ltp_testcases_bin_check_icmpv6_connectivity";
+    src = "testcases/network/stress/ns-tools/check_icmpv6_connectivity";
+    sub_dir = "ltp/testcases/bin";
+    filename = "check_icmpv6_connectivity";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_check_netem = sh_test {
+    name = "ltp_testcases_bin_check_netem";
+    src = "testcases/network/stress/ns-tools/check_netem";
+    sub_dir = "ltp/testcases/bin";
+    filename = "check_netem";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_check_setkey = sh_test {
+    name = "ltp_testcases_bin_check_setkey";
+    src = "testcases/network/stress/ns-tools/check_setkey";
+    sub_dir = "ltp/testcases/bin";
+    filename = "check_setkey";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_clockdiff01.sh" = sh_test {
+    name = "ltp_testcases_bin_clockdiff01.sh";
+    src = "testcases/network/tcp_cmds/clockdiff/clockdiff01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "clockdiff01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cmdlib.sh" = sh_test {
+    name = "ltp_testcases_bin_cmdlib.sh";
+    src = "testcases/lib/cmdlib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cmdlib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_connector_test.sh" = sh_test {
+    name = "ltp_testcases_bin_connector_test.sh";
+    src = "testcases/kernel/connectors/connector_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "connector_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cp_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_cp_tests.sh";
+    src = "testcases/commands/cp/cp_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cp_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpio_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_cpio_tests.sh";
+    src = "testcases/commands/cpio/cpio_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpio_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuacct.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuacct.sh";
+    src = "testcases/kernel/controllers/cpuacct/cpuacct.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuacct.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug01.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug01.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/functional/cpuhotplug01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug02.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug02.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/functional/cpuhotplug02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug03.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug03.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/functional/cpuhotplug03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug04.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug04.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/functional/cpuhotplug04.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug04.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug05.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug05.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/functional/cpuhotplug05.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug05.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug06.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug06.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/functional/cpuhotplug06.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug06.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug07.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug07.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/functional/cpuhotplug07.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug07.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_cpuhotplug_do_disk_write_loop = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug_do_disk_write_loop";
+    src = "testcases/kernel/hotplug/cpu_hotplug/tools/cpuhotplug_do_disk_write_loop";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug_do_disk_write_loop";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_cpuhotplug_do_kcompile_loop = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug_do_kcompile_loop";
+    src = "testcases/kernel/hotplug/cpu_hotplug/tools/cpuhotplug_do_kcompile_loop";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug_do_kcompile_loop";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_cpuhotplug_do_spin_loop = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug_do_spin_loop";
+    src = "testcases/kernel/hotplug/cpu_hotplug/tools/cpuhotplug_do_spin_loop";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug_do_spin_loop";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug_hotplug.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug_hotplug.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/include/cpuhotplug_hotplug.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug_hotplug.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_cpuhotplug_report_proc_interrupts = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug_report_proc_interrupts";
+    src = "testcases/kernel/hotplug/cpu_hotplug/tools/cpuhotplug_report_proc_interrupts";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug_report_proc_interrupts";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuhotplug_testsuite.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuhotplug_testsuite.sh";
+    src = "testcases/kernel/hotplug/cpu_hotplug/include/cpuhotplug_testsuite.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuhotplug_testsuite.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_base_ops_testset.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_base_ops_testset.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_base_ops_test/cpuset_base_ops_testset.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_base_ops_testset.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_exclusive_test.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_exclusive_test.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_exclusive_test/cpuset_exclusive_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_exclusive_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_funcs.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_funcs.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_funcs.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_funcs.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_hierarchy_test.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_hierarchy_test.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_hierarchy_test/cpuset_hierarchy_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_hierarchy_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_hotplug_test.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_hotplug_test.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_hotplug_test/cpuset_hotplug_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_hotplug_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_inherit_testset.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_inherit_testset.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_inherit_test/cpuset_inherit_testset.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_inherit_testset.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_load_balance_test.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_load_balance_test.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_load_balance_test/cpuset_load_balance_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_load_balance_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_memory_pressure_testset.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_memory_pressure_testset.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_memory_pressure_test/cpuset_memory_pressure_testset.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_memory_pressure_testset.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_memory_spread_testset.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_memory_spread_testset.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_memory_spread_test/cpuset_memory_spread_testset.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_memory_spread_testset.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_memory_testset.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_memory_testset.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_memory_test/cpuset_memory_testset.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_memory_testset.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_regression_test.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_regression_test.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_regression_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_regression_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_sched_domains_test.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_sched_domains_test.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_load_balance_test/cpuset_sched_domains_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_sched_domains_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_cpuset_syscall_testset.sh" = sh_test {
+    name = "ltp_testcases_bin_cpuset_syscall_testset.sh";
+    src = "testcases/kernel/controllers/cpuset/cpuset_syscall_test/cpuset_syscall_testset.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "cpuset_syscall_testset.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_create_file = sh_test {
+    name = "ltp_testcases_bin_create_file";
+    src = "testcases/network/stress/ns-tools/create_file";
+    sub_dir = "ltp/testcases/bin";
+    filename = "create_file";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_daemonlib.sh" = sh_test {
+    name = "ltp_testcases_bin_daemonlib.sh";
+    src = "testcases/lib/daemonlib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "daemonlib.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_data = sh_test {
+    name = "ltp_testcases_bin_data";
+    src = "testcases/kernel/sched/clisrv/data";
+    sub_dir = "ltp/testcases/bin";
+    filename = "data";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dccp01.sh" = sh_test {
+    name = "ltp_testcases_bin_dccp01.sh";
+    src = "testcases/network/dccp/dccp01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dccp01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dccp_ipsec.sh" = sh_test {
+    name = "ltp_testcases_bin_dccp_ipsec.sh";
+    src = "testcases/network/stress/dccp/dccp_ipsec.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dccp_ipsec.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dccp_ipsec_vti.sh" = sh_test {
+    name = "ltp_testcases_bin_dccp_ipsec_vti.sh";
+    src = "testcases/network/stress/dccp/dccp_ipsec_vti.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dccp_ipsec_vti.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dctcp01.sh" = sh_test {
+    name = "ltp_testcases_bin_dctcp01.sh";
+    src = "testcases/network/tcp_cc/dctcp01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dctcp01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dhcp_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_dhcp_lib.sh";
+    src = "testcases/network/dhcp/dhcp_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dhcp_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dhcpd_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_dhcpd_tests.sh";
+    src = "testcases/network/dhcp/dhcpd_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dhcpd_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dns-stress-lib.sh" = sh_test {
+    name = "ltp_testcases_bin_dns-stress-lib.sh";
+    src = "testcases/network/stress/dns/dns-stress-lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dns-stress-lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dns-stress.sh" = sh_test {
+    name = "ltp_testcases_bin_dns-stress.sh";
+    src = "testcases/network/stress/dns/dns-stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dns-stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dns-stress01-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_dns-stress01-rmt.sh";
+    src = "testcases/network/stress/dns/dns-stress01-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dns-stress01-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dns-stress02-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_dns-stress02-rmt.sh";
+    src = "testcases/network/stress/dns/dns-stress02-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dns-stress02-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dnsmasq_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_dnsmasq_tests.sh";
+    src = "testcases/network/dhcp/dnsmasq_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dnsmasq_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_dynamic_debug01.sh" = sh_test {
+    name = "ltp_testcases_bin_dynamic_debug01.sh";
+    src = "testcases/kernel/tracing/dynamic_debug/dynamic_debug01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "dynamic_debug01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_evm_overlay.sh" = sh_test {
+    name = "ltp_testcases_bin_evm_overlay.sh";
+    src = "testcases/kernel/security/integrity/ima/tests/evm_overlay.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "evm_overlay.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_file01.sh" = sh_test {
+    name = "ltp_testcases_bin_file01.sh";
+    src = "testcases/commands/file/file01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "file01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_filecapstest.sh" = sh_test {
+    name = "ltp_testcases_bin_filecapstest.sh";
+    src = "testcases/kernel/security/filecaps/filecapstest.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "filecapstest.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_find_portbundle = sh_test {
+    name = "ltp_testcases_bin_find_portbundle";
+    src = "testcases/network/stress/ns-tools/find_portbundle";
+    sub_dir = "ltp/testcases/bin";
+    filename = "find_portbundle";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_force_erase.sh" = sh_test {
+    name = "ltp_testcases_bin_force_erase.sh";
+    src = "testcases/kernel/security/mmc_security/force_erase.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "force_erase.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fork_freeze.sh" = sh_test {
+    name = "ltp_testcases_bin_fork_freeze.sh";
+    src = "testcases/kernel/controllers/freezer/fork_freeze.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fork_freeze.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_freeze_cancel.sh" = sh_test {
+    name = "ltp_testcases_bin_freeze_cancel.sh";
+    src = "testcases/kernel/controllers/freezer/freeze_cancel.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "freeze_cancel.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_freeze_kill_thaw.sh" = sh_test {
+    name = "ltp_testcases_bin_freeze_kill_thaw.sh";
+    src = "testcases/kernel/controllers/freezer/freeze_kill_thaw.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "freeze_kill_thaw.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_freeze_move_thaw.sh" = sh_test {
+    name = "ltp_testcases_bin_freeze_move_thaw.sh";
+    src = "testcases/kernel/controllers/freezer/freeze_move_thaw.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "freeze_move_thaw.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_freeze_self_thaw.sh" = sh_test {
+    name = "ltp_testcases_bin_freeze_self_thaw.sh";
+    src = "testcases/kernel/controllers/freezer/freeze_self_thaw.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "freeze_self_thaw.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_freeze_sleep_thaw.sh" = sh_test {
+    name = "ltp_testcases_bin_freeze_sleep_thaw.sh";
+    src = "testcases/kernel/controllers/freezer/freeze_sleep_thaw.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "freeze_sleep_thaw.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_freeze_thaw.sh" = sh_test {
+    name = "ltp_testcases_bin_freeze_thaw.sh";
+    src = "testcases/kernel/controllers/freezer/freeze_thaw.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "freeze_thaw.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_freeze_write_freezing.sh" = sh_test {
+    name = "ltp_testcases_bin_freeze_write_freezing.sh";
+    src = "testcases/kernel/controllers/freezer/freeze_write_freezing.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "freeze_write_freezing.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs-bench-test.sh" = sh_test {
+    name = "ltp_testcases_bin_fs-bench-test.sh";
+    src = "testcases/kernel/fs/fs-bench/fs-bench-test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs-bench-test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs-bench-test2.sh" = sh_test {
+    name = "ltp_testcases_bin_fs-bench-test2.sh";
+    src = "testcases/kernel/fs/fs-bench/fs-bench-test2.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs-bench-test2.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bin_check_prop = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bin_check_prop";
+    src = "testcases/kernel/fs/fs_bind/bin/check_prop";
+    sub_dir = "ltp/testcases/bin/fs_bind/bin";
+    filename = "check_prop";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bin_lockfile = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bin_lockfile";
+    src = "testcases/kernel/fs/fs_bind/bin/lockfile";
+    sub_dir = "ltp/testcases/bin/fs_bind/bin";
+    filename = "lockfile";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bin_makedir = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bin_makedir";
+    src = "testcases/kernel/fs/fs_bind/bin/makedir";
+    sub_dir = "ltp/testcases/bin/fs_bind/bin";
+    filename = "makedir";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bin_setup = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bin_setup";
+    src = "testcases/kernel/fs/fs_bind/bin/setup";
+    sub_dir = "ltp/testcases/bin/fs_bind/bin";
+    filename = "setup";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bin_setupnslock = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bin_setupnslock";
+    src = "testcases/kernel/fs/fs_bind/bin/setupnslock";
+    sub_dir = "ltp/testcases/bin/fs_bind/bin";
+    filename = "setupnslock";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test10 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test10";
+    src = "testcases/kernel/fs/fs_bind/bind/test10";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test11 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test11";
+    src = "testcases/kernel/fs/fs_bind/bind/test11";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test12 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test12";
+    src = "testcases/kernel/fs/fs_bind/bind/test12";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test14 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test14";
+    src = "testcases/kernel/fs/fs_bind/bind/test14";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test15 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test15";
+    src = "testcases/kernel/fs/fs_bind/bind/test15";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test15";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test16 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test16";
+    src = "testcases/kernel/fs/fs_bind/bind/test16";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test16";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test18 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test18";
+    src = "testcases/kernel/fs/fs_bind/bind/test18";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test18";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_bind_test19 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_bind_test19";
+    src = "testcases/kernel/fs/fs_bind/bind/test19";
+    sub_dir = "ltp/testcases/bin/fs_bind/bind";
+    filename = "test19";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_move_test08 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_move_test08";
+    src = "testcases/kernel/fs/fs_bind/move/test08";
+    sub_dir = "ltp/testcases/bin/fs_bind/move";
+    filename = "test08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_move_test22 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_move_test22";
+    src = "testcases/kernel/fs/fs_bind/move/test22";
+    sub_dir = "ltp/testcases/bin/fs_bind/move";
+    filename = "test22";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test01 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test01";
+    src = "testcases/kernel/fs/fs_bind/rbind/test01";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test02 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test02";
+    src = "testcases/kernel/fs/fs_bind/rbind/test02";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test03 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test03";
+    src = "testcases/kernel/fs/fs_bind/rbind/test03";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test04 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test04";
+    src = "testcases/kernel/fs/fs_bind/rbind/test04";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test05 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test05";
+    src = "testcases/kernel/fs/fs_bind/rbind/test05";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test06 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test06";
+    src = "testcases/kernel/fs/fs_bind/rbind/test06";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test07 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test07";
+    src = "testcases/kernel/fs/fs_bind/rbind/test07";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test07-2 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test07-2";
+    src = "testcases/kernel/fs/fs_bind/rbind/test07-2";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test07-2";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test09 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test09";
+    src = "testcases/kernel/fs/fs_bind/rbind/test09";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test13 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test13";
+    src = "testcases/kernel/fs/fs_bind/rbind/test13";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test17 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test17";
+    src = "testcases/kernel/fs/fs_bind/rbind/test17";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test17";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test20 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test20";
+    src = "testcases/kernel/fs/fs_bind/rbind/test20";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test20";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test21 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test21";
+    src = "testcases/kernel/fs/fs_bind/rbind/test21";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test21";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test23 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test23";
+    src = "testcases/kernel/fs/fs_bind/rbind/test23";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test23";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test24 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test24";
+    src = "testcases/kernel/fs/fs_bind/rbind/test24";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test24";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test25 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test25";
+    src = "testcases/kernel/fs/fs_bind/rbind/test25";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test25";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test26 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test26";
+    src = "testcases/kernel/fs/fs_bind/rbind/test26";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test26";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test27 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test27";
+    src = "testcases/kernel/fs/fs_bind/rbind/test27";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test27";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test28 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test28";
+    src = "testcases/kernel/fs/fs_bind/rbind/test28";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test28";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test29 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test29";
+    src = "testcases/kernel/fs/fs_bind/rbind/test29";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test29";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test30 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test30";
+    src = "testcases/kernel/fs/fs_bind/rbind/test30";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test30";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test31 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test31";
+    src = "testcases/kernel/fs/fs_bind/rbind/test31";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test31";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test32 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test32";
+    src = "testcases/kernel/fs/fs_bind/rbind/test32";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test32";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test33 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test33";
+    src = "testcases/kernel/fs/fs_bind/rbind/test33";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test33";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test34 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test34";
+    src = "testcases/kernel/fs/fs_bind/rbind/test34";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test34";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test35 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test35";
+    src = "testcases/kernel/fs/fs_bind/rbind/test35";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test35";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test36 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test36";
+    src = "testcases/kernel/fs/fs_bind/rbind/test36";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test36";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test37 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test37";
+    src = "testcases/kernel/fs/fs_bind/rbind/test37";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test37";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test38 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test38";
+    src = "testcases/kernel/fs/fs_bind/rbind/test38";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test38";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_bind_rbind_test39 = sh_test {
+    name = "ltp_testcases_bin_fs_bind_rbind_test39";
+    src = "testcases/kernel/fs/fs_bind/rbind/test39";
+    sub_dir = "ltp/testcases/bin/fs_bind/rbind";
+    filename = "test39";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_di = sh_test {
+    name = "ltp_testcases_bin_fs_di";
+    src = "testcases/kernel/fs/fs_di/fs_di";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_di";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fs_inod = sh_test {
+    name = "ltp_testcases_bin_fs_inod";
+    src = "testcases/kernel/fs/fs_inod/fs_inod";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_inod";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer.sh";
+    src = "testcases/kernel/fs/racer/fs_racer.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_dir_create.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_dir_create.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_dir_create.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_dir_create.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_dir_test.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_dir_test.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_dir_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_dir_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_file_concat.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_file_concat.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_file_concat.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_file_concat.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_file_create.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_file_create.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_file_create.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_file_create.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_file_link.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_file_link.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_file_link.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_file_link.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_file_list.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_file_list.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_file_list.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_file_list.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_file_rename.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_file_rename.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_file_rename.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_file_rename.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_file_rm.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_file_rm.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_file_rm.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_file_rm.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fs_racer_file_symlink.sh" = sh_test {
+    name = "ltp_testcases_bin_fs_racer_file_symlink.sh";
+    src = "testcases/kernel/fs/racer/fs_racer_file_symlink.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fs_racer_file_symlink.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_fsx.sh" = sh_test {
+    name = "ltp_testcases_bin_fsx.sh";
+    src = "testcases/network/nfs/fsx-linux/fsx.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fsx.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fsxtest = sh_test {
+    name = "ltp_testcases_bin_fsxtest";
+    src = "testcases/kernel/fs/fsx-linux/fsxtest";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fsxtest";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_fsxtest02 = sh_test {
+    name = "ltp_testcases_bin_fsxtest02";
+    src = "testcases/kernel/fs/fsx-linux/fsxtest02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "fsxtest02";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftp-download-stress.sh" = sh_test {
+    name = "ltp_testcases_bin_ftp-download-stress.sh";
+    src = "testcases/network/stress/ftp/ftp-download-stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftp-download-stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftp-download-stress01-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_ftp-download-stress01-rmt.sh";
+    src = "testcases/network/stress/ftp/ftp-download-stress01-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftp-download-stress01-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftp-download-stress02-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_ftp-download-stress02-rmt.sh";
+    src = "testcases/network/stress/ftp/ftp-download-stress02-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftp-download-stress02-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftp-upload-stress.sh" = sh_test {
+    name = "ltp_testcases_bin_ftp-upload-stress.sh";
+    src = "testcases/network/stress/ftp/ftp-upload-stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftp-upload-stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftp-upload-stress01-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_ftp-upload-stress01-rmt.sh";
+    src = "testcases/network/stress/ftp/ftp-upload-stress01-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftp-upload-stress01-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftp-upload-stress02-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_ftp-upload-stress02-rmt.sh";
+    src = "testcases/network/stress/ftp/ftp-upload-stress02-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftp-upload-stress02-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftp01.sh" = sh_test {
+    name = "ltp_testcases_bin_ftp01.sh";
+    src = "testcases/network/tcp_cmds/ftp/ftp01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftp01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_lib.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftrace_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_regression01.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_regression01.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_regression01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftrace_regression01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_regression02.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_regression02.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_regression02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftrace_regression02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_buffer_size_kb.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_buffer_size_kb.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_buffer_size_kb.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_buffer_size_kb.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_current_tracer.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_current_tracer.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_current_tracer.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_current_tracer.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_ftrace_enabled.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_ftrace_enabled.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_ftrace_enabled.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_ftrace_enabled.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_function_profile_enabled.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_function_profile_enabled.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_function_profile_enabled.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_function_profile_enabled.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_set_event.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_set_event.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_set_event.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_set_event.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_filter.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_filter.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_set_ftrace_filter.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_set_ftrace_filter.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_pid.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_pid.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_set_ftrace_pid.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_set_ftrace_pid.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_stack_max_size.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_stack_max_size.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_stack_max_size.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_stack_max_size.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_stack_trace.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_stack_trace.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_stack_trace.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_stack_trace.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_trace.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_trace.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_trace.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_trace.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_trace_clock.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_trace_clock.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_trace_clock.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_trace_clock.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_trace_options.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_trace_options.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_trace_options.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_trace_options.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_trace_pipe.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_trace_pipe.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_trace_pipe.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_trace_pipe.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_trace_stat.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_trace_stat.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_trace_stat.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_trace_stat.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_tracing_cpumask.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_tracing_cpumask.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_tracing_cpumask.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_tracing_cpumask.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_tracing_enabled.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_tracing_enabled.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_tracing_enabled.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_tracing_enabled.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_tracing_max_latency.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_tracing_max_latency.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_tracing_max_latency.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_tracing_max_latency.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_ftrace_tracing_on.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_ftrace_tracing_on.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress/ftrace_tracing_on.sh";
+    sub_dir = "ltp/testcases/bin/ftrace_stress";
+    filename = "ftrace_tracing_on.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ftrace_stress_test.sh" = sh_test {
+    name = "ltp_testcases_bin_ftrace_stress_test.sh";
+    src = "testcases/kernel/tracing/ftrace_test/ftrace_stress_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ftrace_stress_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_gdb01.sh" = sh_test {
+    name = "ltp_testcases_bin_gdb01.sh";
+    src = "testcases/commands/gdb/gdb01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "gdb01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_geneve01.sh" = sh_test {
+    name = "ltp_testcases_bin_geneve01.sh";
+    src = "testcases/network/virt/geneve01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "geneve01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_geneve02.sh" = sh_test {
+    name = "ltp_testcases_bin_geneve02.sh";
+    src = "testcases/network/virt/geneve02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "geneve02.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_get_ifname = sh_test {
+    name = "ltp_testcases_bin_get_ifname";
+    src = "testcases/network/stress/ns-tools/get_ifname";
+    sub_dir = "ltp/testcases/bin";
+    filename = "get_ifname";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_gre01.sh" = sh_test {
+    name = "ltp_testcases_bin_gre01.sh";
+    src = "testcases/network/virt/gre01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "gre01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_gre02.sh" = sh_test {
+    name = "ltp_testcases_bin_gre02.sh";
+    src = "testcases/network/virt/gre02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "gre02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_host01.sh" = sh_test {
+    name = "ltp_testcases_bin_host01.sh";
+    src = "testcases/network/tcp_cmds/host/host01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "host01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_http-stress.sh" = sh_test {
+    name = "ltp_testcases_bin_http-stress.sh";
+    src = "testcases/network/stress/http/http-stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "http-stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_http-stress01-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_http-stress01-rmt.sh";
+    src = "testcases/network/stress/http/http-stress01-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "http-stress01-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_http-stress02-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_http-stress02-rmt.sh";
+    src = "testcases/network/stress/http/http-stress02-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "http-stress02-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_icmp-uni-basic.sh" = sh_test {
+    name = "ltp_testcases_bin_icmp-uni-basic.sh";
+    src = "testcases/network/stress/icmp/icmp-uni-basic.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp-uni-basic.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_icmp-uni-vti.sh" = sh_test {
+    name = "ltp_testcases_bin_icmp-uni-vti.sh";
+    src = "testcases/network/stress/icmp/icmp-uni-vti.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp-uni-vti.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffip01 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffip01";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp4-multi-diffip01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffip01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffip02 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffip02";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp4-multi-diffip02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffip02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffip03 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffip03";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp4-multi-diffip03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffip03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffip04 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffip04";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp4-multi-diffip04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffip04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffip05 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffip05";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp4-multi-diffip05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffip05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffip06 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffip06";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp4-multi-diffip06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffip06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffip07 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffip07";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp4-multi-diffip07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffip07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffnic01 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffnic01";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp4-multi-diffnic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffnic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffnic02 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffnic02";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp4-multi-diffnic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffnic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffnic03 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffnic03";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp4-multi-diffnic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffnic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffnic04 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffnic04";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp4-multi-diffnic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffnic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffnic05 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffnic05";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp4-multi-diffnic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffnic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffnic06 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffnic06";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp4-multi-diffnic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffnic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp4-multi-diffnic07 = sh_test {
+    name = "ltp_testcases_bin_icmp4-multi-diffnic07";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp4-multi-diffnic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp4-multi-diffnic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffip01 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffip01";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp6-multi-diffip01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffip01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffip02 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffip02";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp6-multi-diffip02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffip02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffip03 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffip03";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp6-multi-diffip03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffip03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffip04 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffip04";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp6-multi-diffip04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffip04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffip05 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffip05";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp6-multi-diffip05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffip05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffip06 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffip06";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp6-multi-diffip06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffip06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffip07 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffip07";
+    src = "testcases/network/stress/icmp/multi-diffip/icmp6-multi-diffip07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffip07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffnic01 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffnic01";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp6-multi-diffnic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffnic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffnic02 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffnic02";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp6-multi-diffnic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffnic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffnic03 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffnic03";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp6-multi-diffnic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffnic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffnic04 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffnic04";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp6-multi-diffnic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffnic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffnic05 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffnic05";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp6-multi-diffnic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffnic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffnic06 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffnic06";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp6-multi-diffnic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffnic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_icmp6-multi-diffnic07 = sh_test {
+    name = "ltp_testcases_bin_icmp6-multi-diffnic07";
+    src = "testcases/network/stress/icmp/multi-diffnic/icmp6-multi-diffnic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "icmp6-multi-diffnic07";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if-addr-adddel.sh" = sh_test {
+    name = "ltp_testcases_bin_if-addr-adddel.sh";
+    src = "testcases/network/stress/interface/if-addr-adddel.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if-addr-adddel.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if-addr-addlarge.sh" = sh_test {
+    name = "ltp_testcases_bin_if-addr-addlarge.sh";
+    src = "testcases/network/stress/interface/if-addr-addlarge.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if-addr-addlarge.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if-lib.sh" = sh_test {
+    name = "ltp_testcases_bin_if-lib.sh";
+    src = "testcases/network/stress/interface/if-lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if-lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if-mtu-change.sh" = sh_test {
+    name = "ltp_testcases_bin_if-mtu-change.sh";
+    src = "testcases/network/stress/interface/if-mtu-change.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if-mtu-change.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if-route-adddel.sh" = sh_test {
+    name = "ltp_testcases_bin_if-route-adddel.sh";
+    src = "testcases/network/stress/interface/if-route-adddel.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if-route-adddel.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if-route-addlarge.sh" = sh_test {
+    name = "ltp_testcases_bin_if-route-addlarge.sh";
+    src = "testcases/network/stress/interface/if-route-addlarge.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if-route-addlarge.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if-updown.sh" = sh_test {
+    name = "ltp_testcases_bin_if-updown.sh";
+    src = "testcases/network/stress/interface/if-updown.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if-updown.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_if4-addr-change.sh" = sh_test {
+    name = "ltp_testcases_bin_if4-addr-change.sh";
+    src = "testcases/network/stress/interface/if4-addr-change.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "if4-addr-change.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ima_measurements.sh" = sh_test {
+    name = "ltp_testcases_bin_ima_measurements.sh";
+    src = "testcases/kernel/security/integrity/ima/tests/ima_measurements.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ima_measurements.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ima_policy.sh" = sh_test {
+    name = "ltp_testcases_bin_ima_policy.sh";
+    src = "testcases/kernel/security/integrity/ima/tests/ima_policy.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ima_policy.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ima_setup.sh" = sh_test {
+    name = "ltp_testcases_bin_ima_setup.sh";
+    src = "testcases/kernel/security/integrity/ima/tests/ima_setup.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ima_setup.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ima_tpm.sh" = sh_test {
+    name = "ltp_testcases_bin_ima_tpm.sh";
+    src = "testcases/kernel/security/integrity/ima/tests/ima_tpm.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ima_tpm.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ima_violations.sh" = sh_test {
+    name = "ltp_testcases_bin_ima_violations.sh";
+    src = "testcases/kernel/security/integrity/ima/tests/ima_violations.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ima_violations.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_initialize_if = sh_test {
+    name = "ltp_testcases_bin_initialize_if";
+    src = "testcases/network/stress/ns-tools/initialize_if";
+    sub_dir = "ltp/testcases/bin";
+    filename = "initialize_if";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ip_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_ip_tests.sh";
+    src = "testcases/network/iproute/ip_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ip_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ipneigh01.sh" = sh_test {
+    name = "ltp_testcases_bin_ipneigh01.sh";
+    src = "testcases/network/tcp_cmds/ipneigh/ipneigh01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ipneigh01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ipsec_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_ipsec_lib.sh";
+    src = "testcases/network/stress/ipsec/ipsec_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ipsec_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_iptables01.sh" = sh_test {
+    name = "ltp_testcases_bin_iptables01.sh";
+    src = "testcases/network/iptables/iptables01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "iptables01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_iptables_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_iptables_lib.sh";
+    src = "testcases/network/iptables/iptables_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "iptables_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ipvlan01.sh" = sh_test {
+    name = "ltp_testcases_bin_ipvlan01.sh";
+    src = "testcases/network/virt/ipvlan01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ipvlan01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_isofs.sh" = sh_test {
+    name = "ltp_testcases_bin_isofs.sh";
+    src = "testcases/kernel/fs/iso9660/isofs.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "isofs.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_killall_icmp_traffic = sh_test {
+    name = "ltp_testcases_bin_killall_icmp_traffic";
+    src = "testcases/network/stress/ns-tools/killall_icmp_traffic";
+    sub_dir = "ltp/testcases/bin";
+    filename = "killall_icmp_traffic";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_killall_tcp_traffic = sh_test {
+    name = "ltp_testcases_bin_killall_tcp_traffic";
+    src = "testcases/network/stress/ns-tools/killall_tcp_traffic";
+    sub_dir = "ltp/testcases/bin";
+    filename = "killall_tcp_traffic";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_killall_udp_traffic = sh_test {
+    name = "ltp_testcases_bin_killall_udp_traffic";
+    src = "testcases/network/stress/ns-tools/killall_udp_traffic";
+    sub_dir = "ltp/testcases/bin";
+    filename = "killall_udp_traffic";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ld01.sh" = sh_test {
+    name = "ltp_testcases_bin_ld01.sh";
+    src = "testcases/commands/ld/ld01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ld01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ldd01.sh" = sh_test {
+    name = "ltp_testcases_bin_ldd01.sh";
+    src = "testcases/commands/ldd/ldd01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ldd01.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_libcgroup_freezer = sh_test {
+    name = "ltp_testcases_bin_libcgroup_freezer";
+    src = "testcases/kernel/controllers/freezer/libcgroup_freezer";
+    sub_dir = "ltp/testcases/bin";
+    filename = "libcgroup_freezer";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_linktest.sh" = sh_test {
+    name = "ltp_testcases_bin_linktest.sh";
+    src = "testcases/kernel/fs/linktest/linktest.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "linktest.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ln_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_ln_tests.sh";
+    src = "testcases/commands/ln/ln_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ln_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_lock_torture.sh" = sh_test {
+    name = "ltp_testcases_bin_lock_torture.sh";
+    src = "testcases/kernel/device-drivers/locking/lock_torture.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "lock_torture.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ltpSockets.sh" = sh_test {
+    name = "ltp_testcases_bin_ltpSockets.sh";
+    src = "testcases/network/sockets/ltpSockets.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ltpSockets.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_macsec01.sh" = sh_test {
+    name = "ltp_testcases_bin_macsec01.sh";
+    src = "testcases/network/virt/macsec01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "macsec01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_macsec02.sh" = sh_test {
+    name = "ltp_testcases_bin_macsec02.sh";
+    src = "testcases/network/virt/macsec02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "macsec02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_macsec03.sh" = sh_test {
+    name = "ltp_testcases_bin_macsec03.sh";
+    src = "testcases/network/virt/macsec03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "macsec03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_macsec_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_macsec_lib.sh";
+    src = "testcases/network/virt/macsec_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "macsec_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_macvlan01.sh" = sh_test {
+    name = "ltp_testcases_bin_macvlan01.sh";
+    src = "testcases/network/virt/macvlan01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "macvlan01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_macvtap01.sh" = sh_test {
+    name = "ltp_testcases_bin_macvtap01.sh";
+    src = "testcases/network/virt/macvtap01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "macvtap01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mc_cmds.sh" = sh_test {
+    name = "ltp_testcases_bin_mc_cmds.sh";
+    src = "testcases/network/multicast/mc_cmds/mc_cmds.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mc_cmds.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mc_commo.sh" = sh_test {
+    name = "ltp_testcases_bin_mc_commo.sh";
+    src = "testcases/network/multicast/mc_commo/mc_commo.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mc_commo.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mc_member.sh" = sh_test {
+    name = "ltp_testcases_bin_mc_member.sh";
+    src = "testcases/network/multicast/mc_member/mc_member.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mc_member.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mc_opts.sh" = sh_test {
+    name = "ltp_testcases_bin_mc_opts.sh";
+    src = "testcases/network/multicast/mc_opts/mc_opts.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mc_opts.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast-group-multiple-socket = sh_test {
+    name = "ltp_testcases_bin_mcast-group-multiple-socket";
+    src = "testcases/network/stress/multicast/grp-operation/mcast-group-multiple-socket";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast-group-multiple-socket";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast-group-same-group = sh_test {
+    name = "ltp_testcases_bin_mcast-group-same-group";
+    src = "testcases/network/stress/multicast/grp-operation/mcast-group-same-group";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast-group-same-group";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast-group-single-socket = sh_test {
+    name = "ltp_testcases_bin_mcast-group-single-socket";
+    src = "testcases/network/stress/multicast/grp-operation/mcast-group-single-socket";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast-group-single-socket";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast-group-source-filter = sh_test {
+    name = "ltp_testcases_bin_mcast-group-source-filter";
+    src = "testcases/network/stress/multicast/grp-operation/mcast-group-source-filter";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast-group-source-filter";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mcast-lib.sh" = sh_test {
+    name = "ltp_testcases_bin_mcast-lib.sh";
+    src = "testcases/network/stress/multicast/grp-operation/mcast-lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast-lib.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-pktfld01 = sh_test {
+    name = "ltp_testcases_bin_mcast4-pktfld01";
+    src = "testcases/network/stress/multicast/packet-flood/mcast4-pktfld01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-pktfld01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-pktfld02 = sh_test {
+    name = "ltp_testcases_bin_mcast4-pktfld02";
+    src = "testcases/network/stress/multicast/packet-flood/mcast4-pktfld02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-pktfld02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-queryfld01 = sh_test {
+    name = "ltp_testcases_bin_mcast4-queryfld01";
+    src = "testcases/network/stress/multicast/query-flood/mcast4-queryfld01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-queryfld01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-queryfld02 = sh_test {
+    name = "ltp_testcases_bin_mcast4-queryfld02";
+    src = "testcases/network/stress/multicast/query-flood/mcast4-queryfld02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-queryfld02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-queryfld03 = sh_test {
+    name = "ltp_testcases_bin_mcast4-queryfld03";
+    src = "testcases/network/stress/multicast/query-flood/mcast4-queryfld03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-queryfld03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-queryfld04 = sh_test {
+    name = "ltp_testcases_bin_mcast4-queryfld04";
+    src = "testcases/network/stress/multicast/query-flood/mcast4-queryfld04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-queryfld04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-queryfld05 = sh_test {
+    name = "ltp_testcases_bin_mcast4-queryfld05";
+    src = "testcases/network/stress/multicast/query-flood/mcast4-queryfld05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-queryfld05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast4-queryfld06 = sh_test {
+    name = "ltp_testcases_bin_mcast4-queryfld06";
+    src = "testcases/network/stress/multicast/query-flood/mcast4-queryfld06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast4-queryfld06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-pktfld01 = sh_test {
+    name = "ltp_testcases_bin_mcast6-pktfld01";
+    src = "testcases/network/stress/multicast/packet-flood/mcast6-pktfld01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-pktfld01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-pktfld02 = sh_test {
+    name = "ltp_testcases_bin_mcast6-pktfld02";
+    src = "testcases/network/stress/multicast/packet-flood/mcast6-pktfld02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-pktfld02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-queryfld01 = sh_test {
+    name = "ltp_testcases_bin_mcast6-queryfld01";
+    src = "testcases/network/stress/multicast/query-flood/mcast6-queryfld01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-queryfld01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-queryfld02 = sh_test {
+    name = "ltp_testcases_bin_mcast6-queryfld02";
+    src = "testcases/network/stress/multicast/query-flood/mcast6-queryfld02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-queryfld02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-queryfld03 = sh_test {
+    name = "ltp_testcases_bin_mcast6-queryfld03";
+    src = "testcases/network/stress/multicast/query-flood/mcast6-queryfld03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-queryfld03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-queryfld04 = sh_test {
+    name = "ltp_testcases_bin_mcast6-queryfld04";
+    src = "testcases/network/stress/multicast/query-flood/mcast6-queryfld04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-queryfld04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-queryfld05 = sh_test {
+    name = "ltp_testcases_bin_mcast6-queryfld05";
+    src = "testcases/network/stress/multicast/query-flood/mcast6-queryfld05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-queryfld05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_mcast6-queryfld06 = sh_test {
+    name = "ltp_testcases_bin_mcast6-queryfld06";
+    src = "testcases/network/stress/multicast/query-flood/mcast6-queryfld06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mcast6-queryfld06";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_control_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_control_test.sh";
+    src = "testcases/kernel/controllers/memcg/control/memcg_control_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_control_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_failcnt.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_failcnt.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_failcnt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_failcnt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_force_empty.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_force_empty.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_force_empty.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_force_empty.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_lib.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_limit_in_bytes.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_limit_in_bytes.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_limit_in_bytes.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_limit_in_bytes.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_max_usage_in_bytes_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_max_usage_in_bytes_test.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_max_usage_in_bytes_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_max_usage_in_bytes_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_memsw_limit_in_bytes_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_memsw_limit_in_bytes_test.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_memsw_limit_in_bytes_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_memsw_limit_in_bytes_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_move_charge_at_immigrate_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_move_charge_at_immigrate_test.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_move_charge_at_immigrate_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_move_charge_at_immigrate_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_regression_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_regression_test.sh";
+    src = "testcases/kernel/controllers/memcg/regression/memcg_regression_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_regression_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_stat_rss.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_stat_rss.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_stat_rss.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_stat_rss.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_stat_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_stat_test.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_stat_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_stat_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_stress_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_stress_test.sh";
+    src = "testcases/kernel/controllers/memcg/stress/memcg_stress_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_stress_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_subgroup_charge.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_subgroup_charge.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_subgroup_charge.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_subgroup_charge.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_test_4.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_test_4.sh";
+    src = "testcases/kernel/controllers/memcg/regression/memcg_test_4.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_test_4.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_usage_in_bytes_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_usage_in_bytes_test.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_usage_in_bytes_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_usage_in_bytes_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_memcg_use_hierarchy_test.sh" = sh_test {
+    name = "ltp_testcases_bin_memcg_use_hierarchy_test.sh";
+    src = "testcases/kernel/controllers/memcg/functional/memcg_use_hierarchy_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "memcg_use_hierarchy_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mkdir_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_mkdir_tests.sh";
+    src = "testcases/commands/mkdir/mkdir_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mkdir_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_modaltr.sh" = sh_test {
+    name = "ltp_testcases_bin_modaltr.sh";
+    src = "testcases/kernel/fs/fs-bench/modaltr.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "modaltr.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mpls01.sh" = sh_test {
+    name = "ltp_testcases_bin_mpls01.sh";
+    src = "testcases/network/mpls/mpls01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mpls01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mpls02.sh" = sh_test {
+    name = "ltp_testcases_bin_mpls02.sh";
+    src = "testcases/network/mpls/mpls02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mpls02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mpls03.sh" = sh_test {
+    name = "ltp_testcases_bin_mpls03.sh";
+    src = "testcases/network/mpls/mpls03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mpls03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mpls04.sh" = sh_test {
+    name = "ltp_testcases_bin_mpls04.sh";
+    src = "testcases/network/mpls/mpls04.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mpls04.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_mpls_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_mpls_lib.sh";
+    src = "testcases/network/mpls/mpls_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "mpls_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_myfunctions-io.sh" = sh_test {
+    name = "ltp_testcases_bin_myfunctions-io.sh";
+    src = "testcases/kernel/controllers/io-throttle/myfunctions-io.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "myfunctions-io.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_myfunctions.sh" = sh_test {
+    name = "ltp_testcases_bin_myfunctions.sh";
+    src = "testcases/kernel/controllers/memctl/myfunctions.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "myfunctions.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_net_cmdlib.sh" = sh_test {
+    name = "ltp_testcases_bin_net_cmdlib.sh";
+    src = "testcases/lib/net_cmdlib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "net_cmdlib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_netstat01.sh" = sh_test {
+    name = "ltp_testcases_bin_netstat01.sh";
+    src = "testcases/network/tcp_cmds/netstat/netstat01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "netstat01.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfs01 = sh_test {
+    name = "ltp_testcases_bin_nfs01";
+    src = "testcases/network/nfs/nfs_stress/nfs01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfs01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfs02 = sh_test {
+    name = "ltp_testcases_bin_nfs02";
+    src = "testcases/network/nfs/nfs_stress/nfs02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfs02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfs03 = sh_test {
+    name = "ltp_testcases_bin_nfs03";
+    src = "testcases/network/nfs/nfs_stress/nfs03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfs03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfs04 = sh_test {
+    name = "ltp_testcases_bin_nfs04";
+    src = "testcases/network/nfs/nfs_stress/nfs04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfs04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfs05 = sh_test {
+    name = "ltp_testcases_bin_nfs05";
+    src = "testcases/network/nfs/nfs_stress/nfs05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfs05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfs06 = sh_test {
+    name = "ltp_testcases_bin_nfs06";
+    src = "testcases/network/nfs/nfs_stress/nfs06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfs06";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_nfs_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_nfs_lib.sh";
+    src = "testcases/network/nfs/nfs_stress/nfs_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfs_lib.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfslock01 = sh_test {
+    name = "ltp_testcases_bin_nfslock01";
+    src = "testcases/network/nfs/nfslock01/nfslock01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfslock01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_nfsstat01 = sh_test {
+    name = "ltp_testcases_bin_nfsstat01";
+    src = "testcases/network/nfs/nfsstat01/nfsstat01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nfsstat01";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_nft01.sh" = sh_test {
+    name = "ltp_testcases_bin_nft01.sh";
+    src = "testcases/network/iptables/nft01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nft01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_nm01.sh" = sh_test {
+    name = "ltp_testcases_bin_nm01.sh";
+    src = "testcases/commands/nm/nm01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "nm01.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_ns-echoclient = sh_test {
+    name = "ltp_testcases_bin_ns-echoclient";
+    src = "testcases/network/stress/ns-tools/ns-echoclient";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ns-echoclient";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_numa01.sh" = sh_test {
+    name = "ltp_testcases_bin_numa01.sh";
+    src = "testcases/kernel/numa/numa01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "numa01.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_output_ipsec_conf = sh_test {
+    name = "ltp_testcases_bin_output_ipsec_conf";
+    src = "testcases/network/stress/ns-tools/output_ipsec_conf";
+    sub_dir = "ltp/testcases/bin";
+    filename = "output_ipsec_conf";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_parameters.sh" = sh_test {
+    name = "ltp_testcases_bin_parameters.sh";
+    src = "testcases/kernel/controllers/cpuctl/parameters.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "parameters.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_pids.sh" = sh_test {
+    name = "ltp_testcases_bin_pids.sh";
+    src = "testcases/kernel/controllers/pids/pids.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "pids.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ping01.sh" = sh_test {
+    name = "ltp_testcases_bin_ping01.sh";
+    src = "testcases/network/tcp_cmds/ping/ping01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ping01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ping02.sh" = sh_test {
+    name = "ltp_testcases_bin_ping02.sh";
+    src = "testcases/network/tcp_cmds/ping/ping02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ping02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_pm_cpu_consolidation.py" = sh_test {
+    name = "ltp_testcases_bin_pm_cpu_consolidation.py";
+    src = "testcases/kernel/power_management/pm_cpu_consolidation.py";
+    sub_dir = "ltp/testcases/bin";
+    filename = "pm_cpu_consolidation.py";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_pm_ilb_test.py" = sh_test {
+    name = "ltp_testcases_bin_pm_ilb_test.py";
+    src = "testcases/kernel/power_management/pm_ilb_test.py";
+    sub_dir = "ltp/testcases/bin";
+    filename = "pm_ilb_test.py";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_pm_include.sh" = sh_test {
+    name = "ltp_testcases_bin_pm_include.sh";
+    src = "testcases/kernel/power_management/pm_include.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "pm_include.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_pm_sched_domain.py" = sh_test {
+    name = "ltp_testcases_bin_pm_sched_domain.py";
+    src = "testcases/kernel/power_management/pm_sched_domain.py";
+    sub_dir = "ltp/testcases/bin";
+    filename = "pm_sched_domain.py";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_pm_sched_mc.py" = sh_test {
+    name = "ltp_testcases_bin_pm_sched_mc.py";
+    src = "testcases/kernel/power_management/lib/pm_sched_mc.py";
+    sub_dir = "ltp/testcases/bin";
+    filename = "pm_sched_mc.py";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_quota_remount_test01.sh" = sh_test {
+    name = "ltp_testcases_bin_quota_remount_test01.sh";
+    src = "testcases/kernel/fs/quota_remount/quota_remount_test01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "quota_remount_test01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_rcp01.sh" = sh_test {
+    name = "ltp_testcases_bin_rcp01.sh";
+    src = "testcases/network/tcp_cmds/rcp/rcp01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "rcp01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_rcu_torture.sh" = sh_test {
+    name = "ltp_testcases_bin_rcu_torture.sh";
+    src = "testcases/kernel/device-drivers/rcu/rcu_torture.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "rcu_torture.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_remove_password.sh" = sh_test {
+    name = "ltp_testcases_bin_remove_password.sh";
+    src = "testcases/kernel/security/mmc_security/remove_password.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "remove_password.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_rlogin01.sh" = sh_test {
+    name = "ltp_testcases_bin_rlogin01.sh";
+    src = "testcases/network/tcp_cmds/rlogin/rlogin01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "rlogin01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_route-change-dst.sh" = sh_test {
+    name = "ltp_testcases_bin_route-change-dst.sh";
+    src = "testcases/network/stress/route/route-change-dst.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route-change-dst.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_route-change-gw.sh" = sh_test {
+    name = "ltp_testcases_bin_route-change-gw.sh";
+    src = "testcases/network/stress/route/route-change-gw.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route-change-gw.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_route-change-if.sh" = sh_test {
+    name = "ltp_testcases_bin_route-change-if.sh";
+    src = "testcases/network/stress/route/route-change-if.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route-change-if.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_route-lib.sh" = sh_test {
+    name = "ltp_testcases_bin_route-lib.sh";
+    src = "testcases/network/stress/route/route-lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route-lib.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_route4-redirect = sh_test {
+    name = "ltp_testcases_bin_route4-redirect";
+    src = "testcases/network/stress/route/route4-redirect";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route4-redirect";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_route4-rmmod = sh_test {
+    name = "ltp_testcases_bin_route4-rmmod";
+    src = "testcases/network/stress/route/route4-rmmod";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route4-rmmod";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_route6-redirect = sh_test {
+    name = "ltp_testcases_bin_route6-redirect";
+    src = "testcases/network/stress/route/route6-redirect";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route6-redirect";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_route6-rmmod = sh_test {
+    name = "ltp_testcases_bin_route6-rmmod";
+    src = "testcases/network/stress/route/route6-rmmod";
+    sub_dir = "ltp/testcases/bin";
+    filename = "route6-rmmod";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_rsh01.sh" = sh_test {
+    name = "ltp_testcases_bin_rsh01.sh";
+    src = "testcases/network/tcp_cmds/rsh/rsh01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "rsh01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_capbounds.sh" = sh_test {
+    name = "ltp_testcases_bin_run_capbounds.sh";
+    src = "testcases/kernel/security/cap_bound/run_capbounds.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_capbounds.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_cpuctl_latency_test.sh" = sh_test {
+    name = "ltp_testcases_bin_run_cpuctl_latency_test.sh";
+    src = "testcases/kernel/controllers/cpuctl/run_cpuctl_latency_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_cpuctl_latency_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_cpuctl_stress_test.sh" = sh_test {
+    name = "ltp_testcases_bin_run_cpuctl_stress_test.sh";
+    src = "testcases/kernel/controllers/cpuctl/run_cpuctl_stress_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_cpuctl_stress_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_cpuctl_test.sh" = sh_test {
+    name = "ltp_testcases_bin_run_cpuctl_test.sh";
+    src = "testcases/kernel/controllers/cpuctl/run_cpuctl_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_cpuctl_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_cpuctl_test_fj.sh" = sh_test {
+    name = "ltp_testcases_bin_run_cpuctl_test_fj.sh";
+    src = "testcases/kernel/controllers/cpuctl_fj/run_cpuctl_test_fj.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_cpuctl_test_fj.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_freezer.sh" = sh_test {
+    name = "ltp_testcases_bin_run_freezer.sh";
+    src = "testcases/kernel/controllers/freezer/run_freezer.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_freezer.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_io_throttle_test.sh" = sh_test {
+    name = "ltp_testcases_bin_run_io_throttle_test.sh";
+    src = "testcases/kernel/controllers/io-throttle/run_io_throttle_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_io_throttle_test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_memctl_test.sh" = sh_test {
+    name = "ltp_testcases_bin_run_memctl_test.sh";
+    src = "testcases/kernel/controllers/memctl/run_memctl_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_memctl_test.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_run_pec_test = sh_test {
+    name = "ltp_testcases_bin_run_pec_test";
+    src = "testcases/kernel/connectors/pec/run_pec_test";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_pec_test";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_run_sched_cliserv.sh" = sh_test {
+    name = "ltp_testcases_bin_run_sched_cliserv.sh";
+    src = "testcases/kernel/sched/clisrv/run_sched_cliserv.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "run_sched_cliserv.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests01.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests01.sh";
+    src = "testcases/kernel/power_management/runpwtests01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests02.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests02.sh";
+    src = "testcases/kernel/power_management/runpwtests02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests03.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests03.sh";
+    src = "testcases/kernel/power_management/runpwtests03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests04.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests04.sh";
+    src = "testcases/kernel/power_management/runpwtests04.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests04.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests05.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests05.sh";
+    src = "testcases/kernel/power_management/runpwtests05.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests05.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests06.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests06.sh";
+    src = "testcases/kernel/power_management/runpwtests06.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests06.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests_exclusive01.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests_exclusive01.sh";
+    src = "testcases/kernel/power_management/runpwtests_exclusive01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests_exclusive01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests_exclusive02.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests_exclusive02.sh";
+    src = "testcases/kernel/power_management/runpwtests_exclusive02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests_exclusive02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests_exclusive03.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests_exclusive03.sh";
+    src = "testcases/kernel/power_management/runpwtests_exclusive03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests_exclusive03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests_exclusive04.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests_exclusive04.sh";
+    src = "testcases/kernel/power_management/runpwtests_exclusive04.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests_exclusive04.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_runpwtests_exclusive05.sh" = sh_test {
+    name = "ltp_testcases_bin_runpwtests_exclusive05.sh";
+    src = "testcases/kernel/power_management/runpwtests_exclusive05.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "runpwtests_exclusive05.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_rwtest = sh_test {
+    name = "ltp_testcases_bin_rwtest";
+    src = "testcases/kernel/fs/doio/rwtest";
+    sub_dir = "ltp/testcases/bin";
+    filename = "rwtest";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sched_stress.sh" = sh_test {
+    name = "ltp_testcases_bin_sched_stress.sh";
+    src = "testcases/kernel/sched/sched_stress/sched_stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sched_stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sctp01.sh" = sh_test {
+    name = "ltp_testcases_bin_sctp01.sh";
+    src = "testcases/network/sctp/sctp01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sctp01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sctp_ipsec.sh" = sh_test {
+    name = "ltp_testcases_bin_sctp_ipsec.sh";
+    src = "testcases/network/stress/sctp/sctp_ipsec.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sctp_ipsec.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sctp_ipsec_vti.sh" = sh_test {
+    name = "ltp_testcases_bin_sctp_ipsec_vti.sh";
+    src = "testcases/network/stress/sctp/sctp_ipsec_vti.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sctp_ipsec_vti.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sendfile01.sh" = sh_test {
+    name = "ltp_testcases_bin_sendfile01.sh";
+    src = "testcases/network/tcp_cmds/sendfile/sendfile01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sendfile01.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_set_ipv4addr = sh_test {
+    name = "ltp_testcases_bin_set_ipv4addr";
+    src = "testcases/network/stress/ns-tools/set_ipv4addr";
+    sub_dir = "ltp/testcases/bin";
+    filename = "set_ipv4addr";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sit01.sh" = sh_test {
+    name = "ltp_testcases_bin_sit01.sh";
+    src = "testcases/network/virt/sit01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sit01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_common.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_common.sh";
+    src = "testcases/kernel/security/smack/smack_common.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_common.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_file_access.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_file_access.sh";
+    src = "testcases/kernel/security/smack/smack_file_access.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_file_access.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_ambient.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_ambient.sh";
+    src = "testcases/kernel/security/smack/smack_set_ambient.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_ambient.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_cipso.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_cipso.sh";
+    src = "testcases/kernel/security/smack/smack_set_cipso.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_cipso.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_current.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_current.sh";
+    src = "testcases/kernel/security/smack/smack_set_current.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_current.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_direct.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_direct.sh";
+    src = "testcases/kernel/security/smack/smack_set_direct.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_direct.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_doi.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_doi.sh";
+    src = "testcases/kernel/security/smack/smack_set_doi.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_doi.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_load.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_load.sh";
+    src = "testcases/kernel/security/smack/smack_set_load.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_load.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_netlabel.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_netlabel.sh";
+    src = "testcases/kernel/security/smack/smack_set_netlabel.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_netlabel.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smack_set_onlycap.sh" = sh_test {
+    name = "ltp_testcases_bin_smack_set_onlycap.sh";
+    src = "testcases/kernel/security/smack/smack_set_onlycap.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smack_set_onlycap.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smt_smp_affinity.sh" = sh_test {
+    name = "ltp_testcases_bin_smt_smp_affinity.sh";
+    src = "testcases/kernel/sched/hyperthreading/ht_affinity/smt_smp_affinity.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smt_smp_affinity.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_smt_smp_enabled.sh" = sh_test {
+    name = "ltp_testcases_bin_smt_smp_enabled.sh";
+    src = "testcases/kernel/sched/hyperthreading/ht_enabled/smt_smp_enabled.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "smt_smp_enabled.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ssh-stress.sh" = sh_test {
+    name = "ltp_testcases_bin_ssh-stress.sh";
+    src = "testcases/network/stress/ssh/ssh-stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ssh-stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ssh-stress01-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_ssh-stress01-rmt.sh";
+    src = "testcases/network/stress/ssh/ssh-stress01-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ssh-stress01-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ssh-stress02-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_ssh-stress02-rmt.sh";
+    src = "testcases/network/stress/ssh/ssh-stress02-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ssh-stress02-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_ssh-stress03-rmt.sh" = sh_test {
+    name = "ltp_testcases_bin_ssh-stress03-rmt.sh";
+    src = "testcases/network/stress/ssh/ssh-stress03-rmt.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "ssh-stress03-rmt.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_stop_freeze_sleep_thaw_cont.sh" = sh_test {
+    name = "ltp_testcases_bin_stop_freeze_sleep_thaw_cont.sh";
+    src = "testcases/kernel/controllers/freezer/stop_freeze_sleep_thaw_cont.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "stop_freeze_sleep_thaw_cont.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_stop_freeze_thaw_cont.sh" = sh_test {
+    name = "ltp_testcases_bin_stop_freeze_thaw_cont.sh";
+    src = "testcases/kernel/controllers/freezer/stop_freeze_thaw_cont.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "stop_freeze_thaw_cont.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_stress_floppy = sh_test {
+    name = "ltp_testcases_bin_stress_floppy";
+    src = "testcases/kernel/io/stress_floppy/stress_floppy";
+    sub_dir = "ltp/testcases/bin";
+    filename = "stress_floppy";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sysctl01.sh" = sh_test {
+    name = "ltp_testcases_bin_sysctl01.sh";
+    src = "testcases/commands/sysctl/sysctl01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sysctl01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_sysctl02.sh" = sh_test {
+    name = "ltp_testcases_bin_sysctl02.sh";
+    src = "testcases/commands/sysctl/sysctl02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "sysctl02.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip01";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip02";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip03";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip04";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip05";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip06";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip07";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip08";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip09";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip10";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip11";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip12";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip13";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffip14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffip14";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp4-multi-diffip14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffip14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic01";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic02";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic03";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic04";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic05";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic06";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic07";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic08";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic09";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic10";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic11";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic12";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic13";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffnic14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffnic14";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp4-multi-diffnic14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffnic14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport01";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport02";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport03";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport04";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport05";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport06";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport07";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport08";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport09";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport10";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport11";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport12";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport13";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-diffport14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-diffport14";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp4-multi-diffport14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-diffport14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport01";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport02";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport03";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport04";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport05";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport06";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport07";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport08";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport09";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport10";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport11";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport12";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport13";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-multi-sameport14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-multi-sameport14";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp4-multi-sameport14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-multi-sameport14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic01";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic02";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic03";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic04";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic05";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic06";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic07";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic08";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic09";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic10";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic11";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic12";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic13";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-basic14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-basic14";
+    src = "testcases/network/stress/tcp/uni-basic/tcp4-uni-basic14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-basic14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff01";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff02";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff03";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff04";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff05";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff06";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff07";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff08";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff09";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff10";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff11";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff12";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff13";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-dsackoff14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-dsackoff14";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp4-uni-dsackoff14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-dsackoff14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup01";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup02";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup03";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup04";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup05";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup06";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup07";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup08";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup09";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup10";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup11";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup12";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup13";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-pktlossdup14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-pktlossdup14";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp4-uni-pktlossdup14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-pktlossdup14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff01";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff02";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff03";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff04";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff05";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff06";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff07";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff08";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff09";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff10";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff11";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff12";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff13";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-sackoff14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-sackoff14";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp4-uni-sackoff14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-sackoff14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend01";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend02";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend03";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend04";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend05";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend06";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend07";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend08";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend09";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend10";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend11";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend12";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend13";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-smallsend14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-smallsend14";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp4-uni-smallsend14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-smallsend14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso01";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso02";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso03";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso04";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso05";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso06";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso07";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso08";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso09";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso10";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso11";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso12";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso13";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-tso14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-tso14";
+    src = "testcases/network/stress/tcp/uni-tso/tcp4-uni-tso14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-tso14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale01 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale01";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale02 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale02";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale03 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale03";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale04 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale04";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale05 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale05";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale06 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale06";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale07 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale07";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale08 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale08";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale09 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale09";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale10 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale10";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale11 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale11";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale12 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale12";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale13 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale13";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp4-uni-winscale14 = sh_test {
+    name = "ltp_testcases_bin_tcp4-uni-winscale14";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp4-uni-winscale14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp4-uni-winscale14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip01";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip02";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip03";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip04";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip05";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip06";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip07";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip08";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip09";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip10";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip11";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip12";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip13";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffip14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffip14";
+    src = "testcases/network/stress/tcp/multi-diffip/tcp6-multi-diffip14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffip14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic01";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic02";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic03";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic04";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic05";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic06";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic07";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic08";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic09";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic10";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic11";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic12";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic13";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffnic14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffnic14";
+    src = "testcases/network/stress/tcp/multi-diffnic/tcp6-multi-diffnic14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffnic14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport01";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport02";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport03";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport04";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport05";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport06";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport07";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport08";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport09";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport10";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport11";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport12";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport13";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-diffport14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-diffport14";
+    src = "testcases/network/stress/tcp/multi-diffport/tcp6-multi-diffport14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-diffport14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport01";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport02";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport03";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport04";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport05";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport06";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport07";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport08";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport09";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport10";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport11";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport12";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport13";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-multi-sameport14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-multi-sameport14";
+    src = "testcases/network/stress/tcp/multi-sameport/tcp6-multi-sameport14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-multi-sameport14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic01";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic02";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic03";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic04";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic05";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic06";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic07";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic08";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic09";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic10";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic11";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic12";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic13";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-basic14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-basic14";
+    src = "testcases/network/stress/tcp/uni-basic/tcp6-uni-basic14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-basic14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff01";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff02";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff03";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff04";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff05";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff06";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff07";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff08";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff09";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff10";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff11";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff12";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff13";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-dsackoff14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-dsackoff14";
+    src = "testcases/network/stress/tcp/uni-dsackoff/tcp6-uni-dsackoff14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-dsackoff14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup01";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup02";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup03";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup04";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup05";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup06";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup07";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup08";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup09";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup10";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup11";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup12";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup13";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-pktlossdup14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-pktlossdup14";
+    src = "testcases/network/stress/tcp/uni-pktlossdup/tcp6-uni-pktlossdup14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-pktlossdup14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff01";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff02";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff03";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff04";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff05";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff06";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff07";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff08";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff09";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff10";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff11";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff12";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff13";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-sackoff14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-sackoff14";
+    src = "testcases/network/stress/tcp/uni-sackoff/tcp6-uni-sackoff14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-sackoff14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend01";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend02";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend03";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend04";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend05";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend06";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend07";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend08";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend09";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend10";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend11";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend12";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend13";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-smallsend14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-smallsend14";
+    src = "testcases/network/stress/tcp/uni-smallsend/tcp6-uni-smallsend14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-smallsend14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso01";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso02";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso03";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso04";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso05";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso06";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso07";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso08";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso09";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso10";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso11";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso12";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso13";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-tso14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-tso14";
+    src = "testcases/network/stress/tcp/uni-tso/tcp6-uni-tso14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-tso14";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale01 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale01";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale02 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale02";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale03 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale03";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale04 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale04";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale05 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale05";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale06 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale06";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale07 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale07";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale08 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale08";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale08";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale08";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale09 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale09";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale09";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale09";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale10 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale10";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale10";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale10";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale11 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale11";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale11";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale11";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale12 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale12";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale12";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale12";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale13 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale13";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale13";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale13";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_tcp6-uni-winscale14 = sh_test {
+    name = "ltp_testcases_bin_tcp6-uni-winscale14";
+    src = "testcases/network/stress/tcp/uni-winscale/tcp6-uni-winscale14";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp6-uni-winscale14";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tcp_cc_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_tcp_cc_lib.sh";
+    src = "testcases/network/tcp_cc/tcp_cc_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp_cc_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tcp_fastopen_run.sh" = sh_test {
+    name = "ltp_testcases_bin_tcp_fastopen_run.sh";
+    src = "testcases/network/tcp_fastopen/tcp_fastopen_run.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp_fastopen_run.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tcp_ipsec.sh" = sh_test {
+    name = "ltp_testcases_bin_tcp_ipsec.sh";
+    src = "testcases/network/stress/tcp/tcp_ipsec.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp_ipsec.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tcp_ipsec_vti.sh" = sh_test {
+    name = "ltp_testcases_bin_tcp_ipsec_vti.sh";
+    src = "testcases/network/stress/tcp/tcp_ipsec_vti.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcp_ipsec_vti.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tcpdump01.sh" = sh_test {
+    name = "ltp_testcases_bin_tcpdump01.sh";
+    src = "testcases/network/tcp_cmds/tcpdump/tcpdump01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tcpdump01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_telnet01.sh" = sh_test {
+    name = "ltp_testcases_bin_telnet01.sh";
+    src = "testcases/network/tcp_cmds/telnet/telnet01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "telnet01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_test.sh" = sh_test {
+    name = "ltp_testcases_bin_test.sh";
+    src = "testcases/lib/test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "test.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_test_controllers.sh" = sh_test {
+    name = "ltp_testcases_bin_test_controllers.sh";
+    src = "testcases/kernel/controllers/test_controllers.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "test_controllers.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_test_ioctl = sh_test {
+    name = "ltp_testcases_bin_test_ioctl";
+    src = "testcases/kernel/syscalls/ioctl/test_ioctl";
+    sub_dir = "ltp/testcases/bin";
+    filename = "test_ioctl";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_test_robind.sh" = sh_test {
+    name = "ltp_testcases_bin_test_robind.sh";
+    src = "testcases/kernel/fs/fs_readonly/test_robind.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "test_robind.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_testall.sh" = sh_test {
+    name = "ltp_testcases_bin_testall.sh";
+    src = "testcases/kernel/security/tomoyo/testall.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "testall.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tracepath01.sh" = sh_test {
+    name = "ltp_testcases_bin_tracepath01.sh";
+    src = "testcases/network/tcp_cmds/tracepath/tracepath01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tracepath01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_traceroute01.sh" = sh_test {
+    name = "ltp_testcases_bin_traceroute01.sh";
+    src = "testcases/network/traceroute/traceroute01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "traceroute01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tst_ansi_color.sh" = sh_test {
+    name = "ltp_testcases_bin_tst_ansi_color.sh";
+    src = "testcases/lib/tst_ansi_color.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tst_ansi_color.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tst_net.sh" = sh_test {
+    name = "ltp_testcases_bin_tst_net.sh";
+    src = "testcases/lib/tst_net.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tst_net.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tst_net_stress.sh" = sh_test {
+    name = "ltp_testcases_bin_tst_net_stress.sh";
+    src = "testcases/network/stress/ns-tools/tst_net_stress.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tst_net_stress.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tst_security.sh" = sh_test {
+    name = "ltp_testcases_bin_tst_security.sh";
+    src = "testcases/lib/tst_security.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tst_security.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_tst_test.sh" = sh_test {
+    name = "ltp_testcases_bin_tst_test.sh";
+    src = "testcases/lib/tst_test.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "tst_test.sh";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffip01 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffip01";
+    src = "testcases/network/stress/udp/multi-diffip/udp4-multi-diffip01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffip01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffip02 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffip02";
+    src = "testcases/network/stress/udp/multi-diffip/udp4-multi-diffip02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffip02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffip03 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffip03";
+    src = "testcases/network/stress/udp/multi-diffip/udp4-multi-diffip03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffip03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffip04 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffip04";
+    src = "testcases/network/stress/udp/multi-diffip/udp4-multi-diffip04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffip04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffip05 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffip05";
+    src = "testcases/network/stress/udp/multi-diffip/udp4-multi-diffip05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffip05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffip06 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffip06";
+    src = "testcases/network/stress/udp/multi-diffip/udp4-multi-diffip06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffip06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffip07 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffip07";
+    src = "testcases/network/stress/udp/multi-diffip/udp4-multi-diffip07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffip07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffnic01 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffnic01";
+    src = "testcases/network/stress/udp/multi-diffnic/udp4-multi-diffnic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffnic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffnic02 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffnic02";
+    src = "testcases/network/stress/udp/multi-diffnic/udp4-multi-diffnic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffnic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffnic03 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffnic03";
+    src = "testcases/network/stress/udp/multi-diffnic/udp4-multi-diffnic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffnic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffnic04 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffnic04";
+    src = "testcases/network/stress/udp/multi-diffnic/udp4-multi-diffnic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffnic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffnic05 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffnic05";
+    src = "testcases/network/stress/udp/multi-diffnic/udp4-multi-diffnic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffnic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffnic06 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffnic06";
+    src = "testcases/network/stress/udp/multi-diffnic/udp4-multi-diffnic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffnic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffnic07 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffnic07";
+    src = "testcases/network/stress/udp/multi-diffnic/udp4-multi-diffnic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffnic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffport01 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffport01";
+    src = "testcases/network/stress/udp/multi-diffport/udp4-multi-diffport01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffport01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffport02 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffport02";
+    src = "testcases/network/stress/udp/multi-diffport/udp4-multi-diffport02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffport02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffport03 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffport03";
+    src = "testcases/network/stress/udp/multi-diffport/udp4-multi-diffport03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffport03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffport04 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffport04";
+    src = "testcases/network/stress/udp/multi-diffport/udp4-multi-diffport04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffport04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffport05 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffport05";
+    src = "testcases/network/stress/udp/multi-diffport/udp4-multi-diffport05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffport05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffport06 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffport06";
+    src = "testcases/network/stress/udp/multi-diffport/udp4-multi-diffport06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffport06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-multi-diffport07 = sh_test {
+    name = "ltp_testcases_bin_udp4-multi-diffport07";
+    src = "testcases/network/stress/udp/multi-diffport/udp4-multi-diffport07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-multi-diffport07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-uni-basic01 = sh_test {
+    name = "ltp_testcases_bin_udp4-uni-basic01";
+    src = "testcases/network/stress/udp/uni-basic/udp4-uni-basic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-uni-basic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-uni-basic02 = sh_test {
+    name = "ltp_testcases_bin_udp4-uni-basic02";
+    src = "testcases/network/stress/udp/uni-basic/udp4-uni-basic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-uni-basic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-uni-basic03 = sh_test {
+    name = "ltp_testcases_bin_udp4-uni-basic03";
+    src = "testcases/network/stress/udp/uni-basic/udp4-uni-basic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-uni-basic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-uni-basic04 = sh_test {
+    name = "ltp_testcases_bin_udp4-uni-basic04";
+    src = "testcases/network/stress/udp/uni-basic/udp4-uni-basic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-uni-basic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-uni-basic05 = sh_test {
+    name = "ltp_testcases_bin_udp4-uni-basic05";
+    src = "testcases/network/stress/udp/uni-basic/udp4-uni-basic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-uni-basic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-uni-basic06 = sh_test {
+    name = "ltp_testcases_bin_udp4-uni-basic06";
+    src = "testcases/network/stress/udp/uni-basic/udp4-uni-basic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-uni-basic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp4-uni-basic07 = sh_test {
+    name = "ltp_testcases_bin_udp4-uni-basic07";
+    src = "testcases/network/stress/udp/uni-basic/udp4-uni-basic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp4-uni-basic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffip01 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffip01";
+    src = "testcases/network/stress/udp/multi-diffip/udp6-multi-diffip01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffip01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffip02 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffip02";
+    src = "testcases/network/stress/udp/multi-diffip/udp6-multi-diffip02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffip02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffip03 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffip03";
+    src = "testcases/network/stress/udp/multi-diffip/udp6-multi-diffip03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffip03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffip04 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffip04";
+    src = "testcases/network/stress/udp/multi-diffip/udp6-multi-diffip04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffip04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffip05 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffip05";
+    src = "testcases/network/stress/udp/multi-diffip/udp6-multi-diffip05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffip05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffip06 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffip06";
+    src = "testcases/network/stress/udp/multi-diffip/udp6-multi-diffip06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffip06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffip07 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffip07";
+    src = "testcases/network/stress/udp/multi-diffip/udp6-multi-diffip07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffip07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffnic01 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffnic01";
+    src = "testcases/network/stress/udp/multi-diffnic/udp6-multi-diffnic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffnic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffnic02 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffnic02";
+    src = "testcases/network/stress/udp/multi-diffnic/udp6-multi-diffnic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffnic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffnic03 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffnic03";
+    src = "testcases/network/stress/udp/multi-diffnic/udp6-multi-diffnic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffnic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffnic04 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffnic04";
+    src = "testcases/network/stress/udp/multi-diffnic/udp6-multi-diffnic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffnic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffnic05 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffnic05";
+    src = "testcases/network/stress/udp/multi-diffnic/udp6-multi-diffnic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffnic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffnic06 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffnic06";
+    src = "testcases/network/stress/udp/multi-diffnic/udp6-multi-diffnic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffnic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffnic07 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffnic07";
+    src = "testcases/network/stress/udp/multi-diffnic/udp6-multi-diffnic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffnic07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffport01 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffport01";
+    src = "testcases/network/stress/udp/multi-diffport/udp6-multi-diffport01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffport01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffport02 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffport02";
+    src = "testcases/network/stress/udp/multi-diffport/udp6-multi-diffport02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffport02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffport03 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffport03";
+    src = "testcases/network/stress/udp/multi-diffport/udp6-multi-diffport03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffport03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffport04 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffport04";
+    src = "testcases/network/stress/udp/multi-diffport/udp6-multi-diffport04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffport04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffport05 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffport05";
+    src = "testcases/network/stress/udp/multi-diffport/udp6-multi-diffport05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffport05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffport06 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffport06";
+    src = "testcases/network/stress/udp/multi-diffport/udp6-multi-diffport06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffport06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-multi-diffport07 = sh_test {
+    name = "ltp_testcases_bin_udp6-multi-diffport07";
+    src = "testcases/network/stress/udp/multi-diffport/udp6-multi-diffport07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-multi-diffport07";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-uni-basic01 = sh_test {
+    name = "ltp_testcases_bin_udp6-uni-basic01";
+    src = "testcases/network/stress/udp/uni-basic/udp6-uni-basic01";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-uni-basic01";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-uni-basic02 = sh_test {
+    name = "ltp_testcases_bin_udp6-uni-basic02";
+    src = "testcases/network/stress/udp/uni-basic/udp6-uni-basic02";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-uni-basic02";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-uni-basic03 = sh_test {
+    name = "ltp_testcases_bin_udp6-uni-basic03";
+    src = "testcases/network/stress/udp/uni-basic/udp6-uni-basic03";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-uni-basic03";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-uni-basic04 = sh_test {
+    name = "ltp_testcases_bin_udp6-uni-basic04";
+    src = "testcases/network/stress/udp/uni-basic/udp6-uni-basic04";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-uni-basic04";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-uni-basic05 = sh_test {
+    name = "ltp_testcases_bin_udp6-uni-basic05";
+    src = "testcases/network/stress/udp/uni-basic/udp6-uni-basic05";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-uni-basic05";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-uni-basic06 = sh_test {
+    name = "ltp_testcases_bin_udp6-uni-basic06";
+    src = "testcases/network/stress/udp/uni-basic/udp6-uni-basic06";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-uni-basic06";
+    compile_multilib = "both";
+};
+
+ltp_testcases_bin_udp6-uni-basic07 = sh_test {
+    name = "ltp_testcases_bin_udp6-uni-basic07";
+    src = "testcases/network/stress/udp/uni-basic/udp6-uni-basic07";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp6-uni-basic07";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_udp_ipsec.sh" = sh_test {
+    name = "ltp_testcases_bin_udp_ipsec.sh";
+    src = "testcases/network/stress/udp/udp_ipsec.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp_ipsec.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_udp_ipsec_vti.sh" = sh_test {
+    name = "ltp_testcases_bin_udp_ipsec_vti.sh";
+    src = "testcases/network/stress/udp/udp_ipsec_vti.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "udp_ipsec_vti.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_unshare01.sh" = sh_test {
+    name = "ltp_testcases_bin_unshare01.sh";
+    src = "testcases/commands/unshare/unshare01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "unshare01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_unzip01.sh" = sh_test {
+    name = "ltp_testcases_bin_unzip01.sh";
+    src = "testcases/commands/unzip/unzip01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "unzip01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_utimensat_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_utimensat_tests.sh";
+    src = "testcases/kernel/syscalls/utimensat/utimensat_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "utimensat_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vfork_freeze.sh" = sh_test {
+    name = "ltp_testcases_bin_vfork_freeze.sh";
+    src = "testcases/kernel/controllers/freezer/vfork_freeze.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vfork_freeze.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_virt_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_virt_lib.sh";
+    src = "testcases/network/virt/virt_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "virt_lib.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vlan01.sh" = sh_test {
+    name = "ltp_testcases_bin_vlan01.sh";
+    src = "testcases/network/virt/vlan01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vlan01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vlan02.sh" = sh_test {
+    name = "ltp_testcases_bin_vlan02.sh";
+    src = "testcases/network/virt/vlan02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vlan02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vlan03.sh" = sh_test {
+    name = "ltp_testcases_bin_vlan03.sh";
+    src = "testcases/network/virt/vlan03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vlan03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vma05.sh" = sh_test {
+    name = "ltp_testcases_bin_vma05.sh";
+    src = "testcases/kernel/mem/vma/vma05.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vma05.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vxlan01.sh" = sh_test {
+    name = "ltp_testcases_bin_vxlan01.sh";
+    src = "testcases/network/virt/vxlan01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vxlan01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vxlan02.sh" = sh_test {
+    name = "ltp_testcases_bin_vxlan02.sh";
+    src = "testcases/network/virt/vxlan02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vxlan02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vxlan03.sh" = sh_test {
+    name = "ltp_testcases_bin_vxlan03.sh";
+    src = "testcases/network/virt/vxlan03.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vxlan03.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_vxlan04.sh" = sh_test {
+    name = "ltp_testcases_bin_vxlan04.sh";
+    src = "testcases/network/virt/vxlan04.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "vxlan04.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_write_freezing.sh" = sh_test {
+    name = "ltp_testcases_bin_write_freezing.sh";
+    src = "testcases/kernel/controllers/freezer/write_freezing.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "write_freezing.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_xinetd_tests.sh" = sh_test {
+    name = "ltp_testcases_bin_xinetd_tests.sh";
+    src = "testcases/network/xinetd/xinetd_tests.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "xinetd_tests.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_zram01.sh" = sh_test {
+    name = "ltp_testcases_bin_zram01.sh";
+    src = "testcases/kernel/device-drivers/zram/zram01.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "zram01.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_zram02.sh" = sh_test {
+    name = "ltp_testcases_bin_zram02.sh";
+    src = "testcases/kernel/device-drivers/zram/zram02.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "zram02.sh";
+    compile_multilib = "both";
+};
+
+"ltp_testcases_bin_zram_lib.sh" = sh_test {
+    name = "ltp_testcases_bin_zram_lib.sh";
+    src = "testcases/kernel/device-drivers/zram/zram_lib.sh";
+    sub_dir = "ltp/testcases/bin";
+    filename = "zram_lib.sh";
+    compile_multilib = "both";
 };
 
 ltp_testsf_c = cc_test {
@@ -16922,7 +21996,6 @@ ltp_testsf_c = cc_test {
     stem = "testsf_c";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/tcp_cmds/sendfile/testsf_c.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/network/tcp_cmds/include"
         "include/old"
@@ -16935,10 +22008,7 @@ ltp_testsf_c6 = cc_test {
     stem = "testsf_c6";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/tcp_cmds/sendfile/testsf_c.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DINET6"
-    ];
+    cflags = ["-DINET6"];
     local_include_dirs = [
         "include/old"
         "testcases/network/tcp_cmds/include"
@@ -16951,7 +22021,6 @@ ltp_testsf_s = cc_test {
     stem = "testsf_s";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/tcp_cmds/sendfile/testsf_s.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/network/tcp_cmds/include"
         "include/old"
@@ -16964,10 +22033,7 @@ ltp_testsf_s6 = cc_test {
     stem = "testsf_s6";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/network/tcp_cmds/sendfile/testsf_s.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-DINET6"
-    ];
+    cflags = ["-DINET6"];
     local_include_dirs = [
         "include/old"
         "testcases/network/tcp_cmds/include"
@@ -16980,7 +22046,6 @@ ltp_tgkill01 = cc_test {
     stem = "tgkill01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/tgkill/tgkill01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -16990,7 +22055,6 @@ ltp_tgkill02 = cc_test {
     stem = "tgkill02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/tgkill/tgkill02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17000,7 +22064,6 @@ ltp_tgkill03 = cc_test {
     stem = "tgkill03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/tgkill/tgkill03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17010,7 +22073,6 @@ ltp_thp01 = cc_test {
     stem = "thp01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/thp/thp01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -17028,7 +22090,6 @@ ltp_thp02 = cc_test {
     stem = "thp02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/thp/thp02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -17046,7 +22107,6 @@ ltp_thp03 = cc_test {
     stem = "thp03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/thp/thp03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -17064,7 +22124,6 @@ ltp_time-schedule = cc_test {
     stem = "time-schedule";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/tool/time-schedule.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17074,7 +22133,6 @@ ltp_time01 = cc_test {
     stem = "time01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/time/time01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17084,7 +22142,6 @@ ltp_time02 = cc_test {
     stem = "time02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/time/time02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17094,7 +22151,16 @@ ltp_timed_forkbomb = cc_test {
     stem = "timed_forkbomb";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/freezer/timed_forkbomb.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_timer_create01 = cc_test {
+    name = "ltp_timer_create01";
+    stem = "timer_create01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/timer_create/timer_create01.c"];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17103,15 +22169,9 @@ ltp_timer_create02 = cc_test {
     name = "ltp_timer_create02";
     stem = "timer_create02";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/timer_create/timer_create02.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
+    srcs = ["testcases/kernel/syscalls/timer_create/timer_create02.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
@@ -17119,31 +22179,19 @@ ltp_timer_create03 = cc_test {
     name = "ltp_timer_create03";
     stem = "timer_create03";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/timer_create/timer_create03.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
+    srcs = ["testcases/kernel/syscalls/timer_create/timer_create03.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
-ltp_timer_create04 = cc_test {
-    name = "ltp_timer_create04";
-    stem = "timer_create04";
+ltp_timer_delete01 = cc_test {
+    name = "ltp_timer_delete01";
+    stem = "timer_delete01";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/timer_create/timer_create04.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
+    srcs = ["testcases/kernel/syscalls/timer_delete/timer_delete01.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
@@ -17151,31 +22199,9 @@ ltp_timer_delete02 = cc_test {
     name = "ltp_timer_delete02";
     stem = "timer_delete02";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/timer_delete/timer_delete02.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_timer_delete03 = cc_test {
-    name = "ltp_timer_delete03";
-    stem = "timer_delete03";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/timer_delete/timer_delete03.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
+    srcs = ["testcases/kernel/syscalls/timer_delete/timer_delete02.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
@@ -17184,7 +22210,6 @@ ltp_timer_getoverrun01 = cc_test {
     stem = "timer_getoverrun01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timer_getoverrun/timer_getoverrun01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17194,7 +22219,16 @@ ltp_timer_gettime01 = cc_test {
     stem = "timer_gettime01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timer_gettime/timer_gettime01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_timer_settime01 = cc_test {
+    name = "ltp_timer_settime01";
+    stem = "timer_settime01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/timer_settime/timer_settime01.c"];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17203,31 +22237,9 @@ ltp_timer_settime02 = cc_test {
     name = "ltp_timer_settime02";
     stem = "timer_settime02";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/timer_settime/timer_settime02.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
-    static_libs = ["libltp_ltp"];
-};
-
-ltp_timer_settime03 = cc_test {
-    name = "ltp_timer_settime03";
-    stem = "timer_settime03";
-    defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/kernel/timers/timer_settime/timer_settime03.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
-    local_include_dirs = [
-        "testcases/kernel/timers/include"
-        "include/old"
-    ];
+    srcs = ["testcases/kernel/syscalls/timer_settime/timer_settime02.c"];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
@@ -17236,7 +22248,6 @@ ltp_timerfd01 = cc_test {
     stem = "timerfd01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timerfd/timerfd01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17246,7 +22257,6 @@ ltp_timerfd02 = cc_test {
     stem = "timerfd02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timerfd/timerfd02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17256,7 +22266,6 @@ ltp_timerfd03 = cc_test {
     stem = "timerfd03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timerfd/timerfd03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17266,7 +22275,6 @@ ltp_timerfd_create01 = cc_test {
     stem = "timerfd_create01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timerfd/timerfd_create01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17276,7 +22284,6 @@ ltp_timerfd_gettime01 = cc_test {
     stem = "timerfd_gettime01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timerfd/timerfd_gettime01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17286,7 +22293,6 @@ ltp_timerfd_settime01 = cc_test {
     stem = "timerfd_settime01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/timerfd/timerfd_settime01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17296,7 +22302,6 @@ ltp_times01 = cc_test {
     stem = "times01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/times/times01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17306,7 +22311,6 @@ ltp_times03 = cc_test {
     stem = "times03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/times/times03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17316,7 +22320,6 @@ ltp_tkill01 = cc_test {
     stem = "tkill01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/tkill/tkill01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17326,7 +22329,6 @@ ltp_tkill02 = cc_test {
     stem = "tkill02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/tkill/tkill02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17336,7 +22338,6 @@ ltp_tomoyo_accept_test = cc_test {
     stem = "tomoyo_accept_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_accept_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17346,7 +22347,6 @@ ltp_tomoyo_file_test = cc_test {
     stem = "tomoyo_file_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_file_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17356,7 +22356,6 @@ ltp_tomoyo_filesystem_test = cc_test {
     stem = "tomoyo_filesystem_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_filesystem_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17366,7 +22365,6 @@ ltp_tomoyo_new_file_test = cc_test {
     stem = "tomoyo_new_file_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_new_file_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17376,7 +22374,6 @@ ltp_tomoyo_new_test = cc_test {
     stem = "tomoyo_new_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_new_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17386,7 +22383,6 @@ ltp_tomoyo_policy_io_test = cc_test {
     stem = "tomoyo_policy_io_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_policy_io_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17396,7 +22392,6 @@ ltp_tomoyo_policy_memory_test = cc_test {
     stem = "tomoyo_policy_memory_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_policy_memory_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17406,7 +22401,6 @@ ltp_tomoyo_rewrite_test = cc_test {
     stem = "tomoyo_rewrite_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/tomoyo/tomoyo_rewrite_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17416,7 +22410,6 @@ ltp_tpci = cc_test {
     stem = "tpci";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/pci/tpci_user/tpci.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17426,7 +22419,6 @@ ltp_trace_sched = cc_test {
     stem = "trace_sched";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/sched/tool/trace_sched.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17436,7 +22428,6 @@ ltp_trerrno = cc_test {
     stem = "trerrno";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/trerrno.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17446,7 +22437,6 @@ ltp_truncate01 = cc_test {
     stem = "truncate01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/truncate/truncate01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/truncate"
         "testcases/kernel/syscalls/utils"
@@ -17461,7 +22451,6 @@ ltp_truncate01_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/truncate/truncate01.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -17478,7 +22467,6 @@ ltp_truncate02 = cc_test {
     stem = "truncate02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/truncate/truncate02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/truncate"
         "testcases/kernel/syscalls/utils"
@@ -17493,7 +22481,6 @@ ltp_truncate02_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/truncate/truncate02.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -17510,7 +22497,6 @@ ltp_truncate03 = cc_test {
     stem = "truncate03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/truncate/truncate03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/syscalls/truncate"
         "testcases/kernel/syscalls/utils"
@@ -17525,7 +22511,6 @@ ltp_truncate03_64 = cc_test {
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/truncate/truncate03.c"];
     cflags = [
-        "-D_FORTIFY_SOURCE=2"
         "-D_FILE_OFFSET_BITS=64"
         "-DTST_USE_NEWER64_SYSCALL=1"
     ];
@@ -17542,10 +22527,7 @@ ltp_tst_brk = cc_test {
     stem = "tst_brk";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17555,10 +22537,25 @@ ltp_tst_brkm = cc_test {
     stem = "tst_brkm";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_tst_capability01 = cc_test {
+    name = "ltp_tst_capability01";
+    stem = "tst_capability01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["lib/newlib_tests/tst_capability01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_tst_capability02 = cc_test {
+    name = "ltp_tst_capability02";
+    stem = "tst_capability02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["lib/newlib_tests/tst_capability02.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17568,7 +22565,6 @@ ltp_tst_check_drivers = cc_test {
     stem = "tst_check_drivers";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_check_drivers.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17577,8 +22573,7 @@ ltp_tst_checkpoint = cc_test {
     name = "ltp_tst_checkpoint";
     stem = "tst_checkpoint";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/lib/tst_checkpoint.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    srcs = ["lib/tests/tst_checkpoint.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17588,7 +22583,6 @@ ltp_tst_checkpoint_wait_timeout = cc_test {
     stem = "tst_checkpoint_wait_timeout";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_checkpoint_wait_timeout.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17598,7 +22592,6 @@ ltp_tst_checkpoint_wake_timeout = cc_test {
     stem = "tst_checkpoint_wake_timeout";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_checkpoint_wake_timeout.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17608,7 +22601,6 @@ ltp_tst_cleanup_once = cc_test {
     stem = "tst_cleanup_once";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_cleanup_once.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17618,7 +22610,6 @@ ltp_tst_dataroot01 = cc_test {
     stem = "tst_dataroot01";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_dataroot01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17628,7 +22619,6 @@ ltp_tst_dataroot02 = cc_test {
     stem = "tst_dataroot02";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_dataroot02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17638,7 +22628,6 @@ ltp_tst_dataroot03 = cc_test {
     stem = "tst_dataroot03";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_dataroot03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17647,8 +22636,7 @@ ltp_tst_device = cc_test {
     name = "ltp_tst_device";
     stem = "tst_device";
     defaults = ["ltp_test_defaults"];
-    srcs = ["testcases/lib/tst_device.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    srcs = ["lib/tests/tst_device.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17658,10 +22646,7 @@ ltp_tst_exit = cc_test {
     stem = "tst_exit";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17671,7 +22656,6 @@ ltp_tst_expiration_timer = cc_test {
     stem = "tst_expiration_timer";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/tst_expiration_timer.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17681,7 +22665,6 @@ ltp_tst_fs_fill_hardlinks = cc_test {
     stem = "tst_fs_fill_hardlinks";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_fs_fill_hardlinks.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17691,7 +22674,6 @@ ltp_tst_fs_fill_subdirs = cc_test {
     stem = "tst_fs_fill_subdirs";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_fs_fill_subdirs.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17701,10 +22683,7 @@ ltp_tst_fs_has_free = cc_test {
     stem = "tst_fs_has_free";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17713,11 +22692,7 @@ ltp_tst_get_unused_port = cc_test {
     name = "ltp_tst_get_unused_port";
     stem = "tst_get_unused_port";
     defaults = ["ltp_test_defaults"];
-    srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    srcs = ["testcases/lib/tst_get_unused_port.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17727,7 +22702,6 @@ ltp_tst_getconf = cc_test {
     stem = "tst_getconf";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_getconf.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17737,7 +22711,6 @@ ltp_tst_kvcmp = cc_test {
     stem = "tst_kvcmp";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_kvcmp.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17747,10 +22720,7 @@ ltp_tst_ncpus = cc_test {
     stem = "tst_ncpus";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17760,10 +22730,7 @@ ltp_tst_ncpus_conf = cc_test {
     stem = "tst_ncpus_conf";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17773,10 +22740,7 @@ ltp_tst_ncpus_max = cc_test {
     stem = "tst_ncpus_max";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17786,7 +22750,6 @@ ltp_tst_net_iface_prefix = cc_test {
     stem = "tst_net_iface_prefix";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_net_iface_prefix.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17796,7 +22759,6 @@ ltp_tst_net_ip_prefix = cc_test {
     stem = "tst_net_ip_prefix";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_net_ip_prefix.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17806,7 +22768,6 @@ ltp_tst_net_vars = cc_test {
     stem = "tst_net_vars";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_net_vars.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17816,7 +22777,6 @@ ltp_tst_process_state = cc_test {
     stem = "tst_process_state";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_process_state.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17826,7 +22786,6 @@ ltp_tst_random = cc_test {
     stem = "tst_random";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_random.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17836,7 +22795,6 @@ ltp_tst_record_childstatus = cc_test {
     stem = "tst_record_childstatus";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_record_childstatus.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17846,10 +22804,7 @@ ltp_tst_res = cc_test {
     stem = "tst_res";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17859,7 +22814,6 @@ ltp_tst_res_hexd = cc_test {
     stem = "tst_res_hexd";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/tst_res_hexd.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17869,10 +22823,7 @@ ltp_tst_resm = cc_test {
     stem = "tst_resm";
     defaults = ["ltp_test_defaults"];
     srcs = ["tools/apicmds/ltpapicmd.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17882,7 +22833,6 @@ ltp_tst_rod = cc_test {
     stem = "tst_rod";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_rod.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17892,7 +22842,6 @@ ltp_tst_safe_fileops = cc_test {
     stem = "tst_safe_fileops";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/tst_safe_fileops.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17902,7 +22851,6 @@ ltp_tst_safe_macros = cc_test {
     stem = "tst_safe_macros";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_safe_macros.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17912,7 +22860,6 @@ ltp_tst_sleep = cc_test {
     stem = "tst_sleep";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_sleep.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17922,7 +22869,6 @@ ltp_tst_strerrno = cc_test {
     stem = "tst_strerrno";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_strerrno.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17932,7 +22878,6 @@ ltp_tst_strsig = cc_test {
     stem = "tst_strsig";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_strsig.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17942,7 +22887,6 @@ ltp_tst_strstatus = cc_test {
     stem = "tst_strstatus";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/newlib_tests/tst_strstatus.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17952,7 +22896,6 @@ ltp_tst_supported_fs = cc_test {
     stem = "tst_supported_fs";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/lib/tst_supported_fs.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17962,7 +22905,6 @@ ltp_tst_tmpdir_test = cc_test {
     stem = "tst_tmpdir_test";
     defaults = ["ltp_test_defaults"];
     srcs = ["lib/tests/tst_tmpdir_test.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17972,9 +22914,38 @@ ltp_uaccess = cc_test {
     stem = "uaccess";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/uaccess/uaccess.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
+};
+
+ltp_uevent01 = cc_test {
+    name = "ltp_uevent01";
+    stem = "uevent01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/uevents/uevent01.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_uevent02 = cc_test {
+    name = "ltp_uevent02";
+    stem = "uevent02";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/uevents/uevent02.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_uevent03 = cc_test {
+    name = "ltp_uevent03";
+    stem = "uevent03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/uevents/uevent03.c"];
+    local_include_dirs = ["include/old"];
+    static_libs = [
+        "libltp_ltp"
+        "libltp_ltpuinput"
+    ];
 };
 
 ltp_umask01 = cc_test {
@@ -17982,7 +22953,15 @@ ltp_umask01 = cc_test {
     stem = "umask01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/umask/umask01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_umip_basic_test = cc_test {
+    name = "ltp_umip_basic_test";
+    stem = "umip_basic_test";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/security/umip/umip_basic_test.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -17992,7 +22971,6 @@ ltp_umount01 = cc_test {
     stem = "umount01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/umount/umount01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18002,7 +22980,6 @@ ltp_umount02 = cc_test {
     stem = "umount02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/umount/umount02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18012,7 +22989,6 @@ ltp_umount03 = cc_test {
     stem = "umount03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/umount/umount03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18022,7 +22998,6 @@ ltp_umount2_01 = cc_test {
     stem = "umount2_01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/umount2/umount2_01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18032,7 +23007,6 @@ ltp_umount2_02 = cc_test {
     stem = "umount2_02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/umount2/umount2_02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18042,7 +23016,6 @@ ltp_umount2_03 = cc_test {
     stem = "umount2_03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/umount2/umount2_03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18052,7 +23025,6 @@ ltp_uname01 = cc_test {
     stem = "uname01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/uname/uname01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18062,7 +23034,6 @@ ltp_uname02 = cc_test {
     stem = "uname02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/uname/uname02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18072,7 +23043,6 @@ ltp_uname03 = cc_test {
     stem = "uname03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/uname/uname03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18082,10 +23052,7 @@ ltp_uname04 = cc_test {
     stem = "uname04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/uname/uname04.c"];
-    cflags = [
-        "-D_GNU_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18095,7 +23062,6 @@ ltp_unlink05 = cc_test {
     stem = "unlink05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/unlink/unlink05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18105,7 +23071,6 @@ ltp_unlink07 = cc_test {
     stem = "unlink07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/unlink/unlink07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18115,7 +23080,6 @@ ltp_unlink08 = cc_test {
     stem = "unlink08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/unlink/unlink08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18125,7 +23089,6 @@ ltp_unlinkat01 = cc_test {
     stem = "unlinkat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/unlinkat/unlinkat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18135,7 +23098,6 @@ ltp_unshare01 = cc_test {
     stem = "unshare01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/unshare/unshare01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18145,7 +23107,15 @@ ltp_unshare02 = cc_test {
     stem = "unshare02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/unshare/unshare02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_userfaultfd01 = cc_test {
+    name = "ltp_userfaultfd01";
+    stem = "userfaultfd01";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/userfaultfd/userfaultfd01.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18155,7 +23125,6 @@ ltp_ustat01 = cc_test {
     stem = "ustat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ustat/ustat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18165,7 +23134,6 @@ ltp_ustat02 = cc_test {
     stem = "ustat02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/ustat/ustat02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18175,7 +23143,6 @@ ltp_utime01 = cc_test {
     stem = "utime01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utime/utime01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18185,7 +23152,6 @@ ltp_utime02 = cc_test {
     stem = "utime02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utime/utime02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18195,7 +23161,6 @@ ltp_utime03 = cc_test {
     stem = "utime03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utime/utime03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18205,7 +23170,6 @@ ltp_utime04 = cc_test {
     stem = "utime04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utime/utime04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18215,7 +23179,6 @@ ltp_utime05 = cc_test {
     stem = "utime05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utime/utime05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18225,7 +23188,6 @@ ltp_utime06 = cc_test {
     stem = "utime06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utime/utime06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18235,7 +23197,6 @@ ltp_utimensat01 = cc_test {
     stem = "utimensat01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utimensat/utimensat01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18245,7 +23206,15 @@ ltp_utimes01 = cc_test {
     stem = "utimes01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/utimes/utimes01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_variant = cc_test {
+    name = "ltp_variant";
+    stem = "variant";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["lib/newlib_tests/variant.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18255,10 +23224,7 @@ ltp_verify_caps_exec = cc_test {
     stem = "verify_caps_exec";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/security/filecaps/verify_caps_exec.c"];
-    cflags = [
-        "-D_FORTIFY_SOURCE=2"
-        "-D_GNU_SOURCE"
-    ];
+    cflags = ["-D_GNU_SOURCE"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18268,7 +23234,6 @@ ltp_vfork = cc_test {
     stem = "vfork";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/controllers/freezer/vfork.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18278,7 +23243,6 @@ ltp_vfork01 = cc_test {
     stem = "vfork01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/vfork/vfork01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18288,7 +23252,6 @@ ltp_vfork02 = cc_test {
     stem = "vfork02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/vfork/vfork02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18298,7 +23261,6 @@ ltp_vhangup01 = cc_test {
     stem = "vhangup01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/vhangup/vhangup01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18308,7 +23270,6 @@ ltp_vhangup02 = cc_test {
     stem = "vhangup02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/vhangup/vhangup02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18318,7 +23279,6 @@ ltp_vma01 = cc_test {
     stem = "vma01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/vma/vma01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -18336,7 +23296,6 @@ ltp_vma02 = cc_test {
     stem = "vma02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/vma/vma02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -18354,7 +23313,6 @@ ltp_vma03 = cc_test {
     stem = "vma03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/vma/vma03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -18372,7 +23330,6 @@ ltp_vma04 = cc_test {
     stem = "vma04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/vma/vma04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -18390,7 +23347,6 @@ ltp_vma05_vdso = cc_test {
     stem = "vma05_vdso";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/mem/vma/vma05_vdso.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = [
         "testcases/kernel/mem/include"
         "testcases/kernel/include"
@@ -18408,7 +23364,6 @@ ltp_vmsplice01 = cc_test {
     stem = "vmsplice01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/vmsplice/vmsplice01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18418,7 +23373,15 @@ ltp_vmsplice02 = cc_test {
     stem = "vmsplice02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/vmsplice/vmsplice02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
+    local_include_dirs = ["include/old"];
+    static_libs = ["libltp_ltp"];
+};
+
+ltp_vmsplice03 = cc_test {
+    name = "ltp_vmsplice03";
+    stem = "vmsplice03";
+    defaults = ["ltp_test_defaults"];
+    srcs = ["testcases/kernel/syscalls/vmsplice/vmsplice03.c"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18428,7 +23391,6 @@ ltp_wait01 = cc_test {
     stem = "wait01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/wait/wait01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18438,7 +23400,6 @@ ltp_wait02 = cc_test {
     stem = "wait02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/wait/wait02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18448,7 +23409,6 @@ ltp_wait401 = cc_test {
     stem = "wait401";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/wait4/wait401.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18458,7 +23418,6 @@ ltp_wait402 = cc_test {
     stem = "wait402";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/wait4/wait402.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18468,7 +23427,6 @@ ltp_waitid01 = cc_test {
     stem = "waitid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitid/waitid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18478,7 +23436,6 @@ ltp_waitid02 = cc_test {
     stem = "waitid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitid/waitid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18488,7 +23445,6 @@ ltp_waitpid01 = cc_test {
     stem = "waitpid01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18498,7 +23454,6 @@ ltp_waitpid02 = cc_test {
     stem = "waitpid02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18508,7 +23463,6 @@ ltp_waitpid03 = cc_test {
     stem = "waitpid03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18518,7 +23472,6 @@ ltp_waitpid04 = cc_test {
     stem = "waitpid04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18528,7 +23481,6 @@ ltp_waitpid05 = cc_test {
     stem = "waitpid05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18538,7 +23490,6 @@ ltp_waitpid06 = cc_test {
     stem = "waitpid06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18548,7 +23499,6 @@ ltp_waitpid07 = cc_test {
     stem = "waitpid07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18558,7 +23508,6 @@ ltp_waitpid08 = cc_test {
     stem = "waitpid08";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid08.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18568,7 +23517,6 @@ ltp_waitpid09 = cc_test {
     stem = "waitpid09";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid09.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18578,7 +23526,6 @@ ltp_waitpid10 = cc_test {
     stem = "waitpid10";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid10.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18588,7 +23535,6 @@ ltp_waitpid11 = cc_test {
     stem = "waitpid11";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid11.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18598,7 +23544,6 @@ ltp_waitpid12 = cc_test {
     stem = "waitpid12";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid12.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18608,7 +23553,6 @@ ltp_waitpid13 = cc_test {
     stem = "waitpid13";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/waitpid/waitpid13.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18618,7 +23562,6 @@ ltp_write01 = cc_test {
     stem = "write01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/write/write01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18628,7 +23571,6 @@ ltp_write02 = cc_test {
     stem = "write02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/write/write02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18638,7 +23580,6 @@ ltp_write03 = cc_test {
     stem = "write03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/write/write03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18648,7 +23589,6 @@ ltp_write04 = cc_test {
     stem = "write04";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/write/write04.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18658,7 +23598,6 @@ ltp_write05 = cc_test {
     stem = "write05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/write/write05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18671,7 +23610,6 @@ ltp_writetest = cc_test {
     cflags = [
         "-D_LARGEFILE_SOURCE"
         "-D_LARGEFILE64_SOURCE"
-        "-D_FORTIFY_SOURCE=2"
     ];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
@@ -18682,7 +23620,6 @@ ltp_writev01 = cc_test {
     stem = "writev01";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/writev/writev01.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18692,7 +23629,6 @@ ltp_writev02 = cc_test {
     stem = "writev02";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/writev/writev02.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18702,7 +23638,6 @@ ltp_writev05 = cc_test {
     stem = "writev05";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/writev/writev05.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18712,7 +23647,6 @@ ltp_writev06 = cc_test {
     stem = "writev06";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/writev/writev06.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18722,7 +23656,6 @@ ltp_writev07 = cc_test {
     stem = "writev07";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/syscalls/writev/writev07.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
@@ -18732,9 +23665,8 @@ ltp_zram03 = cc_test {
     stem = "zram03";
     defaults = ["ltp_test_defaults"];
     srcs = ["testcases/kernel/device-drivers/zram/zram03.c"];
-    cflags = ["-D_FORTIFY_SOURCE=2"];
     local_include_dirs = ["include/old"];
     static_libs = ["libltp_ltp"];
 };
 
-in { inherit libltp_controllers libltp_cpu_set libltp_hugetlb libltp_ipc libltp_kerntest libltp_ltp libltp_mem ltp_abort01 ltp_abs01 ltp_accept01 ltp_accept4_01 ltp_access01 ltp_access02 ltp_access03 ltp_access04 ltp_acct01 ltp_acl1 ltp_add_key01 ltp_add_key02 ltp_add_key03 ltp_add_key04 ltp_adjtimex01 ltp_adjtimex02 ltp_aio-stress ltp_aio01 ltp_aio02 ltp_aiocp ltp_aiodio_append ltp_aiodio_sparse ltp_alarm02 ltp_alarm03 ltp_alarm05 ltp_alarm06 ltp_alarm07 ltp_asapi_01 ltp_asapi_02 ltp_asapi_03 ltp_asyncio02 ltp_atof01 ltp_autogroup01 ltp_bdflush01 ltp_bind01 ltp_bind02 ltp_bind03 ltp_block_dev ltp_brk01 ltp_cacheflush01 ltp_can_filter ltp_can_rcv_own_msgs ltp_cap_bounds_r ltp_cap_bounds_rw ltp_cap_bset_inh_bounds ltp_capget01 ltp_capget02 ltp_capset01 ltp_capset02 ltp_cgroup_fj_proc ltp_cgroup_regression_6_2 ltp_cgroup_regression_fork_processes ltp_cgroup_regression_getdelays ltp_cgroup_xattr ltp_chdir01 ltp_chdir02 ltp_chdir03 ltp_chdir04 ltp_check_keepcaps ltp_check_pe ltp_check_simple_capset ltp_chmod01 ltp_chmod02 ltp_chmod03 ltp_chmod04 ltp_chmod05 ltp_chmod07 ltp_chown01 ltp_chown01_16 ltp_chown02 ltp_chown02_16 ltp_chown03 ltp_chown03_16 ltp_chown05 ltp_chown05_16 ltp_chroot01 ltp_chroot02 ltp_chroot03 ltp_chroot04 ltp_clock_getres01 ltp_clock_gettime02 ltp_clock_gettime03 ltp_clock_nanosleep01 ltp_clock_nanosleep02 ltp_clock_nanosleep2_01 ltp_clock_settime02 ltp_clock_settime03 ltp_clone01 ltp_clone02 ltp_clone03 ltp_clone04 ltp_clone05 ltp_clone06 ltp_clone07 ltp_clone08 ltp_clone09 ltp_close01 ltp_close02 ltp_close08 ltp_connect01 ltp_copy_file_range01 ltp_cpuacct_task ltp_cpuctl_def_task01 ltp_cpuctl_def_task02 ltp_cpuctl_def_task03 ltp_cpuctl_def_task04 ltp_cpuctl_fj_cpu-hog ltp_cpuctl_fj_simple_echo ltp_cpuctl_latency_check_task ltp_cpuctl_latency_test ltp_cpuctl_test01 ltp_cpuctl_test02 ltp_cpuctl_test03 ltp_cpuctl_test04 ltp_cpufreq_boost ltp_cpuset01 ltp_cpuset_cpu_hog ltp_cpuset_list_compute ltp_cpuset_mem_hog ltp_cpuset_memory_pressure ltp_cpuset_sched_domains_check ltp_cpuset_syscall_test ltp_crash01 ltp_crash02 ltp_creat01 ltp_creat03 ltp_creat04 ltp_creat05 ltp_creat07 ltp_creat07_child ltp_creat08 ltp_create-files ltp_create_datafile ltp_create_long_dirs ltp_create_short_dirs ltp_crypto_user01 ltp_cve-2014-0196 ltp_cve-2015-3290 ltp_cve-2016-10044 ltp_cve-2016-7042 ltp_cve-2016-7117 ltp_cve-2017-16939 ltp_cve-2017-17052 ltp_cve-2017-17053 ltp_cve-2017-2618 ltp_cve-2017-2671 ltp_data_space ltp_delete_module01 ltp_delete_module02 ltp_delete_module03 ltp_dio_append ltp_dio_sparse ltp_dio_truncate ltp_diotest1 ltp_diotest2 ltp_diotest3 ltp_diotest5 ltp_diotest6 ltp_dirty ltp_dirtyc0w ltp_dirtyc0w_child ltp_disktest ltp_dma_thread_diotest ltp_dup01 ltp_dup02 ltp_dup03 ltp_dup04 ltp_dup05 ltp_dup06 ltp_dup07 ltp_dup201 ltp_dup202 ltp_dup203 ltp_dup204 ltp_dup205 ltp_dup3_01 ltp_dup3_02 ltp_eas_big_to_small ltp_eas_one_big_task ltp_eas_one_small_task ltp_eas_small_big_toggle ltp_eas_small_to_big ltp_eas_two_big_three_small ltp_endian_switch01 ltp_epoll-ltp ltp_epoll_create1_01 ltp_epoll_ctl01 ltp_epoll_ctl02 ltp_epoll_pwait01 ltp_epoll_wait01 ltp_epoll_wait02 ltp_epoll_wait03 ltp_event_generator ltp_eventfd01 ltp_eventfd2_01 ltp_eventfd2_02 ltp_eventfd2_03 ltp_exec_with_inh ltp_exec_without_inh ltp_execl01 ltp_execl01_child ltp_execle01 ltp_execle01_child ltp_execlp01 ltp_execlp01_child ltp_execv01 ltp_execv01_child ltp_execve01 ltp_execve01_child ltp_execve02 ltp_execve03 ltp_execve04 ltp_execve05 ltp_execve_child ltp_execveat01 ltp_execveat02 ltp_execveat03 ltp_execveat_child ltp_execveat_errno ltp_execvp01 ltp_execvp01_child ltp_exit01 ltp_exit02 ltp_exit_group01 ltp_ext4_file_time ltp_ext4_test_inode_version ltp_f1 ltp_f2 ltp_f3 ltp_faccessat01 ltp_fallocate01 ltp_fallocate02 ltp_fallocate03 ltp_fallocate04 ltp_fallocate05 ltp_fanotify01 ltp_fanotify02 ltp_fanotify03 ltp_fanotify04 ltp_fanotify05 ltp_fanotify06 ltp_fanotify07 ltp_fanotify08 ltp_fanotify09 ltp_fanotify10 ltp_fanotify11 ltp_fanout01 ltp_fchdir01 ltp_fchdir02 ltp_fchdir03 ltp_fchmod01 ltp_fchmod02 ltp_fchmod03 ltp_fchmod04 ltp_fchmod05 ltp_fchmod06 ltp_fchmodat01 ltp_fchown01 ltp_fchown01_16 ltp_fchown02 ltp_fchown02_16 ltp_fchown03 ltp_fchown03_16 ltp_fchown04 ltp_fchown04_16 ltp_fchown05 ltp_fchown05_16 ltp_fchownat01 ltp_fchownat02 ltp_fcntl01 ltp_fcntl01_64 ltp_fcntl02 ltp_fcntl02_64 ltp_fcntl03 ltp_fcntl03_64 ltp_fcntl04 ltp_fcntl04_64 ltp_fcntl05 ltp_fcntl05_64 ltp_fcntl06 ltp_fcntl06_64 ltp_fcntl07 ltp_fcntl07_64 ltp_fcntl08 ltp_fcntl08_64 ltp_fcntl09 ltp_fcntl09_64 ltp_fcntl10 ltp_fcntl10_64 ltp_fcntl11 ltp_fcntl11_64 ltp_fcntl12 ltp_fcntl12_64 ltp_fcntl13 ltp_fcntl13_64 ltp_fcntl14 ltp_fcntl14_64 ltp_fcntl15 ltp_fcntl15_64 ltp_fcntl16 ltp_fcntl16_64 ltp_fcntl17 ltp_fcntl17_64 ltp_fcntl18 ltp_fcntl18_64 ltp_fcntl19 ltp_fcntl19_64 ltp_fcntl20 ltp_fcntl20_64 ltp_fcntl21 ltp_fcntl21_64 ltp_fcntl22 ltp_fcntl22_64 ltp_fcntl23 ltp_fcntl23_64 ltp_fcntl24 ltp_fcntl24_64 ltp_fcntl25 ltp_fcntl25_64 ltp_fcntl26 ltp_fcntl26_64 ltp_fcntl27 ltp_fcntl27_64 ltp_fcntl28 ltp_fcntl28_64 ltp_fcntl29 ltp_fcntl29_64 ltp_fcntl30 ltp_fcntl30_64 ltp_fcntl31 ltp_fcntl31_64 ltp_fcntl32 ltp_fcntl32_64 ltp_fcntl33 ltp_fcntl33_64 ltp_fcntl34 ltp_fcntl34_64 ltp_fcntl35 ltp_fcntl35_64 ltp_fcntl36 ltp_fcntl36_64 ltp_fdatasync01 ltp_fdatasync02 ltp_fgetxattr01 ltp_fgetxattr02 ltp_fgetxattr03 ltp_flistxattr01 ltp_flistxattr02 ltp_flistxattr03 ltp_float_bessel ltp_float_exp_log ltp_float_iperb ltp_float_power ltp_float_trigo ltp_flock01 ltp_flock02 ltp_flock03 ltp_flock04 ltp_flock06 ltp_fork01 ltp_fork02 ltp_fork03 ltp_fork04 ltp_fork05 ltp_fork06 ltp_fork07 ltp_fork08 ltp_fork09 ltp_fork10 ltp_fork11 ltp_fork12 ltp_fork13 ltp_fork14 ltp_fork_exec_loop ltp_fpathconf01 ltp_fptest01 ltp_fptest02 ltp_frag ltp_fremovexattr01 ltp_fremovexattr02 ltp_fs_fill ltp_fs_perms ltp_fsetxattr01 ltp_fsetxattr02 ltp_fstat01 ltp_fstat01_64 ltp_fstat02 ltp_fstat02_64 ltp_fstat03 ltp_fstat03_64 ltp_fstat05 ltp_fstat05_64 ltp_fstatat01 ltp_fstatfs01 ltp_fstatfs01_64 ltp_fstatfs02 ltp_fstatfs02_64 ltp_fsx-linux ltp_fsync01 ltp_fsync02 ltp_fsync03 ltp_ftest01 ltp_ftest02 ltp_ftest03 ltp_ftest04 ltp_ftest05 ltp_ftest06 ltp_ftest07 ltp_ftest08 ltp_ftruncate01 ltp_ftruncate01_64 ltp_ftruncate02 ltp_ftruncate02_64 ltp_ftruncate03 ltp_ftruncate03_64 ltp_ftruncate04 ltp_ftruncate04_64 ltp_futex_wait01 ltp_futex_wait03 ltp_futex_wait04 ltp_futex_wait05 ltp_futex_wait_bitset01 ltp_futex_wait_bitset02 ltp_futex_wake01 ltp_futex_wake02 ltp_futex_wake04 ltp_futimesat01 ltp_fw_load ltp_genacos ltp_genasin ltp_genatan ltp_genatan2 ltp_genbessel ltp_genceil ltp_gencos ltp_gencosh ltp_genexp ltp_genexp_log ltp_genfabs ltp_genfloor ltp_genfmod ltp_genfrexp ltp_genhypot ltp_geniperb ltp_genj0 ltp_genj1 ltp_genldexp ltp_genlgamma ltp_genlog ltp_genlog10 ltp_genmodf ltp_genpow ltp_genpower ltp_gensin ltp_gensinh ltp_gensqrt ltp_gentan ltp_gentanh ltp_gentrigo ltp_geny0 ltp_geny1 ltp_get_mempolicy01 ltp_get_robust_list01 ltp_getaddrinfo_01 ltp_getcpu01 ltp_getcwd01 ltp_getcwd02 ltp_getcwd03 ltp_getcwd04 ltp_getdents01 ltp_getdents02 ltp_getdomainname01 ltp_getdtablesize01 ltp_getegid01 ltp_getegid01_16 ltp_getegid02 ltp_getegid02_16 ltp_geteuid01 ltp_geteuid01_16 ltp_geteuid02 ltp_geteuid02_16 ltp_getgid01 ltp_getgid01_16 ltp_getgid03 ltp_getgid03_16 ltp_getgroups01 ltp_getgroups01_16 ltp_getgroups03 ltp_getgroups03_16 ltp_gethostbyname_r01 ltp_gethostname01 ltp_getitimer01 ltp_getitimer02 ltp_getitimer03 ltp_getpagesize01 ltp_getpeername01 ltp_getpgid01 ltp_getpgid02 ltp_getpgrp01 ltp_getpid01 ltp_getpid02 ltp_getppid01 ltp_getppid02 ltp_getpriority01 ltp_getpriority02 ltp_getrandom01 ltp_getrandom02 ltp_getrandom03 ltp_getrandom04 ltp_getresgid01 ltp_getresgid01_16 ltp_getresgid02 ltp_getresgid02_16 ltp_getresgid03 ltp_getresgid03_16 ltp_getresuid01 ltp_getresuid01_16 ltp_getresuid02 ltp_getresuid02_16 ltp_getresuid03 ltp_getresuid03_16 ltp_getrlimit01 ltp_getrlimit02 ltp_getrlimit03 ltp_getrusage01 ltp_getrusage02 ltp_getrusage03_child ltp_getrusage04 ltp_getsid01 ltp_getsid02 ltp_getsockname01 ltp_getsockopt01 ltp_getsockopt02 ltp_gettid01 ltp_gettimeofday01 ltp_gettimeofday02 ltp_getuid01 ltp_getuid01_16 ltp_getuid03 ltp_getuid03_16 ltp_getxattr01 ltp_getxattr02 ltp_getxattr03 ltp_getxattr04 ltp_getxattr05 ltp_hackbench ltp_hangup01 ltp_ht_affinity ltp_ht_enabled ltp_hugemmap01 ltp_hugemmap02 ltp_hugemmap04 ltp_hugemmap06 ltp_ima_boot_aggregate ltp_ima_mmap ltp_in ltp_in6_02 ltp_inh_capped ltp_inode01 ltp_inode02 ltp_inotify01 ltp_inotify02 ltp_inotify03 ltp_inotify04 ltp_inotify05 ltp_inotify06 ltp_inotify07 ltp_inotify08 ltp_inotify09 ltp_inotify_init1_01 ltp_inotify_init1_02 ltp_input01 ltp_input02 ltp_input04 ltp_input05 ltp_input06 ltp_io_cancel01 ltp_io_destroy01 ltp_io_getevents01 ltp_io_setup01 ltp_io_submit01 ltp_iobw ltp_ioctl01 ltp_ioctl03 ltp_ioctl04 ltp_ioctl05 ltp_ioctl06 ltp_ioctl07 ltp_iogen ltp_ioperm01 ltp_ioperm02 ltp_iopl01 ltp_iopl02 ltp_kcmp01 ltp_kcmp02 ltp_kcmp03 ltp_keyctl01 ltp_keyctl02 ltp_keyctl03 ltp_keyctl04 ltp_keyctl05 ltp_keyctl06 ltp_keyctl07 ltp_keyctl08 ltp_kill01 ltp_kill02 ltp_kill03 ltp_kill04 ltp_kill06 ltp_kill08 ltp_kill09 ltp_kill10 ltp_kill11 ltp_kill12 ltp_kmsg01 ltp_ksm01 ltp_ksm02 ltp_ksm03 ltp_ksm04 ltp_ksm05 ltp_ksm06 ltp_lchown01 ltp_lchown01_16 ltp_lchown02 ltp_lchown02_16 ltp_lchown03 ltp_lchown03_16 ltp_lftest ltp_lgetxattr01 ltp_lgetxattr02 ltp_link02 ltp_link03 ltp_link04 ltp_link05 ltp_link06 ltp_link07 ltp_link08 ltp_linkat01 ltp_linkat02 ltp_listen01 ltp_listxattr01 ltp_listxattr02 ltp_listxattr03 ltp_llistxattr01 ltp_llistxattr02 ltp_llistxattr03 ltp_llseek01 ltp_llseek02 ltp_llseek03 ltp_locktests ltp_lremovexattr01 ltp_lseek01 ltp_lseek02 ltp_lseek07 ltp_lseek11 ltp_lstat01 ltp_lstat01_64 ltp_lstat02 ltp_lstat02_64 ltp_lstat03 ltp_lstat03_64 ltp_ltp-diorh ltp_ltpClient ltp_ltpServer ltp_ltp_acpi ltp_madvise01 ltp_madvise02 ltp_madvise05 ltp_madvise06 ltp_madvise07 ltp_madvise08 ltp_madvise09 ltp_madvise10 ltp_max_map_count ltp_mbind01 ltp_mc_member_test ltp_mc_recv ltp_mc_send ltp_mc_verify_opts ltp_mc_verify_opts_error ltp_meltdown ltp_mem01 ltp_mem02 ltp_mem03 ltp_mem_process ltp_membarrier01 ltp_memcg_process_stress ltp_memcg_test_1 ltp_memcg_test_2 ltp_memcg_test_3 ltp_memcg_test_4 ltp_memcmp01 ltp_memcpy01 ltp_memctl_test01 ltp_memfd_create01 ltp_memfd_create02 ltp_memfd_create03 ltp_memfd_create04 ltp_memset01 ltp_memtoy ltp_migrate_pages01 ltp_migrate_pages02 ltp_migrate_pages03 ltp_mincore01 ltp_mincore02 ltp_mkdir02 ltp_mkdir03 ltp_mkdir04 ltp_mkdir05 ltp_mkdir09 ltp_mkdirat01 ltp_mkdirat02 ltp_mknod01 ltp_mknod02 ltp_mknod03 ltp_mknod04 ltp_mknod05 ltp_mknod06 ltp_mknod07 ltp_mknod08 ltp_mknod09 ltp_mknodat01 ltp_mknodat02 ltp_mlock01 ltp_mlock02 ltp_mlock03 ltp_mlock04 ltp_mlock201 ltp_mlock202 ltp_mlock203 ltp_mlockall01 ltp_mlockall02 ltp_mlockall03 ltp_mmap-corruption01 ltp_mmap001 ltp_mmap01 ltp_mmap02 ltp_mmap03 ltp_mmap04 ltp_mmap05 ltp_mmap06 ltp_mmap07 ltp_mmap08 ltp_mmap09 ltp_mmap1 ltp_mmap10 ltp_mmap11 ltp_mmap12 ltp_mmap13 ltp_mmap14 ltp_mmap15 ltp_mmap16 ltp_mmap2 ltp_mmap3 ltp_mmapstress01 ltp_mmapstress02 ltp_mmapstress03 ltp_mmapstress04 ltp_mmapstress05 ltp_mmapstress06 ltp_mmapstress07 ltp_mmapstress08 ltp_mmapstress09 ltp_mmapstress10 ltp_mmstress ltp_mmstress_dummy ltp_modify_ldt01 ltp_modify_ldt02 ltp_modify_ldt03 ltp_mount01 ltp_mount02 ltp_mount03 ltp_mount03_setuid_test ltp_mount04 ltp_mount05 ltp_mount06 ltp_move_pages01 ltp_move_pages02 ltp_move_pages03 ltp_move_pages04 ltp_move_pages05 ltp_move_pages06 ltp_move_pages07 ltp_move_pages08 ltp_move_pages09 ltp_move_pages10 ltp_move_pages11 ltp_move_pages12 ltp_mprotect01 ltp_mprotect02 ltp_mprotect03 ltp_mprotect04 ltp_mremap01 ltp_mremap02 ltp_mremap03 ltp_mremap05 ltp_msync01 ltp_msync02 ltp_msync03 ltp_msync04 ltp_mtest01 ltp_munlock01 ltp_munlock02 ltp_munlockall01 ltp_munmap01 ltp_munmap02 ltp_munmap03 ltp_nanosleep01 ltp_nanosleep02 ltp_nanosleep03 ltp_nanosleep04 ltp_netstress ltp_newns ltp_newuname01 ltp_nextafter01 ltp_nfs01_open_files ltp_nfs04_create_file ltp_nfs05_make_tree ltp_nfs_flock ltp_nfs_flock_dgen ltp_nftw01 ltp_nftw6401 ltp_nice01 ltp_nice02 ltp_nice03 ltp_nice04 ltp_nptl01 ltp_ns-icmp_redirector ltp_ns-icmpv4_sender ltp_ns-icmpv6_sender ltp_ns-igmp_querier ltp_ns-mcast_join ltp_ns-mcast_receiver ltp_ns-tcpclient ltp_ns-tcpserver ltp_ns-udpclient ltp_ns-udpsender ltp_ns-udpserver ltp_nsclone ltp_oom01 ltp_oom02 ltp_oom03 ltp_oom04 ltp_oom05 ltp_open01 ltp_open02 ltp_open03 ltp_open04 ltp_open05 ltp_open06 ltp_open07 ltp_open08 ltp_open09 ltp_open10 ltp_open11 ltp_open12_child ltp_open13 ltp_open14 ltp_openat01 ltp_openat02_child ltp_openat03 ltp_openfile ltp_overcommit_memory ltp_page01 ltp_page02 ltp_pathconf01 ltp_pause01 ltp_pause02 ltp_pause03 ltp_pcrypt_aead01 ltp_pec_listener ltp_perf_event_open01 ltp_perf_event_open02 ltp_personality01 ltp_personality02 ltp_pids_task1 ltp_pids_task2 ltp_pipe01 ltp_pipe02 ltp_pipe03 ltp_pipe04 ltp_pipe05 ltp_pipe06 ltp_pipe07 ltp_pipe08 ltp_pipe09 ltp_pipe10 ltp_pipe11 ltp_pipe2_01 ltp_pipe2_02 ltp_pivot_root01 ltp_pm_get_sched_values ltp_poll01 ltp_poll02 ltp_posix_fadvise01 ltp_posix_fadvise01_64 ltp_posix_fadvise02 ltp_posix_fadvise02_64 ltp_posix_fadvise03 ltp_posix_fadvise03_64 ltp_posix_fadvise04 ltp_posix_fadvise04_64 ltp_ppoll01 ltp_prctl01 ltp_prctl02 ltp_prctl03 ltp_pread01 ltp_pread01_64 ltp_pread02 ltp_pread02_64 ltp_pread03 ltp_pread03_64 ltp_preadv01 ltp_preadv01_64 ltp_preadv02 ltp_preadv02_64 ltp_preadv03 ltp_preadv03_64 ltp_preadv201 ltp_preadv201_64 ltp_preadv202 ltp_preadv202_64 ltp_print_caps ltp_proc01 ltp_process_vm01 ltp_process_vm_readv02 ltp_process_vm_readv03 ltp_process_vm_writev02 ltp_pselect01 ltp_pselect01_64 ltp_pselect02 ltp_pselect02_64 ltp_pselect03 ltp_pselect03_64 ltp_pt_test ltp_ptem01 ltp_pth_str01 ltp_pth_str02 ltp_pth_str03 ltp_pthcli ltp_pthserv ltp_ptrace01 ltp_ptrace02 ltp_ptrace03 ltp_ptrace04 ltp_ptrace05 ltp_ptrace07 ltp_pty01 ltp_pty02 ltp_pwrite01 ltp_pwrite01_64 ltp_pwrite02 ltp_pwrite02_64 ltp_pwrite03 ltp_pwrite03_64 ltp_pwrite04 ltp_pwrite04_64 ltp_pwritev01 ltp_pwritev01_64 ltp_pwritev02 ltp_pwritev02_64 ltp_pwritev03 ltp_pwritev03_64 ltp_pwritev201 ltp_pwritev201_64 ltp_pwritev202 ltp_pwritev202_64 ltp_quotactl01 ltp_quotactl02 ltp_quotactl03 ltp_random-access ltp_random-access-del-create ltp_read01 ltp_read02 ltp_read03 ltp_read04 ltp_read_all ltp_read_checkzero ltp_readahead01 ltp_readahead02 ltp_readdir01 ltp_readdir02 ltp_readdir21 ltp_readlink01 ltp_readlink03 ltp_readlinkat01 ltp_readlinkat02 ltp_readv01 ltp_readv02 ltp_readv03 ltp_realpath01 ltp_reboot01 ltp_reboot02 ltp_recv01 ltp_recvfrom01 ltp_recvmsg01 ltp_recvmsg02 ltp_recvmsg03 ltp_remap_file_pages02 ltp_removexattr01 ltp_removexattr02 ltp_rename01 ltp_rename02 ltp_rename03 ltp_rename04 ltp_rename05 ltp_rename06 ltp_rename07 ltp_rename08 ltp_rename09 ltp_rename10 ltp_rename11 ltp_rename12 ltp_rename13 ltp_rename14 ltp_renameat01 ltp_renameat201 ltp_renameat202 ltp_request_key01 ltp_request_key02 ltp_request_key03 ltp_request_key04 ltp_request_key05 ltp_rmdir01 ltp_rmdir02 ltp_rmdir03 ltp_rt_sigaction01 ltp_rt_sigaction02 ltp_rt_sigaction03 ltp_rt_sigpending02 ltp_rt_sigprocmask01 ltp_rt_sigprocmask02 ltp_rt_sigqueueinfo01 ltp_rt_sigsuspend01 ltp_rt_sigtimedwait01 ltp_rt_tgsigqueueinfo01 ltp_rtc01 ltp_sbrk01 ltp_sbrk02 ltp_sbrk03 ltp_sched_boost ltp_sched_cfs_prio ltp_sched_dl_runtime ltp_sched_driver ltp_sched_get_priority_max01 ltp_sched_get_priority_max02 ltp_sched_get_priority_min01 ltp_sched_get_priority_min02 ltp_sched_getaffinity01 ltp_sched_getattr01 ltp_sched_getattr02 ltp_sched_getparam01 ltp_sched_getparam02 ltp_sched_getparam03 ltp_sched_getscheduler01 ltp_sched_getscheduler02 ltp_sched_latency_dl ltp_sched_latency_rt ltp_sched_prio_3_fifo ltp_sched_prio_3_rr ltp_sched_rr_get_interval01 ltp_sched_rr_get_interval02 ltp_sched_rr_get_interval03 ltp_sched_setaffinity01 ltp_sched_setattr01 ltp_sched_setparam01 ltp_sched_setparam02 ltp_sched_setparam03 ltp_sched_setparam04 ltp_sched_setparam05 ltp_sched_setscheduler01 ltp_sched_setscheduler02 ltp_sched_setscheduler03 ltp_sched_tc0 ltp_sched_tc1 ltp_sched_tc2 ltp_sched_tc3 ltp_sched_tc4 ltp_sched_tc5 ltp_sched_tc6 ltp_sched_yield01 ltp_sctp_big_chunk ltp_select01 ltp_select01_SYS__newselect ltp_select01_SYS_pselect6 ltp_select01_SYS_select ltp_select02 ltp_select02_SYS__newselect ltp_select02_SYS_pselect6 ltp_select02_SYS_select ltp_select03 ltp_select03_SYS__newselect ltp_select03_SYS_pselect6 ltp_select03_SYS_select ltp_select04 ltp_select04_SYS__newselect ltp_select04_SYS_pselect6 ltp_select04_SYS_select ltp_send01 ltp_sendfile02 ltp_sendfile02_64 ltp_sendfile03 ltp_sendfile03_64 ltp_sendfile04 ltp_sendfile04_64 ltp_sendfile05 ltp_sendfile05_64 ltp_sendfile06 ltp_sendfile06_64 ltp_sendfile07 ltp_sendfile07_64 ltp_sendfile08 ltp_sendfile08_64 ltp_sendfile09 ltp_sendfile09_64 ltp_sendmmsg01 ltp_sendmsg01 ltp_sendto01 ltp_sendto02 ltp_set_robust_list01 ltp_set_thread_area01 ltp_set_tid_address01 ltp_setdomainname01 ltp_setdomainname02 ltp_setdomainname03 ltp_setegid01 ltp_setegid02 ltp_setfsgid01 ltp_setfsgid01_16 ltp_setfsgid02 ltp_setfsgid02_16 ltp_setfsgid03 ltp_setfsgid03_16 ltp_setfsuid01 ltp_setfsuid01_16 ltp_setfsuid02 ltp_setfsuid02_16 ltp_setfsuid03 ltp_setfsuid03_16 ltp_setfsuid04 ltp_setfsuid04_16 ltp_setgid01 ltp_setgid01_16 ltp_setgid02 ltp_setgid02_16 ltp_setgid03 ltp_setgid03_16 ltp_setgroups01 ltp_setgroups01_16 ltp_setgroups02 ltp_setgroups02_16 ltp_setgroups03 ltp_setgroups03_16 ltp_setgroups04 ltp_setgroups04_16 ltp_sethostname01 ltp_sethostname02 ltp_sethostname03 ltp_setitimer01 ltp_setitimer02 ltp_setitimer03 ltp_setns01 ltp_setpgid01 ltp_setpgid02 ltp_setpgid03 ltp_setpgid03_child ltp_setpgrp01 ltp_setpgrp02 ltp_setpriority01 ltp_setpriority02 ltp_setregid01 ltp_setregid01_16 ltp_setregid02 ltp_setregid02_16 ltp_setregid03 ltp_setregid03_16 ltp_setregid04 ltp_setregid04_16 ltp_setresgid01 ltp_setresgid01_16 ltp_setresgid02 ltp_setresgid02_16 ltp_setresgid03 ltp_setresgid03_16 ltp_setresgid04 ltp_setresgid04_16 ltp_setresuid01 ltp_setresuid01_16 ltp_setresuid02 ltp_setresuid02_16 ltp_setresuid03 ltp_setresuid03_16 ltp_setresuid04 ltp_setresuid04_16 ltp_setresuid05 ltp_setresuid05_16 ltp_setreuid01 ltp_setreuid01_16 ltp_setreuid02 ltp_setreuid02_16 ltp_setreuid03 ltp_setreuid03_16 ltp_setreuid04 ltp_setreuid04_16 ltp_setreuid05 ltp_setreuid05_16 ltp_setreuid06 ltp_setreuid06_16 ltp_setreuid07 ltp_setreuid07_16 ltp_setrlimit01 ltp_setrlimit02 ltp_setrlimit03 ltp_setrlimit04 ltp_setrlimit05 ltp_setsid01 ltp_setsockopt01 ltp_setsockopt02 ltp_setsockopt03 ltp_settimeofday01 ltp_settimeofday02 ltp_setuid01 ltp_setuid01_16 ltp_setuid03 ltp_setuid03_16 ltp_setuid04 ltp_setuid04_16 ltp_setxattr01 ltp_setxattr02 ltp_setxattr03 ltp_sgetmask01 ltp_shmctl05 ltp_sigaction01 ltp_sigaction02 ltp_sigaltstack01 ltp_sigaltstack02 ltp_sighold02 ltp_signal01 ltp_signal02 ltp_signal03 ltp_signal04 ltp_signal05 ltp_signal06 ltp_signalfd01 ltp_signalfd4_01 ltp_signalfd4_02 ltp_sigpending02 ltp_sigprocmask01 ltp_sigrelse01 ltp_sigsuspend01 ltp_sigtimedwait01 ltp_sigwait01 ltp_sigwaitinfo01 ltp_smack_notroot ltp_smack_set_socket_labels ltp_smount ltp_socket01 ltp_socket02 ltp_socketcall01 ltp_socketcall02 ltp_socketcall03 ltp_socketcall04 ltp_socketpair01 ltp_socketpair02 ltp_sockioctl01 ltp_splice01 ltp_splice02 ltp_splice03 ltp_splice04 ltp_splice05 ltp_ssetmask01 ltp_stack_clash ltp_stack_space ltp_stat01 ltp_stat01_64 ltp_stat02 ltp_stat02_64 ltp_stat03 ltp_stat03_64 ltp_stat05 ltp_stat05_64 ltp_stat06 ltp_stat06_64 ltp_statfs01 ltp_statfs01_64 ltp_statfs02 ltp_statfs02_64 ltp_statfs03 ltp_statfs03_64 ltp_statvfs01 ltp_statvfs02 ltp_statx01 ltp_statx02 ltp_statx03 ltp_statx04 ltp_statx06 ltp_stream01 ltp_stream02 ltp_stream03 ltp_stream04 ltp_stream05 ltp_stress_cd ltp_string01 ltp_sugov_latency ltp_sugov_stale_util ltp_sugov_wakeups ltp_support_numa ltp_swapoff01 ltp_swapoff02 ltp_swapon01 ltp_swapon02 ltp_swapon03 ltp_swapping01 ltp_symlink01 ltp_symlink02 ltp_symlink03 ltp_symlink04 ltp_symlink05 ltp_symlinkat01 ltp_sync01 ltp_sync02 ltp_sync_file_range01 ltp_syncfs01 ltp_syscall01 ltp_sysconf01 ltp_sysctl01 ltp_sysctl03 ltp_sysctl04 ltp_sysfs01 ltp_sysfs02 ltp_sysfs03 ltp_sysfs04 ltp_sysfs05 ltp_sysfs06 ltp_sysinfo01 ltp_sysinfo02 ltp_syslog11 ltp_syslog12 ltp_syslogtst ltp_tbio ltp_tee01 ltp_tee02 ltp_test01 ltp_test02 ltp_test03 ltp_test04 ltp_test05 ltp_test06 ltp_test07 ltp_test08 ltp_test09 ltp_test10 ltp_test11 ltp_test12 ltp_test13 ltp_test14 ltp_test15 ltp_test16 ltp_test17 ltp_test18 ltp_test19 ltp_test_exec ltp_test_exec_child ltp_testsf_c ltp_testsf_c6 ltp_testsf_s ltp_testsf_s6 ltp_tgkill01 ltp_tgkill02 ltp_tgkill03 ltp_thp01 ltp_thp02 ltp_thp03 ltp_time-schedule ltp_time01 ltp_time02 ltp_timed_forkbomb ltp_timer_create02 ltp_timer_create03 ltp_timer_create04 ltp_timer_delete02 ltp_timer_delete03 ltp_timer_getoverrun01 ltp_timer_gettime01 ltp_timer_settime02 ltp_timer_settime03 ltp_timerfd01 ltp_timerfd02 ltp_timerfd03 ltp_timerfd_create01 ltp_timerfd_gettime01 ltp_timerfd_settime01 ltp_times01 ltp_times03 ltp_tkill01 ltp_tkill02 ltp_tomoyo_accept_test ltp_tomoyo_file_test ltp_tomoyo_filesystem_test ltp_tomoyo_new_file_test ltp_tomoyo_new_test ltp_tomoyo_policy_io_test ltp_tomoyo_policy_memory_test ltp_tomoyo_rewrite_test ltp_tpci ltp_trace_sched ltp_trerrno ltp_truncate01 ltp_truncate01_64 ltp_truncate02 ltp_truncate02_64 ltp_truncate03 ltp_truncate03_64 ltp_tst_brk ltp_tst_brkm ltp_tst_check_drivers ltp_tst_checkpoint ltp_tst_checkpoint_wait_timeout ltp_tst_checkpoint_wake_timeout ltp_tst_cleanup_once ltp_tst_dataroot01 ltp_tst_dataroot02 ltp_tst_dataroot03 ltp_tst_device ltp_tst_exit ltp_tst_expiration_timer ltp_tst_fs_fill_hardlinks ltp_tst_fs_fill_subdirs ltp_tst_fs_has_free ltp_tst_get_unused_port ltp_tst_getconf ltp_tst_kvcmp ltp_tst_ncpus ltp_tst_ncpus_conf ltp_tst_ncpus_max ltp_tst_net_iface_prefix ltp_tst_net_ip_prefix ltp_tst_net_vars ltp_tst_process_state ltp_tst_random ltp_tst_record_childstatus ltp_tst_res ltp_tst_res_hexd ltp_tst_resm ltp_tst_rod ltp_tst_safe_fileops ltp_tst_safe_macros ltp_tst_sleep ltp_tst_strerrno ltp_tst_strsig ltp_tst_strstatus ltp_tst_supported_fs ltp_tst_tmpdir_test ltp_uaccess ltp_umask01 ltp_umount01 ltp_umount02 ltp_umount03 ltp_umount2_01 ltp_umount2_02 ltp_umount2_03 ltp_uname01 ltp_uname02 ltp_uname03 ltp_uname04 ltp_unlink05 ltp_unlink07 ltp_unlink08 ltp_unlinkat01 ltp_unshare01 ltp_unshare02 ltp_ustat01 ltp_ustat02 ltp_utime01 ltp_utime02 ltp_utime03 ltp_utime04 ltp_utime05 ltp_utime06 ltp_utimensat01 ltp_utimes01 ltp_verify_caps_exec ltp_vfork ltp_vfork01 ltp_vfork02 ltp_vhangup01 ltp_vhangup02 ltp_vma01 ltp_vma02 ltp_vma03 ltp_vma04 ltp_vma05_vdso ltp_vmsplice01 ltp_vmsplice02 ltp_wait01 ltp_wait02 ltp_wait401 ltp_wait402 ltp_waitid01 ltp_waitid02 ltp_waitpid01 ltp_waitpid02 ltp_waitpid03 ltp_waitpid04 ltp_waitpid05 ltp_waitpid06 ltp_waitpid07 ltp_waitpid08 ltp_waitpid09 ltp_waitpid10 ltp_waitpid11 ltp_waitpid12 ltp_waitpid13 ltp_write01 ltp_write02 ltp_write03 ltp_write04 ltp_write05 ltp_writetest ltp_writev01 ltp_writev02 ltp_writev05 ltp_writev06 ltp_writev07 ltp_zram03; }
+in { inherit "ltp_testcases_bin_ar01.sh" "ltp_testcases_bin_arping01.sh" "ltp_testcases_bin_ask_password.sh" "ltp_testcases_bin_assign_password.sh" "ltp_testcases_bin_bbr01.sh" "ltp_testcases_bin_bbr02.sh" "ltp_testcases_bin_bind_noport01.sh" "ltp_testcases_bin_binfmt_misc01.sh" "ltp_testcases_bin_binfmt_misc02.sh" "ltp_testcases_bin_binfmt_misc_lib.sh" "ltp_testcases_bin_busy_poll01.sh" "ltp_testcases_bin_busy_poll02.sh" "ltp_testcases_bin_busy_poll03.sh" "ltp_testcases_bin_busy_poll_lib.sh" "ltp_testcases_bin_can_run_tests.sh" "ltp_testcases_bin_cgroup_fj_common.sh" "ltp_testcases_bin_cgroup_fj_function.sh" "ltp_testcases_bin_cgroup_fj_stress.sh" "ltp_testcases_bin_cgroup_lib.sh" "ltp_testcases_bin_cgroup_regression_3_1.sh" "ltp_testcases_bin_cgroup_regression_3_2.sh" "ltp_testcases_bin_cgroup_regression_5_1.sh" "ltp_testcases_bin_cgroup_regression_5_2.sh" "ltp_testcases_bin_cgroup_regression_6_1.sh" "ltp_testcases_bin_cgroup_regression_9_1.sh" "ltp_testcases_bin_cgroup_regression_9_2.sh" "ltp_testcases_bin_cgroup_regression_test.sh" "ltp_testcases_bin_change_password.sh" "ltp_testcases_bin_clockdiff01.sh" "ltp_testcases_bin_cmdlib.sh" "ltp_testcases_bin_connector_test.sh" "ltp_testcases_bin_cp_tests.sh" "ltp_testcases_bin_cpio_tests.sh" "ltp_testcases_bin_cpuacct.sh" "ltp_testcases_bin_cpuhotplug01.sh" "ltp_testcases_bin_cpuhotplug02.sh" "ltp_testcases_bin_cpuhotplug03.sh" "ltp_testcases_bin_cpuhotplug04.sh" "ltp_testcases_bin_cpuhotplug05.sh" "ltp_testcases_bin_cpuhotplug06.sh" "ltp_testcases_bin_cpuhotplug07.sh" "ltp_testcases_bin_cpuhotplug_hotplug.sh" "ltp_testcases_bin_cpuhotplug_testsuite.sh" "ltp_testcases_bin_cpuset_base_ops_testset.sh" "ltp_testcases_bin_cpuset_exclusive_test.sh" "ltp_testcases_bin_cpuset_funcs.sh" "ltp_testcases_bin_cpuset_hierarchy_test.sh" "ltp_testcases_bin_cpuset_hotplug_test.sh" "ltp_testcases_bin_cpuset_inherit_testset.sh" "ltp_testcases_bin_cpuset_load_balance_test.sh" "ltp_testcases_bin_cpuset_memory_pressure_testset.sh" "ltp_testcases_bin_cpuset_memory_spread_testset.sh" "ltp_testcases_bin_cpuset_memory_testset.sh" "ltp_testcases_bin_cpuset_regression_test.sh" "ltp_testcases_bin_cpuset_sched_domains_test.sh" "ltp_testcases_bin_cpuset_syscall_testset.sh" "ltp_testcases_bin_daemonlib.sh" "ltp_testcases_bin_dccp01.sh" "ltp_testcases_bin_dccp_ipsec.sh" "ltp_testcases_bin_dccp_ipsec_vti.sh" "ltp_testcases_bin_dctcp01.sh" "ltp_testcases_bin_dhcp_lib.sh" "ltp_testcases_bin_dhcpd_tests.sh" "ltp_testcases_bin_dns-stress-lib.sh" "ltp_testcases_bin_dns-stress.sh" "ltp_testcases_bin_dns-stress01-rmt.sh" "ltp_testcases_bin_dns-stress02-rmt.sh" "ltp_testcases_bin_dnsmasq_tests.sh" "ltp_testcases_bin_dynamic_debug01.sh" "ltp_testcases_bin_evm_overlay.sh" "ltp_testcases_bin_file01.sh" "ltp_testcases_bin_filecapstest.sh" "ltp_testcases_bin_force_erase.sh" "ltp_testcases_bin_fork_freeze.sh" "ltp_testcases_bin_freeze_cancel.sh" "ltp_testcases_bin_freeze_kill_thaw.sh" "ltp_testcases_bin_freeze_move_thaw.sh" "ltp_testcases_bin_freeze_self_thaw.sh" "ltp_testcases_bin_freeze_sleep_thaw.sh" "ltp_testcases_bin_freeze_thaw.sh" "ltp_testcases_bin_freeze_write_freezing.sh" "ltp_testcases_bin_fs-bench-test.sh" "ltp_testcases_bin_fs-bench-test2.sh" "ltp_testcases_bin_fs_racer.sh" "ltp_testcases_bin_fs_racer_dir_create.sh" "ltp_testcases_bin_fs_racer_dir_test.sh" "ltp_testcases_bin_fs_racer_file_concat.sh" "ltp_testcases_bin_fs_racer_file_create.sh" "ltp_testcases_bin_fs_racer_file_link.sh" "ltp_testcases_bin_fs_racer_file_list.sh" "ltp_testcases_bin_fs_racer_file_rename.sh" "ltp_testcases_bin_fs_racer_file_rm.sh" "ltp_testcases_bin_fs_racer_file_symlink.sh" "ltp_testcases_bin_fsx.sh" "ltp_testcases_bin_ftp-download-stress.sh" "ltp_testcases_bin_ftp-download-stress01-rmt.sh" "ltp_testcases_bin_ftp-download-stress02-rmt.sh" "ltp_testcases_bin_ftp-upload-stress.sh" "ltp_testcases_bin_ftp-upload-stress01-rmt.sh" "ltp_testcases_bin_ftp-upload-stress02-rmt.sh" "ltp_testcases_bin_ftp01.sh" "ltp_testcases_bin_ftrace_lib.sh" "ltp_testcases_bin_ftrace_regression01.sh" "ltp_testcases_bin_ftrace_regression02.sh" "ltp_testcases_bin_ftrace_stress_ftrace_buffer_size_kb.sh" "ltp_testcases_bin_ftrace_stress_ftrace_current_tracer.sh" "ltp_testcases_bin_ftrace_stress_ftrace_ftrace_enabled.sh" "ltp_testcases_bin_ftrace_stress_ftrace_function_profile_enabled.sh" "ltp_testcases_bin_ftrace_stress_ftrace_set_event.sh" "ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_filter.sh" "ltp_testcases_bin_ftrace_stress_ftrace_set_ftrace_pid.sh" "ltp_testcases_bin_ftrace_stress_ftrace_stack_max_size.sh" "ltp_testcases_bin_ftrace_stress_ftrace_stack_trace.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_clock.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_options.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_pipe.sh" "ltp_testcases_bin_ftrace_stress_ftrace_trace_stat.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_cpumask.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_enabled.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_max_latency.sh" "ltp_testcases_bin_ftrace_stress_ftrace_tracing_on.sh" "ltp_testcases_bin_ftrace_stress_test.sh" "ltp_testcases_bin_gdb01.sh" "ltp_testcases_bin_geneve01.sh" "ltp_testcases_bin_geneve02.sh" "ltp_testcases_bin_gre01.sh" "ltp_testcases_bin_gre02.sh" "ltp_testcases_bin_host01.sh" "ltp_testcases_bin_http-stress.sh" "ltp_testcases_bin_http-stress01-rmt.sh" "ltp_testcases_bin_http-stress02-rmt.sh" "ltp_testcases_bin_icmp-uni-basic.sh" "ltp_testcases_bin_icmp-uni-vti.sh" "ltp_testcases_bin_if-addr-adddel.sh" "ltp_testcases_bin_if-addr-addlarge.sh" "ltp_testcases_bin_if-lib.sh" "ltp_testcases_bin_if-mtu-change.sh" "ltp_testcases_bin_if-route-adddel.sh" "ltp_testcases_bin_if-route-addlarge.sh" "ltp_testcases_bin_if-updown.sh" "ltp_testcases_bin_if4-addr-change.sh" "ltp_testcases_bin_ima_measurements.sh" "ltp_testcases_bin_ima_policy.sh" "ltp_testcases_bin_ima_setup.sh" "ltp_testcases_bin_ima_tpm.sh" "ltp_testcases_bin_ima_violations.sh" "ltp_testcases_bin_ip_tests.sh" "ltp_testcases_bin_ipneigh01.sh" "ltp_testcases_bin_ipsec_lib.sh" "ltp_testcases_bin_iptables01.sh" "ltp_testcases_bin_iptables_lib.sh" "ltp_testcases_bin_ipvlan01.sh" "ltp_testcases_bin_isofs.sh" "ltp_testcases_bin_ld01.sh" "ltp_testcases_bin_ldd01.sh" "ltp_testcases_bin_linktest.sh" "ltp_testcases_bin_ln_tests.sh" "ltp_testcases_bin_lock_torture.sh" "ltp_testcases_bin_ltpSockets.sh" "ltp_testcases_bin_macsec01.sh" "ltp_testcases_bin_macsec02.sh" "ltp_testcases_bin_macsec03.sh" "ltp_testcases_bin_macsec_lib.sh" "ltp_testcases_bin_macvlan01.sh" "ltp_testcases_bin_macvtap01.sh" "ltp_testcases_bin_mc_cmds.sh" "ltp_testcases_bin_mc_commo.sh" "ltp_testcases_bin_mc_member.sh" "ltp_testcases_bin_mc_opts.sh" "ltp_testcases_bin_mcast-lib.sh" "ltp_testcases_bin_memcg_control_test.sh" "ltp_testcases_bin_memcg_failcnt.sh" "ltp_testcases_bin_memcg_force_empty.sh" "ltp_testcases_bin_memcg_lib.sh" "ltp_testcases_bin_memcg_limit_in_bytes.sh" "ltp_testcases_bin_memcg_max_usage_in_bytes_test.sh" "ltp_testcases_bin_memcg_memsw_limit_in_bytes_test.sh" "ltp_testcases_bin_memcg_move_charge_at_immigrate_test.sh" "ltp_testcases_bin_memcg_regression_test.sh" "ltp_testcases_bin_memcg_stat_rss.sh" "ltp_testcases_bin_memcg_stat_test.sh" "ltp_testcases_bin_memcg_stress_test.sh" "ltp_testcases_bin_memcg_subgroup_charge.sh" "ltp_testcases_bin_memcg_test_4.sh" "ltp_testcases_bin_memcg_usage_in_bytes_test.sh" "ltp_testcases_bin_memcg_use_hierarchy_test.sh" "ltp_testcases_bin_mkdir_tests.sh" "ltp_testcases_bin_modaltr.sh" "ltp_testcases_bin_mpls01.sh" "ltp_testcases_bin_mpls02.sh" "ltp_testcases_bin_mpls03.sh" "ltp_testcases_bin_mpls04.sh" "ltp_testcases_bin_mpls_lib.sh" "ltp_testcases_bin_myfunctions-io.sh" "ltp_testcases_bin_myfunctions.sh" "ltp_testcases_bin_net_cmdlib.sh" "ltp_testcases_bin_netstat01.sh" "ltp_testcases_bin_nfs_lib.sh" "ltp_testcases_bin_nft01.sh" "ltp_testcases_bin_nm01.sh" "ltp_testcases_bin_numa01.sh" "ltp_testcases_bin_parameters.sh" "ltp_testcases_bin_pids.sh" "ltp_testcases_bin_ping01.sh" "ltp_testcases_bin_ping02.sh" "ltp_testcases_bin_pm_cpu_consolidation.py" "ltp_testcases_bin_pm_ilb_test.py" "ltp_testcases_bin_pm_include.sh" "ltp_testcases_bin_pm_sched_domain.py" "ltp_testcases_bin_pm_sched_mc.py" "ltp_testcases_bin_quota_remount_test01.sh" "ltp_testcases_bin_rcp01.sh" "ltp_testcases_bin_rcu_torture.sh" "ltp_testcases_bin_remove_password.sh" "ltp_testcases_bin_rlogin01.sh" "ltp_testcases_bin_route-change-dst.sh" "ltp_testcases_bin_route-change-gw.sh" "ltp_testcases_bin_route-change-if.sh" "ltp_testcases_bin_route-lib.sh" "ltp_testcases_bin_rsh01.sh" "ltp_testcases_bin_run_capbounds.sh" "ltp_testcases_bin_run_cpuctl_latency_test.sh" "ltp_testcases_bin_run_cpuctl_stress_test.sh" "ltp_testcases_bin_run_cpuctl_test.sh" "ltp_testcases_bin_run_cpuctl_test_fj.sh" "ltp_testcases_bin_run_freezer.sh" "ltp_testcases_bin_run_io_throttle_test.sh" "ltp_testcases_bin_run_memctl_test.sh" "ltp_testcases_bin_run_sched_cliserv.sh" "ltp_testcases_bin_runpwtests01.sh" "ltp_testcases_bin_runpwtests02.sh" "ltp_testcases_bin_runpwtests03.sh" "ltp_testcases_bin_runpwtests04.sh" "ltp_testcases_bin_runpwtests05.sh" "ltp_testcases_bin_runpwtests06.sh" "ltp_testcases_bin_runpwtests_exclusive01.sh" "ltp_testcases_bin_runpwtests_exclusive02.sh" "ltp_testcases_bin_runpwtests_exclusive03.sh" "ltp_testcases_bin_runpwtests_exclusive04.sh" "ltp_testcases_bin_runpwtests_exclusive05.sh" "ltp_testcases_bin_sched_stress.sh" "ltp_testcases_bin_sctp01.sh" "ltp_testcases_bin_sctp_ipsec.sh" "ltp_testcases_bin_sctp_ipsec_vti.sh" "ltp_testcases_bin_sendfile01.sh" "ltp_testcases_bin_sit01.sh" "ltp_testcases_bin_smack_common.sh" "ltp_testcases_bin_smack_file_access.sh" "ltp_testcases_bin_smack_set_ambient.sh" "ltp_testcases_bin_smack_set_cipso.sh" "ltp_testcases_bin_smack_set_current.sh" "ltp_testcases_bin_smack_set_direct.sh" "ltp_testcases_bin_smack_set_doi.sh" "ltp_testcases_bin_smack_set_load.sh" "ltp_testcases_bin_smack_set_netlabel.sh" "ltp_testcases_bin_smack_set_onlycap.sh" "ltp_testcases_bin_smt_smp_affinity.sh" "ltp_testcases_bin_smt_smp_enabled.sh" "ltp_testcases_bin_ssh-stress.sh" "ltp_testcases_bin_ssh-stress01-rmt.sh" "ltp_testcases_bin_ssh-stress02-rmt.sh" "ltp_testcases_bin_ssh-stress03-rmt.sh" "ltp_testcases_bin_stop_freeze_sleep_thaw_cont.sh" "ltp_testcases_bin_stop_freeze_thaw_cont.sh" "ltp_testcases_bin_sysctl01.sh" "ltp_testcases_bin_sysctl02.sh" "ltp_testcases_bin_tcp_cc_lib.sh" "ltp_testcases_bin_tcp_fastopen_run.sh" "ltp_testcases_bin_tcp_ipsec.sh" "ltp_testcases_bin_tcp_ipsec_vti.sh" "ltp_testcases_bin_tcpdump01.sh" "ltp_testcases_bin_telnet01.sh" "ltp_testcases_bin_test.sh" "ltp_testcases_bin_test_controllers.sh" "ltp_testcases_bin_test_robind.sh" "ltp_testcases_bin_testall.sh" "ltp_testcases_bin_tracepath01.sh" "ltp_testcases_bin_traceroute01.sh" "ltp_testcases_bin_tst_ansi_color.sh" "ltp_testcases_bin_tst_net.sh" "ltp_testcases_bin_tst_net_stress.sh" "ltp_testcases_bin_tst_security.sh" "ltp_testcases_bin_tst_test.sh" "ltp_testcases_bin_udp_ipsec.sh" "ltp_testcases_bin_udp_ipsec_vti.sh" "ltp_testcases_bin_unshare01.sh" "ltp_testcases_bin_unzip01.sh" "ltp_testcases_bin_utimensat_tests.sh" "ltp_testcases_bin_vfork_freeze.sh" "ltp_testcases_bin_virt_lib.sh" "ltp_testcases_bin_vlan01.sh" "ltp_testcases_bin_vlan02.sh" "ltp_testcases_bin_vlan03.sh" "ltp_testcases_bin_vma05.sh" "ltp_testcases_bin_vxlan01.sh" "ltp_testcases_bin_vxlan02.sh" "ltp_testcases_bin_vxlan03.sh" "ltp_testcases_bin_vxlan04.sh" "ltp_testcases_bin_write_freezing.sh" "ltp_testcases_bin_xinetd_tests.sh" "ltp_testcases_bin_zram01.sh" "ltp_testcases_bin_zram02.sh" "ltp_testcases_bin_zram_lib.sh" libltp_controllers libltp_cpu_set libltp_hugetlb libltp_ipc libltp_kerntest libltp_ltp libltp_ltpnuma libltp_ltpuinput libltp_mem ltp_abort01 ltp_abs01 ltp_accept01 ltp_accept02 ltp_accept4_01 ltp_access01 ltp_access02 ltp_access03 ltp_access04 ltp_acct01 ltp_acct02 ltp_acct02_helper ltp_acl1 ltp_add_key01 ltp_add_key02 ltp_add_key03 ltp_add_key04 ltp_adjtimex01 ltp_adjtimex02 ltp_af_alg01 ltp_af_alg03 ltp_af_alg04 ltp_af_alg05 ltp_af_alg06 ltp_aio-stress ltp_aio01 ltp_aio02 ltp_aiocp ltp_aiodio_append ltp_aiodio_sparse ltp_alarm02 ltp_alarm03 ltp_alarm05 ltp_alarm06 ltp_alarm07 ltp_asapi_01 ltp_asapi_02 ltp_asapi_03 ltp_atof01 ltp_autogroup01 ltp_bind01 ltp_bind02 ltp_bind03 ltp_block_dev ltp_bpf_map01 ltp_bpf_prog01 ltp_bpf_prog02 ltp_bpf_prog03 ltp_brk01 ltp_cacheflush01 ltp_can_filter ltp_can_rcv_own_msgs ltp_cap_bounds_r ltp_cap_bounds_rw ltp_cap_bset_inh_bounds ltp_capget01 ltp_capget02 ltp_capset01 ltp_capset02 ltp_capset03 ltp_capset04 ltp_cgroup_fj_proc ltp_cgroup_regression_6_2 ltp_cgroup_regression_fork_processes ltp_cgroup_regression_getdelays ltp_cgroup_xattr ltp_chdir01 ltp_chdir02 ltp_chdir03 ltp_chdir04 ltp_check_keepcaps ltp_check_pe ltp_check_simple_capset ltp_chmod01 ltp_chmod02 ltp_chmod03 ltp_chmod04 ltp_chmod05 ltp_chmod07 ltp_chown01 ltp_chown01_16 ltp_chown02 ltp_chown02_16 ltp_chown03 ltp_chown03_16 ltp_chown05 ltp_chown05_16 ltp_chroot01 ltp_chroot02 ltp_chroot03 ltp_chroot04 ltp_clock_adjtime01 ltp_clock_adjtime02 ltp_clock_getres01 ltp_clock_gettime01 ltp_clock_gettime02 ltp_clock_nanosleep01 ltp_clock_nanosleep02 ltp_clock_nanosleep2_01 ltp_clock_settime01 ltp_clock_settime02 ltp_clone01 ltp_clone02 ltp_clone03 ltp_clone04 ltp_clone05 ltp_clone06 ltp_clone07 ltp_clone08 ltp_clone09 ltp_close01 ltp_close02 ltp_close08 ltp_connect01 ltp_copy_file_range01 ltp_copy_file_range02 ltp_copy_file_range03 ltp_cpuacct_task ltp_cpuctl_def_task01 ltp_cpuctl_def_task02 ltp_cpuctl_def_task03 ltp_cpuctl_def_task04 ltp_cpuctl_fj_cpu-hog ltp_cpuctl_fj_simple_echo ltp_cpuctl_latency_check_task ltp_cpuctl_latency_test ltp_cpuctl_test01 ltp_cpuctl_test02 ltp_cpuctl_test03 ltp_cpuctl_test04 ltp_cpufreq_boost ltp_cpuset01 ltp_cpuset_cpu_hog ltp_cpuset_list_compute ltp_cpuset_mem_hog ltp_cpuset_memory_pressure ltp_cpuset_sched_domains_check ltp_cpuset_syscall_test ltp_crash01 ltp_crash02 ltp_creat01 ltp_creat03 ltp_creat04 ltp_creat05 ltp_creat07 ltp_creat07_child ltp_creat08 ltp_create-files ltp_create_datafile ltp_crypto_user01 ltp_crypto_user02 ltp_cve-2014-0196 ltp_cve-2015-3290 ltp_cve-2016-10044 ltp_cve-2016-7042 ltp_cve-2016-7117 ltp_cve-2017-16939 ltp_cve-2017-17052 ltp_cve-2017-17053 ltp_cve-2017-2618 ltp_cve-2017-2671 ltp_data_space ltp_delete_module01 ltp_delete_module02 ltp_delete_module03 ltp_dio_append ltp_dio_sparse ltp_dio_truncate ltp_diotest1 ltp_diotest2 ltp_diotest3 ltp_diotest5 ltp_diotest6 ltp_dirty ltp_dirtyc0w ltp_dirtyc0w_child ltp_disktest ltp_dma_thread_diotest ltp_dup01 ltp_dup02 ltp_dup03 ltp_dup04 ltp_dup05 ltp_dup06 ltp_dup07 ltp_dup201 ltp_dup202 ltp_dup203 ltp_dup204 ltp_dup205 ltp_dup3_01 ltp_dup3_02 ltp_eas_big_to_small ltp_eas_one_big_task ltp_eas_one_small_task ltp_eas_small_big_toggle ltp_eas_small_to_big ltp_eas_two_big_three_small ltp_endian_switch01 ltp_epoll-ltp ltp_epoll_create1_01 ltp_epoll_ctl01 ltp_epoll_ctl02 ltp_epoll_pwait01 ltp_epoll_wait01 ltp_epoll_wait02 ltp_epoll_wait03 ltp_event_generator ltp_eventfd01 ltp_eventfd2_01 ltp_eventfd2_02 ltp_eventfd2_03 ltp_exec_with_inh ltp_exec_without_inh ltp_execl01 ltp_execl01_child ltp_execle01 ltp_execle01_child ltp_execlp01 ltp_execlp01_child ltp_execv01 ltp_execv01_child ltp_execve01 ltp_execve01_child ltp_execve02 ltp_execve03 ltp_execve04 ltp_execve05 ltp_execve_child ltp_execveat01 ltp_execveat02 ltp_execveat03 ltp_execveat_child ltp_execveat_errno ltp_execvp01 ltp_execvp01_child ltp_exit01 ltp_exit02 ltp_exit_group01 ltp_f1 ltp_f2 ltp_f3 ltp_faccessat01 ltp_fallocate01 ltp_fallocate02 ltp_fallocate03 ltp_fallocate04 ltp_fallocate05 ltp_fanotify01 ltp_fanotify02 ltp_fanotify03 ltp_fanotify04 ltp_fanotify05 ltp_fanotify06 ltp_fanotify07 ltp_fanotify08 ltp_fanotify09 ltp_fanotify10 ltp_fanotify11 ltp_fanotify12 ltp_fanotify13 ltp_fanotify14 ltp_fanotify15 ltp_fanotify_child ltp_fanout01 ltp_fchdir01 ltp_fchdir02 ltp_fchdir03 ltp_fchmod01 ltp_fchmod02 ltp_fchmod03 ltp_fchmod04 ltp_fchmod05 ltp_fchmod06 ltp_fchmodat01 ltp_fchown01 ltp_fchown01_16 ltp_fchown02 ltp_fchown02_16 ltp_fchown03 ltp_fchown03_16 ltp_fchown04 ltp_fchown04_16 ltp_fchown05 ltp_fchown05_16 ltp_fchownat01 ltp_fchownat02 ltp_fcntl01 ltp_fcntl01_64 ltp_fcntl02 ltp_fcntl02_64 ltp_fcntl03 ltp_fcntl03_64 ltp_fcntl04 ltp_fcntl04_64 ltp_fcntl05 ltp_fcntl05_64 ltp_fcntl06 ltp_fcntl06_64 ltp_fcntl07 ltp_fcntl07_64 ltp_fcntl08 ltp_fcntl08_64 ltp_fcntl09 ltp_fcntl09_64 ltp_fcntl10 ltp_fcntl10_64 ltp_fcntl11 ltp_fcntl11_64 ltp_fcntl12 ltp_fcntl12_64 ltp_fcntl13 ltp_fcntl13_64 ltp_fcntl14 ltp_fcntl14_64 ltp_fcntl15 ltp_fcntl15_64 ltp_fcntl16 ltp_fcntl16_64 ltp_fcntl17 ltp_fcntl17_64 ltp_fcntl18 ltp_fcntl18_64 ltp_fcntl19 ltp_fcntl19_64 ltp_fcntl20 ltp_fcntl20_64 ltp_fcntl21 ltp_fcntl21_64 ltp_fcntl22 ltp_fcntl22_64 ltp_fcntl23 ltp_fcntl23_64 ltp_fcntl24 ltp_fcntl24_64 ltp_fcntl25 ltp_fcntl25_64 ltp_fcntl26 ltp_fcntl26_64 ltp_fcntl27 ltp_fcntl27_64 ltp_fcntl28 ltp_fcntl28_64 ltp_fcntl29 ltp_fcntl29_64 ltp_fcntl30 ltp_fcntl30_64 ltp_fcntl31 ltp_fcntl31_64 ltp_fcntl32 ltp_fcntl32_64 ltp_fcntl33 ltp_fcntl33_64 ltp_fcntl34 ltp_fcntl34_64 ltp_fcntl35 ltp_fcntl35_64 ltp_fcntl36 ltp_fcntl36_64 ltp_fdatasync01 ltp_fdatasync02 ltp_fdatasync03 ltp_fgetxattr01 ltp_fgetxattr02 ltp_fgetxattr03 ltp_flistxattr01 ltp_flistxattr02 ltp_flistxattr03 ltp_float_bessel ltp_float_exp_log ltp_float_iperb ltp_float_power ltp_float_trigo ltp_flock01 ltp_flock02 ltp_flock03 ltp_flock04 ltp_flock06 ltp_fork01 ltp_fork02 ltp_fork03 ltp_fork04 ltp_fork05 ltp_fork06 ltp_fork07 ltp_fork08 ltp_fork09 ltp_fork10 ltp_fork11 ltp_fork12 ltp_fork13 ltp_fork14 ltp_fork_exec_loop ltp_fpathconf01 ltp_fptest01 ltp_fptest02 ltp_frag ltp_fremovexattr01 ltp_fremovexattr02 ltp_fs_fill ltp_fs_perms ltp_fsetxattr01 ltp_fsetxattr02 ltp_fstat02 ltp_fstat02_64 ltp_fstat03 ltp_fstat03_64 ltp_fstatat01 ltp_fstatfs01 ltp_fstatfs01_64 ltp_fstatfs02 ltp_fstatfs02_64 ltp_fsx-linux ltp_fsync01 ltp_fsync02 ltp_fsync03 ltp_fsync04 ltp_ftest01 ltp_ftest02 ltp_ftest03 ltp_ftest04 ltp_ftest05 ltp_ftest06 ltp_ftest07 ltp_ftest08 ltp_ftruncate01 ltp_ftruncate01_64 ltp_ftruncate03 ltp_ftruncate03_64 ltp_ftruncate04 ltp_ftruncate04_64 ltp_futex_cmp_requeue01 ltp_futex_cmp_requeue02 ltp_futex_wait01 ltp_futex_wait03 ltp_futex_wait04 ltp_futex_wait05 ltp_futex_wait_bitset01 ltp_futex_wait_bitset02 ltp_futex_wake01 ltp_futex_wake02 ltp_futex_wake04 ltp_futimesat01 ltp_fw_load ltp_genacos ltp_genasin ltp_genatan ltp_genatan2 ltp_genbessel ltp_genceil ltp_gencos ltp_gencosh ltp_genexp ltp_genexp_log ltp_genfabs ltp_genfloor ltp_genfmod ltp_genfrexp ltp_genhypot ltp_geniperb ltp_genj0 ltp_genj1 ltp_genldexp ltp_genlgamma ltp_genlog ltp_genlog10 ltp_genmodf ltp_genpow ltp_genpower ltp_gensin ltp_gensinh ltp_gensqrt ltp_gentan ltp_gentanh ltp_gentrigo ltp_geny0 ltp_geny1 ltp_get_mempolicy01 ltp_get_robust_list01 ltp_getaddrinfo_01 ltp_getcpu01 ltp_getcwd01 ltp_getcwd02 ltp_getcwd03 ltp_getcwd04 ltp_getdents01 ltp_getdents02 ltp_getdomainname01 ltp_getdtablesize01 ltp_getegid01 ltp_getegid01_16 ltp_getegid02 ltp_getegid02_16 ltp_geteuid01 ltp_geteuid01_16 ltp_geteuid02 ltp_geteuid02_16 ltp_getgid01 ltp_getgid01_16 ltp_getgid03 ltp_getgid03_16 ltp_getgroups01 ltp_getgroups01_16 ltp_getgroups03 ltp_getgroups03_16 ltp_gethostbyname_r01 ltp_gethostname01 ltp_getitimer01 ltp_getitimer02 ltp_getitimer03 ltp_getpagesize01 ltp_getpeername01 ltp_getpgid01 ltp_getpgid02 ltp_getpgrp01 ltp_getpid01 ltp_getpid02 ltp_getppid01 ltp_getppid02 ltp_getpriority01 ltp_getpriority02 ltp_getrandom01 ltp_getrandom02 ltp_getrandom03 ltp_getrandom04 ltp_getresgid01 ltp_getresgid01_16 ltp_getresgid02 ltp_getresgid02_16 ltp_getresgid03 ltp_getresgid03_16 ltp_getresuid01 ltp_getresuid01_16 ltp_getresuid02 ltp_getresuid02_16 ltp_getresuid03 ltp_getresuid03_16 ltp_getrlimit01 ltp_getrlimit02 ltp_getrlimit03 ltp_getrusage01 ltp_getrusage02 ltp_getrusage03_child ltp_getrusage04 ltp_getsid01 ltp_getsid02 ltp_getsockname01 ltp_getsockopt01 ltp_getsockopt02 ltp_gettid01 ltp_gettimeofday01 ltp_gettimeofday02 ltp_getuid01 ltp_getuid01_16 ltp_getuid03 ltp_getuid03_16 ltp_getxattr01 ltp_getxattr02 ltp_getxattr03 ltp_getxattr04 ltp_getxattr05 ltp_hackbench ltp_hangup01 ltp_ht_affinity ltp_ht_enabled ltp_hugemmap01 ltp_hugemmap02 ltp_hugemmap04 ltp_hugemmap06 ltp_ima_boot_aggregate ltp_ima_mmap ltp_in ltp_in6_02 ltp_inh_capped ltp_inode01 ltp_inode02 ltp_inotify01 ltp_inotify02 ltp_inotify03 ltp_inotify04 ltp_inotify05 ltp_inotify06 ltp_inotify07 ltp_inotify08 ltp_inotify09 ltp_inotify_init1_01 ltp_inotify_init1_02 ltp_input01 ltp_input02 ltp_input04 ltp_input05 ltp_input06 ltp_io_cancel01 ltp_io_destroy01 ltp_io_getevents01 ltp_io_setup01 ltp_io_submit01 ltp_iobw ltp_ioctl01 ltp_ioctl03 ltp_ioctl04 ltp_ioctl05 ltp_ioctl06 ltp_ioctl07 ltp_ioctl08 ltp_ioctl_ns01 ltp_ioctl_ns02 ltp_ioctl_ns03 ltp_ioctl_ns04 ltp_ioctl_ns05 ltp_ioctl_ns06 ltp_ioctl_ns07 ltp_iogen ltp_ioperm01 ltp_ioperm02 ltp_iopl01 ltp_iopl02 ltp_ioprio_get01 ltp_ioprio_set01 ltp_ioprio_set02 ltp_ioprio_set03 ltp_kcmp01 ltp_kcmp02 ltp_kcmp03 ltp_keyctl01 ltp_keyctl02 ltp_keyctl03 ltp_keyctl04 ltp_keyctl05 ltp_keyctl06 ltp_keyctl07 ltp_keyctl08 ltp_kill01 ltp_kill02 ltp_kill03 ltp_kill04 ltp_kill06 ltp_kill08 ltp_kill09 ltp_kill10 ltp_kill11 ltp_kill12 ltp_kmsg01 ltp_ksm01 ltp_ksm02 ltp_ksm03 ltp_ksm04 ltp_ksm05 ltp_ksm06 ltp_lchown01 ltp_lchown01_16 ltp_lchown02 ltp_lchown02_16 ltp_lchown03 ltp_lchown03_16 ltp_leapsec01 ltp_lftest ltp_lgetxattr01 ltp_lgetxattr02 ltp_link02 ltp_link03 ltp_link04 ltp_link05 ltp_link06 ltp_link07 ltp_link08 ltp_linkat01 ltp_linkat02 ltp_listen01 ltp_listxattr01 ltp_listxattr02 ltp_listxattr03 ltp_llistxattr01 ltp_llistxattr02 ltp_llistxattr03 ltp_llseek01 ltp_llseek02 ltp_llseek03 ltp_locktests ltp_lremovexattr01 ltp_lseek01 ltp_lseek02 ltp_lseek07 ltp_lseek11 ltp_lstat01 ltp_lstat01_64 ltp_lstat02 ltp_lstat02_64 ltp_ltp-diorh ltp_ltpClient ltp_ltpServer ltp_ltp_acpi ltp_madvise01 ltp_madvise02 ltp_madvise05 ltp_madvise06 ltp_madvise07 ltp_madvise08 ltp_madvise09 ltp_madvise10 ltp_max_map_count ltp_mbind01 ltp_mbind02 ltp_mbind03 ltp_mbind04 ltp_mc_member_test ltp_mc_recv ltp_mc_send ltp_mc_verify_opts ltp_mc_verify_opts_error ltp_meltdown ltp_mem01 ltp_mem02 ltp_mem03 ltp_mem_process ltp_membarrier01 ltp_memcg_process_stress ltp_memcg_test_1 ltp_memcg_test_2 ltp_memcg_test_3 ltp_memcg_test_4 ltp_memcmp01 ltp_memcpy01 ltp_memctl_test01 ltp_memfd_create01 ltp_memfd_create02 ltp_memfd_create03 ltp_memfd_create04 ltp_memset01 ltp_memtoy ltp_migrate_pages01 ltp_migrate_pages02 ltp_migrate_pages03 ltp_mincore01 ltp_mincore02 ltp_mkdir02 ltp_mkdir03 ltp_mkdir04 ltp_mkdir05 ltp_mkdir09 ltp_mkdirat01 ltp_mkdirat02 ltp_mknod01 ltp_mknod02 ltp_mknod03 ltp_mknod04 ltp_mknod05 ltp_mknod06 ltp_mknod07 ltp_mknod08 ltp_mknod09 ltp_mknodat01 ltp_mknodat02 ltp_mlock01 ltp_mlock02 ltp_mlock03 ltp_mlock04 ltp_mlock201 ltp_mlock202 ltp_mlock203 ltp_mlockall01 ltp_mlockall02 ltp_mlockall03 ltp_mmap-corruption01 ltp_mmap001 ltp_mmap01 ltp_mmap02 ltp_mmap03 ltp_mmap04 ltp_mmap05 ltp_mmap06 ltp_mmap07 ltp_mmap08 ltp_mmap09 ltp_mmap1 ltp_mmap10 ltp_mmap11 ltp_mmap12 ltp_mmap13 ltp_mmap14 ltp_mmap15 ltp_mmap16 ltp_mmap2 ltp_mmap3 ltp_mmapstress01 ltp_mmapstress02 ltp_mmapstress03 ltp_mmapstress04 ltp_mmapstress05 ltp_mmapstress06 ltp_mmapstress07 ltp_mmapstress08 ltp_mmapstress09 ltp_mmapstress10 ltp_mmstress ltp_mmstress_dummy ltp_modify_ldt01 ltp_modify_ldt02 ltp_modify_ldt03 ltp_mount01 ltp_mount02 ltp_mount03 ltp_mount03_setuid_test ltp_mount04 ltp_mount05 ltp_mount06 ltp_move_pages01 ltp_move_pages02 ltp_move_pages03 ltp_move_pages04 ltp_move_pages05 ltp_move_pages06 ltp_move_pages07 ltp_move_pages09 ltp_move_pages10 ltp_move_pages11 ltp_move_pages12 ltp_mprotect01 ltp_mprotect02 ltp_mprotect03 ltp_mprotect04 ltp_mremap01 ltp_mremap02 ltp_mremap03 ltp_mremap05 ltp_msync01 ltp_msync02 ltp_msync03 ltp_msync04 ltp_mtest01 ltp_munlock01 ltp_munlock02 ltp_munlockall01 ltp_munmap01 ltp_munmap02 ltp_munmap03 ltp_nanosleep01 ltp_nanosleep02 ltp_nanosleep04 ltp_netstress ltp_newns ltp_newuname01 ltp_nextafter01 ltp_nfs01_open_files ltp_nfs04_create_file ltp_nfs05_make_tree ltp_nfs_flock ltp_nfs_flock_dgen ltp_nftw01 ltp_nftw6401 ltp_nice01 ltp_nice02 ltp_nice03 ltp_nice04 ltp_nptl01 ltp_ns-icmp_redirector ltp_ns-icmpv4_sender ltp_ns-icmpv6_sender ltp_ns-igmp_querier ltp_ns-mcast_join ltp_ns-mcast_receiver ltp_ns-tcpclient ltp_ns-tcpserver ltp_ns-udpclient ltp_ns-udpsender ltp_ns-udpserver ltp_nsclone ltp_oom01 ltp_oom02 ltp_oom03 ltp_oom04 ltp_oom05 ltp_open01 ltp_open02 ltp_open03 ltp_open04 ltp_open05 ltp_open06 ltp_open07 ltp_open08 ltp_open09 ltp_open10 ltp_open11 ltp_open12_child ltp_open13 ltp_open14 ltp_openat01 ltp_openat02_child ltp_openat03 ltp_openfile ltp_overcommit_memory ltp_page01 ltp_page02 ltp_pathconf01 ltp_pause01 ltp_pause02 ltp_pause03 ltp_pcrypt_aead01 ltp_pec_listener ltp_perf_event_open01 ltp_perf_event_open02 ltp_personality01 ltp_personality02 ltp_pidfd_send_signal01 ltp_pidfd_send_signal02 ltp_pidfd_send_signal03 ltp_pids_task1 ltp_pids_task2 ltp_pipe01 ltp_pipe02 ltp_pipe03 ltp_pipe04 ltp_pipe05 ltp_pipe06 ltp_pipe07 ltp_pipe08 ltp_pipe09 ltp_pipe10 ltp_pipe11 ltp_pipe2_01 ltp_pipe2_02 ltp_pivot_root01 ltp_pkey01 ltp_pm_get_sched_values ltp_poll01 ltp_poll02 ltp_posix_fadvise01 ltp_posix_fadvise01_64 ltp_posix_fadvise02 ltp_posix_fadvise02_64 ltp_posix_fadvise03 ltp_posix_fadvise03_64 ltp_posix_fadvise04 ltp_posix_fadvise04_64 ltp_ppoll01 ltp_prctl01 ltp_prctl02 ltp_prctl03 ltp_prctl04 ltp_prctl05 ltp_prctl06 ltp_prctl06_execve ltp_prctl07 ltp_prctl08 ltp_prctl09 ltp_pread01 ltp_pread01_64 ltp_pread02 ltp_pread02_64 ltp_pread03 ltp_pread03_64 ltp_preadv01 ltp_preadv01_64 ltp_preadv02 ltp_preadv02_64 ltp_preadv03 ltp_preadv03_64 ltp_preadv201 ltp_preadv201_64 ltp_preadv202 ltp_preadv202_64 ltp_preadv203 ltp_preadv203_64 ltp_print_caps ltp_proc01 ltp_process_vm01 ltp_process_vm_readv02 ltp_process_vm_readv03 ltp_process_vm_writev02 ltp_pselect01 ltp_pselect01_64 ltp_pselect02 ltp_pselect02_64 ltp_pselect03 ltp_pselect03_64 ltp_pt_test ltp_ptem01 ltp_pth_str01 ltp_pth_str02 ltp_pth_str03 ltp_pthcli ltp_pthserv ltp_ptrace01 ltp_ptrace02 ltp_ptrace03 ltp_ptrace04 ltp_ptrace05 ltp_ptrace07 ltp_pty01 ltp_pty02 ltp_pwrite01 ltp_pwrite01_64 ltp_pwrite02 ltp_pwrite02_64 ltp_pwrite03 ltp_pwrite03_64 ltp_pwrite04 ltp_pwrite04_64 ltp_pwritev01 ltp_pwritev01_64 ltp_pwritev02 ltp_pwritev02_64 ltp_pwritev03 ltp_pwritev03_64 ltp_pwritev201 ltp_pwritev201_64 ltp_pwritev202 ltp_pwritev202_64 ltp_quotactl01 ltp_quotactl02 ltp_quotactl03 ltp_quotactl04 ltp_quotactl05 ltp_quotactl06 ltp_random-access ltp_random-access-del-create ltp_read01 ltp_read02 ltp_read03 ltp_read04 ltp_read_all ltp_read_checkzero ltp_readahead01 ltp_readahead02 ltp_readdir01 ltp_readdir21 ltp_readlink01 ltp_readlink03 ltp_readlinkat01 ltp_readlinkat02 ltp_readv01 ltp_readv02 ltp_readv03 ltp_realpath01 ltp_reboot01 ltp_reboot02 ltp_recv01 ltp_recvfrom01 ltp_recvmsg01 ltp_recvmsg02 ltp_recvmsg03 ltp_remap_file_pages02 ltp_removexattr01 ltp_removexattr02 ltp_rename01 ltp_rename02 ltp_rename03 ltp_rename04 ltp_rename05 ltp_rename06 ltp_rename07 ltp_rename08 ltp_rename09 ltp_rename10 ltp_rename11 ltp_rename12 ltp_rename13 ltp_rename14 ltp_renameat01 ltp_renameat201 ltp_renameat202 ltp_request_key01 ltp_request_key02 ltp_request_key03 ltp_request_key04 ltp_request_key05 ltp_rmdir01 ltp_rmdir02 ltp_rmdir03 ltp_rt_sigaction01 ltp_rt_sigaction02 ltp_rt_sigaction03 ltp_rt_sigpending02 ltp_rt_sigprocmask01 ltp_rt_sigprocmask02 ltp_rt_sigqueueinfo01 ltp_rt_sigsuspend01 ltp_rt_sigtimedwait01 ltp_rt_tgsigqueueinfo01 ltp_rtc01 ltp_sbrk01 ltp_sbrk02 ltp_sbrk03 ltp_sched_boost ltp_sched_cfs_prio ltp_sched_dl_runtime ltp_sched_driver ltp_sched_get_priority_max01 ltp_sched_get_priority_max02 ltp_sched_get_priority_min01 ltp_sched_get_priority_min02 ltp_sched_getaffinity01 ltp_sched_getattr01 ltp_sched_getattr02 ltp_sched_getparam01 ltp_sched_getparam02 ltp_sched_getparam03 ltp_sched_getscheduler01 ltp_sched_getscheduler02 ltp_sched_latency_dl ltp_sched_latency_rt ltp_sched_prio_3_fifo ltp_sched_prio_3_rr ltp_sched_rr_get_interval01 ltp_sched_rr_get_interval02 ltp_sched_rr_get_interval03 ltp_sched_setaffinity01 ltp_sched_setattr01 ltp_sched_setparam01 ltp_sched_setparam02 ltp_sched_setparam03 ltp_sched_setparam04 ltp_sched_setparam05 ltp_sched_setscheduler01 ltp_sched_setscheduler02 ltp_sched_setscheduler03 ltp_sched_tc0 ltp_sched_tc1 ltp_sched_tc2 ltp_sched_tc3 ltp_sched_tc4 ltp_sched_tc5 ltp_sched_tc6 ltp_sched_yield01 ltp_sctp_big_chunk ltp_select01 ltp_select02 ltp_select03 ltp_select04 ltp_send01 ltp_sendfile02 ltp_sendfile02_64 ltp_sendfile03 ltp_sendfile03_64 ltp_sendfile04 ltp_sendfile04_64 ltp_sendfile05 ltp_sendfile05_64 ltp_sendfile06 ltp_sendfile06_64 ltp_sendfile07 ltp_sendfile07_64 ltp_sendfile08 ltp_sendfile08_64 ltp_sendfile09 ltp_sendfile09_64 ltp_sendmmsg01 ltp_sendmsg01 ltp_sendto01 ltp_sendto02 ltp_set_mempolicy01 ltp_set_mempolicy02 ltp_set_mempolicy03 ltp_set_mempolicy04 ltp_set_robust_list01 ltp_set_thread_area01 ltp_set_tid_address01 ltp_setdomainname01 ltp_setdomainname02 ltp_setdomainname03 ltp_setegid01 ltp_setegid02 ltp_setfsgid01 ltp_setfsgid01_16 ltp_setfsgid02 ltp_setfsgid02_16 ltp_setfsgid03 ltp_setfsgid03_16 ltp_setfsuid01 ltp_setfsuid01_16 ltp_setfsuid02 ltp_setfsuid02_16 ltp_setfsuid03 ltp_setfsuid03_16 ltp_setfsuid04 ltp_setfsuid04_16 ltp_setgid01 ltp_setgid01_16 ltp_setgid02 ltp_setgid02_16 ltp_setgid03 ltp_setgid03_16 ltp_setgroups01 ltp_setgroups01_16 ltp_setgroups02 ltp_setgroups02_16 ltp_setgroups03 ltp_setgroups03_16 ltp_setgroups04 ltp_setgroups04_16 ltp_sethostname01 ltp_sethostname02 ltp_sethostname03 ltp_setitimer01 ltp_setitimer02 ltp_setitimer03 ltp_setns01 ltp_setpgid01 ltp_setpgid02 ltp_setpgid03 ltp_setpgid03_child ltp_setpgrp01 ltp_setpgrp02 ltp_setpriority01 ltp_setpriority02 ltp_setregid01 ltp_setregid01_16 ltp_setregid02 ltp_setregid02_16 ltp_setregid03 ltp_setregid03_16 ltp_setregid04 ltp_setregid04_16 ltp_setresgid01 ltp_setresgid01_16 ltp_setresgid02 ltp_setresgid02_16 ltp_setresgid03 ltp_setresgid03_16 ltp_setresgid04 ltp_setresgid04_16 ltp_setresuid01 ltp_setresuid01_16 ltp_setresuid02 ltp_setresuid02_16 ltp_setresuid03 ltp_setresuid03_16 ltp_setresuid04 ltp_setresuid04_16 ltp_setresuid05 ltp_setresuid05_16 ltp_setreuid01 ltp_setreuid01_16 ltp_setreuid02 ltp_setreuid02_16 ltp_setreuid03 ltp_setreuid03_16 ltp_setreuid04 ltp_setreuid04_16 ltp_setreuid05 ltp_setreuid05_16 ltp_setreuid06 ltp_setreuid06_16 ltp_setreuid07 ltp_setreuid07_16 ltp_setrlimit01 ltp_setrlimit02 ltp_setrlimit03 ltp_setrlimit04 ltp_setrlimit05 ltp_setrlimit06 ltp_setsid01 ltp_setsockopt01 ltp_setsockopt02 ltp_setsockopt03 ltp_setsockopt04 ltp_settimeofday01 ltp_settimeofday02 ltp_setuid01 ltp_setuid01_16 ltp_setuid03 ltp_setuid03_16 ltp_setuid04 ltp_setuid04_16 ltp_setxattr01 ltp_setxattr02 ltp_setxattr03 ltp_sgetmask01 ltp_shmctl05 ltp_sigaction01 ltp_sigaction02 ltp_sigaltstack01 ltp_sigaltstack02 ltp_sighold02 ltp_signal01 ltp_signal02 ltp_signal03 ltp_signal04 ltp_signal05 ltp_signal06 ltp_signalfd01 ltp_signalfd4_01 ltp_signalfd4_02 ltp_sigpending02 ltp_sigprocmask01 ltp_sigrelse01 ltp_sigsuspend01 ltp_sigtimedwait01 ltp_sigwait01 ltp_sigwaitinfo01 ltp_smack_notroot ltp_smack_set_socket_labels ltp_smount ltp_snd_timer01 ltp_socket01 ltp_socket02 ltp_socketcall01 ltp_socketcall02 ltp_socketcall03 ltp_socketcall04 ltp_socketpair01 ltp_socketpair02 ltp_sockioctl01 ltp_splice01 ltp_splice02 ltp_splice03 ltp_splice04 ltp_splice05 ltp_ssetmask01 ltp_stack_clash ltp_stack_space ltp_stat01 ltp_stat01_64 ltp_stat02 ltp_stat02_64 ltp_stat03 ltp_stat03_64 ltp_statfs01 ltp_statfs01_64 ltp_statfs02 ltp_statfs02_64 ltp_statfs03 ltp_statfs03_64 ltp_statvfs01 ltp_statvfs02 ltp_statx01 ltp_statx02 ltp_statx03 ltp_statx04 ltp_statx06 ltp_statx07 ltp_stream01 ltp_stream02 ltp_stream03 ltp_stream04 ltp_stream05 ltp_stress_cd ltp_string01 ltp_sugov_latency ltp_sugov_stale_util ltp_sugov_wakeups ltp_support_numa ltp_swapoff01 ltp_swapoff02 ltp_swapon01 ltp_swapon02 ltp_swapon03 ltp_swapping01 ltp_symlink01 ltp_symlink02 ltp_symlink03 ltp_symlink04 ltp_symlink05 ltp_symlinkat01 ltp_sync01 ltp_sync02 ltp_sync03 ltp_sync_file_range01 ltp_sync_file_range02 ltp_syncfs01 ltp_syscall01 ltp_sysconf01 ltp_sysctl01 ltp_sysctl03 ltp_sysctl04 ltp_sysfs01 ltp_sysfs02 ltp_sysfs03 ltp_sysfs04 ltp_sysfs05 ltp_sysfs06 ltp_sysinfo01 ltp_sysinfo02 ltp_syslog11 ltp_syslog12 ltp_syslogtst ltp_tbio ltp_tee01 ltp_tee02 ltp_test01 ltp_test02 ltp_test03 ltp_test04 ltp_test05 ltp_test06 ltp_test07 ltp_test08 ltp_test09 ltp_test10 ltp_test11 ltp_test12 ltp_test13 ltp_test14 ltp_test15 ltp_test16 ltp_test17 ltp_test18 ltp_test19 ltp_test_exec ltp_test_exec_child ltp_test_guarded_buf ltp_test_kconfig ltp_testcases_bin_add_ipv6addr ltp_testcases_bin_broken_ip-checksum ltp_testcases_bin_broken_ip-dstaddr ltp_testcases_bin_broken_ip-fragment ltp_testcases_bin_broken_ip-ihl ltp_testcases_bin_broken_ip-nexthdr ltp_testcases_bin_broken_ip-plen ltp_testcases_bin_broken_ip-protcol ltp_testcases_bin_broken_ip-totlen ltp_testcases_bin_broken_ip-version ltp_testcases_bin_check_envval ltp_testcases_bin_check_icmpv4_connectivity ltp_testcases_bin_check_icmpv6_connectivity ltp_testcases_bin_check_netem ltp_testcases_bin_check_setkey ltp_testcases_bin_cpuhotplug_do_disk_write_loop ltp_testcases_bin_cpuhotplug_do_kcompile_loop ltp_testcases_bin_cpuhotplug_do_spin_loop ltp_testcases_bin_cpuhotplug_report_proc_interrupts ltp_testcases_bin_create_file ltp_testcases_bin_data ltp_testcases_bin_find_portbundle ltp_testcases_bin_fs_bind_bin_check_prop ltp_testcases_bin_fs_bind_bin_lockfile ltp_testcases_bin_fs_bind_bin_makedir ltp_testcases_bin_fs_bind_bin_setup ltp_testcases_bin_fs_bind_bin_setupnslock ltp_testcases_bin_fs_bind_bind_test10 ltp_testcases_bin_fs_bind_bind_test11 ltp_testcases_bin_fs_bind_bind_test12 ltp_testcases_bin_fs_bind_bind_test14 ltp_testcases_bin_fs_bind_bind_test15 ltp_testcases_bin_fs_bind_bind_test16 ltp_testcases_bin_fs_bind_bind_test18 ltp_testcases_bin_fs_bind_bind_test19 ltp_testcases_bin_fs_bind_move_test08 ltp_testcases_bin_fs_bind_move_test22 ltp_testcases_bin_fs_bind_rbind_test01 ltp_testcases_bin_fs_bind_rbind_test02 ltp_testcases_bin_fs_bind_rbind_test03 ltp_testcases_bin_fs_bind_rbind_test04 ltp_testcases_bin_fs_bind_rbind_test05 ltp_testcases_bin_fs_bind_rbind_test06 ltp_testcases_bin_fs_bind_rbind_test07 ltp_testcases_bin_fs_bind_rbind_test07-2 ltp_testcases_bin_fs_bind_rbind_test09 ltp_testcases_bin_fs_bind_rbind_test13 ltp_testcases_bin_fs_bind_rbind_test17 ltp_testcases_bin_fs_bind_rbind_test20 ltp_testcases_bin_fs_bind_rbind_test21 ltp_testcases_bin_fs_bind_rbind_test23 ltp_testcases_bin_fs_bind_rbind_test24 ltp_testcases_bin_fs_bind_rbind_test25 ltp_testcases_bin_fs_bind_rbind_test26 ltp_testcases_bin_fs_bind_rbind_test27 ltp_testcases_bin_fs_bind_rbind_test28 ltp_testcases_bin_fs_bind_rbind_test29 ltp_testcases_bin_fs_bind_rbind_test30 ltp_testcases_bin_fs_bind_rbind_test31 ltp_testcases_bin_fs_bind_rbind_test32 ltp_testcases_bin_fs_bind_rbind_test33 ltp_testcases_bin_fs_bind_rbind_test34 ltp_testcases_bin_fs_bind_rbind_test35 ltp_testcases_bin_fs_bind_rbind_test36 ltp_testcases_bin_fs_bind_rbind_test37 ltp_testcases_bin_fs_bind_rbind_test38 ltp_testcases_bin_fs_bind_rbind_test39 ltp_testcases_bin_fs_di ltp_testcases_bin_fs_inod ltp_testcases_bin_fsxtest ltp_testcases_bin_fsxtest02 ltp_testcases_bin_get_ifname ltp_testcases_bin_icmp4-multi-diffip01 ltp_testcases_bin_icmp4-multi-diffip02 ltp_testcases_bin_icmp4-multi-diffip03 ltp_testcases_bin_icmp4-multi-diffip04 ltp_testcases_bin_icmp4-multi-diffip05 ltp_testcases_bin_icmp4-multi-diffip06 ltp_testcases_bin_icmp4-multi-diffip07 ltp_testcases_bin_icmp4-multi-diffnic01 ltp_testcases_bin_icmp4-multi-diffnic02 ltp_testcases_bin_icmp4-multi-diffnic03 ltp_testcases_bin_icmp4-multi-diffnic04 ltp_testcases_bin_icmp4-multi-diffnic05 ltp_testcases_bin_icmp4-multi-diffnic06 ltp_testcases_bin_icmp4-multi-diffnic07 ltp_testcases_bin_icmp6-multi-diffip01 ltp_testcases_bin_icmp6-multi-diffip02 ltp_testcases_bin_icmp6-multi-diffip03 ltp_testcases_bin_icmp6-multi-diffip04 ltp_testcases_bin_icmp6-multi-diffip05 ltp_testcases_bin_icmp6-multi-diffip06 ltp_testcases_bin_icmp6-multi-diffip07 ltp_testcases_bin_icmp6-multi-diffnic01 ltp_testcases_bin_icmp6-multi-diffnic02 ltp_testcases_bin_icmp6-multi-diffnic03 ltp_testcases_bin_icmp6-multi-diffnic04 ltp_testcases_bin_icmp6-multi-diffnic05 ltp_testcases_bin_icmp6-multi-diffnic06 ltp_testcases_bin_icmp6-multi-diffnic07 ltp_testcases_bin_initialize_if ltp_testcases_bin_killall_icmp_traffic ltp_testcases_bin_killall_tcp_traffic ltp_testcases_bin_killall_udp_traffic ltp_testcases_bin_libcgroup_freezer ltp_testcases_bin_mcast-group-multiple-socket ltp_testcases_bin_mcast-group-same-group ltp_testcases_bin_mcast-group-single-socket ltp_testcases_bin_mcast-group-source-filter ltp_testcases_bin_mcast4-pktfld01 ltp_testcases_bin_mcast4-pktfld02 ltp_testcases_bin_mcast4-queryfld01 ltp_testcases_bin_mcast4-queryfld02 ltp_testcases_bin_mcast4-queryfld03 ltp_testcases_bin_mcast4-queryfld04 ltp_testcases_bin_mcast4-queryfld05 ltp_testcases_bin_mcast4-queryfld06 ltp_testcases_bin_mcast6-pktfld01 ltp_testcases_bin_mcast6-pktfld02 ltp_testcases_bin_mcast6-queryfld01 ltp_testcases_bin_mcast6-queryfld02 ltp_testcases_bin_mcast6-queryfld03 ltp_testcases_bin_mcast6-queryfld04 ltp_testcases_bin_mcast6-queryfld05 ltp_testcases_bin_mcast6-queryfld06 ltp_testcases_bin_nfs01 ltp_testcases_bin_nfs02 ltp_testcases_bin_nfs03 ltp_testcases_bin_nfs04 ltp_testcases_bin_nfs05 ltp_testcases_bin_nfs06 ltp_testcases_bin_nfslock01 ltp_testcases_bin_nfsstat01 ltp_testcases_bin_ns-echoclient ltp_testcases_bin_output_ipsec_conf ltp_testcases_bin_route4-redirect ltp_testcases_bin_route4-rmmod ltp_testcases_bin_route6-redirect ltp_testcases_bin_route6-rmmod ltp_testcases_bin_run_pec_test ltp_testcases_bin_rwtest ltp_testcases_bin_set_ipv4addr ltp_testcases_bin_stress_floppy ltp_testcases_bin_tcp4-multi-diffip01 ltp_testcases_bin_tcp4-multi-diffip02 ltp_testcases_bin_tcp4-multi-diffip03 ltp_testcases_bin_tcp4-multi-diffip04 ltp_testcases_bin_tcp4-multi-diffip05 ltp_testcases_bin_tcp4-multi-diffip06 ltp_testcases_bin_tcp4-multi-diffip07 ltp_testcases_bin_tcp4-multi-diffip08 ltp_testcases_bin_tcp4-multi-diffip09 ltp_testcases_bin_tcp4-multi-diffip10 ltp_testcases_bin_tcp4-multi-diffip11 ltp_testcases_bin_tcp4-multi-diffip12 ltp_testcases_bin_tcp4-multi-diffip13 ltp_testcases_bin_tcp4-multi-diffip14 ltp_testcases_bin_tcp4-multi-diffnic01 ltp_testcases_bin_tcp4-multi-diffnic02 ltp_testcases_bin_tcp4-multi-diffnic03 ltp_testcases_bin_tcp4-multi-diffnic04 ltp_testcases_bin_tcp4-multi-diffnic05 ltp_testcases_bin_tcp4-multi-diffnic06 ltp_testcases_bin_tcp4-multi-diffnic07 ltp_testcases_bin_tcp4-multi-diffnic08 ltp_testcases_bin_tcp4-multi-diffnic09 ltp_testcases_bin_tcp4-multi-diffnic10 ltp_testcases_bin_tcp4-multi-diffnic11 ltp_testcases_bin_tcp4-multi-diffnic12 ltp_testcases_bin_tcp4-multi-diffnic13 ltp_testcases_bin_tcp4-multi-diffnic14 ltp_testcases_bin_tcp4-multi-diffport01 ltp_testcases_bin_tcp4-multi-diffport02 ltp_testcases_bin_tcp4-multi-diffport03 ltp_testcases_bin_tcp4-multi-diffport04 ltp_testcases_bin_tcp4-multi-diffport05 ltp_testcases_bin_tcp4-multi-diffport06 ltp_testcases_bin_tcp4-multi-diffport07 ltp_testcases_bin_tcp4-multi-diffport08 ltp_testcases_bin_tcp4-multi-diffport09 ltp_testcases_bin_tcp4-multi-diffport10 ltp_testcases_bin_tcp4-multi-diffport11 ltp_testcases_bin_tcp4-multi-diffport12 ltp_testcases_bin_tcp4-multi-diffport13 ltp_testcases_bin_tcp4-multi-diffport14 ltp_testcases_bin_tcp4-multi-sameport01 ltp_testcases_bin_tcp4-multi-sameport02 ltp_testcases_bin_tcp4-multi-sameport03 ltp_testcases_bin_tcp4-multi-sameport04 ltp_testcases_bin_tcp4-multi-sameport05 ltp_testcases_bin_tcp4-multi-sameport06 ltp_testcases_bin_tcp4-multi-sameport07 ltp_testcases_bin_tcp4-multi-sameport08 ltp_testcases_bin_tcp4-multi-sameport09 ltp_testcases_bin_tcp4-multi-sameport10 ltp_testcases_bin_tcp4-multi-sameport11 ltp_testcases_bin_tcp4-multi-sameport12 ltp_testcases_bin_tcp4-multi-sameport13 ltp_testcases_bin_tcp4-multi-sameport14 ltp_testcases_bin_tcp4-uni-basic01 ltp_testcases_bin_tcp4-uni-basic02 ltp_testcases_bin_tcp4-uni-basic03 ltp_testcases_bin_tcp4-uni-basic04 ltp_testcases_bin_tcp4-uni-basic05 ltp_testcases_bin_tcp4-uni-basic06 ltp_testcases_bin_tcp4-uni-basic07 ltp_testcases_bin_tcp4-uni-basic08 ltp_testcases_bin_tcp4-uni-basic09 ltp_testcases_bin_tcp4-uni-basic10 ltp_testcases_bin_tcp4-uni-basic11 ltp_testcases_bin_tcp4-uni-basic12 ltp_testcases_bin_tcp4-uni-basic13 ltp_testcases_bin_tcp4-uni-basic14 ltp_testcases_bin_tcp4-uni-dsackoff01 ltp_testcases_bin_tcp4-uni-dsackoff02 ltp_testcases_bin_tcp4-uni-dsackoff03 ltp_testcases_bin_tcp4-uni-dsackoff04 ltp_testcases_bin_tcp4-uni-dsackoff05 ltp_testcases_bin_tcp4-uni-dsackoff06 ltp_testcases_bin_tcp4-uni-dsackoff07 ltp_testcases_bin_tcp4-uni-dsackoff08 ltp_testcases_bin_tcp4-uni-dsackoff09 ltp_testcases_bin_tcp4-uni-dsackoff10 ltp_testcases_bin_tcp4-uni-dsackoff11 ltp_testcases_bin_tcp4-uni-dsackoff12 ltp_testcases_bin_tcp4-uni-dsackoff13 ltp_testcases_bin_tcp4-uni-dsackoff14 ltp_testcases_bin_tcp4-uni-pktlossdup01 ltp_testcases_bin_tcp4-uni-pktlossdup02 ltp_testcases_bin_tcp4-uni-pktlossdup03 ltp_testcases_bin_tcp4-uni-pktlossdup04 ltp_testcases_bin_tcp4-uni-pktlossdup05 ltp_testcases_bin_tcp4-uni-pktlossdup06 ltp_testcases_bin_tcp4-uni-pktlossdup07 ltp_testcases_bin_tcp4-uni-pktlossdup08 ltp_testcases_bin_tcp4-uni-pktlossdup09 ltp_testcases_bin_tcp4-uni-pktlossdup10 ltp_testcases_bin_tcp4-uni-pktlossdup11 ltp_testcases_bin_tcp4-uni-pktlossdup12 ltp_testcases_bin_tcp4-uni-pktlossdup13 ltp_testcases_bin_tcp4-uni-pktlossdup14 ltp_testcases_bin_tcp4-uni-sackoff01 ltp_testcases_bin_tcp4-uni-sackoff02 ltp_testcases_bin_tcp4-uni-sackoff03 ltp_testcases_bin_tcp4-uni-sackoff04 ltp_testcases_bin_tcp4-uni-sackoff05 ltp_testcases_bin_tcp4-uni-sackoff06 ltp_testcases_bin_tcp4-uni-sackoff07 ltp_testcases_bin_tcp4-uni-sackoff08 ltp_testcases_bin_tcp4-uni-sackoff09 ltp_testcases_bin_tcp4-uni-sackoff10 ltp_testcases_bin_tcp4-uni-sackoff11 ltp_testcases_bin_tcp4-uni-sackoff12 ltp_testcases_bin_tcp4-uni-sackoff13 ltp_testcases_bin_tcp4-uni-sackoff14 ltp_testcases_bin_tcp4-uni-smallsend01 ltp_testcases_bin_tcp4-uni-smallsend02 ltp_testcases_bin_tcp4-uni-smallsend03 ltp_testcases_bin_tcp4-uni-smallsend04 ltp_testcases_bin_tcp4-uni-smallsend05 ltp_testcases_bin_tcp4-uni-smallsend06 ltp_testcases_bin_tcp4-uni-smallsend07 ltp_testcases_bin_tcp4-uni-smallsend08 ltp_testcases_bin_tcp4-uni-smallsend09 ltp_testcases_bin_tcp4-uni-smallsend10 ltp_testcases_bin_tcp4-uni-smallsend11 ltp_testcases_bin_tcp4-uni-smallsend12 ltp_testcases_bin_tcp4-uni-smallsend13 ltp_testcases_bin_tcp4-uni-smallsend14 ltp_testcases_bin_tcp4-uni-tso01 ltp_testcases_bin_tcp4-uni-tso02 ltp_testcases_bin_tcp4-uni-tso03 ltp_testcases_bin_tcp4-uni-tso04 ltp_testcases_bin_tcp4-uni-tso05 ltp_testcases_bin_tcp4-uni-tso06 ltp_testcases_bin_tcp4-uni-tso07 ltp_testcases_bin_tcp4-uni-tso08 ltp_testcases_bin_tcp4-uni-tso09 ltp_testcases_bin_tcp4-uni-tso10 ltp_testcases_bin_tcp4-uni-tso11 ltp_testcases_bin_tcp4-uni-tso12 ltp_testcases_bin_tcp4-uni-tso13 ltp_testcases_bin_tcp4-uni-tso14 ltp_testcases_bin_tcp4-uni-winscale01 ltp_testcases_bin_tcp4-uni-winscale02 ltp_testcases_bin_tcp4-uni-winscale03 ltp_testcases_bin_tcp4-uni-winscale04 ltp_testcases_bin_tcp4-uni-winscale05 ltp_testcases_bin_tcp4-uni-winscale06 ltp_testcases_bin_tcp4-uni-winscale07 ltp_testcases_bin_tcp4-uni-winscale08 ltp_testcases_bin_tcp4-uni-winscale09 ltp_testcases_bin_tcp4-uni-winscale10 ltp_testcases_bin_tcp4-uni-winscale11 ltp_testcases_bin_tcp4-uni-winscale12 ltp_testcases_bin_tcp4-uni-winscale13 ltp_testcases_bin_tcp4-uni-winscale14 ltp_testcases_bin_tcp6-multi-diffip01 ltp_testcases_bin_tcp6-multi-diffip02 ltp_testcases_bin_tcp6-multi-diffip03 ltp_testcases_bin_tcp6-multi-diffip04 ltp_testcases_bin_tcp6-multi-diffip05 ltp_testcases_bin_tcp6-multi-diffip06 ltp_testcases_bin_tcp6-multi-diffip07 ltp_testcases_bin_tcp6-multi-diffip08 ltp_testcases_bin_tcp6-multi-diffip09 ltp_testcases_bin_tcp6-multi-diffip10 ltp_testcases_bin_tcp6-multi-diffip11 ltp_testcases_bin_tcp6-multi-diffip12 ltp_testcases_bin_tcp6-multi-diffip13 ltp_testcases_bin_tcp6-multi-diffip14 ltp_testcases_bin_tcp6-multi-diffnic01 ltp_testcases_bin_tcp6-multi-diffnic02 ltp_testcases_bin_tcp6-multi-diffnic03 ltp_testcases_bin_tcp6-multi-diffnic04 ltp_testcases_bin_tcp6-multi-diffnic05 ltp_testcases_bin_tcp6-multi-diffnic06 ltp_testcases_bin_tcp6-multi-diffnic07 ltp_testcases_bin_tcp6-multi-diffnic08 ltp_testcases_bin_tcp6-multi-diffnic09 ltp_testcases_bin_tcp6-multi-diffnic10 ltp_testcases_bin_tcp6-multi-diffnic11 ltp_testcases_bin_tcp6-multi-diffnic12 ltp_testcases_bin_tcp6-multi-diffnic13 ltp_testcases_bin_tcp6-multi-diffnic14 ltp_testcases_bin_tcp6-multi-diffport01 ltp_testcases_bin_tcp6-multi-diffport02 ltp_testcases_bin_tcp6-multi-diffport03 ltp_testcases_bin_tcp6-multi-diffport04 ltp_testcases_bin_tcp6-multi-diffport05 ltp_testcases_bin_tcp6-multi-diffport06 ltp_testcases_bin_tcp6-multi-diffport07 ltp_testcases_bin_tcp6-multi-diffport08 ltp_testcases_bin_tcp6-multi-diffport09 ltp_testcases_bin_tcp6-multi-diffport10 ltp_testcases_bin_tcp6-multi-diffport11 ltp_testcases_bin_tcp6-multi-diffport12 ltp_testcases_bin_tcp6-multi-diffport13 ltp_testcases_bin_tcp6-multi-diffport14 ltp_testcases_bin_tcp6-multi-sameport01 ltp_testcases_bin_tcp6-multi-sameport02 ltp_testcases_bin_tcp6-multi-sameport03 ltp_testcases_bin_tcp6-multi-sameport04 ltp_testcases_bin_tcp6-multi-sameport05 ltp_testcases_bin_tcp6-multi-sameport06 ltp_testcases_bin_tcp6-multi-sameport07 ltp_testcases_bin_tcp6-multi-sameport08 ltp_testcases_bin_tcp6-multi-sameport09 ltp_testcases_bin_tcp6-multi-sameport10 ltp_testcases_bin_tcp6-multi-sameport11 ltp_testcases_bin_tcp6-multi-sameport12 ltp_testcases_bin_tcp6-multi-sameport13 ltp_testcases_bin_tcp6-multi-sameport14 ltp_testcases_bin_tcp6-uni-basic01 ltp_testcases_bin_tcp6-uni-basic02 ltp_testcases_bin_tcp6-uni-basic03 ltp_testcases_bin_tcp6-uni-basic04 ltp_testcases_bin_tcp6-uni-basic05 ltp_testcases_bin_tcp6-uni-basic06 ltp_testcases_bin_tcp6-uni-basic07 ltp_testcases_bin_tcp6-uni-basic08 ltp_testcases_bin_tcp6-uni-basic09 ltp_testcases_bin_tcp6-uni-basic10 ltp_testcases_bin_tcp6-uni-basic11 ltp_testcases_bin_tcp6-uni-basic12 ltp_testcases_bin_tcp6-uni-basic13 ltp_testcases_bin_tcp6-uni-basic14 ltp_testcases_bin_tcp6-uni-dsackoff01 ltp_testcases_bin_tcp6-uni-dsackoff02 ltp_testcases_bin_tcp6-uni-dsackoff03 ltp_testcases_bin_tcp6-uni-dsackoff04 ltp_testcases_bin_tcp6-uni-dsackoff05 ltp_testcases_bin_tcp6-uni-dsackoff06 ltp_testcases_bin_tcp6-uni-dsackoff07 ltp_testcases_bin_tcp6-uni-dsackoff08 ltp_testcases_bin_tcp6-uni-dsackoff09 ltp_testcases_bin_tcp6-uni-dsackoff10 ltp_testcases_bin_tcp6-uni-dsackoff11 ltp_testcases_bin_tcp6-uni-dsackoff12 ltp_testcases_bin_tcp6-uni-dsackoff13 ltp_testcases_bin_tcp6-uni-dsackoff14 ltp_testcases_bin_tcp6-uni-pktlossdup01 ltp_testcases_bin_tcp6-uni-pktlossdup02 ltp_testcases_bin_tcp6-uni-pktlossdup03 ltp_testcases_bin_tcp6-uni-pktlossdup04 ltp_testcases_bin_tcp6-uni-pktlossdup05 ltp_testcases_bin_tcp6-uni-pktlossdup06 ltp_testcases_bin_tcp6-uni-pktlossdup07 ltp_testcases_bin_tcp6-uni-pktlossdup08 ltp_testcases_bin_tcp6-uni-pktlossdup09 ltp_testcases_bin_tcp6-uni-pktlossdup10 ltp_testcases_bin_tcp6-uni-pktlossdup11 ltp_testcases_bin_tcp6-uni-pktlossdup12 ltp_testcases_bin_tcp6-uni-pktlossdup13 ltp_testcases_bin_tcp6-uni-pktlossdup14 ltp_testcases_bin_tcp6-uni-sackoff01 ltp_testcases_bin_tcp6-uni-sackoff02 ltp_testcases_bin_tcp6-uni-sackoff03 ltp_testcases_bin_tcp6-uni-sackoff04 ltp_testcases_bin_tcp6-uni-sackoff05 ltp_testcases_bin_tcp6-uni-sackoff06 ltp_testcases_bin_tcp6-uni-sackoff07 ltp_testcases_bin_tcp6-uni-sackoff08 ltp_testcases_bin_tcp6-uni-sackoff09 ltp_testcases_bin_tcp6-uni-sackoff10 ltp_testcases_bin_tcp6-uni-sackoff11 ltp_testcases_bin_tcp6-uni-sackoff12 ltp_testcases_bin_tcp6-uni-sackoff13 ltp_testcases_bin_tcp6-uni-sackoff14 ltp_testcases_bin_tcp6-uni-smallsend01 ltp_testcases_bin_tcp6-uni-smallsend02 ltp_testcases_bin_tcp6-uni-smallsend03 ltp_testcases_bin_tcp6-uni-smallsend04 ltp_testcases_bin_tcp6-uni-smallsend05 ltp_testcases_bin_tcp6-uni-smallsend06 ltp_testcases_bin_tcp6-uni-smallsend07 ltp_testcases_bin_tcp6-uni-smallsend08 ltp_testcases_bin_tcp6-uni-smallsend09 ltp_testcases_bin_tcp6-uni-smallsend10 ltp_testcases_bin_tcp6-uni-smallsend11 ltp_testcases_bin_tcp6-uni-smallsend12 ltp_testcases_bin_tcp6-uni-smallsend13 ltp_testcases_bin_tcp6-uni-smallsend14 ltp_testcases_bin_tcp6-uni-tso01 ltp_testcases_bin_tcp6-uni-tso02 ltp_testcases_bin_tcp6-uni-tso03 ltp_testcases_bin_tcp6-uni-tso04 ltp_testcases_bin_tcp6-uni-tso05 ltp_testcases_bin_tcp6-uni-tso06 ltp_testcases_bin_tcp6-uni-tso07 ltp_testcases_bin_tcp6-uni-tso08 ltp_testcases_bin_tcp6-uni-tso09 ltp_testcases_bin_tcp6-uni-tso10 ltp_testcases_bin_tcp6-uni-tso11 ltp_testcases_bin_tcp6-uni-tso12 ltp_testcases_bin_tcp6-uni-tso13 ltp_testcases_bin_tcp6-uni-tso14 ltp_testcases_bin_tcp6-uni-winscale01 ltp_testcases_bin_tcp6-uni-winscale02 ltp_testcases_bin_tcp6-uni-winscale03 ltp_testcases_bin_tcp6-uni-winscale04 ltp_testcases_bin_tcp6-uni-winscale05 ltp_testcases_bin_tcp6-uni-winscale06 ltp_testcases_bin_tcp6-uni-winscale07 ltp_testcases_bin_tcp6-uni-winscale08 ltp_testcases_bin_tcp6-uni-winscale09 ltp_testcases_bin_tcp6-uni-winscale10 ltp_testcases_bin_tcp6-uni-winscale11 ltp_testcases_bin_tcp6-uni-winscale12 ltp_testcases_bin_tcp6-uni-winscale13 ltp_testcases_bin_tcp6-uni-winscale14 ltp_testcases_bin_test_ioctl ltp_testcases_bin_udp4-multi-diffip01 ltp_testcases_bin_udp4-multi-diffip02 ltp_testcases_bin_udp4-multi-diffip03 ltp_testcases_bin_udp4-multi-diffip04 ltp_testcases_bin_udp4-multi-diffip05 ltp_testcases_bin_udp4-multi-diffip06 ltp_testcases_bin_udp4-multi-diffip07 ltp_testcases_bin_udp4-multi-diffnic01 ltp_testcases_bin_udp4-multi-diffnic02 ltp_testcases_bin_udp4-multi-diffnic03 ltp_testcases_bin_udp4-multi-diffnic04 ltp_testcases_bin_udp4-multi-diffnic05 ltp_testcases_bin_udp4-multi-diffnic06 ltp_testcases_bin_udp4-multi-diffnic07 ltp_testcases_bin_udp4-multi-diffport01 ltp_testcases_bin_udp4-multi-diffport02 ltp_testcases_bin_udp4-multi-diffport03 ltp_testcases_bin_udp4-multi-diffport04 ltp_testcases_bin_udp4-multi-diffport05 ltp_testcases_bin_udp4-multi-diffport06 ltp_testcases_bin_udp4-multi-diffport07 ltp_testcases_bin_udp4-uni-basic01 ltp_testcases_bin_udp4-uni-basic02 ltp_testcases_bin_udp4-uni-basic03 ltp_testcases_bin_udp4-uni-basic04 ltp_testcases_bin_udp4-uni-basic05 ltp_testcases_bin_udp4-uni-basic06 ltp_testcases_bin_udp4-uni-basic07 ltp_testcases_bin_udp6-multi-diffip01 ltp_testcases_bin_udp6-multi-diffip02 ltp_testcases_bin_udp6-multi-diffip03 ltp_testcases_bin_udp6-multi-diffip04 ltp_testcases_bin_udp6-multi-diffip05 ltp_testcases_bin_udp6-multi-diffip06 ltp_testcases_bin_udp6-multi-diffip07 ltp_testcases_bin_udp6-multi-diffnic01 ltp_testcases_bin_udp6-multi-diffnic02 ltp_testcases_bin_udp6-multi-diffnic03 ltp_testcases_bin_udp6-multi-diffnic04 ltp_testcases_bin_udp6-multi-diffnic05 ltp_testcases_bin_udp6-multi-diffnic06 ltp_testcases_bin_udp6-multi-diffnic07 ltp_testcases_bin_udp6-multi-diffport01 ltp_testcases_bin_udp6-multi-diffport02 ltp_testcases_bin_udp6-multi-diffport03 ltp_testcases_bin_udp6-multi-diffport04 ltp_testcases_bin_udp6-multi-diffport05 ltp_testcases_bin_udp6-multi-diffport06 ltp_testcases_bin_udp6-multi-diffport07 ltp_testcases_bin_udp6-uni-basic01 ltp_testcases_bin_udp6-uni-basic02 ltp_testcases_bin_udp6-uni-basic03 ltp_testcases_bin_udp6-uni-basic04 ltp_testcases_bin_udp6-uni-basic05 ltp_testcases_bin_udp6-uni-basic06 ltp_testcases_bin_udp6-uni-basic07 ltp_testsf_c ltp_testsf_c6 ltp_testsf_s ltp_testsf_s6 ltp_tgkill01 ltp_tgkill02 ltp_tgkill03 ltp_thp01 ltp_thp02 ltp_thp03 ltp_time-schedule ltp_time01 ltp_time02 ltp_timed_forkbomb ltp_timer_create01 ltp_timer_create02 ltp_timer_create03 ltp_timer_delete01 ltp_timer_delete02 ltp_timer_getoverrun01 ltp_timer_gettime01 ltp_timer_settime01 ltp_timer_settime02 ltp_timerfd01 ltp_timerfd02 ltp_timerfd03 ltp_timerfd_create01 ltp_timerfd_gettime01 ltp_timerfd_settime01 ltp_times01 ltp_times03 ltp_tkill01 ltp_tkill02 ltp_tomoyo_accept_test ltp_tomoyo_file_test ltp_tomoyo_filesystem_test ltp_tomoyo_new_file_test ltp_tomoyo_new_test ltp_tomoyo_policy_io_test ltp_tomoyo_policy_memory_test ltp_tomoyo_rewrite_test ltp_tpci ltp_trace_sched ltp_trerrno ltp_truncate01 ltp_truncate01_64 ltp_truncate02 ltp_truncate02_64 ltp_truncate03 ltp_truncate03_64 ltp_tst_brk ltp_tst_brkm ltp_tst_capability01 ltp_tst_capability02 ltp_tst_check_drivers ltp_tst_checkpoint ltp_tst_checkpoint_wait_timeout ltp_tst_checkpoint_wake_timeout ltp_tst_cleanup_once ltp_tst_dataroot01 ltp_tst_dataroot02 ltp_tst_dataroot03 ltp_tst_device ltp_tst_exit ltp_tst_expiration_timer ltp_tst_fs_fill_hardlinks ltp_tst_fs_fill_subdirs ltp_tst_fs_has_free ltp_tst_get_unused_port ltp_tst_getconf ltp_tst_kvcmp ltp_tst_ncpus ltp_tst_ncpus_conf ltp_tst_ncpus_max ltp_tst_net_iface_prefix ltp_tst_net_ip_prefix ltp_tst_net_vars ltp_tst_process_state ltp_tst_random ltp_tst_record_childstatus ltp_tst_res ltp_tst_res_hexd ltp_tst_resm ltp_tst_rod ltp_tst_safe_fileops ltp_tst_safe_macros ltp_tst_sleep ltp_tst_strerrno ltp_tst_strsig ltp_tst_strstatus ltp_tst_supported_fs ltp_tst_tmpdir_test ltp_uaccess ltp_uevent01 ltp_uevent02 ltp_uevent03 ltp_umask01 ltp_umip_basic_test ltp_umount01 ltp_umount02 ltp_umount03 ltp_umount2_01 ltp_umount2_02 ltp_umount2_03 ltp_uname01 ltp_uname02 ltp_uname03 ltp_uname04 ltp_unlink05 ltp_unlink07 ltp_unlink08 ltp_unlinkat01 ltp_unshare01 ltp_unshare02 ltp_userfaultfd01 ltp_ustat01 ltp_ustat02 ltp_utime01 ltp_utime02 ltp_utime03 ltp_utime04 ltp_utime05 ltp_utime06 ltp_utimensat01 ltp_utimes01 ltp_variant ltp_verify_caps_exec ltp_vfork ltp_vfork01 ltp_vfork02 ltp_vhangup01 ltp_vhangup02 ltp_vma01 ltp_vma02 ltp_vma03 ltp_vma04 ltp_vma05_vdso ltp_vmsplice01 ltp_vmsplice02 ltp_vmsplice03 ltp_wait01 ltp_wait02 ltp_wait401 ltp_wait402 ltp_waitid01 ltp_waitid02 ltp_waitpid01 ltp_waitpid02 ltp_waitpid03 ltp_waitpid04 ltp_waitpid05 ltp_waitpid06 ltp_waitpid07 ltp_waitpid08 ltp_waitpid09 ltp_waitpid10 ltp_waitpid11 ltp_waitpid12 ltp_waitpid13 ltp_write01 ltp_write02 ltp_write03 ltp_write04 ltp_write05 ltp_writetest ltp_writev01 ltp_writev02 ltp_writev05 ltp_writev06 ltp_writev07 ltp_zram03; }

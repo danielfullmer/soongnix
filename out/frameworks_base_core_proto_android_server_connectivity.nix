@@ -24,7 +24,6 @@ datastallprotosnano = java_library_static {
         "data_stall_event.proto"
     ];
     sdk_version = "system_current";
-    no_framework_libs = true;
 };
 
 in { inherit datastallprotosnano; }

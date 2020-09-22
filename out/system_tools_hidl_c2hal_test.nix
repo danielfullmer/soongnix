@@ -76,8 +76,6 @@ c2hal_test = cc_test_library {
     export_generated_headers = ["c2hal_test_genc++_headers"];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
         "libcutils"

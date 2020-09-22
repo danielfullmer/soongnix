@@ -49,7 +49,7 @@ layersprotosnano = java_library_static {
         "layers.proto"
         "layerstrace.proto"
     ];
-    no_framework_libs = true;
+    sdk_version = "core_platform";
     target = {
         android = {
             jarjar_rules = "jarjar-rules.txt";

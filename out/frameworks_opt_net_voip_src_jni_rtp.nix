@@ -29,13 +29,19 @@ librtp_jni = cc_library_shared {
         "G711Codec.cpp"
         "GsmCodec.cpp"
     ];
+    header_libs = [
+        "libmedia_headers"
+        "libmediametrics_headers"
+    ];
+
     shared_libs = [
-        "libnativehelper"
-        "libcutils"
-        "libutils"
-        "liblog"
         "libaudioclient"
+        "libaudiofoundation"
+        "libcutils"
+        "liblog"
+        "libnativehelper"
         "libstagefright_amrnb_common"
+        "libutils"
     ];
     static_libs = [
         "libgsm"

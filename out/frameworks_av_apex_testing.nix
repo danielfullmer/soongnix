@@ -1,4 +1,4 @@
-{ apex }:
+{ apex_test }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,18 +15,19 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"test_com.android.media" = apex {
+"test_com.android.media" = apex_test {
     name = "test_com.android.media";
     manifest = "test_manifest.json";
-    file_contexts = "com.android.media";
+    file_contexts = ":com.android.media-file_contexts";
     defaults = ["com.android.media-defaults"];
+    prebuilts = ["sdkinfo_45"];
     installable = false;
 };
 
-"test_com.android.media.swcodec" = apex {
+"test_com.android.media.swcodec" = apex_test {
     name = "test_com.android.media.swcodec";
     manifest = "test_manifest_codec.json";
-    file_contexts = "com.android.media.swcodec";
+    file_contexts = ":com.android.media.swcodec-file_contexts";
     defaults = ["com.android.media.swcodec-defaults"];
     installable = false;
 };

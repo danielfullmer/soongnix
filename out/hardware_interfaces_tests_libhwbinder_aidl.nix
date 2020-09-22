@@ -1,7 +1,7 @@
-{ cc_library_shared }:
+{ cc_library }:
 let
 
-"android.hardware.tests.libbinder" = cc_library_shared {
+"android.hardware.tests.libbinder" = cc_library {
     name = "android.hardware.tests.libbinder";
     defaults = ["hidl_defaults"];
 

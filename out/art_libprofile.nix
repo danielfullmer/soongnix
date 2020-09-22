@@ -22,14 +22,13 @@ libprofile_defaults = cc_defaults {
     defaults = ["art_defaults"];
     host_supported = true;
     srcs = [
+        "profile/profile_boot_info.cc"
         "profile/profile_compilation_info.cc"
     ];
     target = {
         android = {
             shared_libs = [
-                "libartbase"
                 "libartpalette"
-                "libdexfile"
                 "libbase"
             ];
             static_libs = [
@@ -41,9 +40,7 @@ libprofile_defaults = cc_defaults {
         };
         not_windows = {
             shared_libs = [
-                "libartbase"
                 "libartpalette"
-                "libdexfile"
                 "libziparchive"
                 "libz"
                 "libbase"
@@ -53,9 +50,7 @@ libprofile_defaults = cc_defaults {
         windows = {
             cflags = ["-Wno-thread-safety"];
             static_libs = [
-                "libartbase"
                 "libartpalette"
-                "libdexfile"
                 "libziparchive"
                 "libz"
                 "libbase"
@@ -105,25 +100,43 @@ libprofiled_static_defaults = cc_defaults {
 
 libprofile = art_cc_library {
     name = "libprofile";
-    defaults = ["libprofile_defaults"];
-    #  Leave the symbols in the shared library so that stack unwinders can
-    #  produce meaningful name resolution.
-    strip = {
-        keep_symbols = true;
-    };
+    defaults = [
+        "libprofile_defaults"
+        "libart_nativeunwind_defaults"
+    ];
     shared_libs = [
         "libbase"
         "libziparchive"
     ];
     export_shared_lib_headers = ["libbase"];
     target = {
+        android = {
+            shared_libs = [
+                "libartbase"
+                "libdexfile"
+            ];
+        };
+        not_windows = {
+            shared_libs = [
+                "libartbase"
+                "libdexfile"
+            ];
+        };
         windows = {
             enabled = true;
             shared = {
                 enabled = false;
             };
+            static_libs = [
+                "libartbase"
+                "libdexfile"
+            ];
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 libprofiled = art_cc_library {
@@ -136,7 +149,30 @@ libprofiled = art_cc_library {
         "libbase"
         "libziparchive"
     ];
+    target = {
+        android = {
+            shared_libs = [
+                "libartbased"
+                "libdexfiled"
+            ];
+        };
+        not_windows = {
+            shared_libs = [
+                "libartbased"
+                "libdexfiled"
+            ];
+        };
+        windows = {
+            static_libs = [
+                "libartbased"
+                "libdexfiled"
+            ];
+        };
+    };
     export_shared_lib_headers = ["libbase"];
+    apex_available = [
+        "com.android.art.debug"
+    ];
 };
 
 #  For now many of these tests still use CommonRuntimeTest, almost universally because of
@@ -148,6 +184,7 @@ art_libprofile_tests = art_cc_test {
         "art_gtest_defaults"
     ];
     srcs = [
+        "profile/profile_boot_info_test.cc"
         "profile/profile_compilation_info_test.cc"
     ];
     shared_libs = [

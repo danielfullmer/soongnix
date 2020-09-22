@@ -27,11 +27,15 @@ VtsHalMediaC2V1_0Defaults = cc_defaults {
     ];
 
     static_libs = [
+        "libgtest"
         "VtsHalMediaC2V1_0CommonUtil"
     ];
 
     shared_libs = [
         "libcodec2_client"
+    ];
+    test_suites = [
+        "vts"
     ];
 };
 

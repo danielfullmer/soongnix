@@ -19,6 +19,8 @@ libedify = cc_library_static {
     name = "libedify";
 
     host_supported = true;
+    vendor_available = true;
+    recovery_available = true;
 
     srcs = [
         "expr.cpp"

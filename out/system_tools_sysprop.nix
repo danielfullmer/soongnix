@@ -1,4 +1,4 @@
-{ cc_binary_host, cc_defaults, cc_test_host }:
+{ cc_binary_host, cc_defaults, cc_test_host, java_defaults, java_library }:
 let
 
 /*
@@ -28,6 +28,7 @@ sysprop-defaults = cc_defaults {
         "libbase"
         "liblog"
     ];
+    static_libs = ["libc++fs"];
     proto = {
         type = "full";
     };
@@ -52,18 +53,55 @@ sysprop_java = cc_binary_host {
     ];
 };
 
+sysprop_api_checker = cc_binary_host {
+    name = "sysprop_api_checker";
+    defaults = ["sysprop-defaults"];
+    srcs = [
+        "ApiChecker.cpp"
+        "ApiCheckerMain.cpp"
+    ];
+};
+
+sysprop_api_dump = cc_binary_host {
+    name = "sysprop_api_dump";
+    defaults = ["sysprop-defaults"];
+    srcs = ["ApiDumpMain.cpp"];
+};
+
 sysprop_test = cc_test_host {
     name = "sysprop_test";
     defaults = ["sysprop-defaults"];
     srcs = [
+        "ApiChecker.cpp"
         "CppGen.cpp"
         "JavaGen.cpp"
+        "tests/ApiCheckerTest.cpp"
         "tests/CodeWriterUnitTest.cpp"
         "tests/CppGenTest.cpp"
-        "tests/DirectoryUtilUnitTest.cpp"
         "tests/InvalidSyspropTest.cpp"
         "tests/JavaGenTest.cpp"
     ];
+    test_suites = ["general-tests"];
 };
 
-in { inherit sysprop-defaults sysprop_cpp sysprop_java sysprop_test; }
+sysprop-library-stub-defaults = java_defaults {
+    name = "sysprop-library-stub-defaults";
+    srcs = [
+        "stub/android/os/SystemProperties.java"
+    ];
+    installable = false;
+    sdk_version = "core_current";
+};
+
+sysprop-library-stub-platform = java_library {
+    name = "sysprop-library-stub-platform";
+    defaults = ["sysprop-library-stub-defaults"];
+};
+
+sysprop-library-stub-vendor = java_library {
+    name = "sysprop-library-stub-vendor";
+    defaults = ["sysprop-library-stub-defaults"];
+    soc_specific = true;
+};
+
+in { inherit sysprop-defaults sysprop-library-stub-defaults sysprop-library-stub-platform sysprop-library-stub-vendor sysprop_api_checker sysprop_api_dump sysprop_cpp sysprop_java sysprop_test; }

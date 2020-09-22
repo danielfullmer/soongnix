@@ -22,11 +22,6 @@ CtsJvmtiRedefineClassesDeviceApp = android_test_helper_app {
         "src/art/Main.java"
     ];
     manifest = "AndroidManifest.xml";
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
     dex_preopt = {
         enabled = false;
     };

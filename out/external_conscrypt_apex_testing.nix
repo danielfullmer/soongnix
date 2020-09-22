@@ -1,4 +1,4 @@
-{ apex }:
+{ apex_test }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -15,11 +15,14 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"test_com.android.conscrypt" = apex {
+"test_com.android.conscrypt" = apex_test {
     name = "test_com.android.conscrypt";
+    visibility = [
+        "//system/apex/tests"
+    ];
     defaults = ["com.android.conscrypt-defaults"];
     manifest = "test_apex_manifest.json";
-    file_contexts = "com.android.conscrypt";
+    file_contexts = ":com.android.conscrypt-file_contexts";
     #  Test APEX, should never be installed
     installable = false;
 };

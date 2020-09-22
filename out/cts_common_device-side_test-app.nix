@@ -33,7 +33,7 @@ CompatibilityTestApp = android_test {
         "compatibility-common-util-devicesidelib"
         "compatibility-device-info-tests"
         "compatibility-device-info"
-        "compatibility-device-util-tests"
+        "compatibility-device-util-tests-axt"
         "compatibility-device-util-axt"
     ];
 

@@ -1,4 +1,4 @@
-{ cc_library }:
+{ cc_library_shared }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -14,15 +14,32 @@ let
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-libandroidicu = cc_library {
+
+#  A shared library for use on Android by frameworks and other code outside
+#  of the ART mainline module. It provides a subset of ICU APIs, some
+#  Android extensions and stable symbols. Most Android target code should
+#  depend on this library.
+#
+#  With the exception of a few special cases like host apex build targets,
+#  host binaries should use libicuuc + libicui18n directly.
+libandroidicu = cc_library_shared {
     name = "libandroidicu";
 
     #  Most code is imported via libandroidicu_static.
     srcs = [
         "aicu/AIcu.cpp"
     ];
+    #  host_supported is required for host apex. This library is not intended
+    #  for general host use.
     host_supported = true;
+    native_bridge_supported = true;
     unique_host_soname = true;
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        #  b/133140750 Clean this up. This is due to the dependency to from libmedia
+        "//apex_available:platform"
+    ];
 
     #  include/aicu/: extra utility APIs added by android
     #  include/unicode/: Includes modified C headers from ICU4C,
@@ -43,6 +60,7 @@ libandroidicu = cc_library {
     #  and export the headers in include/.
     whole_static_libs = ["libandroidicu_static"];
     shared_libs = [
+        "libbase"
         "libicuuc"
         "libicui18n"
         "liblog"
@@ -66,6 +84,9 @@ libandroidicu = cc_library {
                 "-DANDROID_LINK_SHARED_ICU4C"
             ];
             version_script = "libandroidicu.map.txt";
+            static_libs = [
+                "libandroidicuinit"
+            ];
         };
         windows = {
             enabled = true;

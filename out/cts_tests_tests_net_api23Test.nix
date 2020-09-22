@@ -49,7 +49,7 @@ CtsNetApi23TestCases = android_test {
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 

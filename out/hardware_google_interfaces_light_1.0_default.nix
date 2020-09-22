@@ -31,7 +31,6 @@ let
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.light@2.0"
         "hardware.google.light@1.0"
     ];

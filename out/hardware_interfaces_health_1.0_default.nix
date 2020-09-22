@@ -1,4 +1,4 @@
-{ cc_library_static }:
+{ cc_binary, cc_library_shared, cc_library_static }:
 let
 
 "android.hardware.health@1.0-convert" = cc_library_static {
@@ -15,11 +15,63 @@ let
     shared_libs = [
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.health@1.0"
     ];
 
 };
 
-in { inherit "android.hardware.health@1.0-convert"; }
+"android.hardware.health@1.0-impl-helper" = cc_library_static {
+    name = "android.hardware.health@1.0-impl-helper";
+    vendor = true;
+    srcs = ["Health.cpp"];
+
+    header_libs = [
+        "libbase_headers"
+        "libhealthd_headers"
+    ];
+
+    shared_libs = [
+        "libcutils"
+        "libhidlbase"
+        "liblog"
+        "libutils"
+        "android.hardware.health@1.0"
+    ];
+
+    static_libs = [
+        "android.hardware.health@1.0-convert"
+    ];
+};
+
+"android.hardware.health@1.0-impl" = cc_library_shared {
+    name = "android.hardware.health@1.0-impl";
+    vendor = true;
+    relative_install_path = "hw";
+
+    static_libs = [
+        "android.hardware.health@1.0-impl-helper"
+        "android.hardware.health@1.0-convert"
+        "libhealthd.default"
+    ];
+};
+
+"android.hardware.health@1.0-service" = cc_binary {
+    name = "android.hardware.health@1.0-service";
+    vendor = true;
+    relative_install_path = "hw";
+    init_rc = ["android.hardware.health@1.0-service.rc"];
+    srcs = ["HealthService.cpp"];
+
+    shared_libs = [
+        "liblog"
+        "libcutils"
+        "libdl"
+        "libbase"
+        "libutils"
+        "libhidlbase"
+        "android.hardware.health@1.0"
+    ];
+};
+
+in { inherit "android.hardware.health@1.0-convert" "android.hardware.health@1.0-impl" "android.hardware.health@1.0-impl-helper" "android.hardware.health@1.0-service"; }

@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library, cc_library_headers, cc_test }:
+{ cc_binary, cc_defaults, cc_library_headers, cc_library_static, cc_test }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -29,21 +29,31 @@ minadbd_defaults = cc_defaults {
     include_dirs = [
         "system/core/adb"
     ];
+
+    header_libs = [
+        "libminadbd_headers"
+    ];
 };
 
 #  `libminadbd_services` is analogous to the `libadbd_services` for regular `adbd`, but providing
 #  the sideload service only.
-libminadbd_services = cc_library {
+libminadbd_services = cc_library_static {
     name = "libminadbd_services";
     recovery_available = true;
 
     defaults = [
         "minadbd_defaults"
+        "librecovery_utils_defaults"
     ];
 
     srcs = [
         "fuse_adb_provider.cpp"
         "minadbd_services.cpp"
+    ];
+
+    static_libs = [
+        "librecovery_utils"
+        "libotautil"
     ];
 
     shared_libs = [
@@ -57,9 +67,12 @@ libminadbd_services = cc_library {
 libminadbd_headers = cc_library_headers {
     name = "libminadbd_headers";
     recovery_available = true;
-    #  TODO create a include dir
     export_include_dirs = [
-        "."
+        "include"
+    ];
+    #  adb_install.cpp
+    visibility = [
+        "//bootable/recovery/install"
     ];
 };
 
@@ -69,6 +82,8 @@ minadbd = cc_binary {
 
     defaults = [
         "minadbd_defaults"
+        "libadbd_binary_dependencies"
+        "librecovery_utils_defaults"
     ];
 
     srcs = [
@@ -76,10 +91,18 @@ minadbd = cc_binary {
     ];
 
     shared_libs = [
-        "libadbd"
         "libbase"
         "libcrypto"
+    ];
+
+    static_libs = [
         "libminadbd_services"
+        "libfusesideload"
+        "librecovery_utils"
+    ];
+
+    required = [
+        "adbd_system_api_recovery"
     ];
 };
 
@@ -89,6 +112,8 @@ minadbd_test = cc_test {
 
     defaults = [
         "minadbd_defaults"
+        "librecovery_utils_defaults"
+        "libadbd_binary_dependencies"
     ];
 
     srcs = [
@@ -99,12 +124,13 @@ minadbd_test = cc_test {
     static_libs = [
         "libminadbd_services"
         "libfusesideload"
-        "libadbd"
-        "libcrypto"
+        "librecovery_utils"
+        "libotautil"
     ];
 
     shared_libs = [
         "libbase"
+        "libcrypto"
         "libcutils"
         "liblog"
     ];

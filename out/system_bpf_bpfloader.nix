@@ -48,8 +48,7 @@ bpfloader = cc_binary {
     init_rc = ["bpfloader.rc"];
 
     required = [
-        "clatd.o"
-        "netd.o"
+        "time_in_state.o"
     ];
 
 };

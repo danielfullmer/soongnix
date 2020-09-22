@@ -61,6 +61,12 @@ art_defaults = art_global_defaults {
     #  Additional flags are computed by art.go
 
     name = "art_defaults";
+
+    #  This is the default visibility for the //art package, but we repeat it
+    #  here so that it gets merged with other visibility rules in modules
+    #  extending these defaults.
+    visibility = ["//art:__subpackages__"];
+
     cflags = [
         #  Base set of cflags used by all things ART.
         "-fno-rtti"
@@ -77,8 +83,9 @@ art_defaults = art_global_defaults {
         "-fvisibility=protected"
 
         #  Warn about thread safety violations with clang.
-        #"-Wthread-safety"
-        #"-Wthread-safety-negative"
+        "-Wthread-safety"
+        #  TODO(b/144045034): turn on -Wthread-safety-negative
+        # "-Wthread-safety-negative",
 
         #  Warn if switch fallthroughs aren't annotated.
         "-Wimplicit-fallthrough"
@@ -111,6 +118,25 @@ art_defaults = art_global_defaults {
         "-D_LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS"
     ];
 
+    arch = {
+        x86 = {
+            avx2 = {
+                cflags = [
+                    "-mavx2"
+                    "-mfma"
+                ];
+            };
+        };
+        x86_64 = {
+            avx2 = {
+                cflags = [
+                    "-mavx2"
+                    "-mfma"
+                ];
+            };
+        };
+    };
+
     target = {
         android = {
             cflags = [
@@ -122,10 +148,10 @@ art_defaults = art_global_defaults {
                 #  "-marm",
                 #  "-mapcs",
             ];
-            include_dirs = [
+            header_libs = [
                 #  We optimize Thread::Current() with a direct TLS access. This requires access to a
-                #   private Bionic header.
-                "bionic/libc/private"
+                #   platform specific Bionic header.
+                "bionic_libc_platform_headers"
             ];
         };
         linux = {
@@ -134,6 +160,18 @@ art_defaults = art_global_defaults {
                 #  Apple, it's a pain.
                 "-Wmissing-noreturn"
             ];
+        };
+        linux_bionic = {
+            header_libs = [
+                #  We optimize Thread::Current() with a direct TLS access. This requires access to a
+                #   platform specific Bionic header.
+                "bionic_libc_platform_headers"
+            ];
+            strip = {
+                #  Do not strip art libs when building for linux-bionic.
+                #  Otherwise we can't get any symbols out of crashes.
+                none = true;
+            };
         };
         darwin = {
             enabled = false;
@@ -163,12 +201,6 @@ art_defaults = art_global_defaults {
         arm64 = {
             cflags = ["-DART_ENABLE_CODEGEN_arm64"];
         };
-        mips = {
-            cflags = ["-DART_ENABLE_CODEGEN_mips"];
-        };
-        mips64 = {
-            cflags = ["-DART_ENABLE_CODEGEN_mips64"];
-        };
         x86 = {
             cflags = ["-DART_ENABLE_CODEGEN_x86"];
         };
@@ -176,10 +208,6 @@ art_defaults = art_global_defaults {
             cflags = ["-DART_ENABLE_CODEGEN_x86_64"];
         };
     };
-
-    include_dirs = [
-        "external/vixl/src"
-    ];
 
     tidy_checks = art_clang_tidy_errors ++ art_clang_tidy_disabled;
     tidy_checks_as_errors = art_clang_tidy_errors;
@@ -202,6 +230,7 @@ art_defaults = art_global_defaults {
 
 _bp2nix_art_debug_defaults = art_debug_defaults {
     name = "art_debug_defaults";
+    visibility = ["//art:__subpackages__"];
     cflags = [
         "-DDYNAMIC_ANNOTATIONS_ENABLED=1"
         "-DVIXL_DEBUG"

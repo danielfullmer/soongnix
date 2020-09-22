@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test, java_defaults }:
 let
 
 #  Copyright (C) 2008 The Android Open Source Project
@@ -15,8 +15,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-CtsNetTestCases = android_test {
-    name = "CtsNetTestCases";
+CtsNetTestCasesDefaults = java_defaults {
+    name = "CtsNetTestCasesDefaults";
     defaults = ["cts_defaults"];
 
     #  Include both the 32 and 64 bit versions
@@ -35,15 +35,17 @@ CtsNetTestCases = android_test {
         "libnativehelper_compat_libc++"
     ];
 
-    #  include CtsTestServer as a temporary hack to free net.cts from cts.stub.
     srcs = [
         "src/android/net/cts/AirplaneModeTest.java"
+        "src/android/net/cts/ConnectivityDiagnosticsManagerTest.java"
         "src/android/net/cts/ConnectivityManagerTest.java"
         "src/android/net/cts/CredentialsTest.java"
-        "src/android/net/cts/DhcpInfoTest.java"
         "src/android/net/cts/DnsResolverTest.java"
         "src/android/net/cts/DnsTest.java"
+        "src/android/net/cts/IkeTunUtils.java"
+        "src/android/net/cts/Ikev2VpnTest.java"
         "src/android/net/cts/InetAddressesTest.java"
+        "src/android/net/cts/IpConfigurationTest.java"
         "src/android/net/cts/IpSecBaseTest.java"
         "src/android/net/cts/IpSecManagerTest.java"
         "src/android/net/cts/IpSecManagerTunnelTest.java"
@@ -54,13 +56,15 @@ CtsNetTestCases = android_test {
         "src/android/net/cts/MacAddressTest.java"
         "src/android/net/cts/MailToTest.java"
         "src/android/net/cts/MultinetworkApiTest.java"
-        "src/android/net/cts/NetworkInfoTest.java"
         "src/android/net/cts/NetworkInfo_DetailedStateTest.java"
         "src/android/net/cts/NetworkInfo_StateTest.java"
         "src/android/net/cts/NetworkRequestTest.java"
+        "src/android/net/cts/NetworkStatsBinderTest.java"
         "src/android/net/cts/NetworkWatchlistTest.java"
         "src/android/net/cts/PacketUtils.java"
+        "src/android/net/cts/ProxyInfoTest.java"
         "src/android/net/cts/ProxyTest.java"
+        "src/android/net/cts/RssiCurveTest.java"
         "src/android/net/cts/SSLCertificateSocketFactoryTest.java"
         "src/android/net/cts/TheaterModeTest.java"
         "src/android/net/cts/TrafficStatsTest.java"
@@ -81,54 +85,63 @@ CtsNetTestCases = android_test {
         "src/android/net/rtp/cts/AudioCodecTest.java"
         "src/android/net/rtp/cts/AudioGroupTest.java"
         "src/android/net/rtp/cts/AudioStreamTest.java"
-        "src/android/net/wifi/aware/cts/SingleDeviceTest.java"
-        "src/android/net/wifi/aware/cts/TestUtils.java"
-        "src/android/net/wifi/cts/ConcurrencyTest.java"
-        "src/android/net/wifi/cts/ConfigParserTest.java"
-        "src/android/net/wifi/cts/FakeKeys.java"
-        "src/android/net/wifi/cts/MulticastLockTest.java"
-        "src/android/net/wifi/cts/NsdManagerTest.java"
-        "src/android/net/wifi/cts/PpsMoParserTest.java"
-        "src/android/net/wifi/cts/ScanResultTest.java"
-        "src/android/net/wifi/cts/SupplicantStateTest.java"
-        "src/android/net/wifi/cts/WifiConfigurationTest.java"
-        "src/android/net/wifi/cts/WifiEnterpriseConfigTest.java"
-        "src/android/net/wifi/cts/WifiFeature.java"
-        "src/android/net/wifi/cts/WifiInfoTest.java"
-        "src/android/net/wifi/cts/WifiLockTest.java"
-        "src/android/net/wifi/cts/WifiManagerTest.java"
-        "src/android/net/wifi/p2p/cts/WifiP2pConfigTest.java"
-        "src/android/net/wifi/rtt/cts/TestBase.java"
-        "src/android/net/wifi/rtt/cts/WifiRttTest.java"
         "src/org/apache/http/conn/ssl/cts/AbstractVerifierTest.java"
-
+        "src/android/net/cts/CaptivePortalApiTest.kt"
+        "src/android/net/cts/CaptivePortalTest.kt"
+        "src/android/net/cts/NetworkAgentTest.kt"
+        "src/android/net/cts/NetworkInfoTest.kt"
     ];
-
+    jarjar_rules = "jarjar-rules-shared.txt";
     static_libs = [
         "FrameworksNetCommonTests"
-        "core-tests-support"
+        "TestNetworkStackLib"
         "compatibility-device-util-axt"
+        "core-tests-support"
         "cts-net-utils"
         "ctstestrunner-axt"
         "ctstestserver"
-        "mockwebserver"
         "junit"
         "junit-params"
+        "libnanohttpd"
+        "mockwebserver"
+        "net-utils-framework-common"
         "truth-prebuilt"
     ];
 
     #  uncomment when b/13249961 is fixed
     #  sdk_version: "current",
     platform_apis = true;
+};
 
-    #  Tag this module as a cts test artifact
+#  Networking CTS tests for development and release. These tests always target the platform SDK
+#  version, and are subject to all the restrictions appropriate to that version. Before SDK
+#  finalization, these tests have a min_sdk_version of 10000, and cannot be installed on release
+#  devices.
+CtsNetTestCases = android_test {
+    name = "CtsNetTestCases";
+    defaults = ["CtsNetTestCasesDefaults"];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
+        "general-tests"
+    ];
+    test_config_template = "AndroidTestTemplate.xml";
+};
+
+#  Networking CTS tests that target the latest released SDK. These tests can be installed on release
+#  devices at any point in the Android release cycle and are useful for qualifying mainline modules
+#  on release devices.
+CtsNetTestCasesLatestSdk = android_test {
+    name = "CtsNetTestCasesLatestSdk";
+    defaults = ["CtsNetTestCasesDefaults"];
+    jni_uses_sdk_apis = true;
+    min_sdk_version = "29";
+    target_sdk_version = "30";
+    test_suites = [
         "general-tests"
         "mts"
     ];
-
+    test_config_template = "AndroidTestTemplate.xml";
 };
 
-in { inherit CtsNetTestCases; }
+in { inherit CtsNetTestCases CtsNetTestCasesDefaults CtsNetTestCasesLatestSdk; }

@@ -17,10 +17,11 @@ let
 #  limitations under the License.
 #
 
-GameQualificationNativeTestCases = cc_test {
+GameCoreNativeTestCases = cc_test {
     sdk_version = "26";
-    name = "GameQualificationNativeTestCases";
+    name = "GameCoreNativeTestCases";
     srcs = [
+        "main.cpp"
         "cpu_test.cpp"
         "mprotect_test.cpp"
         "glExtensions_test.cpp"
@@ -47,7 +48,6 @@ GameQualificationNativeTestCases = cc_test {
     test_suites = [
         "device-tests"
     ];
-    pack_relocations = false;
 };
 
-in { inherit GameQualificationNativeTestCases; }
+in { inherit GameCoreNativeTestCases; }

@@ -6,10 +6,15 @@ let
     defaults = ["hidl_defaults"];
     vendor_available = true;
     shared_libs = [
-        "android.hardware.graphics.composer@2.1"
+        "android.hardware.graphics.composer@2.2"
+    ];
+    export_shared_lib_headers = [
         "android.hardware.graphics.composer@2.2"
     ];
     header_libs = [
+        "android.hardware.graphics.composer@2.1-command-buffer"
+    ];
+    export_header_lib_headers = [
         "android.hardware.graphics.composer@2.1-command-buffer"
     ];
     export_include_dirs = ["include"];

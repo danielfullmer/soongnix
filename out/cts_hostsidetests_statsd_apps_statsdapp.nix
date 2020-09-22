@@ -38,8 +38,10 @@ CtsStatsdApp = android_test_helper_app {
         "src/com/android/server/cts/device/statsd/Checkers.java"
         "src/com/android/server/cts/device/statsd/DaveyActivity.java"
         "src/com/android/server/cts/device/statsd/DaveyView.java"
+        "src/com/android/server/cts/device/statsd/DirectoryTests.java"
         "src/com/android/server/cts/device/statsd/DummyCallscreeningService.java"
         "src/com/android/server/cts/device/statsd/HiddenApiUsedActivity.java"
+        "src/com/android/server/cts/device/statsd/IsolatedProcessService.java"
         "src/com/android/server/cts/device/statsd/StatsdAuthenticator.java"
         "src/com/android/server/cts/device/statsd/StatsdCtsBackgroundService.java"
         "src/com/android/server/cts/device/statsd/StatsdCtsForegroundActivity.java"
@@ -63,14 +65,10 @@ CtsStatsdApp = android_test_helper_app {
         "compatibility-device-util-axt"
         "androidx.legacy_legacy-support-v4"
         "androidx.test.rules"
+        "cts-net-utils"
+        "BlobStoreTestUtils"
     ];
     jni_libs = ["liblmkhelper"];
-    #  tag this module as a cts test artifact
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
     compile_multilib = "both";
 };
 

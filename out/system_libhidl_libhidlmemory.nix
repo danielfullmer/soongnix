@@ -18,10 +18,19 @@ let
 libhidlmemory = cc_library {
     name = "libhidlmemory";
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
         support_system_process = true;
     };
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.neuralnetworks"
+        "test_com.android.neuralnetworks"
+        "com.android.media"
+        "com.android.media.swcodec"
+    ];
     defaults = ["libhidl-defaults"];
     shared_libs = [
         "libbase"
@@ -29,7 +38,6 @@ libhidlmemory = cc_library {
         "libutils"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hidl.memory@1.0"
         "android.hidl.memory.token@1.0"
     ];
@@ -52,6 +60,7 @@ libhidlmemory = cc_library {
             cflags = ["-DLIBHIDL_TARGET_DEBUGGABLE"];
         };
     };
+    min_sdk_version = "29";
 };
 
 in { inherit libhidlmemory; }

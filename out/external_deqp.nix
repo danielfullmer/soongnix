@@ -44,6 +44,7 @@ libdeqp = cc_library_shared {
         "deqp_glslang"
         "deqp_SPIRV"
         "deqp_spirv-tools"
+        "deqp_amber"
     ];
 
     cflags = [
@@ -60,6 +61,8 @@ libdeqp = cc_library_shared {
         "-fwrapv"
         "-Wno-implicit-fallthrough"
         "-Wno-sign-conversion"
+        "-Wno-unused-private-field"
+        "-DENABLE_HLSL"
     ];
 
     sdk_version = "27";
@@ -69,6 +72,7 @@ libdeqp = cc_library_shared {
         "-Wno-implicit-int-conversion"
         "-Wno-missing-field-initializers"
         "-Wno-switch"
+        "-Wno-unused-parameter"
         "-Wno-unused-variable"
         "-fexceptions"
     ];
@@ -81,7 +85,8 @@ libdeqp = cc_library_shared {
 
     test_suites = [
         "cts"
-        "vts"
+        "mts"
+        "vts10"
     ];
 
     srcs = [

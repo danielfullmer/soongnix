@@ -45,6 +45,9 @@ libcamera2ndk = cc_library_shared {
         "libmediandk"
         "libnativewindow"
     ];
+    header_libs = [
+        "jni_headers"
+    ];
     cflags = [
         "-fvisibility=hidden"
         "-DEXPORT=__attribute__ ((visibility (\"default\")))"
@@ -95,7 +98,6 @@ libcamera2ndk_vendor = cc_library_shared {
     ];
 
     shared_libs = [
-        "libhwbinder"
         "libfmq"
         "libhidlbase"
         "libhardware"
@@ -109,8 +111,8 @@ libcamera2ndk_vendor = cc_library_shared {
         "android.frameworks.cameraservice.device@2.0"
         "android.frameworks.cameraservice.common@2.0"
         "android.frameworks.cameraservice.service@2.0"
+        "android.frameworks.cameraservice.service@2.1"
     ];
-
     static_libs = [
         "android.hardware.camera.common@1.0-helper"
         "libarect"
@@ -126,12 +128,14 @@ libcamera2ndk_vendor = cc_library_shared {
     };
 };
 
-AImageReaderVendorTest = cc_test {
-    name = "AImageReaderVendorTest";
+ACameraNdkVendorTest = cc_test {
+    name = "ACameraNdkVendorTest";
     vendor = true;
-    srcs = ["ndk_vendor/tests/AImageReaderVendorTest.cpp"];
+    srcs = [
+        "ndk_vendor/tests/AImageReaderVendorTest.cpp"
+        "ndk_vendor/tests/ACameraManagerTest.cpp"
+    ];
     shared_libs = [
-        "libhwbinder"
         "libcamera2ndk_vendor"
         "libcamera_metadata"
         "libmediandk"
@@ -149,4 +153,4 @@ AImageReaderVendorTest = cc_test {
     ];
 };
 
-in { inherit AImageReaderVendorTest libcamera2ndk libcamera2ndk_vendor; }
+in { inherit ACameraNdkVendorTest libcamera2ndk libcamera2ndk_vendor; }

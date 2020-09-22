@@ -27,7 +27,7 @@ CtsMockingDebuggableTestCases = android_test {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     sdk_version = "current";

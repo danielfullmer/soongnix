@@ -21,14 +21,10 @@ libwifilogd_flags = cc_defaults {
         "-Wall"
         "-Wextra"
         "-Weffc++"
-        "-Weverything"
-        "-Wno-c++98-compat"
-        "-Wno-c++98-compat-pedantic"
-        "-Wno-padded"
         "-Werror"
 
     ];
-    #include_dirs = ["system/connectivity"];
+    include_dirs = ["system/connectivity"];
     shared_libs = [
         "libbase"
         "libcutils"
@@ -56,17 +52,6 @@ wifilogd_unit_test = cc_test {
     name = "wifilogd_unit_test";
     test_suites = ["device-tests"];
     defaults = ["libwifilogd_flags"];
-    cppflags = [
-        "-Wno-undef"
-        "-Wno-missing-noreturn"
-        "-Wno-shift-sign-overflow"
-        "-Wno-used-but-marked-unused"
-        "-Wno-deprecated"
-        "-Wno-weak-vtables"
-        "-Wno-sign-conversion"
-        "-Wno-global-constructors"
-        "-Wno-covered-switch-default"
-    ];
     srcs = [
         "tests/byte_buffer_unittest.cpp"
         "tests/command_processor_unittest.cpp"

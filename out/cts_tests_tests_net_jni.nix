@@ -19,6 +19,7 @@ libnativedns_jni = cc_library_shared {
     name = "libnativedns_jni";
 
     srcs = ["NativeDnsJni.c"];
+    sdk_version = "current";
 
     shared_libs = [
         "libnativehelper_compat_libc++"
@@ -38,6 +39,7 @@ libnativemultinetwork_jni = cc_library_shared {
     name = "libnativemultinetwork_jni";
 
     srcs = ["NativeMultinetworkJni.cpp"];
+    sdk_version = "current";
     cflags = [
         "-Wall"
         "-Werror"

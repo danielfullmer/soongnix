@@ -1,5 +1,33 @@
-{ cc_binary, cc_defaults, cc_test }:
+{ cc_binary, cc_defaults, cc_test, java_binary }:
 let
+
+#  Copyright (C) 2017 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+incident-helper-cmd = java_binary {
+    name = "incident-helper-cmd";
+    wrapper = "incident_helper_cmd";
+    srcs = [
+        "java/com/android/commands/incident/ExecutionException.java"
+        "java/com/android/commands/incident/IncidentHelper.java"
+        "java/com/android/commands/incident/Section.java"
+        "java/com/android/commands/incident/sections/PersistLogSection.java"
+    ];
+    proto = {
+        plugin = "javastream";
+    };
+};
 
 incident_helper_defaults = cc_defaults {
     name = "incident_helper_defaults";
@@ -30,7 +58,7 @@ incident_helper_defaults = cc_defaults {
         "src/ih_util.cpp"
     ];
 
-    generated_headers = ["gen-platform-proto-constants"];
+    generated_headers = ["framework-cppstream-protos"];
 
     shared_libs = [
         "libbase"
@@ -92,4 +120,4 @@ incident_helper_test = cc_test {
     };
 };
 
-in { inherit incident_helper incident_helper_defaults incident_helper_test; }
+in { inherit incident-helper-cmd incident_helper incident_helper_defaults incident_helper_test; }

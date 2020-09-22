@@ -27,7 +27,6 @@ libhidlallocatorutils = cc_library {
         "libbinder"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hidl.memory@1.0"
     ];
     export_include_dirs = ["include"];

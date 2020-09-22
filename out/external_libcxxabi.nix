@@ -1,4 +1,4 @@
-{ cc_library_static }:
+{ cc_defaults, cc_library_static }:
 let
 
 #
@@ -17,11 +17,50 @@ let
 #  limitations under the License.
 #
 
+"libc++abi_defaults" = cc_defaults {
+    name = "libc++abi_defaults";
+    vendor_available = true;
+    ramdisk_available = true;
+    recovery_available = true;
+    native_bridge_supported = true;
+    include_dirs = ["external/libcxx/include"];
+    local_include_dirs = ["include"];
+    export_include_dirs = ["include"];
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+    cppflags = [
+        "-std=c++14"
+        "-fexceptions"
+        "-Wextra"
+        "-Wno-unused-function"
+        "-Wno-implicit-fallthrough"
+        #  src/cxa_demangle.cpp:2591 -Wimplicit-fallthrough
+    ];
+    sanitize = {
+        never = true;
+    };
+    stl = "none";
+    rtti = true;
+};
+
+"libc++demangle" = cc_library_static {
+    name = "libc++demangle";
+    defaults = ["libc++abi_defaults"];
+    host_supported = false;
+    srcs = ["src/cxa_demangle.cpp"];
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "apex_inherit";
+};
+
 "libc++abi" = cc_library_static {
     name = "libc++abi";
+    defaults = ["libc++abi_defaults"];
     host_supported = true;
-    vendor_available = true;
-    recovery_available = true;
     srcs = [
         "src/abort_message.cpp"
         "src/cxa_aux_runtime.cpp"
@@ -43,26 +82,6 @@ let
         "src/stdlib_stdexcept.cpp"
         "src/stdlib_typeinfo.cpp"
     ];
-    include_dirs = ["external/libcxx/include"];
-    local_include_dirs = ["include"];
-    export_include_dirs = ["include"];
-    cflags = [
-        "-Wall"
-        "-Werror"
-    ];
-    cppflags = [
-        "-std=c++14"
-        "-fexceptions"
-        "-Wextra"
-        "-Wno-unused-function"
-        "-Wno-implicit-fallthrough"
-        #  src/cxa_demangle.cpp:2591 -Wimplicit-fallthrough
-    ];
-    sanitize = {
-        never = true;
-    };
-    stl = "none";
-    rtti = true;
     arch = {
         arm = {
             include_dirs = ["external/libunwind_llvm/include"];
@@ -87,6 +106,8 @@ let
     target = {
         android = {
             cppflags = ["-DHAVE___CXA_THREAD_ATEXIT_IMPL"];
+            #  Packaged in libc++demangle for Android to reduce bloat.
+            exclude_srcs = ["src/cxa_demangle.cpp"];
         };
         darwin = {
             #  libcxxabi really doesn't like the non-LLVM assembler on Darwin
@@ -126,7 +147,11 @@ let
             ];
         };
     };
-
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "apex_inherit";
 };
 
-in { inherit "libc++abi"; }
+in { inherit "libc++abi" "libc++abi_defaults" "libc++demangle"; }

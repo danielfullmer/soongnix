@@ -10,6 +10,7 @@ omx_tests = cc_test {
     shared_libs = [
         "libstagefright"
         "libbinder"
+        "libdatasource"
         "libmedia"
         "libmedia_omx"
         "libutils"
@@ -25,6 +26,7 @@ omx_tests = cc_test {
 
     header_libs = [
         "libbase_headers"
+        "libmediametrics_headers"
         "media_ndk_headers"
     ];
 

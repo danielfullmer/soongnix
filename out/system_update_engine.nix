@@ -131,6 +131,7 @@ libpayload_consumer_exports = cc_defaults {
         "libverity_tree"
     ];
     shared_libs = [
+        "libziparchive"
         "libbase"
         "libcrypto"
         "libfec"
@@ -152,6 +153,7 @@ libpayload_consumer = cc_library_static {
         "common/clock.cc"
         "common/constants.cc"
         "common/cpu_limiter.cc"
+        "common/dynamic_partition_control_stub.cc"
         "common/error_code_utils.cc"
         "common/file_fetcher.cc"
         "common/hash_calculator.cc"
@@ -167,6 +169,7 @@ libpayload_consumer = cc_library_static {
         "common/utils.cc"
         "payload_consumer/bzip_extent_writer.cc"
         "payload_consumer/cached_file_descriptor.cc"
+        "payload_consumer/certificate_parser_android.cc"
         "payload_consumer/delta_performer.cc"
         "payload_consumer/download_action.cc"
         "payload_consumer/extent_reader.cc"
@@ -194,16 +197,41 @@ libupdate_engine_boot_control_exports = cc_defaults {
     name = "libupdate_engine_boot_control_exports";
     defaults = ["update_metadata-protos_exports"];
 
-    static_libs = ["update_metadata-protos"];
+    static_libs = [
+        "libcutils"
+        "libfs_mgr_binder"
+        "libgsi"
+        "libpayload_consumer"
+        "libsnapshot"
+        "update_metadata-protos"
+    ];
     shared_libs = [
         "libbootloader_message"
-        "libfs_mgr"
-        "libhwbinder"
         "libhidlbase"
         "liblp"
+        "libstatslog"
         "libutils"
         "android.hardware.boot@1.0"
+        "android.hardware.boot@1.1"
     ];
+    header_libs = [
+        "avb_headers"
+    ];
+    target = {
+        recovery = {
+            static_libs = [
+                "libfs_mgr"
+                "libsnapshot_nobinder"
+            ];
+            exclude_static_libs = [
+                "libfs_mgr_binder"
+                "libsnapshot"
+            ];
+            exclude_shared_libs = [
+                "libstatslog"
+            ];
+        };
+    };
 };
 
 libupdate_engine_boot_control = cc_library_static {
@@ -211,12 +239,15 @@ libupdate_engine_boot_control = cc_library_static {
     defaults = [
         "ue_defaults"
         "libupdate_engine_boot_control_exports"
+        "libpayload_consumer_exports"
     ];
     recovery_available = true;
 
     srcs = [
         "boot_control_android.cc"
+        "cleanup_previous_update_action.cc"
         "dynamic_partition_control_android.cc"
+        "dynamic_partition_utils.cc"
     ];
 };
 
@@ -246,8 +277,8 @@ libupdate_engine_android_exports = cc_defaults {
         "libcurl"
         "libcutils"
         "liblog"
-        "libmetricslogger"
         "libssl"
+        "libstatslog"
         "libutils"
     ];
 };
@@ -276,6 +307,7 @@ libupdate_engine_android = cc_library_static {
         "daemon_state_android.cc"
         "hardware_android.cc"
         "libcurl_http_fetcher.cc"
+        "logging_android.cc"
         "metrics_reporter_android.cc"
         "metrics_utils.cc"
         "network_selector_android.cc"
@@ -296,7 +328,10 @@ update_engine = cc_binary {
     ];
 
     static_libs = ["libupdate_engine_android"];
-    required = ["cacerts_google"];
+    required = [
+        "cacerts_google"
+        "otacerts"
+    ];
 
     srcs = ["main.cc"];
     init_rc = ["update_engine.rc"];
@@ -324,6 +359,7 @@ update_engine_sideload = cc_binary {
 
     srcs = [
         "hardware_android.cc"
+        "logging_android.cc"
         "metrics_reporter_stub.cc"
         "metrics_utils.cc"
         "network_selector_stub.cc"
@@ -361,7 +397,6 @@ update_engine_sideload = cc_binary {
         recovery = {
             exclude_shared_libs = [
                 "libprotobuf-cpp-lite"
-                "libhwbinder"
                 "libbrillo-stream"
                 "libbrillo"
                 "libchrome"
@@ -369,7 +404,9 @@ update_engine_sideload = cc_binary {
         };
     };
 
-    required = ["android.hardware.boot@1.0-impl-wrapper.recovery"];
+    required = [
+        "otacerts.recovery"
+    ];
 };
 
 #  libupdate_engine_client (type: shared_library)
@@ -403,13 +440,21 @@ libupdate_engine_client = cc_library_shared {
     ];
 
     srcs = [
-        "binder_bindings/android/brillo/IUpdateEngine.aidl"
-        "binder_bindings/android/brillo/IUpdateEngineStatusCallback.aidl"
+        ":libupdate_engine_client_aidl"
         "client_library/client.cc"
         "client_library/client_binder.cc"
         "parcelable_update_engine_status.cc"
         "update_status_utils.cc"
     ];
+};
+
+libupdate_engine_client_aidl = filegroup {
+    name = "libupdate_engine_client_aidl";
+    srcs = [
+        "binder_bindings/android/brillo/IUpdateEngine.aidl"
+        "binder_bindings/android/brillo/IUpdateEngineStatusCallback.aidl"
+    ];
+    path = "binder_bindings";
 };
 
 #  update_engine_client (type: executable)
@@ -453,6 +498,9 @@ libpayload_generator_exports = cc_defaults {
         "update_metadata-protos_exports"
     ];
 
+    header_libs = [
+        "bootimg_headers"
+    ];
     static_libs = [
         "libavb"
         "libbrotli"
@@ -547,8 +595,6 @@ ue_unittest_delta_generator = cc_test {
 
     gtest = false;
     stem = "delta_generator";
-    relative_install_path = "update_engine_unittests";
-    no_named_install_directory = true;
 };
 
 #  test_http_server (type: executable)
@@ -563,8 +609,6 @@ test_http_server = cc_test {
     ];
 
     gtest = false;
-    relative_install_path = "update_engine_unittests";
-    no_named_install_directory = true;
 };
 
 #  test_subprocess (type: executable)
@@ -576,8 +620,6 @@ test_subprocess = cc_test {
     srcs = ["test_subprocess.cc"];
 
     gtest = false;
-    relative_install_path = "update_engine_unittests";
-    no_named_install_directory = true;
 };
 
 #  Public keys for unittests.
@@ -586,16 +628,19 @@ ue_unittest_keys = genrule {
     name = "ue_unittest_keys";
     cmd = "openssl rsa -in $(location unittest_key.pem) -pubout -out $(location unittest_key.pub.pem) &&" +
         "openssl rsa -in $(location unittest_key2.pem) -pubout -out $(location unittest_key2.pub.pem) &&" +
-        "openssl rsa -in $(location unittest_key_RSA4096.pem) -pubout -out $(location unittest_key_RSA4096.pub.pem)";
+        "openssl rsa -in $(location unittest_key_RSA4096.pem) -pubout -out $(location unittest_key_RSA4096.pub.pem) &&" +
+        "openssl pkey -in $(location unittest_key_EC.pem) -pubout -out $(location unittest_key_EC.pub.pem)";
     srcs = [
         "unittest_key.pem"
         "unittest_key2.pem"
         "unittest_key_RSA4096.pem"
+        "unittest_key_EC.pem"
     ];
     out = [
         "unittest_key.pub.pem"
         "unittest_key2.pub.pem"
         "unittest_key_RSA4096.pub.pem"
+        "unittest_key_EC.pub.pem"
     ];
 };
 
@@ -625,11 +670,6 @@ update_engine_unittests = cc_test {
         "libpayload_generator_exports"
         "libupdate_engine_android_exports"
     ];
-    required = [
-        "test_http_server"
-        "test_subprocess"
-        "ue_unittest_delta_generator"
-    ];
 
     static_libs = [
         "libpayload_generator"
@@ -637,22 +677,33 @@ update_engine_unittests = cc_test {
         "libgmock"
         "libchrome_test_helpers"
         "libupdate_engine_android"
+        "libdm"
     ];
-    shared_libs = [
-        "libhidltransport"
+
+    header_libs = [
+        "libstorage_literals_headers"
     ];
 
     data = [
+        ":test_http_server"
+        ":test_subprocess"
+        ":ue_unittest_delta_generator"
         ":ue_unittest_disk_imgs"
         ":ue_unittest_keys"
+        "otacerts.zip"
         "unittest_key.pem"
         "unittest_key2.pem"
         "unittest_key_RSA4096.pem"
+        "unittest_key_EC.pem"
         "update_engine.conf"
     ];
 
+    #  We cannot use the default generated AndroidTest.xml because of the use of helper modules
+    #  (i.e. test_http_server, test_subprocess, ue_unittest_delta_generator).
+    test_config = "test_config.xml";
+    test_suites = ["device-tests"];
+
     srcs = [
-        "boot_control_android_unittest.cc"
         "certificate_checker_unittest.cc"
         "common/action_pipe_unittest.cc"
         "common/action_processor_unittest.cc"
@@ -670,8 +721,10 @@ update_engine_unittests = cc_test {
         "common/terminator_unittest.cc"
         "common/test_utils.cc"
         "common/utils_unittest.cc"
+        "dynamic_partition_control_android_unittest.cc"
         "payload_consumer/bzip_extent_writer_unittest.cc"
         "payload_consumer/cached_file_descriptor_unittest.cc"
+        "payload_consumer/certificate_parser_android_unittest.cc"
         "payload_consumer/delta_performer_integration_test.cc"
         "payload_consumer/delta_performer_unittest.cc"
         "payload_consumer/extent_reader_unittest.cc"
@@ -741,4 +794,4 @@ things_update_engine_aidl = filegroup {
     ];
 };
 
-in { inherit brillo_update_payload delta_generator libpayload_consumer libpayload_consumer_exports libpayload_generator libpayload_generator_exports libupdate_engine_aidl libupdate_engine_android libupdate_engine_android_exports libupdate_engine_boot_control libupdate_engine_boot_control_exports libupdate_engine_client test_http_server test_subprocess things_update_engine_aidl ue_defaults ue_unittest_delta_generator ue_unittest_disk_imgs ue_unittest_keys update_engine update_engine_client update_engine_sideload update_engine_unittests update_metadata-protos update_metadata-protos_exports; }
+in { inherit brillo_update_payload delta_generator libpayload_consumer libpayload_consumer_exports libpayload_generator libpayload_generator_exports libupdate_engine_aidl libupdate_engine_android libupdate_engine_android_exports libupdate_engine_boot_control libupdate_engine_boot_control_exports libupdate_engine_client libupdate_engine_client_aidl test_http_server test_subprocess things_update_engine_aidl ue_defaults ue_unittest_delta_generator ue_unittest_disk_imgs ue_unittest_keys update_engine update_engine_client update_engine_sideload update_engine_unittests update_metadata-protos update_metadata-protos_exports; }

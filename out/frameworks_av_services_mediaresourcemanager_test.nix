@@ -8,6 +8,7 @@ ResourceManagerService_test = cc_test {
     test_suites = ["device-tests"];
     shared_libs = [
         "libbinder"
+        "libbinder_ndk"
         "liblog"
         "libmedia"
         "libresourcemanagerservice"

@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_test, vts_config }:
 let
 
 #
@@ -28,4 +28,8 @@ vts_selftest_zero_testcase_binary_test = cc_test {
     ];
 };
 
-in { inherit vts_selftest_zero_testcase_binary_test; }
+VtsSelfTestZeroTestCaseBinaryTest = vts_config {
+    name = "VtsSelfTestZeroTestCaseBinaryTest";
+};
+
+in { inherit VtsSelfTestZeroTestCaseBinaryTest vts_selftest_zero_testcase_binary_test; }

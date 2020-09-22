@@ -15,8 +15,9 @@ shell_and_utilities_system = phony {
     required = [
         "auditctl"
         "awk"
+        "bc"
         "bzip2"
-        "grep"
+        "ldd"
         "logwrapper"
         "mini-keyctl"
         "mkshrc"
@@ -28,14 +29,13 @@ shell_and_utilities_system = phony {
         "tcpdump"
         "toolbox"
         "toybox"
-        "unzip"
+        "ziptool"
     ];
 };
 
 shell_and_utilities_recovery = phony {
     name = "shell_and_utilities_recovery";
     required = [
-        "grep.recovery"
         "sh.recovery"
         "toolbox.recovery"
         "toybox.recovery"
@@ -47,7 +47,6 @@ shell_and_utilities_vendor = phony {
     name = "shell_and_utilities_vendor";
     required = [
         "awk_vendor"
-        "grep_vendor"
         "logwrapper_vendor"
         "mkshrc_vendor"
         "sh_vendor"

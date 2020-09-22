@@ -13,7 +13,6 @@ let
         "android.hardware.gatekeeper@1.0"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "liblog"
     ];
@@ -33,7 +32,6 @@ let
         "android.hardware.gatekeeper@1.0"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "liblog"
     ];

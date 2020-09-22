@@ -13,9 +13,7 @@ atrace = cc_binary {
 
     shared_libs = [
         "libbinder"
-        "libhwbinder"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libcutils"

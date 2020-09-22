@@ -1,0 +1,17 @@
+--- system_bt_build.nix	2020-08-24 22:04:48.294409143 -0700
++++ system_bt_build.nix	2020-08-24 22:14:04.525614183 -0700
+@@ -56,7 +56,7 @@
+     };
+ };
+ 
+-fluoride_defaults = fluoride_defaults {
++_bp2nix_fluoride_defaults = fluoride_defaults {
+     name = "fluoride_defaults";
+     target = {
+         android = {
+@@ -109,4 +109,4 @@
+     };
+ };
+ 
+-in { inherit clang_coverage_bin clang_file_coverage fluoride_defaults fluoride_types_defaults libchrome_support_defaults soong-fluoride; }
++in { inherit clang_coverage_bin clang_file_coverage fluoride_types_defaults libchrome_support_defaults soong-fluoride; fluoride_defaults = _bp2nix_fluoride_defaults; }

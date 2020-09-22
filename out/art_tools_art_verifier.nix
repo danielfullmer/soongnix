@@ -21,9 +21,9 @@ art_verifier-defaults = art_cc_defaults {
     name = "art_verifier-defaults";
     defaults = [
         "art_defaults"
-        "libart_static_defaults"
     ];
     host_supported = true;
+    device_supported = false;
     srcs = [
         "art_verifier.cc"
     ];
@@ -50,7 +50,19 @@ art_verifier-defaults = art_cc_defaults {
 
 art_verifier = art_cc_binary {
     name = "art_verifier";
-    defaults = ["art_verifier-defaults"];
+    defaults = [
+        "art_verifier-defaults"
+        "libart_static_defaults"
+    ];
 };
 
-in { inherit art_verifier art_verifier-defaults; }
+art_verifierd = art_cc_binary {
+    name = "art_verifierd";
+    defaults = [
+        "art_debug_defaults"
+        "art_verifier-defaults"
+        "libartd_static_defaults"
+    ];
+};
+
+in { inherit art_verifier art_verifier-defaults art_verifierd; }

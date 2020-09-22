@@ -49,7 +49,6 @@ libbt-stack = cc_library_static {
         "system/bt/bta/sys"
         "system/bt/utils/include"
     ];
-    cflags = ["-Wno-implicit-fallthrough"];
     srcs = crypto_toolbox_srcs ++ [
         "a2dp/a2dp_aac.cc"
         "a2dp/a2dp_aac_decoder.cc"
@@ -142,7 +141,6 @@ libbt-stack = cc_library_static {
         "l2cap/l2c_link.cc"
         "l2cap/l2c_main.cc"
         "l2cap/l2c_utils.cc"
-        "l2cap/l2cap_client.cc"
         "pan/pan_api.cc"
         "pan/pan_main.cc"
         "pan/pan_utils.cc"
@@ -206,23 +204,45 @@ net_test_stack = cc_test {
         "test/stack_avrcp_test.cc"
     ];
     shared_libs = [
-        "libcrypto"
+        "android.hardware.bluetooth@1.0"
+        "android.hardware.bluetooth@1.1"
+        "android.hardware.bluetooth.a2dp@1.0"
+        "android.hardware.bluetooth.audio@2.0"
+        "libaaudio"
+        "libcutils"
+        "libdl"
+        "libfmq"
         "libhidlbase"
         "liblog"
+        "libprocessgroup"
         "libprotobuf-cpp-lite"
-        "libcutils"
         "libutils"
+        "libtinyxml2"
+        "libz"
+        "libcrypto"
+        "android.hardware.keymaster@4.0"
+        "android.hardware.keymaster@3.0"
+        "libkeymaster4support"
+        "libkeystore_aidl"
+        "libkeystore_binder"
+        "libkeystore_parcelables"
     ];
     static_libs = [
+        "libbt-audio-hal-interface"
+        "libbtcore"
         "libbt-bta"
         "libbt-stack"
         "libbt-common"
         "libbt-sbc-decoder"
         "libbt-sbc-encoder"
+        "libbt-utils"
+        "libbtif"
         "libFraunhoferAAC"
-        "libbtdevice"
         "libbt-hci"
+        "libbtdevice"
+        "libg722codec"
         "libosi"
+        "libudrv-uipc"
         "libbt-protos-lite"
     ];
     whole_static_libs = [
@@ -451,4 +471,72 @@ net_test_gatt_conn_multiplexing = cc_test {
     };
 };
 
-in { inherit libbt-stack net_test_btu_message_loop net_test_gatt_conn_multiplexing net_test_stack net_test_stack_ad_parser net_test_stack_multi_adv net_test_stack_rfcomm net_test_stack_smp; }
+net_test_stack_gatt_native = cc_test {
+    name = "net_test_stack_gatt_native";
+    defaults = ["fluoride_defaults"];
+    test_suites = ["device-tests"];
+    host_supported = true;
+    include_dirs = [
+        "system/bt"
+        "system/bt/stack/include"
+        "system/bt/stack/l2cap"
+        "system/bt/stack/btm"
+        "system/bt/utils/include"
+    ];
+    srcs = [
+        "test/gatt/gatt_sr_test.cc"
+        "gatt/gatt_utils.cc"
+    ];
+    shared_libs = [
+        "libcutils"
+        "libprotobuf-cpp-lite"
+        "libcrypto"
+    ];
+    static_libs = [
+        "liblog"
+        "libosi"
+        "libbt-common"
+        "libbt-protos-lite"
+        "libosi-AllocationTestHarness"
+    ];
+    sanitize = {
+        address = true;
+        cfi = true;
+        misc_undefined = ["bounds"];
+    };
+};
+
+net_test_stack_a2dp_native = cc_test {
+    name = "net_test_stack_a2dp_native";
+    defaults = ["fluoride_defaults"];
+    test_suites = ["device-tests"];
+    host_supported = true;
+    include_dirs = [
+        "external/libldac/inc"
+        "system/bt"
+        "system/bt/stack/include"
+    ];
+    srcs = [
+        "test/a2dp/a2dp_vendor_ldac_decoder_test.cc"
+        "test/a2dp/misc_fake.cc"
+    ];
+    shared_libs = [
+        "libcrypto"
+        "libcutils"
+        "libprotobuf-cpp-lite"
+    ];
+    static_libs = [
+        "libbt-common"
+        "libbt-protos-lite"
+        "liblog"
+        "libosi"
+        "libosi-AllocationTestHarness"
+    ];
+    sanitize = {
+        address = true;
+        cfi = true;
+        misc_undefined = ["bounds"];
+    };
+};
+
+in { inherit libbt-stack net_test_btu_message_loop net_test_gatt_conn_multiplexing net_test_stack net_test_stack_a2dp_native net_test_stack_ad_parser net_test_stack_gatt_native net_test_stack_multi_adv net_test_stack_rfcomm net_test_stack_smp; }

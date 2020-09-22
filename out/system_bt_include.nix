@@ -4,7 +4,6 @@ let
 avrcp_headers = cc_library_headers {
     name = "avrcp_headers";
     defaults = ["libchrome_support_defaults"];
-    include_dirs = ["system/bt/internal_include"];
     export_include_dirs = ["./hardware/avrcp/"];
     header_libs = ["internal_include_headers"];
     export_header_lib_headers = ["internal_include_headers"];

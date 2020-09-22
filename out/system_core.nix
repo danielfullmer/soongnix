@@ -6,6 +6,4 @@ android_filesystem_config_header = filegroup {
     srcs = ["include/private/android_filesystem_config.h"];
 };
 
-subdirs = ["*"];
-
 in { inherit android_filesystem_config_header; }

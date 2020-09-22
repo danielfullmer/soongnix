@@ -19,6 +19,8 @@ let
 
 libvts_measurement = cc_library_shared {
     name = "libvts_measurement";
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     srcs = [
         "vts_measurement.cpp"
     ];

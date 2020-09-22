@@ -1,12 +1,11 @@
-{ cc_library_static }:
+{ cc_library }:
 let
 
-libaudiopolicyengine_config = cc_library_static {
+libaudiopolicyengine_config = cc_library {
     name = "libaudiopolicyengine_config";
     export_include_dirs = ["include"];
     include_dirs = [
         "external/libxml2/include"
-        "external/icu/icu4c/source/common"
     ];
     srcs = [
         "src/EngineConfig.cpp"
@@ -18,18 +17,15 @@ libaudiopolicyengine_config = cc_library_static {
     ];
     shared_libs = [
         "libmedia_helper"
-        "libandroidicu"
         "libxml2"
         "libutils"
         "liblog"
         "libcutils"
     ];
-    static_libs = [
-        "libaudiopolicycomponents"
-    ];
     header_libs = [
         "libaudio_system_headers"
-        "libaudiopolicycommon"
+        "libmedia_headers"
+        "libaudioclient_headers"
     ];
 };
 

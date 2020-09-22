@@ -42,6 +42,7 @@ recovery_test_defaults = cc_defaults {
         android = {
             shared_libs = [
                 "libutils"
+                "libvndksupport"
             ];
         };
 
@@ -53,13 +54,11 @@ recovery_test_defaults = cc_defaults {
     };
 };
 
-#  libapplypatch, libapplypatch_modes, libimgdiff, libimgpatch
+#  libapplypatch, libapplypatch_modes
 libapplypatch_static_libs = [
     "libapplypatch_modes"
     "libapplypatch"
     "libedify"
-    "libimgdiff"
-    "libimgpatch"
     "libotautil"
     "libbsdiff"
     "libbspatch"
@@ -69,7 +68,6 @@ libapplypatch_static_libs = [
     "libbase"
     "libbrotli"
     "libbz"
-    "libcrypto"
     "libz"
     "libziparchive"
 ];
@@ -82,25 +80,20 @@ librecovery_static_libs = [
     "libinstall"
     "librecovery_ui"
     "libminui"
+    "libfusesideload"
+    "libbootloader_message"
     "libotautil"
 
     "libhealthhalutils"
-    "libvintf_recovery"
     "libvintf"
 
     "android.hardware.health@2.0"
     "android.hardware.health@1.0"
-    "libbootloader_message"
     "libext4_utils"
     "libfs_mgr"
-    "libfusesideload"
     "libhidl-gen-utils"
     "libhidlbase"
-    "libhidltransport"
-    "libhwbinder_noltopgo"
-    "libbinderthreadstate"
     "liblp"
-    "libvndksupport"
     "libtinyxml2"
     "libc++fs"
 ];
@@ -108,18 +101,28 @@ librecovery_static_libs = [
 recovery_unit_test = cc_test {
     name = "recovery_unit_test";
     isolated = true;
+    require_root = true;
 
     defaults = [
         "recovery_test_defaults"
+        "libupdater_defaults"
+        "libupdater_device_defaults"
     ];
 
     test_suites = ["device-tests"];
 
     srcs = [
+        "unit/applypatch_modes_test.cpp"
         "unit/applypatch_test.cpp"
         "unit/asn1_decoder_test.cpp"
+        "unit/battery_utils_test.cpp"
+        "unit/bootloader_message_test.cpp"
         "unit/commands_test.cpp"
         "unit/dirutil_test.cpp"
+        "unit/edify_test.cpp"
+        "unit/fuse_provider_test.cpp"
+        "unit/fuse_sideload_test.cpp"
+        "unit/install_test.cpp"
         "unit/locale_test.cpp"
         "unit/minui_test.cpp"
         "unit/package_test.cpp"
@@ -128,103 +131,24 @@ recovery_unit_test = cc_test {
         "unit/resources_test.cpp"
         "unit/screen_ui_test.cpp"
         "unit/sysutil_test.cpp"
+        "unit/uncrypt_test.cpp"
+        "unit/update_verifier_test.cpp"
+        "unit/updater_test.cpp"
+        "unit/verifier_test.cpp"
         "unit/zip_test.cpp"
     ];
 
-    static_libs = libapplypatch_static_libs ++ [
-        "libinstall"
-        "librecovery_ui"
-        "libminui"
-        "libotautil"
-        "libupdater"
-        "libgtest_prod"
-    ];
-
-    data = [
-        "testdata/battery_scale.png"
-        "testdata/bonus.file"
-        "testdata/boot.img"
-        "testdata/deflate_src.zip"
-        "testdata/deflate_tgt.zip"
-        "testdata/fake-eocd.zip"
-        "testdata/font.png"
-        "testdata/gzipped_source"
-        "testdata/gzipped_target"
-        "testdata/loop00000.png"
-        "testdata/otasigned_4096bits.zip"
-        "testdata/otasigned_v1.zip"
-        "testdata/otasigned_v2.zip"
-        "testdata/otasigned_v3.zip"
-        "testdata/otasigned_v4.zip"
-        "testdata/otasigned_v5.zip"
-        "testdata/random.zip"
-        "testdata/recovery-from-boot-with-bonus.p"
-        "testdata/recovery-from-boot.p"
-        "testdata/recovery.img"
-        "testdata/testkey_4096bits.x509.pem"
-        "testdata/testkey_v1.pk8"
-        "testdata/testkey_v1.txt"
-        "testdata/testkey_v1.x509.pem"
-        "testdata/testkey_v2.pk8"
-        "testdata/testkey_v2.txt"
-        "testdata/testkey_v2.x509.pem"
-        "testdata/testkey_v3.pk8"
-        "testdata/testkey_v3.txt"
-        "testdata/testkey_v3.x509.pem"
-        "testdata/testkey_v4.pk8"
-        "testdata/testkey_v4.txt"
-        "testdata/testkey_v4.x509.pem"
-        "testdata/testkey_v5.pk8"
-        "testdata/testkey_v5.txt"
-        "testdata/testkey_v5.x509.pem"
-        "testdata/ziptest_dummy-update.zip"
-        "testdata/ziptest_valid.zip"
-    ];
-};
-
-recovery_manual_test = cc_test {
-    name = "recovery_manual_test";
-    isolated = true;
-
-    defaults = [
-        "recovery_test_defaults"
-    ];
-
-    test_suites = ["device-tests"];
-
-    srcs = [
-        "manual/recovery_test.cpp"
-    ];
-};
-
-recovery_component_test = cc_test {
-    name = "recovery_component_test";
-    isolated = true;
-
-    defaults = [
-        "recovery_test_defaults"
-        "libupdater_defaults"
-    ];
-
-    test_suites = ["device-tests"];
-
-    srcs = [
-        "component/applypatch_modes_test.cpp"
-        "component/bootloader_message_test.cpp"
-        "component/edify_test.cpp"
-        "component/imgdiff_test.cpp"
-        "component/install_test.cpp"
-        "component/resources_test.cpp"
-        "component/sideload_test.cpp"
-        "component/uncrypt_test.cpp"
-        "component/update_verifier_test.cpp"
-        "component/updater_test.cpp"
-        "component/verifier_test.cpp"
-    ];
-
     static_libs = libapplypatch_static_libs ++ librecovery_static_libs ++ [
-        "libupdater"
+        "librecovery_ui"
+        "libfusesideload"
+        "libminui"
+        "librecovery_utils"
+        "libotautil"
+        "libupdater_device"
+        "libupdater_core"
         "libupdate_verifier"
+
+        "libgtest_prod"
         "libprotobuf-cpp-lite"
     ];
 
@@ -271,33 +195,47 @@ recovery_component_test = cc_test {
     ];
 };
 
-recovery_host_test = cc_test_host {
-    name = "recovery_host_test";
+recovery_manual_test = cc_test {
+    name = "recovery_manual_test";
     isolated = true;
 
     defaults = [
         "recovery_test_defaults"
     ];
 
+    test_suites = ["device-tests"];
+
     srcs = [
-        "component/imgdiff_test.cpp"
+        "manual/recovery_test.cpp"
+    ];
+};
+
+recovery_host_test = cc_test_host {
+    name = "recovery_host_test";
+    isolated = true;
+
+    defaults = [
+        "recovery_test_defaults"
+        "libupdater_defaults"
+    ];
+
+    srcs = [
+        "unit/host/imgdiff_test.cpp"
+        "unit/host/update_simulator_test.cpp"
     ];
 
     static_libs = [
+        "libupdater_host"
+        "libupdater_core"
         "libimgdiff"
-        "libimgpatch"
-        "libotautil"
         "libbsdiff"
-        "libbspatch"
-        "libziparchive"
-        "libutils"
-        "libcrypto"
-        "libbrotli"
-        "libbz"
         "libdivsufsort64"
         "libdivsufsort"
-        "libz"
+        "libfstab"
+        "libc++fs"
     ];
+
+    test_suites = ["general-tests"];
 
     data = [
         "testdata/battery_scale.png"
@@ -342,10 +280,10 @@ recovery_host_test = cc_test_host {
 
     target = {
         darwin = {
-            #  libimgdiff is not available on the Mac.
+            #  libapplypatch in "libupdater_defaults" is not available on the Mac.
             enabled = false;
         };
     };
 };
 
-in { inherit recovery_component_test recovery_host_test recovery_manual_test recovery_test_defaults recovery_unit_test; }
+in { inherit recovery_host_test recovery_manual_test recovery_test_defaults recovery_unit_test; }

@@ -104,7 +104,6 @@ trusty_keymaster_tipc = cc_binary {
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libtrusty"
         "libkeymaster_messages"
         "libkeymaster3device"
@@ -112,4 +111,36 @@ trusty_keymaster_tipc = cc_binary {
     ];
 };
 
-in { inherit "android.hardware.keymaster@3.0-service.trusty" "keystore.trusty" trusty_keymaster_tipc; }
+"android.hardware.keymaster@4.0-service.trusty" = cc_binary {
+    name = "android.hardware.keymaster@4.0-service.trusty";
+    defaults = ["hidl_defaults"];
+    relative_install_path = "hw";
+    vendor = true;
+    init_rc = ["4.0/android.hardware.keymaster@4.0-service.trusty.rc"];
+    srcs = [
+        "4.0/service.cpp"
+        "4.0/TrustyKeymaster4Device.cpp"
+        "ipc/trusty_keymaster_ipc.cpp"
+        "TrustyKeymaster.cpp"
+    ];
+
+    local_include_dirs = ["include"];
+
+    shared_libs = [
+        "liblog"
+        "libcutils"
+        "libdl"
+        "libbase"
+        "libutils"
+        "libhardware"
+        "libhidlbase"
+        "libtrusty"
+        "libkeymaster_messages"
+        "libkeymaster4"
+        "android.hardware.keymaster@4.0"
+    ];
+
+    vintf_fragments = ["4.0/android.hardware.keymaster@4.0-service.trusty.xml"];
+};
+
+in { inherit "android.hardware.keymaster@3.0-service.trusty" "android.hardware.keymaster@4.0-service.trusty" "keystore.trusty" trusty_keymaster_tipc; }

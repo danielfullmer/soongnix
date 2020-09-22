@@ -44,6 +44,10 @@ dexoptanalyzer = art_cc_binary {
         "libart"
         "libartbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 dexoptanalyzerd = art_cc_binary {
@@ -55,6 +59,9 @@ dexoptanalyzerd = art_cc_binary {
     shared_libs = [
         "libartd"
         "libartbased"
+    ];
+    apex_available = [
+        "com.android.art.debug"
     ];
 };
 

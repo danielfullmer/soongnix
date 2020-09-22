@@ -23,10 +23,12 @@ cts-wm-components = filegroup {
         "alertwindowservice/src/android/server/wm/alertwindowservice/Components.java"
         "app/src/android/server/wm/app/Components.java"
         "app27/src/android/server/wm/app27/Components.java"
+        "appAShareUid/src/android/server/wm/shareuid/a/Components.java"
+        "appBShareUid/src/android/server/wm/shareuid/b/Components.java"
         "appDeprecatedSdk/src/android/server/wm/deprecatedsdk/Components.java"
         "appDisplaySize/src/android/server/wm/displaysize/Components.java"
         "appPrereleaseSdk/src/android/server/wm/prerelease/Components.java"
-        "appProfileable/src/android/server/wm/debuggable/Components.java"
+        "appProfileable/src/android/server/wm/profileable/Components.java"
         "appSecondUid/src/android/server/wm/second/Components.java"
         "appThirdUid/src/android/server/wm/third/Components.java"
         "backgroundactivity/AppA/src/android/server/wm/backgroundactivity/appa/Components.java"
@@ -39,4 +41,19 @@ cts-wm-components = filegroup {
     ];
 };
 
-in { inherit cts-wm-components; }
+cts-wm-aspect-ratio-test-base = filegroup {
+    name = "cts-wm-aspect-ratio-test-base";
+    srcs = ["src/android/server/wm/AspectRatioTestsBase.java"];
+};
+
+cts-wm-decor-inset-test-base = filegroup {
+    name = "cts-wm-decor-inset-test-base";
+    srcs = ["src/android/server/wm/DecorInsetTestsBase.java"];
+};
+
+cts-wm-force-relayout-test-base = filegroup {
+    name = "cts-wm-force-relayout-test-base";
+    srcs = ["src/android/server/wm/ForceRelayoutTestBase.java"];
+};
+
+in { inherit cts-wm-aspect-ratio-test-base cts-wm-components cts-wm-decor-inset-test-base cts-wm-force-relayout-test-base; }

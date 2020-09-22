@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library_shared }:
+{ cc_binary, cc_binary_host, cc_defaults, cc_library_shared }:
 let
 
 #
@@ -22,6 +22,7 @@ lp_defaults = cc_defaults {
     cflags = [
         "-Werror"
         "-Wextra"
+        "-D_FILE_OFFSET_BITS=64"
     ];
     target = {
         linux_bionic = {
@@ -97,10 +98,9 @@ lpdump = cc_binary {
     };
 };
 
-lpmake = cc_binary {
+lpmake = cc_binary_host {
     name = "lpmake";
     defaults = ["lp_defaults"];
-    host_supported = true;
     shared_libs = [
         "libbase"
         "liblog"
@@ -108,6 +108,20 @@ lpmake = cc_binary {
     ];
     srcs = [
         "lpmake.cc"
+    ];
+};
+
+lpadd = cc_binary_host {
+    name = "lpadd";
+    defaults = ["lp_defaults"];
+    shared_libs = [
+        "libbase"
+        "liblog"
+        "liblp"
+        "libsparse"
+    ];
+    srcs = [
+        "lpadd.cc"
     ];
 };
 
@@ -143,11 +157,9 @@ lpdumpd = cc_binary {
     ];
 };
 
-lpunpack = cc_binary {
+lpunpack = cc_binary_host {
     name = "lpunpack";
     defaults = ["lp_defaults"];
-    device_supported = false;
-    host_supported = true;
     shared_libs = [
         "libbase"
         "liblog"
@@ -162,4 +174,4 @@ lpunpack = cc_binary {
     ];
 };
 
-in { inherit liblpdump lp_defaults lpdump lpdumpd lpflash lpmake lpunpack; }
+in { inherit liblpdump lp_defaults lpadd lpdump lpdumpd lpflash lpmake lpunpack; }

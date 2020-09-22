@@ -57,6 +57,7 @@ setupcompat = android_library {
         "androidx.annotation_annotation"
     ];
     min_sdk_version = "14";
+    sdk_version = "current";
 };
 
 in { inherit setupcompat; }

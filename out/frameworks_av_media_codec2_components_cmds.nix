@@ -12,10 +12,15 @@ codec2play = cc_binary {
     include_dirs = [
     ];
 
+    header_libs = [
+        "libmediadrm_headers"
+    ];
+
     shared_libs = [
         "libbase"
         "libbinder"
         "libcutils"
+        "libdatasource"
         "libgui"
         "liblog"
         "libstagefright"

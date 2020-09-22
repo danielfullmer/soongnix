@@ -1,4 +1,4 @@
-{ java_library_host, python_binary_host, python_defaults, python_library_host, python_test_host }:
+{ genrule, java_library_host, python_binary_host, python_defaults, python_library_host, python_test_host }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -46,8 +46,8 @@ atest_py2_default = python_defaults {
     };
 };
 
-atest = python_binary_host {
-    name = "atest";
+atest-py2 = python_binary_host {
+    name = "atest-py2";
     main = "atest.py";
     srcs = [
         "__init__.py"
@@ -55,6 +55,7 @@ atest = python_binary_host {
         "atest.py"
         "atest_arg_parser.py"
         "atest_arg_parser_unittest.py"
+        "atest_decorator.py"
         "atest_enum.py"
         "atest_error.py"
         "atest_execution_info.py"
@@ -65,6 +66,8 @@ atest = python_binary_host {
         "atest_unittest.py"
         "atest_utils.py"
         "atest_utils_unittest.py"
+        "bug_detector.py"
+        "bug_detector_unittest.py"
         "cli_translator.py"
         "cli_translator_unittest.py"
         "constants.py"
@@ -81,6 +84,9 @@ atest = python_binary_host {
         "test_runner_handler_unittest.py"
         "unittest_constants.py"
         "unittest_utils.py"
+        "asuite_lib_test/asuite_cc_client_test.py"
+        "asuite_lib_test/asuite_lib_run_test.py"
+        "asuite_lib_test/asuite_metrics_test.py"
         "metrics/__init__.py"
         "metrics/clearcut_client.py"
         "metrics/metrics.py"
@@ -92,6 +98,8 @@ atest = python_binary_host {
         "proto/external_user_log_pb2.py"
         "proto/internal_user_log_pb2.py"
         "test_finders/__init__.py"
+        "test_finders/cache_finder.py"
+        "test_finders/cache_finder_unittest.py"
         "test_finders/example_finder.py"
         "test_finders/module_finder.py"
         "test_finders/module_finder_unittest.py"
@@ -117,18 +125,23 @@ atest = python_binary_host {
         "test_runners/test_runner_base.py"
         "test_runners/vts_tf_test_runner.py"
         "test_runners/vts_tf_test_runner_unittest.py"
+        "tools/__init__.py"
+        "tools/atest_tools.py"
+        "tools/atest_tools_unittest.py"
     ];
     exclude_srcs = [
         "atest_arg_parser_unittest.py"
         "atest_execution_info_unittest.py"
         "atest_unittest.py"
         "atest_utils_unittest.py"
+        "bug_detector_unittest.py"
         "cli_translator_unittest.py"
         "module_info_unittest.py"
         "result_reporter_unittest.py"
         "test_finder_handler_unittest.py"
         "test_mapping_unittest.py"
         "test_runner_handler_unittest.py"
+        "test_finders/cache_finder_unittest.py"
         "test_finders/module_finder_unittest.py"
         "test_finders/suite_plan_finder_unittest.py"
         "test_finders/test_finder_utils_unittest.py"
@@ -138,6 +151,10 @@ atest = python_binary_host {
         "test_runners/robolectric_test_runner_unittest.py"
         "test_runners/suite_plan_test_runner_unittest.py"
         "test_runners/vts_tf_test_runner_unittest.py"
+        "tools/atest_tools_unittest.py"
+        "asuite_lib_test/asuite_cc_client_test.py"
+        "asuite_lib_test/asuite_lib_run_test.py"
+        "asuite_lib_test/asuite_metrics_test.py"
         "proto/clientanalytics_pb2.py"
         "proto/common_pb2.py"
         "proto/external_user_log_pb2.py"
@@ -147,19 +164,28 @@ atest = python_binary_host {
     libs = [
         "atest_proto"
     ];
-    #  Make atest's built name to atest-dev
-    stem = "atest-dev";
+    data = [
+        "tools/updatedb_darwin.sh"
+        ":asuite_version"
+    ];
+    #  Make atest's built name to atest-py2-dev
+    stem = "atest-py2-dev";
     defaults = ["atest_py2_default"];
+    dist = {
+        targets = ["droidcore"];
+    };
 };
 
 atest_module_info = python_library_host {
     name = "atest_module_info";
     defaults = ["atest_lib_default"];
     srcs = [
-        "module_info.py"
+        "atest_error.py"
+        "atest_decorator.py"
         "atest_utils.py"
         "constants.py"
         "constants_default.py"
+        "module_info.py"
     ];
 };
 
@@ -188,8 +214,10 @@ asuite_metrics = python_library_host {
     ];
 };
 
-atest_unittests = python_test_host {
-    name = "atest_unittests";
+#  Exclude atest_updatedb_unittest due to it's a test for ATest's wrapper of updatedb, but there's
+#  no updatedb binary on test server.
+atest-py2_unittests = python_test_host {
+    name = "atest-py2_unittests";
     main = "atest_run_unittests.py";
     pkg_path = "atest";
     srcs = [
@@ -198,6 +226,7 @@ atest_unittests = python_test_host {
         "atest.py"
         "atest_arg_parser.py"
         "atest_arg_parser_unittest.py"
+        "atest_decorator.py"
         "atest_enum.py"
         "atest_error.py"
         "atest_execution_info.py"
@@ -208,6 +237,8 @@ atest_unittests = python_test_host {
         "atest_unittest.py"
         "atest_utils.py"
         "atest_utils_unittest.py"
+        "bug_detector.py"
+        "bug_detector_unittest.py"
         "cli_translator.py"
         "cli_translator_unittest.py"
         "constants.py"
@@ -224,6 +255,9 @@ atest_unittests = python_test_host {
         "test_runner_handler_unittest.py"
         "unittest_constants.py"
         "unittest_utils.py"
+        "asuite_lib_test/asuite_cc_client_test.py"
+        "asuite_lib_test/asuite_lib_run_test.py"
+        "asuite_lib_test/asuite_metrics_test.py"
         "metrics/__init__.py"
         "metrics/clearcut_client.py"
         "metrics/metrics.py"
@@ -235,6 +269,8 @@ atest_unittests = python_test_host {
         "proto/external_user_log_pb2.py"
         "proto/internal_user_log_pb2.py"
         "test_finders/__init__.py"
+        "test_finders/cache_finder.py"
+        "test_finders/cache_finder_unittest.py"
         "test_finders/example_finder.py"
         "test_finders/module_finder.py"
         "test_finders/module_finder_unittest.py"
@@ -260,11 +296,17 @@ atest_unittests = python_test_host {
         "test_runners/test_runner_base.py"
         "test_runners/vts_tf_test_runner.py"
         "test_runners/vts_tf_test_runner_unittest.py"
+        "tools/__init__.py"
+        "tools/atest_tools.py"
+        "tools/atest_tools_unittest.py"
     ];
     data = [
+        "tools/updatedb_darwin.sh"
         "unittest_data/AndroidTest.xml"
         "unittest_data/CtsUiDeviceTestCases.xml"
+        "unittest_data/KernelTest.xml"
         "unittest_data/VtsAndroidTest.xml"
+        "unittest_data/cache_root/"
         "unittest_data/cc_path_testing/"
         "unittest_data/class_file_path_testing/"
         "unittest_data/gts_auth_key.json"
@@ -276,6 +318,8 @@ atest_unittests = python_test_host {
         "unittest_data/test_mapping/"
         "unittest_data/vts_plan_files/"
         "unittest_data/vts_push_files/"
+        "unittest_data/cache_root/78ea54ef315f5613f7c11dd1a87f10c7.cache"
+        "unittest_data/cache_root/cd66f9f5ad63b42d0d77a9334de6bb73.cache"
         "unittest_data/cc_path_testing/PathTesting.cpp"
         "unittest_data/class_file_path_testing/hello_world_test.cc"
         "unittest_data/class_file_path_testing/hello_world_test.cpp"
@@ -292,6 +336,7 @@ atest_unittests = python_test_host {
         "unittest_data/test_mapping/folder2/"
         "unittest_data/test_mapping/folder3/"
         "unittest_data/test_mapping/folder5/"
+        "unittest_data/test_mapping/folder6/"
         "unittest_data/test_mapping/test_mapping_sample"
         "unittest_data/test_mapping/folder1/test_mapping_sample"
         "unittest_data/test_mapping/folder2/test_mapping_sample"
@@ -299,6 +344,8 @@ atest_unittests = python_test_host {
         "unittest_data/test_mapping/folder3/test_mapping_sample"
         "unittest_data/test_mapping/folder3/folder4/test_mapping_sample"
         "unittest_data/test_mapping/folder5/test_mapping_sample"
+        "unittest_data/test_mapping/folder6/test_mapping_sample_golden"
+        "unittest_data/test_mapping/folder6/test_mapping_sample_with_comments"
         "unittest_data/vts_plan_files/vts-aa.xml"
         "unittest_data/vts_plan_files/vts-bb.xml"
         "unittest_data/vts_plan_files/vts-cc.xml"
@@ -309,32 +356,21 @@ atest_unittests = python_test_host {
         "unittest_data/path_testing_empty/.empty_file"
     ];
     exclude_srcs = [
+        "asuite_lib_test/asuite_cc_client_test.py"
+        "asuite_lib_test/asuite_lib_run_test.py"
+        "asuite_lib_test/asuite_metrics_test.py"
         "proto/clientanalytics_pb2.py"
         "proto/common_pb2.py"
         "proto/external_user_log_pb2.py"
         "proto/internal_user_log_pb2.py"
         "proto/__init__.py"
+        "tools/atest_updatedb_unittest.py"
     ];
     libs = [
         "py-mock"
         "atest_proto"
     ];
     test_config = "atest_unittests.xml";
-    test_suites = ["general-tests"];
-    defaults = ["atest_py2_default"];
-};
-
-atest_integration_tests = python_test_host {
-    name = "atest_integration_tests";
-    main = "atest_integration_tests.py";
-    pkg_path = "atest";
-    srcs = [
-        "atest_integration_tests.py"
-    ];
-    data = [
-        "INTEGRATION_TESTS"
-    ];
-    test_config = "atest_integration_tests.xml";
     test_suites = ["general-tests"];
     defaults = ["atest_py2_default"];
 };
@@ -361,10 +397,8 @@ asuite_proto_java = java_library_host {
         "proto/external_user_log.proto"
         "proto/internal_user_log.proto"
     ];
-    libs = [
-        "libprotobuf-java-full"
-    ];
     proto = {
+        type = "full";
         canonical_path_from_root = false;
         include_dirs = ["external/protobuf/src"];
     };
@@ -388,6 +422,8 @@ asuite_cc_client = python_library_host {
     name = "asuite_cc_client";
     defaults = ["asuite_default"];
     srcs = [
+        "atest_error.py"
+        "atest_decorator.py"
         "atest_utils.py"
         "constants.py"
         "constants_default.py"
@@ -403,4 +439,17 @@ asuite_cc_client = python_library_host {
     ];
 };
 
-in { inherit asuite_cc_client asuite_default asuite_metrics asuite_proto asuite_proto_java atest atest_integration_tests atest_lib_default atest_module_info atest_proto atest_py2_default atest_unittests; }
+asuite_version = genrule {
+    name = "asuite_version";
+    cmd = "DATETIME=$$(TZ='America/Log_Angelos' date +'%F');" +
+        "if [[ -n $$BUILD_NUMBER ]]; then" +
+        "  echo $\${DATETIME}_$\${BUILD_NUMBER} > $(out);" +
+        "else" +
+        "  echo $$(date +'%F_%R') > $(out);" +
+        "fi";
+    out = [
+        "VERSION"
+    ];
+};
+
+in { inherit asuite_cc_client asuite_default asuite_metrics asuite_proto asuite_proto_java asuite_version atest-py2 atest-py2_unittests atest_lib_default atest_module_info atest_proto atest_py2_default; }

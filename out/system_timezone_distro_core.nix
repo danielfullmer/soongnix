@@ -55,7 +55,7 @@ time_zone_distro_unbundled = java_library {
     sdk_version = "system_current";
 };
 
-#  Tests for time_zone_distro code.
+#  Tests for time_zone_distro code (see CtsLibcoreTestCases)
 time_zone_distro-tests = java_library {
     name = "time_zone_distro-tests";
 

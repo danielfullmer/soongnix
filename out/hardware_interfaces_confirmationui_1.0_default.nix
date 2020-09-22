@@ -20,6 +20,7 @@ let
 "android.hardware.confirmationui@1.0-service" = cc_binary {
     name = "android.hardware.confirmationui@1.0-service";
     init_rc = ["android.hardware.confirmationui@1.0-service.rc"];
+    vintf_fragments = ["android.hardware.confirmationui@1.0-service.xml"];
     vendor = true;
     relative_install_path = "hw";
     cflags = [
@@ -39,7 +40,6 @@ let
         "libcrypto"
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

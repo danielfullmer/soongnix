@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_headers, cc_test, cc_test_library }:
+{ cc_benchmark, cc_defaults, cc_library, cc_library_headers, cc_test, cc_test_library }:
 let
 
 #  Copyright (C) 2008 The Android Open Source Project
@@ -20,6 +20,12 @@ libutils_headers = cc_library_headers {
     vendor_available = true;
     recovery_available = true;
     host_supported = true;
+    native_bridge_supported = true;
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "apex_inherit";
 
     header_libs = [
         "liblog_headers"
@@ -124,8 +130,10 @@ libutils_defaults = cc_defaults {
 libutils = cc_library {
     name = "libutils";
     defaults = ["libutils_defaults"];
+    native_bridge_supported = true;
 
     srcs = [
+        "Errors.cpp"
         "FileMap.cpp"
         "JenkinsHash.cpp"
         "NativeHandle.cpp"
@@ -159,11 +167,19 @@ libutils = cc_library {
             ];
         };
     };
+
+    apex_available = [
+        "//apex_available:anyapex"
+        "//apex_available:platform"
+    ];
+    min_sdk_version = "apex_inherit";
 };
 
 libutilscallstack = cc_library {
     name = "libutilscallstack";
     defaults = ["libutils_defaults"];
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 
     srcs = [
         "CallStack.cpp"
@@ -206,6 +222,7 @@ libutils_test = cc_test {
         "Mutex_test.cpp"
         "SharedBuffer_test.cpp"
         "String8_test.cpp"
+        "String16_test.cpp"
         "StrongPointer_test.cpp"
         "Unicode_test.cpp"
         "Vector_test.cpp"
@@ -291,4 +308,10 @@ libutils_test_singleton2 = cc_test_library {
     shared_libs = ["libutils_test_singleton1"];
 };
 
-in { inherit libutils libutils_defaults libutils_headers libutils_singleton_test libutils_test libutils_test_singleton1 libutils_test_singleton2 libutilscallstack; }
+libutils_benchmark = cc_benchmark {
+    name = "libutils_benchmark";
+    srcs = ["Vector_benchmark.cpp"];
+    shared_libs = ["libutils"];
+};
+
+in { inherit libutils libutils_benchmark libutils_defaults libutils_headers libutils_singleton_test libutils_test libutils_test_singleton1 libutils_test_singleton2 libutilscallstack; }

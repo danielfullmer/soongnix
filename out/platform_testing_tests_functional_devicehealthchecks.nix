@@ -20,17 +20,20 @@ DeviceHealthChecks = android_test {
 
     #  Only compile source java files in this apk.
     srcs = [
-        "src/com/android/devicehealthchecks/CrashCheck.java"
         "src/com/android/devicehealthchecks/CrashCheckBase.java"
         "src/com/android/devicehealthchecks/KnownFailureItem.java"
         "src/com/android/devicehealthchecks/KnownFailures.java"
+        "src/com/android/devicehealthchecks/MediaBootCheck.java"
         "src/com/android/devicehealthchecks/SensorsBootCheck.java"
+        "src/com/android/devicehealthchecks/SystemAppCheck.java"
+        "src/com/android/devicehealthchecks/SystemCheck.java"
     ];
 
     sdk_version = "current";
     certificate = "platform";
     static_libs = [
-        "android-support-test"
+        "androidx.test.rules"
+        "androidx.test.runner"
         "platform-test-annotations"
     ];
 

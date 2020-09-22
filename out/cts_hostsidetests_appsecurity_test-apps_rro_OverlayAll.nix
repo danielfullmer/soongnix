@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsOverlayPolicyAll = android_test {
+CtsOverlayPolicyAll = android_test_helper_app {
     name = "CtsOverlayPolicyAll";
     defaults = ["cts_support_defaults"];
     manifest = "AndroidManifest.xml";
@@ -25,12 +25,12 @@ CtsOverlayPolicyAll = android_test {
     certificate = ":cts-testkey1";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
-CtsOverlayPolicyAllPie = android_test {
+CtsOverlayPolicyAllPie = android_test_helper_app {
     name = "CtsOverlayPolicyAllPie";
     defaults = ["cts_support_defaults"];
     manifest = "AndroidManifestNoName.xml";
@@ -38,12 +38,12 @@ CtsOverlayPolicyAllPie = android_test {
     certificate = ":cts-testkey1";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
-CtsOverlayPolicyAllNoName = android_test {
+CtsOverlayPolicyAllNoName = android_test_helper_app {
     name = "CtsOverlayPolicyAllNoName";
     defaults = ["cts_support_defaults"];
     manifest = "AndroidManifestNoName.xml";
@@ -51,12 +51,12 @@ CtsOverlayPolicyAllNoName = android_test {
     certificate = ":cts-testkey1";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
-CtsOverlayPolicyAllNoNameDifferentCert = android_test {
+CtsOverlayPolicyAllNoNameDifferentCert = android_test_helper_app {
     name = "CtsOverlayPolicyAllNoNameDifferentCert";
     defaults = ["cts_support_defaults"];
     manifest = "AndroidManifestNoName.xml";
@@ -64,7 +64,7 @@ CtsOverlayPolicyAllNoNameDifferentCert = android_test {
     certificate = ":cts-testkey2";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

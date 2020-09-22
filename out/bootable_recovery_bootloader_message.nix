@@ -39,6 +39,18 @@ libbootloader_message = cc_library {
         "libbootloader_message_defaults"
     ];
     recovery_available = true;
+    host_supported = true;
+
+    target = {
+        host = {
+            shared_libs = [
+                "libcutils" #  for strlcpy
+            ];
+        };
+        darwin = {
+            enabled = false;
+        };
+    };
 };
 
 libbootloader_message_vendor = cc_library_static {
@@ -47,6 +59,7 @@ libbootloader_message_vendor = cc_library_static {
         "libbootloader_message_defaults"
     ];
     vendor = true;
+    recovery_available = true;
 };
 
 in { inherit libbootloader_message libbootloader_message_defaults libbootloader_message_vendor; }

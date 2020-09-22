@@ -30,6 +30,8 @@ VtsHalNetNetdV1_1TargetTest = cc_test {
     shared_libs = [
         "libnetutils"
     ];
+    require_root = true;
+    test_suites = ["vts"];
 };
 
 in { inherit VtsHalNetNetdV1_1TargetTest; }

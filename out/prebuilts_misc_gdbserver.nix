@@ -11,6 +11,11 @@ gdbserver = cc_prebuilt_binary {
         };
     };
 
+    #  These are already stripped, and restripping them just issues diagnostics.
+    strip = {
+        none = true;
+    };
+
     target = {
         android_arm = {
             srcs = ["android-arm/gdbserver"];

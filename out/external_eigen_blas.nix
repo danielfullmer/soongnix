@@ -61,6 +61,8 @@ libF77blas = cc_library_static {
     vendor_available = true;
     defaults = ["eigen-defaults"];
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 };
 
 #  Build Eigen using API 9 toolchain for RS Support lib.

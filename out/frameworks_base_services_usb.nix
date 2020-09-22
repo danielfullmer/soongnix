@@ -1,8 +1,8 @@
-{ java_library_static }:
+{ filegroup, java_library_static }:
 let
 
-"services.usb" = java_library_static {
-    name = "services.usb";
+"services.usb-sources" = filegroup {
+    name = "services.usb-sources";
     srcs = [
         "java/com/android/server/usb/MtpNotificationManager.java"
         "java/com/android/server/usb/UsbAlsaDevice.java"
@@ -18,6 +18,7 @@ let
         "java/com/android/server/usb/UsbSerialReader.java"
         "java/com/android/server/usb/UsbService.java"
         "java/com/android/server/usb/UsbSettingsManager.java"
+        "java/com/android/server/usb/UsbUserPermissionManager.java"
         "java/com/android/server/usb/UsbUserSettingsManager.java"
         "java/com/android/server/usb/descriptors/ByteStream.java"
         "java/com/android/server/usb/descriptors/Usb10ACHeader.java"
@@ -62,6 +63,14 @@ let
         "java/com/android/server/usb/descriptors/UsbMSMidiOutputJack.java"
         "java/com/android/server/usb/descriptors/UsbTerminalTypes.java"
         "java/com/android/server/usb/descriptors/UsbUnknown.java"
+        "java/com/android/server/usb/descriptors/UsbVCEndpoint.java"
+        "java/com/android/server/usb/descriptors/UsbVCHeader.java"
+        "java/com/android/server/usb/descriptors/UsbVCHeaderInterface.java"
+        "java/com/android/server/usb/descriptors/UsbVCInputTerminal.java"
+        "java/com/android/server/usb/descriptors/UsbVCInterface.java"
+        "java/com/android/server/usb/descriptors/UsbVCOutputTerminal.java"
+        "java/com/android/server/usb/descriptors/UsbVCProcessingUnit.java"
+        "java/com/android/server/usb/descriptors/UsbVCSelectorUnit.java"
         "java/com/android/server/usb/descriptors/report/HTMLReportCanvas.java"
         "java/com/android/server/usb/descriptors/report/ReportCanvas.java"
         "java/com/android/server/usb/descriptors/report/Reporting.java"
@@ -75,6 +84,14 @@ let
         "java/com/android/server/usb/descriptors/tree/UsbDescriptorsTree.java"
         "java/com/android/server/usb/descriptors/tree/UsbDescriptorsTreeNode.java"
     ];
+    path = "java";
+    visibility = ["//frameworks/base/services"];
+};
+
+"services.usb" = java_library_static {
+    name = "services.usb";
+    defaults = ["services_defaults"];
+    srcs = [":services.usb-sources"];
 
     libs = [
         "services.core"
@@ -86,7 +103,8 @@ let
         "android.hardware.usb-V1.1-java"
         "android.hardware.usb-V1.2-java"
         "android.hardware.usb.gadget-V1.0-java"
+        "android.hardware.usb.gadget-V1.1-java"
     ];
 };
 
-in { inherit "services.usb"; }
+in { inherit "services.usb" "services.usb-sources"; }

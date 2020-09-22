@@ -27,9 +27,15 @@ screenrecord = cc_binary {
         "Program.cpp"
     ];
 
+    header_libs = [
+        "libmediadrm_headers"
+        "libmediametrics_headers"
+    ];
+
     shared_libs = [
         "libstagefright"
         "libmedia"
+        "libmediandk"
         "libmedia_omx"
         "libutils"
         "libbinder"

@@ -15,12 +15,33 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-wifi_service_proto = java_library {
-    name = "wifi_service_proto";
+wifi-lite-protos = java_library {
+    name = "wifi-lite-protos";
     proto = {
         type = "lite";
     };
+    sdk_version = "system_current";
     srcs = ["src/scorecard.proto"];
 };
 
-in { inherit wifi_service_proto; }
+wifi-nano-protos = java_library {
+    name = "wifi-nano-protos";
+    host_supported = true;
+    proto = {
+        type = "nano";
+    };
+    srcs = [
+        "src/metrics.proto"
+        ":system-messages-proto-src"
+    ];
+    sdk_version = "system_current";
+    #  Pin java_version until jarjar is certified to support later versions. http://b/72703434
+    java_version = "1.8";
+    target = {
+        host = {
+            static_libs = ["libprotobuf-java-nano"];
+        };
+    };
+};
+
+in { inherit wifi-lite-protos wifi-nano-protos; }

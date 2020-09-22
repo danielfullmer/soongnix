@@ -1,4 +1,4 @@
-{ java_defaults, java_library, java_library_static }:
+{ java_defaults, java_library }:
 let
 
 #
@@ -16,9 +16,9 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  For platform use, builds directly against core-libart to avoid circular
+#  For platform use, builds against core_current to avoid circular
 #  dependencies. *NOT* for unbundled use.
-libphonenumber-platform = java_library_static {
+libphonenumber-platform = java_library {
     name = "libphonenumber-platform";
 
     #  For the platform, compile everything except the carrier to phone number
@@ -60,7 +60,11 @@ libphonenumber-platform = java_library_static {
         "repackaged/internal/prefixmapper/src/com/android/i18n/phonenumbers/prefixmapper/PrefixTimeZonesMap.java"
     ];
 
-    no_framework_libs = true;
+    libs = [
+        "unsupportedappusage"
+    ];
+
+    sdk_version = "core_current";
 };
 
 libphonenumber-unbundled-defaults = java_defaults {
@@ -103,7 +107,7 @@ libphonenumber-unbundled-defaults = java_defaults {
 };
 
 #  For unbundled use, supports gingerbread and up.
-libphonenumber = java_library_static {
+libphonenumber = java_library {
     name = "libphonenumber";
     defaults = ["libphonenumber-unbundled-defaults"];
 
@@ -118,7 +122,7 @@ libphonenumber = java_library_static {
 };
 
 #  For unbundled use - without geocoder
-libphonenumber-nogeocoder = java_library_static {
+libphonenumber-nogeocoder = java_library {
     name = "libphonenumber-nogeocoder";
     defaults = ["libphonenumber-unbundled-defaults"];
 

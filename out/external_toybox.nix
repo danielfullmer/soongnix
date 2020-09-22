@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults }:
+{ cc_binary, cc_defaults, sh_test }:
 let
 
 #
@@ -17,40 +17,42 @@ let
 #  limitations under the License.
 #
 
-#
-#  To sync with upstream:
-#
+/*
 
-#   # Update.
-#   git remote add toybox https://github.com/landley/toybox.git
-#   git fetch toybox
-#   git merge toybox/master
+   --- To sync with upstream:
 
-#   # Regenerate generated files.
-#   NOBUILD=1 scripts/make.sh
+    # Update source and regenerate generated files.
+    git remote add toybox https://github.com/landley/toybox.git
+    git fetch toybox && git merge toybox/master && ./regenerate.sh
 
-#   # Make any necessary Android.bp changes and rebuild.
-#   mm -j32
+    # Make any necessary Android.bp changes and rebuild.
+    mm -j32
 
-#   # Run tests.
-#   ./run-tests-on-android.sh
-#   # Run a single test.
-#   ./run-tests-on-android.sh wc
+    # Run all the tests.
+    ./run-tests-on-android.sh
+    # Run a single test.
+    ./run-tests-on-android.sh wc
 
-#   # Upload changes.
-#   git commit -a --amend
-#   git push aosp HEAD:refs/for/master  # Push to gerrit for review.
-#   git push aosp HEAD:master  # Push directly, avoiding gerrit.
+    # Upload changes.
+    git commit -a --amend
+    git push aosp HEAD:refs/for/master  # Push to gerrit for review.
+    git push aosp HEAD:master           # Push directly, avoiding gerrit.
 
-#
-#  To add a toy:
-#
 
-#   Edit .config to enable the toy you want to add.
-#   make clean && make  # Regenerate the generated files.
-#   # Edit `srcs` below to add the toy.
-#   # If you just want to use it as "toybox x" rather than "x", you can stop now.
-#   # If you want this toy to have a symbolic link in /system/bin, add the toy to symlinks.
+   --- To add a toy:
+
+    # Edit the three .config-* files to enable the toy you want for the targets
+    # you want it on, and regenerate the generated files:
+    ./regenerate.sh
+
+    # Edit the relevant `srcs` below, depending on where the toy should be
+    # available.
+
+    # If you just want to use the toy via "toybox x" rather than "x", you can
+    # stop now. If you want this toy to have a symbolic link in /system/bin,
+    # add the toy to symlinks.
+
+*/
 
 toybox-defaults = cc_defaults {
     name = "toybox-defaults";
@@ -58,6 +60,7 @@ toybox-defaults = cc_defaults {
         "lib/args.c"
         "lib/commas.c"
         "lib/dirtree.c"
+        "lib/env.c"
         "lib/help.c"
         "lib/lib.c"
         "lib/linestack.c"
@@ -67,168 +70,64 @@ toybox-defaults = cc_defaults {
         "lib/tty.c"
         "lib/xwrap.c"
         "main.c"
-        "toys/android/getenforce.c"
-        "toys/android/load_policy.c"
-        "toys/android/log.c"
-        "toys/android/restorecon.c"
-        "toys/android/runcon.c"
-        "toys/android/sendevent.c"
-        "toys/android/setenforce.c"
-        "toys/android/setprop.c"
-        "toys/android/start.c"
-        "toys/lsb/dmesg.c"
+        "toys/lsb/gzip.c"
         "toys/lsb/hostname.c"
-        "toys/lsb/killall.c"
         "toys/lsb/md5sum.c"
-        "toys/lsb/mknod.c"
         "toys/lsb/mktemp.c"
-        "toys/lsb/mount.c"
-        "toys/lsb/pidof.c"
         "toys/lsb/seq.c"
-        "toys/lsb/sync.c"
-        "toys/lsb/umount.c"
-        "toys/net/ifconfig.c"
         "toys/net/microcom.c"
-        "toys/net/netcat.c"
-        "toys/net/netstat.c"
-        "toys/net/ping.c"
-        "toys/net/rfkill.c"
-        "toys/net/tunctl.c"
-        "toys/other/acpi.c"
-        "toys/other/base64.c"
-        "toys/other/blkid.c"
-        "toys/other/blockdev.c"
-        "toys/other/chcon.c"
-        "toys/other/chroot.c"
-        "toys/other/chrt.c"
-        "toys/other/clear.c"
-        "toys/other/devmem.c"
         "toys/other/dos2unix.c"
-        "toys/other/fallocate.c"
-        "toys/other/flock.c"
-        "toys/other/fmt.c"
-        "toys/other/free.c"
-        "toys/other/freeramdisk.c"
-        "toys/other/fsfreeze.c"
-        "toys/other/fsync.c"
-        "toys/other/help.c"
-        "toys/other/hwclock.c"
-        "toys/other/i2ctools.c"
-        "toys/other/inotifyd.c"
-        "toys/other/insmod.c"
-        "toys/other/ionice.c"
-        "toys/other/losetup.c"
-        "toys/other/lsattr.c"
-        "toys/other/lsmod.c"
-        "toys/other/lspci.c"
-        "toys/other/lsusb.c"
-        "toys/other/makedevs.c"
-        "toys/other/mkswap.c"
-        "toys/other/modinfo.c"
-        "toys/other/mountpoint.c"
-        "toys/other/nbd_client.c"
-        "toys/other/nsenter.c"
-        "toys/other/partprobe.c"
-        "toys/other/pivot_root.c"
-        "toys/other/pmap.c"
-        "toys/other/printenv.c"
-        "toys/other/pwdx.c"
         "toys/other/readlink.c"
         "toys/other/realpath.c"
-        "toys/other/rev.c"
-        "toys/other/rmmod.c"
-        "toys/other/setfattr.c"
         "toys/other/setsid.c"
         "toys/other/stat.c"
-        "toys/other/swapoff.c"
-        "toys/other/swapon.c"
-        "toys/other/sysctl.c"
-        "toys/other/tac.c"
-        "toys/other/taskset.c"
         "toys/other/timeout.c"
         "toys/other/truncate.c"
-        "toys/other/uptime.c"
-        "toys/other/usleep.c"
-        "toys/other/uuidgen.c"
-        "toys/other/vconfig.c"
-        "toys/other/vmstat.c"
-        "toys/other/watch.c"
         "toys/other/which.c"
         "toys/other/xxd.c"
         "toys/other/yes.c"
-        "toys/pending/bc.c"
         "toys/pending/dd.c"
         "toys/pending/diff.c"
         "toys/pending/expr.c"
-        "toys/pending/getfattr.c"
-        "toys/pending/gzip.c"
-        "toys/pending/lsof.c"
-        "toys/pending/modprobe.c"
-        "toys/pending/more.c"
-        "toys/pending/stty.c"
-        "toys/pending/tar.c"
+        "toys/pending/getopt.c"
         "toys/pending/tr.c"
-        "toys/pending/traceroute.c"
         "toys/posix/basename.c"
-        "toys/posix/cal.c"
         "toys/posix/cat.c"
-        "toys/posix/chgrp.c"
         "toys/posix/chmod.c"
-        "toys/posix/cksum.c"
         "toys/posix/cmp.c"
         "toys/posix/comm.c"
         "toys/posix/cp.c"
-        "toys/posix/cpio.c"
         "toys/posix/cut.c"
         "toys/posix/date.c"
-        "toys/posix/df.c"
         "toys/posix/dirname.c"
         "toys/posix/du.c"
         "toys/posix/echo.c"
         "toys/posix/env.c"
-        "toys/posix/expand.c"
-        "toys/posix/false.c"
-        "toys/posix/file.c"
         "toys/posix/find.c"
         "toys/posix/getconf.c"
         "toys/posix/grep.c"
         "toys/posix/head.c"
-        "toys/posix/iconv.c"
         "toys/posix/id.c"
-        "toys/posix/kill.c"
         "toys/posix/ln.c"
         "toys/posix/ls.c"
         "toys/posix/mkdir.c"
-        "toys/posix/mkfifo.c"
-        "toys/posix/nice.c"
-        "toys/posix/nl.c"
-        "toys/posix/nohup.c"
         "toys/posix/od.c"
         "toys/posix/paste.c"
         "toys/posix/patch.c"
-        "toys/posix/printf.c"
-        "toys/posix/ps.c"
         "toys/posix/pwd.c"
-        "toys/posix/renice.c"
         "toys/posix/rm.c"
         "toys/posix/rmdir.c"
         "toys/posix/sed.c"
         "toys/posix/sleep.c"
         "toys/posix/sort.c"
-        "toys/posix/split.c"
-        "toys/posix/strings.c"
         "toys/posix/tail.c"
+        "toys/posix/tar.c"
         "toys/posix/tee.c"
-        "toys/posix/time.c"
+        "toys/posix/test.c"
         "toys/posix/touch.c"
         "toys/posix/true.c"
-        "toys/posix/tty.c"
-        "toys/posix/ulimit.c"
         "toys/posix/uname.c"
         "toys/posix/uniq.c"
-        "toys/posix/unlink.c"
-        "toys/posix/uudecode.c"
-        "toys/posix/uuencode.c"
         "toys/posix/wc.c"
         "toys/posix/xargs.c"
     ];
@@ -245,6 +144,7 @@ toybox-defaults = cc_defaults {
         "-Wno-sign-compare"
         "-Wno-string-plus-int"
         "-Wno-unused-parameter"
+        "-Wno-unused-variable"
         "-funsigned-char"
         "-ffunction-sections"
         "-fdata-sections"
@@ -256,20 +156,159 @@ toybox-defaults = cc_defaults {
     #  because libnetd_client.so is C++.
     stl = "none";
 
-    #  not usable on Android?: freeramdisk fsfreeze makedevs nbd-client
-    #                          partprobe pivot_root pwdx rev rfkill vconfig
-    #  currently prefer external/efs2progs: blkid chattr lsattr
-    #  currently prefer external/iputils: ping ping6
+    shared_libs = [
+        "libcrypto"
+        "libz"
+    ];
+
     target = {
+        linux_glibc = {
+            local_include_dirs = ["android/linux"];
+        };
+
+        darwin = {
+            local_include_dirs = ["android/mac"];
+            cflags = [
+                #  You can't have toybox cp(1) on macOS before 10.13.
+                "-mmacosx-version-min=10.13"
+                "-UMACOSX_DEPLOYMENT_TARGET"
+                "-DMACOSX_DEPLOYMENT_TARGET=10.13"
+                #  macOS' getgroups(3) signature differs.
+                "-Wno-pointer-sign"
+                #  diff.c defines MIN and MAX which (only on macOS) we're
+                #  also getting from <sys/param.h>.
+                "-Wno-macro-redefined"
+            ];
+        };
+
+        linux = {
+            srcs = [
+                "toys/posix/ps.c"
+                "toys/other/taskset.c"
+            ];
+        };
+
         android = {
+            local_include_dirs = ["android/device"];
+            srcs = [
+                "toys/android/getenforce.c"
+                "toys/android/load_policy.c"
+                "toys/android/log.c"
+                "toys/android/restorecon.c"
+                "toys/android/runcon.c"
+                "toys/android/sendevent.c"
+                "toys/android/setenforce.c"
+                "toys/lsb/dmesg.c"
+                "toys/lsb/killall.c"
+                "toys/lsb/mknod.c"
+                "toys/lsb/mount.c"
+                "toys/lsb/pidof.c"
+                "toys/lsb/sync.c"
+                "toys/lsb/umount.c"
+                "toys/net/ifconfig.c"
+                "toys/net/netcat.c"
+                "toys/net/netstat.c"
+                "toys/net/ping.c"
+                "toys/net/rfkill.c"
+                "toys/net/tunctl.c"
+                "toys/other/acpi.c"
+                "toys/other/base64.c"
+                "toys/other/blkid.c"
+                "toys/other/blockdev.c"
+                "toys/other/chcon.c"
+                "toys/other/chroot.c"
+                "toys/other/chrt.c"
+                "toys/other/clear.c"
+                "toys/other/devmem.c"
+                "toys/other/fallocate.c"
+                "toys/other/flock.c"
+                "toys/other/fmt.c"
+                "toys/other/free.c"
+                "toys/other/freeramdisk.c"
+                "toys/other/fsfreeze.c"
+                "toys/other/fsync.c"
+                "toys/other/help.c"
+                "toys/other/hwclock.c"
+                "toys/other/i2ctools.c"
+                "toys/other/inotifyd.c"
+                "toys/other/insmod.c"
+                "toys/other/ionice.c"
+                "toys/other/losetup.c"
+                "toys/other/lsattr.c"
+                "toys/other/lsmod.c"
+                "toys/other/lspci.c"
+                "toys/other/lsusb.c"
+                "toys/other/makedevs.c"
+                "toys/other/mkswap.c"
+                "toys/other/modinfo.c"
+                "toys/other/mountpoint.c"
+                "toys/other/nbd_client.c"
+                "toys/other/nsenter.c"
+                "toys/other/partprobe.c"
+                "toys/other/pivot_root.c"
+                "toys/other/pmap.c"
+                "toys/other/printenv.c"
+                "toys/other/pwdx.c"
+                "toys/other/rev.c"
+                "toys/other/rmmod.c"
+                "toys/other/setfattr.c"
+                "toys/other/swapoff.c"
+                "toys/other/swapon.c"
+                "toys/other/sysctl.c"
+                "toys/other/tac.c"
+                "toys/other/uptime.c"
+                "toys/other/usleep.c"
+                "toys/other/uuidgen.c"
+                "toys/other/vconfig.c"
+                "toys/other/vmstat.c"
+                "toys/other/watch.c"
+                "toys/pending/getfattr.c"
+                "toys/pending/lsof.c"
+                "toys/pending/modprobe.c"
+                "toys/pending/more.c"
+                "toys/pending/readelf.c"
+                "toys/pending/stty.c"
+                "toys/pending/traceroute.c"
+                "toys/pending/vi.c"
+                "toys/posix/cal.c"
+                "toys/posix/chgrp.c"
+                "toys/posix/cksum.c"
+                "toys/posix/cpio.c"
+                "toys/posix/df.c"
+                "toys/posix/expand.c"
+                "toys/posix/false.c"
+                "toys/posix/file.c"
+                "toys/posix/iconv.c"
+                "toys/posix/kill.c"
+                "toys/posix/mkfifo.c"
+                "toys/posix/nice.c"
+                "toys/posix/nl.c"
+                "toys/posix/nohup.c"
+                "toys/posix/printf.c"
+                "toys/posix/renice.c"
+                "toys/posix/split.c"
+                "toys/posix/strings.c"
+                "toys/posix/time.c"
+                "toys/posix/tty.c"
+                "toys/posix/ulimit.c"
+                "toys/posix/unlink.c"
+                "toys/posix/uudecode.c"
+                "toys/posix/uuencode.c"
+            ];
+
+            #  not usable on Android?: freeramdisk fsfreeze makedevs nbd-client
+            #                          partprobe pivot_root pwdx rev rfkill vconfig
+            #  currently prefer external/e2fsprogs: blkid
+            #  currently prefer external/iputils: ping ping6
+
             symlinks = [
                 "acpi"
                 "base64"
                 "basename"
-                "bc"
                 "blockdev"
                 "cal"
                 "cat"
+                "chattr"
                 "chcon"
                 "chgrp"
                 "chmod"
@@ -293,11 +332,13 @@ toybox-defaults = cc_defaults {
                 "dos2unix"
                 "du"
                 "echo"
+                "egrep"
                 "env"
                 "expand"
                 "expr"
                 "fallocate"
                 "false"
+                "fgrep"
                 "file"
                 "find"
                 "flock"
@@ -306,6 +347,7 @@ toybox-defaults = cc_defaults {
                 "fsync"
                 "getconf"
                 "getenforce"
+                "grep"
                 "groups"
                 "gunzip"
                 "gzip"
@@ -332,6 +374,7 @@ toybox-defaults = cc_defaults {
                 "logname"
                 "losetup"
                 "ls"
+                "lsattr"
                 "lsmod"
                 "lsof"
                 "lspci"
@@ -344,7 +387,6 @@ toybox-defaults = cc_defaults {
                 "mktemp"
                 "microcom"
                 "modinfo"
-                "modprobe"
                 "more"
                 "mount"
                 "mountpoint"
@@ -368,6 +410,7 @@ toybox-defaults = cc_defaults {
                 "printf"
                 "ps"
                 "pwd"
+                "readelf"
                 "readlink"
                 "realpath"
                 "renice"
@@ -380,7 +423,6 @@ toybox-defaults = cc_defaults {
                 "sendevent"
                 "seq"
                 "setenforce"
-                "setprop"
                 "setsid"
                 "sha1sum"
                 "sha224sum"
@@ -390,9 +432,7 @@ toybox-defaults = cc_defaults {
                 "sleep"
                 "sort"
                 "split"
-                "start"
                 "stat"
-                "stop"
                 "strings"
                 "stty"
                 "swapoff"
@@ -404,6 +444,7 @@ toybox-defaults = cc_defaults {
                 "tar"
                 "taskset"
                 "tee"
+                "test"
                 "time"
                 "timeout"
                 "top"
@@ -434,21 +475,15 @@ toybox-defaults = cc_defaults {
                 "yes"
                 "zcat"
             ];
+
+            shared_libs = [
+                "liblog"
+                "libprocessgroup"
+                "libselinux"
+            ];
         };
     };
 };
-
-toybox_libraries = [
-    "liblog"
-    "libselinux"
-    #  libcutils dependency is needed only for <cutils/sched_policy.h>
-    #  inclusion from lib/portability.h. When it's changed to include
-    #  <processgroup/sched_policy.h> this dependency should be dropped
-    "libcutils"
-    "libprocessgroup"
-    "libcrypto"
-    "libz"
-];
 
 # ###########################################
 #  toybox for /system, /vendor, and /recovery
@@ -459,19 +494,249 @@ toybox = cc_binary {
     defaults = ["toybox-defaults"];
     host_supported = true;
     recovery_available = true;
-    shared_libs = toybox_libraries;
-    target = {
-        darwin = {
-            enabled = false;
-        };
-    };
 };
 
 toybox_vendor = cc_binary {
     name = "toybox_vendor";
     defaults = ["toybox-defaults"];
-    shared_libs = toybox_libraries;
     vendor = true;
 };
 
-in { inherit toybox toybox-defaults toybox_vendor; }
+# ###########################################
+#  Running the toybox tests
+# ###########################################
+
+toybox-tests = sh_test {
+    name = "toybox-tests";
+    src = "run-tests-on-android.sh";
+    filename = "run-tests-on-android.sh";
+    test_suites = ["general-tests"];
+    host_supported = true;
+    device_supported = false;
+    test_config = "toybox-tests.xml";
+    data = [
+        "tests/README.txt"
+        "tests/base64.test"
+        "tests/basename.test"
+        "tests/bc.test"
+        "tests/blkid.test"
+        "tests/bzcat.test"
+        "tests/cat.test"
+        "tests/chattr.test"
+        "tests/chgrp.test"
+        "tests/chmod.test"
+        "tests/chown.test"
+        "tests/cksum.test"
+        "tests/cmp.test"
+        "tests/cp.test"
+        "tests/cpio.test"
+        "tests/cut.test"
+        "tests/date.test"
+        "tests/dd.test"
+        "tests/demo_number.test"
+        "tests/diff.test"
+        "tests/dirname.test"
+        "tests/du.test"
+        "tests/echo.test"
+        "tests/env.test"
+        "tests/expand.test"
+        "tests/expr.test"
+        "tests/factor.test"
+        "tests/file.test"
+        "tests/files/"
+        "tests/find.test"
+        "tests/fmt.test"
+        "tests/fold.test"
+        "tests/fstype.test"
+        "tests/getfattr.test"
+        "tests/getopt.test"
+        "tests/grep.test"
+        "tests/groupadd.test"
+        "tests/groupdel.test"
+        "tests/gunzip.test"
+        "tests/gzip.test"
+        "tests/head.test"
+        "tests/hostname.test"
+        "tests/iconv.test"
+        "tests/id.test"
+        "tests/ifconfig.test"
+        "tests/kill.test"
+        "tests/killall.test"
+        "tests/link.test"
+        "tests/ln.test"
+        "tests/losetup.test"
+        "tests/ls.test"
+        "tests/lsattr.test"
+        "tests/man.test"
+        "tests/md5sum.test"
+        "tests/mkdir.test"
+        "tests/mkfifo.test"
+        "tests/mktemp.test"
+        "tests/modinfo.test"
+        "tests/more.test"
+        "tests/mount.test"
+        "tests/mv.test"
+        "tests/nl.test"
+        "tests/paste.test"
+        "tests/patch.test"
+        "tests/pgrep.test"
+        "tests/pidof.test"
+        "tests/pkill.test"
+        "tests/printf.test"
+        "tests/ps.test"
+        "tests/pwd.test"
+        "tests/readelf.test"
+        "tests/readlink.test"
+        "tests/renice.test"
+        "tests/rev.test"
+        "tests/rm.test"
+        "tests/rmdir.test"
+        "tests/sed.test"
+        "tests/seq.test"
+        "tests/setfattr.test"
+        "tests/sh.test"
+        "tests/sha1sum.test"
+        "tests/sort.test"
+        "tests/split.test"
+        "tests/stat.test"
+        "tests/strings.test"
+        "tests/tac.test"
+        "tests/tail.test"
+        "tests/tar.test"
+        "tests/tee.test"
+        "tests/test.test"
+        "tests/timeout.test"
+        "tests/top.test"
+        "tests/touch.test"
+        "tests/truncate.test"
+        "tests/unzip.test"
+        "tests/uptime.test"
+        "tests/useradd.test"
+        "tests/uudecode.test"
+        "tests/uuencode.test"
+        "tests/uuidgen.test"
+        "tests/vi.test"
+        "tests/wc.test"
+        "tests/xargs.test"
+        "tests/xxd.test"
+        "tests/xzcat.test"
+        "tests/zcat.test"
+        "tests/files/bc/"
+        "tests/files/blkid/"
+        "tests/files/bzcat/"
+        "tests/files/elf/"
+        "tests/files/java.class"
+        "tests/files/tar/"
+        "tests/files/utf8/"
+        "tests/files/vi/"
+        "tests/files/zip/"
+        "tests/files/bc/add.txt"
+        "tests/files/bc/add_results.txt"
+        "tests/files/bc/arctan.txt"
+        "tests/files/bc/arctan_results.txt"
+        "tests/files/bc/arrays.txt"
+        "tests/files/bc/arrays_results.txt"
+        "tests/files/bc/bessel.txt"
+        "tests/files/bc/bessel_results.txt"
+        "tests/files/bc/boolean.txt"
+        "tests/files/bc/boolean_results.txt"
+        "tests/files/bc/cosine.txt"
+        "tests/files/bc/cosine_results.txt"
+        "tests/files/bc/decimal.txt"
+        "tests/files/bc/decimal_results.txt"
+        "tests/files/bc/divide.txt"
+        "tests/files/bc/divide_results.txt"
+        "tests/files/bc/exponent.txt"
+        "tests/files/bc/exponent_results.txt"
+        "tests/files/bc/log.txt"
+        "tests/files/bc/log_results.txt"
+        "tests/files/bc/misc.txt"
+        "tests/files/bc/misc1.txt"
+        "tests/files/bc/misc1_results.txt"
+        "tests/files/bc/misc2.txt"
+        "tests/files/bc/misc2_results.txt"
+        "tests/files/bc/misc_results.txt"
+        "tests/files/bc/modulus.txt"
+        "tests/files/bc/modulus_results.txt"
+        "tests/files/bc/multiply.txt"
+        "tests/files/bc/multiply_results.txt"
+        "tests/files/bc/parse.txt"
+        "tests/files/bc/parse_results.txt"
+        "tests/files/bc/pi.txt"
+        "tests/files/bc/pi_results.txt"
+        "tests/files/bc/power.txt"
+        "tests/files/bc/power_results.txt"
+        "tests/files/bc/print.txt"
+        "tests/files/bc/print_results.txt"
+        "tests/files/bc/script.sh"
+        "tests/files/bc/sine.txt"
+        "tests/files/bc/sine_results.txt"
+        "tests/files/bc/sqrt.txt"
+        "tests/files/bc/sqrt_results.txt"
+        "tests/files/bc/subtract.txt"
+        "tests/files/bc/subtract_results.txt"
+        "tests/files/bc/vars.txt"
+        "tests/files/bc/vars_results.txt"
+        "tests/files/blkid/cramfs.bz2"
+        "tests/files/blkid/ext2.bz2"
+        "tests/files/blkid/ext3.bz2"
+        "tests/files/blkid/ext4.bz2"
+        "tests/files/blkid/f2fs.bz2"
+        "tests/files/blkid/minix.bz2"
+        "tests/files/blkid/msdos.bz2"
+        "tests/files/blkid/ntfs.bz2"
+        "tests/files/blkid/reiser3.bz2"
+        "tests/files/blkid/squashfs.bz2"
+        "tests/files/blkid/vfat.bz2"
+        "tests/files/blkid/xfs.bz2"
+        "tests/files/bzcat/badcrc.bz2"
+        "tests/files/bzcat/overflow.bz2"
+        "tests/files/elf/ndk-elf-note-full"
+        "tests/files/elf/ndk-elf-note-short"
+        "tests/files/tar/tar.tar"
+        "tests/files/tar/tar.tbz2"
+        "tests/files/tar/tar.tgz"
+        "tests/files/utf8/0xabad1dea.txt"
+        "tests/files/utf8/arabic.txt"
+        "tests/files/utf8/bad.txt"
+        "tests/files/utf8/japan.txt"
+        "tests/files/utf8/test1.txt"
+        "tests/files/utf8/test2.txt"
+        "tests/files/vi/D_first.in"
+        "tests/files/vi/D_last.in"
+        "tests/files/vi/ascii.txt"
+        "tests/files/vi/ascii_D_first.out"
+        "tests/files/vi/ascii_D_last.out"
+        "tests/files/vi/ascii_dd_first.out"
+        "tests/files/vi/ascii_dd_last.out"
+        "tests/files/vi/ascii_dw_first.out"
+        "tests/files/vi/ascii_dw_last.out"
+        "tests/files/vi/ascii_insert_after_w.out"
+        "tests/files/vi/ascii_insert_eof.out"
+        "tests/files/vi/ascii_insert_multi.out"
+        "tests/files/vi/ascii_insert_multi_yy_push.out"
+        "tests/files/vi/ascii_insert_sof.out"
+        "tests/files/vi/ascii_yw_push.out"
+        "tests/files/vi/dd_first.in"
+        "tests/files/vi/dd_last.in"
+        "tests/files/vi/dw_first.in"
+        "tests/files/vi/dw_last.in"
+        "tests/files/vi/insert_after_w.in"
+        "tests/files/vi/insert_eof.in"
+        "tests/files/vi/insert_multi.in"
+        "tests/files/vi/insert_multi_yy_push.in"
+        "tests/files/vi/insert_sof.in"
+        "tests/files/vi/yw_push.in"
+        "tests/files/zip/d1/"
+        "tests/files/zip/example.zip"
+        "tests/files/zip/d1/d2/"
+        "tests/files/zip/d1/d2/a.txt"
+        "tests/files/zip/d1/d2/b.txt"
+        "tests/files/zip/d1/d2/c.txt"
+        "tests/files/zip/d1/d2/empty.txt"
+        "tests/files/zip/d1/d2/x.txt"
+        "scripts/runtest.sh"
+    ];
+};
+
+in { inherit toybox toybox-defaults toybox-tests toybox_vendor; }

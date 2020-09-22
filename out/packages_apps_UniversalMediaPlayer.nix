@@ -88,6 +88,7 @@ UniversalMediaPlayer = android_app {
     static_libs = [
         "androidx-constraintlayout_constraintlayout"
         "androidx.media2_media2-widget"
+        "androidx.media2_media2-player"
         "com.google.android.material_material"
     ];
     optimize = {

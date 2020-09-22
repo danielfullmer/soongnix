@@ -1,4 +1,4 @@
-{ cc_binary_host, cc_defaults, cc_library_host_shared, java_defaults }:
+{ cc_binary_host, cc_defaults, cc_library_host_static, java_defaults }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -61,9 +61,12 @@ hidl-java-module-defaults = java_defaults {
     };
 };
 
-libhidl-gen = cc_library_host_shared {
+libhidl-gen = cc_library_host_static {
     name = "libhidl-gen";
     defaults = ["hidl-gen-defaults"];
+    cflags = [
+        "-Wno-bool-operation" #  found in ConstantExpression.cpp:105
+    ];
     srcs = [
         "Annotation.cpp"
         "ArrayType.cpp"
@@ -72,6 +75,7 @@ libhidl-gen = cc_library_host_shared {
         "DeathRecipientType.cpp"
         "DocComment.cpp"
         "EnumType.cpp"
+        "FmqType.cpp"
         "HandleType.cpp"
         "HidlTypeAssertion.cpp"
         "Interface.cpp"
@@ -80,8 +84,6 @@ libhidl-gen = cc_library_host_shared {
         "Method.cpp"
         "NamedType.cpp"
         "PointerType.cpp"
-        "FmqType.cpp"
-        "RefType.cpp"
         "ScalarType.cpp"
         "Scope.cpp"
         "StringType.cpp"
@@ -92,60 +94,77 @@ libhidl-gen = cc_library_host_shared {
     shared_libs = [
         "libbase"
         "liblog"
+    ];
+    static_libs = [
+        "libcrypto"
         "libhidl-gen-hash"
         "libhidl-gen-host-utils"
         "libhidl-gen-utils"
     ];
-    export_shared_lib_headers = [
-        "libbase"
+    export_shared_lib_headers = ["libbase"];
+    export_static_lib_headers = [
+        "libhidl-gen-hash"
         "libhidl-gen-host-utils"
         "libhidl-gen-utils"
     ];
     export_include_dirs = ["."]; #  for tests
 };
 
-libhidl-gen-ast = cc_library_host_shared {
+libhidl-gen-ast = cc_library_host_static {
     name = "libhidl-gen-ast";
     defaults = ["hidl-gen-defaults"];
     srcs = [
+        "AST.cpp"
         "Coordinator.cpp"
         "generateCpp.cpp"
         "generateCppAdapter.cpp"
         "generateCppImpl.cpp"
         "generateDependencies.cpp"
+        "generateFormattedHidl.cpp"
+        "generateInheritanceHierarchy.cpp"
         "generateJava.cpp"
+        "generateJavaImpl.cpp"
         "generateVts.cpp"
-        "hidl-gen_y.yy"
         "hidl-gen_l.ll"
-        "AST.cpp"
+        "hidl-gen_y.yy"
     ];
     shared_libs = [
         "libbase"
-        "liblog"
+        "libjsoncpp"
+    ];
+    static_libs = [
+        "libcrypto"
         "libhidl-gen"
         "libhidl-gen-hash"
         "libhidl-gen-host-utils"
         "libhidl-gen-utils"
     ];
-    export_shared_lib_headers = [
-        "libbase"
+    export_shared_lib_headers = ["libbase"];
+    export_static_lib_headers = [
+        "libhidl-gen-hash"
         "libhidl-gen-utils"
     ];
     export_include_dirs = ["."]; #  for tests
+    yacc = {
+        gen_location_hh = true;
+        gen_position_hh = true;
+    };
 };
 
 hidl-gen = cc_binary_host {
     name = "hidl-gen";
     defaults = ["hidl-gen-defaults"];
     srcs = ["main.cpp"];
-    shared_libs = [
+    static_libs = [
         "libbase"
-        "liblog"
+        "libcrypto"
         "libhidl-gen"
         "libhidl-gen-ast"
         "libhidl-gen-hash"
         "libhidl-gen-host-utils"
         "libhidl-gen-utils"
+        "libjsoncpp"
+        "liblog"
     ];
 };
 

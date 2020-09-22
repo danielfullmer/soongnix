@@ -23,7 +23,6 @@ CtsSecurityBulletinHostTestCases = java_test_host {
         "src/android/security/cts/HostsideMainlineModuleDetector.java"
         "src/android/security/cts/HostsideOomCatcher.java"
         "src/android/security/cts/LaunchSomeWhere.java"
-        "src/android/security/cts/Poc16_02.java"
         "src/android/security/cts/Poc16_04.java"
         "src/android/security/cts/Poc16_05.java"
         "src/android/security/cts/Poc16_06.java"
@@ -53,8 +52,10 @@ CtsSecurityBulletinHostTestCases = java_test_host {
         "src/android/security/cts/Poc19_03.java"
         "src/android/security/cts/Poc19_05.java"
         "src/android/security/cts/Poc19_06.java"
+        "src/android/security/cts/Poc19_07.java"
         "src/android/security/cts/Poc19_08.java"
         "src/android/security/cts/Poc19_11.java"
+        "src/android/security/cts/Poc20_03.java"
         "src/android/security/cts/RegexUtils.java"
         "src/android/security/cts/SecurityTestCase.java"
         "src/android/security/cts/TestMedia.java"
@@ -63,7 +64,7 @@ CtsSecurityBulletinHostTestCases = java_test_host {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
         "sts"
     ];
@@ -93,8 +94,12 @@ cts_hostsidetests_securitybulletin_defaults = cc_defaults {
     };
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "sts"
+    ];
+    cflags = [
+        "-Wall"
+        "-Werror"
     ];
 };
 

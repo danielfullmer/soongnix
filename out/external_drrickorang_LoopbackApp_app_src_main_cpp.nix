@@ -30,6 +30,9 @@ libloopback = cc_library_shared {
     ];
     # LOCAL_LDFLAGS += -Wl,--hash-style=sysv
     # LOCAL_CFLAGS := -DSTDC_HEADERS
+    cflags = [
+        "-Wno-deprecated-declarations"
+    ];
     cppflags = [
         "-fexceptions"
     ];

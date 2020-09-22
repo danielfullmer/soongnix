@@ -17,35 +17,44 @@ let
 #  limitations under the License.
 #
 
-#  Tests for V1_0 models using the V1_1 HAL.
-VtsHalNeuralnetworksV1_1CompatV1_0TargetTest = cc_test {
-    name = "VtsHalNeuralnetworksV1_1CompatV1_0TargetTest";
-    defaults = ["VtsHalNeuralNetworksTargetTestDefaults"];
-    srcs = [
-        "GeneratedTestsV1_0.cpp"
-    ];
-};
-
-#  Tests for V1_1 models.
 VtsHalNeuralnetworksV1_1TargetTest = cc_test {
     name = "VtsHalNeuralnetworksV1_1TargetTest";
-    defaults = ["VtsHalNeuralNetworksTargetTestDefaults"];
+    defaults = ["neuralnetworks_vts_functional_defaults"];
     srcs = [
         "BasicTests.cpp"
-        "GeneratedTests.cpp"
+        "TestAssertions.cpp"
+        "TestMain.cpp"
+        "ValidateModel.cpp"
+        "ValidateRequest.cpp"
+        "VtsHalNeuralnetworks.cpp"
+        "GeneratedTestHarness.cpp"
+    ];
+    shared_libs = [
+        "libfmq"
+        "libnativewindow"
+    ];
+    static_libs = [
+        "android.hardware.neuralnetworks@1.0"
+        "android.hardware.neuralnetworks@1.1"
+        "android.hidl.allocator@1.0"
+        "android.hidl.memory@1.0"
+        "libgmock"
+        "libhidlmemory"
+        "libneuralnetworks_generated_test_harness"
+        "libneuralnetworks_utils"
+        "VtsHalNeuralNetworksV1_0_utils"
+    ];
+    whole_static_libs = [
+        "neuralnetworks_generated_V1_0_example"
+        "neuralnetworks_generated_V1_1_example"
+    ];
+    header_libs = [
+        "libneuralnetworks_headers"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
     ];
 };
 
-PresubmitHalNeuralnetworksV1_1TargetTest = cc_test {
-    name = "PresubmitHalNeuralnetworksV1_1TargetTest";
-    defaults = ["VtsHalNeuralNetworksTargetTestDefaults"];
-    srcs = [
-        "BasicTests.cpp"
-        "GeneratedTests.cpp"
-    ];
-    cflags = [
-        "-DPRESUBMIT_NOT_VTS"
-    ];
-};
-
-in { inherit PresubmitHalNeuralnetworksV1_1TargetTest VtsHalNeuralnetworksV1_1CompatV1_0TargetTest VtsHalNeuralnetworksV1_1TargetTest; }
+in { inherit VtsHalNeuralnetworksV1_1TargetTest; }

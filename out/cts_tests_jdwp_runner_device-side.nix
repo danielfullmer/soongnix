@@ -30,13 +30,6 @@ cts-dalvik-device-test-runner = java_test_helper_library {
     };
 
     static_libs = ["junit"];
-
-    #  Tag this module as a cts test artifact
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
 };
 
 in { inherit cts-dalvik-device-test-runner; }

@@ -1,4 +1,4 @@
-{ cc_binary, cc_library }:
+{ cc_binary, cc_library_static }:
 let
 
 #  Copyright (C) 2008 The Android Open Source Project
@@ -15,10 +15,17 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libbz = cc_library {
+libbz = cc_library_static {
     name = "libbz";
     host_supported = true;
+    vendor_available = true;
     recovery_available = true;
+    visibility = [
+        "//bootable/recovery:__subpackages__"
+        "//external/bsdiff:__subpackages__"
+        "//external/puffin:__subpackages__"
+        "//system/update_engine:__subpackages__"
+    ];
     arch = {
         arm = {
             #  measurements show that the ARM version of ZLib is about x1.17 faster
@@ -54,7 +61,7 @@ bzip2 = cc_binary {
         "-Werror"
         "-Wno-unused-parameter"
     ];
-    shared_libs = ["libbz"];
+    static_libs = ["libbz"];
     srcs = ["bzip2.c"];
     stl = "none";
     symlinks = [

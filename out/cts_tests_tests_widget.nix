@@ -21,6 +21,7 @@ CtsWidgetTestCases = android_test {
 
     static_libs = [
         "androidx.annotation_annotation"
+        "androidx.test.ext.junit"
         "androidx.test.rules"
         "mockito-target-minus-junit4"
         "android-common"
@@ -54,6 +55,8 @@ CtsWidgetTestCases = android_test {
         "src/android/widget/cts/AutoCompleteCtsActivity.java"
         "src/android/widget/cts/AutoCompleteTextViewNoIme.java"
         "src/android/widget/cts/AutoCompleteTextViewTest.java"
+        "src/android/widget/cts/BackwardNavigationCtsActivity.java"
+        "src/android/widget/cts/BackwardNavigationTest.java"
         "src/android/widget/cts/BaseAdapterTest.java"
         "src/android/widget/cts/BaseExpandableListAdapterTest.java"
         "src/android/widget/cts/ButtonTest.java"
@@ -221,6 +224,8 @@ CtsWidgetTestCases = android_test {
         "src/android/widget/cts/ZoomButtonCtsActivity.java"
         "src/android/widget/cts/ZoomButtonTest.java"
         "src/android/widget/cts/ZoomControlsTest.java"
+        "src/android/widget/cts/inline/InlineContentViewCtsActivity.java"
+        "src/android/widget/cts/inline/InlineContentViewTest.java"
         "src/android/widget/cts/util/ExpandableListScenario.java"
         "src/android/widget/cts/util/ListItemFactory.java"
         "src/android/widget/cts/util/ListScenario.java"
@@ -237,9 +242,8 @@ CtsWidgetTestCases = android_test {
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
-        "cts_instant"
     ];
 
 };

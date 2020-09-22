@@ -50,6 +50,13 @@ core_native_default_libs = cc_defaults {
 
 libjavacore = cc_library_shared {
     name = "libjavacore";
+    visibility = [
+        "//art/build/apex"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
     defaults = [
         "core_native_default_flags"
         "core_native_default_libs"
@@ -69,6 +76,7 @@ libjavacore = cc_library_shared {
         "libz"
     ];
     static_libs = [
+        "libandroidicuinit"
         "libziparchive"
     ];
     target = {
@@ -85,6 +93,18 @@ libjavacore = cc_library_shared {
 
 libandroidio = cc_library_shared {
     name = "libandroidio";
+    visibility = [
+        "//art/build/apex"
+        "//external/conscrypt"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        #  TODO(b/147813447) remove this. This is currently due to the 'runtime_libs'
+        #  dependency from libjavacrypto in the conscrypt APEX.
+        "com.android.conscrypt"
+        "test_com.android.conscrypt"
+    ];
     defaults = [
         "core_native_default_flags"
     ];
@@ -107,8 +127,8 @@ libopenjdk_native_defaults = cc_defaults {
         "core_native_default_libs"
     ];
     srcs = [":libopenjdk_native_srcs"];
-    include_dirs = [
-        "libcore/luni/src/main/native"
+    local_include_dirs = [
+        "luni/src/main/native"
     ];
     cflags = [
         #  TODO(narayan): Prune down this list of exclusions once the underlying
@@ -157,6 +177,13 @@ libopenjdk_native_defaults = cc_defaults {
 
 libopenjdk = cc_library_shared {
     name = "libopenjdk";
+    visibility = [
+        "//art/build/apex"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
     defaults = ["libopenjdk_native_defaults"];
     shared_libs = [
         "libopenjdkjvm"
@@ -166,6 +193,12 @@ libopenjdk = cc_library_shared {
 #  Debug version of libopenjdk. Depends on libopenjdkjvmd.
 libopenjdkd = cc_library_shared {
     name = "libopenjdkd";
+    visibility = [
+        "//art/build/apex"
+    ];
+    apex_available = [
+        "com.android.art.debug"
+    ];
     defaults = ["libopenjdk_native_defaults"];
     shared_libs = [
         "libopenjdkjvmd"
@@ -175,6 +208,10 @@ libopenjdkd = cc_library_shared {
 #  Test JNI library.
 libjavacoretests = cc_library_shared {
     name = "libjavacoretests";
+    visibility = [
+        "//art/build/sdk"
+        "//cts/tests/libcore/luni"
+    ];
     defaults = ["core_native_default_flags"];
     host_supported = true;
 
@@ -222,10 +259,5 @@ libjavacore-benchmarks = cc_benchmark {
 
     shared_libs = ["libnativehelper"];
 };
-
-subdirs = [
-    "luni/src/main/native"
-    "ojluni/src/main/native"
-];
 
 in { inherit core_native_default_flags core_native_default_libs libandroidio libjavacore libjavacore-benchmarks libjavacore-unit-tests libjavacoretests libopenjdk libopenjdk_native_defaults libopenjdkd; }

@@ -31,15 +31,16 @@ VtsHalWifiV1_0TargetTestUtil = cc_library_static {
     shared_libs = [
         "libnativehelper"
     ];
-    static_libs = ["android.hardware.wifi@1.0"];
+    static_libs = [
+        "android.hardware.wifi@1.0"
+        "libwifi-system-iface"
+    ];
 };
 
 VtsHalWifiV1_0TargetTest = cc_test {
     name = "VtsHalWifiV1_0TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
-        "VtsHalWifiV1_0TargetTest.cpp"
-        "wifi_ap_iface_hidl_test.cpp"
         "wifi_chip_hidl_test.cpp"
         "wifi_p2p_iface_hidl_test.cpp"
         "wifi_rtt_controller_hidl_test.cpp"
@@ -51,22 +52,52 @@ VtsHalWifiV1_0TargetTest = cc_test {
         "android.hardware.wifi@1.1"
         "android.hardware.wifi@1.2"
         "android.hardware.wifi@1.3"
+        "libwifi-system-iface"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
+#  These tests are split out so that they can be conditioned on presence of the
+#  "android.hardware.wifi.aware" feature.
 VtsHalWifiNanV1_0TargetTest = cc_test {
     name = "VtsHalWifiNanV1_0TargetTest";
     defaults = ["VtsHalTargetTestDefaults"];
     srcs = [
-        "VtsHalWifiV1_0TargetTest.cpp"
+        "wifi_chip_hidl_nan_test.cpp"
         "wifi_nan_iface_hidl_test.cpp"
     ];
     static_libs = [
         "VtsHalWifiV1_0TargetTestUtil"
         "android.hardware.wifi@1.0"
+        "libwifi-system-iface"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
-in { inherit VtsHalWifiNanV1_0TargetTest VtsHalWifiV1_0TargetTest VtsHalWifiV1_0TargetTestUtil; }
+#  These tests are split out so that they can be conditioned on presence of
+#  the hostapd HAL, which indicates SoftAP support.
+VtsHalWifiApV1_0TargetTest = cc_test {
+    name = "VtsHalWifiApV1_0TargetTest";
+    defaults = ["VtsHalTargetTestDefaults"];
+    srcs = [
+        "wifi_ap_iface_hidl_test.cpp"
+        "wifi_chip_hidl_ap_test.cpp"
+    ];
+    static_libs = [
+        "VtsHalWifiV1_0TargetTestUtil"
+        "android.hardware.wifi@1.0"
+        "libwifi-system-iface"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+};
+
+in { inherit VtsHalWifiApV1_0TargetTest VtsHalWifiNanV1_0TargetTest VtsHalWifiV1_0TargetTest VtsHalWifiV1_0TargetTestUtil; }

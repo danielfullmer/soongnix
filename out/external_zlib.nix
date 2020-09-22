@@ -1,8 +1,57 @@
-{ cc_binary, cc_binary_host, cc_library }:
+{ cc_binary, cc_binary_host, cc_defaults, cc_library, cc_library_static }:
 let
+
+libz_defaults = cc_defaults {
+    name = "libz_defaults";
+
+    cflags = [
+        "-O3"
+        "-DHAVE_HIDDEN"
+        "-DZLIB_CONST"
+        "-Wall"
+        "-Werror"
+        "-Wno-unused"
+        "-Wno-unused-parameter"
+    ];
+    stl = "none";
+    export_include_dirs = ["."];
+    srcs = [
+        "adler32.c"
+        "compress.c"
+        "cpu_features.c"
+        "crc32.c"
+        "deflate.c"
+        "gzclose.c"
+        "gzlib.c"
+        "gzread.c"
+        "gzwrite.c"
+        "infback.c"
+        "inflate.c"
+        "inftrees.c"
+        "inffast.c"
+        "trees.c"
+        "uncompr.c"
+        "zutil.c"
+    ];
+
+    arch = {
+        arm = {
+            #  measurements show that the ARM version of ZLib is about x1.17 faster
+            #  than the thumb one...
+            #  TODO: re-test with zlib_bench after SIMD is enabled.
+            instruction_set = "arm";
+
+            #  TODO: This is to work around b/24465209. Remove after root cause
+            #  is fixed.
+            pack_relocations = false;
+            ldflags = ["-Wl,--hash-style=both"];
+        };
+    };
+};
 
 libz = cc_library {
     name = "libz";
+    defaults = ["libz_defaults"];
 
     host_supported = true;
     unique_host_soname = true;
@@ -13,46 +62,9 @@ libz = cc_library {
         enabled = true;
         support_system_process = true;
     };
+    ramdisk_available = true;
     recovery_available = true;
-
-    cflags = [
-        "-O3"
-        "-DUSE_MMAP"
-        "-DZLIB_CONST"
-        "-Wall"
-        "-Werror"
-    ];
-    stl = "none";
-    export_include_dirs = ["."];
-    srcs = [
-        "src/adler32.c"
-        "src/compress.c"
-        "src/crc32.c"
-        "src/deflate.c"
-        "src/gzclose.c"
-        "src/gzlib.c"
-        "src/gzread.c"
-        "src/gzwrite.c"
-        "src/infback.c"
-        "src/inflate.c"
-        "src/inftrees.c"
-        "src/inffast.c"
-        "src/trees.c"
-        "src/uncompr.c"
-        "src/zutil.c"
-    ];
-
-    arch = {
-        arm = {
-            #  measurements show that the ARM version of ZLib is about x1.17 faster
-            #  than the thumb one...
-            instruction_set = "arm";
-
-            #  TODO: This is to work around b/24465209. Remove after root cause is fixed
-            pack_relocations = false;
-            ldflags = ["-Wl,--hash-style=both"];
-        };
-    };
+    native_bridge_supported = true;
 
     target = {
         linux_bionic = {
@@ -62,39 +74,43 @@ libz = cc_library {
             enabled = true;
         };
     };
+
+    #  TODO(b/155456180): make libz a stub-providing library by uncommenting below
+    #     stubs: {
+    #         versions: ["29", "30"],
+    #         symbol_file: "libz.map.txt",
+    #     },
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug" #  from libdexfile
+        "com.android.art.release"
+        "com.android.bluetooth.updatable"
+        "com.android.runtime"
+    ];
 };
 
 minigzip = cc_binary_host {
     name = "minigzip";
-    srcs = ["src/test/minigzip.c"];
+    srcs = ["contrib/minigzip/minigzip.c"];
     cflags = [
         "-Wall"
         "-Werror"
+        "-DUSE_MMAP"
     ];
     static_libs = ["libz"];
     stl = "none";
 };
 
-zlib_example = cc_binary {
-    name = "zlib_example";
-    srcs = ["src/test/example.c"];
+zlib_bench = cc_binary {
+    name = "zlib_bench";
+    srcs = ["contrib/bench/zlib_bench.cc"];
     cflags = [
         "-Wall"
         "-Werror"
     ];
+    host_supported = true;
     shared_libs = ["libz"];
-    stl = "none";
-};
-
-zlib_example_host = cc_binary_host {
-    name = "zlib_example_host";
-    srcs = ["src/test/example.c"];
-    cflags = [
-        "-Wall"
-        "-Werror"
-    ];
-    static_libs = ["libz"];
-    stl = "none";
 };
 
 #  This module is defined in development/ndk/Android.bp. Updating these headers
@@ -117,4 +133,19 @@ zlib_example_host = cc_binary_host {
 #      license: "NOTICE",
 #  }
 
-in { inherit libz minigzip zlib_example zlib_example_host; }
+#  TODO(b/155351357) remove this library and let libtextclassifier to use libz
+#  instead.
+#  libz_current allows modules building against the NDK to have access to zlib
+#  API that's not available from the NDK libz.
+libz_current = cc_library_static {
+    name = "libz_current";
+    defaults = ["libz_defaults"];
+    sdk_version = "current";
+
+    apex_available = [
+        "//apex_available:platform" #  indirectly from GoogleExtServices that gets installed to /system
+        "com.android.extservices" #  indirectly via libtextclassifier
+    ];
+};
+
+in { inherit libz libz_current libz_defaults minigzip zlib_bench; }

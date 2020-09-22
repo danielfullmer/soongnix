@@ -63,7 +63,8 @@ mcld-gen-options = llvm_tblgen {
 
         #  Add target specific code generation libraries
         android_arm = {
-            static_libs = MCLD_ARM_LIBS;
+            #  Include AARCH64 libs to enable 64-bit linking on ARM targets
+            static_libs = MCLD_ARM_LIBS ++ MCLD_AARCH64_LIBS;
         };
         android_arm64 = {
             #  Include ARM libs to enable 32-bit linking on AARCH64 targets

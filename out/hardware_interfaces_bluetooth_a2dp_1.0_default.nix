@@ -1,8 +1,8 @@
 { cc_library_shared }:
 let
 
-"android.hardware.bluetooth.a2dp@1.0-impl" = cc_library_shared {
-    name = "android.hardware.bluetooth.a2dp@1.0-impl";
+"android.hardware.bluetooth.a2dp@1.0-impl.mock" = cc_library_shared {
+    name = "android.hardware.bluetooth.a2dp@1.0-impl.mock";
     relative_install_path = "hw";
     vendor = true;
     srcs = [
@@ -10,10 +10,9 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.bluetooth.a2dp@1.0"
     ];
 };
 
-in { inherit "android.hardware.bluetooth.a2dp@1.0-impl"; }
+in { inherit "android.hardware.bluetooth.a2dp@1.0-impl.mock"; }

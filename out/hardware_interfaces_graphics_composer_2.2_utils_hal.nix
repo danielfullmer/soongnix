@@ -22,9 +22,11 @@ let
     vendor_available = true;
     shared_libs = [
         "android.hardware.graphics.composer@2.2"
+        "android.hardware.graphics.composer@2.2-resources"
     ];
     export_shared_lib_headers = [
         "android.hardware.graphics.composer@2.2"
+        "android.hardware.graphics.composer@2.2-resources"
     ];
     header_libs = [
         "android.hardware.graphics.composer@2.2-command-buffer"

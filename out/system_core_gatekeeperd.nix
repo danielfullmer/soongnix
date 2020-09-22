@@ -1,4 +1,4 @@
-{ cc_binary }:
+{ cc_binary, cc_library_shared, filegroup }:
 let
 
 #
@@ -26,8 +26,6 @@ gatekeeperd = cc_binary {
         "-Wunused"
     ];
     srcs = [
-        "SoftGateKeeperDevice.cpp"
-        "IGateKeeperService.cpp"
         "gatekeeperd.cpp"
     ];
 
@@ -43,9 +41,8 @@ gatekeeperd = cc_binary {
         "libkeystore_aidl"
         "libkeystore_binder"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "android.hardware.gatekeeper@1.0"
+        "libgatekeeper_aidl"
     ];
 
     static_libs = ["libscrypt_static"];
@@ -53,4 +50,38 @@ gatekeeperd = cc_binary {
     init_rc = ["gatekeeperd.rc"];
 };
 
-in { inherit gatekeeperd; }
+gatekeeper_aidl = filegroup {
+    name = "gatekeeper_aidl";
+    srcs = [
+        "binder/android/service/gatekeeper/IGateKeeperService.aidl"
+    ];
+    path = "binder";
+};
+
+libgatekeeper_aidl = cc_library_shared {
+    name = "libgatekeeper_aidl";
+    srcs = [
+        ":gatekeeper_aidl"
+        "GateKeeperResponse.cpp"
+    ];
+    aidl = {
+        export_aidl_headers = true;
+        include_dirs = [
+            "system/core/gatekeeperd/binder"
+            "frameworks/base/core/java/"
+        ];
+    };
+    export_include_dirs = ["include"];
+    shared_libs = [
+        "libbase"
+        "libbinder"
+        "libcutils"
+        "liblog"
+        "libutils"
+    ];
+    export_shared_lib_headers = [
+        "libbinder"
+    ];
+};
+
+in { inherit gatekeeper_aidl gatekeeperd libgatekeeper_aidl; }

@@ -25,7 +25,10 @@ VtsHalSecureElementV1_1TargetTest = cc_test {
         "android.hardware.secure_element@1.0"
         "android.hardware.secure_element@1.1"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalSecureElementV1_1TargetTest; }

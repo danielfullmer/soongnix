@@ -27,6 +27,11 @@ android_native_app_glue = cc_library_static {
     ];
     sdk_version = "minimum";
     export_include_dirs = ["current/sources/android/native_app_glue"];
+    target = {
+        platform = {
+            shared_libs = ["libnativewindow"];
+        };
+    };
 };
 
 in { inherit android_native_app_glue; }

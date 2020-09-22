@@ -34,6 +34,7 @@ libstagefright_httplive = cc_library {
         "liblog"
         "libcrypto"
         "libcutils"
+        "libdatasource"
         "libmedia"
         "libmediandk"
         "libstagefright"

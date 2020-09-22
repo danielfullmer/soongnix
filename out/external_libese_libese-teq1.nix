@@ -31,6 +31,7 @@ libese-teq1 = cc_library {
         "libese"
         "libese-sysdeps"
     ];
+    export_include_dirs = ["include"];
 };
 
 libese-teq1-private = cc_library {
@@ -55,6 +56,7 @@ libese-teq1-private = cc_library {
         "."
         "include"
     ];
+    visibility = ["//external/libese:__subpackages__"];
 };
 
 subdirs = ["tests"];

@@ -85,45 +85,6 @@ android-support-asynclayoutinflater = android_library {
     java_version = "1.7";
 };
 
-android-support-car-nodeps = android_library_import {
-    name = "android-support-car-nodeps";
-    aars = ["m2repository/com/android/support/car/28.0.0-alpha5/car-28.0.0-alpha5.aar"];
-    sdk_version = "current";
-    min_sdk_version = "24";
-    static_libs = [
-        "android-support-design"
-        "android-support-v7-appcompat"
-        "android-support-v7-cardview"
-        "android-support-v4"
-        "android-support-v7-recyclerview"
-        "android-support-v7-gridlayout"
-        "android-support-v7-preference"
-        "android-support-constraint-layout"
-        "prebuilt-android.car-stubs"
-    ];
-};
-
-android-support-car = android_library {
-    name = "android-support-car";
-    sdk_version = "current";
-    min_sdk_version = "24";
-    manifest = "manifests/android-support-car/AndroidManifest.xml";
-    static_libs = [
-        "android-support-car-nodeps"
-        "android-support-annotations"
-        "android-support-design"
-        "android-support-v7-appcompat"
-        "android-support-v7-cardview"
-        "android-support-v4"
-        "android-support-v7-recyclerview"
-        "android-support-v7-gridlayout"
-        "android-support-v7-preference"
-        "android-support-constraint-layout"
-        "prebuilt-android.car-stubs"
-    ];
-    java_version = "1.7";
-};
-
 android-support-v7-cardview-nodeps = android_library_import {
     name = "android-support-v7-cardview-nodeps";
     aars = ["m2repository/com/android/support/cardview-v7/28.0.0/cardview-v7-28.0.0.aar"];
@@ -203,34 +164,6 @@ android-support-cursoradapter = android_library {
     static_libs = [
         "android-support-cursoradapter-nodeps"
         "android-support-annotations"
-    ];
-    java_version = "1.7";
-};
-
-android-support-customtabs-nodeps = android_library_import {
-    name = "android-support-customtabs-nodeps";
-    aars = ["m2repository/com/android/support/customtabs/28.0.0/customtabs-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "15";
-    static_libs = [
-        "android-support-compat"
-        "android-support-interpolator"
-        "android-support-core-ui"
-    ];
-};
-
-android-support-customtabs = android_library {
-    name = "android-support-customtabs";
-    sdk_version = "current";
-    min_sdk_version = "15";
-    manifest = "manifests/android-support-customtabs/AndroidManifest.xml";
-    static_libs = [
-        "android-support-customtabs-nodeps"
-        "android-support-annotations"
-        "android-support-collections"
-        "android-support-compat"
-        "android-support-interpolator"
-        "android-support-core-ui"
     ];
     java_version = "1.7";
 };
@@ -345,27 +278,6 @@ android-support-v7-gridlayout = android_library {
         "android-support-v7-gridlayout-nodeps"
         "android-support-compat"
         "android-support-core-ui"
-    ];
-    java_version = "1.7";
-};
-
-android-support-heifwriter-nodeps = android_library_import {
-    name = "android-support-heifwriter-nodeps";
-    aars = ["m2repository/com/android/support/heifwriter/28.0.0/heifwriter-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "28";
-    static_libs = [
-    ];
-};
-
-android-support-heifwriter = android_library {
-    name = "android-support-heifwriter";
-    sdk_version = "current";
-    min_sdk_version = "28";
-    manifest = "manifests/android-support-heifwriter/AndroidManifest.xml";
-    static_libs = [
-        "android-support-heifwriter-nodeps"
-        "android-support-annotations"
     ];
     java_version = "1.7";
 };
@@ -541,37 +453,6 @@ android-support-percent = android_library {
     java_version = "1.7";
 };
 
-android-support-v17-preference-leanback-nodeps = android_library_import {
-    name = "android-support-v17-preference-leanback-nodeps";
-    aars = ["m2repository/com/android/support/preference-leanback-v17/28.0.0/preference-leanback-v17-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "17";
-    static_libs = [
-        "android-support-v7-appcompat"
-        "android-support-v7-recyclerview"
-        "android-support-v7-preference"
-        "android-support-v14-preference"
-        "android-support-v17-leanback"
-    ];
-};
-
-android-support-v17-preference-leanback = android_library {
-    name = "android-support-v17-preference-leanback";
-    sdk_version = "current";
-    min_sdk_version = "17";
-    manifest = "manifests/android-support-v17-preference-leanback/AndroidManifest.xml";
-    static_libs = [
-        "android-support-v17-preference-leanback-nodeps"
-        "android-support-collections"
-        "android-support-v7-appcompat"
-        "android-support-v7-recyclerview"
-        "android-support-v7-preference"
-        "android-support-v14-preference"
-        "android-support-v17-leanback"
-    ];
-    java_version = "1.7";
-};
-
 android-support-v14-preference-nodeps = android_library_import {
     name = "android-support-v14-preference-nodeps";
     aars = ["m2repository/com/android/support/preference-v14/28.0.0/preference-v14-28.0.0.aar"];
@@ -644,52 +525,6 @@ android-support-print = android_library {
     java_version = "1.7";
 };
 
-android-support-recommendation-nodeps = android_library_import {
-    name = "android-support-recommendation-nodeps";
-    aars = ["m2repository/com/android/support/recommendation/28.0.0/recommendation-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "21";
-    static_libs = [
-    ];
-};
-
-android-support-recommendation = android_library {
-    name = "android-support-recommendation";
-    sdk_version = "current";
-    min_sdk_version = "21";
-    manifest = "manifests/android-support-recommendation/AndroidManifest.xml";
-    static_libs = [
-        "android-support-recommendation-nodeps"
-        "android-support-annotations"
-    ];
-    java_version = "1.7";
-};
-
-android-support-recyclerview-selection-nodeps = android_library_import {
-    name = "android-support-recyclerview-selection-nodeps";
-    aars = ["m2repository/com/android/support/recyclerview-selection/28.0.0/recyclerview-selection-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "14";
-    static_libs = [
-        "android-support-v7-recyclerview"
-        "android-support-compat"
-    ];
-};
-
-android-support-recyclerview-selection = android_library {
-    name = "android-support-recyclerview-selection";
-    sdk_version = "current";
-    min_sdk_version = "14";
-    manifest = "manifests/android-support-recyclerview-selection/AndroidManifest.xml";
-    static_libs = [
-        "android-support-recyclerview-selection-nodeps"
-        "android-support-annotations"
-        "android-support-v7-recyclerview"
-        "android-support-compat"
-    ];
-    java_version = "1.7";
-};
-
 android-support-v7-recyclerview-nodeps = android_library_import {
     name = "android-support-v7-recyclerview-nodeps";
     aars = ["m2repository/com/android/support/recyclerview-v7/28.0.0/recyclerview-v7-28.0.0.aar"];
@@ -711,80 +546,6 @@ android-support-v7-recyclerview = android_library {
         "android-support-annotations"
         "android-support-compat"
         "android-support-core-ui"
-    ];
-    java_version = "1.7";
-};
-
-android-slices-builders-nodeps = android_library_import {
-    name = "android-slices-builders-nodeps";
-    aars = ["m2repository/com/android/support/slices-builders/28.0.0/slices-builders-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "19";
-    static_libs = [
-        "android-slices-core"
-        "android-support-compat"
-    ];
-};
-
-android-slices-builders = android_library {
-    name = "android-slices-builders";
-    sdk_version = "current";
-    min_sdk_version = "19";
-    manifest = "manifests/android-slices-builders/AndroidManifest.xml";
-    static_libs = [
-        "android-slices-builders-nodeps"
-        "android-support-annotations"
-        "android-slices-core"
-        "android-support-compat"
-    ];
-    java_version = "1.7";
-};
-
-android-slices-core-nodeps = android_library_import {
-    name = "android-slices-core-nodeps";
-    aars = ["m2repository/com/android/support/slices-core/28.0.0/slices-core-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "19";
-    static_libs = [
-        "android-support-v7-appcompat"
-    ];
-};
-
-android-slices-core = android_library {
-    name = "android-slices-core";
-    sdk_version = "current";
-    min_sdk_version = "19";
-    manifest = "manifests/android-slices-core/AndroidManifest.xml";
-    static_libs = [
-        "android-slices-core-nodeps"
-        "android-support-annotations"
-        "android-support-v7-appcompat"
-    ];
-    java_version = "1.7";
-};
-
-android-slices-view-nodeps = android_library_import {
-    name = "android-slices-view-nodeps";
-    aars = ["m2repository/com/android/support/slices-view/28.0.0/slices-view-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "19";
-    static_libs = [
-        "android-arch-lifecycle-livedata-core"
-        "android-slices-core"
-        "android-support-v7-recyclerview"
-    ];
-};
-
-android-slices-view = android_library {
-    name = "android-slices-view";
-    sdk_version = "current";
-    min_sdk_version = "19";
-    manifest = "manifests/android-slices-view/AndroidManifest.xml";
-    static_libs = [
-        "android-slices-view-nodeps"
-        "android-arch-lifecycle-livedata-core"
-        "android-slices-core"
-        "android-support-v7-recyclerview"
     ];
     java_version = "1.7";
 };
@@ -954,74 +715,6 @@ android-support-dynamic-animation = android_library {
     java_version = "1.7";
 };
 
-android-support-emoji-appcompat-nodeps = android_library_import {
-    name = "android-support-emoji-appcompat-nodeps";
-    aars = ["m2repository/com/android/support/support-emoji-appcompat/28.0.0/support-emoji-appcompat-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "14";
-    static_libs = [
-        "android-support-emoji"
-        "android-support-v7-appcompat"
-    ];
-};
-
-android-support-emoji-appcompat = android_library {
-    name = "android-support-emoji-appcompat";
-    sdk_version = "current";
-    min_sdk_version = "14";
-    manifest = "manifests/android-support-emoji-appcompat/AndroidManifest.xml";
-    static_libs = [
-        "android-support-emoji-appcompat-nodeps"
-        "android-support-emoji"
-        "android-support-v7-appcompat"
-    ];
-    java_version = "1.7";
-};
-
-android-support-emoji-bundled-nodeps = android_library_import {
-    name = "android-support-emoji-bundled-nodeps";
-    aars = ["m2repository/com/android/support/support-emoji-bundled/28.0.0/support-emoji-bundled-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "14";
-    static_libs = [
-        "android-support-emoji"
-    ];
-};
-
-android-support-emoji-bundled = android_library {
-    name = "android-support-emoji-bundled";
-    sdk_version = "current";
-    min_sdk_version = "14";
-    manifest = "manifests/android-support-emoji-bundled/AndroidManifest.xml";
-    static_libs = [
-        "android-support-emoji-bundled-nodeps"
-        "android-support-emoji"
-    ];
-    java_version = "1.7";
-};
-
-android-support-emoji-nodeps = android_library_import {
-    name = "android-support-emoji-nodeps";
-    aars = ["m2repository/com/android/support/support-emoji/28.0.0/support-emoji-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "14";
-    static_libs = [
-        "android-support-compat"
-    ];
-};
-
-android-support-emoji = android_library {
-    name = "android-support-emoji";
-    sdk_version = "current";
-    min_sdk_version = "14";
-    manifest = "manifests/android-support-emoji/AndroidManifest.xml";
-    static_libs = [
-        "android-support-emoji-nodeps"
-        "android-support-compat"
-    ];
-    java_version = "1.7";
-};
-
 android-support-fragment-nodeps = android_library_import {
     name = "android-support-fragment-nodeps";
     aars = ["m2repository/com/android/support/support-fragment/28.0.0/support-fragment-28.0.0.aar"];
@@ -1070,29 +763,6 @@ android-support-media-compat = android_library {
     manifest = "manifests/android-support-media-compat/AndroidManifest.xml";
     static_libs = [
         "android-support-media-compat-nodeps"
-        "android-support-annotations"
-        "android-support-compat"
-    ];
-    java_version = "1.7";
-};
-
-android-support-tv-provider-nodeps = android_library_import {
-    name = "android-support-tv-provider-nodeps";
-    aars = ["m2repository/com/android/support/support-tv-provider/28.0.0/support-tv-provider-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "21";
-    static_libs = [
-        "android-support-compat"
-    ];
-};
-
-android-support-tv-provider = android_library {
-    name = "android-support-tv-provider";
-    sdk_version = "current";
-    min_sdk_version = "21";
-    manifest = "manifests/android-support-tv-provider/AndroidManifest.xml";
-    static_libs = [
-        "android-support-tv-provider-nodeps"
         "android-support-annotations"
         "android-support-compat"
     ];
@@ -1268,56 +938,4 @@ android-support-viewpager = android_library {
     java_version = "1.7";
 };
 
-android-support-wear-nodeps = android_library_import {
-    name = "android-support-wear-nodeps";
-    aars = ["m2repository/com/android/support/wear/28.0.0/wear-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "23";
-    static_libs = [
-        "android-support-core-ui"
-        "android-support-fragment"
-        "android-support-v7-recyclerview"
-        "android-support-constraint-layout"
-    ];
-};
-
-android-support-wear = android_library {
-    name = "android-support-wear";
-    sdk_version = "current";
-    min_sdk_version = "23";
-    manifest = "manifests/android-support-wear/AndroidManifest.xml";
-    static_libs = [
-        "android-support-wear-nodeps"
-        "android-support-annotations"
-        "android-support-core-ui"
-        "android-support-fragment"
-        "android-support-v7-recyclerview"
-        "android-support-constraint-layout"
-    ];
-    java_version = "1.7";
-};
-
-android-support-webkit-nodeps = android_library_import {
-    name = "android-support-webkit-nodeps";
-    aars = ["m2repository/com/android/support/webkit/28.0.0/webkit-28.0.0.aar"];
-    sdk_version = "current";
-    min_sdk_version = "14";
-    static_libs = [
-        "android-support-compat"
-    ];
-};
-
-android-support-webkit = android_library {
-    name = "android-support-webkit";
-    sdk_version = "current";
-    min_sdk_version = "14";
-    manifest = "manifests/android-support-webkit/AndroidManifest.xml";
-    static_libs = [
-        "android-support-webkit-nodeps"
-        "android-support-annotations"
-        "android-support-compat"
-    ];
-    java_version = "1.7";
-};
-
-in { inherit android-slices-builders android-slices-builders-nodeps android-slices-core android-slices-core-nodeps android-slices-view android-slices-view-nodeps android-support-animatedvectordrawable android-support-animatedvectordrawable-nodeps android-support-annotations android-support-annotations-nodeps android-support-asynclayoutinflater android-support-asynclayoutinflater-nodeps android-support-car android-support-car-nodeps android-support-collections android-support-collections-nodeps android-support-compat android-support-compat-nodeps android-support-coordinatorlayout android-support-coordinatorlayout-nodeps android-support-core-ui android-support-core-ui-nodeps android-support-core-utils android-support-core-utils-nodeps android-support-cursoradapter android-support-cursoradapter-nodeps android-support-customtabs android-support-customtabs-nodeps android-support-customview android-support-customview-nodeps android-support-documentfile android-support-documentfile-nodeps android-support-drawerlayout android-support-drawerlayout-nodeps android-support-dynamic-animation android-support-dynamic-animation-nodeps android-support-emoji android-support-emoji-appcompat android-support-emoji-appcompat-nodeps android-support-emoji-bundled android-support-emoji-bundled-nodeps android-support-emoji-nodeps android-support-exifinterface android-support-exifinterface-nodeps android-support-fragment android-support-fragment-nodeps android-support-heifwriter android-support-heifwriter-nodeps android-support-interpolator android-support-interpolator-nodeps android-support-loader android-support-loader-nodeps android-support-localbroadcastmanager android-support-localbroadcastmanager-nodeps android-support-media-compat android-support-media-compat-nodeps android-support-percent android-support-percent-nodeps android-support-print android-support-print-nodeps android-support-recommendation android-support-recommendation-nodeps android-support-recyclerview-selection android-support-recyclerview-selection-nodeps android-support-slidingpanelayout android-support-slidingpanelayout-nodeps android-support-swiperefreshlayout android-support-swiperefreshlayout-nodeps android-support-transition android-support-transition-nodeps android-support-tv-provider android-support-tv-provider-nodeps android-support-v13 android-support-v13-nodeps android-support-v14-preference android-support-v14-preference-nodeps android-support-v17-leanback android-support-v17-leanback-nodeps android-support-v17-preference-leanback android-support-v17-preference-leanback-nodeps android-support-v4 android-support-v4-nodeps android-support-v7-appcompat android-support-v7-appcompat-nodeps android-support-v7-cardview android-support-v7-cardview-nodeps android-support-v7-gridlayout android-support-v7-gridlayout-nodeps android-support-v7-mediarouter android-support-v7-mediarouter-nodeps android-support-v7-palette android-support-v7-palette-nodeps android-support-v7-preference android-support-v7-preference-nodeps android-support-v7-recyclerview android-support-v7-recyclerview-nodeps android-support-vectordrawable android-support-vectordrawable-nodeps android-support-viewpager android-support-viewpager-nodeps android-support-wear android-support-wear-nodeps android-support-webkit android-support-webkit-nodeps android-versionedparcelable android-versionedparcelable-nodeps; }
+in { inherit android-support-animatedvectordrawable android-support-animatedvectordrawable-nodeps android-support-annotations android-support-annotations-nodeps android-support-asynclayoutinflater android-support-asynclayoutinflater-nodeps android-support-collections android-support-collections-nodeps android-support-compat android-support-compat-nodeps android-support-coordinatorlayout android-support-coordinatorlayout-nodeps android-support-core-ui android-support-core-ui-nodeps android-support-core-utils android-support-core-utils-nodeps android-support-cursoradapter android-support-cursoradapter-nodeps android-support-customview android-support-customview-nodeps android-support-documentfile android-support-documentfile-nodeps android-support-drawerlayout android-support-drawerlayout-nodeps android-support-dynamic-animation android-support-dynamic-animation-nodeps android-support-exifinterface android-support-exifinterface-nodeps android-support-fragment android-support-fragment-nodeps android-support-interpolator android-support-interpolator-nodeps android-support-loader android-support-loader-nodeps android-support-localbroadcastmanager android-support-localbroadcastmanager-nodeps android-support-media-compat android-support-media-compat-nodeps android-support-percent android-support-percent-nodeps android-support-print android-support-print-nodeps android-support-slidingpanelayout android-support-slidingpanelayout-nodeps android-support-swiperefreshlayout android-support-swiperefreshlayout-nodeps android-support-transition android-support-transition-nodeps android-support-v13 android-support-v13-nodeps android-support-v14-preference android-support-v14-preference-nodeps android-support-v17-leanback android-support-v17-leanback-nodeps android-support-v4 android-support-v4-nodeps android-support-v7-appcompat android-support-v7-appcompat-nodeps android-support-v7-cardview android-support-v7-cardview-nodeps android-support-v7-gridlayout android-support-v7-gridlayout-nodeps android-support-v7-mediarouter android-support-v7-mediarouter-nodeps android-support-v7-palette android-support-v7-palette-nodeps android-support-v7-preference android-support-v7-preference-nodeps android-support-v7-recyclerview android-support-v7-recyclerview-nodeps android-support-vectordrawable android-support-vectordrawable-nodeps android-support-viewpager android-support-viewpager-nodeps android-versionedparcelable android-versionedparcelable-nodeps; }

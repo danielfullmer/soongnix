@@ -55,12 +55,14 @@ soong-ui-build = bootstrap_go_package {
         "ninja.go"
         "path.go"
         "proc_sync.go"
+        "rbe.go"
         "signal.go"
         "soong.go"
         "test_build.go"
         "util.go"
     ];
     testSrcs = [
+        "cleanbuild_test.go"
         "config_test.go"
         "environment_test.go"
         "util_test.go"
@@ -68,11 +70,13 @@ soong-ui-build = bootstrap_go_package {
     ];
     darwin = {
         srcs = [
+            "config_darwin.go"
             "sandbox_darwin.go"
         ];
     };
     linux = {
         srcs = [
+            "config_linux.go"
             "sandbox_linux.go"
         ];
     };

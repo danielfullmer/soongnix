@@ -41,7 +41,7 @@ WallpaperCropper = android_app {
     ];
     platform_apis = true;
     certificate = "platform";
-    product_specific = true;
+    system_ext_specific = true;
     privileged = true;
     optimize = {
         proguard_flags_files = ["proguard.flags"];

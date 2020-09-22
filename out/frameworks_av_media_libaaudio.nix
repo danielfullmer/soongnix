@@ -22,7 +22,6 @@ let
 libaaudio_headers = cc_library_headers {
     name = "libaaudio_headers";
     export_include_dirs = ["include"];
-    version_script = "libaaudio.map.txt";
 };
 
 in { inherit libaaudio_headers; }

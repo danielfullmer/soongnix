@@ -22,7 +22,10 @@ ONS = android_app {
     name = "ONS";
     platform_apis = true;
     privileged = true;
-    libs = ["telephony-common"];
+    libs = [
+        "telephony-common"
+        "app-compat-annotations"
+    ];
     srcs = [
         "src/com/android/ons/ONSAutoBoot.java"
         "src/com/android/ons/ONSConfigInput.java"

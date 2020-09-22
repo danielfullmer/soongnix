@@ -1,4 +1,4 @@
-{ android_test, java_library }:
+{ android_test_helper_app, java_library }:
 let
 
 #  Copyright 2011, The Android Open Source Project
@@ -20,7 +20,7 @@ let
     srcs = ["src/com/android/keychain/tests/support/IKeyChainServiceTestSupport.aidl"];
 };
 
-KeyChainTestsSupport = android_test {
+KeyChainTestsSupport = android_test_helper_app {
     name = "KeyChainTestsSupport";
     srcs = ["src/com/android/keychain/tests/support/KeyChainServiceTestSupport.java"];
     platform_apis = true;
@@ -29,6 +29,9 @@ KeyChainTestsSupport = android_test {
         "junit"
     ];
     certificate = "platform";
+    test_suites = [
+        "general-tests"
+    ];
 };
 
 in { inherit "com.android.keychain.tests.support" KeyChainTestsSupport; }

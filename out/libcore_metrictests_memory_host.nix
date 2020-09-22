@@ -23,7 +23,7 @@ libcore-memory-metrics-tests = java_test_host {
         "src/libcore/heapmetrics/MetricsRunner.java"
         "src/libcore/heapmetrics/Reachability.java"
     ];
-    libs = [
+    static_libs = [
         "tradefed"
         "ahat"
     ];

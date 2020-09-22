@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsEphemeralTestsImplicitApp = android_test {
+CtsEphemeralTestsImplicitApp = android_test_helper_app {
     name = "CtsEphemeralTestsImplicitApp";
     defaults = ["cts_support_defaults"];
     static_libs = [
@@ -27,7 +27,7 @@ CtsEphemeralTestsImplicitApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     srcs = ["src/com/android/cts/implicitapp/ImplicitActivity.java"];

@@ -18,20 +18,14 @@ let
 CtsSliceTestCases = android_test {
     name = "CtsSliceTestCases";
     defaults = ["cts_defaults"];
-
-    #  don't include this package in any target
-
-    #  and when built explicitly put it in the data partition
-
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "sts"
+        "vts10"
         "general-tests"
     ];
-
     libs = ["android.test.runner.stubs"];
-
     static_libs = [
         "androidx.test.rules"
         "compatibility-device-util-axt"
@@ -42,14 +36,11 @@ CtsSliceTestCases = android_test {
         "platform-test-annotations"
         "ub-uiautomator"
     ];
-
     compile_multilib = "both";
-
     jni_libs = [
         "libdexmakerjvmtiagent"
         "libmultiplejvmtiagentsinterferenceagent"
     ];
-
     srcs = [
         "src/android/slice/cts/Launcher.java"
         "src/android/slice/cts/LocalSliceProvider.java"
@@ -63,9 +54,7 @@ CtsSliceTestCases = android_test {
         "src/android/slice/cts/SliceSpecTest.java"
         "src/android/slice/cts/SliceProviderTest.kt"
     ];
-
     platform_apis = true;
-
 };
 
 in { inherit CtsSliceTestCases; }

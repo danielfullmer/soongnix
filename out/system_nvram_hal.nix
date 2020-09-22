@@ -1,4 +1,4 @@
-{ cc_library_shared, cc_library_static }:
+{ cc_binary, cc_library_shared, cc_library_static, prebuilt_usr_share }:
 let
 
 #
@@ -59,4 +59,50 @@ libnvram-hal = cc_library_static {
 
 };
 
-in { inherit "nvram.testing" libnvram-hal; }
+fake-nvram = cc_binary {
+    name = "fake-nvram";
+    srcs = [
+        "fake_nvram.cpp"
+        "fake_nvram_storage.cpp"
+    ];
+    clang = true;
+    cflags = [
+        "-Wall"
+        "-Werror"
+        "-Wextra"
+    ];
+    static_libs = ["libnvram-core"];
+    shared_libs = [
+        "libnvram-messages"
+        "libcrypto"
+        "libminijail"
+        "liblog"
+        "libcutils"
+        "libbase"
+    ];
+
+    init_rc = ["fake-nvram.rc"];
+    required = ["fake-nvram-seccomp.policy"];
+};
+
+#  seccomp policy for fake_nvram.
+"fake-nvram-seccomp.policy" = prebuilt_usr_share {
+    name = "fake-nvram-seccomp.policy";
+    sub_dir = "policy";
+    arch = {
+        arm = {
+            src = "fake-nvram-seccomp-arm.policy";
+        };
+        arm64 = {
+            src = "fake-nvram-seccomp-arm64.policy";
+        };
+        x86 = {
+            src = "fake-nvram-seccomp-x86.policy";
+        };
+        x86_64 = {
+            src = "fake-nvram-seccomp-x86_64.policy";
+        };
+    };
+};
+
+in { inherit "fake-nvram-seccomp.policy" "nvram.testing" fake-nvram libnvram-hal; }

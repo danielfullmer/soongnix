@@ -10,7 +10,7 @@ libcodec2_soft_vorbisdec = cc_library_shared {
 
     srcs = ["C2SoftVorbisDec.cpp"];
 
-    shared_libs = ["libvorbisidec"];
+    static_libs = ["libvorbisidec"];
 };
 
 in { inherit libcodec2_soft_vorbisdec; }

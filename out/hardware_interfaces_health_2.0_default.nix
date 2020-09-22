@@ -13,8 +13,6 @@ let
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
         "libcutils"
@@ -36,7 +34,11 @@ let
     vendor_available = true;
     srcs = [
         "Health.cpp"
-        "healthd_common.cpp"
+        "healthd_common_adapter.cpp"
+    ];
+
+    whole_static_libs = [
+        "libhealthloop"
     ];
 
     export_include_dirs = ["include"];

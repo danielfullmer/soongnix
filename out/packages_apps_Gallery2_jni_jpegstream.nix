@@ -1,0 +1,42 @@
+{ cc_library_shared }:
+let
+
+#  Jpeg Streaming native
+libjni_jpegstream = cc_library_shared {
+    name = "libjni_jpegstream";
+    product_specific = true;
+
+    static_libs = ["libjpeg_static_ndk"];
+    shared_libs = ["liblog"];
+
+    arch = {
+        arm = {
+            instruction_set = "arm";
+        };
+    };
+    cflags = [
+        "-ffast-math"
+        "-O3"
+        "-funroll-loops"
+
+        "-Wall"
+        "-Wextra"
+        "-Werror"
+    ];
+    local_include_dirs = ["src"];
+    sdk_version = "17";
+    stl = "c++_static";
+
+    srcs = [
+        "src/inputstream_wrapper.cpp"
+        "src/jpegstream.cpp"
+        "src/jerr_hook.cpp"
+        "src/jpeg_hook.cpp"
+        "src/jpeg_writer.cpp"
+        "src/jpeg_reader.cpp"
+        "src/outputstream_wrapper.cpp"
+        "src/stream_wrapper.cpp"
+    ];
+};
+
+in { inherit libjni_jpegstream; }

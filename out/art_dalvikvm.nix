@@ -57,6 +57,10 @@ dalvikvm = art_cc_binary {
 
     #  Create symlink for the primary version target.
     symlink_preferred_arch = true;
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 in { inherit dalvikvm; }

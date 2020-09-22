@@ -197,6 +197,7 @@ libwilhelm = cc_library_shared {
     ];
 
     header_libs = [
+        "libmediametrics_headers"
         "libOpenSLES_headers"
         "media_plugin_headers"
     ];
@@ -216,16 +217,17 @@ libwilhelm = cc_library_shared {
         "liblog"
         "libutils"
         "libmedia"
-        "libmedia_omx"
+        "libmedia_codeclist"
         "libaudioclient"
+        "libaudiofoundation"
         "libaudiomanager"
         "libbinder"
+        "libdatasource"
         "libstagefright"
         "libstagefright_foundation"
         "libgui"
         "libdl"
         "libandroid_runtime"
-
         "libstagefright_http_support"
     ];
 
@@ -267,6 +269,9 @@ libOpenSLES = cc_library_shared {
         "liblog"
         "libnativewindow"
     ];
+    header_libs = [
+        "libmediametrics_headers"
+    ];
     version_script = "libOpenSLES.map.txt";
 };
 
@@ -296,6 +301,9 @@ libOpenMAXAL = cc_library_shared {
         "libwilhelm"
         "liblog"
         "libnativewindow"
+    ];
+    header_libs = [
+        "libmediametrics_headers"
     ];
     version_script = "libOpenMAXAL.map.txt";
 };

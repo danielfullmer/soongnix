@@ -27,6 +27,9 @@ multiproduct_kati = blueprint_go_binary {
     srcs = [
         "main.go"
     ];
+    testSrcs = [
+        "main_test.go"
+    ];
 };
 
 in { inherit multiproduct_kati; }

@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_shared, cc_library_static }:
+{ cc_defaults, cc_library, cc_library_headers, cc_library_shared, cc_library_static }:
 let
 
 subdirs = ["tests"];
@@ -13,6 +13,14 @@ audio_utils_defaults = cc_defaults {
         "-Werror"
         "-Wall"
     ];
+};
+
+libaudioutils_headers = cc_library_headers {
+    name = "libaudioutils_headers";
+    host_supported = true;
+    vendor_available = true;
+    export_include_dirs = ["include"];
+    sdk_version = "current";
 };
 
 libaudioutils = cc_library {
@@ -31,10 +39,12 @@ libaudioutils = cc_library {
         "ErrorLog.cpp"
         "fifo.cpp"
         "fifo_index.cpp"
-        "fifo_writer32.cpp"
+        "fifo_writer_T.cpp"
         "format.c"
         "limiter.c"
+        "Metadata.cpp"
         "minifloat.c"
+        "mono_blend.cpp"
         "power.cpp"
         "PowerLog.cpp"
         "primitives.c"
@@ -60,7 +70,7 @@ libaudioutils = cc_library {
     target = {
         android = {
             srcs = [
-                "mono_blend.cpp"
+                #  "mono_blend.cpp",
                 "resampler.c"
                 "echo_reference.c"
             ];
@@ -73,6 +83,7 @@ libaudioutils = cc_library {
             cflags = ["-D__unused=__attribute__((unused))"];
         };
     };
+    min_sdk_version = "29";
 };
 
 libaudioutils_fixedfft = cc_library_static {
@@ -87,6 +98,7 @@ libaudioutils_fixedfft = cc_library_static {
     };
 
     srcs = ["fixedfft.cpp"];
+    min_sdk_version = "29";
 };
 
 libsndfile = cc_library_static {
@@ -108,6 +120,7 @@ libfifo = cc_library_static {
         "primitives.c"
         "roundup.c"
     ];
+    min_sdk_version = "29";
 };
 
 libaudiospdif = cc_library_shared {
@@ -128,4 +141,4 @@ libaudiospdif = cc_library_shared {
     ];
 };
 
-in { inherit audio_utils_defaults libaudiospdif libaudioutils libaudioutils_fixedfft libfifo libsndfile; }
+in { inherit audio_utils_defaults libaudiospdif libaudioutils libaudioutils_fixedfft libaudioutils_headers libfifo libsndfile; }

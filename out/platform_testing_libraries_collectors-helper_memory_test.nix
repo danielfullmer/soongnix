@@ -24,7 +24,7 @@ memory-helper-test = java_library {
         "src/com/android/helpers/tests/FreeMemHelperTest.java"
         "src/com/android/helpers/tests/GarbageCollectionHelperTest.java"
         "src/com/android/helpers/tests/ProcessShowmapHelperTest.java"
-        "src/com/android/helpers/tests/RssSnapshotHelperTest.java"
+        "src/com/android/helpers/tests/ShowmapSnapshotHelperTest.java"
         "src/com/android/helpers/tests/TotalPssHelperTest.java"
     ];
 

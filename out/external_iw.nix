@@ -61,7 +61,7 @@ iw_common = cc_defaults {
     ];
 
     ldflags = ["-Wl,--no-gc-sections"];
-    static_libs = ["libnl"];
+    shared_libs = ["libnl"];
 };
 
 iw = cc_binary {

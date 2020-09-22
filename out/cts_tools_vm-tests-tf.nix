@@ -1519,18 +1519,6 @@ vmtests-dfh-dex-generated = java_genrule_host {
     out = ["vmtests_dfh_dex_generated.jar"];
 };
 
-vmtests-dasm-dex-generated = java_genrule_host {
-    name = "vmtests-dasm-dex-generated";
-    tools = [
-        "dasm"
-        "soong_zip"
-    ];
-    tool_files = ["etc/vmtests-dasm.sh"];
-    srcs = [];
-    cmd = "$(location etc/vmtests-dasm.sh) $(location dasm) $(location soong_zip) $(genDir) $(out) $(in)";
-    out = ["vmtests_dasm_dex_generated.jar"];
-};
-
 vmtests_generated_mains_test_sources = java_genrule {
     name = "vmtests_generated_mains_test_sources";
     tools = [
@@ -1558,9 +1546,8 @@ vmtests-generated-resources = java_library_host {
     static_libs = [
         "host-cts-vmtests"
         "vmtests-dfh-dex-generated"
-        "vmtests-dasm-dex-generated"
     ];
     installable = false;
 };
 
-in { inherit cts-vmtests-dot host-cts-vmtests vmtests-buildutil vmtests-dasm-dex-generated vmtests-dfh-dex-generated vmtests-generated-resources vmtests-mains vmtests_generated_host_test_sources vmtests_generated_mains_test_sources; }
+in { inherit cts-vmtests-dot host-cts-vmtests vmtests-buildutil vmtests-dfh-dex-generated vmtests-generated-resources vmtests-mains vmtests_generated_host_test_sources vmtests_generated_mains_test_sources; }

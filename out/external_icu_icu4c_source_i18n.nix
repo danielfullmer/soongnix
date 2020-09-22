@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_headers, cc_library_shared }:
+{ cc_defaults, cc_library, cc_library_headers }:
 let
 
 #  Copyright (C) 2008 The Android Open Source Project
@@ -80,10 +80,10 @@ libicui18n_defaults = cc_defaults {
         "double-conversion-bignum-dtoa.cpp"
         "double-conversion-bignum.cpp"
         "double-conversion-cached-powers.cpp"
-        "double-conversion-diy-fp.cpp"
+        "double-conversion-double-to-string.cpp"
         "double-conversion-fast-dtoa.cpp"
+        "double-conversion-string-to-double.cpp"
         "double-conversion-strtod.cpp"
-        "double-conversion.cpp"
         "dtfmtsym.cpp"
         "dtitvfmt.cpp"
         "dtitvinf.cpp"
@@ -95,6 +95,10 @@ libicui18n_defaults = cc_defaults {
         "fmtable.cpp"
         "fmtable_cnv.cpp"
         "format.cpp"
+        "formatted_string_builder.cpp"
+        "formattedval_iterimpl.cpp"
+        "formattedval_sbimpl.cpp"
+        "formattedvalue.cpp"
         "fphdlimp.cpp"
         "fpositer.cpp"
         "funcrepl.cpp"
@@ -134,13 +138,13 @@ libicui18n_defaults = cc_defaults {
         "number_modifiers.cpp"
         "number_multiplier.cpp"
         "number_notation.cpp"
+        "number_output.cpp"
         "number_padding.cpp"
         "number_patternmodifier.cpp"
         "number_patternstring.cpp"
         "number_rounding.cpp"
         "number_scientific.cpp"
         "number_skeletons.cpp"
-        "number_stringbuilder.cpp"
         "number_utils.cpp"
         "numfmt.cpp"
         "numparse_affixes.cpp"
@@ -150,7 +154,6 @@ libicui18n_defaults = cc_defaults {
         "numparse_impl.cpp"
         "numparse_parsednumber.cpp"
         "numparse_scientific.cpp"
-        "numparse_stringsegment.cpp"
         "numparse_symbols.cpp"
         "numparse_validators.cpp"
         "numrange_fluent.cpp"
@@ -190,6 +193,7 @@ libicui18n_defaults = cc_defaults {
         "smpdtfst.cpp"
         "sortkey.cpp"
         "standardplural.cpp"
+        "string_segment.cpp"
         "strmatch.cpp"
         "strrepl.cpp"
         "stsearch.cpp"
@@ -259,6 +263,8 @@ libicui18n_defaults = cc_defaults {
         "-Wall"
         "-Werror"
         "-Wno-unused-parameter"
+        "-Wno-unused-const-variable"
+        "-Wno-unneeded-internal-declaration"
     ];
     cppflags = [
         "-std=c++11"
@@ -275,10 +281,6 @@ libicui18n_defaults = cc_defaults {
         };
         windows = {
             enabled = true;
-            cflags = [
-                "-Wno-ignored-attributes" #  ICU-20356
-                "-Wno-missing-field-initializers" #  ICU-20179
-            ];
         };
     };
 };
@@ -286,25 +288,48 @@ libicui18n_defaults = cc_defaults {
 libicui18n_headers = cc_library_headers {
     name = "libicui18n_headers";
     host_supported = true;
+    native_bridge_supported = true;
     export_include_dirs = ["."];
     target = {
         windows = {
             enabled = true;
         };
     };
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 #
 #  Build for the host and target (device).
+#  Allow static builds for host so that they can be statically
+#  linked into libandroid_runtime. That enables libandroid_runtime to
+#  be shipped on desktops as one file which saves space and complexity.
 #
-libicui18n = cc_library_shared {
+libicui18n = cc_library {
     name = "libicui18n";
     defaults = ["libicui18n_defaults"];
     host_supported = true;
+    native_bridge_supported = true;
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        #  b/133140750 Clean this up. This is due to the dependency to from libmedia
+        "//apex_available:platform"
+    ];
     unique_host_soname = true;
     shared_libs = ["libicuuc"];
     header_libs = ["libicui18n_headers"];
     export_header_lib_headers = ["libicui18n_headers"];
+    target = {
+        android = {
+            static = {
+                enabled = false;
+            };
+        };
+    };
 };
 
 in { inherit libicui18n libicui18n_defaults libicui18n_headers; }

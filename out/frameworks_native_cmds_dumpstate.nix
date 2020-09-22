@@ -69,7 +69,6 @@ dumpstate_aidl = filegroup {
     name = "dumpstate_aidl";
     srcs = [
         "binder/android/os/IDumpstateListener.aidl"
-        "binder/android/os/IDumpstateToken.aidl"
         "binder/android/os/IDumpstate.aidl"
     ];
     path = "binder";
@@ -80,6 +79,7 @@ dumpstate_defaults = cc_defaults {
     defaults = ["dumpstate_cflag_defaults"];
     shared_libs = [
         "android.hardware.dumpstate@1.0"
+        "android.hardware.dumpstate@1.1"
         "libziparchive"
         "libbase"
         "libbinder"
@@ -89,15 +89,13 @@ dumpstate_defaults = cc_defaults {
         "libdumpstateaidl"
         "libdumpstateutil"
         "libdumputils"
+        "libhardware_legacy"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
     srcs = [
-        "DumpstateSectionReporter.cpp"
         "DumpstateService.cpp"
-        "utils.cpp"
     ];
     static_libs = [
         "libincidentcompanion"
@@ -123,10 +121,11 @@ dumpstate = cc_binary {
         "kill"
         "librank"
         "logcat"
+        "lpdump"
+        "lpdumpd"
         "lsmod"
         "lsof"
         "netstat"
-        "parse_radio_log"
         "printenv"
         "procrank"
         "screencap"
@@ -149,6 +148,25 @@ dumpstate_test = cc_test {
         "tests/dumpstate_test.cpp"
     ];
     static_libs = ["libgmock"];
+    test_config = "dumpstate_test.xml";
+    data = [
+        ":dumpstate_test_fixture"
+        "tests/testdata/empty-file.txt"
+        "tests/testdata/multiple-lines-with-newline.txt"
+        "tests/testdata/multiple-lines.txt"
+        "tests/testdata/single-line-with-newline.txt"
+        "tests/testdata/single-line.txt"
+        "tests/testdata/stats-invalid-1st-NAN.txt"
+        "tests/testdata/stats-invalid-1st-negative.txt"
+        "tests/testdata/stats-invalid-1st-too-big.txt"
+        "tests/testdata/stats-invalid-2nd-NAN.txt"
+        "tests/testdata/stats-invalid-2nd-negative.txt"
+        "tests/testdata/stats-invalid-2nd-too-big.txt"
+        "tests/testdata/stats-invalid-both-NAN.txt"
+        "tests/testdata/stats-one-run-no-newline.txt"
+        "tests/testdata/stats-two-runs.txt"
+    ];
+    test_suites = ["device-tests"];
 };
 
 dumpstate_smoke_test = cc_test {

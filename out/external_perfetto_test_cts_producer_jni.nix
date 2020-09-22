@@ -10,7 +10,7 @@ libperfettocts_jni = cc_library_shared {
         "libgtest"
         "libprotobuf-cpp-lite"
         "perfetto_cts_jni_deps"
-        "perfetto_src_tracing_ipc"
+        "libperfetto_client_experimental"
     ];
     shared_libs = [
         "libandroid"
@@ -19,8 +19,8 @@ libperfettocts_jni = cc_library_shared {
     ];
     compile_multilib = "both";
     stl = "libc++_static";
-    cflags = [
-        "-DPERFETTO_BUILD_WITH_ANDROID"
+    defaults = [
+        "perfetto_defaults"
     ];
 };
 

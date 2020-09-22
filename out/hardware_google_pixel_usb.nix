@@ -37,8 +37,6 @@ libpixelusb = cc_library_static {
         "libbase"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
     ];
 };

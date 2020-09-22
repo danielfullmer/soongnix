@@ -20,6 +20,7 @@ let
 cpufeatures = cc_library_static {
     name = "cpufeatures";
     vendor_available = true;
+    native_bridge_supported = true;
     srcs = ["current/sources/android/cpufeatures/cpu-features.c"];
     cflags = [
         "-Wall"

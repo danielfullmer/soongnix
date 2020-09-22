@@ -26,8 +26,11 @@ libcodec2_soft_flacenc = cc_library_shared {
 
     srcs = ["C2SoftFlacEnc.cpp"];
 
-    static_libs = [
+    shared_libs = [
         "libaudioutils"
+    ];
+
+    static_libs = [
         "libFLAC"
     ];
 };

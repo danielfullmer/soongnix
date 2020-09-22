@@ -41,8 +41,16 @@ sqlite-minimal-defaults = cc_defaults {
         "-DSQLITE_SECURE_DELETE"
         "-DSQLITE_ENABLE_BATCH_ATOMIC_WRITE"
         "-DBIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD"
+        "-DSQLITE_DEFAULT_LEGACY_ALTER_TABLE"
         "-Wno-unused-parameter"
         "-Werror"
+
+        #  Default value causes sqlite3_open_v2 to return error if DB is missing.
+        "-ftrivial-auto-var-init=pattern"
+
+        #  Turn off the new pass manager due to miscompile.
+        #  http://b/131854833
+        "-fno-experimental-new-pass-manager"
     ];
 
     target = {
@@ -71,6 +79,7 @@ libsqlite = cc_library {
     name = "libsqlite";
     defaults = ["sqlite-defaults"];
     vendor_available = true;
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
     };
@@ -82,7 +91,6 @@ libsqlite = cc_library {
             shared_libs = [
                 "libdl"
                 "liblog"
-                "libutils"
                 "libandroidicu"
             ];
             cflags = ["-DSQLITE_ENABLE_ICU"];
@@ -93,16 +101,7 @@ libsqlite = cc_library {
         host = {
             static_libs = [
                 "liblog"
-                "libutils"
             ];
-        };
-        not_windows = {
-            shared_libs = [
-                "libandroidicu"
-            ];
-
-            #  include android specific methods
-            whole_static_libs = ["libsqlite3_android"];
         };
         windows = {
             enabled = true;
@@ -110,6 +109,7 @@ libsqlite = cc_library {
         vendor = {
             cflags = ["-USQLITE_ENABLE_ICU"];
             exclude_shared_libs = ["libandroidicu"];
+            exclude_static_libs = ["libsqlite3_android"];
         };
     };
 

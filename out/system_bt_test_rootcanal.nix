@@ -16,8 +16,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"android.hardware.bluetooth@1.0-service.sim" = cc_binary {
-    name = "android.hardware.bluetooth@1.0-service.sim";
+"android.hardware.bluetooth@1.1-service.sim" = cc_binary {
+    name = "android.hardware.bluetooth@1.1-service.sim";
     proprietary = true;
     relative_install_path = "hw";
     srcs = [
@@ -28,14 +28,14 @@ let
     header_libs = ["libbluetooth_headers"];
     shared_libs = [
         "android.hardware.bluetooth@1.0"
+        "android.hardware.bluetooth@1.1"
         "libbase"
         "libchrome"
         "libcutils"
-        "libhwbinder"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
+        "libprotobuf-cpp-lite"
     ];
     cflags = [
         "-fvisibility=hidden"
@@ -44,23 +44,29 @@ let
         "-Werror"
         "-DHAS_NO_BDROID_BUILDCFG"
     ];
+    generated_headers = [
+        "RootCanalGeneratedPackets_h"
+        "BluetoothGeneratedPackets_h"
+    ];
     static_libs = [
         "android.hardware.bluetooth-async"
         "android.hardware.bluetooth-hci"
         "libbt-rootcanal"
         "libbt-rootcanal-types"
+        "libscriptedbeaconpayload-protos-lite"
     ];
     include_dirs = [
         "system/bt"
+        "system/bt/gd"
         "system/bt/hci/include"
         "system/bt/internal_include"
         "system/bt/stack/include"
     ];
-    init_rc = ["android.hardware.bluetooth@1.0-service.sim.rc"];
+    init_rc = ["android.hardware.bluetooth@1.1-service.sim.rc"];
 };
 
-"android.hardware.bluetooth@1.0-impl-sim" = cc_library_shared {
-    name = "android.hardware.bluetooth@1.0-impl-sim";
+"android.hardware.bluetooth@1.1-impl-sim" = cc_library_shared {
+    name = "android.hardware.bluetooth@1.1-impl-sim";
     proprietary = true;
     relative_install_path = "hw";
     srcs = [
@@ -70,13 +76,14 @@ let
     header_libs = ["libbluetooth_headers"];
     shared_libs = [
         "android.hardware.bluetooth@1.0"
+        "android.hardware.bluetooth@1.1"
         "libbase"
         "libchrome"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
+        "libprotobuf-cpp-lite"
     ];
     cflags = [
         "-Wall"
@@ -84,18 +91,24 @@ let
         "-Werror"
         "-DHAS_NO_BDROID_BUILDCFG"
     ];
+    generated_headers = [
+        "RootCanalGeneratedPackets_h"
+        "BluetoothGeneratedPackets_h"
+    ];
     static_libs = [
         "android.hardware.bluetooth-async"
         "android.hardware.bluetooth-hci"
         "libbt-rootcanal"
         "libbt-rootcanal-types"
+        "libscriptedbeaconpayload-protos-lite"
     ];
     include_dirs = [
         "system/bt"
+        "system/bt/gd"
         "system/bt/hci/include"
         "system/bt/internal_include"
         "system/bt/stack/include"
     ];
 };
 
-in { inherit "android.hardware.bluetooth@1.0-impl-sim" "android.hardware.bluetooth@1.0-service.sim"; }
+in { inherit "android.hardware.bluetooth@1.1-impl-sim" "android.hardware.bluetooth@1.1-service.sim"; }

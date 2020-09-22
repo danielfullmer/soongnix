@@ -28,11 +28,6 @@ CtsJvmtiTaggingDeviceApp = android_test_helper_app {
         "src/art/Main.java"
     ];
     manifest = "AndroidManifest.xml";
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
     static_libs = ["CtsJvmtiDeviceAppBase"];
     jni_libs = ["libctsjvmtiagent"];
     compile_multilib = "both";

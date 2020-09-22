@@ -22,6 +22,7 @@ slesTest_intbufq = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -43,6 +44,7 @@ slesTest_multiplay = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 
 };
@@ -71,6 +73,7 @@ slesTest_engine = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -98,6 +101,7 @@ slesTest_object = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -119,6 +123,7 @@ slesTest_configbq = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -145,6 +150,7 @@ slesTest_reverb = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -171,6 +177,7 @@ slesTest_srcsink = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -198,6 +205,7 @@ slesTest_outputmix = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -225,6 +233,7 @@ slesTest_urimime = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -252,6 +261,7 @@ slesTest_dim = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -279,6 +289,7 @@ slesTest_multithread = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -309,6 +320,7 @@ slesTest_playbq = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -336,6 +348,7 @@ slesTest_monkey = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 
@@ -389,6 +402,7 @@ slesTest_dual = cc_test {
         "-Wall"
 
         "-UNDEBUG"
+        "-Wno-deprecated-declarations"
     ];
 };
 

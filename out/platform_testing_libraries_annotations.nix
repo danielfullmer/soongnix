@@ -24,8 +24,10 @@ platform-test-annotations = java_library_static {
         "src/android/platform/test/annotations/ApiTest.java"
         "src/android/platform/test/annotations/AppModeFull.java"
         "src/android/platform/test/annotations/AppModeInstant.java"
+        "src/android/platform/test/annotations/FlakyTest.java"
         "src/android/platform/test/annotations/GlobalPresubmit.java"
         "src/android/platform/test/annotations/HermeticTest.java"
+        "src/android/platform/test/annotations/LargeTest.java"
         "src/android/platform/test/annotations/Postsubmit.java"
         "src/android/platform/test/annotations/Presubmit.java"
         "src/android/platform/test/annotations/QualityTest.java"
@@ -33,6 +35,8 @@ platform-test-annotations = java_library_static {
         "src/android/platform/test/annotations/RestrictedBuildTest.java"
         "src/android/platform/test/annotations/RootPermissionTest.java"
         "src/android/platform/test/annotations/SecurityTest.java"
+        "src/android/platform/test/annotations/SocPresubmit.java"
+        "src/android/platform/test/annotations/SystemUserOnly.java"
     ];
     sdk_version = "current"; #  To allow use from CTS
 };

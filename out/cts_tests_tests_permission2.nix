@@ -20,17 +20,13 @@ let
 CtsPermission2TestCases = android_test {
     name = "CtsPermission2TestCases";
     defaults = ["cts_defaults"];
-
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
-        "cts_instant"
     ];
-
     libs = ["android.test.base.stubs"];
-
     static_libs = [
         "androidx.test.core"
         "compatibility-device-util-axt"
@@ -40,12 +36,10 @@ CtsPermission2TestCases = android_test {
         "truth-prebuilt"
         "permission-test-util-lib"
     ];
-
     srcs = [
         "src/android/permission2/cts/CommandBroadcastReceiver.java"
         "src/android/permission2/cts/ContactsProviderTest.java"
         "src/android/permission2/cts/NoCaptureAudioOutputPermissionTest.java"
-        "src/android/permission2/cts/NoLocationPermissionTest.java"
         "src/android/permission2/cts/NoProcessOutgoingCallPermissionTest.java"
         "src/android/permission2/cts/NoReceiveSmsPermissionTest.java"
         "src/android/permission2/cts/NoWriteSecureSettingsPermissionTest.java"
@@ -55,9 +49,30 @@ CtsPermission2TestCases = android_test {
         "src/android/permission2/cts/ProtectedBroadcastsTest.java"
         "src/android/permission2/cts/RestrictedPermissionsTest.java"
         "src/android/permission2/cts/RestrictedStoragePermissionSharedUidTest.java"
+        "src/android/permission2/cts/RestrictedStoragePermissionTest.java"
+        "src/android/permission2/cts/RuntimePermissionProperties.kt"
     ];
-
     sdk_version = "test_current";
+    data = [
+        ":CtsLocationPermissionsUserSdk22"
+        ":CtsLocationPermissionsUserSdk29"
+        ":CtsSMSCallLogPermissionsUserSdk22"
+        ":CtsSMSCallLogPermissionsUserSdk29"
+        ":CtsStoragePermissionsUserDefaultSdk22"
+        ":CtsStoragePermissionsUserDefaultSdk28"
+        ":CtsStoragePermissionsUserDefaultSdk29"
+        ":CtsStoragePermissionsUserOptInSdk22"
+        ":CtsStoragePermissionsUserOptInSdk28"
+        ":CtsStoragePermissionsUserOptOutSdk29"
+        ":CtsStoragePermissionsPreservedUserOptOutSdk30"
+        ":CtsLegacyStorageNotIsolatedWithSharedUid"
+        ":CtsLegacyStorageIsolatedWithSharedUid"
+        ":CtsLegacyStorageRestrictedWithSharedUid"
+        ":CtsLegacyStorageRestrictedSdk28WithSharedUid"
+        ":CtsStoragePermissionsUserOptOutSdk30"
+        ":CtsSMSRestrictedWithSharedUid"
+        ":CtsSMSNotRestrictedWithSharedUid"
+    ];
 };
 
 in { inherit CtsPermission2TestCases; }

@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsInstantUpgradeApp = android_test {
+CtsInstantUpgradeApp = android_test_helper_app {
     name = "CtsInstantUpgradeApp";
     defaults = ["cts_support_defaults"];
     libs = [
@@ -33,7 +33,7 @@ CtsInstantUpgradeApp = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     srcs = ["src/com/android/cts/instantupgradeapp/ClientTest.java"];

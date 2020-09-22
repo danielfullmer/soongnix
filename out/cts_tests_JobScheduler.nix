@@ -22,16 +22,18 @@ CtsJobSchedulerTestCases = android_test {
         "compatibility-device-util-axt"
         "ub-uiautomator"
         "androidx.test.rules"
+        "cts-wm-util"
     ];
     libs = ["android.test.base.stubs"];
     srcs = [
         "src/android/jobscheduler/DummyJobContentProvider.java"
         "src/android/jobscheduler/MockJobService.java"
         "src/android/jobscheduler/TriggerContentJobService.java"
+        "src/android/jobscheduler/cts/BaseJobSchedulerTest.java"
         "src/android/jobscheduler/cts/BatteryConstraintTest.java"
         "src/android/jobscheduler/cts/ConnectivityConstraintTest.java"
-        "src/android/jobscheduler/cts/ConstraintTest.java"
-        "src/android/jobscheduler/cts/DeviceStatesTest.java"
+        "src/android/jobscheduler/cts/IdleConstraintTest.java"
+        "src/android/jobscheduler/cts/JobSchedulingTest.java"
         "src/android/jobscheduler/cts/JobThrottlingTest.java"
         "src/android/jobscheduler/cts/StorageConstraintTest.java"
         "src/android/jobscheduler/cts/TestAppInterface.java"
@@ -44,7 +46,7 @@ CtsJobSchedulerTestCases = android_test {
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     #  sdk_version: "current",

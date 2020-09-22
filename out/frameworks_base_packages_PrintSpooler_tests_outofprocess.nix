@@ -30,6 +30,7 @@ PrintSpoolerOutOfProcessTests = android_test {
 
     sdk_version = "test_current";
     test_suites = ["device-tests"];
+    required = ["com.android.cts.helpers.aosp"];
 };
 
 in { inherit PrintSpoolerOutOfProcessTests; }

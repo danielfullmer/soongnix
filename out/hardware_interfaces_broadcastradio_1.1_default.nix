@@ -44,7 +44,6 @@ let
         "android.hardware.broadcastradio@1.1"
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

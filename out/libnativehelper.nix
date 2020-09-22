@@ -25,6 +25,10 @@ jni_headers = cc_library_headers {
             enabled = true;
         };
     };
+    #  The minimum sdk version required by users of this module.
+    sdk_version = "minimum";
+    #  As part of mainline modules(APEX), it should support at least 29(Q)
+    min_sdk_version = "29";
 };
 
 libnativehelper_header_only = cc_library_headers {
@@ -36,6 +40,14 @@ libnativehelper_header_only = cc_library_headers {
             enabled = true;
         };
     };
+    sdk_version = "current";
+    #  As part of mainline modules(APEX), it should support at least 29(Q)
+    min_sdk_version = "29";
+
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
 };
 
 jni_platform_headers = cc_library_headers {
@@ -47,6 +59,12 @@ jni_platform_headers = cc_library_headers {
             enabled = true;
         };
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 libnativehelper = cc_library {
@@ -58,10 +76,7 @@ libnativehelper = cc_library {
         "JniInvocation.cpp"
         "toStringArray.cpp"
     ];
-    shared_libs = [
-        "libbase"
-        "liblog"
-    ];
+    shared_libs = ["liblog"];
     cflags = [
         "-Werror"
         "-fvisibility=protected"
@@ -77,9 +92,20 @@ libnativehelper = cc_library {
     };
     target = {
         windows = {
+            shared_libs = ["libbase"];
             enabled = true;
         };
     };
+    #  Please avoid adding APEX dependencies on this for R (b/157711673).
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        #  b/133140750 Clean this up. This is due to the dependency from libplatform_library_jni,
+        #  librs_jni, libjni_legacymosaic, etc.
+        "//apex_available:platform"
+        #  b/133140750 Clean this up, or allow this library to everywhere
+        "com.android.bluetooth.updatable"
+    ];
 };
 
 #
@@ -95,9 +121,9 @@ libnativehelper = cc_library {
         "include"
     ];
     cflags = ["-Werror"];
-    include_dirs = [
-        "libnativehelper/header_only_include"
-        "libnativehelper/platform_include"
+    local_include_dirs = [
+        "header_only_include"
+        "platform_include"
     ];
     srcs = [
         "JNIHelp.cpp"

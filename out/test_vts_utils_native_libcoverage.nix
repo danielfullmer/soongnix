@@ -32,7 +32,6 @@ vts_coverage_configure = cc_binary {
         "libutils"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
     ];
 };
 

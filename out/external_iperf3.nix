@@ -15,8 +15,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-iperf = cc_binary {
-    name = "iperf";
+iperf3 = cc_binary {
+    name = "iperf3";
     srcs = [
         "src/cjson.c"
         "src/dscp.c"
@@ -56,4 +56,4 @@ iperf = cc_binary {
     ];
 };
 
-in { inherit iperf; }
+in { inherit iperf3; }

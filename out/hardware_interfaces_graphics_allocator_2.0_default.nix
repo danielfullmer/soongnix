@@ -16,7 +16,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
@@ -34,7 +33,6 @@ let
     shared_libs = [
         "android.hardware.graphics.allocator@2.0"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];

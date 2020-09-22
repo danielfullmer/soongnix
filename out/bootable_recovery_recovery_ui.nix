@@ -25,7 +25,9 @@ librecovery_ui = cc_library {
 
     srcs = [
         "device.cpp"
+        "ethernet_ui.cpp"
         "screen_ui.cpp"
+        "stub_ui.cpp"
         "ui.cpp"
         "vr_ui.cpp"
         "wear_ui.cpp"
@@ -93,4 +95,24 @@ librecovery_ui_vr = cc_library_static {
     export_include_dirs = ["include"];
 };
 
-in { inherit librecovery_ui librecovery_ui_default librecovery_ui_vr librecovery_ui_wear; }
+#  The default device that uses EthernetRecoveryUI.
+librecovery_ui_ethernet = cc_library_static {
+    name = "librecovery_ui_ethernet";
+    recovery_available = true;
+
+    defaults = [
+        "recovery_defaults"
+    ];
+
+    srcs = [
+        "ethernet_device.cpp"
+    ];
+
+    shared_libs = [
+        "libbase"
+    ];
+
+    export_include_dirs = ["include"];
+};
+
+in { inherit librecovery_ui librecovery_ui_default librecovery_ui_ethernet librecovery_ui_vr librecovery_ui_wear; }

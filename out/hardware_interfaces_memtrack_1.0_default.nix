@@ -26,7 +26,6 @@ let
         "libbase"
         "liblog"
         "libhidlbase"
-        "libhidltransport"
         "libhardware"
         "libutils"
         "android.hardware.memtrack@1.0"
@@ -49,7 +48,6 @@ let
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.memtrack@1.0"
     ];
 

@@ -59,9 +59,10 @@ aapt2_defaults = cc_defaults {
         "libziparchive"
         "libpng"
         "libbase"
-        "libprotobuf-cpp-lite"
+        "libprotobuf-cpp-full"
         "libz"
         "libbuildversion"
+        "libidmap2_policies"
     ];
     stl = "libc++_static";
     group_static_libs = true;
@@ -218,6 +219,7 @@ aapt2_tests = cc_test_host {
 aapt2 = cc_binary_host {
     name = "aapt2";
     srcs = ["Main.cpp"] ++ toolSources;
+    use_version_lib = true;
     static_libs = ["libaapt2"];
     defaults = ["aapt2_defaults"];
 };
@@ -230,6 +232,7 @@ aapt2-protos = genrule {
     tools = [":soong_zip"];
     srcs = [
         "Configuration.proto"
+        "ResourcesInternal.proto"
         "Resources.proto"
     ];
     out = ["aapt2-protos.zip"];

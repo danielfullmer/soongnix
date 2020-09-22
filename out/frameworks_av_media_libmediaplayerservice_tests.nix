@@ -9,12 +9,25 @@ DrmSessionManager_test = cc_test {
 
     shared_libs = [
         "liblog"
+        "libbinder"
+        "libbinder_ndk"
+        "libmedia"
         "libmediaplayerservice"
         "libmediadrm"
+        "libresourcemanagerservice"
         "libutils"
         "android.hardware.drm@1.0"
         "android.hardware.drm@1.1"
         "android.hardware.drm@1.2"
+    ];
+
+    static_libs = [
+        "resourcemanager_aidl_interface-ndk_platform"
+    ];
+
+    include_dirs = [
+        "frameworks/av/include"
+        "frameworks/av/services/mediaresourcemanager"
     ];
 
     cflags = [

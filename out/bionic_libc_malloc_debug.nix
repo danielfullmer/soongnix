@@ -6,8 +6,8 @@ let
 #  ==============================================================
 #  Used by libmemunreachable
 libc_malloc_debug_backtrace = cc_library_static {
-
     name = "libc_malloc_debug_backtrace";
+    vendor_available = true;
 
     srcs = [
         "backtrace.cpp"
@@ -19,7 +19,6 @@ libc_malloc_debug_backtrace = cc_library_static {
     whole_static_libs = [
         "libbase"
         "libasync_safe"
-        "libdemangle"
     ];
 
     include_dirs = ["bionic/libc"];
@@ -31,11 +30,22 @@ libc_malloc_debug_backtrace = cc_library_static {
     };
     native_coverage = false;
 
+    target = {
+        android = {
+            static_libs = ["libc++demangle"];
+        };
+    };
+
     #  -Wno-error=format-zero-length needed for gcc to compile.
     cflags = [
         "-Wall"
         "-Werror"
         "-Wno-error=format-zero-length"
+    ];
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.runtime"
     ];
 };
 
@@ -58,18 +68,9 @@ libc_malloc_debug = cc_library {
 
     stl = "libc++_static";
 
-    #  Only need this for arm since libc++ uses its own unwind code that
-    #  doesn't mix with the other default unwind code.
-    arch = {
-        arm = {
-            static_libs = ["libunwind_llvm"];
-        };
-    };
-
     static_libs = [
         "libasync_safe"
         "libbase"
-        "libdemangle"
         "libc_malloc_debug_backtrace"
     ];
 
@@ -101,6 +102,15 @@ libc_malloc_debug = cc_library {
         "-Wno-error=format-zero-length"
         "-Wthread-safety"
     ];
+
+    apex_available = [
+        "com.android.runtime"
+    ];
+    static = {
+        apex_available = [
+            "//apex_available:platform"
+        ];
+    };
 };
 
 #  ==============================================================
@@ -123,9 +133,12 @@ malloc_debug_unit_tests = cc_test {
         "bionic/libc/async_safe/include"
     ];
 
+    header_libs = [
+        "bionic_libc_platform_headers"
+    ];
+
     static_libs = [
         "libc_malloc_debug"
-        "libdemangle"
         "libtinyxml2"
     ];
 
@@ -147,8 +160,15 @@ malloc_debug_unit_tests = cc_test {
 #  ==============================================================
 malloc_debug_system_tests = cc_test {
     name = "malloc_debug_system_tests";
+    isolated = true;
 
-    include_dirs = ["bionic/libc"];
+    include_dirs = [
+        "bionic/libc"
+    ];
+
+    header_libs = [
+        "bionic_libc_platform_headers"
+    ];
 
     srcs = [
         "tests/malloc_debug_system_tests.cpp"
@@ -156,6 +176,7 @@ malloc_debug_system_tests = cc_test {
 
     shared_libs = [
         "libbase"
+        "libbacktrace"
         "liblog"
         "libunwindstack"
     ];
@@ -165,6 +186,7 @@ malloc_debug_system_tests = cc_test {
         "-Werror"
         "-O0"
     ];
+    test_suites = ["general-tests"];
 };
 
 in { inherit libc_malloc_debug libc_malloc_debug_backtrace malloc_debug_system_tests malloc_debug_unit_tests; }

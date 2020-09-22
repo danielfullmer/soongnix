@@ -1,7 +1,10 @@
-{ cc_library_shared }:
+{ cc_library }:
 let
 
-libwavextractor = cc_library_shared {
+libwavextractor = cc_library {
+    name = "libwavextractor";
+
+    defaults = ["extractor-defaults"];
 
     srcs = ["WAVExtractor.cpp"];
 
@@ -10,9 +13,8 @@ libwavextractor = cc_library_shared {
     ];
 
     shared_libs = [
+        "libbase"
         "libbinder_ndk"
-        "liblog"
-        "libmediandk"
     ];
 
     static_libs = [
@@ -20,27 +22,6 @@ libwavextractor = cc_library_shared {
         "libfifo"
         "libstagefright_foundation"
     ];
-
-    name = "libwavextractor";
-    relative_install_path = "extractors";
-
-    compile_multilib = "first";
-
-    cflags = [
-        "-Werror"
-        "-Wall"
-        "-fvisibility=hidden"
-    ];
-    version_script = "exports.lds";
-
-    sanitize = {
-        cfi = true;
-        misc_undefined = [
-            "unsigned-integer-overflow"
-            "signed-integer-overflow"
-        ];
-    };
-
 };
 
 in { inherit libwavextractor; }

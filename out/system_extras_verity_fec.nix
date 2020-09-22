@@ -10,6 +10,11 @@ fec = cc_binary_host {
                 misc_undefined = ["integer"];
             };
         };
+        linux = {
+            static_libs = [
+                "libavb"
+            ];
+        };
     };
 
     srcs = [
@@ -18,6 +23,7 @@ fec = cc_binary_host {
     ];
 
     static_libs = [
+        "libbase"
         "libsparse"
         "libz"
         "libcrypto_utils"
@@ -25,9 +31,9 @@ fec = cc_binary_host {
         "libfec"
         "libfec_rs"
         "libext4_utils"
+        "liblog"
         "libsquashfs_utils"
     ];
-    shared_libs = ["libbase"];
     cflags = [
         "-Wall"
         "-Werror"

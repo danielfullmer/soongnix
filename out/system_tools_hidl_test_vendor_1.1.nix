@@ -7,9 +7,10 @@ let
     name = "hidl.tests.vendor@1.1";
     owner = "some-owner-name";
     root = "hidl.tests";
-    product_specific = true;
+    system_ext_specific = true;
     srcs = [
         "IVendor.hal"
+        "types.hal"
     ];
     interfaces = [
         "android.frameworks.displayservice@1.0"

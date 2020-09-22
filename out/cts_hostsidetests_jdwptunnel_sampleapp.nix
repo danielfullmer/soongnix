@@ -28,13 +28,6 @@ CtsJdwpTunnelSampleApp = android_test_helper_app {
 
     srcs = ["src/android/jdwptunnel/sampleapp/SampleDeviceActivity.java"];
 
-    #  tag this module as a cts test artifact
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
-
     sdk_version = "current";
 
 };

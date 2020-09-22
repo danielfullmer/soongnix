@@ -33,11 +33,15 @@ libbnnmlowp-defaults = cc_defaults {
 libbnnmlowp = cc_library_static {
     name = "libbnnmlowp";
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     defaults = ["libbnnmlowp-defaults"];
 };
 
 libbnnmlowpV8 = cc_library_static {
     name = "libbnnmlowpV8";
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     defaults = ["libbnnmlowp-defaults"];
 
     sdk_version = "9";

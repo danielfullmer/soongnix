@@ -15,28 +15,6 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-ctsdeviceutillegacy = java_library_static {
-    name = "ctsdeviceutillegacy";
-
-    static_libs = [
-        "compatibility-device-util"
-        "junit"
-    ];
-
-    libs = ["android.test.base.stubs"];
-
-    srcs = [
-        "src/android/webkit/cts/WebViewOnUiThread.java"
-        "src/android/webkit/cts/WebViewSyncLoader.java"
-        "src/android/webkit/cts/WebkitUtils.java"
-        "src/com/android/compatibility/common/util/SynchronousPixelCopy.java"
-    ];
-
-    sdk_version = "test_current";
-
-};
-
-#  A variant of ctsdeviceutillegacy that depends on androidx.test instead of android.support.test
 ctsdeviceutillegacy-axt = java_library_static {
     name = "ctsdeviceutillegacy-axt";
 
@@ -58,4 +36,4 @@ ctsdeviceutillegacy-axt = java_library_static {
 
 };
 
-in { inherit ctsdeviceutillegacy ctsdeviceutillegacy-axt; }
+in { inherit ctsdeviceutillegacy-axt; }

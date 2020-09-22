@@ -7,9 +7,9 @@ f2fs-tools-defaults = cc_defaults {
     name = "f2fs-tools-defaults";
     cflags = [
         "-DF2FS_MAJOR_VERSION=1"
-        "-DF2FS_MINOR_VERSION=11"
-        "-DF2FS_TOOLS_VERSION=\"1.12.0\""
-        "-DF2FS_TOOLS_DATE=\"2018-11-12\""
+        "-DF2FS_MINOR_VERSION=13"
+        "-DF2FS_TOOLS_VERSION=\"1.13.0\""
+        "-DF2FS_TOOLS_DATE=\"2019-09-24\""
         "-DWITH_ANDROID"
         "-Wall"
         "-Werror"
@@ -45,6 +45,7 @@ libf2fs_src_files = cc_defaults {
         "mkfs/f2fs_format.c"
         "mkfs/f2fs_format_utils.c"
         "lib/libf2fs_zoned.c"
+        "lib/nls_utf8.c"
     ];
 };
 
@@ -72,6 +73,8 @@ fsck_main_src_files = cc_defaults {
         "fsck/mount.c"
         "lib/libf2fs.c"
         "lib/libf2fs_io.c"
+        "lib/nls_utf8.c"
+        "fsck/dump.c"
     ];
 };
 
@@ -151,6 +154,7 @@ make_f2fs = cc_binary {
     cflags = [
         "-DWITH_RESIZE"
         "-DWITH_DEFRAG"
+        "-DWITH_DUMP"
     ];
     srcs = [
         "fsck/fsck.c"
@@ -165,6 +169,7 @@ make_f2fs = cc_binary {
     symlinks = [
         "resize.f2fs"
         "defrag.f2fs"
+        "dump.f2fs"
     ];
 };
 
@@ -212,7 +217,10 @@ sload_f2fs = cc_binary {
 check_f2fs = cc_binary {
     name = "check_f2fs";
     host_supported = false;
-    cflags = ["--static"];
+    cflags = [
+        "--static"
+        "-U_FORTIFY_SOURCE"
+    ];
     srcs = ["tools/check_f2fs.c"];
     product_specific = true;
 };

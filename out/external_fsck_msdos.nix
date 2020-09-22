@@ -24,6 +24,7 @@ fsck_msdos = cc_binary {
         "-Wno-unused-const-variable"
         "-Wno-format"
         "-Wno-sign-compare"
+        "-include freebsd-compat.h"
     ];
 };
 

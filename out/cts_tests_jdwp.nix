@@ -24,7 +24,7 @@ CtsJdwpTestCases = java_test {
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 
@@ -34,6 +34,7 @@ CtsJdwpTestCases = java_test {
     optimize = {
         enabled = false;
     };
+    data = [":cts-dalvik-device-test-runner"];
 };
 
 in { inherit CtsJdwpTestCases; }

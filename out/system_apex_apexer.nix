@@ -1,4 +1,4 @@
-{ apex_key, apex_test, python_binary_host }:
+{ apex_key, apex_test, python_binary_host, python_library_host, python_test_host }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -31,11 +31,50 @@ apexer_tools = [
     "fec"
 ];
 
+apex_manifest = python_library_host {
+    name = "apex_manifest";
+    srcs = [
+        "apex_manifest.py"
+    ];
+    version = {
+        py2 = {
+            enabled = true;
+        };
+        py3 = {
+            enabled = true;
+        };
+    };
+    libs = [
+        "apex_manifest_proto"
+    ];
+};
+
 apexer = python_binary_host {
     name = "apexer";
     srcs = [
         "apexer.py"
-        "apex_manifest.py"
+    ];
+    version = {
+        py2 = {
+            enabled = true;
+            embedded_launcher = true;
+        };
+        py3 = {
+            enabled = false;
+        };
+    };
+    libs = [
+        "apex_manifest"
+        "apex_build_info_proto"
+        "manifest_utils"
+    ];
+    required = apexer_tools;
+};
+
+conv_apex_manifest = python_binary_host {
+    name = "conv_apex_manifest";
+    srcs = [
+        "conv_apex_manifest.py"
     ];
     version = {
         py2 = {
@@ -49,7 +88,6 @@ apexer = python_binary_host {
     libs = [
         "apex_manifest_proto"
     ];
-    required = apexer_tools;
 };
 
 "com.android.support.apexer.key" = apex_key {
@@ -71,4 +109,39 @@ apexer = python_binary_host {
     binaries = apexer_tools;
 };
 
-in { inherit "com.android.support.apexer" "com.android.support.apexer.key" apexer; }
+#  TODO(b/148659029): this test can't run in TEST_MAPPING.
+apexer_test = python_test_host {
+    name = "apexer_test";
+    main = "apexer_test.py";
+    srcs = [
+        "apexer_test.py"
+    ];
+    data = [
+        ":com.android.example.apex"
+        ":com.android.example-legacy.apex"
+        ":com.android.example-logging_parent.apex"
+        ":com.android.example-overridden_package_name.apex"
+        "testdata/com.android.example.apex.avbpubkey"
+        "testdata/com.android.example.apex.pem"
+        "testdata/com.android.example.apex.pk8"
+        "testdata/com.android.example.apex.x509.pem"
+    ];
+    version = {
+        py2 = {
+            enabled = false;
+        };
+        py3 = {
+            enabled = true;
+        };
+    };
+    test_suites = ["general-tests"];
+    libs = [
+        "apex_manifest"
+    ];
+    required = [
+        "apexer"
+        "deapexer"
+    ];
+};
+
+in { inherit "com.android.support.apexer" "com.android.support.apexer.key" apex_manifest apexer apexer_test conv_apex_manifest; }

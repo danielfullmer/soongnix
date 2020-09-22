@@ -15,7 +15,6 @@ aaudio_loopback = cc_test {
         "libaudioutils"
     ];
     header_libs = ["libaaudio_example_utils"];
-    pack_relocations = false;
 };
 
 in { inherit aaudio_loopback; }

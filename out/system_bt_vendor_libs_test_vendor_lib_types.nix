@@ -19,8 +19,6 @@ libbt-rootcanal-types = cc_library_static {
     ];
     host_supported = true;
     srcs = [
-        "class_of_device.cc"
-        "address.cc"
         "bluetooth/uuid.cc"
     ];
     header_libs = ["libbt-rootcanal-types-header"];
@@ -34,8 +32,6 @@ rootcanal-test_types = cc_test {
     defaults = ["fluoride_defaults"];
     host_supported = true;
     srcs = [
-        "test/class_of_device_unittest.cc"
-        "test/address_unittest.cc"
         "test/bluetooth/uuid_unittest.cc"
     ];
     static_libs = [

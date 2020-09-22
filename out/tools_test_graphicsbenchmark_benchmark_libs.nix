@@ -22,9 +22,12 @@ libagq = cc_library_shared {
     srcs = [
         "agq.cpp"
     ];
+
     export_include_dirs = ["."];
-    shared_libs = ["liblog"];
-    pack_relocations = false;
+    shared_libs = [
+        "liblog"
+        "libnativewindow"
+    ];
 };
 
 in { inherit libagq; }

@@ -15,8 +15,6 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  TODO(ajcbik): rename dexdump2 into dexdump when Dalvik version is removed
-
 dexdump_defaults = cc_defaults {
     name = "dexdump_defaults";
     defaults = ["art_defaults"];
@@ -27,34 +25,41 @@ dexdump_defaults = cc_defaults {
     ];
 };
 
-dexdump2 = art_cc_binary {
-    name = "dexdump2";
+dexdump = art_cc_binary {
+    name = "dexdump";
     defaults = ["dexdump_defaults"];
     host_supported = true;
-    shared_libs = [
-        "libdexfile"
-        "libartbase"
-        "libbase"
-    ];
-};
-
-dexdumps = art_cc_binary {
-    name = "dexdumps";
-    defaults = [
-        "dexdump_defaults"
-        "libartbase_static_defaults"
-        "libdexfile_static_defaults"
-    ];
-    host_supported = true;
-    device_supported = false;
     target = {
-        darwin = {
-            enabled = false;
+        android = {
+            shared_libs = [
+                "libdexfile"
+                "libartbase"
+                "libbase"
+            ];
         };
-        windows = {
+        #  Use static libs on host: required for Windows build and
+        #  static_sdk_tools build.
+        host = {
+            enabled = true;
+            static_libs = [
+                "libdexfile"
+                "libartbase"
+                "libbase"
+                "libartpalette"
+                "liblog"
+                "libz"
+                "libziparchive"
+            ];
+        };
+        darwin = {
             enabled = true;
         };
     };
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+        "//apex_available:platform" #  for SDK
+    ];
 };
 
 art_dexdump_tests = art_cc_test {
@@ -65,4 +70,4 @@ art_dexdump_tests = art_cc_test {
     srcs = ["dexdump_test.cc"];
 };
 
-in { inherit art_dexdump_tests dexdump2 dexdump_defaults dexdumps; }
+in { inherit art_dexdump_tests dexdump dexdump_defaults; }

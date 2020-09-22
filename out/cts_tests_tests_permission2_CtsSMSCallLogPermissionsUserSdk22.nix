@@ -23,13 +23,6 @@ CtsSMSCallLogPermissionsUserSdk22 = android_test_helper_app {
 
     sdk_version = "current";
 
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-        "cts_instant"
-    ];
-
     #  TODO: Uncomment when uncommenting the test
     #  srcs: ["src/**/*.java"]
 

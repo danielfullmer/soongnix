@@ -30,7 +30,6 @@ let
 
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.light@2.0"
         "android.hardware.tests.extension.light@2.0"

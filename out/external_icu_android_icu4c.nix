@@ -21,12 +21,19 @@ let
 icu4c_extra_headers = cc_library_headers {
     name = "icu4c_extra_headers";
     host_supported = true;
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
     target = {
         windows = {
             enabled = true;
         };
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 in { inherit icu4c_extra_headers; }

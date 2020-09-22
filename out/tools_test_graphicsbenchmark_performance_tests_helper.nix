@@ -15,8 +15,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-GameQualificationHelper = java_library {
-    name = "GameQualificationHelper";
+GameCoreHelper = java_library {
+    name = "GameCoreHelper";
     srcs = [
         "src/com/android/game/qualification/ApkInfo.java"
         "src/com/android/game/qualification/CertificationRequirements.java"
@@ -31,8 +31,8 @@ GameQualificationHelper = java_library {
     };
 };
 
-GameQualificationHelperHost = java_library_host {
-    name = "GameQualificationHelperHost";
+GameCoreHelperHost = java_library_host {
+    name = "GameCoreHelperHost";
     srcs = [
         "src/com/android/game/qualification/ApkInfo.java"
         "src/com/android/game/qualification/CertificationRequirements.java"
@@ -50,16 +50,18 @@ GameQualificationHelperHost = java_library_host {
 };
 
 #  Test
-GameQualificationHelperTest = java_test_host {
-    name = "GameQualificationHelperTest";
+GameCoreHelperTest = java_test_host {
+    name = "GameCoreHelperTest";
     srcs = ["test/com/android/game/qualification/GameCoreConfigurationXmlParserTest.java"];
     test_suites = [
         "general-tests"
     ];
     libs = [
-        "GameQualificationHelperHost"
         "junit-host"
+    ];
+    static_libs = [
+        "GameCoreHelperHost"
     ];
 };
 
-in { inherit GameQualificationHelper GameQualificationHelperHost GameQualificationHelperTest; }
+in { inherit GameCoreHelper GameCoreHelperHost GameCoreHelperTest; }

@@ -15,6 +15,7 @@ libbt-common = cc_library_static {
     srcs = [
         "address_obfuscator.cc"
         "message_loop_thread.cc"
+        "metric_id_allocator.cc"
         "metrics.cc"
         "once_timer.cc"
         "repeating_timer.cc"
@@ -43,8 +44,10 @@ bluetooth_test_common = cc_test {
     srcs = [
         "address_obfuscator_unittest.cc"
         "leaky_bonded_queue_unittest.cc"
+        "lru_unittest.cc"
         "message_loop_thread_unittest.cc"
         "metrics_unittest.cc"
+        "metric_id_allocator_unittest.cc"
         "once_timer_unittest.cc"
         "repeating_timer_unittest.cc"
         "state_machine_unittest.cc"

@@ -34,9 +34,11 @@ VtsHalPowerStatsV1_0TargetTest = cc_test {
         "liblog"
         "libhidlbase"
         "libfmq"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
     ];
 };
 

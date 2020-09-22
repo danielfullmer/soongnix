@@ -24,7 +24,6 @@ cas_service_defaults = cc_defaults {
         "libbinder"
         "libhidlbase"
         "libhidlmemory"
-        "libhidltransport"
         "liblog"
         "libstagefright_foundation"
         "libutils"

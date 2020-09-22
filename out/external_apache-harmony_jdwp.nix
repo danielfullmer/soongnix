@@ -1,4 +1,4 @@
-{ java_genrule, java_library_host, java_test }:
+{ java_genrule, java_test }:
 let
 
 SourceDebugExtensionMockClass_gen = java_genrule {
@@ -12,6 +12,9 @@ SourceDebugExtensionMockClass_gen = java_genrule {
 
 apache-harmony-jdwp-tests = java_test {
     name = "apache-harmony-jdwp-tests";
+    visibility = [
+        "//cts/tests/jdwp"
+    ];
     hostdex = true;
     host_supported = true;
     srcs = [
@@ -419,14 +422,9 @@ apache-harmony-jdwp-tests = java_test {
 
     libs = ["junit"];
 
-    no_standard_libs = true;
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
     target = {
-        #  Only depend on core-all for the Android variant so we can avoid
-        #  needing to create a core-all host variant.
-        android = {
-            libs = ["core-all"];
-        };
         host = {
             exclude_srcs = ["src/test/java/org/apache/harmony/jpda/tests/jdwp/DDM/**/*.java"];
         };
@@ -440,9 +438,4 @@ apache-harmony-jdwp-tests = java_test {
     jarjar_rules = "jarjar-rules.txt";
 };
 
-apache-harmony-jdwp-tests-host = java_library_host {
-    name = "apache-harmony-jdwp-tests-host";
-    static_libs = ["apache-harmony-jdwp-tests"];
-};
-
-in { inherit SourceDebugExtensionMockClass_gen apache-harmony-jdwp-tests apache-harmony-jdwp-tests-host; }
+in { inherit SourceDebugExtensionMockClass_gen apache-harmony-jdwp-tests; }

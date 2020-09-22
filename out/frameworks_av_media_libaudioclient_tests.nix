@@ -16,6 +16,10 @@ test_create_audiotrack = cc_test {
         "test_create_audiotrack.cpp"
         "test_create_utils.cpp"
     ];
+    header_libs = [
+        "libmedia_headers"
+        "libmediametrics_headers"
+    ];
     shared_libs = [
         "libaudioclient"
         "libbinder"
@@ -31,6 +35,10 @@ test_create_audiorecord = cc_test {
     srcs = [
         "test_create_audiorecord.cpp"
         "test_create_utils.cpp"
+    ];
+    header_libs = [
+        "libmedia_headers"
+        "libmediametrics_headers"
     ];
     shared_libs = [
         "libaudioclient"

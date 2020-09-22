@@ -11,8 +11,6 @@ let
     shared_libs = [
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "libutils"
     ];

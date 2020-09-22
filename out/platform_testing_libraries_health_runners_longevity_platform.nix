@@ -28,7 +28,6 @@ longevity-device-lib = java_library_static {
         "src/android/platform/test/longevity/LongevitySuite.java"
         "src/android/platform/test/longevity/Profile.java"
         "src/android/platform/test/longevity/ProfileSuite.java"
-        "src/android/platform/test/longevity/ScenarioRunner.java"
         "src/android/platform/test/longevity/ScheduledScenarioRunner.java"
         "src/android/platform/test/longevity/listener/BatteryTerminator.java"
         "src/android/platform/test/longevity/listener/ErrorTerminator.java"

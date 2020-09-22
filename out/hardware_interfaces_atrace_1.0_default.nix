@@ -32,7 +32,6 @@ let
         "libbase"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.atrace@1.0"
     ];
 };

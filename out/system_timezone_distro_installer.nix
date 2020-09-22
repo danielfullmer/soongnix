@@ -23,7 +23,7 @@ time_zone_distro_installer = java_library {
     libs = ["time_zone_distro"];
 };
 
-#  Tests for time_zone_distro_installer code
+#  Tests for time_zone_distro_installer code (see CtsLibcoreTestCases)
 time_zone_distro_installer-tests = java_library {
     name = "time_zone_distro_installer-tests";
 

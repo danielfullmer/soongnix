@@ -13,6 +13,7 @@ libstagefright_xmlparser = cc_library_shared {
     vndk = {
         enabled = true;
     };
+    double_loadable = true;
 
     srcs = [
         "MediaCodecsXmlParser.cpp"

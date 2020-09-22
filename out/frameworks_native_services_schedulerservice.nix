@@ -12,8 +12,6 @@ libschedulerservicehidl = cc_library_shared {
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libmediautils"
         "liblog"
         "libutils"

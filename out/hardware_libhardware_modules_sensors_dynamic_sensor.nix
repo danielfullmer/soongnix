@@ -25,8 +25,6 @@ dynamic_sensor_defaults = cc_defaults {
         "-Wall"
         "-Werror"
         "-Wextra"
-        #  Allow implicit fallthroughs in HidRawSensor.cpp until they are fixed.
-        "-Wno-error=implicit-fallthrough"
     ];
     export_include_dirs = ["."];
 

@@ -1,0 +1,17 @@
+--- hardware_qcom_sm8150_display.nix	2020-08-24 22:04:48.429415459 -0700
++++ hardware_qcom_sm8150_display.nix	2020-08-24 22:14:04.501613046 -0700
+@@ -4,7 +4,7 @@
+ _missingName = soong_namespace {
+ };
+ 
+-display_go_defaults = display_go_defaults {
++_bp2nix_display_go_defaults = display_go_defaults {
+     name = "display_go_defaults";
+ };
+ 
+@@ -58,4 +58,4 @@
+     "libqdutils"
+ ];
+ 
+-in { inherit _missingName display_defaults display_go_defaults display_headers; }
++in { inherit _missingName display_defaults display_headers; display_go_defaults = _bp2nix_display_go_defaults; }

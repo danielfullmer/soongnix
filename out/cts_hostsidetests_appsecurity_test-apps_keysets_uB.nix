@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2014 The Android Open Source Project
@@ -16,7 +16,7 @@ let
 #  limitations under the License.
 
 # apks signed cts-keyset-test-a
-CtsKeySetSigningAUpgradeB = android_test {
+CtsKeySetSigningAUpgradeB = android_test_helper_app {
     name = "CtsKeySetSigningAUpgradeB";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -28,13 +28,13 @@ CtsKeySetSigningAUpgradeB = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
 # apks signed cts-keyset-test-b
-CtsKeySetSigningBUpgradeB = android_test {
+CtsKeySetSigningBUpgradeB = android_test_helper_app {
     name = "CtsKeySetSigningBUpgradeB";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -46,13 +46,13 @@ CtsKeySetSigningBUpgradeB = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
 # apks signed by cts-keyset-test-a and cts-keyset-test-c
-CtsKeySetSigningAAndCUpgradeB = android_test {
+CtsKeySetSigningAAndCUpgradeB = android_test_helper_app {
     name = "CtsKeySetSigningAAndCUpgradeB";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -65,7 +65,7 @@ CtsKeySetSigningAAndCUpgradeB = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

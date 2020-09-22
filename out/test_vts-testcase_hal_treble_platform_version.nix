@@ -1,4 +1,4 @@
-{ vts_config }:
+{ python_test_host, vts_config }:
 let
 
 #
@@ -21,4 +21,30 @@ VtsTreblePlatformVersionTest = vts_config {
     name = "VtsTreblePlatformVersionTest";
 };
 
-in { inherit VtsTreblePlatformVersionTest; }
+vts_treble_platform_version_test = python_test_host {
+    name = "vts_treble_platform_version_test";
+    main = "vts_treble_platform_version_test.py";
+    srcs = [
+        "vts_treble_platform_version_test.py"
+    ];
+    libs = [
+        "vndk_utils"
+        "vts_vndk_utils"
+    ];
+    test_suites = [
+        "vts"
+    ];
+    auto_gen_config = true;
+    version = {
+        py2 = {
+            enabled = false;
+            embedded_launcher = false;
+        };
+        py3 = {
+            enabled = true;
+            embedded_launcher = true;
+        };
+    };
+};
+
+in { inherit VtsTreblePlatformVersionTest vts_treble_platform_version_test; }

@@ -6,13 +6,15 @@ libcompositionengine_defaults = cc_defaults {
     defaults = ["surfaceflinger_defaults"];
     cflags = [
         "-DLOG_TAG=\"CompositionEngine\""
+        "-DATRACE_TAG=ATRACE_TAG_GRAPHICS"
     ];
     shared_libs = [
-        "android.frameworks.vr.composer@1.0"
+        "android.frameworks.vr.composer@2.0"
         "android.hardware.graphics.allocator@2.0"
         "android.hardware.graphics.composer@2.1"
         "android.hardware.graphics.composer@2.2"
         "android.hardware.graphics.composer@2.3"
+        "android.hardware.graphics.composer@2.4"
         "android.hardware.power@1.0"
         "android.hardware.power@1.3"
         "libbase"
@@ -21,8 +23,8 @@ libcompositionengine_defaults = cc_defaults {
         "liblayers_proto"
         "liblog"
         "libnativewindow"
-        "libsync"
-        "libtimestats_proto"
+        "libprotobuf-cpp-lite"
+        "libtimestats"
         "libui"
         "libutils"
     ];
@@ -35,6 +37,7 @@ libcompositionengine_defaults = cc_defaults {
         "android.hardware.graphics.composer@2.1-command-buffer"
         "android.hardware.graphics.composer@2.2-command-buffer"
         "android.hardware.graphics.composer@2.3-command-buffer"
+        "android.hardware.graphics.composer@2.4-command-buffer"
         "libsurfaceflinger_headers"
     ];
 };
@@ -43,14 +46,14 @@ libcompositionengine = cc_library {
     name = "libcompositionengine";
     defaults = ["libcompositionengine_defaults"];
     srcs = [
+        "src/ClientCompositionRequestCache.cpp"
         "src/CompositionEngine.cpp"
         "src/Display.cpp"
         "src/DisplayColorProfile.cpp"
         "src/DisplaySurface.cpp"
         "src/DumpHelpers.cpp"
         "src/HwcBufferCache.cpp"
-        "src/Layer.cpp"
-        "src/LayerCompositionState.cpp"
+        "src/LayerFECompositionState.cpp"
         "src/Output.cpp"
         "src/OutputCompositionState.cpp"
         "src/OutputLayer.cpp"
@@ -69,7 +72,6 @@ libcompositionengine_mocks = cc_library {
         "mock/Display.cpp"
         "mock/DisplayColorProfile.cpp"
         "mock/DisplaySurface.cpp"
-        "mock/Layer.cpp"
         "mock/LayerFE.cpp"
         "mock/NativeWindow.cpp"
         "mock/Output.cpp"
@@ -94,9 +96,9 @@ libcompositionengine_test = cc_test {
         "tests/DisplayColorProfileTest.cpp"
         "tests/DisplayTest.cpp"
         "tests/HwcBufferCacheTest.cpp"
-        "tests/LayerTest.cpp"
         "tests/MockHWC2.cpp"
         "tests/MockHWComposer.cpp"
+        "tests/MockPowerAdvisor.cpp"
         "tests/OutputTest.cpp"
         "tests/OutputLayerTest.cpp"
         "tests/RenderSurfaceTest.cpp"
@@ -104,6 +106,7 @@ libcompositionengine_test = cc_test {
     static_libs = [
         "libcompositionengine"
         "libcompositionengine_mocks"
+        "libgui_mocks"
         "librenderengine_mocks"
         "libgmock"
         "libgtest"
@@ -121,7 +124,13 @@ libcompositionengine_test = cc_test {
         #
         #  You can either "make dist tests" before flashing, or set this
         #  option to false temporarily.
-        address = true;
+
+        #  FIXME: ASAN build is broken for a while, but was not discovered
+        #  since new PM silently suppressed ASAN. Temporarily turn off ASAN
+        #  to unblock the compiler upgrade process.
+        #  address: true,
+        #  http://b/139747256
+        address = false;
     };
 };
 

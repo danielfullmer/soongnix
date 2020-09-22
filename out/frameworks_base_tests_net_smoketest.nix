@@ -17,6 +17,11 @@ FrameworksNetSmokeTests = android_test {
     defaults = ["FrameworksNetTests-jni-defaults"];
     srcs = ["java/SmokeTest.java"];
     test_suites = ["device-tests"];
+    static_libs = [
+        "androidx.test.rules"
+        "mockito-target-minus-junit4"
+        "services.core"
+    ];
 };
 
 in { inherit FrameworksNetSmokeTests; }

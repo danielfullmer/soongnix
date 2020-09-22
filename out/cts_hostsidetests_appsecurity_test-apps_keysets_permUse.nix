@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #  Copyright (C) 2014 The Android Open Source Project
@@ -16,7 +16,7 @@ let
 #  limitations under the License.
 
 # apks signed cts-keyset-test-a
-CtsKeySetPermUseSigningA = android_test {
+CtsKeySetPermUseSigningA = android_test_helper_app {
     name = "CtsKeySetPermUseSigningA";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -28,13 +28,13 @@ CtsKeySetPermUseSigningA = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
 # apks signed cts-keyset-test-b
-CtsKeySetPermUseSigningB = android_test {
+CtsKeySetPermUseSigningB = android_test_helper_app {
     name = "CtsKeySetPermUseSigningB";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -46,7 +46,7 @@ CtsKeySetPermUseSigningB = android_test {
     #  tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

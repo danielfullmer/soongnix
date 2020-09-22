@@ -26,23 +26,11 @@ Magick_coders = cc_library_static {
         "xc.c"
     ];
 
-    exclude_srcs = [
-        #  Removed because requires LIBTIFF
-        "tiff.c"
-    ];
-
-    cflags = [
-        "-DHAVE_CONFIG_H"
-        "-Wall"
-        "-Werror"
-        "-Wno-for-loop-analysis"
-        "-Wno-sign-compare"
-        "-Wno-unused-function"
-        "-Wno-unused-parameter"
-    ];
+    cflags = ["-DHAVE_CONFIG_H"];
 
     header_libs = ["Magick_headers"];
     static_libs = ["libjpeg_static_ndk"];
+    visibility = ["//vendor:__subpackages__"];
 };
 
 in { inherit Magick_coders; }

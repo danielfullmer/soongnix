@@ -20,6 +20,7 @@ jarjar = java_library_host {
     manifest = "manifest.txt";
 
     srcs = [
+        "src/android/com/android/jarjar/RemoveAndroidCompatAnnotationsJarTransformer.java"
         "src/main/com/tonicsystems/jarjar/AbstractDepHandler.java"
         "src/main/com/tonicsystems/jarjar/DepFind.java"
         "src/main/com/tonicsystems/jarjar/DepFindVisitor.java"

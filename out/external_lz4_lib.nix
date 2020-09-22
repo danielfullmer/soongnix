@@ -5,11 +5,20 @@ let
 
 liblz4 = cc_library {
     name = "liblz4";
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.adbd"
+        "com.android.art.debug" #  from libartbase
+        "com.android.art.release"
+    ];
+    recovery_available = true;
     vendor_available = true;
     vndk = {
         enabled = true;
     };
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     target = {
         windows = {
             enabled = true;

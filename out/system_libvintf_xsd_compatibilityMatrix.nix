@@ -1,4 +1,4 @@
-{ xsd_config }:
+{ filegroup, xsd_config }:
 let
 
 #
@@ -17,10 +17,15 @@ let
 #  limitations under the License.
 #
 
+compatibility_matrix_schema = filegroup {
+    name = "compatibility_matrix_schema";
+    srcs = ["compatibility_matrix.xsd"];
+};
+
 compatibility_matrix = xsd_config {
     name = "compatibility_matrix";
-    srcs = ["compatibility_matrix.xsd"];
+    srcs = [":compatibility_matrix_schema"];
     package_name = "compatibility.matrix";
 };
 
-in { inherit compatibility_matrix; }
+in { inherit compatibility_matrix compatibility_matrix_schema; }

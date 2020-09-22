@@ -1,8 +1,8 @@
-{ java_library_static }:
+{ filegroup, java_library_static }:
 let
 
-"services.backup" = java_library_static {
-    name = "services.backup";
+"services.backup-sources" = filegroup {
+    name = "services.backup-sources";
     srcs = [
         "java/com/android/server/backup/BackupAgentTimeoutParameters.java"
         "java/com/android/server/backup/BackupManagerConstants.java"
@@ -18,45 +18,10 @@ let
         "java/com/android/server/backup/KeyValueBackupJob.java"
         "java/com/android/server/backup/PackageManagerBackupAgent.java"
         "java/com/android/server/backup/ProcessedPackagesJournal.java"
-        "java/com/android/server/backup/Trampoline.java"
-        "java/com/android/server/backup/TransportManager.java"
         "java/com/android/server/backup/UserBackupManagerFilePersistedSettings.java"
         "java/com/android/server/backup/UserBackupManagerFiles.java"
         "java/com/android/server/backup/UserBackupManagerService.java"
-        "java/com/android/server/backup/encryption/chunk/Chunk.java"
-        "java/com/android/server/backup/encryption/chunk/ChunkHash.java"
-        "java/com/android/server/backup/encryption/chunk/ChunkListingMap.java"
-        "java/com/android/server/backup/encryption/chunk/ChunkOrderingType.java"
-        "java/com/android/server/backup/encryption/chunk/EncryptedChunkOrdering.java"
-        "java/com/android/server/backup/encryption/chunking/BackupWriter.java"
-        "java/com/android/server/backup/encryption/chunking/ByteRange.java"
-        "java/com/android/server/backup/encryption/chunking/ChunkEncryptor.java"
-        "java/com/android/server/backup/encryption/chunking/ChunkHasher.java"
-        "java/com/android/server/backup/encryption/chunking/Chunker.java"
-        "java/com/android/server/backup/encryption/chunking/DiffScriptBackupWriter.java"
-        "java/com/android/server/backup/encryption/chunking/DiffScriptWriter.java"
-        "java/com/android/server/backup/encryption/chunking/EncryptedChunk.java"
-        "java/com/android/server/backup/encryption/chunking/EncryptedChunkEncoder.java"
-        "java/com/android/server/backup/encryption/chunking/InlineLengthsEncryptedChunkEncoder.java"
-        "java/com/android/server/backup/encryption/chunking/LengthlessEncryptedChunkEncoder.java"
-        "java/com/android/server/backup/encryption/chunking/OutputStreamWrapper.java"
-        "java/com/android/server/backup/encryption/chunking/RawBackupWriter.java"
-        "java/com/android/server/backup/encryption/chunking/SingleStreamDiffScriptWriter.java"
-        "java/com/android/server/backup/encryption/chunking/cdc/ContentDefinedChunker.java"
-        "java/com/android/server/backup/encryption/chunking/cdc/FingerprintMixer.java"
-        "java/com/android/server/backup/encryption/chunking/cdc/Hkdf.java"
-        "java/com/android/server/backup/encryption/chunking/cdc/IsChunkBreakpoint.java"
-        "java/com/android/server/backup/encryption/chunking/cdc/RabinFingerprint64.java"
-        "java/com/android/server/backup/encryption/keys/RecoverableKeyStoreSecondaryKey.java"
-        "java/com/android/server/backup/encryption/keys/RecoverableKeyStoreSecondaryKeyManager.java"
-        "java/com/android/server/backup/encryption/keys/TertiaryKeyGenerator.java"
-        "java/com/android/server/backup/encryption/keys/TertiaryKeyRotationTracker.java"
-        "java/com/android/server/backup/encryption/storage/BackupEncryptionDb.java"
-        "java/com/android/server/backup/encryption/storage/BackupEncryptionDbContract.java"
-        "java/com/android/server/backup/encryption/storage/BackupEncryptionDbHelper.java"
-        "java/com/android/server/backup/encryption/storage/EncryptionDbException.java"
-        "java/com/android/server/backup/encryption/storage/TertiaryKey.java"
-        "java/com/android/server/backup/encryption/storage/TertiaryKeysTable.java"
+        "java/com/android/server/backup/UserBackupPreferences.java"
         "java/com/android/server/backup/fullbackup/AppMetadataBackupWriter.java"
         "java/com/android/server/backup/fullbackup/FullBackupEngine.java"
         "java/com/android/server/backup/fullbackup/FullBackupEntry.java"
@@ -71,7 +36,6 @@ let
         "java/com/android/server/backup/internal/Operation.java"
         "java/com/android/server/backup/internal/PerformClearTask.java"
         "java/com/android/server/backup/internal/PerformInitializeTask.java"
-        "java/com/android/server/backup/internal/RunBackupReceiver.java"
         "java/com/android/server/backup/internal/RunInitializeReceiver.java"
         "java/com/android/server/backup/internal/SetupObserver.java"
         "java/com/android/server/backup/keyvalue/AgentException.java"
@@ -105,14 +69,6 @@ let
         "java/com/android/server/backup/restore/RestoreFileRunnable.java"
         "java/com/android/server/backup/restore/RestorePolicy.java"
         "java/com/android/server/backup/restore/UnifiedRestoreState.java"
-        "java/com/android/server/backup/transport/OnTransportRegisteredListener.java"
-        "java/com/android/server/backup/transport/TransportClient.java"
-        "java/com/android/server/backup/transport/TransportClientManager.java"
-        "java/com/android/server/backup/transport/TransportConnectionListener.java"
-        "java/com/android/server/backup/transport/TransportNotAvailableException.java"
-        "java/com/android/server/backup/transport/TransportNotRegisteredException.java"
-        "java/com/android/server/backup/transport/TransportStats.java"
-        "java/com/android/server/backup/transport/TransportUtils.java"
         "java/com/android/server/backup/utils/AppBackupUtils.java"
         "java/com/android/server/backup/utils/BackupManagerMonitorUtils.java"
         "java/com/android/server/backup/utils/BackupObserverUtils.java"
@@ -128,7 +84,16 @@ let
         "java/com/android/server/backup/utils/SparseArrayUtils.java"
         "java/com/android/server/backup/utils/TarBackupReader.java"
     ];
-    libs = ["services.core"];
+    path = "java";
+    visibility = ["//frameworks/base/services"];
 };
 
-in { inherit "services.backup"; }
+"services.backup" = java_library_static {
+    name = "services.backup";
+    defaults = ["services_defaults"];
+    srcs = [":services.backup-sources"];
+    libs = ["services.core"];
+    static_libs = ["backuplib"];
+};
+
+in { inherit "services.backup" "services.backup-sources"; }

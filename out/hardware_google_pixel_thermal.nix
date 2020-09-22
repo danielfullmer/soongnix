@@ -1,4 +1,4 @@
-{ cc_binary }:
+{ cc_binary, sh_binary }:
 let
 
 "android.hardware.thermal@2.0-service.pixel" = cc_binary {
@@ -20,14 +20,11 @@ let
         "utils/thermal_files.cpp"
         "utils/thermal_watcher.cpp"
     ];
-    static_libs = [
-        "libjsoncpp"
-    ];
     shared_libs = [
         "libbase"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
+        "libjsoncpp"
         "libutils"
         "android.hardware.thermal@1.0"
         "android.hardware.thermal@2.0"
@@ -49,4 +46,13 @@ let
     ];
 };
 
-in { inherit "android.hardware.thermal@2.0-service.pixel"; }
+thermal_logd = sh_binary {
+    name = "thermal_logd";
+    src = "init.thermal.logging.sh";
+    vendor = true;
+    init_rc = [
+        "pixel-thermal-logd.rc"
+    ];
+};
+
+in { inherit "android.hardware.thermal@2.0-service.pixel" thermal_logd; }

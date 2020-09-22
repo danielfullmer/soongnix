@@ -6,6 +6,7 @@ soong-ca-certificates = bootstrap_go_package {
     pkgPath = "android/soong/system/ca-certificates";
     deps = [
         "soong-android"
+        "soong-etc"
         "soong-phony"
     ];
     srcs = [

@@ -21,8 +21,9 @@ multi-user-helper = java_library_static {
         "src/android/platform/helpers/MultiUserHelper.java"
     ];
     static_libs = [
+        "android.car"
         "androidx.test.runner"
-        "android.car.userlib"
+        "ub-uiautomator"
     ];
 };
 

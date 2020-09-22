@@ -60,6 +60,8 @@ libFLAC = cc_library_static {
         #  cfi: true,
         blacklist = "libFLAC_blacklist.txt";
     };
+
+    min_sdk_version = "29";
 };
 
 in { inherit libFLAC; }

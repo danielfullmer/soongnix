@@ -118,16 +118,19 @@ fastbootd = cc_binary {
         "device/fastboot_device.cpp"
         "device/flashing.cpp"
         "device/main.cpp"
+        "device/usb.cpp"
         "device/usb_client.cpp"
+        "device/tcp_client.cpp"
         "device/utility.cpp"
         "device/variables.cpp"
+        "socket.cpp"
     ];
 
     shared_libs = [
         "android.hardware.boot@1.0"
+        "android.hardware.boot@1.1"
         "android.hardware.fastboot@1.0"
         "android.hardware.health@2.0"
-        "libadbd"
         "libasyncio"
         "libbase"
         "libbootloader_message"
@@ -137,16 +140,22 @@ fastbootd = cc_binary {
         "libfs_mgr"
         "libgsi"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "liblog"
         "liblp"
+        "libprotobuf-cpp-lite"
         "libsparse"
         "libutils"
     ];
 
     static_libs = [
+        "libgtest_prod"
         "libhealthhalutils"
+        "libsnapshot_nobinder"
+    ];
+
+    header_libs = [
+        "avb_headers"
+        "libsnapshot_headers"
     ];
 };
 
@@ -190,7 +199,11 @@ fastboot_host_defaults = cc_defaults {
     #  will violate ODR.
     shared_libs = [];
 
-    header_libs = ["bootimg_headers"];
+    header_libs = [
+        "avb_headers"
+        "bootimg_headers"
+    ];
+
     static_libs = [
         "libziparchive"
         "libsparse"

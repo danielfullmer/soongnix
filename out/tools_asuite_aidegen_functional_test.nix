@@ -32,14 +32,17 @@ aidegen_functional_test_default = python_defaults {
 
 aidegen_functional_test = python_binary_host {
     name = "aidegen_functional_test";
+    suffix = "-dev";
     defaults = ["aidegen_functional_test_default"];
     main = "aidegen_functional_test_main.py";
     srcs = [
+        "__init__.py"
         "aidegen_functional_test_main.py"
     ];
     libs = [
         "aidegen_lib"
         "atest_module_info"
+        "asuite_cc_client"
     ];
 };
 

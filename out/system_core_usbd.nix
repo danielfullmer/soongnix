@@ -8,7 +8,6 @@ usbd = cc_binary {
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "libhardware"

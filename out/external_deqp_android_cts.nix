@@ -1,4 +1,4 @@
-{ filegroup, genrule, java_test_host }:
+{ filegroup, java_test_host }:
 let
 
 #  Copyright (C) 2015 The Android Open Source Project
@@ -39,25 +39,11 @@ deqp_master_caselists = filegroup {
         "master/gles31-rotate-portrait.txt"
         "master/gles31-rotate-reverse-landscape.txt"
         "master/gles31-rotate-reverse-portrait.txt"
-        "master/vk-master-risky.txt"
+        "master/vk-master-2019-03-01.txt"
+        "master/vk-master-2020-03-01.txt"
         "master/vk-master.txt"
     ];
     path = "master";
-};
-
-deqp_nyc_caselists = genrule {
-    name = "deqp_nyc_caselists";
-    srcs = [
-        "nyc/vk-master.txt"
-        "nyc/gles31-master.txt"
-        "nyc/egl-master.txt"
-    ];
-    out = [
-        "nyc-vk-master.txt"
-        "nyc-gles31-master.txt"
-        "nyc-egl-master.txt"
-    ];
-    cmd = "for i in $(in); do cp $$i $(genDir)/nyc-$$(basename $$i); done";
 };
 
 deqp_angle_exclude_caselists = filegroup {
@@ -65,6 +51,7 @@ deqp_angle_exclude_caselists = filegroup {
     srcs = [
         "angle/egl-angle-excluded.txt"
         "angle/gles2-angle-excluded.txt"
+        "angle/gles3-angle-excluded.txt"
     ];
     path = "angle";
 };
@@ -75,8 +62,9 @@ CtsDeqpTestCases = java_test_host {
     #  Tag this module as a cts test artifact
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
+        "mts"
     ];
 
     srcs = [
@@ -91,9 +79,8 @@ CtsDeqpTestCases = java_test_host {
 
     data = [
         ":deqp_master_caselists"
-        ":deqp_nyc_caselists"
         ":deqp_angle_exclude_caselists"
     ];
 };
 
-in { inherit CtsDeqpTestCases deqp_angle_exclude_caselists deqp_master_caselists deqp_nyc_caselists; }
+in { inherit CtsDeqpTestCases deqp_angle_exclude_caselists deqp_master_caselists; }

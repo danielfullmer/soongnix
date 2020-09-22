@@ -32,7 +32,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
@@ -133,7 +132,6 @@ bluetooth-address-unit-tests = cc_test_host {
         "libutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.bluetooth@1.0"
     ];
 };

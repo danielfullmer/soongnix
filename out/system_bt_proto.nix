@@ -7,7 +7,10 @@ bluetooth-protos-lite = java_library_static {
     proto = {
         type = "lite";
     };
-    srcs = ["bluetooth/metrics/bluetooth.proto"];
+    srcs = [
+        "bluetooth/metrics/bluetooth.proto"
+        "bluetooth/bluetoothKeystore/keystore.proto"
+    ];
 };
 
 libbt-protos-lite = cc_library_static {
@@ -17,7 +20,10 @@ libbt-protos-lite = cc_library_static {
         export_proto_headers = true;
         type = "lite";
     };
-    srcs = ["bluetooth/metrics/bluetooth.proto"];
+    srcs = [
+        "bluetooth/metrics/bluetooth.proto"
+        "bluetooth/bluetoothKeystore/keystore.proto"
+    ];
 };
 
 in { inherit bluetooth-protos-lite libbt-protos-lite; }

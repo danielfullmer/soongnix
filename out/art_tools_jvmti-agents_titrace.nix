@@ -43,17 +43,8 @@ titrace-defaults = cc_defaults {
     };
     header_libs = [
         "libopenjdkjvmti_headers"
+        "libdexfile_all_headers" #  for dex_instruction_list.h only
     ];
-    include_dirs = ["art/libdexfile"]; #  for dex_instruction_list.h only
-    multilib = {
-        lib32 = {
-            suffix = "32";
-        };
-        lib64 = {
-            suffix = "64";
-        };
-    };
-    symlink_preferred_arch = true;
 };
 
 libtitrace = art_cc_library {

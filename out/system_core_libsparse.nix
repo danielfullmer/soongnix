@@ -1,4 +1,4 @@
-{ cc_binary, cc_binary_host, cc_library, python_binary_host }:
+{ cc_binary, cc_binary_host, cc_fuzz, cc_library, python_binary_host }:
 let
 
 #  Copyright 2010 The Android Open Source Project
@@ -6,6 +6,7 @@ let
 libsparse = cc_library {
     name = "libsparse";
     host_supported = true;
+    ramdisk_available = true;
     recovery_available = true;
     unique_host_soname = true;
     srcs = [
@@ -86,4 +87,16 @@ append2simg = cc_binary_host {
     };
 };
 
-in { inherit "simg_dump.py" append2simg img2simg libsparse simg2img; }
+sparse_fuzzer = cc_fuzz {
+    name = "sparse_fuzzer";
+    host_supported = false;
+    srcs = [
+        "sparse_fuzzer.cpp"
+    ];
+    static_libs = [
+        "libsparse"
+        "liblog"
+    ];
+};
+
+in { inherit "simg_dump.py" append2simg img2simg libsparse simg2img sparse_fuzzer; }

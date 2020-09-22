@@ -15,10 +15,6 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-subdirs = [
-    "tipc-test"
-];
-
 libtrusty = cc_library {
     name = "libtrusty";
     vendor = true;

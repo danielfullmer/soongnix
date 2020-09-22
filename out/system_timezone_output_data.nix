@@ -1,4 +1,4 @@
-{ prebuilt_etc }:
+{ java_genrule, prebuilt_etc }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -31,6 +31,14 @@ apex_tz_version = prebuilt_etc {
     installable = false;
 };
 
+"apex_telephonylookup.xml" = prebuilt_etc {
+    name = "apex_telephonylookup.xml";
+    src = "android/telephonylookup.xml";
+    filename = "telephonylookup.xml";
+    sub_dir = "tz";
+    installable = false;
+};
+
 apex_tzdata = prebuilt_etc {
     name = "apex_tzdata";
     src = "iana/tzdata";
@@ -49,4 +57,21 @@ apex_tzdata = prebuilt_etc {
     installable = false;
 };
 
-in { inherit "apex_icu_tzdata.dat" "apex_tzlookup.xml" apex_tz_version apex_tzdata; }
+#  tzdata packaged into a jar for use in robolectric
+robolectric_tzdata = java_genrule {
+    name = "robolectric_tzdata";
+    out = ["robolectric_tzdata.jar"];
+    tools = ["soong_zip"];
+    srcs = [
+        "iana/tzdata"
+        "android/tzlookup.xml"
+        "android/telephonylookup.xml"
+    ];
+    cmd = "mkdir -p $(genDir)/usr/share/zoneinfo/ && " +
+        "cp $(location iana/tzdata) $(genDir)/usr/share/zoneinfo/ && " +
+        "cp $(location android/tzlookup.xml) $(genDir)/usr/share/zoneinfo/ && " +
+        "cp $(location android/telephonylookup.xml) $(genDir)/usr/share/zoneinfo/ && " +
+        "$(location soong_zip) -o $(out) -C $(genDir) -D $(genDir)/usr/share/zoneinfo";
+};
+
+in { inherit "apex_icu_tzdata.dat" "apex_telephonylookup.xml" "apex_tzlookup.xml" apex_tz_version apex_tzdata robolectric_tzdata; }

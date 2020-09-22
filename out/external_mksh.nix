@@ -118,6 +118,9 @@ sh-defaults = cc_defaults {
         "-DMKSH_DEFAULT_EXECSHELL=\"/system/bin/sh\""
         "-DMKSH_DEFAULT_TMPDIR=\"/data/local\""
     ];
+
+    stl = "none";
+    system_shared_libs = ["libc"];
 };
 
 sh = cc_binary {

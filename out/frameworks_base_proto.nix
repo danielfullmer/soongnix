@@ -1,4 +1,4 @@
-{ java_library_static }:
+{ filegroup, java_library_static }:
 let
 
 framework-protos = java_library_static {
@@ -12,10 +12,9 @@ framework-protos = java_library_static {
         "src/ipconnectivity.proto"
         "src/system_messages.proto"
         "src/task_snapshot.proto"
-        "src/wifi.proto"
+        "src/typed_features.proto"
         "src/metrics_constants/metrics_constants.proto"
     ];
-    no_framework_libs = true;
     sdk_version = "9";
     #  Pin java_version until jarjar is certified to support later versions. http://b/72703434
     java_version = "1.8";
@@ -36,8 +35,17 @@ metrics-constants-protos = java_library_static {
         type = "nano";
     };
     srcs = ["src/metrics_constants/metrics_constants.proto"];
-    no_framework_libs = true;
     sdk_version = "system_current";
 };
 
-in { inherit framework-protos metrics-constants-protos; }
+system-messages-proto-src = filegroup {
+    name = "system-messages-proto-src";
+    srcs = ["src/system_messages.proto"];
+};
+
+ipconnectivity-proto-src = filegroup {
+    name = "ipconnectivity-proto-src";
+    srcs = ["src/ipconnectivity.proto"];
+};
+
+in { inherit framework-protos ipconnectivity-proto-src metrics-constants-protos system-messages-proto-src; }

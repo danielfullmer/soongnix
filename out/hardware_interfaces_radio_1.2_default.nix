@@ -12,7 +12,6 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.radio@1.2"
@@ -32,7 +31,6 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.radio@1.2"

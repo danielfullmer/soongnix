@@ -28,7 +28,10 @@ VtsHalBroadcastradioV1_1TargetTest = cc_test {
         "android.hardware.broadcastradio@vts-utils-lib"
         "libgmock"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalBroadcastradioV1_1TargetTest; }

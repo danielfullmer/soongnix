@@ -1,0 +1,50 @@
+{ android_app_certificate, apex, apex_defaults, apex_key }:
+let
+
+#
+#  Copyright (C) 2019 The Android Open Source Project
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+#  i18n APEX is intended as a home for ICU as of July 2019.
+#  Various parts and dependencies of ICU would be gradually moved into this APEX,
+#  and the below build rules should reflect the latest status.
+#  TODO(b/138434658): Move the apex declaration back to external/icu
+#  The apex is declared in libcore/ to workaround new dependency from external/icu
+#  to system/sepolicy in a downstream branch.
+"com.android.i18n" = apex {
+    name = "com.android.i18n";
+    defaults = ["com.android.i18n-defaults"];
+    certificate = ":com.android.i18n.certificate";
+};
+
+"com.android.i18n-defaults" = apex_defaults {
+    name = "com.android.i18n-defaults";
+    compile_multilib = "both";
+    manifest = "manifest.json";
+    prebuilts = ["apex_icu.dat"];
+    key = "com.android.i18n.key";
+};
+
+"com.android.i18n.key" = apex_key {
+    name = "com.android.i18n.key";
+    public_key = "com.android.i18n.avbpubkey";
+    private_key = "com.android.i18n.pem";
+};
+
+"com.android.i18n.certificate" = android_app_certificate {
+    name = "com.android.i18n.certificate";
+    certificate = "com.android.i18n";
+};
+
+in { inherit "com.android.i18n" "com.android.i18n-defaults" "com.android.i18n.certificate" "com.android.i18n.key"; }

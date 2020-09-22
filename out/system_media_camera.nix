@@ -6,6 +6,8 @@ subdirs = ["tests"];
 libcamera_metadata = cc_library_shared {
     name = "libcamera_metadata";
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
     };
@@ -15,10 +17,16 @@ libcamera_metadata = cc_library_shared {
     include_dirs = ["system/media/private/camera/include"];
     local_include_dirs = ["include"];
     export_include_dirs = ["include"];
-    export_shared_lib_headers = ["libcutils"];
+
+    header_libs = [
+        "libcutils_headers"
+    ];
+
+    export_header_lib_headers = [
+        "libcutils_headers"
+    ];
 
     shared_libs = [
-        "libcutils"
         "liblog"
     ];
 

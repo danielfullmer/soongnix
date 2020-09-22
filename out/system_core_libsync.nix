@@ -14,6 +14,7 @@ libsync_defaults = cc_defaults {
 libsync = cc_library {
     name = "libsync";
     recovery_available = true;
+    native_bridge_supported = true;
     defaults = ["libsync_defaults"];
 };
 

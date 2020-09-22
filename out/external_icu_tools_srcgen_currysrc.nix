@@ -1,4 +1,4 @@
-{ java_import_host, java_library_host }:
+{ java_import_host, java_library_host, package }:
 let
 
 #  Copyright (C) 2015 The Android Open Source Project
@@ -14,6 +14,10 @@ let
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
 
 #  Host prebuilt dependencies.
 #  ============================================================
@@ -44,6 +48,9 @@ let
 
 currysrc = java_library_host {
     name = "currysrc";
+    visibility = [
+        "//external/icu/tools/srcgen"
+    ];
     static_libs = [
         "currysrc_org.eclipse"
         "guavalib"
@@ -104,4 +111,4 @@ currysrc = java_library_host {
     ];
 };
 
-in { inherit "currysrc_org.eclipse" currysrc; }
+in { inherit "currysrc_org.eclipse" _missingName currysrc; }

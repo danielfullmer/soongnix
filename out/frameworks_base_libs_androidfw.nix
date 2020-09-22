@@ -70,7 +70,6 @@ libandroidfw = cc_library {
                 "BackupData.cpp"
                 "BackupHelpers.cpp"
                 "CursorWindow.cpp"
-                "DisplayEventDispatcher.cpp"
             ];
             shared_libs = [
                 "libziparchive"
@@ -78,7 +77,6 @@ libandroidfw = cc_library {
                 "libbinder"
                 "liblog"
                 "libcutils"
-                "libgui"
                 "libutils"
                 "libz"
             ];
@@ -194,6 +192,8 @@ libandroidfw_tests = cc_test {
         "tests/data/sparse/sparse.apk"
         "tests/data/styles/styles.apk"
         "tests/data/system/system.apk"
+        "tests/data/loader/resources.arsc"
+        "tests/data/overlay/overlay.idmap"
     ];
     test_suites = ["device-tests"];
 };

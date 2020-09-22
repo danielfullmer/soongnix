@@ -1,43 +1,71 @@
-{ cc_library, cc_library_shared }:
+{ cc_library_headers, cc_library_shared }:
 let
 
 #
 #  libmediadrm
 #
 
-#  TODO: change it back to cc_library_shared when MediaPlayer2 switches to
-#  using NdkMediaDrm, instead of MediaDrm.java.
-libmediadrm = cc_library {
+libmediadrm_headers = cc_library_headers {
+    name = "libmediadrm_headers";
+
+    export_include_dirs = [
+        "interface"
+    ];
+
+};
+
+libmediadrm = cc_library_shared {
     name = "libmediadrm";
 
     srcs = [
         "DrmPluginPath.cpp"
         "DrmSessionManager.cpp"
-        "ICrypto.cpp"
-        "IDrm.cpp"
-        "IDrmClient.cpp"
-        "IMediaDrmService.cpp"
         "SharedLibrary.cpp"
         "DrmHal.cpp"
         "CryptoHal.cpp"
+        "DrmUtils.cpp"
+    ];
+
+    local_include_dirs = [
+        "include"
+        "interface"
+    ];
+
+    export_include_dirs = [
+        "include"
+    ];
+
+    header_libs = [
+        "libmedia_headers"
     ];
 
     shared_libs = [
-        "libbinder"
+        "libbinder_ndk"
         "libcutils"
         "libdl"
         "liblog"
+        "libmedia"
         "libmediadrmmetrics_lite"
-        "libmediametrics"
+        "libmediametrics#1"
         "libmediautils"
         "libstagefright_foundation"
         "libutils"
         "android.hardware.drm@1.0"
         "android.hardware.drm@1.1"
         "android.hardware.drm@1.2"
+        "android.hardware.drm@1.3"
         "libhidlallocatorutils"
         "libhidlbase"
-        "libhidltransport"
+    ];
+
+    static_libs = [
+        "resourcemanager_aidl_interface-ndk_platform"
+    ];
+
+    export_shared_lib_headers = [
+        "android.hardware.drm@1.0"
+        "android.hardware.drm@1.1"
+        "android.hardware.drm@1.2"
     ];
 
     cflags = [
@@ -55,16 +83,21 @@ libmediadrmmetrics_lite = cc_library_shared {
         "protos/metrics.proto"
     ];
 
+    local_include_dirs = [
+        "include"
+    ];
+
     proto = {
         export_proto_headers = true;
         type = "lite";
     };
+    header_libs = [
+        "libmedia_headers"
+    ];
     shared_libs = [
         "android.hardware.drm@1.0"
         "android.hardware.drm@1.1"
         "android.hardware.drm@1.2"
-        "libbinder"
-        "libhidlbase"
         "liblog"
         "libmediametrics"
         "libprotobuf-cpp-lite"
@@ -86,17 +119,22 @@ libmediadrmmetrics_full = cc_library_shared {
         "protos/metrics.proto"
     ];
 
+    local_include_dirs = [
+        "include"
+    ];
+
     proto = {
         export_proto_headers = true;
         type = "full";
     };
+    header_libs = [
+        "libmedia_headers"
+    ];
     shared_libs = [
         "android.hardware.drm@1.0"
         "android.hardware.drm@1.1"
         "android.hardware.drm@1.2"
         "libbase"
-        "libbinder"
-        "libhidlbase"
         "liblog"
         "libmediametrics"
         "libprotobuf-cpp-full"
@@ -110,4 +148,32 @@ libmediadrmmetrics_full = cc_library_shared {
     ];
 };
 
-in { inherit libmediadrm libmediadrmmetrics_full libmediadrmmetrics_lite; }
+libmediadrmmetrics_consumer = cc_library_shared {
+    name = "libmediadrmmetrics_consumer";
+    srcs = [
+        "DrmMetricsConsumer.cpp"
+    ];
+
+    include_dirs = [
+        "frameworks/av/media/libmedia/include"
+    ];
+
+    shared_libs = [
+        "android.hardware.drm@1.0"
+        "android.hardware.drm@1.1"
+        "android.hardware.drm@1.2"
+        "libbinder"
+        "libhidlbase"
+        "liblog"
+        "libmediadrm"
+        "libmediadrmmetrics_full"
+        "libutils"
+    ];
+
+    header_libs = [
+        "libmediametrics_headers"
+        "libstagefright_foundation_headers"
+    ];
+};
+
+in { inherit libmediadrm libmediadrm_headers libmediadrmmetrics_consumer libmediadrmmetrics_full libmediadrmmetrics_lite; }

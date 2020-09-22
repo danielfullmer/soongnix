@@ -25,13 +25,6 @@ CtsRoleTestApp = android_test {
         "src/android/app/role/cts/app/IsRoleHeldActivity.java"
         "src/android/app/role/cts/app/RequestRoleActivity.java"
     ];
-
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-        "mts"
-    ];
 };
 
 in { inherit CtsRoleTestApp; }

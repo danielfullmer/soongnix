@@ -24,12 +24,12 @@ libstress = cc_test_library {
     stl = "c++_static";
 };
 
-GameQualificationAllocstress = android_test_helper_app {
-    name = "GameQualificationAllocstress";
+GameCoreAllocStress = android_test_helper_app {
+    name = "GameCoreAllocStress";
     sdk_version = "26"; #  Oreo
     jni_libs = ["libstress"];
     test_suites = ["device-tests"];
     srcs = ["src/java/com/android/game/qualification/allocstress/MainActivity.java"];
 };
 
-in { inherit GameQualificationAllocstress libstress; }
+in { inherit GameCoreAllocStress libstress; }

@@ -43,28 +43,11 @@ bootanimation = cc_binary {
         "audioplay.cpp"
     ];
 
-    product_variables = {
-        product_is_iot = {
-            shared_libs = [
-                "libandroidthings"
-                "libandroidthings_protos"
-                "libchrome"
-                "libprotobuf-cpp-lite"
-            ];
-            static_libs = ["libjsoncpp"];
-            srcs = [
-                "iot/iotbootanimation_main.cpp"
-                "iot/BootAction.cpp"
-                "iot/BootParameters.cpp"
-            ];
-            exclude_srcs = [
-                "bootanimation_main.cpp"
-                "audioplay.cpp"
-            ];
-        };
-    };
-
     init_rc = ["bootanim.rc"];
+
+    cflags = [
+        "-Wno-deprecated-declarations"
+    ];
 };
 
 #  libbootanimation
@@ -82,14 +65,7 @@ libbootanimation = cc_library_shared {
         "libEGL"
         "libGLESv1_CM"
         "libgui"
-        "libtinyalsa"
     ];
-
-    product_variables = {
-        product_is_iot = {
-            init_rc = ["iot/bootanim_iot.rc"];
-        };
-    };
 };
 
 in { inherit bootanimation bootanimation_defaults libbootanimation; }

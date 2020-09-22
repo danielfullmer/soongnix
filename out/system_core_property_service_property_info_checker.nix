@@ -10,6 +10,7 @@ property_info_checker = cc_binary {
         "libpropertyinfoserializer"
         "libpropertyinfoparser"
         "libbase"
+        "liblog"
         "libsepol"
     ];
     srcs = ["property_info_checker.cpp"];

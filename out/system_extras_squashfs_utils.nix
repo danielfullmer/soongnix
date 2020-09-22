@@ -33,6 +33,10 @@ libsquashfs_utils = cc_library {
 "mksquashfsimage.sh" = sh_binary_host {
     name = "mksquashfsimage.sh";
     src = "mksquashfsimage.sh";
+    required = [
+        "img2simg"
+        "mksquashfs"
+    ];
 };
 
 in { inherit "mksquashfsimage.sh" libsquashfs_utils; }

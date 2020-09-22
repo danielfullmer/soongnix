@@ -40,13 +40,13 @@ colorspace_test = cc_test {
 GraphicBufferAllocator_test = cc_test {
     name = "GraphicBufferAllocator_test";
     header_libs = [
-        "libdvr_headers"
         "libnativewindow_headers"
     ];
     static_libs = [
         "libgmock"
     ];
     shared_libs = [
+        "libhidlbase"
         "liblog"
         "libui"
     ];
@@ -63,14 +63,11 @@ GraphicBufferAllocator_test = cc_test {
 GraphicBuffer_test = cc_test {
     name = "GraphicBuffer_test";
     header_libs = [
-        "libdvr_headers"
         "libnativewindow_headers"
     ];
     shared_libs = [
-        "android.frameworks.bufferhub@1.0"
         "libcutils"
         "libhidlbase"
-        "libhwbinder"
         "libui"
         "libutils"
     ];
@@ -81,37 +78,26 @@ GraphicBuffer_test = cc_test {
     ];
 };
 
-BufferHub_test = cc_test {
-    name = "BufferHub_test";
-    header_libs = [
-        "libdvr_headers"
-        "libnativewindow_headers"
-    ];
-    static_libs = [
-        "libgmock"
-    ];
-    shared_libs = [
-        "android.frameworks.bufferhub@1.0"
-        "libcutils"
-        "libhidlbase"
-        "libhwbinder"
-        "liblog"
-        "libui"
-        "libutils"
-    ];
-    srcs = [
-        "BufferHubBuffer_test.cpp"
-        "BufferHubEventFd_test.cpp"
-        "BufferHubMetadata_test.cpp"
-    ];
+#  This test has a main method, and requires a separate binary to be built.
+GraphicBufferOverBinder_test = cc_test {
+    name = "GraphicBufferOverBinder_test";
+    srcs = ["GraphicBufferOverBinder_test.cpp"];
     cflags = [
         "-Wall"
         "-Werror"
+    ];
+    shared_libs = [
+        "libbinder"
+        "libgui"
+        "liblog"
+        "libui"
+        "libutils"
     ];
 };
 
 Size_test = cc_test {
     name = "Size_test";
+    test_suites = ["device-tests"];
     shared_libs = ["libui"];
     srcs = ["Size_test.cpp"];
     cflags = [
@@ -120,4 +106,4 @@ Size_test = cc_test {
     ];
 };
 
-in { inherit BufferHub_test GraphicBufferAllocator_test GraphicBuffer_test Region_test Size_test colorspace_test; }
+in { inherit GraphicBufferAllocator_test GraphicBufferOverBinder_test GraphicBuffer_test Region_test Size_test colorspace_test; }

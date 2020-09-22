@@ -44,14 +44,23 @@ uiautomator-stubs-docs = droiddoc {
         "android.test.runner"
         "junit"
         "android.test.base"
+        "unsupportedappusage"
     ];
     custom_template = "droiddoc-templates-sdk";
     installable = false;
     args = "-stubpackages com.android.uiautomator.core:" +
         "com.android.uiautomator.testrunner";
-    api_tag_name = "UIAUTOMATOR";
-    api_filename = "uiautomator_api.txt";
-    removed_api_filename = "uiautomator_removed_api.txt";
+
+    check_api = {
+        current = {
+            api_file = ":uiautomator-current-api";
+            removed_api_file = ":uiautomator-removed-api";
+        };
+        last_released = {
+            api_file = ":uiautomator-last-released-api";
+            removed_api_file = ":uiautomator-removed-api";
+        };
+    };
 };
 
 android_uiautomator = java_library_static {
@@ -99,4 +108,24 @@ android_uiautomator = java_library_static {
     ];
 };
 
-in { inherit "uiautomator.core" android_uiautomator uiautomator-stubs-docs; }
+"uiautomator.library" = java_library_static {
+    name = "uiautomator.library";
+    srcs = [
+        "core-src/com/android/uiautomator/core/AccessibilityNodeInfoDumper.java"
+        "core-src/com/android/uiautomator/core/AccessibilityNodeInfoHelper.java"
+        "core-src/com/android/uiautomator/core/Configurator.java"
+        "core-src/com/android/uiautomator/core/InteractionController.java"
+        "core-src/com/android/uiautomator/core/QueryController.java"
+        "core-src/com/android/uiautomator/core/Tracer.java"
+        "core-src/com/android/uiautomator/core/UiAutomatorBridge.java"
+        "core-src/com/android/uiautomator/core/UiCollection.java"
+        "core-src/com/android/uiautomator/core/UiDevice.java"
+        "core-src/com/android/uiautomator/core/UiObject.java"
+        "core-src/com/android/uiautomator/core/UiObjectNotFoundException.java"
+        "core-src/com/android/uiautomator/core/UiScrollable.java"
+        "core-src/com/android/uiautomator/core/UiSelector.java"
+        "core-src/com/android/uiautomator/core/UiWatcher.java"
+    ];
+};
+
+in { inherit "uiautomator.core" "uiautomator.library" android_uiautomator uiautomator-stubs-docs; }

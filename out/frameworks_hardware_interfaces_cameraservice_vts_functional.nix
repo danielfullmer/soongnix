@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_test, vts_config }:
 let
 
 #
@@ -26,6 +26,7 @@ VtsHalCameraServiceV2_0TargetTest = cc_test {
         "android.hardware.camera.common@1.0-helper"
         "android.frameworks.cameraservice.device@2.0"
         "android.frameworks.cameraservice.service@2.0"
+        "android.frameworks.cameraservice.service@2.1"
         "android.frameworks.cameraservice.common@2.0"
         "libfmq"
     ];
@@ -41,6 +42,12 @@ VtsHalCameraServiceV2_0TargetTest = cc_test {
         #        (http://b/123320603). This is needed for libmediandk's llndk only api.
         "-D__ANDROID_VNDK__"
     ];
+    auto_gen_config = true;
+    test_suites = ["vts"];
 };
 
-in { inherit VtsHalCameraServiceV2_0TargetTest; }
+VtsHalCameraServiceV2_0Target = vts_config {
+    name = "VtsHalCameraServiceV2_0Target";
+};
+
+in { inherit VtsHalCameraServiceV2_0Target VtsHalCameraServiceV2_0TargetTest; }

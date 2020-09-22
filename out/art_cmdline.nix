@@ -22,6 +22,11 @@ art_cmdlineparser_headers = cc_library_headers {
     name = "art_cmdlineparser_headers";
     host_supported = true;
     export_include_dirs = ["."];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 art_cmdline_tests = art_cc_test {

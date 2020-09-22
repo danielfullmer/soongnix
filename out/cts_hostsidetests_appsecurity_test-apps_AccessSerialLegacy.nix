@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsAccessSerialLegacy = android_test {
+CtsAccessSerialLegacy = android_test_helper_app {
     name = "CtsAccessSerialLegacy";
     defaults = ["cts_support_defaults"];
     static_libs = ["androidx.test.rules"];
@@ -26,7 +26,7 @@ CtsAccessSerialLegacy = android_test {
     min_sdk_version = "27";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     optimize = {

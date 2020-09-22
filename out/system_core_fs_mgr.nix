@@ -29,15 +29,16 @@ fs_mgr_defaults = cc_defaults {
     ];
 };
 
-libfs_mgr = cc_library {
-    #  Do not ever allow this library to be vendor_available as a shared library.
-    #  It does not have a stable interface.
-    name = "libfs_mgr";
+libfs_mgr_defaults = cc_defaults {
+    name = "libfs_mgr_defaults";
     defaults = ["fs_mgr_defaults"];
-    recovery_available = true;
     export_include_dirs = ["include"];
     include_dirs = ["system/vold"];
+    cflags = [
+        "-D_FILE_OFFSET_BITS=64"
+    ];
     srcs = [
+        "file_wait.cpp"
         "fs_mgr.cpp"
         "fs_mgr_format.cpp"
         "fs_mgr_verity.cpp"
@@ -45,6 +46,7 @@ libfs_mgr = cc_library {
         "fs_mgr_overlayfs.cpp"
         "fs_mgr_roots.cpp"
         "fs_mgr_vendor_overlay.cpp"
+        ":libfiemap_srcs"
     ];
     shared_libs = [
         "libbase"
@@ -75,6 +77,8 @@ libfs_mgr = cc_library {
     whole_static_libs = [
         "liblogwrap"
         "libdm"
+        "libext2_uuid"
+        "libfscrypt"
         "libfstab"
     ];
     cppflags = [
@@ -88,6 +92,47 @@ libfs_mgr = cc_library {
             ];
         };
     };
+    header_libs = [
+        "libfiemap_headers"
+        "libstorage_literals_headers"
+    ];
+    export_header_lib_headers = [
+        "libfiemap_headers"
+    ];
+    required = [
+        "e2freefrag"
+        "e2fsdroid"
+    ];
+};
+
+#  Two variants of libfs_mgr are provided: libfs_mgr and libfs_mgr_binder.
+#  Use libfs_mgr in recovery, first-stage-init, or when libfiemap or overlayfs
+#  is not used.
+#
+#  Use libfs_mgr_binder when not in recovery/first-stage init, or when overlayfs
+#  or libfiemap is needed. In this case, libfiemap will proxy over binder to
+#  gsid.
+libfs_mgr = cc_library {
+    #  Do not ever allow this library to be vendor_available as a shared library.
+    #  It does not have a stable interface.
+    name = "libfs_mgr";
+    recovery_available = true;
+    defaults = [
+        "libfs_mgr_defaults"
+    ];
+    srcs = [
+        ":libfiemap_passthrough_srcs"
+    ];
+};
+
+libfs_mgr_binder = cc_library {
+    #  Do not ever allow this library to be vendor_available as a shared library.
+    #  It does not have a stable interface.
+    name = "libfs_mgr_binder";
+    defaults = [
+        "libfs_mgr_defaults"
+        "libfiemap_binder_defaults"
+    ];
 };
 
 libfstab = cc_library_static {
@@ -107,6 +152,14 @@ libfstab = cc_library_static {
         darwin = {
             enabled = false;
         };
+        vendor = {
+            cflags = [
+                #  Skipping entries in fstab should only be done in a system
+                #  process as the config file is in /system_ext.
+                #  Remove the op from the vendor variant.
+                "-DNO_SKIP_MOUNT"
+            ];
+        };
     };
     export_include_dirs = ["include_fstab"];
     header_libs = [
@@ -120,13 +173,21 @@ remount = cc_binary {
     defaults = ["fs_mgr_defaults"];
     static_libs = [
         "libavb_user"
+        "libutils"
+        "libvold_binder"
     ];
     shared_libs = [
         "libbootloader_message"
         "libbase"
+        "libbinder"
+        "libcutils"
         "libcrypto"
+        "libext4_utils"
         "libfec"
-        "libfs_mgr"
+        "libfs_mgr_binder"
+        "liblog"
+        "liblp"
+        "libselinux"
     ];
     header_libs = [
         "libcutils_headers"
@@ -145,6 +206,28 @@ remount = cc_binary {
             ];
         };
     };
+    required = [
+        "clean_scratch_files"
+    ];
 };
 
-in { inherit fs_mgr_defaults libfs_mgr libfstab remount; }
+clean_scratch_files = cc_binary {
+    name = "clean_scratch_files";
+    defaults = ["fs_mgr_defaults"];
+    shared_libs = [
+        "libbase"
+        "libfs_mgr_binder"
+    ];
+    srcs = [
+        "clean_scratch_files.cpp"
+    ];
+    product_variables = {
+        debuggable = {
+            init_rc = [
+                "clean_scratch_files.rc"
+            ];
+        };
+    };
+};
+
+in { inherit clean_scratch_files fs_mgr_defaults libfs_mgr libfs_mgr_binder libfs_mgr_defaults libfstab remount; }

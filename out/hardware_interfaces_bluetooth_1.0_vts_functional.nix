@@ -25,7 +25,11 @@ VtsHalBluetoothV1_0TargetTest = cc_test {
         "android.hardware.bluetooth@1.0"
         "libbluetooth-types"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    disable_framework = true;
 };
 
 in { inherit VtsHalBluetoothV1_0TargetTest; }

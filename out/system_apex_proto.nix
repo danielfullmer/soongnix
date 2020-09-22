@@ -1,4 +1,4 @@
-{ cc_library_static, python_library_host }:
+{ cc_library_static, java_library_static, python_library_host }:
 let
 
 /*
@@ -27,6 +27,17 @@ lib_apex_manifest_proto = cc_library_static {
     srcs = ["apex_manifest.proto"];
 };
 
+lib_apex_manifest_proto_lite = cc_library_static {
+    name = "lib_apex_manifest_proto_lite";
+    host_supported = true;
+    recovery_available = true;
+    proto = {
+        export_proto_headers = true;
+        type = "lite";
+    };
+    srcs = ["apex_manifest.proto"];
+};
+
 apex_manifest_proto = python_library_host {
     name = "apex_manifest_proto";
     version = {
@@ -45,6 +56,34 @@ apex_manifest_proto = python_library_host {
     };
 };
 
+apex_build_info_proto = python_library_host {
+    name = "apex_build_info_proto";
+    version = {
+        py2 = {
+            enabled = true;
+        };
+        py3 = {
+            enabled = true;
+        };
+    };
+    srcs = [
+        "apex_build_info.proto"
+    ];
+    proto = {
+        canonical_path_from_root = false;
+    };
+};
+
+apex_manifest_proto_java = java_library_static {
+    name = "apex_manifest_proto_java";
+    host_supported = true;
+    device_supported = false;
+    proto = {
+        type = "full";
+    };
+    srcs = ["apex_manifest.proto"];
+};
+
 lib_apex_session_state_proto = cc_library_static {
     name = "lib_apex_session_state_proto";
     host_supported = true;
@@ -55,4 +94,4 @@ lib_apex_session_state_proto = cc_library_static {
     srcs = ["session_state.proto"];
 };
 
-in { inherit apex_manifest_proto lib_apex_manifest_proto lib_apex_session_state_proto; }
+in { inherit apex_build_info_proto apex_manifest_proto apex_manifest_proto_java lib_apex_manifest_proto lib_apex_manifest_proto_lite lib_apex_session_state_proto; }

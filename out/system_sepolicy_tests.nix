@@ -17,7 +17,6 @@ libsepolwrap = cc_library_host_shared {
         "libbase"
         "libsepol"
     ];
-    stl = "libc++_static";
     sanitize = {
         never = true;
     };
@@ -39,7 +38,7 @@ py2_only = python_defaults {
 treble_sepolicy_tests = python_binary_host {
     name = "treble_sepolicy_tests";
     srcs = [
-        "FcSort.py"
+        "fc_sort.py"
         "mini_parser.py"
         "policy.py"
         "treble_sepolicy_tests.py"
@@ -51,7 +50,7 @@ treble_sepolicy_tests = python_binary_host {
 sepolicy_tests = python_binary_host {
     name = "sepolicy_tests";
     srcs = [
-        "FcSort.py"
+        "fc_sort.py"
         "policy.py"
         "sepolicy_tests.py"
     ];
@@ -62,7 +61,7 @@ sepolicy_tests = python_binary_host {
 searchpolicy = python_binary_host {
     name = "searchpolicy";
     srcs = [
-        "FcSort.py"
+        "fc_sort.py"
         "policy.py"
         "searchpolicy.py"
     ];
@@ -79,4 +78,12 @@ combine_maps = python_binary_host {
     defaults = ["py2_only"];
 };
 
-in { inherit combine_maps libsepolwrap py2_only searchpolicy sepolicy_tests treble_sepolicy_tests; }
+fc_sort = python_binary_host {
+    name = "fc_sort";
+    srcs = [
+        "fc_sort.py"
+    ];
+    defaults = ["py2_only"];
+};
+
+in { inherit combine_maps fc_sort libsepolwrap py2_only searchpolicy sepolicy_tests treble_sepolicy_tests; }

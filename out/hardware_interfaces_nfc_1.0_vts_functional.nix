@@ -24,7 +24,10 @@ VtsHalNfcV1_0TargetTest = cc_test {
     static_libs = [
         "android.hardware.nfc@1.0"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalNfcV1_0TargetTest; }

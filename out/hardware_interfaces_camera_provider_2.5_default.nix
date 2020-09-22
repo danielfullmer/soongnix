@@ -27,7 +27,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
@@ -56,6 +55,8 @@ let
         "android.hardware.camera.provider@2.4-external"
         "android.hardware.camera.provider@2.5"
         "android.hardware.graphics.mapper@2.0"
+        "android.hardware.graphics.mapper@3.0"
+        "android.hardware.graphics.mapper@4.0"
         "android.hidl.allocator@1.0"
         "android.hidl.memory@1.0"
         "camera.device@3.3-impl"
@@ -67,7 +68,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libtinyxml2"
         "libutils"
@@ -78,6 +78,7 @@ let
     header_libs = [
         "camera.device@3.4-external-impl_headers"
         "camera.device@3.5-external-impl_headers"
+        "camera.device@3.6-external-impl_headers"
     ];
     export_include_dirs = ["."];
 };
@@ -106,7 +107,6 @@ camera_service_2_5_defaults = cc_defaults {
         "libcamera_metadata"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
@@ -171,9 +171,11 @@ camera_service_2_5_defaults = cc_defaults {
         "android.hardware.camera.provider@2.5"
         "android.hardware.camera.provider@2.5-external"
         "android.hardware.graphics.mapper@2.0"
+        "android.hardware.graphics.mapper@3.0"
+        "android.hardware.graphics.mapper@4.0"
         "libbinder"
+        "libcamera_metadata"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libtinyxml2"
         "libutils"
@@ -186,6 +188,7 @@ camera_service_2_5_defaults = cc_defaults {
         "camera.device@3.4-impl_headers"
         "camera.device@3.5-external-impl_headers"
         "camera.device@3.5-impl_headers"
+        "camera.device@3.6-external-impl_headers"
     ];
 };
 

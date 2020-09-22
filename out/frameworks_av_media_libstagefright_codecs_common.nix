@@ -4,6 +4,7 @@ let
 libstagefright_enc_common = cc_library {
     name = "libstagefright_enc_common";
     vendor_available = true;
+    min_sdk_version = "29";
 
     srcs = ["cmnMemory.c"];
 

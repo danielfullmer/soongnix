@@ -6,6 +6,7 @@ libprocessgroup_headers = cc_library_headers {
     vendor_available = true;
     recovery_available = true;
     host_supported = true;
+    native_bridge_supported = true;
     export_include_dirs = ["include"];
     target = {
         linux_bionic = {
@@ -15,6 +16,11 @@ libprocessgroup_headers = cc_library_headers {
             enabled = true;
         };
     };
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "29";
 };
 
 libprocessgroup = cc_library {
@@ -26,6 +32,7 @@ libprocessgroup = cc_library {
     ];
     name = "libprocessgroup";
     host_supported = true;
+    native_bridge_supported = true;
     recovery_available = true;
     vendor_available = true;
     vndk = {
@@ -53,6 +60,11 @@ libprocessgroup = cc_library {
         "-Werror"
         "-Wexit-time-destructors"
     ];
+    apex_available = [
+        "//apex_available:platform"
+        "//apex_available:anyapex"
+    ];
+    min_sdk_version = "29";
 };
 
 in { inherit libprocessgroup libprocessgroup_headers; }

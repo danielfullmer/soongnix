@@ -12,6 +12,7 @@ libopenslestests = cc_test {
     cflags = [
         "-Werror"
         "-Wall"
+        "-Wno-deprecated-declarations"
     ];
 };
 

@@ -7,7 +7,9 @@ let
 libdl_static = cc_library_static {
     name = "libdl_static";
     defaults = ["linux_bionic_supported"];
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
 
     srcs = [
         "libdl.cpp"
@@ -34,7 +36,9 @@ libdl_static = cc_library_static {
 
 libdl = cc_library {
     name = "libdl";
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
     static_ndk_lib = true;
 
     defaults = ["linux_bionic_supported"];
@@ -110,15 +114,25 @@ libdl = cc_library {
 
     stubs = {
         symbol_file = "libdl.map.txt";
-        versions = ["10000"];
+        versions = [
+            "29"
+            "10000"
+        ];
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.runtime"
+    ];
 };
 
 libdl_android = cc_library {
     name = "libdl_android";
 
     defaults = ["linux_bionic_supported"];
+    ramdisk_available = true;
     recovery_available = true;
+    native_bridge_supported = true;
 
     #  NOTE: --exclude-libs=libgcc.a makes sure that any symbols libdl.so pulls from
     #  libgcc.a are made static to libdl.so.  This in turn ensures that libraries that
@@ -180,6 +194,11 @@ libdl_android = cc_library {
         symbol_file = "libdl_android.map.txt";
         versions = ["10000"];
     };
+
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.runtime"
+    ];
 };
 
 "libdl.arm.map" = genrule {

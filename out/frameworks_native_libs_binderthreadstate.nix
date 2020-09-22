@@ -1,4 +1,4 @@
-{ cc_library }:
+{ aidl_interface, cc_library_static, cc_test, hidl_package_root }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -15,37 +15,58 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-libbinderthreadstate = cc_library {
-    name = "libbinderthreadstate";
-    recovery_available = true;
-    vendor_available = false;
-    vndk = {
-        enabled = true;
-        support_system_process = true;
-    };
-    srcs = [
-        "IPCThreadStateBase.cpp"
-    ];
-
-    header_libs = [
-        "libbase_headers"
-        "libutils_headers"
-    ];
+#  DO NOT ADD NEW USAGES OF THIS
+#  See comments in header file.
+libbinderthreadstateutils = cc_library_static {
+    name = "libbinderthreadstateutils";
+    double_loadable = true;
+    vendor_available = true;
+    host_supported = true;
 
     shared_libs = [
-        "liblog"
+        "libbinder"
+        "libhidlbase" #  libhwbinder is in here
     ];
 
     export_include_dirs = ["include"];
-
-    sanitize = {
-        misc_undefined = ["integer"];
-    };
 
     cflags = [
         "-Wall"
         "-Werror"
     ];
+    min_sdk_version = "29";
 };
 
-in { inherit libbinderthreadstate; }
+binderthreadstateutilstest = hidl_package_root {
+    name = "binderthreadstateutilstest";
+};
+
+"binderthreadstateutilstest.aidl" = aidl_interface {
+    name = "binderthreadstateutilstest.aidl";
+    unstable = true;
+    srcs = ["IAidlStuff.aidl"];
+};
+
+libbinderthreadstateutils_test = cc_test {
+    name = "libbinderthreadstateutils_test";
+    srcs = ["test.cpp"];
+    static_libs = [
+        "binderthreadstateutilstest@1.0"
+        "binderthreadstateutilstest.aidl-cpp"
+        "libbinderthreadstateutils"
+    ];
+    shared_libs = [
+        "libbase"
+        "libbinder"
+        "libcutils"
+        "libhidlbase"
+        "libutils"
+        "liblog"
+    ];
+    test_suites = [
+        "general-tests"
+    ];
+    require_root = true;
+};
+
+in { inherit "binderthreadstateutilstest.aidl" binderthreadstateutilstest libbinderthreadstateutils libbinderthreadstateutils_test; }

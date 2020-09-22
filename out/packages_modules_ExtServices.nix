@@ -20,65 +20,66 @@ ExtServices-core = android_library {
     srcs = [
         "src/android/ext/services/Version.java"
         "src/android/ext/services/autofill/AutofillFieldClassificationServiceImpl.java"
+        "src/android/ext/services/autofill/CreditCardMatcher.java"
         "src/android/ext/services/autofill/EditDistanceScorer.java"
         "src/android/ext/services/autofill/ExactMatch.java"
+        "src/android/ext/services/autofill/InlineSuggestionRenderServiceImpl.java"
         "src/android/ext/services/notification/AgingHelper.java"
         "src/android/ext/services/notification/Assistant.java"
         "src/android/ext/services/notification/AssistantSettings.java"
         "src/android/ext/services/notification/ChannelImpressions.java"
-        "src/android/ext/services/notification/CopyCodeActivity.java"
         "src/android/ext/services/notification/EntityTypeCounter.java"
         "src/android/ext/services/notification/NotificationCategorizer.java"
         "src/android/ext/services/notification/NotificationEntry.java"
-        "src/android/ext/services/notification/SmartActionsHelper.java"
         "src/android/ext/services/notification/SmsHelper.java"
         "src/android/ext/services/resolver/LRResolverRankerService.java"
-        "src/android/ext/services/sms/FinancialSmsServiceImpl.java"
         "src/android/ext/services/storage/CacheQuotaServiceImpl.java"
         "src/android/ext/services/watchdog/ExplicitHealthCheckServiceImpl.java"
         "src/android/ext/services/watchdog/ExplicitHealthChecker.java"
         "src/android/ext/services/watchdog/NetworkChecker.java"
     ];
+    sdk_version = "system_current";
     resource_dirs = [
         "res"
     ];
 
     manifest = "AndroidManifest.xml";
 
+    static_libs = [
+        "androidx.annotation_annotation"
+        "androidx.autofill_autofill"
+        "TextClassifierServiceLibNoManifest"
+        "TextClassifierNotificationLibNoManifest"
+    ];
+
     plugins = ["java_api_finder"];
 };
 
 ExtServices = android_app {
     name = "ExtServices";
-    srcs = [
-        "src/android/ext/services/Version.java"
-        "src/android/ext/services/autofill/AutofillFieldClassificationServiceImpl.java"
-        "src/android/ext/services/autofill/EditDistanceScorer.java"
-        "src/android/ext/services/autofill/ExactMatch.java"
-        "src/android/ext/services/notification/AgingHelper.java"
-        "src/android/ext/services/notification/Assistant.java"
-        "src/android/ext/services/notification/AssistantSettings.java"
-        "src/android/ext/services/notification/ChannelImpressions.java"
-        "src/android/ext/services/notification/CopyCodeActivity.java"
-        "src/android/ext/services/notification/EntityTypeCounter.java"
-        "src/android/ext/services/notification/NotificationCategorizer.java"
-        "src/android/ext/services/notification/NotificationEntry.java"
-        "src/android/ext/services/notification/SmartActionsHelper.java"
-        "src/android/ext/services/notification/SmsHelper.java"
-        "src/android/ext/services/resolver/LRResolverRankerService.java"
-        "src/android/ext/services/sms/FinancialSmsServiceImpl.java"
-        "src/android/ext/services/storage/CacheQuotaServiceImpl.java"
-        "src/android/ext/services/watchdog/ExplicitHealthCheckServiceImpl.java"
-        "src/android/ext/services/watchdog/ExplicitHealthChecker.java"
-        "src/android/ext/services/watchdog/NetworkChecker.java"
-    ];
-    platform_apis = true;
+    sdk_version = "system_current";
     certificate = "platform";
     optimize = {
         proguard_flags_files = ["proguard.proguard"];
     };
     privileged = true;
-    min_sdk_version = "28";
+    static_libs = [
+        "ExtServices-core"
+    ];
+    jni_libs = ["libtextclassifier"];
+    use_embedded_native_libs = true;
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.extservices"
+        "test_com.android.extservices"
+    ];
+    min_sdk_version = "current";
+    required = [
+        "libtextclassifier_annotator_en_model"
+        "libtextclassifier_annotator_universal_model"
+        "libtextclassifier_actions_suggestions_universal_model"
+        "libtextclassifier_lang_id_model"
+    ];
 };
 
 in { inherit ExtServices ExtServices-core; }

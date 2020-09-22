@@ -25,12 +25,9 @@ car-setup-wizard-lib-utils = android_library {
         "src/com/android/car/setupwizardlib/InitialLockSetupHelper.java"
         "src/com/android/car/setupwizardlib/LockConfig.java"
         "src/com/android/car/setupwizardlib/IInitialLockSetupService.aidl"
-        "src/com/android/car/setupwizardlib/InitialLockListener.java"
-        "src/com/android/car/setupwizardlib/InitialLockSetupClient.java"
-        "src/com/android/car/setupwizardlib/InitialLockSetupConstants.java"
-        "src/com/android/car/setupwizardlib/InitialLockSetupHelper.java"
+        "src/com/android/car/setupwizardlib/LockConfig.aidl"
     ];
-    libs = ["android.car"];
+    libs = ["android.car-system-stubs"];
     optimize = {
         enabled = false;
     };

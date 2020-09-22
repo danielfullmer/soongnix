@@ -94,6 +94,7 @@ jemalloc5_defaults = cc_defaults {
     name = "jemalloc5_defaults";
     defaults = ["linux_bionic_supported"];
     host_supported = true;
+    native_bridge_supported = true;
     cflags = common_cflags;
 
     target = {
@@ -148,11 +149,14 @@ lib_src_files = [
 # -----------------------------------------------------------------------
 libjemalloc5 = cc_library {
     name = "libjemalloc5";
+    ramdisk_available = true;
     recovery_available = true;
 
     defaults = ["jemalloc5_defaults"];
 
     srcs = lib_src_files;
+
+    export_include_dirs = ["include"];
 
     target = {
         android = {

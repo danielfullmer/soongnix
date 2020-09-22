@@ -33,12 +33,6 @@ libctssecurity_jni = cc_library {
         "cpufeatures"
         "libcutils"
     ];
-    cflags = [
-        "-Wno-unused-parameter"
-        "-Wno-sign-compare"
-        "-Wno-unused-label"
-        "-Wno-unused-variable"
-    ];
 };
 
 libcve_2019_2213_jni = cc_library {

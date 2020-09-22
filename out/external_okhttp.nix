@@ -1,4 +1,4 @@
-{ filegroup, java_library, java_library_static }:
+{ filegroup, java_library, package }:
 let
 
 #
@@ -17,9 +17,14 @@ let
 #  limitations under the License.
 #
 
+_missingName = package {
+    default_visibility = ["//visibility:private"];
+};
+
 #  The source files that contribute to Android's core library APIs.
 okhttp_api_files = filegroup {
     name = "okhttp_api_files";
+    visibility = ["//libcore"];
     #  Use the repackaged version of android as that is what is used by Android core library
     #  APIs.
     srcs = [
@@ -30,9 +35,15 @@ okhttp_api_files = filegroup {
     ];
 };
 
+nojarjar_visibility = [
+    "//art/build/sdk"
+    "//cts/tests/libcore/okhttp"
+];
+
 #  non-jarjar'd version of okhttp to compile the tests against
 okhttp-nojarjar = java_library {
     name = "okhttp-nojarjar";
+    visibility = nojarjar_visibility;
     srcs = [
         "android/src/main/java/com/android/okhttp/internalandroidapi/AndroidResponseCacheAdapter.java"
         "android/src/main/java/com/android/okhttp/internalandroidapi/Dns.java"
@@ -167,18 +178,21 @@ okhttp-nojarjar = java_library {
 
     hostdex = true;
 
-    no_standard_libs = true;
-    libs = [
-        "core-all"
-        #  TODO(b/129126571): Depend on Conscrypt stubs instead
-        "conscrypt"
-    ];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
+    libs = [
+        "conscrypt.module.intra.core.api.stubs"
+    ];
     java_version = "1.7";
 };
 
 okhttp = java_library {
     name = "okhttp";
+    visibility = [
+        "//art/build/apex"
+        "//external/robolectric-shadows"
+        "//libcore"
+    ];
     srcs = [
         #  Although some of the classes in the android/ directory are already in the correct
         #  package and do not need to be moved to another package they are transformed as they
@@ -315,14 +329,16 @@ okhttp = java_library {
     hostdex = true;
     installable = true;
 
-    no_standard_libs = true;
-    libs = [
-        "core-all"
-        #  TODO(b/129126571): Depend on Conscrypt stubs instead
-        "conscrypt"
-    ];
+    sdk_version = "none";
     system_modules = "core-all-system-modules";
+    libs = [
+        "conscrypt.module.intra.core.api.stubs"
+    ];
     java_version = "1.7";
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 #  A guaranteed unstripped version of okhttp.
@@ -330,25 +346,27 @@ okhttp = java_library {
 #  not be stripped. See b/24535627.
 okhttp-testdex = java_library {
     name = "okhttp-testdex";
+    visibility = [
+        "//art:__subpackages__"
+    ];
     static_libs = ["okhttp"];
 
     installable = true;
 
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
     libs = [
-        "core-all"
-        #  TODO(b/129126571): Depend on Conscrypt stubs instead
-        "conscrypt"
+        "conscrypt.module.intra.core.api.stubs"
     ];
     dex_preopt = {
         enabled = false;
     };
-    system_modules = "core-all-system-modules";
     java_version = "1.7";
 };
 
-okhttp-tests-nojarjar = java_library_static {
+okhttp-tests-nojarjar = java_library {
     name = "okhttp-tests-nojarjar";
+    visibility = nojarjar_visibility;
     srcs = [
 
         "okhttp-android-support/src/test/java/com/squareup/okhttp/AbstractResponseCache.java"
@@ -477,17 +495,16 @@ okhttp-tests-nojarjar = java_library_static {
     #  Exclude test Android currently has problems with due to @Parameterized (requires JUnit 4.11).
     exclude_srcs = ["okhttp-tests/src/test/java/com/squareup/okhttp/WebPlatformUrlTest.java"];
 
-    no_standard_libs = true;
+    sdk_version = "none";
+    system_modules = "core-all-system-modules";
     libs = [
-        "core-all"
         "okhttp-nojarjar"
         "junit"
-        "conscrypt"
+        "conscrypt.module.intra.core.api.stubs"
         "bouncycastle-unbundled"
     ];
-    system_modules = "core-all-system-modules";
 
     java_version = "1.7";
 };
 
-in { inherit okhttp okhttp-nojarjar okhttp-testdex okhttp-tests-nojarjar okhttp_api_files; }
+in { inherit _missingName okhttp okhttp-nojarjar okhttp-testdex okhttp-tests-nojarjar okhttp_api_files; }

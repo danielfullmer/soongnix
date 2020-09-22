@@ -17,8 +17,7 @@ hidl_test_java_native = cc_test {
         "libbase"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
+        "libhidlmemory"
         "liblog"
         "libutils"
     ];
@@ -27,7 +26,9 @@ hidl_test_java_native = cc_test {
         "android.hardware.tests.baz@1.0"
         "android.hardware.tests.expression@1.0"
         "android.hardware.tests.inheritance@1.0"
+        "android.hardware.tests.memory@2.0"
         "android.hardware.tests.safeunion@1.0"
+        "android.hidl.allocator@1.0"
     ];
 
     #  impls should never be static, these are used only for testing purposes
@@ -50,6 +51,7 @@ hidl_test_java_java = java_test {
         "android.hardware.tests.baz-V1.0-java"
         "android.hardware.tests.expression-V1.0-java"
         "android.hardware.tests.inheritance-V1.0-java"
+        "android.hardware.tests.memory-V2.0-java"
         "android.hardware.tests.safeunion-V1.0-java"
     ];
 };

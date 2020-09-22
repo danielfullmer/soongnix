@@ -22,12 +22,23 @@ let
 androidmk = blueprint_go_binary {
     name = "androidmk";
     srcs = [
-        "cmd/androidmk/android.go"
-        "cmd/androidmk/androidmk.go"
-        "cmd/androidmk/values.go"
+        "cmd/androidmk.go"
+    ];
+    deps = [
+        "androidmk-lib"
+    ];
+};
+
+androidmk-lib = bootstrap_go_package {
+    name = "androidmk-lib";
+    pkgPath = "android/soong/androidmk/androidmk";
+    srcs = [
+        "androidmk/android.go"
+        "androidmk/androidmk.go"
+        "androidmk/values.go"
     ];
     testSrcs = [
-        "cmd/androidmk/androidmk_test.go"
+        "androidmk/androidmk_test.go"
     ];
     deps = [
         "androidmk-parser"
@@ -51,4 +62,4 @@ androidmk-parser = bootstrap_go_package {
     ];
 };
 
-in { inherit androidmk androidmk-parser; }
+in { inherit androidmk androidmk-lib androidmk-parser; }

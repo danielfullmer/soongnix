@@ -1,4 +1,4 @@
-{ cc_test }:
+{ cc_defaults, cc_test }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -21,16 +21,76 @@ SurfaceFlinger_test = cc_test {
     test_suites = ["device-tests"];
     srcs = [
         "BufferGenerator.cpp"
+        "CommonTypes_test.cpp"
         "Credentials_test.cpp"
+        "DereferenceSurfaceControl_test.cpp"
+        "DisplayConfigs_test.cpp"
+        "EffectLayer_test.cpp"
         "InvalidHandles_test.cpp"
+        "LayerCallback_test.cpp"
+        "LayerRenderTypeTransaction_test.cpp"
+        "LayerTransaction_test.cpp"
+        "LayerTypeAndRenderTypeTransaction_test.cpp"
+        "LayerTypeTransaction_test.cpp"
+        "LayerUpdate_test.cpp"
+        "MirrorLayer_test.cpp"
+        "MultiDisplayLayerBounds_test.cpp"
+        "RelativeZ_test.cpp"
+        "SetFrameRate_test.cpp"
+        "SetGeometry_test.cpp"
         "Stress_test.cpp"
         "SurfaceInterceptor_test.cpp"
-        "Transaction_test.cpp"
         "VirtualDisplay_test.cpp"
     ];
     data = ["SurfaceFlinger_test.filter"];
     static_libs = [
         "libtrace_proto"
+    ];
+    shared_libs = [
+        "android.hardware.graphics.common-ndk_platform"
+        "android.hardware.graphics.common@1.2"
+        "android.hardware.graphics.composer@2.1"
+        "libandroid"
+        "libbinder"
+        "libcutils"
+        "libEGL"
+        "libGLESv2"
+        "libgui"
+        "liblayers_proto"
+        "liblog"
+        "libnativewindow"
+        "libprotobuf-cpp-full"
+        "libui"
+        "libutils"
+    ];
+    header_libs = [
+        "libnativewindow_headers"
+    ];
+};
+
+ipc_defaults = cc_defaults {
+    name = "ipc_defaults";
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+};
+
+IPC_test = cc_test {
+    name = "IPC_test";
+    defaults = ["ipc_defaults"];
+    test_suites = ["device-tests"];
+    srcs = [
+        "BufferGenerator.cpp"
+        "IPC_test.cpp"
+    ];
+    cppflags = [
+        "-Wall"
+        "-Werror"
+        "-Wformat"
+        "-Wthread-safety"
+        "-Wunused"
+        "-Wunreachable-code"
     ];
     shared_libs = [
         "libandroid"
@@ -42,19 +102,20 @@ SurfaceFlinger_test = cc_test {
         "liblayers_proto"
         "liblog"
         "libprotobuf-cpp-full"
-        "libtimestats_proto"
         "libui"
         "libutils"
     ];
-
+    cpp_std = "experimental";
+    gnu_extensions = false;
 };
 
 subdirs = [
     "fakehwc"
     "hwc2"
     "unittests"
+    "utils"
     "vsync"
     "waitforvsync"
 ];
 
-in { inherit SurfaceFlinger_test; }
+in { inherit IPC_test SurfaceFlinger_test ipc_defaults; }

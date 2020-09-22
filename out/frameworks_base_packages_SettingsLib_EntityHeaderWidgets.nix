@@ -12,7 +12,7 @@ SettingsLibEntityHeaderWidgets = android_library {
 
     static_libs = [
         "androidx.annotation_annotation"
-        "SettingsLibAppPreference"
+        "SettingsLibSettingsTheme"
     ];
 
     sdk_version = "system_current";

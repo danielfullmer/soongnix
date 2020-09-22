@@ -37,7 +37,10 @@ error_prone_core = java_import {
 error_prone_test_helpers = java_import {
     name = "error_prone_test_helpers";
     host_supported = true;
-    jars = ["error_prone/error_prone_test_helpers-2.3.2.jar"];
+    jars = [
+        "error_prone/error_prone_test_helpers-2.3.2.jar"
+        "jimfs/jimfs-1.1.jar"
+    ];
 };
 
 subdirs = ["soong"];

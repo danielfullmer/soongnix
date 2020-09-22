@@ -7,6 +7,11 @@ libqemu_pipe = cc_library_static {
     name = "libqemu_pipe";
     vendor_available = true;
     recovery_available = true;
+    apex_available = [
+        "com.android.adbd"
+        #  TODO(b/151398197) remove the below
+        "//apex_available:platform"
+    ];
     sanitize = {
         misc_undefined = ["integer"];
     };

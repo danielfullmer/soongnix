@@ -25,7 +25,6 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libhidlmemory"
         "libutils"

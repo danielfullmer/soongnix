@@ -7,10 +7,8 @@ FrameworksLocationTests = android_test {
     srcs = [
         "src/android/location/CountryTester.java"
         "src/android/location/GeocoderTest.java"
-        "src/android/location/GnssStatusTest.java"
         "src/android/location/LocationManagerTest.java"
         "src/android/location/LocationTest.java"
-        "src/android/location/SatelliteInfo.java"
     ];
     libs = [
         "android.test.runner"

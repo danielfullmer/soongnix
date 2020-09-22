@@ -19,8 +19,6 @@ let
         "libcutils"
         "libfmq"
         "libhidlbase"
-        "libhwbinder"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.media.bufferpool@1.0"

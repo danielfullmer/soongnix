@@ -8,7 +8,6 @@ game-driver-protos = java_library_static {
         type = "lite";
     };
     srcs = ["game_driver.proto"];
-    no_framework_libs = true;
     jarjar_rules = "jarjar-rules.txt";
     sdk_version = "28";
 };

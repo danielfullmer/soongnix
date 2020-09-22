@@ -33,6 +33,14 @@ vts_mediaCodecs_validate_test = cc_test {
         "-Wall"
         "-Werror"
     ];
+    data = [
+        ":media_codecs"
+    ];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
+    test_config = "vts_mediaCodecs_validate_test.xml";
 };
 
 in { inherit vts_mediaCodecs_validate_test; }

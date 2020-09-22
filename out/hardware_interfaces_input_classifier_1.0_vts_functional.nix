@@ -25,7 +25,10 @@ VtsHalInputClassifierV1_0TargetTest = cc_test {
         "android.hardware.input.classifier@1.0"
         "android.hardware.input.common@1.0"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalInputClassifierV1_0TargetTest; }

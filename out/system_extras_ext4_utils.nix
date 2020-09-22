@@ -20,17 +20,10 @@ libext4_utils = cc_library {
     export_include_dirs = ["include"];
     shared_libs = [
         "libbase"
-        "libsparse"
         "libz"
     ];
 
     target = {
-        host = {
-            static_libs = ["libsparse"];
-        };
-        not_windows = {
-            static_libs = ["libselinux"];
-        };
         windows = {
             host_ldlibs = ["-lws2_32"];
             enabled = true;
@@ -39,7 +32,6 @@ libext4_utils = cc_library {
         android = {
             shared_libs = [
                 "libbase"
-                "libselinux"
             ];
 
             shared = {
@@ -57,6 +49,10 @@ mkuserimg_mke2fs = python_binary_host {
     name = "mkuserimg_mke2fs";
     srcs = [
         "mkuserimg_mke2fs.py"
+    ];
+
+    data = [
+        "mke2fs.conf"
     ];
 
     version = {

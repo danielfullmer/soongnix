@@ -1,0 +1,27 @@
+{ cc_test_library }:
+let
+
+libaudioloopback_jni = cc_test_library {
+    name = "libaudioloopback_jni";
+    srcs = [
+        "jni-bridge.cpp"
+        "NativeAudioAnalyzer.cpp"
+    ];
+    include_dirs = [
+        "frameworks/av/media/ndk/include"
+        "system/core/include/cutils"
+    ];
+    shared_libs = [
+        "libaaudio"
+        "liblog"
+    ];
+    stl = "libc++_static";
+    ldflags = ["-Wl,--hash-style=sysv"];
+    cflags = [
+        "-Werror"
+        "-Wall"
+    ];
+    sdk_version = "current";
+};
+
+in { inherit libaudioloopback_jni; }

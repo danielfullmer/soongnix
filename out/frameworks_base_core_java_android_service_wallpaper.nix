@@ -12,6 +12,8 @@ WallpaperSharedLib = android_library {
         "IWallpaperService.aidl"
     ];
 
+    libs = ["unsupportedappusage"];
+
     #  Enforce that the library is built against java 8 so that there are
     #  no compatibility issues with launcher
     java_version = "1.8";

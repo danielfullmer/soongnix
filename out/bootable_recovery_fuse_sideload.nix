@@ -37,6 +37,10 @@ libfusesideload = cc_library {
         "include"
     ];
 
+    static_libs = [
+        "libotautil"
+    ];
+
     shared_libs = [
         "libbase"
         "libcrypto"

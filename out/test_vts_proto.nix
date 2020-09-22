@@ -1,4 +1,4 @@
-{ cc_library_shared }:
+{ cc_library_shared, java_library_host }:
 let
 
 #
@@ -21,6 +21,8 @@ libvts_multidevice_proto = cc_library_shared {
 
     name = "libvts_multidevice_proto";
     host_supported = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
 
     srcs = [
         "AndroidSystemControlMessage.proto"
@@ -73,4 +75,22 @@ libvts_proto_fuzzer_proto = cc_library_shared {
     ];
 };
 
-in { inherit libvts_multidevice_proto libvts_proto_fuzzer_proto; }
+libvts_protos_host = java_library_host {
+    name = "libvts_protos_host";
+    srcs = [
+        "AndroidSystemControlMessage.proto"
+        "ComponentSpecificationMessage.proto"
+        "ExecutionSpecificationMessage.proto"
+        "TestSchedulingPolicyMessage.proto"
+        "VtsDriverControlMessage.proto"
+        "VtsFuzzTaskMessage.proto"
+        "VtsProfilingMessage.proto"
+        "VtsReportMessage.proto"
+        "VtsResourceControllerMessage.proto"
+    ];
+    proto = {
+        type = "full";
+    };
+};
+
+in { inherit libvts_multidevice_proto libvts_proto_fuzzer_proto libvts_protos_host; }

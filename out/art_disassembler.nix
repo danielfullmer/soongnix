@@ -1,4 +1,4 @@
-{ art_cc_defaults, art_cc_library }:
+{ art_cc_defaults, art_cc_library, cc_library_headers }:
 let
 
 #
@@ -23,8 +23,6 @@ libart-disassembler-defaults = art_cc_defaults {
     host_supported = true;
     srcs = [
         "disassembler.cc"
-        "disassembler_mips.cc"
-        "disassembler_x86.cc"
     ];
     codegen = {
         arm = {
@@ -33,36 +31,19 @@ libart-disassembler-defaults = art_cc_defaults {
         arm64 = {
             srcs = ["disassembler_arm64.cc"];
         };
-        #  TODO: We should also conditionally include the MIPS32/MIPS64 and the
-        #  x86/x86-64 disassembler definitions (b/119090273). However, using the
-        #  following syntax here:
-        #
-        #    mips: {
-        #        srcs: ["disassembler_mips.cc"]
-        #    },
-        #    mips64: {
-        #        srcs: ["disassembler_mips.cc"]
-        #    },
-        #    x86: {
-        #        srcs: ["disassembler_x86.cc"]
-        #    },
-        #    x86_64: {
-        #        srcs: ["disassembler_x86.cc"]
-        #    },
-        #
-        #  does not work, as it generates a file rejected by ninja with this
-        #  error message (e.g. on host, where we include all the back ends by
-        #  default):
-        #
-        #    FAILED: ninja: out/soong/build.ninja:320768: multiple rules generate out/soong/.intermediates/art/disassembler/libart-disassembler/linux_glibc_x86_64_static/obj/art/disassembler/disassembler_mips.o [-w dupbuild=err]
+        x86 = {
+            srcs = ["disassembler_x86.cc"];
+        };
+        x86_64 = {
+            srcs = ["disassembler_x86.cc"];
+        };
     };
-    include_dirs = ["art/runtime"];
-
     shared_libs = [
         "libbase"
     ];
     header_libs = [
         "art_libartbase_headers"
+        "libart_runtime_headers_ndk"
     ];
     export_include_dirs = ["."];
 };
@@ -73,6 +54,10 @@ libart-disassembler = art_cc_library {
     shared_libs = [
         #  For disassembler_arm*.
         "libvixl"
+    ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
     ];
 };
 
@@ -86,6 +71,24 @@ libartd-disassembler = art_cc_library {
         #  For disassembler_arm*.
         "libvixld"
     ];
+
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
-in { inherit libart-disassembler libart-disassembler-defaults libartd-disassembler; }
+art_disassembler_headers = cc_library_headers {
+    name = "art_disassembler_headers";
+    host_supported = true;
+    export_include_dirs = [
+        "."
+    ];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
+};
+
+in { inherit art_disassembler_headers libart-disassembler libart-disassembler-defaults libartd-disassembler; }

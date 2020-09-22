@@ -37,7 +37,6 @@ fluoride_bta_defaults = cc_defaults {
 libbt-bta = cc_library_static {
     name = "libbt-bta";
     defaults = ["fluoride_bta_defaults"];
-    cflags = ["-Wno-implicit-fallthrough"];
     srcs = [
         "ag/bta_ag_act.cc"
         "ag/bta_ag_api.cc"
@@ -147,4 +146,34 @@ net_test_bta = cc_test {
     ];
 };
 
-in { inherit fluoride_bta_defaults libbt-bta net_test_bta; }
+#  bta hf client add record tests for target
+#  ========================================================
+net_test_hf_client_add_record = cc_test {
+    name = "net_test_hf_client_add_record";
+    defaults = ["fluoride_defaults"];
+    test_suites = ["device-tests"];
+    include_dirs = [
+        "system/bt"
+        "system/bt/bta/include"
+        "system/bt/bta/sys"
+        "system/bt/btif/include"
+        "system/bt/internal_include"
+        "system/bt/stack/include"
+        "system/bt/utils/include"
+    ];
+    srcs = [
+        "test/bta_hf_client_add_record_test.cc"
+    ];
+    header_libs = ["libbluetooth_headers"];
+    shared_libs = [
+        "libcutils"
+        "liblog"
+    ];
+    static_libs = [
+        "libbluetooth-types"
+        "libosi"
+    ];
+    cflags = ["-DBUILDCFG"];
+};
+
+in { inherit fluoride_bta_defaults libbt-bta net_test_bta net_test_hf_client_add_record; }

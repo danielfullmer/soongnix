@@ -26,7 +26,6 @@ let
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "libcutils"
         "android.hardware.fastboot@1.0"

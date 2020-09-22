@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library, cc_library_static }:
+{ cc_library, cc_library_static }:
 let
 
 #
@@ -85,6 +85,7 @@ libcompiler_rt = cc_library {
         support_system_process = true;
     };
     host_supported = true;
+    native_bridge_supported = true;
     #  The following list contains platform-independent functionalities.
     #
     #  Skip apple_versioning.c since it is unused.
@@ -375,7 +376,6 @@ libcompiler_rt = cc_library {
     target = {
         android = {
             shared_libs = ["liblog"];
-            static_libs = ["liblzma"];
         };
         android_arm = {
             static_libs = ["libunwind_llvm"];
@@ -422,7 +422,6 @@ libcompiler_rt = cc_library {
                 "libunwindbacktrace"
                 "libunwind_static"
             ];
-            shared_libs = ["liblzma"];
         };
         windows = {
             enabled = true;
@@ -432,7 +431,7 @@ libcompiler_rt = cc_library {
     };
 
     asflags = ["-integrated-as"];
-    no_libgcc = true;
+    no_libcrt = true;
 
     sanitize = {
         never = true;
@@ -440,36 +439,4 @@ libcompiler_rt = cc_library {
     stl = "none";
 };
 
-asan_arch_defaults = cc_defaults {
-    name = "asan_arch_defaults";
-
-    vendor_available = true;
-    enabled = false;
-    target = {
-        android_arm = {
-            enabled = true;
-        };
-        android_arm64 = {
-            enabled = true;
-        };
-        android_mips = {
-            enabled = true;
-        };
-        android_mips64 = {
-            enabled = true;
-        };
-        android_x86 = {
-            enabled = true;
-        };
-        android_x86_64 = {
-            enabled = true;
-        };
-        linux_glibc = {
-            enabled = true;
-        };
-    };
-};
-
-subdirs = ["lib/*"];
-
-in { inherit asan_arch_defaults libcompiler_rt libcompiler_rt-extras; }
+in { inherit libcompiler_rt libcompiler_rt-extras; }

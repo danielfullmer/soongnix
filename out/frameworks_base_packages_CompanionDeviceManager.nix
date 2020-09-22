@@ -21,6 +21,7 @@ CompanionDeviceManager = android_app {
         "src/com/android/companiondevicemanager/DeviceChooserActivity.java"
         "src/com/android/companiondevicemanager/DeviceDiscoveryService.java"
     ];
+
     platform_apis = true;
 };
 

@@ -36,6 +36,7 @@ UiBench = android_test {
         "src/com/android/test/uibench/TrivialAnimationActivityWideGamut.java"
         "src/com/android/test/uibench/TrivialListActivity.java"
         "src/com/android/test/uibench/TrivialRecyclerViewActivity.java"
+        "src/com/android/test/uibench/WindowInsetsControllerActivity.java"
         "src/com/android/test/uibench/leanback/BitmapLoader.java"
         "src/com/android/test/uibench/leanback/BrowseActivity.java"
         "src/com/android/test/uibench/leanback/BrowseFragment.java"

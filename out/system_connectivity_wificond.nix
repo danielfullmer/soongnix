@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library_static, cc_test }:
+{ cc_binary, cc_defaults, cc_library_static, cc_test, filegroup }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -23,7 +23,7 @@ wificond_defaults = cc_defaults {
         "-Werror"
         "-Wno-unused-parameter"
     ];
-    #include_dirs = ["system/connectivity"];
+    include_dirs = ["system/connectivity"];
 };
 
 #
@@ -33,20 +33,31 @@ wificond = cc_binary {
     name = "wificond";
     defaults = ["wificond_defaults"];
     init_rc = ["wificond.rc"];
-    srcs = ["main.cpp"];
+    srcs = [
+        "main.cpp"
+        "wifi_keystore_hal_connector.cpp"
+    ];
+    include_dirs = ["system/security/keystore/include"];
 
     shared_libs = [
-        "android.hardware.wifi.offload@1.0"
         "libbinder"
         "libbase"
+        "libcrypto"
         "libcutils"
         "libhidlbase"
-        "libhidltransport"
+        "libkeystore_aidl"
+        "libkeystore_binder"
+        "libkeystore_parcelables"
         "libminijail"
+        "libssl"
         "libutils"
         "libwifi-system-iface"
+        "android.system.wifi.keystore@1.0"
     ];
-    static_libs = ["libwificond"];
+    static_libs = [
+        "libwificond" #  Wificond daemon
+        "libwifikeystorehal" #  Wifi Keystore HAL service
+    ];
 };
 
 #
@@ -60,31 +71,24 @@ libwificond = cc_library_static {
         "ap_interface_impl.cpp"
         "client_interface_binder.cpp"
         "client_interface_impl.cpp"
+        "device_wiphy_capabilities.cpp"
         "logging_utils.cpp"
+        "client/native_wifi_client.cpp"
         "scanning/channel_settings.cpp"
         "scanning/hidden_network.cpp"
-        "scanning/offload_scan_callback_interface_impl.cpp"
         "scanning/pno_network.cpp"
         "scanning/pno_settings.cpp"
         "scanning/radio_chain_info.cpp"
         "scanning/scan_result.cpp"
-        "scanning/offload/scan_stats.cpp"
         "scanning/single_scan_settings.cpp"
         "scanning/scan_utils.cpp"
         "scanning/scanner_impl.cpp"
-        "scanning/offload/offload_scan_manager.cpp"
-        "scanning/offload/offload_callback.cpp"
-        "scanning/offload/offload_service_utils.cpp"
-        "scanning/offload/offload_scan_utils.cpp"
         "server.cpp"
     ];
 
     shared_libs = [
-        "android.hardware.wifi.offload@1.0"
         "libbase"
         "libutils"
-        "libhidlbase"
-        "libhidltransport"
         "libwifi-system-iface"
     ];
     whole_static_libs = [
@@ -138,15 +142,9 @@ libwificond_ipc = cc_library_static {
     };
     srcs = [
         "ipc_constants.cpp"
-        "aidl/android/net/wifi/IApInterface.aidl"
-        "aidl/android/net/wifi/IApInterfaceEventCallback.aidl"
-        "aidl/android/net/wifi/IClientInterface.aidl"
-        "aidl/android/net/wifi/IInterfaceEventCallback.aidl"
-        "aidl/android/net/wifi/IPnoScanEvent.aidl"
-        "aidl/android/net/wifi/IScanEvent.aidl"
-        "aidl/android/net/wifi/ISendMgmtFrameEvent.aidl"
-        "aidl/android/net/wifi/IWificond.aidl"
-        "aidl/android/net/wifi/IWifiScannerImpl.aidl"
+        ":libwificond_ipc_aidl"
+        "client/native_wifi_client.cpp"
+        "device_wiphy_capabilities.cpp"
         "scanning/channel_settings.cpp"
         "scanning/hidden_network.cpp"
         "scanning/pno_network.cpp"
@@ -158,6 +156,22 @@ libwificond_ipc = cc_library_static {
     shared_libs = ["libbinder"];
 };
 
+libwificond_ipc_aidl = filegroup {
+    name = "libwificond_ipc_aidl";
+    srcs = [
+        "aidl/android/net/wifi/nl80211/IApInterface.aidl"
+        "aidl/android/net/wifi/nl80211/IApInterfaceEventCallback.aidl"
+        "aidl/android/net/wifi/nl80211/IClientInterface.aidl"
+        "aidl/android/net/wifi/nl80211/IInterfaceEventCallback.aidl"
+        "aidl/android/net/wifi/nl80211/IPnoScanEvent.aidl"
+        "aidl/android/net/wifi/nl80211/IScanEvent.aidl"
+        "aidl/android/net/wifi/nl80211/ISendMgmtFrameEvent.aidl"
+        "aidl/android/net/wifi/nl80211/IWificond.aidl"
+        "aidl/android/net/wifi/nl80211/IWifiScannerImpl.aidl"
+    ];
+    path = "aidl";
+};
+
 #
 #  test util library
 #
@@ -165,7 +179,6 @@ libwificond_test_utils = cc_library_static {
     name = "libwificond_test_utils";
     defaults = ["wificond_defaults"];
     srcs = [
-        "tests/integration/binder_dispatcher.cpp"
         "tests/integration/process_utils.cpp"
         "tests/shell_utils.cpp"
     ];
@@ -192,26 +205,15 @@ wificond_unit_test = cc_test {
         "tests/mock_client_interface_impl.cpp"
         "tests/mock_netlink_manager.cpp"
         "tests/mock_netlink_utils.cpp"
-        "tests/mock_offload.cpp"
-        "tests/mock_offload_callback_handlers.cpp"
-        "tests/mock_offload_scan_callback_interface.cpp"
-        "tests/mock_offload_scan_callback_interface_impl.cpp"
-        "tests/mock_offload_scan_manager.cpp"
-        "tests/mock_offload_service_utils.cpp"
         "tests/mock_scan_utils.cpp"
+        "tests/native_wifi_client_unittest.cpp"
         "tests/netlink_manager_unittest.cpp"
         "tests/netlink_utils_unittest.cpp"
         "tests/nl80211_attribute_unittest.cpp"
         "tests/nl80211_packet_unittest.cpp"
-        "tests/offload_callback_test.cpp"
-        "tests/offload_hal_test_constants.cpp"
-        "tests/offload_scan_manager_test.cpp"
-        "tests/offload_scan_utils_test.cpp"
-        "tests/offload_test_utils.cpp"
         "tests/scanner_unittest.cpp"
         "tests/scan_result_unittest.cpp"
         "tests/scan_settings_unittest.cpp"
-        "tests/scan_stats_unittest.cpp"
         "tests/scan_utils_unittest.cpp"
         "tests/server_unittest.cpp"
     ];
@@ -224,12 +226,9 @@ wificond_unit_test = cc_test {
         "libwificond_nl"
     ];
     shared_libs = [
-        "android.hardware.wifi.offload@1.0"
         "libbase"
         "libbinder"
         "libcutils"
-        "libhidltransport"
-        "libhidlbase"
         "liblog"
         "libutils"
         "libwifi-system-iface"
@@ -264,4 +263,4 @@ wificond_integration_test = cc_test {
     ];
 };
 
-in { inherit libwificond libwificond_event_loop libwificond_ipc libwificond_nl libwificond_test_utils wificond wificond_defaults wificond_integration_test wificond_unit_test; }
+in { inherit libwificond libwificond_event_loop libwificond_ipc libwificond_ipc_aidl libwificond_nl libwificond_test_utils wificond wificond_defaults wificond_integration_test wificond_unit_test; }

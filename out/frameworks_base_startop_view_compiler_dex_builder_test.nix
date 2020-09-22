@@ -40,8 +40,10 @@ generate_compiled_layout2 = genrule {
 dex-builder-test = android_test {
     name = "dex-builder-test";
     srcs = [
+        "src/android/startop/test/ApkLayoutCompilerTest.java"
         "src/android/startop/test/DexBuilderTest.java"
         "src/android/startop/test/LayoutCompilerTest.java"
+        "src/android/startop/test/TestClass.java"
     ];
     sdk_version = "current";
     data = [
@@ -50,8 +52,9 @@ dex-builder-test = android_test {
         ":generate_compiled_layout2"
     ];
     static_libs = [
-        "androidx.test.rules"
-        "guava"
+        "androidx.test.core"
+        "androidx.test.runner"
+        "junit"
     ];
     manifest = "AndroidManifest.xml";
     resource_dirs = ["res"];

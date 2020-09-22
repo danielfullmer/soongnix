@@ -81,4 +81,17 @@ let
     ];
 };
 
-in { inherit "framework_compatibility_matrix.1.xml" "framework_compatibility_matrix.2.xml" "framework_compatibility_matrix.3.xml" "framework_compatibility_matrix.4.xml" "framework_compatibility_matrix.legacy.xml"; }
+"framework_compatibility_matrix.5.xml" = vintf_compatibility_matrix {
+    name = "framework_compatibility_matrix.5.xml";
+    stem = "compatibility_matrix.5.xml";
+    srcs = [
+        "compatibility_matrix.5.xml"
+    ];
+    kernel_configs = [
+        "kernel_config_r_4.14"
+        "kernel_config_r_4.19"
+        "kernel_config_r_5.4"
+    ];
+};
+
+in { inherit "framework_compatibility_matrix.1.xml" "framework_compatibility_matrix.2.xml" "framework_compatibility_matrix.3.xml" "framework_compatibility_matrix.4.xml" "framework_compatibility_matrix.5.xml" "framework_compatibility_matrix.legacy.xml"; }

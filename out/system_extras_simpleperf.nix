@@ -98,37 +98,6 @@ libsimpleperf_elf_read = cc_library_static {
     use_version_lib = true;
 };
 
-libsimpleperf_dex_read_static_reqs_defaults = cc_defaults {
-    name = "libsimpleperf_dex_read_static_reqs_defaults";
-    defaults = ["libdexfile_static_defaults"];
-    static_libs = [
-        "libdexfile_support_static"
-    ];
-    header_libs = ["libdexfile_external_headers"];
-    export_header_lib_headers = ["libdexfile_external_headers"];
-};
-
-libsimpleperf_dex_read = cc_library_static {
-    name = "libsimpleperf_dex_read";
-    defaults = [
-        "simpleperf_defaults"
-        "libsimpleperf_dex_read_static_reqs_defaults"
-    ];
-    host_supported = true;
-
-    export_include_dirs = [
-        "."
-    ];
-
-    static_libs = ["libbase"];
-
-    srcs = [
-        "read_dex_file.cpp"
-    ];
-
-    group_static_libs = true;
-};
-
 simpleperf_cflags = cc_defaults {
     name = "simpleperf_cflags";
     target = {
@@ -150,6 +119,37 @@ simpleperf_cflags = cc_defaults {
     };
 };
 
+#  linked as a separate library because using OpenCSD headers needs to enable exception
+libsimpleperf_etm_decoder = cc_library_static {
+    name = "libsimpleperf_etm_decoder";
+    defaults = [
+        "simpleperf_cflags"
+        "libsimpleperf_elf_read_static_reqs_defaults"
+    ];
+    host_supported = true;
+    srcs = ["ETMDecoder.cpp"];
+    cppflags = [
+        #  flags needed to include libopencsd_decoder headers
+        "-Wno-ignored-qualifiers"
+        "-Wno-unused-parameter"
+        "-Wno-switch"
+        "-Wno-unused-private-field"
+        "-Wno-implicit-fallthrough"
+        "-fexceptions"
+    ];
+    rtti = true;
+    static_libs = [
+        "libopencsd_decoder"
+        "libbase"
+        "liblog"
+    ];
+    target = {
+        windows = {
+            enabled = true;
+        };
+    };
+};
+
 simpleperf_static_libs = cc_defaults {
     name = "simpleperf_static_libs";
     defaults = [
@@ -158,16 +158,17 @@ simpleperf_static_libs = cc_defaults {
     ];
     host_supported = true;
     static_libs = [
+        "libsimpleperf_etm_decoder"
         "libbase"
         "liblog"
         "libutils"
         "libprotobuf-cpp-lite"
+        "libopencsd_decoder"
     ];
     target = {
         linux = {
             static_libs = [
                 "libunwindstack"
-                "libdexfile_support_static"
                 "libcutils"
                 "libprocinfo"
                 "libevent"
@@ -199,6 +200,10 @@ simpleperf_shared_libs = cc_defaults {
         "liblzma"
         "libprotobuf-cpp-lite"
         "libziparchive"
+    ];
+    static_libs = [
+        "libsimpleperf_etm_decoder"
+        "libopencsd_decoder"
     ];
     target = {
         linux = {
@@ -260,6 +265,7 @@ libsimpleperf_srcs = cc_defaults {
     srcs = [
         "cmd_dumprecord.cpp"
         "cmd_help.cpp"
+        "cmd_inject.cpp"
         "cmd_kmem.cpp"
         "cmd_report.cpp"
         "cmd_report_sample.cpp"
@@ -288,16 +294,15 @@ libsimpleperf_srcs = cc_defaults {
                 "cmd_stat.cpp"
                 "cmd_trace_sched.cpp"
                 "environment.cpp"
+                "ETMRecorder.cpp"
                 "event_fd.cpp"
                 "event_selection_set.cpp"
-                "InplaceSamplerClient.cpp"
                 "IOEventLoop.cpp"
                 "JITDebugReader.cpp"
                 "OfflineUnwinder.cpp"
                 "read_dex_file.cpp"
                 "record_file_writer.cpp"
                 "RecordReadThread.cpp"
-                "UnixSocket.cpp"
                 "workload.cpp"
             ];
         };
@@ -324,6 +329,13 @@ libsimpleperf = cc_library_static {
         "libbuildversion"
     ];
     use_version_lib = false;
+
+    target = {
+        linux = {
+            #  See note for libdexfile_support_static in simpleperf_ndk.
+            static_libs = ["libdexfile_support"];
+        };
+    };
 };
 
 #  simpleperf shipped in system image
@@ -353,11 +365,7 @@ simpleperf_ndk = cc_binary {
         "simpleperf_static_libs"
     ];
     dist = {
-        targets = [
-            "sdk"
-            "win_sdk"
-            "simpleperf"
-        ];
+        targets = ["simpleperf"];
     };
     srcs = [
         "main.cpp"
@@ -407,6 +415,14 @@ simpleperf_ndk = cc_binary {
                 dir = "simpleperf/darwin/x86_64";
             };
         };
+        linux = {
+            #  In the NDK we need libdexfile_support_static which links
+            #  libdexfile_external and its ART dependencies statically. However
+            #  in other libraries we must use libdexfile_support, which dlopen's
+            #  libdexfile_external.so from the ART APEX, to avoid getting ART
+            #  internals in the system image.
+            static_libs = ["libdexfile_support_static"];
+        };
         linux_glibc_x86 = {
             dist = {
                 dir = "simpleperf/linux/x86";
@@ -451,6 +467,10 @@ libsimpleperf_record = cc_library {
         windows = {
             enabled = false;
         };
+        linux = {
+            #  See note for libdexfile_support_static in simpleperf_ndk.
+            static_libs = ["libdexfile_support"];
+        };
     };
 };
 
@@ -461,11 +481,7 @@ libsimpleperf_report = cc_library_shared {
         "simpleperf_static_libs"
     ];
     dist = {
-        targets = [
-            "sdk"
-            "win_sdk"
-            "simpleperf"
-        ];
+        targets = ["simpleperf"];
     };
     srcs = [
         "report_lib_interface.cpp"
@@ -478,6 +494,9 @@ libsimpleperf_report = cc_library_shared {
         };
         linux = {
             ldflags = ["-Wl,--exclude-libs,ALL"];
+            #  See note for libdexfile_support_static in simpleperf_ndk. This is
+            #  part of the NDK, so use libdexfile_support_static.
+            static_libs = ["libdexfile_support_static"];
         };
         darwin = {
             dist = {
@@ -512,32 +531,10 @@ libsimpleperf_report = cc_library_shared {
     };
 };
 
-#  It's the shared library linked with user's app and get samples from signal handlers in each
-#  thread. Doesn't work yet.
-libsimpleperf_inplace_sampler = cc_library_shared {
-    name = "libsimpleperf_inplace_sampler";
-    defaults = [
-        "simpleperf_static_libs"
-    ];
-    export_include_dirs = ["include"];
-    ldflags = ["-Wl,--exclude-libs,ALL"];
-    srcs = [
-        "inplace_sampler_lib.cpp"
-    ];
-    static_libs = ["libsimpleperf"];
-    target = {
-        darwin = {
-            enabled = false;
-        };
-        windows = {
-            enabled = false;
-        };
-    };
-};
-
 simpleperf_test_srcs = cc_defaults {
     name = "simpleperf_test_srcs";
     srcs = [
+        "cmd_inject_test.cpp"
         "cmd_kmem_test.cpp"
         "cmd_report_test.cpp"
         "cmd_report_sample_test.cpp"
@@ -555,6 +552,7 @@ simpleperf_test_srcs = cc_defaults {
         linux = {
             srcs = [
                 "CallChainJoiner_test.cpp"
+                "cmd_api_test.cpp"
                 "cmd_debug_unwind_test.cpp"
                 "cmd_dumprecord_test.cpp"
                 "cmd_list_test.cpp"
@@ -563,10 +561,10 @@ simpleperf_test_srcs = cc_defaults {
                 "cmd_trace_sched_test.cpp"
                 "environment_test.cpp"
                 "IOEventLoop_test.cpp"
+                "OfflineUnwinder_test.cpp"
                 "read_dex_file_test.cpp"
                 "record_file_test.cpp"
                 "RecordReadThread_test.cpp"
-                "UnixSocket_test.cpp"
                 "workload_test.cpp"
             ];
         };
@@ -589,14 +587,20 @@ simpleperf_unit_test = cc_test {
         };
     };
     data = [
+        "testdata/DisplayBitmaps.apk"
+        "testdata/DisplayBitmapsTest.apk"
+        "testdata/EndlessTunnel.apk"
         "testdata/base.vdex"
+        "testdata/cpp_api.apk"
         "testdata/data/"
         "testdata/elf"
         "testdata/elf_file_source.cpp"
         "testdata/elf_with_mini_debug_info"
+        "testdata/etm/"
         "testdata/generated_by_linux_perf.data"
         "testdata/has_embedded_native_libs_apk_perf.data"
         "testdata/invalid_perf.data"
+        "testdata/java_api.apk"
         "testdata/kallsyms"
         "testdata/libc.so"
         "testdata/libsgmainso-6.4.36.so"
@@ -607,6 +611,7 @@ simpleperf_unit_test = cc_test {
         "testdata/perf_no_unwind.data"
         "testdata/perf_sched_stat_runtime.data"
         "testdata/perf_test_max_stack_and_percent_limit.data"
+        "testdata/perf_unwind_embedded_lib_in_apk.data"
         "testdata/perf_with_app_package_name.data"
         "testdata/perf_with_big_trace_data.data"
         "testdata/perf_with_callchain_record.data"
@@ -628,14 +633,26 @@ simpleperf_unit_test = cc_test {
         "testdata/data/correct_symfs_for_build_id_check/"
         "testdata/data/symfs_for_no_symbol_table_warning/"
         "testdata/data/symfs_for_read_elf_file_warning/"
+        "testdata/data/symfs_with_build_id_list/"
+        "testdata/data/symfs_with_wrong_build_id_list/"
+        "testdata/data/symfs_without_build_id/"
         "testdata/data/t2"
         "testdata/data/wrong_symfs_for_build_id_check/"
         "testdata/data/app/com.example.hellojni-1/"
+        "testdata/data/app/simpleperf.demo.cpp_api/"
         "testdata/data/app/com.example.hellojni-1/base.apk"
+        "testdata/data/app/simpleperf.demo.cpp_api/base.apk"
         "testdata/data/correct_symfs_for_build_id_check/elf_for_build_id_check"
         "testdata/data/symfs_for_no_symbol_table_warning/elf"
         "testdata/data/symfs_for_read_elf_file_warning/elf"
+        "testdata/data/symfs_with_build_id_list/build_id_list"
+        "testdata/data/symfs_with_build_id_list/elf_for_build_id_check"
+        "testdata/data/symfs_with_wrong_build_id_list/build_id_list"
+        "testdata/data/symfs_without_build_id/elf"
         "testdata/data/wrong_symfs_for_build_id_check/elf_for_build_id_check"
+        "testdata/etm/etm_test_loop"
+        "testdata/etm/perf.data"
+        "testdata/etm/perf_inject.data"
     ];
 };
 
@@ -702,4 +719,4 @@ simpleperf_record_test = cc_test {
     };
 };
 
-in { inherit libsimpleperf libsimpleperf_cts_test libsimpleperf_dex_read libsimpleperf_dex_read_static_reqs_defaults libsimpleperf_elf_read libsimpleperf_elf_read_static_reqs_defaults libsimpleperf_inplace_sampler libsimpleperf_record libsimpleperf_report libsimpleperf_srcs simpleperf simpleperf_cflags simpleperf_cpu_hotplug_test simpleperf_defaults simpleperf_libs_for_tests simpleperf_ndk simpleperf_record_test simpleperf_shared_libs simpleperf_static_libs simpleperf_test_srcs simpleperf_unit_test; }
+in { inherit libsimpleperf libsimpleperf_cts_test libsimpleperf_elf_read libsimpleperf_elf_read_static_reqs_defaults libsimpleperf_etm_decoder libsimpleperf_record libsimpleperf_report libsimpleperf_srcs simpleperf simpleperf_cflags simpleperf_cpu_hotplug_test simpleperf_defaults simpleperf_libs_for_tests simpleperf_ndk simpleperf_record_test simpleperf_shared_libs simpleperf_static_libs simpleperf_test_srcs simpleperf_unit_test; }

@@ -13,8 +13,7 @@ libdrm_amdgpu_sources = cc_defaults {
         "amdgpu_gpu_info.c"
         "amdgpu_vamgr.c"
         "amdgpu_vm.c"
-        "util_hash.c"
-        "util_hash_table.c"
+        "handle_table.c"
     ];
 };
 

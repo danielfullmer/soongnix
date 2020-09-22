@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsAccessSerialModern = android_test {
+CtsAccessSerialModern = android_test_helper_app {
     name = "CtsAccessSerialModern";
     defaults = ["cts_support_defaults"];
     static_libs = [
@@ -29,7 +29,7 @@ CtsAccessSerialModern = android_test {
     min_sdk_version = "27";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     optimize = {

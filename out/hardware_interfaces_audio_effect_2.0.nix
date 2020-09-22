@@ -6,6 +6,8 @@ let
 "android.hardware.audio.effect@2.0" = hidl_interface {
     name = "android.hardware.audio.effect@2.0";
     root = "android.hardware";
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     vndk = {
         enabled = true;
     };

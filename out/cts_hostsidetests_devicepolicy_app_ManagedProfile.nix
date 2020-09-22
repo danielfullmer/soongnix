@@ -31,7 +31,10 @@ CtsManagedProfileApp = android_test_helper_app {
         "src/com/android/cts/managedprofile/ComponentDisablingActivity.java"
         "src/com/android/cts/managedprofile/ContactsTest.java"
         "src/com/android/cts/managedprofile/CrossProfileCalendarTest.java"
+        "src/com/android/cts/managedprofile/CrossProfileIntentFilterTest.java"
         "src/com/android/cts/managedprofile/CrossProfileNotificationListenerService.java"
+        "src/com/android/cts/managedprofile/CrossProfileSharingTest.java"
+        "src/com/android/cts/managedprofile/CrossProfileTest.java"
         "src/com/android/cts/managedprofile/CrossProfileUtils.java"
         "src/com/android/cts/managedprofile/CrossProfileWidgetPrimaryUserTest.java"
         "src/com/android/cts/managedprofile/CrossProfileWidgetTest.java"
@@ -45,12 +48,13 @@ CtsManagedProfileApp = android_test_helper_app {
         "src/com/android/cts/managedprofile/DummyCrossProfileViewEventActivity.java"
         "src/com/android/cts/managedprofile/DummyDialerActivity.java"
         "src/com/android/cts/managedprofile/IsUsingUnifiedPasswordTest.java"
+        "src/com/android/cts/managedprofile/LauncherAppsTest.java"
         "src/com/android/cts/managedprofile/LockProfileReceiver.java"
         "src/com/android/cts/managedprofile/ManagedProfileActivity.java"
         "src/com/android/cts/managedprofile/ManagedProfileSetupTest.java"
-        "src/com/android/cts/managedprofile/ManagedProfileTest.java"
         "src/com/android/cts/managedprofile/MissedCallNotificationReceiver.java"
         "src/com/android/cts/managedprofile/NfcTest.java"
+        "src/com/android/cts/managedprofile/NotificationListener.java"
         "src/com/android/cts/managedprofile/NotificationListenerTest.java"
         "src/com/android/cts/managedprofile/OrganizationInfoTest.java"
         "src/com/android/cts/managedprofile/ParentProfileTest.java"
@@ -73,12 +77,12 @@ CtsManagedProfileApp = android_test_helper_app {
         "src/com/android/cts/managedprofile/TestActivity.java"
         "src/com/android/cts/managedprofile/TimeoutActivity.java"
         "src/com/android/cts/managedprofile/TrustAgentInfoTest.java"
+        "src/com/android/cts/managedprofile/UserManagerTest.java"
         "src/com/android/cts/managedprofile/Utils.java"
         "src/com/android/cts/managedprofile/WebViewActivity.java"
         "src/com/android/cts/managedprofile/WifiTest.java"
         "src/com/android/cts/managedprofile/WipeDataNotificationTest.java"
         "src/com/android/cts/managedprofile/WipeDataReceiver.java"
-        "src/com/android/cts/managedprofile/WipeDataTest.java"
     ];
     libs = [
         "android.test.runner.stubs"
@@ -95,15 +99,15 @@ CtsManagedProfileApp = android_test_helper_app {
         "testng"
         "androidx.legacy_legacy-support-v4"
     ];
-    sdk_version = "test_current";
     min_sdk_version = "27";
     #  tag this module as a cts test artifact
     test_suites = [
         "arcts"
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
+    platform_apis = true;
 };
 
 in { inherit CtsManagedProfileApp; }

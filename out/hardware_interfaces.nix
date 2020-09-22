@@ -24,9 +24,14 @@ VtsHalTargetTestDefaults = cc_defaults {
 
     #  Lists all dependencies that can *not* be expected on the device.
     static_libs = [
-        "VtsHalHidlTargetTestBase"
+        "VtsHalHidlTestUtils"
         "libhidl-gen-utils"
     ];
+
+    header_libs = [
+        "libhidl_gtest_helper"
+    ];
+
     group_static_libs = true;
 
     #  Lists all system dependencies that can be expected on the device.
@@ -36,8 +41,6 @@ VtsHalTargetTestDefaults = cc_defaults {
         "libcutils"
         "liblog"
         "libhidlbase"
-        "libhidltransport"
-        "libhwbinder"
         "libutils"
     ];
     cflags = [
@@ -45,6 +48,19 @@ VtsHalTargetTestDefaults = cc_defaults {
         "-g"
     ];
 
+    require_root = true;
 };
 
-in { inherit "android.hardware" VtsHalTargetTestDefaults hidl_defaults; }
+#  TODO: Remove this after all vts tests under vendor/qcom are converted to
+#  parameterized gtest.
+Vts10HalTargetTestDefaults = cc_defaults {
+    name = "Vts10HalTargetTestDefaults";
+    defaults = [
+        "VtsHalTargetTestDefaults"
+    ];
+    static_libs = [
+        "VtsHalHidlTargetTestBase"
+    ];
+};
+
+in { inherit "android.hardware" Vts10HalTargetTestDefaults VtsHalTargetTestDefaults hidl_defaults; }

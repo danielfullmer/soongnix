@@ -1,4 +1,4 @@
-{ cc_binary, cc_binary_host, cc_defaults, cc_library, cc_library_static }:
+{ cc_binary, cc_binary_host, cc_defaults, cc_library, cc_library_headers, cc_library_static }:
 let
 
 #  Copyright (C) 2017 The Android Open Source Project
@@ -14,10 +14,6 @@ let
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
-subdirs = [
-    "test"
-];
 
 libvintf-defaults = cc_defaults {
     name = "libvintf-defaults";
@@ -70,6 +66,9 @@ libvintf = cc_library {
         "libtinyxml2"
         "libz"
     ];
+    header_libs = [
+        "libhidlmetadata_headers"
+    ];
     export_include_dirs = [
         "include"
         "."
@@ -77,9 +76,12 @@ libvintf = cc_library {
     local_include_dirs = ["include/vintf"];
 
     export_shared_lib_headers = [
+        "libbase"
         "libhidl-gen-utils"
     ];
-
+    export_header_lib_headers = [
+        "libhidlmetadata_headers"
+    ];
     target = {
         host = {
             srcs = [
@@ -92,6 +94,15 @@ libvintf = cc_library {
             ];
         };
     };
+};
+
+libvintf_local_headers = cc_library_headers {
+    name = "libvintf_local_headers";
+    host_supported = true;
+    export_include_dirs = ["."];
+    visibility = [
+        "//system/libvintf:__subpackages__"
+    ];
 };
 
 vintf = cc_binary {
@@ -113,6 +124,8 @@ checkvintf = cc_binary_host {
     static_libs = [
         "libbase"
         "libhidl-gen-utils"
+        "libhidlmetadata"
+        "liblog"
         "libvintf"
         "libutils"
         "libtinyxml2"
@@ -152,20 +165,4 @@ assemble_vintf = cc_binary_host {
     ];
 };
 
-libvintf_recovery = cc_library_static {
-    name = "libvintf_recovery";
-    recovery_available = true;
-    defaults = ["libvintf-defaults"];
-    srcs = ["VintfObjectRecovery.cpp"];
-    export_include_dirs = ["include"];
-    local_include_dirs = ["include/vintf"];
-    static_libs = [
-        "libbase"
-        "libvintf"
-        "libhidl-gen-utils"
-        "libfs_mgr"
-    ];
-    export_static_lib_headers = ["libhidl-gen-utils"];
-};
-
-in { inherit assemble_vintf checkvintf libassemblevintf libvintf libvintf-defaults libvintf_recovery vintf; }
+in { inherit assemble_vintf checkvintf libassemblevintf libvintf libvintf-defaults libvintf_local_headers vintf; }

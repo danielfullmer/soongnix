@@ -7,6 +7,7 @@ service = cc_binary {
     srcs = ["service.cpp"];
 
     shared_libs = [
+        "libcutils"
         "libutils"
         "libbinder"
     ];
@@ -25,6 +26,7 @@ vndservice = cc_binary {
     srcs = ["service.cpp"];
 
     shared_libs = [
+        "libcutils"
         "libutils"
         "libbinder"
     ];

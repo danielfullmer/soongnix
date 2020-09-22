@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library, cc_library_static, cc_test, filegroup }:
+{ aidl_interface, cc_binary, cc_defaults, cc_library, cc_library_static, cc_test, filegroup }:
 let
 
 #  Copyright (C) 2018 The Android Open Source Project
@@ -21,13 +21,21 @@ idmap2_defaults = cc_defaults {
     tidy_checks = [
         "modernize-*"
         "-modernize-avoid-c-arrays"
+        "-modernize-use-trailing-return-type"
+        "android-*"
+        "misc-*"
+        "readability-*"
+    ];
+    tidy_checks_as_errors = [
+        "modernize-*"
+        "-modernize-avoid-c-arrays"
+        "-modernize-use-trailing-return-type"
         "android-*"
         "misc-*"
         "readability-*"
     ];
     tidy_flags = [
         "-system-headers"
-        "-warnings-as-errors=*"
     ];
 };
 
@@ -42,12 +50,13 @@ libidmap2 = cc_library {
         "libidmap2/CommandLineOptions.cpp"
         "libidmap2/FileUtils.cpp"
         "libidmap2/Idmap.cpp"
-        "libidmap2/Policies.cpp"
+        "libidmap2/PolicyUtils.cpp"
         "libidmap2/PrettyPrintVisitor.cpp"
         "libidmap2/RawPrintVisitor.cpp"
+        "libidmap2/ResourceMapping.cpp"
         "libidmap2/ResourceUtils.cpp"
         "libidmap2/Result.cpp"
-        "libidmap2/Xml.cpp"
+        "libidmap2/XmlParser.cpp"
         "libidmap2/ZipFile.cpp"
     ];
     export_include_dirs = ["include"];
@@ -62,6 +71,7 @@ libidmap2 = cc_library {
                 "libcutils"
                 "libutils"
                 "libziparchive"
+                "libidmap2_policies"
             ];
         };
         host = {
@@ -71,8 +81,40 @@ libidmap2 = cc_library {
             static_libs = [
                 "libandroidfw"
                 "libbase"
+                "libcutils"
                 "libutils"
                 "libziparchive"
+                "libidmap2_policies"
+            ];
+        };
+    };
+};
+
+libidmap2_policies = cc_library {
+    name = "libidmap2_policies";
+    defaults = [
+        "idmap2_defaults"
+    ];
+    host_supported = true;
+    export_include_dirs = ["libidmap2_policies/include"];
+    target = {
+        windows = {
+            enabled = true;
+        };
+        android = {
+            static = {
+                enabled = false;
+            };
+            shared_libs = [
+                "libandroidfw"
+            ];
+        };
+        host = {
+            shared = {
+                enabled = false;
+            };
+            static_libs = [
+                "libandroidfw"
             ];
         };
     };
@@ -98,9 +140,10 @@ idmap2_tests = cc_test {
         "tests/PoliciesTests.cpp"
         "tests/PrettyPrintVisitorTests.cpp"
         "tests/RawPrintVisitorTests.cpp"
+        "tests/ResourceMappingTests.cpp"
         "tests/ResourceUtilsTests.cpp"
         "tests/ResultTests.cpp"
-        "tests/XmlTests.cpp"
+        "tests/XmlParserTests.cpp"
         "tests/ZipFileTests.cpp"
     ];
     required = [
@@ -117,16 +160,19 @@ idmap2_tests = cc_test {
                 "libutils"
                 "libz"
                 "libziparchive"
+                "libidmap2_policies"
             ];
         };
         host = {
             static_libs = [
                 "libandroidfw"
                 "libbase"
+                "libcutils"
                 "libidmap2"
                 "liblog"
                 "libutils"
                 "libziparchive"
+                "libidmap2_policies"
             ];
             shared_libs = [
                 "libz"
@@ -136,6 +182,7 @@ idmap2_tests = cc_test {
     data = [
         "tests/data/overlay/overlay-no-name-static.apk"
         "tests/data/overlay/overlay-no-name.apk"
+        "tests/data/overlay/overlay-shared.apk"
         "tests/data/overlay/overlay-static-1.apk"
         "tests/data/overlay/overlay-static-2.apk"
         "tests/data/overlay/overlay.apk"
@@ -154,12 +201,13 @@ idmap2 = cc_binary {
     ];
     host_supported = true;
     srcs = [
+        "idmap2/CommandUtils.cpp"
         "idmap2/Create.cpp"
+        "idmap2/CreateMultiple.cpp"
         "idmap2/Dump.cpp"
         "idmap2/Lookup.cpp"
         "idmap2/Main.cpp"
         "idmap2/Scan.cpp"
-        "idmap2/Verify.cpp"
     ];
     target = {
         android = {
@@ -170,22 +218,26 @@ idmap2 = cc_binary {
                 "libidmap2"
                 "libutils"
                 "libziparchive"
+                "libidmap2_policies"
             ];
         };
         host = {
             static_libs = [
                 "libandroidfw"
                 "libbase"
+                "libcutils"
                 "libidmap2"
                 "liblog"
                 "libutils"
                 "libziparchive"
+                "libidmap2_policies"
             ];
             shared_libs = [
                 "libz"
             ];
         };
     };
+
 };
 
 idmap2d = cc_binary {
@@ -206,6 +258,7 @@ idmap2d = cc_binary {
         "libidmap2"
         "libutils"
         "libziparchive"
+        "libidmap2_policies"
     ];
     static_libs = [
         "libidmap2daidl"
@@ -236,6 +289,21 @@ idmap2_aidl = filegroup {
     srcs = [
         "idmap2d/aidl/android/os/IIdmap2.aidl"
     ];
+    path = "idmap2d/aidl";
 };
 
-in { inherit idmap2 idmap2_aidl idmap2_defaults idmap2_tests idmap2d libidmap2 libidmap2daidl; }
+overlayable_policy_aidl = aidl_interface {
+    name = "overlayable_policy_aidl";
+    unstable = true;
+    srcs = [":overlayable_policy_aidl_files"];
+};
+
+overlayable_policy_aidl_files = filegroup {
+    name = "overlayable_policy_aidl_files";
+    srcs = [
+        "idmap2d/aidl/android/os/OverlayablePolicy.aidl"
+    ];
+    path = "idmap2d/aidl";
+};
+
+in { inherit idmap2 idmap2_aidl idmap2_defaults idmap2_tests idmap2d libidmap2 libidmap2_policies libidmap2daidl overlayable_policy_aidl overlayable_policy_aidl_files; }

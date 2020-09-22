@@ -31,7 +31,17 @@ opt-net-voip-srcs = filegroup {
         "src/java/android/net/sip/SipRegistrationListener.java"
         "src/java/android/net/sip/SipSession.java"
         "src/java/android/net/sip/SipSessionAdapter.java"
+        "src/java/com/android/server/sip/SipHelper.java"
+        "src/java/com/android/server/sip/SipService.java"
+        "src/java/com/android/server/sip/SipSessionGroup.java"
+        "src/java/com/android/server/sip/SipSessionListenerProxy.java"
+        "src/java/com/android/server/sip/SipWakeLock.java"
+        "src/java/com/android/server/sip/SipWakeupTimer.java"
+        "src/java/android/net/sip/ISipService.aidl"
+        "src/java/android/net/sip/ISipSession.aidl"
+        "src/java/android/net/sip/ISipSessionListener.aidl"
     ];
+    path = "src/java";
 };
 
 opt-net-voip-htmls = filegroup {
@@ -45,35 +55,10 @@ opt-net-voip-htmls = filegroup {
 voip-common = java_library {
     name = "voip-common";
     installable = true;
-    srcs = [
-        "src/java/android/net/rtp/AudioCodec.java"
-        "src/java/android/net/rtp/AudioGroup.java"
-        "src/java/android/net/rtp/AudioStream.java"
-        "src/java/android/net/rtp/RtpStream.java"
-        "src/java/android/net/sip/SimpleSessionDescription.java"
-        "src/java/android/net/sip/SipAudioCall.java"
-        "src/java/android/net/sip/SipErrorCode.java"
-        "src/java/android/net/sip/SipException.java"
-        "src/java/android/net/sip/SipManager.java"
-        "src/java/android/net/sip/SipProfile.java"
-        "src/java/android/net/sip/SipRegistrationListener.java"
-        "src/java/android/net/sip/SipSession.java"
-        "src/java/android/net/sip/SipSessionAdapter.java"
-        "src/java/com/android/server/sip/SipHelper.java"
-        "src/java/com/android/server/sip/SipService.java"
-        "src/java/com/android/server/sip/SipSessionGroup.java"
-        "src/java/com/android/server/sip/SipSessionListenerProxy.java"
-        "src/java/com/android/server/sip/SipWakeLock.java"
-        "src/java/com/android/server/sip/SipWakeupTimer.java"
-        "src/java/android/net/sip/ISipService.aidl"
-        "src/java/android/net/sip/ISipSession.aidl"
-        "src/java/android/net/sip/ISipSessionListener.aidl"
+    srcs = [":opt-net-voip-srcs"];
+    static_libs = [
+        "nist-sip"
     ];
-    aidl = {
-        local_include_dirs = [
-            "src/java"
-        ];
-    };
     required = ["librtp_jni"];
 };
 

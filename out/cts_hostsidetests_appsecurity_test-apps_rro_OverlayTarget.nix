@@ -1,4 +1,4 @@
-{ android_test }:
+{ android_test_helper_app }:
 let
 
 #
@@ -17,7 +17,7 @@ let
 #  limitations under the License.
 #
 
-CtsOverlayTarget = android_test {
+CtsOverlayTarget = android_test_helper_app {
     name = "CtsOverlayTarget";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -28,12 +28,12 @@ CtsOverlayTarget = android_test {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };
 
-CtsOverlayTargetNoOverlayable = android_test {
+CtsOverlayTargetNoOverlayable = android_test_helper_app {
     name = "CtsOverlayTargetNoOverlayable";
     defaults = ["cts_support_defaults"];
     sdk_version = "current";
@@ -43,7 +43,7 @@ CtsOverlayTargetNoOverlayable = android_test {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
 };

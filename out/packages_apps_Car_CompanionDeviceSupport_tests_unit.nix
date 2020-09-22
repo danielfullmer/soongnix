@@ -25,6 +25,8 @@ CompanionDeviceSupport-unit-tests = android_test {
         "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarCleanerTest.java"
         "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarImporterTest.java"
         "src/com/android/car/companiondevicesupport/feature/calendarsync/CalendarSyncFeatureTest.java"
+        "src/com/android/car/companiondevicesupport/feature/notificationmsg/NotificationMsgDelegateTest.java"
+        "src/com/android/car/companiondevicesupport/feature/notificationmsg/NotificationMsgFeatureTest.java"
     ];
 
     libs = [

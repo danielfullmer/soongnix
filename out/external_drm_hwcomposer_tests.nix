@@ -12,7 +12,7 @@ hwc-drm-tests = cc_test {
     header_libs = ["libhardware_headers"];
     static_libs = ["libdrmhwc_utils"];
     shared_libs = ["hwcomposer.drm"];
-    include_dirs = ["external/drm_hwcomposer"];
+    include_dirs = ["external/drm_hwcomposer/include"];
 };
 
 in { inherit hwc-drm-tests; }

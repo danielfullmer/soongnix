@@ -97,6 +97,7 @@ wayland_core_server_protocol_headers = genrule {
 libwayland_client = cc_library_static {
     name = "libwayland_client";
     vendor_available = true;
+    host_supported = true;
     defaults = ["wayland_defaults"];
     srcs = [
         "src/connection.c"
@@ -126,6 +127,7 @@ libwayland_client = cc_library_static {
 libwayland_server = cc_library_static {
     name = "libwayland_server";
     vendor_available = true;
+    host_supported = true;
     defaults = ["wayland_defaults"];
     srcs = [
         "src/connection.c"

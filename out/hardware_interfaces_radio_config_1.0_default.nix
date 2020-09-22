@@ -14,7 +14,6 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
         "android.hardware.radio.config@1.0"

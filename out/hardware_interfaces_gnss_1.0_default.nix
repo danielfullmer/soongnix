@@ -25,7 +25,6 @@ let
     shared_libs = [
         "liblog"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.gnss@1.0"
         "libhardware"
@@ -50,7 +49,6 @@ let
         "libhardware"
         "libbinder"
         "libhidlbase"
-        "libhidltransport"
         "android.hardware.gnss@1.0"
     ];
 

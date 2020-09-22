@@ -21,6 +21,8 @@ xsdc-cpp-tests = cc_test_host {
         "main.cpp"
     ];
     generated_sources = [
+        "xsdc_attr_group_simple_tests"
+        "xsdc_group_tests"
         "xsdc_nested_type_tests"
         "xsdc_predefined_types_tests"
         "xsdc_purchase_simple_tests"
@@ -29,6 +31,8 @@ xsdc-cpp-tests = cc_test_host {
         "xsdc_simple_type_tests"
     ];
     generated_headers = [
+        "xsdc_attr_group_simple_tests"
+        "xsdc_group_tests"
         "xsdc_nested_type_tests"
         "xsdc_predefined_types_tests"
         "xsdc_purchase_simple_tests"
@@ -41,6 +45,8 @@ xsdc-cpp-tests = cc_test_host {
         "libxml2"
     ];
     data = [
+        "resources/attr_group_simple.xml"
+        "resources/group.xml"
         "resources/nested_type.xml"
         "resources/predefined_types.xml"
         "resources/purchase_simple.xml"

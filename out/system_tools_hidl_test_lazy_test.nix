@@ -1,20 +1,38 @@
-{ cc_test }:
+{ cc_binary, cc_test }:
 let
 
 hidl_lazy_test = cc_test {
     name = "hidl_lazy_test";
     defaults = ["hidl-gen-defaults"];
-    srcs = ["main.cpp"];
+    srcs = ["hidl_lazy_test.cpp"];
 
     shared_libs = [
         "libbase"
-        "liblog"
+        "libhidl-gen-utils"
         "libhidlbase"
-        "libhidltransport"
-        "libhidlmemory"
-        "libhwbinder"
+        "liblog"
+        "libutils"
+    ];
+
+    test_suites = ["general-tests"];
+    require_root = true;
+};
+
+hidl_lazy_test_server = cc_binary {
+    name = "hidl_lazy_test_server";
+    system_ext_specific = true;
+
+    vintf_fragments = ["hidl_lazy_test_server.xml"];
+    init_rc = ["hidl_lazy_test_server.rc"];
+
+    srcs = ["hidl_lazy_test_server.cpp"];
+
+    shared_libs = [
+        "android.hardware.tests.lazy@1.0"
+        "libbase"
+        "libhidlbase"
         "libutils"
     ];
 };
 
-in { inherit hidl_lazy_test; }
+in { inherit hidl_lazy_test hidl_lazy_test_server; }

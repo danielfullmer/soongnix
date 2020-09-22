@@ -30,10 +30,11 @@ CtsUsesLibraryHostTestCases = java_test_host {
     ];
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     required = ["CtsUsesLibraryApp"];
+    data = [":CtsUsesLibraryApp"];
 };
 
 in { inherit CtsUsesLibraryHostTestCases; }

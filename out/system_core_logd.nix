@@ -42,7 +42,6 @@ liblogd = cc_library_static {
         "FlushCommand.cpp"
         "LogBuffer.cpp"
         "LogBufferElement.cpp"
-        "LogBufferInterface.cpp"
         "LogTimes.cpp"
         "LogStatistics.cpp"
         "LogWhiteBlackList.cpp"

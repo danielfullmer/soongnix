@@ -36,7 +36,6 @@ let
     shared_libs = [
         "libbase"
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "android.hardware.health.storage@1.0"
     ];

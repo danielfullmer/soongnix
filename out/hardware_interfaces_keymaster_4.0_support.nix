@@ -30,11 +30,10 @@ libkeymaster4support = cc_library {
         "authorization_set.cpp"
         "key_param_output.cpp"
         "keymaster_utils.cpp"
-        "Keymaster.cpp"
-        "Keymaster3.cpp"
-        "Keymaster4.cpp"
     ];
-    export_include_dirs = ["include"];
+    export_include_dirs = [
+        "include"
+    ];
     shared_libs = [
         "android.hardware.keymaster@3.0"
         "android.hardware.keymaster@4.0"
@@ -42,8 +41,6 @@ libkeymaster4support = cc_library {
         "libcrypto"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
-        "libutils"
     ];
 };
 

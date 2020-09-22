@@ -1,4 +1,4 @@
-{ cc_defaults, cc_library_static }:
+{ cc_library_static }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -15,8 +15,8 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"Magick++_defaults" = cc_defaults {
-    name = "Magick++_defaults";
+"Magick++" = cc_library_static {
+    name = "Magick++";
 
     srcs = [
         "lib/Blob.cpp"
@@ -52,19 +52,9 @@ let
     header_libs = ["Magick_headers"];
     export_header_lib_headers = ["Magick_headers"];
     export_include_dirs = ["lib"];
-};
-
-"Magick++_platform" = cc_library_static {
-    name = "Magick++_platform";
-    defaults = ["Magick++_defaults"];
-    stl = "libc++_static";
-};
-
-"Magick++" = cc_library_static {
-    name = "Magick++";
-    defaults = ["Magick++_defaults"];
     sdk_version = "24";
     stl = "c++_static";
+    visibility = ["//vendor:__subpackages__"];
 };
 
-in { inherit "Magick++" "Magick++_defaults" "Magick++_platform"; }
+in { inherit "Magick++"; }

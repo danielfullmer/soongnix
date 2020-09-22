@@ -63,7 +63,7 @@ dexmaker-mockmaker = java_library_static {
 #  Build dispatcher for Dexmaker's inline MockMaker
 dexmaker-inline-mockmaker-dispatcher = java_library_static {
     name = "dexmaker-inline-mockmaker-dispatcher";
-    sdk_version = "current";
+    sdk_version = "core_current";
     srcs = ["dexmaker-mockito-inline-dispatcher/src/main/java/com/android/dx/mockito/inline/MockMethodDispatcher.java"];
 };
 
@@ -100,8 +100,8 @@ dexmaker_agent_defaults = cc_defaults {
         "libz"
     ];
 
-    include_dirs = [
-        "art/openjdkjvmti/include"
+    header_libs = [
+        "libopenjdkjvmti_headers"
     ];
 };
 
@@ -193,7 +193,6 @@ dexmaker-extended-mockmaker = java_library_static {
 #  methods.
 mockito-target = java_library_static {
     name = "mockito-target";
-    no_framework_libs = true;
     static_libs = [
         "mockito-target-minus-junit4"
         "junit"
@@ -204,7 +203,6 @@ mockito-target = java_library_static {
 #  Same as mockito-target but does not bundle junit
 mockito-target-minus-junit4 = java_library_static {
     name = "mockito-target-minus-junit4";
-    no_framework_libs = true;
     static_libs = [
         "mockito"
         "dexmaker"
@@ -222,7 +220,6 @@ mockito-target-minus-junit4 = java_library_static {
 #  Project depending on this also need to depend on the static JNI library libdexmakerjvmtiagent
 mockito-target-inline = java_library_static {
     name = "mockito-target-inline";
-    no_framework_libs = true;
     static_libs = [
         "mockito-target-inline-minus-junit4"
         "junit"
@@ -233,7 +230,6 @@ mockito-target-inline = java_library_static {
 #  Same as mockito-target-inline but does not bundle junit
 mockito-target-inline-minus-junit4 = java_library_static {
     name = "mockito-target-inline-minus-junit4";
-    no_framework_libs = true;
     static_libs = [
         "mockito"
         "dexmaker"
@@ -252,7 +248,6 @@ mockito-target-inline-minus-junit4 = java_library_static {
 #  libdexmakerjvmtiagent
 mockito-target-extended = java_library_static {
     name = "mockito-target-extended";
-    no_framework_libs = true;
     static_libs = [
         "mockito-target-extended-minus-junit4"
         "junit"
@@ -263,7 +258,6 @@ mockito-target-extended = java_library_static {
 #  Same as mockito-target-extended but does not bundle junit
 mockito-target-extended-minus-junit4 = java_library_static {
     name = "mockito-target-extended-minus-junit4";
-    no_framework_libs = true;
     static_libs = [
         "mockito"
         "dexmaker"
@@ -330,6 +324,7 @@ dexmaker-inline-mockmaker-tests = java_library_static {
     name = "dexmaker-inline-mockmaker-tests";
     sdk_version = "current";
     srcs = [
+        "dexmaker-mockito-inline-tests/src/main/java/com/android/dx/mockito/inline/tests/MemoryLeaks.java"
         "dexmaker-mockito-inline-tests/src/main/java/com/android/dx/mockito/inline/tests/MockFinal.java"
         "dexmaker-mockito-inline-tests/src/main/java/com/android/dx/mockito/inline/tests/MockNonPublic.java"
         "dexmaker-mockito-inline-tests/src/main/java/com/android/dx/mockito/inline/tests/MultipleJvmtiAgentsInterference.java"

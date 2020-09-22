@@ -11,7 +11,6 @@ input_monitor = cc_test {
     ];
     shared_libs = ["libaaudio"];
     header_libs = ["libaaudio_example_utils"];
-    pack_relocations = false;
 };
 
 input_monitor_callback = cc_test {
@@ -24,7 +23,6 @@ input_monitor_callback = cc_test {
     ];
     shared_libs = ["libaaudio"];
     header_libs = ["libaaudio_example_utils"];
-    pack_relocations = false;
 };
 
 in { inherit input_monitor input_monitor_callback; }

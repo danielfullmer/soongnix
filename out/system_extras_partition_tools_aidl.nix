@@ -19,6 +19,7 @@ let
 
 liblpdump_interface = aidl_interface {
     name = "liblpdump_interface";
+    unstable = true;
     srcs = [
         "android/lpdump/ILpdump.aidl"
     ];

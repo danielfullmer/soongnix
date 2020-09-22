@@ -17,6 +17,10 @@ shared_mem_test = cc_test {
         "libaudioclient"
     ];
 
+    header_libs = [
+        "libmediametrics_headers"
+    ];
+
     cflags = [
         "-Wall"
         "-Werror"

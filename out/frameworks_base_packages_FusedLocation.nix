@@ -1,4 +1,4 @@
-{ android_app }:
+{ android_app, android_test }:
 let
 
 #  Copyright (C) 2012 The Android Open Source Project
@@ -20,7 +20,6 @@ FusedLocation = android_app {
     srcs = [
         "src/com/android/location/fused/FusedLocationProvider.java"
         "src/com/android/location/fused/FusedLocationService.java"
-        "src/com/android/location/fused/FusionEngine.java"
     ];
     libs = ["com.android.location.provider"];
     platform_apis = true;
@@ -28,4 +27,29 @@ FusedLocation = android_app {
     privileged = true;
 };
 
-in { inherit FusedLocation; }
+FusedLocationTests = android_test {
+    name = "FusedLocationTests";
+    manifest = "test/AndroidManifest.xml";
+    test_config = "test/AndroidTest.xml";
+    srcs = [
+        "test/src/com/android/location/fused/tests/FusedLocationServiceTest.java"
+        "src/com/android/location/fused/FusedLocationProvider.java" #  include real sources because we're forced to test this directly
+        "src/com/android/location/fused/FusedLocationService.java"
+    ];
+    libs = [
+        "android.test.base"
+        "android.test.runner"
+        "com.android.location.provider"
+    ];
+    static_libs = [
+        "androidx.test.core"
+        "androidx.test.rules"
+        "androidx.test.ext.junit"
+        "androidx.test.ext.truth"
+        "mockito-target-minus-junit4"
+        "truth-prebuilt"
+    ];
+    test_suites = ["device-tests"];
+};
+
+in { inherit FusedLocation FusedLocationTests; }

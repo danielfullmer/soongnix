@@ -27,11 +27,6 @@ CtsUsesLibraryApp = android_test {
         "androidx.test.rules"
         "ctstestrunner-axt"
     ];
-    test_suites = [
-        "cts"
-        "vts"
-        "general-tests"
-    ];
 };
 
 in { inherit CtsUsesLibraryApp; }

@@ -110,6 +110,8 @@ ufdt_verify_overlay = cc_test {
         "libufdt_verify"
     ];
     required = ["dtc"];
+    test_suites = ["vts"];
+    auto_gen_config = false;
 };
 
 in { inherit extract_dtb fdt_apply_overlay ufdt_apply_overlay ufdt_gen_test_dts ufdt_verify_overlay ufdt_verify_overlay_host; }

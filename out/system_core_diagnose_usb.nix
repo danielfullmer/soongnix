@@ -10,6 +10,11 @@ libdiagnose_usb = cc_library_static {
     ];
     host_supported = true;
     recovery_available = true;
+    apex_available = [
+        "com.android.adbd"
+        #  TODO(b/151398197) remove the below
+        "//apex_available:platform"
+    ];
     target = {
         windows = {
             enabled = true;

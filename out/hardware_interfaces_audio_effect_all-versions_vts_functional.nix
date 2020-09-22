@@ -34,15 +34,24 @@ VtsHalAudioEffectTargetTest_default = cc_defaults {
     header_libs = [
         "android.hardware.audio.common.util@all-versions"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 VtsHalAudioEffectV2_0TargetTest = cc_test {
     name = "VtsHalAudioEffectV2_0TargetTest";
     defaults = ["VtsHalAudioEffectTargetTest_default"];
+    #  Use test_config for vts suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioEffectV2_0TargetTest.xml";
     static_libs = [
         "android.hardware.audio.common@2.0"
         "android.hardware.audio.effect@2.0"
+    ];
+    data = [
+        ":audio_effects_conf_V2_0"
     ];
     cflags = [
         "-DMAJOR_VERSION=2"
@@ -54,9 +63,15 @@ VtsHalAudioEffectV2_0TargetTest = cc_test {
 VtsHalAudioEffectV4_0TargetTest = cc_test {
     name = "VtsHalAudioEffectV4_0TargetTest";
     defaults = ["VtsHalAudioEffectTargetTest_default"];
+    #  Use test_config for vts suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioEffectV4_0TargetTest.xml";
     static_libs = [
         "android.hardware.audio.common@4.0"
         "android.hardware.audio.effect@4.0"
+    ];
+    data = [
+        ":audio_effects_conf_V4_0"
     ];
     cflags = [
         "-DMAJOR_VERSION=4"
@@ -68,9 +83,15 @@ VtsHalAudioEffectV4_0TargetTest = cc_test {
 VtsHalAudioEffectV5_0TargetTest = cc_test {
     name = "VtsHalAudioEffectV5_0TargetTest";
     defaults = ["VtsHalAudioEffectTargetTest_default"];
+    #  Use test_config for vts suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioEffectV5_0TargetTest.xml";
     static_libs = [
         "android.hardware.audio.common@5.0"
         "android.hardware.audio.effect@5.0"
+    ];
+    data = [
+        ":audio_effects_conf_V5_0"
     ];
     cflags = [
         "-DMAJOR_VERSION=5"
@@ -79,4 +100,24 @@ VtsHalAudioEffectV5_0TargetTest = cc_test {
     ];
 };
 
-in { inherit VtsHalAudioEffectTargetTest_default VtsHalAudioEffectV2_0TargetTest VtsHalAudioEffectV4_0TargetTest VtsHalAudioEffectV5_0TargetTest; }
+VtsHalAudioEffectV6_0TargetTest = cc_test {
+    name = "VtsHalAudioEffectV6_0TargetTest";
+    defaults = ["VtsHalAudioEffectTargetTest_default"];
+    #  Use test_config for vts suite.
+    #  TODO(b/146104851): Add auto-gen rules and remove it.
+    test_config = "VtsHalAudioEffectV6_0TargetTest.xml";
+    static_libs = [
+        "android.hardware.audio.common@6.0"
+        "android.hardware.audio.effect@6.0"
+    ];
+    data = [
+        ":audio_effects_conf_V6_0"
+    ];
+    cflags = [
+        "-DMAJOR_VERSION=6"
+        "-DMINOR_VERSION=0"
+        "-include common/all-versions/VersionMacro.h"
+    ];
+};
+
+in { inherit VtsHalAudioEffectTargetTest_default VtsHalAudioEffectV2_0TargetTest VtsHalAudioEffectV4_0TargetTest VtsHalAudioEffectV5_0TargetTest VtsHalAudioEffectV6_0TargetTest; }

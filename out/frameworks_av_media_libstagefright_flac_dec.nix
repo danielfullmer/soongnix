@@ -4,6 +4,7 @@ let
 libstagefright_flacdec = cc_library {
     name = "libstagefright_flacdec";
     vendor_available = true;
+    min_sdk_version = "29";
 
     srcs = [
         "FLACDecoder.cpp"
@@ -21,30 +22,21 @@ libstagefright_flacdec = cc_library {
         cfi = true;
     };
 
-    static = {
-        whole_static_libs = [
-            "libFLAC"
-            "libaudioutils"
-        ];
-    };
-
-    shared = {
-        static_libs = [
-            "libFLAC"
-            "libaudioutils"
-        ];
-        export_static_lib_headers = [
-            "libFLAC"
-        ];
-    };
-
     shared_libs = [
+        "libaudioutils"
         "liblog"
+    ];
+
+    static_libs = [
+        "libFLAC"
+    ];
+
+    export_static_lib_headers = [
+        "libFLAC"
     ];
 
     header_libs = [
         "libmedia_headers"
-        "libFLAC-headers"
     ];
 };
 

@@ -29,16 +29,10 @@ let
     shared_libs = [
         "android.hardware.automotive.audiocontrol@1.0"
         "libhidlbase"
-        "libhidltransport"
         "liblog"
         "libutils"
     ];
-
-    cflags = [
-        "-DLOG_TAG=\"AudCntrlDrv\""
-        "-O0"
-        "-g"
-    ];
+    vintf_fragments = ["audiocontrol_manifest.xml"];
 };
 
 in { inherit "android.hardware.automotive.audiocontrol@1.0-service"; }

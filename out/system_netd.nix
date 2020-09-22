@@ -6,6 +6,16 @@ libnetd_client_headers = cc_library_headers {
     export_include_dirs = ["include"];
 };
 
+libnetdbinder_utils_headers = cc_library_headers {
+    name = "libnetdbinder_utils_headers";
+    export_include_dirs = ["include/binder_utils"];
+    apex_available = [
+        "//apex_available:platform"
+        "com.android.resolv"
+    ];
+    min_sdk_version = "29";
+};
+
 netd_defaults = cc_defaults {
     name = "netd_defaults";
     cflags = [
@@ -13,6 +23,8 @@ netd_defaults = cc_defaults {
         "-Werror"
         #  Override -Wno-error=implicit-fallthrough from soong
         "-Werror=implicit-fallthrough"
+        "-Werror=sometimes-uninitialized"
+        "-Werror=conditional-uninitialized"
         "-Wnullable-to-nonnull-conversion"
         "-Wsign-compare"
         "-Wthread-safety"
@@ -20,13 +32,16 @@ netd_defaults = cc_defaults {
         "-Wuninitialized"
     ];
     tidy = true;
+    cpp_std = "experimental";
     tidy_checks = [
         "android-*"
+        "bugprone-*"
         "cert-*"
         "clang-analyzer-security*"
         "google-*"
         "misc-*"
         "performance-*"
+        "-bugprone-narrowing-conversions" #  lots of unsigned -> int conversions
         "-cert-err34-c" #  TODO: re-enable after removing atoi() and sscanf() calls
         "-google-readability-*" #  Too pedantic
         "-google-runtime-int" #  Too many unavoidable warnings due to strtol()
@@ -35,13 +50,14 @@ netd_defaults = cc_defaults {
     ];
     tidy_flags = [
         ("-warnings-as-errors=" +
-            "'android-*'" +
-            ",'clang-analyzer-security*'" +
-            ",'cert-*'" +
-            ",'google-*'" +
-            ",'performance-*'" +
-            ",'misc-*'")
+            "android-*," +
+            "bugprone-*," +
+            "cert-*," +
+            "clang-analyzer-security*," +
+            "google-*," +
+            "misc-*," +
+            "performance-*")
     ];
 };
 
-in { inherit libnetd_client_headers netd_defaults; }
+in { inherit libnetd_client_headers libnetdbinder_utils_headers netd_defaults; }

@@ -72,6 +72,7 @@ libbcc-targets = cc_defaults {
             cflags = [
                 "-DFORCE_ARM_CODEGEN"
                 "-DARCH_ARM_HAVE_VFP"
+                "-DPROVIDE_ARM64_CODEGEN"
             ];
             neon = {
                 cflags = [

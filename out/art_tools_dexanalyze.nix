@@ -40,6 +40,10 @@ dexanalyze = art_cc_binary {
         "libartbase"
         "libbase"
     ];
+    apex_available = [
+        "com.android.art.release"
+        "com.android.art.debug"
+    ];
 };
 
 art_dexanalyze_tests = art_cc_test {

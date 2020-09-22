@@ -36,12 +36,12 @@ let
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "libutils"
         "liblog"
-        "android.hardware.gnss@2.0"
         "android.hardware.gnss.measurement_corrections@1.0"
         "android.hardware.gnss.visibility_control@1.0"
+        "android.hardware.gnss@2.1"
+        "android.hardware.gnss@2.0"
         "android.hardware.gnss@1.0"
         "android.hardware.gnss@1.1"
     ];

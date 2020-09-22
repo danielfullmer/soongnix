@@ -30,8 +30,24 @@ par_test = python_test_host {
         };
         py3 = {
             enabled = false;
+            embedded_launcher = true;
         };
     };
 };
 
-in { inherit par_test; }
+par_test3 = python_test_host {
+    name = "par_test3";
+    main = "par_test.py";
+    srcs = [
+        "par_test.py"
+        "testpkg/par_test.py"
+    ];
+
+    version = {
+        py3 = {
+            embedded_launcher = true;
+        };
+    };
+};
+
+in { inherit par_test par_test3; }

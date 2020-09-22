@@ -21,7 +21,7 @@ AlarmTestApp = android_test_helper_app {
     sdk_version = "current";
     test_suites = [
         "cts"
-        "vts"
+        "vts10"
         "general-tests"
     ];
     srcs = [

@@ -22,6 +22,7 @@ UsbTests = android_test {
     srcs = [
         "src/com/android/server/usb/UsbDescriptorParserTests.java"
         "src/com/android/server/usb/UsbHandlerTest.java"
+        "src/com/android/server/usb/UsbManagerNoPermTest.java"
     ];
     static_libs = [
         "frameworks-base-testutils"
@@ -32,6 +33,7 @@ UsbTests = android_test {
         "services.net"
         "services.usb"
         "truth-prebuilt"
+        "UsbManagerTestLib"
     ];
     jni_libs = ["libdexmakerjvmtiagent"];
     certificate = "platform";

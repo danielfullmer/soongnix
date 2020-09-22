@@ -28,7 +28,10 @@ VtsHalSoundtriggerV2_1TargetTest = cc_test {
         "android.hardware.soundtrigger@2.1"
         "libhidlmemory"
     ];
-    test_suites = ["general-tests"];
+    test_suites = [
+        "general-tests"
+        "vts"
+    ];
 };
 
 in { inherit VtsHalSoundtriggerV2_1TargetTest; }

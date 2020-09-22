@@ -43,9 +43,11 @@ car-messenger-common = android_library {
     static_libs = [
         "android.car.userlib"
         "androidx.legacy_legacy-support-v4"
-        "car-apps-common-bp"
+        "car-apps-common"
         "car-messenger-protos"
+        "car-telephony-common"
         "connected-device-protos"
+        "libphonenumber"
     ];
 };
 

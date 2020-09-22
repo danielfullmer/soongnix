@@ -91,7 +91,6 @@ trebuchet-core = java_library_host {
     libs = [
         "kotlin-reflect"
     ];
-    no_framework_libs = true;
 };
 
 trebuchet-startup-common = java_library_host {
@@ -103,7 +102,6 @@ trebuchet-startup-common = java_library_host {
     libs = [
         "trebuchet-core"
     ];
-    no_framework_libs = true;
 };
 
 trebuchet-core-tests = java_test_host {

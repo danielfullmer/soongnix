@@ -24,7 +24,6 @@ hwservicemanager_defaults = cc_defaults {
     ];
     shared_libs = [
         "libhidlbase"
-        "libhidltransport"
         "liblog"
     ];
 };
@@ -34,7 +33,6 @@ libhwservicemanager_shared_libs = cc_defaults {
     shared_libs = [
         "libbase"
         "libhidl-gen-utils"
-        "libhwbinder"
         "libselinux"
         "libutils"
         "libvintf"
@@ -43,6 +41,7 @@ libhwservicemanager_shared_libs = cc_defaults {
 
 libhwservicemanager = cc_library_static {
     name = "libhwservicemanager";
+    host_supported = true;
     defaults = [
         "hwservicemanager_defaults"
         "libhwservicemanager_shared_libs"
@@ -98,6 +97,7 @@ hwservicemanager = cc_binary {
 
 hwservicemanager_test = cc_test {
     name = "hwservicemanager_test";
+    host_supported = true;
     defaults = [
         "hwservicemanager_defaults"
         "libhwservicemanager_shared_libs"

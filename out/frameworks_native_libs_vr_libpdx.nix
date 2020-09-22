@@ -5,6 +5,7 @@ libpdx_headers = cc_library_headers {
     name = "libpdx_headers";
     export_include_dirs = ["private"];
     vendor_available = true;
+    min_sdk_version = "29";
 };
 
 libpdx = cc_library_static {
@@ -56,6 +57,8 @@ pdx_tests = cc_test {
         "libpdx"
         "liblog"
         "libutils"
+    ];
+    shared_libs = [
         "libvndksupport"
     ];
 };

@@ -1,4 +1,4 @@
-{ python_binary_host, python_test_host }:
+{ cc_genrule, python_binary_host, python_test_host }:
 let
 
 #  Copyright (C) 2019 The Android Open Source Project
@@ -80,4 +80,34 @@ minijail_compiler_unittest = python_test_host {
     };
 };
 
-in { inherit minijail_compile_seccomp_policy minijail_compiler_unittest minijail_parser_unittest; }
+minijail_generate_constants_json = python_binary_host {
+    name = "minijail_generate_constants_json";
+    main = "generate_constants_json.py";
+    srcs = [
+        "generate_constants_json.py"
+    ];
+    version = {
+        py2 = {
+            enabled = false;
+        };
+        py3 = {
+            enabled = true;
+        };
+    };
+};
+
+minijail_constants_json = cc_genrule {
+    name = "minijail_constants_json";
+    host_supported = true;
+    vendor_available = true;
+    recovery_available = true;
+    tools = ["minijail_generate_constants_json"];
+    cmd = "$(location minijail_generate_constants_json) --output=$(out) $(in)";
+    srcs = [
+        ":libminijail_gen_constants_llvmir"
+        ":libminijail_gen_syscall_llvmir"
+    ];
+    out = ["constants.json"];
+};
+
+in { inherit minijail_compile_seccomp_policy minijail_compiler_unittest minijail_constants_json minijail_generate_constants_json minijail_parser_unittest; }

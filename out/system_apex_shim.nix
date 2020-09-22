@@ -20,7 +20,24 @@ let
 
 "com.android.apex.cts.shim.v1_prebuilt" = prebuilt_apex {
     name = "com.android.apex.cts.shim.v1_prebuilt";
-    src = "com.android.apex.cts.shim.v1.apex";
+    overrides = [
+        "CtsShimPrebuilt"
+        "CtsShimPrivPrebuilt"
+    ];
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v1.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v1.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v1.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v1.apex";
+        };
+    };
     filename = "com.android.apex.cts.shim.apex";
     prefer = true;
     installable = true;
@@ -28,44 +45,142 @@ let
 
 "com.android.apex.cts.shim.v2_prebuilt" = prebuilt_apex {
     name = "com.android.apex.cts.shim.v2_prebuilt";
-    src = "com.android.apex.cts.shim.v2.apex";
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2.apex";
+        };
+    };
     filename = "com.android.apex.cts.shim.v2.apex";
     installable = false;
 };
 
 "com.android.apex.cts.shim.v2_wrong_sha_prebuilt" = prebuilt_apex {
     name = "com.android.apex.cts.shim.v2_wrong_sha_prebuilt";
-    src = "com.android.apex.cts.shim.v2_wrong_sha.apex";
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_wrong_sha.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_wrong_sha.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_wrong_sha.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_wrong_sha.apex";
+        };
+    };
     filename = "com.android.apex.cts.shim.v2_wrong_sha.apex";
     installable = false;
 };
 
 "com.android.apex.cts.shim.v2_additional_file_prebuilt" = prebuilt_apex {
     name = "com.android.apex.cts.shim.v2_additional_file_prebuilt";
-    src = "com.android.apex.cts.shim.v2_additional_file.apex";
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_additional_file.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_additional_file.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_additional_file.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_additional_file.apex";
+        };
+    };
     filename = "com.android.apex.cts.shim.v2_additional_file.apex";
     installable = false;
 };
 
 "com.android.apex.cts.shim.v2_additional_folder_prebuilt" = prebuilt_apex {
     name = "com.android.apex.cts.shim.v2_additional_folder_prebuilt";
-    src = "com.android.apex.cts.shim.v2_additional_folder.apex";
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_additional_folder.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_additional_folder.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_additional_folder.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_additional_folder.apex";
+        };
+    };
     filename = "com.android.apex.cts.shim.v2_additional_folder.apex";
     installable = false;
 };
 
 "com.android.apex.cts.shim.v2_with_pre_install_hook_prebuilt" = prebuilt_apex {
     name = "com.android.apex.cts.shim.v2_with_pre_install_hook_prebuilt";
-    src = "com.android.apex.cts.shim.v2_with_pre_install_hook.apex";
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_with_pre_install_hook.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_with_pre_install_hook.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_with_pre_install_hook.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_with_pre_install_hook.apex";
+        };
+    };
     filename = "com.android.apex.cts.shim.v2_with_pre_install_hook.apex";
     installable = false;
 };
 
 "com.android.apex.cts.shim.v2_with_post_install_hook_prebuilt" = prebuilt_apex {
     name = "com.android.apex.cts.shim.v2_with_post_install_hook_prebuilt";
-    src = "com.android.apex.cts.shim.v2_with_post_install_hook.apex";
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_with_post_install_hook.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v2_with_post_install_hook.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_with_post_install_hook.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v2_with_post_install_hook.apex";
+        };
+    };
     filename = "com.android.apex.cts.shim.v2_with_post_install_hook.apex";
     installable = false;
 };
 
-in { inherit "com.android.apex.cts.shim.v1_prebuilt" "com.android.apex.cts.shim.v2_additional_file_prebuilt" "com.android.apex.cts.shim.v2_additional_folder_prebuilt" "com.android.apex.cts.shim.v2_prebuilt" "com.android.apex.cts.shim.v2_with_post_install_hook_prebuilt" "com.android.apex.cts.shim.v2_with_pre_install_hook_prebuilt" "com.android.apex.cts.shim.v2_wrong_sha_prebuilt"; }
+"com.android.apex.cts.shim.v3_prebuilt" = prebuilt_apex {
+    name = "com.android.apex.cts.shim.v3_prebuilt";
+    arch = {
+        arm = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v3.apex";
+        };
+        arm64 = {
+            src = "prebuilts/arm/com.android.apex.cts.shim.v3.apex";
+        };
+        x86 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v3.apex";
+        };
+        x86_64 = {
+            src = "prebuilts/x86/com.android.apex.cts.shim.v3.apex";
+        };
+    };
+    filename = "com.android.apex.cts.shim.v3.apex";
+    installable = false;
+};
+
+in { inherit "com.android.apex.cts.shim.v1_prebuilt" "com.android.apex.cts.shim.v2_additional_file_prebuilt" "com.android.apex.cts.shim.v2_additional_folder_prebuilt" "com.android.apex.cts.shim.v2_prebuilt" "com.android.apex.cts.shim.v2_with_post_install_hook_prebuilt" "com.android.apex.cts.shim.v2_with_pre_install_hook_prebuilt" "com.android.apex.cts.shim.v2_wrong_sha_prebuilt" "com.android.apex.cts.shim.v3_prebuilt"; }

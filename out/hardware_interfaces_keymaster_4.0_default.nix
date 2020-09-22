@@ -31,7 +31,6 @@ let
         "libcutils"
         "libhardware"
         "libhidlbase"
-        "libhidltransport"
         "libkeymaster4"
         "liblog"
         "libutils"

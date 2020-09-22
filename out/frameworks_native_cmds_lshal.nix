@@ -1,4 +1,4 @@
-{ cc_binary, cc_defaults, cc_library_shared, cc_test }:
+{ cc_binary, cc_defaults, cc_library_static, cc_test }:
 let
 
 #  Copyright (C) 2016 The Android Open Source Project
@@ -15,14 +15,13 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-liblshal = cc_library_shared {
+liblshal = cc_library_static {
     name = "liblshal";
     shared_libs = [
         "libbase"
         "libcutils"
         "libutils"
         "libhidlbase"
-        "libhidltransport"
         "libhidl-gen-hash"
         "libhidl-gen-utils"
         "libvintf"
@@ -39,6 +38,7 @@ liblshal = cc_library_shared {
         "TableEntry.cpp"
         "TextTable.cpp"
         "utils.cpp"
+        "WaitCommand.cpp"
     ];
     cflags = [
         "-Wall"
@@ -50,13 +50,15 @@ lshal_defaults = cc_defaults {
     name = "lshal_defaults";
     shared_libs = [
         "libbase"
-        "libhidlbase"
-        "libhidl-gen-utils"
-        "libhidltransport"
-        "liblshal"
+        "libcutils"
         "libutils"
+        "libhidlbase"
+        "libhidl-gen-hash"
+        "libhidl-gen-utils"
+        "libvintf"
     ];
     static_libs = [
+        "liblshal"
         "libprocpartition"
     ];
     cflags = [
@@ -75,14 +77,16 @@ lshal = cc_binary {
 
 lshal_test = cc_test {
     name = "lshal_test";
+    test_suites = ["device-tests"];
     defaults = ["lshal_defaults"];
     gtest = true;
     static_libs = [
+        "android.hardware.tests.baz@1.0"
         "libgmock"
     ];
     shared_libs = [
+        "libhidlbase"
         "libvintf"
-        "android.hardware.tests.baz@1.0"
     ];
     srcs = [
         "test.cpp"

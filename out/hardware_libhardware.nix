@@ -21,6 +21,8 @@ libhardware_headers = cc_library_headers {
     export_include_dirs = ["include"];
     recovery_available = true;
     vendor_available = true;
+    #  TODO(b/153609531): remove when no longer needed.
+    native_bridge_supported = true;
     target = {
         recovery = {
             exclude_header_libs = [
@@ -29,6 +31,7 @@ libhardware_headers = cc_library_headers {
             ];
         };
     };
+    min_sdk_version = "29";
 
 };
 
@@ -62,6 +65,7 @@ libhardware = cc_library_shared {
             exclude_shared_libs = ["libvndksupport"];
         };
     };
+    min_sdk_version = "29";
 };
 
 in { inherit libhardware libhardware_headers; }

@@ -63,6 +63,11 @@ objenesis = java_library_static {
         "main/src/main/java/org/objenesis/strategy/StdInstantiatorStrategy.java"
     ];
     sdk_version = "core_current";
+
+    #  Pin to Java language level 8. It is loaded by an OpenJDK 8 runtime from
+    #  prebuilts/studio/jdk in frameworks/layoutlib/bridge/tests/run_tests.sh.
+    #  See b/141970724.
+    java_version = "1.8";
 };
 
 #  Compatibility library for old name of host target
@@ -76,8 +81,7 @@ objenesis-host = java_library_host {
 
 objenesis-tck = java_library_static {
     name = "objenesis-tck";
-    no_framework_libs = true;
-    sdk_version = "current";
+    sdk_version = "core_current";
 
     static_libs = ["objenesis"];
     srcs = [

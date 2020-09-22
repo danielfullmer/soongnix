@@ -11,6 +11,11 @@ libv8sampler = cc_library_static {
         "src"
         "include"
     ];
+
+    apex_available = [
+        "com.android.art.debug"
+        "com.android.art.release"
+    ];
 };
 
 in { inherit libv8sampler; }

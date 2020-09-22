@@ -1,4 +1,4 @@
-{ bpf }:
+{ bpf, cc_library_headers }:
 let
 
 #
@@ -16,6 +16,11 @@ let
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+
+netd_bpf_progs_headers = cc_library_headers {
+    name = "netd_bpf_progs_headers";
+    export_include_dirs = ["."];
+};
 
 #
 #  bpf kernel programs
@@ -46,4 +51,17 @@ let
     ];
 };
 
-in { inherit "clatd.o" "netd.o"; }
+"offload.o" = bpf {
+    name = "offload.o";
+    srcs = ["offload.c"];
+    cflags = [
+        "-Wall"
+        "-Werror"
+    ];
+    include_dirs = [
+        "system/netd/libnetdbpf/include"
+        "system/netd/libnetdutils/include"
+    ];
+};
+
+in { inherit "clatd.o" "netd.o" "offload.o" netd_bpf_progs_headers; }

@@ -38,8 +38,6 @@ lvmtest = cc_test {
     srcs = ["lvmtest.cpp"];
 
     cflags = [
-        "-DBUILD_FLOAT"
-        "-DHIGHER_FS"
         "-DSUPPORT_MC"
 
         "-Wall"
