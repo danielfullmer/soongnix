@@ -11,6 +11,14 @@ let
     then pkgs.applyPatches { src = v; patches = ./system_tools_aidl.patch; }
     else if n == "art"
     then pkgs.applyPatches { src = v; patches = ./art.patch; }
+    else if n == "bionic"
+    then pkgs.runCommand "bionic-libc-patched" { nativeBuildInputs = [ pkgs.python ]; } ''
+      cp -r ${v} $out
+      chmod u+w -R $out
+      rm $out/libc/fs_config_generator.py
+      cp ${_sourceDirs."build/make"}/tools/fs_config/fs_config_generator.py $out/libc/
+      patchShebangs $out/libc/fs_config_generator.py
+    ''
     else v
   ) _sourceDirs;
 
