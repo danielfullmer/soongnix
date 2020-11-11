@@ -141,7 +141,7 @@ in {
   "cc_prebuilt_object" "cc_prebuilt_test_library_shared" "kernel_headers"
   "llndk_headers" "llndk_library" "ndk_headers" "ndk_library"
   "ndk_prebuilt_object" "ndk_prebuilt_shared_stl" "ndk_prebuilt_static_stl"
-  "preprocessed_ndk_headers" "toolchain_library" "vendor_public_library"
+  "preprocessed_ndk_headers" "vendor_public_library"
   "vendor_snapshot_binary" "vendor_snapshot_header" "vendor_snapshot_object"
   "vendor_snapshot_shared" "vendor_snapshot_static" "versioned_ndk_headers"
   "vndk_libraries_txt" "vndk_prebuilt_shared"

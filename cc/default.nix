@@ -482,6 +482,13 @@ let
   cc_benchmark_host = args: cc_binary_host (recursiveMerge [ args { static_libs = [ "libgoogle-benchmark" ]; host_supported = true;} ]);
 
   cc_genrule = wrapModule argDefaults.cc_binary genrule;
+
+  toolchain_library = wrapModule {} ({ name, src, ...}:
+    pkgs.runCommandNoCC name {} ''
+      mkdir -p $out/lib
+      cp ${sourceDir src} $out/lib/${name}.a
+    ''
+  );
 in {
   inherit
     cc_defaults
@@ -499,5 +506,6 @@ in {
     cc_test_library
     cc_benchmark
     cc_benchmark_host
-    cc_genrule;
+    cc_genrule
+    toolchain_library;
 }
